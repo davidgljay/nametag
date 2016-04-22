@@ -6,7 +6,7 @@ var Room = React.createClass({
   getInitialState: function() {
   	//Get FB info
   	//Start w/ offline dataset for testing.
-  	return null;
+  	return {title:'I\'m a room!'};
     // return {secondsElapsed: 0};
   },
   componentDidMount: function() {
@@ -17,8 +17,15 @@ var Room = React.createClass({
   },
   render: function() {
     return (
-      <div>
-      	<h1>I'm a room!</h1>
+    	<div>
+    	    <div className="header">
+                <ul className="nav nav-pills pull-right">
+                    <li className="active"><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+                <h3 className="text-muted">{this.state.title}</h3>
+            </div>
       </div>
     );
   }
