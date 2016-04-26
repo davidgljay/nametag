@@ -31,12 +31,19 @@ var Participants = React.createClass({
 			this.state.participants[key].member_id=key;
 			participants_arr.push(this.state.participants[key]);
 		}
+		participants_arr.sort(function(a,b) {
+			if (a.mod) {
+				return 1
+			} else {
+				return -1;
+			}
+		})
 
 		//Create a function to return list items
 		var creatParticipant = function(participant, mod) {
 			return  (
 			<li key={participant.name} className="list-group-item participantProfile">
-				<Participant name={participant.name} bio={participant.bio} member_id={participant.member_id} mod={mod}/>
+				<Participant name={participant.name} bio={participant.bio} icon={participant.icon} member_id={participant.member_id} mod={mod}/>
 			</li>
 			);
 		};
