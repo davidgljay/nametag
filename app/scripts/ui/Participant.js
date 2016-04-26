@@ -5,15 +5,17 @@ var React = require('react');
 var Participant = React.createClass({
 	render:function() {
 		var star ='';
-		console.log(this.props)
 		if (this.props.mod==this.props.member_id) {
-			star=<span className="glyphicon glyphicon-star" aria-hidden="true"></span>;
+			star=(<div className="ismod">
+					<span className="glyphicon glyphicon-star" aria-hidden="true"></span>
+					<div>Mod</div>
+				  </div>);
 		}
 		return(
 			<div>
 				{star}
-				<h4 className="participantName">{this.props.name}</h4>
-				<div className="participantBio">{this.props.bio}</div>
+				<div className="name">{this.props.name}</div>
+				<div className="bio">{this.props.bio}</div>
 			</div>
 			);
 	}

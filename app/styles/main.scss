@@ -54,17 +54,26 @@ body {
 #participants {
     margin-top: 40px;
 
-    h4 {
-        margin:0px;
-    }
 }
 
 .participantProfile {
 
+    .ismod {
+        color:$gold; 
+        float:right;  
+        font-size: 10px;    
+    }
+    .name {
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .bio {
+        font-size: 14px;
+        font-style: italic;
+    }
     .glyphicon-star {
-        color:$gold;
-        font-size: 24px;
-        float:right;
+
+        font-size: 20px;
 
     }
 }

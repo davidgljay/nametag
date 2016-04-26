@@ -36,7 +36,7 @@ var Room = React.createClass({
     	<div>
     	    <div className="header">
                 <ul className="nav nav-pills pull-right">
-                    <li className="active"><a href="#">X</a></li>
+                    <li><a href="#"><span className="glyphicon glyphicon-remove" aria-hidden="true"></span></a></li>
                 </ul>
                 <h3 className="text-muted">{this.state.room.title}</h3>
               <div id="description">{this.state.room.description}</div>
