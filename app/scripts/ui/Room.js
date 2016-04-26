@@ -17,7 +17,8 @@ var Room = React.createClass({
     return {
       fbref:fbref,
       room:{
-        title:''
+        title:'',
+        norms:[]
       }
     }
   },
@@ -30,7 +31,7 @@ var Room = React.createClass({
   },
   render: function() {
     //TODO: Add Moderator
-    //TODO: Add Norms
+
     return (
     	<div>
     	    <div className="header">
@@ -40,8 +41,22 @@ var Room = React.createClass({
                 <h3 className="text-muted">{this.state.room.title}</h3>
               <div id="description">{this.state.room.description}</div>
           </div>
-          <div id="leftBar">
-            <Participants roomid={this.props.roomid}/>
+          <div className="row">
+            <div id="leftBar" className="col-md-3" >
+            <div id="norms">
+                <h4>Norms:</h4>
+                <ul id="normlist">
+                  {this.state.room.norms.map(function(norm) {
+                    return (
+                      <li key={norm} className="norm">
+                        {norm}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+              <Participants roomid={this.props.roomid} mod={this.props.mod}/>
+            </div>
           </div>
       </div>
     );
