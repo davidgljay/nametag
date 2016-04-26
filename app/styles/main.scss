@@ -1,4 +1,4 @@
-$icon-font-path: "../fonts/";
+$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 
 @import "bootstrap-sass-official/assets/stylesheets/bootstrap";
 $lime:#92CD00;
@@ -40,12 +40,23 @@ body {
     background: $navy;
 }
 
+#norms {
+    color:white;
+}
+
 #participants {
     margin-top: 40px;
 }
 
 .participantProfile {
     background:$grey;
+
+    .glyphicon-star {
+        color:yellow;
+        font-size: 24px;
+        float:right;
+
+    }
 }
 
 /* Custom page footer */

@@ -33,10 +33,10 @@ var Participants = React.createClass({
 		}
 
 		//Create a function to return list items
-		var creatParticipant = function(participant) {
+		var creatParticipant = function(participant, mod) {
 			return  (
 			<li key={participant.name} className="list-group-item participantProfile">
-				<Participant name={participant.name} bio={participant.bio} member_id={participant.member_id}/>
+				<Participant name={participant.name} bio={participant.bio} member_id={participant.member_id} mod={mod}/>
 			</li>
 			);
 		};
@@ -44,15 +44,15 @@ var Participants = React.createClass({
 		return (
 			<ul id="participants" className="list-group">
 				{participants_arr.map(function(participant) {
-					return creatParticipant(participant);
-				})}
+					return creatParticipant(participant, this.props.mod);
+				}, this)}
 			</ul>
 		);
 	}
-})
+});
 
-Participants.propTypes = { roomid: React.PropTypes.string };
-Participants.defaultProps = {roomid: "stampi"};
+Participants.propTypes = { roomid: React.PropTypes.string, mod:React.PropTypes.string };
+Participants.defaultProps = {roomid: "stampi", mod:"wxyz"};
 
 
 module.exports = Participants;
