@@ -3,8 +3,11 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import "bootstrap-sass-official/assets/stylesheets/bootstrap";
 $lime:#92CD00;
 $navy:#1B264F;
+$lightblue:#BEC9F3;
+$blue:#3083b3;
 $grey:#E5E4D7;
 $green:#2C6700;
+$gold:#e8ea19;
 
 /* Space out content a bit */
 body {
@@ -15,20 +18,23 @@ body {
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
 .footer {
-    padding-left: 15px;
+    padding-left:15px;
     padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
 }
 
 /* Custom page header */
 .header {
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 3px solid $blue;
+
 
     /* Make the masthead heading the same height as the navigation */
     h3 {
         margin-top: 0;
         margin-bottom: 0;
         line-height: 40px;
-        padding-bottom: 19px;
     }
 }
 
@@ -38,6 +44,7 @@ body {
 #leftBar {
     min-height:400px;
     background: $navy;
+    padding-top: 40px;
 }
 
 #norms {
@@ -46,13 +53,16 @@ body {
 
 #participants {
     margin-top: 40px;
+
+    h4 {
+        margin:0px;
+    }
 }
 
 .participantProfile {
-    background:$grey;
 
     .glyphicon-star {
-        color:yellow;
+        color:$gold;
         font-size: 24px;
         float:right;
 
@@ -77,12 +87,11 @@ body {
     /* Remove the padding we set earlier */
     .header,
     .footer {
-        padding-left: 0;
-        padding-right: 0;
+        margin-left: -15px;
+        margin-right: -15px;
     }
 
     /* Space out the masthead */
     .header {
-        margin-bottom: 30px;
     }
 }
