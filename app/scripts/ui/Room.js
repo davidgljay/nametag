@@ -38,6 +38,10 @@ var Room = React.createClass({
                     <li className="active"><a href="#">X</a></li>
                 </ul>
                 <h3 className="text-muted">{this.state.room.title}</h3>
+              <div id="description">{this.state.room.description}</div>
+          </div>
+          <div id="leftBar">
+            <Participants roomid={this.props.roomid}/>
           </div>
       </div>
     );
