@@ -1,6 +1,7 @@
 'use strict';
 
-var React = require('react');
+var React = require('react'),
+Participant = require('./Participant');
 
 var Participants = React.createClass({
 	getInitialState:function(){
@@ -35,7 +36,7 @@ var Participants = React.createClass({
 		var creatParticipant = function(participant) {
 			return  (
 			<li key={participant.name}>
-				<Participant info={participant}/>
+				<Participant name={participant.name} bio={participant.bio} member_id={participant.member_id}/>
 			</li>
 			);
 		};
@@ -43,7 +44,7 @@ var Participants = React.createClass({
 		return (
 			<ul>
 				{participants_arr.map(function(participant) {
-					creatParticipant(participant);
+					return creatParticipant(participant);
 				})}
 			</ul>
 		);
