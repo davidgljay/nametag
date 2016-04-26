@@ -1,13 +1,10 @@
 $icon-font-path: "../fonts/";
 
 @import "bootstrap-sass-official/assets/stylesheets/bootstrap";
-
-.browsehappy {
-    margin: 0.2em 0;
-    background: #ccc;
-    color: #000;
-    padding: 0.2em 0;
-}
+$lime:#92CD00;
+$navy:#1B264F;
+$grey:#E5E4D7;
+$green:#2C6700;
 
 /* Space out content a bit */
 body {
@@ -17,7 +14,6 @@ body {
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
-.marketing,
 .footer {
     padding-left: 15px;
     padding-right: 15px;
@@ -34,6 +30,22 @@ body {
         line-height: 40px;
         padding-bottom: 19px;
     }
+}
+
+/*Left Nav*/
+/*TODO: Break into separate file.*/
+
+#leftBar {
+    min-height:400px;
+    background: $navy;
+}
+
+#participants {
+    margin-top: 40px;
+}
+
+.participantProfile {
+    background:$grey;
 }
 
 /* Custom page footer */

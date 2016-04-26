@@ -35,14 +35,14 @@ var Participants = React.createClass({
 		//Create a function to return list items
 		var creatParticipant = function(participant) {
 			return  (
-			<li key={participant.name}>
+			<li key={participant.name} className="list-group-item participantProfile">
 				<Participant name={participant.name} bio={participant.bio} member_id={participant.member_id}/>
 			</li>
 			);
 		};
 
 		return (
-			<ul>
+			<ul id="participants" className="list-group">
 				{participants_arr.map(function(participant) {
 					return creatParticipant(participant);
 				})}

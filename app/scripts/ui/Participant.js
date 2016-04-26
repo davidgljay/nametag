@@ -5,7 +5,7 @@ var React = require('react');
 var Participant = React.createClass({
 	render:function() {
 		return(
-			<div className="participantProfile">
+			<div>
 				<h4 className="participantName">{this.props.name}</h4>
 				<div className="participantBio">{this.props.bio}</div>
 			</div>
