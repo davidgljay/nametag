@@ -5,16 +5,38 @@ Participant = require('./Participant');
 
 var Participants = React.createClass({
 	getInitialState:function(){
-		var fbref = new Firebase('https://badgespace.firebaseio.com/participants/'+this.props.roomid);
-		fbref.on('value',function(value) {
-       		this.setState({participants:value.val()});
+		var self = this;
+		//Get participant data
+		var pRef = new Firebase('https://badgespace.firebaseio.com/participants/'+this.props.roomid);
+		pRef.on('value',function(participants) {
+			var pdata = participants.val();
+       		self.setState({participants:pdata});
+       		for (var participant in pdata) {
+       			getpBadges(pdata[participant].member_id);
+       		}
+
 	    }, 
 	    function(err) {
-	      console.log("Error getting room from FB:" + err);
-	    }, this);
+	      console.log("Error getting participants from FB:" + err);
+	    });
+
+		//Get badge data for each participants
+	    var pBadgeRef = new Firebase('https://badgespace.firebaseio.com/participant_badges/'+this.props.userid+'/'+this.props.roomid);
+	    var getpBadges = function(memberid) {
+	    	pBadgeRef.child(memberid);
+	    	pBadgeRef.on('value', function(badges) {
+	    		self.setState(function(previousState) {
+	    			previousState.participants[memberid].badges = badges.val();
+	    			return previousState;
+	    		})
+	    	},
+	    	function(err) {
+	    		console.log("Error getting participant badge data")
+	    	});
+	    }
 		return {
-			fbref:fbref,
 			participants:{}
+
 		};
 	},
 
@@ -43,7 +65,7 @@ var Participants = React.createClass({
 		var creatParticipant = function(participant, mod) {
 			return  (
 			<li key={participant.name} className="list-group-item participantProfile">
-				<Participant name={participant.name} bio={participant.bio} icon={participant.icon} member_id={participant.member_id} mod={mod}/>
+				<Participant name={participant.name} bio={participant.bio} icon={participant.icon} badges={participant.badges} mod={mod}/>
 			</li>
 			);
 		};
@@ -59,7 +81,7 @@ var Participants = React.createClass({
 });
 
 Participants.propTypes = { roomid: React.PropTypes.string, mod:React.PropTypes.string };
-Participants.defaultProps = {roomid: "stampi", mod:"wxyz"};
+Participants.defaultProps = {roomid: "stampi", mod:"wxyz", userid:"abcd"};
 
 
 module.exports = Participants;
