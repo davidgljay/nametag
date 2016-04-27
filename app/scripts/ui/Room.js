@@ -30,7 +30,7 @@ var Room = React.createClass({
   	//TODO: mark the user as inactive when they leave the room.
   },
   render: function() {
-    //TODO: Add Moderator
+    //TODO: Move norms to stateless object
 
     return (
     	<div>
@@ -43,7 +43,7 @@ var Room = React.createClass({
           </div>
           <div className="row">
             <div id="leftBar" className="col-md-3" >
-            <div id="norms">
+              <div id="norms">
                 <h4>Norms:</h4>
                 <ul id="normlist">
                   {this.state.room.norms.map(function(norm) {
