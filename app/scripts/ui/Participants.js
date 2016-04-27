@@ -23,8 +23,7 @@ var Participants = React.createClass({
 		//Get badge data for each participants
 	    var pBadgeRef = new Firebase('https://badgespace.firebaseio.com/participant_badges/'+this.props.userid+'/'+this.props.roomid);
 	    var getpBadges = function(memberid) {
-	    	pBadgeRef.child(memberid);
-	    	pBadgeRef.on('value', function(badges) {
+	    	pBadgeRef.child(memberid).on('value', function(badges) {
 	    		self.setState(function(previousState) {
 	    			previousState.participants[memberid].badges = badges.val();
 	    			return previousState;
@@ -63,9 +62,12 @@ var Participants = React.createClass({
 
 		//Create a function to return list items
 		var creatParticipant = function(participant, mod) {
+			//Make participant.badges an empty array if it not already assigned.
+			participant.badges = participant.badges || [];
+
 			return  (
 			<li key={participant.name} className="list-group-item participantProfile">
-				<Participant name={participant.name} bio={participant.bio} icon={participant.icon} badges={participant.badges} mod={mod}/>
+				<Participant name={participant.name} bio={participant.bio} icon={participant.icon} member_id={participant.member_id} badges={participant.badges} mod={mod}/>
 			</li>
 			);
 		};

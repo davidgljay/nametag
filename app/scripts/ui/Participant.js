@@ -14,21 +14,23 @@ var Participant = React.createClass({
 				  </div>);
 		}
 
-		//Show badges
-
 		return(
 			<div>
 				{star}
 				<img src={this.props.icon} alt={this.props.name} className="img-circle"/>
 				<div className="name">{this.props.name}</div>
 				<div className="bio">{this.props.bio}</div>
-				<div className="badges"></div>
+				<div className="badges">
+					{this.props.badges.map(function(badge){
+						return <div className="label label-pill badge">{badge.name}</div>
+					})}
+				</div>
 			</div>
 			);
 	}
 })
 
-Participant.propTypes = { name: React.PropTypes.string, bio: React.PropTypes.string, member_id: React.PropTypes.string, icon: React.PropTypes.string };
+Participant.propTypes = { name: React.PropTypes.string, bio: React.PropTypes.string, member_id: React.PropTypes.string, icon: React.PropTypes.string, badges:React.PropTypes.array };
 Participant.defaultProps = {
 	name:'davidgljay',
 	bio:'Here to party!'
