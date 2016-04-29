@@ -1,7 +1,8 @@
 'use strict';
 
 var React = require('react'),
-Participants = require('./Participants');
+Participants = require('./Participants'),
+Messages = require('./Messages');
 
 var Room = React.createClass({
   getInitialState: function() {
@@ -56,6 +57,9 @@ var Room = React.createClass({
                 </ul>
               </div>
               <Participants roomid={this.props.roomid} mod={this.props.mod}/>
+            </div>
+            <div className="col-md-9">
+              <Messages roomid={this.props.roomid}/>
             </div>
           </div>
       </div>
