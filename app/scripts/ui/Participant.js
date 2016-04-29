@@ -15,14 +15,14 @@ var Participant = React.createClass({
 		}
 
 		return(
-			<div>
+			<div key={this.props.name}>
 				{star}
 				<img src={this.props.icon} alt={this.props.name} className="img-circle"/>
 				<div className="name">{this.props.name}</div>
 				<div className="bio">{this.props.bio}</div>
 				<div className="badges">
 					{this.props.badges.map(function(badge){
-						return <div className="label label-pill badge">{badge.name}</div>
+						return <div className="label label-pill badge" key={badge.name}>{badge.name}</div>
 					})}
 				</div>
 			</div>
