@@ -64,15 +64,7 @@ body {
         float:right;  
         font-size: 10px;    
     }
-    .name {
-        font-weight: bold;
-        font-size: 16px;
-    }
 
-    .img-circle {
-        float:left;
-        margin-right:10px;
-    }
     .bio {
         font-size: 14px;
         font-style: italic;
@@ -84,6 +76,15 @@ body {
     }
 }
 
+.name {
+    font-weight: bold;
+    font-size: 16px;
+}
+.icon {
+    float:left;
+    margin-right:10px;
+}
+
 /* Message display */
 
 .message {
@@ -91,11 +92,6 @@ body {
         font-size: 10px;
         font-style: italic;
         color: grey;
-    }
-
-    .author {
-        float:left;
-        margin-right:10px;
     }
 
     .text {

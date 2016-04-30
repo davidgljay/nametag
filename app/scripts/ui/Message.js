@@ -9,8 +9,6 @@ var Message = React.createClass({
 	},
 	componentDidMount:function() {
 		var self = this;
-		console.log(this.props.roomid)
-		console.log(this.props.author)
 		var authorRef = new Firebase('https://badgespace.firebaseio.com/participants/'+this.props.roomid+"/"+this.props.author);
 		authorRef.on('value', function(author) {
 			this.setState(function(previousState) {
@@ -22,12 +20,15 @@ var Message = React.createClass({
 		}, this);
 	},
 	render:function() {
-		var author = '';
-		console.log(this.state.author)
-		if (this.state.author) {author = this.state.author.icon}
+		var icon, name;
+		if (this.state.author) {
+			icon = this.state.author.icon;
+			name = this.state.author.name;
+		}
 			return (
 				<div className="message">
-					<img className="author img-circle" src={author}/>
+					<img className="author img-circle" src={icon}/>
+					<div className="authorName">{name}</div>
 					<div className="text">{this.props.text}</div>
 					<div className="date">{moment(this.props.date).format('h:mm A, ddd MMM DD YYYY')}</div>
 				</div>
