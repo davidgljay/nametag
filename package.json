@@ -1,6 +1,6 @@
 {
-    "name": "safespace",
-    "version": "0.0.0",
+    "name": "Nametag",
+    "version": "0.0.1",
     "dependencies": {},
     "devDependencies": {
         "browserify": "latest",
