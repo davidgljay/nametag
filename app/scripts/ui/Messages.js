@@ -1,6 +1,7 @@
 'use strict';
 
-var React = require('react');
+var React = require('react'),
+Message = require('./Message');
 
 var Messages = React.createClass({
 	getInitialState:function() {
@@ -46,9 +47,7 @@ var Messages = React.createClass({
 			<div id="messages">
 				{messages.map(function(message) {
 					return (
-						<div className="message" key={message.id}>
-							<div className="messageText">{message.text}</div>
-						</div>
+						<Message text={message.text} date={message.date} key={message.id}/>
 						);
 				})}
 			</div>
@@ -56,7 +55,7 @@ var Messages = React.createClass({
 	}
 })
 
-Messages.propTypes = { Messagesid: React.PropTypes.string };
+Messages.propTypes = { roomid: React.PropTypes.string };
 Messages.defaultProps = { roomid:'stampi' };
 
 module.exports=Messages;
