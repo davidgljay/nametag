@@ -13,11 +13,11 @@ var Messages = React.createClass({
     				if (!messageObj.exists()) {
     					return;
     				}
-    				//TODO: Handle cases where messages are updated.
+
     				self.setState(function(previousState) {
     					var message = messageObj.val();
     					message.id = messageObj.key();
-    					previousState.messages.push(message);
+    					previousState.messages[message.id] = message;
     					return previousState;
     				})
     			});
@@ -25,11 +25,17 @@ var Messages = React.createClass({
 	    function(err) {
 	      console.log("Error getting room from FB:" + err);
 	    }, this);
-		return {messages:[]};
+		return {messages:{}};
 	},
 	render:function() {
 		//TODO: Handle user icons
-		var messages = this.state.messages.sort(function(a,b) {
+
+		var messages = [];
+
+		for (var message in this.state.messages) {
+			messages.push(this.state.messages[message]);
+		}
+		messages.sort(function(a,b) {
 			return a.timestamp - b.timestamp;
 		});
 
