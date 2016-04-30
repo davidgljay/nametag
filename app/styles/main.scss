@@ -84,6 +84,21 @@ body {
     }
 }
 
+/* Message display */
+
+.message {
+    .date {
+        font-size: 10px;
+        font-style: italic;
+        color: grey;
+    }
+
+    .text {
+        font-size: 16px;
+    }
+}
+
+
 /* Custom page footer */
 .footer {
     padding-top: 19px;
