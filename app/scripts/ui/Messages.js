@@ -6,7 +6,7 @@ Message = require('./Message');
 var Messages = React.createClass({
 	getInitialState:function() {
 		var self = this;
-		var messageListRef = new Firebase('https://badgespace.firebaseio.com/room_messages/'+this.props.roomid+"/");
+		var messageListRef = new Firebase('https://badgespace.firebaseio.com/room_messages/'+this.props.roomid);
 	    messageListRef.on('child_added',function(value) {
 	    	var mId = value.val();
     		new Firebase('https://badgespace.firebaseio.com/messages/' + mId)
@@ -29,9 +29,9 @@ var Messages = React.createClass({
 		return {messages:{}};
 	},
 	render:function() {
-		//TODO: Handle user icons
 
-		var messages = [];
+		var messages = [],
+		self=this;
 
 		for (var message in this.state.messages) {
 			messages.push(this.state.messages[message]);
@@ -47,7 +47,7 @@ var Messages = React.createClass({
 			<div id="messages">
 				{messages.map(function(message) {
 					return (
-						<Message text={message.text} date={message.date} key={message.id}/>
+						<Message text={message.text} date={message.date} author={message.author} roomid={self.props.roomid} key={message.id}/>
 						);
 				})}
 			</div>
