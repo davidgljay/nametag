@@ -47,7 +47,7 @@ var Messages = React.createClass({
 			<div id="messages">
 				{messages.map(function(message) {
 					return (
-						<Message text={message.text} date={message.date} author={message.author} roomId={self.props.roomId} key={message.id}/>
+						<Message text={message.text} timestamp={message.timestamp} author={message.author} roomId={self.props.roomId} key={message.id}/>
 						);
 				})}
 			</div>

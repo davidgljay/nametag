@@ -9,7 +9,8 @@ var Message = React.createClass({
 	},
 	componentDidMount:function() {
 		var self = this;
-		var authorRef = new Firebase('https://badgespace.firebaseio.com/participants/'+this.props.roomid+"/"+this.props.author);
+		console.log(this.props.author)
+		var authorRef = new Firebase('https://badgespace.firebaseio.com/participants/'+this.props.roomId+"/"+this.props.author);
 		authorRef.on('value', function(author) {
 			this.setState(function(previousState) {
 				previousState.author = author.val();
@@ -30,13 +31,13 @@ var Message = React.createClass({
 					<img className="icon img-circle" src={icon}/>
 					<div className="name">{name}</div>
 					<div className="text">{this.props.text}</div>
-					<div className="date">{moment(this.props.date).format('h:mm A, ddd MMM DD YYYY')}</div>
+					<div className="date">{moment(this.props.timestamp).format('h:mm A, ddd MMM DD YYYY')}</div>
 				</div>
 				);
 	}
 });
 
 Message.propTypes = {id:React.PropTypes.string, text:React.PropTypes.string, date:React.PropTypes.number, author:React.PropTypes.string, roomid:React.PropTypes.string};
-Message.defaultProps = { id:'msg1', text:'This is the testiest message.', date:1461977139344 };
+Message.defaultProps = { id:'msg1', text:'This is the testiest message.', timestamp:1461977139344 };
 
 module.exports=Message;
