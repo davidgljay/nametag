@@ -24,6 +24,7 @@ var Messages = React.createClass({
     					return previousState;
     				})
 
+    				//TODO: Animate scrolling
     				window.scrollBy(0,90);
     			});
 	    }, 
