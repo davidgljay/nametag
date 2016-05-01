@@ -43,8 +43,8 @@ var Room = React.createClass({
                 <h3 className="text-muted">{this.state.room.title}</h3>
               <div id="description">{this.state.room.description}</div>
           </div>
-          <div className="row">
-            <div id="leftBar" className="col-md-3" >
+          <div>
+            <div id="leftBar">
               <div id="leftBarContent">
                 <div id="norms">
                   <h4>Norms:</h4>
@@ -64,7 +64,7 @@ var Room = React.createClass({
                 </div>
               </div>
             </div>
-            <div className="col-md-9">
+            <div id="chat">
               <Messages roomId={this.props.roomId}/>
             </div>
           </div>

@@ -11,6 +11,7 @@ $gold:#e8ea19;
 
 
 .container {
+    width:100%;
     padding:0px;
     margin:0px;
 }
@@ -44,7 +45,12 @@ $gold:#e8ea19;
     background: $navy;
     padding-top: 80px;
     height: 100vh;
-    padding-left:30px;
+    padding-left:15px;
+    padding-right:15px;
+    width: 275px;
+    position:fixed;
+    top:0px;
+    left:0px;
 }
 
 #norms {
@@ -89,13 +95,14 @@ $gold:#e8ea19;
 
 /* Message display */
 #messages{
-    height:100vh;
+    height:100%;
     width:100%;
     padding-top:80px;
     overflow:scroll;
 
 
     #msgContainer {
+        padding-left: 300px;
         padding-bottom:60px;
     }
 
