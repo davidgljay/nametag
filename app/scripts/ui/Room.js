@@ -7,7 +7,7 @@ Compose = require('./Compose');
 
 var Room = React.createClass({
   getInitialState: function() {
-  	var fbref=new Firebase('https://badgespace.firebaseio.com/rooms/'+this.props.roomid);
+  	var fbref=new Firebase('https://badgespace.firebaseio.com/rooms/'+this.props.roomId);
 
     fbref.on('value',function(value) {
        this.setState({room:value.val()});
@@ -58,24 +58,27 @@ var Room = React.createClass({
                     })}
                   </ul>
                 </div>
-                <Participants roomid={this.props.roomid} mod={this.props.mod}/>
+                <Participants roomId={this.props.roomId} mod={this.props.mod}/>
                 <div className="footer">
                     <p>Built with ♥ by some queers</p>
                 </div>
               </div>
             </div>
             <div className="col-md-9">
-              <Messages roomid={this.props.roomid}/>
+              <Messages roomId={this.props.roomId}/>
             </div>
           </div>
-          <Compose roomid={this.props.roomid}/>
+          <Compose roomId={this.props.roomId} participantId={this.props.participantId} />
       </div>
     );
   }
 });
 
-Room.propTypes = { roomid: React.PropTypes.string };
-Room.defaultProps = {roomid:'stampi'};
+Room.propTypes = { roomId: React.PropTypes.string };
+Room.defaultProps = {
+  roomId:'stampi',
+  participantId:'wxyz'
+};
 
 
 module.exports = Room;

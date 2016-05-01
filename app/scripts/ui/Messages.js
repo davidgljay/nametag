@@ -6,7 +6,7 @@ Message = require('./Message');
 var Messages = React.createClass({
 	getInitialState:function() {
 		var self = this;
-		var messageListRef = new Firebase('https://badgespace.firebaseio.com/room_messages/'+this.props.roomid);
+		var messageListRef = new Firebase('https://badgespace.firebaseio.com/room_messages/'+this.props.roomId);
 	    messageListRef.on('child_added',function(value) {
 	    	var mId = value.val();
     		new Firebase('https://badgespace.firebaseio.com/messages/' + mId)
@@ -47,7 +47,7 @@ var Messages = React.createClass({
 			<div id="messages">
 				{messages.map(function(message) {
 					return (
-						<Message text={message.text} date={message.date} author={message.author} roomid={self.props.roomid} key={message.id}/>
+						<Message text={message.text} date={message.date} author={message.author} roomId={self.props.roomId} key={message.id}/>
 						);
 				})}
 			</div>
@@ -55,7 +55,7 @@ var Messages = React.createClass({
 	}
 })
 
-Messages.propTypes = { roomid: React.PropTypes.string };
-Messages.defaultProps = { roomid:'stampi' };
+Messages.propTypes = { roomId: React.PropTypes.string };
+Messages.defaultProps = { roomId:'stampi' };
 
 module.exports=Messages;

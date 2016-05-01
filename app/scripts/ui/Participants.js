@@ -7,7 +7,7 @@ var Participants = React.createClass({
 	getInitialState:function(){
 		var self = this;
 		//Get participant data
-		var pRef = new Firebase('https://badgespace.firebaseio.com/participants/'+this.props.roomid);
+		var pRef = new Firebase('https://badgespace.firebaseio.com/participants/'+this.props.roomId);
 		pRef.on('value',function(participants) {
 			var pdata = participants.val();
        		self.setState({participants:pdata});
@@ -21,7 +21,7 @@ var Participants = React.createClass({
 	    });
 
 		//Get badge data for each participants
-	    var pBadgeRef = new Firebase('https://badgespace.firebaseio.com/participant_badges/'+this.props.userid+'/'+this.props.roomid);
+	    var pBadgeRef = new Firebase('https://badgespace.firebaseio.com/participant_badges/'+this.props.userid+'/'+this.props.roomId);
 	    var getpBadges = function(memberid) {
 	    	pBadgeRef.child(memberid).on('value', function(badges) {
 	    		self.setState(function(previousState) {
@@ -82,8 +82,8 @@ var Participants = React.createClass({
 	}
 });
 
-Participants.propTypes = { roomid: React.PropTypes.string, mod:React.PropTypes.string };
-Participants.defaultProps = {roomid: "stampi", mod:"wxyz", userid:"abcd"};
+Participants.propTypes = { roomId: React.PropTypes.string, mod:React.PropTypes.string };
+Participants.defaultProps = {roomId: "stampi", mod:"wxyz", userid:"abcd"};
 
 
 module.exports = Participants;
