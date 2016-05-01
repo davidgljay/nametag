@@ -5,29 +5,27 @@ $lime:#92CD00;
 $navy:#1B264F;
 $lightblue:#BEC9F3;
 $blue:#3083b3;
-$grey:#E5E4D7;
+$grey:#E5E5E5;
 $green:#2C6700;
 $gold:#e8ea19;
 
-/* Space out content a bit */
-body {
-    padding-top: 20px;
-    padding-bottom: 20px;
-}
 
-/* Everything but the jumbotron gets side spacing for mobile first views */
-.header,
-.footer {
-    padding-left:15px;
-    padding-right: 15px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-
+.container {
+    padding:0px;
+    margin:0px;
 }
 
 /* Custom page header */
 .header {
     border-bottom: 3px solid $blue;
+    position: fixed;
+    top:0px;
+    z-index:100;
+    background:white;
+    width:100%;
+    padding-left:15px;
+    padding-bottom:5px;
+    padding-right:15px;
 
 
     /* Make the masthead heading the same height as the navigation */
@@ -44,8 +42,9 @@ body {
 #leftBar {
     min-height:400px;
     background: $navy;
-    padding-top: 40px;
-    height: 80vh;
+    padding-top: 80px;
+    height: 100vh;
+    padding-left:30px;
 }
 
 #norms {
@@ -57,7 +56,7 @@ body {
 
 }
 
-.participantProfile {
+.profile {
 
     .ismod {
         color:$gold; 
@@ -66,7 +65,7 @@ body {
     }
 
     .bio {
-        font-size: 14px;
+        font-size: 12px;
         font-style: italic;
     }
     .glyphicon-star {
@@ -74,38 +73,51 @@ body {
         font-size: 20px;
 
     }
-}
 
-.name {
+    .name {
     font-weight: bold;
     font-size: 16px;
+    }
+
+    .icon {
+        float:left;
+        margin-right:10px;
+    }
 }
-.icon {
-    float:left;
-    margin-right:10px;
-}
+
+
 
 /* Message display */
+#messages{
+    height: 100vh;
+    padding-bottom: 40px;
+    padding-top:80px;
 
-.message {
-    .date {
-        font-size: 10px;
-        font-style: italic;
-        color: grey;
-    }
+    .message {
+        .date {
+            font-size: 10px;
+            font-style: italic;
+            color: grey;
+        }
 
-    .text {
-        font-size: 16px;
+        .text {
+            font-size: 16px;
+        }
     }
 }
 
+/* Message composition */
 
-/* Custom page footer */
-.footer {
-    padding-top: 19px;
-    color: #777;
-    border-top: 1px solid #e5e5e5;
+#compose {
+    position:fixed;
+    bottom:0px;
+    margin-right: 15px;
+    margin-bottom: 20px;
+    width:100%;
+    padding-left:300px;
+    padding-right:15px;
 }
+
 
 .container-narrow > hr {
     margin: 30px 0;
@@ -115,14 +127,13 @@ body {
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
 
-    /* Remove the padding we set earlier */
-    .header,
     .footer {
-        margin-left: -15px;
-        margin-right: -15px;
+        color: $grey;
+        font-size: 11px;
+        font-style: italic;
+        position: fixed;
+        bottom: 5px;
+        left: 15px;
     }
 
-    /* Space out the masthead */
-    .header {
-    }
 }

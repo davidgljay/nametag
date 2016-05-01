@@ -66,7 +66,7 @@ var Participants = React.createClass({
 			participant.badges = participant.badges || [];
 
 			return  (
-			<li key={participant.name} className="list-group-item participantProfile">
+			<li key={participant.name} className="list-group-item profile">
 				<Participant name={participant.name} bio={participant.bio} icon={participant.icon} member_id={participant.member_id} badges={participant.badges} mod={mod}/>
 			</li>
 			);

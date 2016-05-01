@@ -17,7 +17,7 @@ var Participant = React.createClass({
 		return(
 			<div key={this.props.name}>
 				{star}
-				<img src={this.props.icon} alt={this.props.name} className="img-circle"/>
+				<img src={this.props.icon} alt={this.props.name} className="img-circle icon"/>
 				<div className="name">{this.props.name}</div>
 				<div className="bio">{this.props.bio}</div>
 				<div className="badges">

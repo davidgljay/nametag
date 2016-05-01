@@ -26,9 +26,9 @@ var Message = React.createClass({
 			name = this.state.author.name;
 		}
 			return (
-				<div className="message">
-					<img className="author img-circle" src={icon}/>
-					<div className="authorName">{name}</div>
+				<div className="message profile">
+					<img className="icon img-circle" src={icon}/>
+					<div className="name">{name}</div>
 					<div className="text">{this.props.text}</div>
 					<div className="date">{moment(this.props.date).format('h:mm A, ddd MMM DD YYYY')}</div>
 				</div>

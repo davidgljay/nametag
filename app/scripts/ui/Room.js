@@ -45,25 +45,30 @@ var Room = React.createClass({
           </div>
           <div className="row">
             <div id="leftBar" className="col-md-3" >
-              <div id="norms">
-                <h4>Norms:</h4>
-                <ul id="normlist">
-                  {this.state.room.norms.map(function(norm) {
-                    return (
-                      <li key={norm} className="norm">
-                        {norm}
-                      </li>
-                    );
-                  })}
-                </ul>
+              <div id="leftBarContent">
+                <div id="norms">
+                  <h4>Norms:</h4>
+                  <ul id="normlist">
+                    {this.state.room.norms.map(function(norm) {
+                      return (
+                        <li key={norm} className="norm">
+                          {norm}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+                <Participants roomid={this.props.roomid} mod={this.props.mod}/>
+                <div className="footer">
+                    <p>Built with ♥ by some queers</p>
+                </div>
               </div>
-              <Participants roomid={this.props.roomid} mod={this.props.mod}/>
             </div>
             <div className="col-md-9">
               <Messages roomid={this.props.roomid}/>
-              <Compose roomid={this.props.roomid}/>
             </div>
           </div>
+          <Compose roomid={this.props.roomid}/>
       </div>
     );
   }
