@@ -45,11 +45,13 @@ var Messages = React.createClass({
 
 		return (
 			<div id="messages">
-				{messages.map(function(message) {
-					return (
-						<Message text={message.text} timestamp={message.timestamp} author={message.author} roomId={self.props.roomId} key={message.id}/>
-						);
-				})}
+				<div id="msgContainer">
+					{messages.map(function(message) {
+						return (
+								<Message text={message.text} timestamp={message.timestamp} author={message.author} roomId={self.props.roomId} key={message.id}/>
+							);
+					})}
+				</div>
 			</div>
 			)
 	}

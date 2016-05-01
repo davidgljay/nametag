@@ -76,7 +76,7 @@ $gold:#e8ea19;
 
     .name {
     font-weight: bold;
-    font-size: 16px;
+    font-size: 14px;
     }
 
     .icon {
@@ -89,11 +89,19 @@ $gold:#e8ea19;
 
 /* Message display */
 #messages{
-    height: 100vh;
-    padding-bottom: 40px;
+    height:100vh;
+    width:100%;
     padding-top:80px;
+    overflow:scroll;
+
+
+    #msgContainer {
+        padding-bottom:60px;
+    }
 
     .message {
+        margin-top:10px;
+        margin-bottom:5px;
         .date {
             font-size: 10px;
             font-style: italic;
