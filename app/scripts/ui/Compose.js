@@ -17,17 +17,20 @@ var Compose = React.createClass({
 	},
 	post:function(e) {
 		e.preventDefault();
-		var newMsg = this.state.msgRef.push({
-			text:this.state.message,
-			timestamp:Date.now(),
-			author:this.props.participantId
-		}, function(err, res) {
-			if (err) {
-				console.log("Error posting message");
-			};
-		})
-		this.state.rmMsgRef.push(newMsg.key())
-		this.setState({message:''});
+		if (this.state.message.length >0) {
+			var newMsg = this.state.msgRef.push({
+				text:this.state.message,
+				timestamp:Date.now(),
+				author:this.props.participantId
+			}, function(err, res) {
+				if (err) {
+					console.log("Error posting message");
+				};
+			})
+			this.state.rmMsgRef.push(newMsg.key())
+			this.setState({message:''});
+		}
+
 	},
 	render:function() {
 		//TODO: Add GIFs, image upload, emoticons
