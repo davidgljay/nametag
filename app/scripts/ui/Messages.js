@@ -40,8 +40,7 @@ var Messages = React.createClass({
 			return a.timestamp - b.timestamp;
 		});
 
-		//TODO: Handle date formatting.
-		//TODO: Make separate message object;
+		//TODO: remove bootstrap formatting and make full width;
 
 		return (
 			<div id="messages">
