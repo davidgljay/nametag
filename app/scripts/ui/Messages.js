@@ -15,18 +15,25 @@ var Messages = React.createClass({
     					return;
     				}
 
+    				//Scroll to the bottom if the message was created before the user entered the room.
+    				var message = messageObj.val();
+    				message.id = messageObj.key();
+
     				self.setState(function(previousState) {
-    					var message = messageObj.val();
-    					message.id = messageObj.key();
     					previousState.messages[message.id] = message;
     					return previousState;
     				})
+
+    				window.scrollBy(0,90);
     			});
 	    }, 
 	    function(err) {
 	      console.log("Error getting room from FB:" + err);
 	    }, this);
-		return {messages:{}};
+		return {
+			messages:{},
+			startTime: Date.now()
+		};
 	},
 	render:function() {
 
@@ -47,7 +54,7 @@ var Messages = React.createClass({
 				<div id="msgContainer">
 					{messages.map(function(message) {
 						return (
-								<Message text={message.text} timestamp={message.timestamp} author={message.author} roomId={self.props.roomId} key={message.id}/>
+								<Message id={message.id} text={message.text} timestamp={message.timestamp} author={message.author} roomId={self.props.roomId} key={message.id}/>
 							);
 					})}
 				</div>
