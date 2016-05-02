@@ -52,13 +52,15 @@ var Messages = React.createClass({
 
 		return (
 			<div id="messages">
-				<div id="msgContainer">
+				<table id="msgContainer">
+					<tbody>
 					{messages.map(function(message) {
 						return (
 								<Message id={message.id} text={message.text} timestamp={message.timestamp} author={message.author} roomId={self.props.roomId} key={message.id}/>
 							);
 					})}
-				</div>
+					</tbody>
+				</table>
 			</div>
 			)
 	}

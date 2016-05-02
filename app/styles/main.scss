@@ -81,8 +81,8 @@ $gold:#e8ea19;
     }
 
     .name {
-    font-weight: bold;
-    font-size: 14px;
+        font-weight: bold;
+        font-size: 14px;
     }
 
     .icon {
@@ -90,8 +90,6 @@ $gold:#e8ea19;
         margin-right:10px;
     }
 }
-
-
 
 /* Message display */
 #messages{
@@ -102,13 +100,24 @@ $gold:#e8ea19;
 
 
     #msgContainer {
-        padding-left: 300px;
-        padding-bottom:60px;
+        margin-left: 300px;
+        margin-bottom:60px;
     }
 
     .message {
-        margin-top:10px;
-        margin-bottom:5px;
+        padding-top:10px;
+        padding-bottom:5px;
+
+        .icon {
+            padding-right:10px;
+            vertical-align: top;
+        }
+
+        .name {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
         .date {
             font-size: 10px;
             font-style: italic;
@@ -119,19 +128,27 @@ $gold:#e8ea19;
             font-size: 16px;
         }
     }
+
+    .actions {
+        color:grey;
+
+        span {
+            padding-right:10px;
+        }
+    }
 }
 
-/* Message composition */
+    /* Message composition */
 
-#compose {
-    position:fixed;
-    bottom:0px;
-    margin-right: 15px;
-    margin-bottom: 20px;
-    width:100%;
-    padding-left:300px;
-    padding-right:15px;
-}
+    #compose {
+        position:fixed;
+        bottom:0px;
+        margin-right: 15px;
+        margin-bottom: 20px;
+        width:100%;
+        padding-left:300px;
+        padding-right:15px;
+    }
 
 
 .container-narrow > hr {

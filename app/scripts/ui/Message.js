@@ -22,6 +22,12 @@ var Message = React.createClass({
 			console.log("Error getting message author info")
 		}, this);
 	},
+	onMouseOver:function(e) {
+		console.log("Mouseover triggered");
+	},
+	modAction:function(e) {
+		console.log("Modaction click");
+	},
 	render:function() {
 		var icon, name;
 		if (this.state.author) {
@@ -29,16 +35,20 @@ var Message = React.createClass({
 			name = this.state.author.name;
 		}
 			return (
-				<div className="message profile">
-					<div className="icon">
+				<tr className="message" OnMouseOver={this.onMouseOver}>
+					<td className="icon">
 						<img className="img-circle" src={icon}/>
-					</div>
-					<div className="messageText">
+					</td>
+					<td className="messageText">
 						<div className="name">{name}</div>
 						<div className="text">{this.props.text}</div>
 						<div className="date">{moment(this.props.timestamp).format('h:mm A, ddd MMM DD YYYY')}</div>
-					</div>
-				</div>
+						<div className="actions">
+							<span className="glyphicon glyphicon-heart" onClick={this.heartAction} aria-hidden="true"/>
+							<span className="glyphicon glyphicon-flag" onClick={this.modAction} aria-hidden="true"/>
+						</div>
+					</td>
+				</tr>
 				);
 	}
 });
