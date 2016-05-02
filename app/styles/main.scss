@@ -18,7 +18,7 @@ $gold:#e8ea19;
 
 /* Custom page header */
 .header {
-    border-bottom: 3px solid $blue;
+    border-bottom: 3px solid $navy;
     position: fixed;
     top:0px;
     z-index:100;
@@ -51,6 +51,7 @@ $gold:#e8ea19;
     position:fixed;
     top:0px;
     left:0px;
+    z-index:50;
 }
 
 #norms {
@@ -143,8 +144,10 @@ $gold:#e8ea19;
     #compose {
         position:fixed;
         bottom:0px;
-        margin-right: 15px;
-        margin-bottom: 20px;
+        padding-right: 30px;
+        padding-bottom: 20px;
+        padding-top:10px;
+        background:white;
         width:100%;
         padding-left:300px;
         padding-right:15px;
