@@ -26,7 +26,7 @@ var Message = React.createClass({
 		}, this);
 	},
 	onMouseEnter:function(e) {
-
+		//TODO: Figure out ok for mobile (no mouseover)
 		this.setState({mouseOver:true})
 	},
 	onMouseLeave:function(e){
@@ -53,7 +53,6 @@ var Message = React.createClass({
 			below = <div className="date">{moment(this.props.timestamp).format('h:mm A, ddd MMM DD YYYY')}</div>
 		}
 		return (
-			<div>
 				<tr className="message" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
 					<td className="icon">
 						<img className="img-circle" src={icon}/>
@@ -62,12 +61,9 @@ var Message = React.createClass({
 						<div className="name">{name}</div>
 						<div className="text">{this.props.text}</div>
 						{below}
+						<div className="msgPadding"></div>
 					</td>
 				</tr>
-				<tr>
-					<td className="msgPadding"></td>
-				</tr>
-			</div>
 			);
 		}
 });
