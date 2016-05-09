@@ -1,13 +1,15 @@
 'use strict';
 
 var React = require('react'),
-moment = require('../../bower_components/moment/moment');
+moment = require('../../bower_components/moment/moment'),
+ModAction = require('./ModAction');
 
 var Message = React.createClass({
 	getInitialState:function() {
 		return {
 			author:{},
-			mouseOver:false
+			mouseOver:false,
+			modAction:false
 		};
 	},
 	componentDidMount:function() {
@@ -33,7 +35,7 @@ var Message = React.createClass({
 		this.setState({mouseOver:false})
 	},
 	modAction:function(e) {
-		console.log("Modaction click");
+		this.setState({modAction:true})
 	},
 	render:function() {
 		var icon, name, below;
@@ -52,6 +54,11 @@ var Message = React.createClass({
 		} else {
 			below = <div className="date">{moment(this.props.timestamp).format('h:mm A, ddd MMM DD YYYY')}</div>
 		}
+
+		if (this.state.modAction) {
+			below = <ModAction roomId={this.props.roomId} msgId={this.props.id}/>
+		}
+
 		return (
 				<tr className="message" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
 					<td className="icon">
