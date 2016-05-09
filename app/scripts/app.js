@@ -4,5 +4,7 @@ var React = window.React = require('react'),
     Room = require("./ui/Room"),
     mountNode = document.getElementById("app");
 
+require('./config')
+
 ReactDOM.render(<Room />, mountNode);
 
