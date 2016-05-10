@@ -75,9 +75,9 @@ var ModAction = React.createClass({
 		//I could also create a system for notifying badgeholders.
 		var visText; 
 		if (this.state.isPublic) {
-			visText = "This reminder will be visible to everyone in the room."
+			visText = "Visible to everyone in the room."
 		} else {
-			visText = "This reminder will be visible only to the author of this message."
+			visText = "Visible only to the author of this message."
 		}
 
 		return (
@@ -110,7 +110,7 @@ var ModAction = React.createClass({
 						Remind
 					</button>
 					<button className={"btn btn-link escalateLink " + (!this.state.escalated || "hide")} onClick={this.escalate}>Escalate</button>
-					<button className={"btn btn-danger " + (this.state.escalated || "hide")} onClick={this.removeUser}>Remove User</button>
+					<button className={"btn btn-danger " + (this.state.escalated || "hide")} onClick={this.removeUser}>Remove {this.props.author}</button>
 					<button className={"btn btn-danger " + (this.state.escalated || "hide")} onClick={this.notifyBadge}>Notify Badge Granters</button>
 				</div>
 		    </div>
