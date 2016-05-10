@@ -58,17 +58,17 @@ var ModAction = React.createClass({
 	},
 	setPublic: function(isPublic) {
 		var self = this;
-		return function(e) {
+		return function() {
 			self.setState({isPublic:isPublic});
 		}
 	},
-	escalate:function(e) {
+	escalate:function() {
 		this.setState({escalated:true})
 	},
 	removeUser:function() {
 		//TODO: Add functionality to remove user. Possibly room blacklist?
 	},
-	addNote:function(e) {
+	addNote:function() {
 		this.setState({message: e.target.value});
 	},
 	render:function() {
@@ -95,7 +95,7 @@ var ModAction = React.createClass({
 
 		return (
 			<div id="modAction">
-				<span aria-hidden="true" className="glyphicon glyphicon-remove"></span>
+				<span aria-hidden="true" className="glyphicon glyphicon-remove" onClick={this.props.close}></span>
 				<h4>Remind {this.props.author} of Conversation Norms</h4>
 				<ul className="list-group">
 				{this.state.norms.map(this.showNorm)}
@@ -130,6 +130,6 @@ var ModAction = React.createClass({
 	}
 })
 
-ModAction.propTypes = { roomId: React.PropTypes.string, msgId: React.PropTypes.string };
+ModAction.propTypes = { roomId: React.PropTypes.string, msgId: React.PropTypes.string, close: React.PropTypes.func };
 
 module.exports=ModAction;

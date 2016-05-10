@@ -27,15 +27,18 @@ var Message = React.createClass({
 			console.log("Error getting message author info")
 		}, this);
 	},
-	onMouseEnter:function(e) {
+	onMouseEnter:function() {
 		//TODO: Figure out ok for mobile (no mouseover)
 		this.setState({mouseOver:true})
 	},
-	onMouseLeave:function(e){
+	onMouseLeave:function(){
 		this.setState({mouseOver:false})
 	},
-	modAction:function(e) {
-		this.setState({modAction:true})
+	modAction:function(open) {
+		var self = this;
+		return function() {
+			self.setState({modAction:open})
+		}
 	},
 	render:function() {
 		var icon, name, below;
@@ -48,7 +51,7 @@ var Message = React.createClass({
 			below = 
 				<div className="actions">
 					<span className="glyphicon glyphicon-heart" onClick={this.heartAction} aria-hidden="true"/>
-					<span className="glyphicon glyphicon-flag" onClick={this.modAction} aria-hidden="true"/>
+					<span className="glyphicon glyphicon-flag" onClick={this.modAction(true)} aria-hidden="true"/>
 				</div>
 				
 		} else {
@@ -56,7 +59,7 @@ var Message = React.createClass({
 		}
 
 		if (this.state.modAction) {
-			below = <ModAction roomId={this.props.roomId} msgId={this.props.id} author={this.state.author.name} className="collapse"/>
+			below = <ModAction roomId={this.props.roomId} msgId={this.props.id} author={this.state.author.name} close={this.modAction(false)}/>
 		}
 
 		return (
