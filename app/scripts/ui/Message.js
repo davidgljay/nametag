@@ -56,7 +56,7 @@ var Message = React.createClass({
 		}
 
 		if (this.state.modAction) {
-			below = <ModAction roomId={this.props.roomId} msgId={this.props.id}/>
+			below = <ModAction roomId={this.props.roomId} msgId={this.props.id} author={this.state.author.name} className="collapse"/>
 		}
 
 		return (

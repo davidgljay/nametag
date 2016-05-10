@@ -10,6 +10,9 @@ $green:#2C6700;
 $gold:#e8ea19;
 
 
+.hide {
+    display:none;
+}
 .container {
     width:100%;
     padding:0px;
@@ -158,6 +161,7 @@ $gold:#e8ea19;
         width:100%;
         padding-left:300px;
         padding-right:15px;
+        z-index:50;
     }
 
 
@@ -165,6 +169,39 @@ $gold:#e8ea19;
     margin: 30px 0;
 }
 
+/*ModAction*/
+
+
+#modAction {
+    width:60%;
+    border-radius:6px;
+    border: 1px $navy solid; 
+    padding: 10px;
+
+    .chooseVis {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .visText {
+        padding-top: 10px;
+        font-style: italic;
+    }
+
+    .escalateLink {
+        color:red;
+    }
+
+    .modActions .btn {
+        margin-right:10px;
+        margin-bottom: 10px;
+    }
+
+}
+
+input[type="checkbox"] {
+    margin-right: 20px;
+}
 
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
