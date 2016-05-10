@@ -4,10 +4,7 @@ var React = require('react');
 
 var ModAction = React.createClass({
 	getInitialState:function() {
-		var self = this;
-		var modActionRef = new Firebase(process.env.FIREBASE_URL + 'mod_actions/' + this.props.msgId);
 		return {
-			modActionRef:modActionRef,
 			norms:[],
 			isPublic:false,
 			note:"",
@@ -53,8 +50,25 @@ var ModAction = React.createClass({
 	preventDefault:function(e) {
 		e.preventDefault();
 	},
-	postAction: function() {
-		//TODO: Allow edits without breaking append-only rule.
+	remindOfNorms: function() {
+		var self = this;
+		var modActionRef = new Firebase(process.env.FIREBASE_URL + 'mod_actions/');
+		//TODO: Allow edits without breaking append-only rule (right now there's one modaction per comment)
+
+		var isChecked = function(item) {
+			return item.checked;
+		}
+		var modAction = {
+			action: "warn",
+			norms: this.state.norms.filter(isChecked),
+			note: this.state.note
+		}
+		//Update firebase with modaction for the user.
+		if (this.state.isPublic) {
+			modActionRef.child( this.props.roomId + "/public/" + this.props.msgId + "/").set(modAction)
+		} else {
+			modActionRef.child( this.props.roomId + "/private/" + this.props.author.id + "/" + this.props.msgId + "/").set(modAction)			
+		}
 	},
 	setPublic: function(isPublic) {
 		var self = this;
@@ -66,17 +80,19 @@ var ModAction = React.createClass({
 		this.setState({escalated:true})
 	},
 	removeUser:function() {
-		//TODO: Add functionality to remove user. Possibly room blacklist?
+		//TODO: Add functionality to remove user.
 	},
-	addNote:function() {
-		this.setState({message: e.target.value});
+	addNote:function(e) {
+		this.setState({note: e.target.value});
 	},
 	render:function() {
-		//Maybe just choose a norm that's been violated and add an optional note?
-		//Keyword is remind
-		//I could add complexity here, cite multiple posts, etc.
-		//I could also create a system for notifying badgeholders.
-		var visText; 
+		//TODO: I could add complexity here, cite multiple posts, etc.
+		//TODO: Create a system for notifying badgeholders.
+		var visText, alert; 
+		if (this.state.alert) {
+
+		}
+
 		if (this.state.isPublic) {
 			visText = (
 					<p>
@@ -96,7 +112,7 @@ var ModAction = React.createClass({
 		return (
 			<div id="modAction">
 				<span aria-hidden="true" className="glyphicon glyphicon-remove" onClick={this.props.close}></span>
-				<h4>Remind {this.props.author} of Conversation Norms</h4>
+				<h4>Remind {this.props.author.name} of Conversation Norms</h4>
 				<ul className="list-group">
 				{this.state.norms.map(this.showNorm)}
 				</ul>
@@ -117,11 +133,11 @@ var ModAction = React.createClass({
 					</div>
 				</div>
 				<div className="modActions">
-					<button className="btn btn-primary">
+					<button className="btn btn-primary" onClick={this.remindOfNorms}>
 						Remind
 					</button>
 					<button className={"btn btn-link escalateLink " + (!this.state.escalated || "hide")} onClick={this.escalate}>Escalate</button>
-					<button className={"btn btn-danger " + (this.state.escalated || "hide")} onClick={this.removeUser}>Remove {this.props.author}</button>
+					<button className={"btn btn-danger " + (this.state.escalated || "hide")} onClick={this.removeUser}>Remove {this.props.author.name}</button>
 					<button className={"btn btn-danger " + (this.state.escalated || "hide")} onClick={this.notifyBadge}>Notify Badge Granters</button>
 				</div>
 		    </div>
@@ -130,6 +146,6 @@ var ModAction = React.createClass({
 	}
 })
 
-ModAction.propTypes = { roomId: React.PropTypes.string, msgId: React.PropTypes.string, close: React.PropTypes.func };
+ModAction.propTypes = { roomId: React.PropTypes.string, msgId: React.PropTypes.string, close: React.PropTypes.func, author: React.PropTypes.object };
 
 module.exports=ModAction;

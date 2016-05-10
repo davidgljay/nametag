@@ -17,10 +17,11 @@ var Message = React.createClass({
 		//TODO: Does this belong in getInitialState of componentDidMount?
 		//It seems like it's bad to set state before the component mounts, so maybe here?
 		var self = this;
-		var authorRef = new Firebase('https://badgespace.firebaseio.com/participants/'+this.props.roomId+"/"+this.props.author);
+		var authorRef = new Firebase(process.env.FIREBASE_URL + 'participants/'+this.props.roomId+"/"+this.props.author);
 		authorRef.on('value', function(author) {
 			this.setState(function(previousState) {
 				previousState.author = author.val();
+				previousState.author.id = this.props.author
 				return previousState;
 			})
 		}, function(err) {
@@ -59,7 +60,7 @@ var Message = React.createClass({
 		}
 
 		if (this.state.modAction) {
-			below = <ModAction roomId={this.props.roomId} msgId={this.props.id} author={this.state.author.name} close={this.modAction(false)}/>
+			below = <ModAction roomId={this.props.roomId} msgId={this.props.id} author={this.state.author} close={this.modAction(false)}/>
 		}
 
 		return (
