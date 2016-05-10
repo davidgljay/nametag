@@ -23,7 +23,7 @@ var ModAction = React.createClass({
 	},
 	showNorm: function(norm) {
 		return (
-			<li className="list-group-item" key={norm.id} onClick={this.checkNorm(norm.id)}>
+			<li className="list-group-item chooseNorm" key={norm.id} onClick={this.checkNorm(norm.id)}>
 				<label className="c-input c-checkbox" >
 				  <input type="checkbox" checked={norm.checked}/>
 				  <span className="c-indicator"></span>
@@ -63,11 +63,24 @@ var ModAction = React.createClass({
 			norms: this.state.norms.filter(isChecked),
 			note: this.state.note
 		}
+
+		var postComplete = function(err) {
+			if(err) {
+				self.setState({alert:"Error posting reminder"});
+			} else {
+				self.props.close();
+			}
+		}
+
+		if (modAction.norms.length === 0) {
+			self.setState({alert:"Please check at least one norm."});
+			return;
+		}
 		//Update firebase with modaction for the user.
 		if (this.state.isPublic) {
-			modActionRef.child( this.props.roomId + "/public/" + this.props.msgId + "/").set(modAction)
+			modActionRef.child( this.props.roomId + "/public/" + this.props.msgId + "/").set(modAction, postComplete)
 		} else {
-			modActionRef.child( this.props.roomId + "/private/" + this.props.author.id + "/" + this.props.msgId + "/").set(modAction)			
+			modActionRef.child( this.props.roomId + "/private/" + this.props.author.id + "/" + this.props.msgId + "/").set(modAction, postComplete)			
 		}
 	},
 	setPublic: function(isPublic) {
@@ -90,7 +103,11 @@ var ModAction = React.createClass({
 		//TODO: Create a system for notifying badgeholders.
 		var visText, alert; 
 		if (this.state.alert) {
-
+			alert = (
+				<div className="alert alert-danger" role="alert">
+ 					{this.state.alert}
+				</div>
+				);
 		}
 
 		if (this.state.isPublic) {
@@ -111,6 +128,7 @@ var ModAction = React.createClass({
 
 		return (
 			<div id="modAction">
+				{alert}
 				<span aria-hidden="true" className="glyphicon glyphicon-remove" onClick={this.props.close}></span>
 				<h4>Remind {this.props.author.name} of Conversation Norms</h4>
 				<ul className="list-group">
@@ -137,7 +155,7 @@ var ModAction = React.createClass({
 						Remind
 					</button>
 					<button className={"btn btn-link escalateLink " + (!this.state.escalated || "hide")} onClick={this.escalate}>Escalate</button>
-					<button className={"btn btn-danger " + (this.state.escalated || "hide")} onClick={this.removeUser}>Remove {this.props.author.name}</button>
+					<button className={"btn btn-danger " + (this.state.escalated || "hide")} onClick={this.removeUser}>Remove {this.props.author.name} From Room</button>
 					<button className={"btn btn-danger " + (this.state.escalated || "hide")} onClick={this.notifyBadge}>Notify Badge Granters</button>
 				</div>
 		    </div>

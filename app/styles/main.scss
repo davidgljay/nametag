@@ -182,7 +182,11 @@ $gold:#e8ea19;
     .glyphicon-remove {
         float:right;
         color:$blue;
+        cursor:pointer;
+    }
 
+    .chooseNorm {
+        cursor:pointer;
     }
 
     .chooseVis {
