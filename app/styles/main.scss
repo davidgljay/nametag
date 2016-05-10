@@ -179,6 +179,12 @@ $gold:#e8ea19;
     padding: 10px;
     margin-top: 20px;
 
+    .glyphicon-remove {
+        float:right;
+        color:$blue;
+
+    }
+
     .chooseVis {
         margin-top: 20px;
         margin-bottom: 20px;
@@ -187,6 +193,11 @@ $gold:#e8ea19;
     .visText {
         padding-top: 10px;
         font-style: italic;
+
+        .glyphicon {
+            margin-right: 10px;
+            font-style: none;
+        }
     }
 
     .escalateLink {

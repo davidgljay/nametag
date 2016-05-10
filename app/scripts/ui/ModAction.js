@@ -65,8 +65,11 @@ var ModAction = React.createClass({
 	escalate:function(e) {
 		this.setState({escalated:true})
 	},
+	removeUser:function() {
+		//TODO: Add functionality to remove user. Possibly room blacklist?
+	},
 	addNote:function(e) {
-
+		this.setState({message: e.target.value});
 	},
 	render:function() {
 		//Maybe just choose a norm that's been violated and add an optional note?
@@ -75,14 +78,24 @@ var ModAction = React.createClass({
 		//I could also create a system for notifying badgeholders.
 		var visText; 
 		if (this.state.isPublic) {
-			visText = "Visible to everyone in the room."
+			visText = (
+					<p>
+						<span aria-hidden="true" className="glyphicon glyphicon-eye-open"></span>
+						Visible to everyone in the room.
+					</p>
+					)
 		} else {
-			visText = "Visible only to the author of this message."
+			visText = (
+				<p>
+					<span aria-hidden="true" className="glyphicon glyphicon-eye-close"></span>
+					Visible only to the author of this message.
+				</p>
+				)
 		}
 
 		return (
 			<div id="modAction">
-				<span aria-hidden="true" class="glyphicon glyphicon-remove"></span>
+				<span aria-hidden="true" className="glyphicon glyphicon-remove"></span>
 				<h4>Remind {this.props.author} of Conversation Norms</h4>
 				<ul className="list-group">
 				{this.state.norms.map(this.showNorm)}
@@ -92,12 +105,10 @@ var ModAction = React.createClass({
 					<div className="btn-group" data-toggle="buttons">
 						<label className={"btn btn-default " + (this.state.isPublic || "active")}>
 							<input type="radio" id="privateAction" onClick={this.setPublic(false)} /> 
-							<span aria-hidden="true" class="glyphicon glyphicon-eye-closed"></span>
 							Private
 						</label> 
 						<label className={"btn btn-default " + (!this.state.isPublic || "active")}>
 							<input type="radio" id="publicAction" onClick={this.setPublic(true)}/> 
-							<span aria-hidden="true" class="glyphicon glyphicon-eye-open"></span>
 							Public
 						</label> 
 					</div>
