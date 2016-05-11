@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react'),
-moment = require('../../bower_components/moment/moment'),
+moment = require('../../../bower_components/moment/moment'),
 ModAction = require('./ModAction');
 
 var Message = React.createClass({

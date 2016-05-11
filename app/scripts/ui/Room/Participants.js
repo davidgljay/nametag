@@ -6,19 +6,6 @@ Participant = require('./Participant');
 var Participants = React.createClass({
 	getInitialState:function(){
 		var self = this;
-		//Get participant data
-		var pRef = new Firebase('https://badgespace.firebaseio.com/participants/'+this.props.roomId);
-		pRef.on('value',function(participants) {
-			var pdata = participants.val();
-       		self.setState({participants:pdata});
-       		for (var participant in pdata) {
-       			getpBadges(pdata[participant].member_id);
-       		}
-
-	    }, 
-	    function(err) {
-	      console.log("Error getting participants from FB:" + err);
-	    });
 
 		//Get badge data for each participants
 	    var pBadgeRef = new Firebase('https://badgespace.firebaseio.com/participant_badges/'+this.props.userid+'/'+this.props.roomId);
@@ -33,6 +20,20 @@ var Participants = React.createClass({
 	    		console.log("Error getting participant badge data")
 	    	});
 	    }
+
+	    		//Get participant data
+		var pRef = new Firebase('https://badgespace.firebaseio.com/participants/'+this.props.roomId);
+		pRef.on('value',function(participants) {
+			var pdata = participants.val();
+       		self.setState({participants:pdata});
+       		for (var participant in pdata) {
+       			getpBadges(pdata[participant].member_id);
+       		}
+
+	    }, 
+	    function(err) {
+	      console.log("Error getting participants from FB:" + err);
+	    });
 		return {
 			participants:{}
 
