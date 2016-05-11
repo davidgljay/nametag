@@ -3,6 +3,10 @@
 var React = require('react');
 
 var ModAction = React.createClass({
+	contextTypes: {
+    	participantId: React.PropTypes.string,
+    	roomId: React.PropTypes.string
+  	},
 	getInitialState:function() {
 		return {
 			norms:[],
@@ -13,7 +17,7 @@ var ModAction = React.createClass({
 	},
 	componentDidMount: function() {
 		var self = this,
-		normsRef = new Firebase(process.env.FIREBASE_URL + "rooms/" + this.props.roomId + "/norms" );
+		normsRef = new Firebase(process.env.FIREBASE_URL + "rooms/" + this.context.roomId + "/norms" );
 		normsRef.on('child_added', function(value) {
 			self.setState(function(previousState) {
 				previousState.norms.push({text:value.val(), id:previousState.norms.length, checked:false})
@@ -61,7 +65,10 @@ var ModAction = React.createClass({
 		var modAction = {
 			action: "warn",
 			norms: this.state.norms.filter(isChecked),
-			note: this.state.note
+			note: this.state.note,
+			timestamp: new Date().getTime(),
+			modId: this.context.participantId,
+			author: this.props.author.id
 		}
 
 		var postComplete = function(err) {
@@ -78,9 +85,9 @@ var ModAction = React.createClass({
 		}
 		//Update firebase with modaction for the user.
 		if (this.state.isPublic) {
-			modActionRef.child( this.props.roomId + "/public/" + this.props.msgId + "/").set(modAction, postComplete)
+			modActionRef.child( this.context.roomId + "/public/" + this.props.msgId + "/").set(modAction, postComplete)
 		} else {
-			modActionRef.child( this.props.roomId + "/private/" + this.props.author.id + "/" + this.props.msgId + "/").set(modAction, postComplete)			
+			modActionRef.child( this.context.roomId + "/private/" + this.props.author.id + "/" + this.props.msgId + "/").set(modAction, postComplete)			
 		}
 	},
 	setPublic: function(isPublic) {
@@ -164,6 +171,6 @@ var ModAction = React.createClass({
 	}
 })
 
-ModAction.propTypes = { roomId: React.PropTypes.string, msgId: React.PropTypes.string, close: React.PropTypes.func, author: React.PropTypes.object };
+ModAction.propTypes = {  msgId: React.PropTypes.string, close: React.PropTypes.func, author: React.PropTypes.object };
 
 module.exports=ModAction;
