@@ -73,7 +73,7 @@ var ModActionNotif = React.createClass({
 				);
 		}
 		return (
-			<tr className="modActionNotif">
+			<tr className="modActionNotif message">
 				<td className="icon">
 					<img className="img-circle" src={this.state.mod.icon}/>
 				</td>
@@ -83,7 +83,7 @@ var ModActionNotif = React.createClass({
 						{this.props.modAction.norms.map(showNorms)}
 					</ul>
 					<p>Regarding the statement:</p>
-					<div className="quote">{this.state.message}</div>
+					<div className="quote well">{this.state.message}</div>
 					<div className="modNote">{this.props.modAction.note}</div>
 				</td>
 			</tr>

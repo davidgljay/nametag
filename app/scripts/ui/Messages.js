@@ -48,7 +48,6 @@ var Messages = React.createClass({
 		addModAction = function(data) {
 			var modAction = data.val();
 			modAction.msgId = data.key();
-			console.log("Adding Mod action");
 			self.setState(function (previousState) {
 				previousState.modActions[modAction.msgId]=modAction;
 				return previousState;
