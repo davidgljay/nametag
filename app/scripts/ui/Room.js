@@ -24,6 +24,17 @@ var Room = React.createClass({
       }
     }
   },
+  //Set participantId and roomId as context for the room.
+  childContextTypes: {
+    participantId: React.PropTypes.string,
+    roomId: React.PropTypes.string
+  },
+  getChildContext: function() {
+    return {
+      participantId: this.props.participantId,
+      roomId: this.props.roomId
+    };
+  },
   componentDidMount: function() {
   	//TODO: mark the user as active in the room.
 
@@ -65,7 +76,7 @@ var Room = React.createClass({
               </div>
             </div>
             <div id="chat">
-              <Messages roomId={this.props.roomId}/>
+              <Messages roomId={this.props.roomId} participantId={this.props.participantId}/>
             </div>
           </div>
           <Compose roomId={this.props.roomId} participantId={this.props.participantId} />
