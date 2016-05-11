@@ -1,7 +1,9 @@
 {
     "name": "Nametag",
     "version": "0.0.1",
-    "dependencies": {},
+    "dependencies": {
+        "react-router":"^2.4.0"
+        },
     "devDependencies": {
         "browserify": "latest",
         "del": "~0.1.3",

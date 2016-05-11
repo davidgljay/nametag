@@ -7,17 +7,7 @@ Compose = require('./Compose');
 
 var Room = React.createClass({
   getInitialState: function() {
-  	var fbref=new Firebase('https://badgespace.firebaseio.com/rooms/'+this.props.roomId);
-
-    fbref.on('value',function(value) {
-       this.setState({room:value.val()});
-    }, 
-    function(err) {
-      console.log("Error getting room from FB:" + err);
-    }, this);
-
     return {
-      fbref:fbref,
       room:{
         title:'',
         norms:[]
@@ -32,19 +22,28 @@ var Room = React.createClass({
   getChildContext: function() {
     return {
       participantId: this.props.participantId,
-      roomId: this.props.roomId
+      roomId: this.props.params.roomId
     };
   },
   componentDidMount: function() {
   	//TODO: mark the user as active in the room.
+    var roomRef=new Firebase('https://badgespace.firebaseio.com/rooms/'+this.props.params.roomId);
+
+    roomRef.on('value',function(value) {
+       this.setState({room:value.val()});
+    }, 
+    function(err) {
+      console.log("Error getting room from FB:" + err);
+    }, this);
 
   },
   componentWillUnmount: function() {
+    var roomRef=new Firebase('https://badgespace.firebaseio.com/rooms/'+this.props.params.roomId);
+    roomRef.off('value');
   	//TODO: mark the user as inactive when they leave the room.
   },
   render: function() {
     //TODO: Move norms to stateless object
-
     return (
     	<div>
     	    <div className="header">
@@ -69,27 +68,27 @@ var Room = React.createClass({
                     })}
                   </ul>
                 </div>
-                <Participants roomId={this.props.roomId} mod={this.props.mod}/>
+                <Participants roomId={this.context.roomId} mod={this.props.mod}/>
                 <div className="footer">
                     <p>Built with ♥ by some queers</p>
                 </div>
               </div>
             </div>
             <div id="chat">
-              <Messages roomId={this.props.roomId} participantId={this.props.participantId}/>
+              <Messages roomId={this.context.roomId} participantId={this.props.participantId}/>
             </div>
           </div>
-          <Compose roomId={this.props.roomId} participantId={this.props.participantId} />
+          <Compose roomId={this.context.roomId} participantId={this.props.participantId} />
       </div>
     );
   }
 });
 
-Room.propTypes = { roomId: React.PropTypes.string };
-Room.defaultProps = {
-  roomId:'stampi',
-  participantId:'wxyz'
-};
+// Room.propTypes = { roomId: React.PropTypes.string };
+// Room.defaultProps = {
+//   roomId:'stampi',
+//   participantId:'wxyz'
+// };
 
 
 module.exports = Room;
