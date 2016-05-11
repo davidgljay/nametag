@@ -6,5 +6,8 @@ var React = window.React = require('react'),
 
 require('./config')
 
+//TODO: Confirm that error handling is added to firebase refs throughout
+//TODO: Confirm that firebase refs are located in componentDidMount and unregistered throught.
+
 ReactDOM.render(<Room />, mountNode);
 
