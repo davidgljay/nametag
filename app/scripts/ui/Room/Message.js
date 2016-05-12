@@ -2,7 +2,8 @@
 
 var React = require('react'),
 moment = require('../../../bower_components/moment/moment'),
-ModAction = require('./ModAction');
+ModAction = require('./ModAction'),
+errorLog = require('../../utils/errorLog');
 
 var Message = React.createClass({
 	getInitialState:function() {
@@ -24,9 +25,11 @@ var Message = React.createClass({
 				previousState.author.id = this.props.author
 				return previousState;
 			})
-		}, function(err) {
-			console.log("Error getting message author info")
-		}, this);
+		}, errorLog("Error getting message author info"), this);
+	},
+	compomnentWillUnmount:function() {
+		var authorRef = new Firebase(process.env.FIREBASE_URL + 'participants/'+this.props.roomId+"/"+this.props.author);
+		authorRef.off()
 	},
 	onMouseEnter:function() {
 		//TODO: Figure out ok for mobile (no mouseover)

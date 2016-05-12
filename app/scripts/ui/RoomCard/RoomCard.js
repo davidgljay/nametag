@@ -1,7 +1,8 @@
 'user stict';
 
 var React = require('react'),
-Participant = require('../Room/Participant');
+Participant = require('../Room/Participant'),
+errorLog = require("../../utils/errorLog");
 
 var RoomCard = React.createClass({
 	getInitialState:function() {
@@ -19,10 +20,9 @@ var RoomCard = React.createClass({
 		var modRef = new Firebase(process.env.FIREBASE_URL + "participants/" + this.props.room.id + "/" + this.props.room.mod),
 		self=this;
 
-		console.log(this.props.room)
 		modRef.on('value', function(value) {
 			self.setState({mod:value.val()});
-		})
+		}, errorLog('Error getting mod info in room card'));
 		for (var i = this.props.room.badges.length - 1; i >= 0; i--) {
 			var badgeRef = new Firebase(process.env.FIREBASE_URL + "badges/" + this.props.room.badges[i]);
 			badgeRef.on('value', function(value) {
@@ -30,7 +30,7 @@ var RoomCard = React.createClass({
 					prevState.badges.push(value.val());
 					return prevState;
 				});
-			});
+			}, errorLog('Error getting badge info for room card'));
 		}
 
 	},

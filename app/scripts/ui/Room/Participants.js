@@ -1,28 +1,31 @@
 'use strict';
 
 var React = require('react'),
-Participant = require('./Participant');
+Participant = require('./Participant'),
+errorLog = require('../../utils/errorLog');
 
 var Participants = React.createClass({
 	getInitialState:function(){
+		return {
+			participants:{}
+		};
+	},
+	componentDidMount:function(){
 		var self = this;
 
 		//Get badge data for each participants
-	    var pBadgeRef = new Firebase('https://badgespace.firebaseio.com/participant_badges/'+this.props.userid+'/'+this.props.roomId);
+	    var pBadgeRef = new Firebase(process.env.FIREBASE_URL + 'participant_badges/'+this.props.userid+'/'+this.props.roomId);
 	    var getpBadges = function(memberid) {
 	    	pBadgeRef.child(memberid).on('value', function(badges) {
 	    		self.setState(function(previousState) {
 	    			previousState.participants[memberid].badges = badges.val();
 	    			return previousState;
 	    		})
-	    	},
-	    	function(err) {
-	    		console.log("Error getting participant badge data")
-	    	});
+	    	},errorLog("Error getting participant badges"));
 	    }
 
 	    		//Get participant data
-		var pRef = new Firebase('https://badgespace.firebaseio.com/participants/'+this.props.roomId);
+		var pRef = new Firebase(process.env.FIREBASE_URL + 'participants/'+this.props.roomId);
 		pRef.on('value',function(participants) {
 			var pdata = participants.val();
        		self.setState({participants:pdata});
@@ -30,21 +33,15 @@ var Participants = React.createClass({
        			getpBadges(pdata[participant].member_id);
        		}
 
-	    }, 
-	    function(err) {
-	      console.log("Error getting participants from FB:" + err);
-	    });
-		return {
-			participants:{}
-
-		};
-	},
-
-	componentDidMount:function(){
-
+	    }, errorLog("Error getting partipant info"));
 	},
 	componentWillUnmount:function(){
-
+		var pRef = new Firebase(process.env.FIREBASE_URL + 'participants/'+this.props.roomId);
+		pRef.off('value');
+		for (var participant in this.state.participants) {
+		    var pBadgeRef = new Firebase(process.env.FIREBASE_URL + 'participant_badges/'+this.props.userid+'/'+this.props.roomId + '/' + participant);
+		    bBadgeRef.off('value');
+		}
 	},
 	render:function(){
 		//Push participants into an array;

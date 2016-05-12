@@ -1,6 +1,7 @@
 'use strict';
 
-var React = require('react');
+var React = require('react'),
+errorLog = require('../../utils/errorLog');
 
 var ModAction = React.createClass({
 	contextTypes: {
@@ -23,7 +24,7 @@ var ModAction = React.createClass({
 				previousState.norms.push({text:value.val(), id:previousState.norms.length, checked:false})
 				return previousState;
 			})
-		})
+		}, errorLog("Error getting room norms"))
 	},
 	showNorm: function(norm) {
 		return (
@@ -74,6 +75,7 @@ var ModAction = React.createClass({
 		var postComplete = function(err) {
 			if(err) {
 				self.setState({alert:"Error posting reminder"});
+				 errorLog('Error putting mod Action')(err)
 			} else {
 				self.props.close();
 			}
@@ -119,11 +121,11 @@ var ModAction = React.createClass({
 
 		if (this.state.isPublic) {
 			visText = (
-					<p>
-						<span aria-hidden="true" className="glyphicon glyphicon-eye-open"></span>
-						Visible to everyone in the room.
-					</p>
-					)
+				<p>
+					<span aria-hidden="true" className="glyphicon glyphicon-eye-open"></span>
+					Visible to everyone in the room.
+				</p>
+				)
 		} else {
 			visText = (
 				<p>

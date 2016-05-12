@@ -1,6 +1,7 @@
 'use strict';
 
-var React = require('react');
+var React = require('react'),
+errorLog = require('../../utils/errorLog');
 
 var ModActionNotif = React.createClass({
 	contextTypes: {
@@ -22,26 +23,17 @@ var ModActionNotif = React.createClass({
 		self = this;
 		msgRef.on('value', function(value) {
 			self.setState({message:value.val().text})
-		},
-		function(err) {
-			console.log(err);
-		});
+		},errorLog("Error getting message in modActionNotif"));
 		modRef.on('value', function(value) {
 			self.setState({mod:value.val()})
-		},
-		function(err) {
-			console.log(err);
-		});
+		},errorLog("Error getting mod info in modActionNotif"));
 		authorRef.on('value', function(value) {
 			self.setState(function(prevState) {
 				prevState.author = value.val();
 				prevState.author.id = value.key();
 				return prevState;
 			})
-		},
-		function(err) {
-			console.log(err);
-		})
+		},errorLog("Error getting author info in modActionNotif"))
 	},
 	componentWillUnmount:function() {
 		var msgRef = new Firebase(process.env.FIREBASE_URL + "messages/" + this.props.modAction.msgId),

@@ -3,7 +3,8 @@
 var React = require('react'),
 Participants = require('./Participants'),
 Messages = require('./Messages'),
-Compose = require('./Compose');
+Compose = require('./Compose'),
+errorLog = require('../../utils/errorLog');
 
 var Room = React.createClass({
   getInitialState: function() {
@@ -31,10 +32,7 @@ var Room = React.createClass({
 
     roomRef.on('value',function(value) {
        this.setState({room:value.val()});
-    }, 
-    function(err) {
-      console.log("Error getting room from FB:" + err);
-    }, this);
+    },errorLog("Error getting room from FB"), this);
 
   },
   componentWillUnmount: function() {

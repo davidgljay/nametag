@@ -1,6 +1,7 @@
 'use strict';
 
-var React = require('react');
+var React = require('react'),
+errorLog = require('../../utils/errorLog');
 
 var Compose = React.createClass({
 	getInitialState:function(){
@@ -22,11 +23,11 @@ var Compose = React.createClass({
 				text:this.state.message,
 				timestamp:Date.now(),
 				author:this.props.participantId
-			}, function(err, res) {
-				if (err) {
-					console.log("Error posting message");
-				};
-			})
+				}, function(err, res) {
+					if (err) {
+						errorLog("Error posting message")(err);
+					};
+				})
 			this.state.rmMsgRef.push(newMsg.key())
 			this.setState({message:''});
 		}

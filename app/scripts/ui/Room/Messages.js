@@ -2,37 +2,11 @@
 
 var React = require('react'),
 Message = require('./Message'),
-ModActionNotif = require('./ModActionNotif');
+ModActionNotif = require('./ModActionNotif'),
+errorLog = require('../../utils/errorLog');
 
 var Messages = React.createClass({
 	getInitialState:function() {
-		var self = this;
-		//TODO: move to componentdidmount
-		var messageListRef = new Firebase('https://badgespace.firebaseio.com/room_messages/'+this.props.roomId);
-	    messageListRef.on('child_added',function(value) {
-	    	var mId = value.val();
-    		new Firebase(process.env.FIREBASE_URL + '/messages/' + mId)
-    			.on('value',function(messageObj) {
-    				if (!messageObj.exists()) {
-    					return;
-    				}
-
-    				//Scroll to the bottom if the message was created before the user entered the room.
-    				var message = messageObj.val();
-    				message.id = messageObj.key();
-
-    				self.setState(function(previousState) {
-    					previousState.messages[message.id] = message;
-    					return previousState;
-    				})
-
-    				//TODO: Animate scrolling
-    				window.scrollBy(0,90);
-    			});
-	    }, 
-	    function(err) {
-	      console.log("Error getting room from FB:" + err);
-	    }, this);
 		return {
 			messages:{},
 			modActions:{},
@@ -41,6 +15,31 @@ var Messages = React.createClass({
 	},
 	componentDidMount:function() {
 		var self=this;
+
+		//Add messages for display
+		var messageListRef = new Firebase('https://badgespace.firebaseio.com/room_messages/'+this.props.roomId);
+	    messageListRef.on('child_added',function(value) {
+	    	var mId = value.val();
+    		var messageRef = new Firebase(process.env.FIREBASE_URL + '/messages/' + mId);
+    		messageRef.on('value',function(messageObj) {
+					if (!messageObj.exists()) {
+						return;
+					}
+
+					//Scroll to the bottom if the message was created before the user entered the room.
+					var message = messageObj.val();
+					message.id = messageObj.key();
+
+					self.setState(function(previousState) {
+						previousState.messages[message.id] = message;
+						return previousState;
+					})
+
+					//TODO: Animate scrolling
+					window.scrollBy(0,90);
+				});
+	    	}, errorLog("Error getting room from FB:" + err), this);
+
 
 		//Add mod actions to state for display
 		var modActionPubRef = new Firebase(process.env.FIREBASE_URL + "/mod_actions/" + this.props.roomId + "/public"),
@@ -54,16 +53,24 @@ var Messages = React.createClass({
 			})
 		};
 
-		modActionPubRef.on('child_added', addModAction);
-		modActionPrivRef.on('child_added', addModAction);
+		modActionPubRef.on('child_added', addModAction, errorLog("Error adding public mod actions"));
+		modActionPrivRef.on('child_added', addModAction, errorLog("Error adding private mod actions"));
+
 
 	},
 	componentWillUnmount:function() {
 		var modActionPubRef = new Firebase(process.env.FIREBASE_URL + "/mod_actions/" + this.props.roomId + "/public"),
-		modActionPrivRef = new Firebase(process.env.FIREBASE_URL + "/mod_actions/" + this.props.roomId + "/private/" + this.props.participantId);
+		modActionPrivRef = new Firebase(process.env.FIREBASE_URL + "/mod_actions/" + this.props.roomId + "/private/" + this.props.participantId),
+		messageListRef = new Firebase(process.env.FIREBASE_URL + 'room_messages/'+this.props.roomId);;
 
-		modActionPubRef.off("child_added");
-		modActionPrivRef.off("child_added");
+		modActionPubRef.off('child_added');
+		modActionPrivRef.off('child_added');
+		messageListRef.off('child_added');
+
+		for (var message in this.state.messages) {
+			var messageRef = new Firebase(process.env.FIREBASE_URL + '/messages/' + message);
+			messageRef.off('value');
+		}
 	},
 	render:function() {
 
