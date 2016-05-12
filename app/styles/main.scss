@@ -262,6 +262,21 @@ $rose:#efcfd7;
     }
 }
 
+/*Room Cards*/
+ #roomCards {
+    width: 80%;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    
+    .roomCard {
+        margin-bottom:30px
+    }
+
+ }
+
+
+
 input[type="checkbox"] {
     margin-right: 20px;
 }
