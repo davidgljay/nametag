@@ -6,7 +6,13 @@ errorLog = require('../../utils/errorLog');
 
 var RoomCards= React.createClass({
 	getInitialState:function() {
-		return {rooms:[]}
+		return {rooms:[
+			// {
+			// 	title:"Test room",
+			// 	description:"Lorem ipsum",
+			// 	id:"abcd"
+			// }
+		]}
 	},
 	componentDidMount:function() {
 		var roomsRef = new Firebase(process.env.FIREBASE_URL + "/rooms"),
@@ -31,7 +37,7 @@ var RoomCards= React.createClass({
 	},
 	render:function() {
 		return (
-				<div id="RoomCards">
+				<div id="roomCards">
 					{this.state.rooms.map(this.showRoomCard)}
 				</div>
 			)

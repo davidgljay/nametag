@@ -38,7 +38,7 @@ var Messages = React.createClass({
 					//TODO: Animate scrolling
 					window.scrollBy(0,90);
 				});
-	    	}, errorLog("Error getting room from FB:" + err), this);
+	    	}, errorLog("Error getting room from FB"), this);
 
 
 		//Add mod actions to state for display

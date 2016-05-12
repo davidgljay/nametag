@@ -36,7 +36,7 @@ var Room = React.createClass({
 
   },
   componentWillUnmount: function() {
-    var roomRef=new Firebase('https://badgespace.firebaseio.com/rooms/'+this.props.params.roomId);
+    var roomRef=new Firebase(process.env.FIREBASE_URL + 'rooms/'+this.props.params.roomId);
     roomRef.off('value');
   	//TODO: mark the user as inactive when they leave the room.
   },
