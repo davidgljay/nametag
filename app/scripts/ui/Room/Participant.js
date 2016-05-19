@@ -10,12 +10,12 @@ var Participant = React.createClass({
 		if (this.props.mod==this.props.member_id) {
 			star=(<div className="ismod">
 					<span className="glyphicon glyphicon-star" aria-hidden="true"></span>
-					<div>Mod</div>
+					<div className="modTitle">Mod</div>
 				  </div>);
 		}
 
 		return(
-			<div key={this.props.name}>
+			<div key={this.props.name} className="participant">
 				{star}
 				<img src={this.props.icon} alt={this.props.name} className="img-circle icon"/>
 				<div className="name">{this.props.name}</div>

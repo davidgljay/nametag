@@ -23,8 +23,8 @@ var RoomCard = React.createClass({
 		modRef.on('value', function(value) {
 			self.setState({mod:value.val()});
 		}, errorLog('Error getting mod info in room card'));
-		for (var i = this.props.room.badges.length - 1; i >= 0; i--) {
-			var badgeRef = new Firebase(process.env.FIREBASE_URL + "badges/" + this.props.room.badges[i]);
+		for (var i = this.props.room.mod_badges.length - 1; i >= 0; i--) {
+			var badgeRef = new Firebase(process.env.FIREBASE_URL + "badges/" + this.props.room.mod_badges[i]);
 			badgeRef.on('value', function(value) {
 				self.setState(function(prevState) {
 					prevState.badges.push(value.val());
@@ -38,8 +38,8 @@ var RoomCard = React.createClass({
 		var modRef = new Firebase(process.env.FIREBASE_URL + "participants/" + this.props.room.mod);
 		modRef.off('value');
 
-		for (var i = this.props.room.badges.length - 1; i >= 0; i--) {
-			var badgeRef = new Firebase(process.env.FIREBASE_URL + "badges/" + this.props.room.badges[i]);
+		for (var i = this.props.room.mod_badges.length - 1; i >= 0; i--) {
+			var badgeRef = new Firebase(process.env.FIREBASE_URL + "badges/" + this.props.room.mod_badges[i]);
 			badgeRef.off('value');
 		}
 	},
@@ -47,16 +47,22 @@ var RoomCard = React.createClass({
 		window.location="/#/rooms/" + this.props.room.id;
 	},
 	render: function() {
-		console.log(this.state.mod);
+		//TODO: 
 		return (
-			<div className="roomCard well">
-				<div className="roomImage">
+			<div className="roomCard row">
+				<div className="roomImage col-md-3">
 					<img className="img-rounded" src={this.props.room.icon}/>
 				</div>
-				<a href={"/#/rooms/" + this.props.room.id}><h3>{this.props.room.title}</h3></a>
-				<p class="roomDesc">{this.props.room.description}</p>
-				<hr></hr>
-				<Participant name={this.state.mod.name} bio={this.state.mod.bio} icon={this.state.mod.icon} member_id={this.state.mod.member_id} badges={[]}/>
+				<div className="roomInfo col-md-5">
+					<div className="roomTime">
+						<b>started:</b> 2 days ago<br/>
+						<b>ends:</b> in 1 week
+					</div>
+					<a href={"/#/rooms/" + this.props.room.id}><h3>{this.props.room.title}</h3></a>
+					<p class="roomDesc">{this.props.room.description}</p>
+					<hr></hr>
+					<Participant className="mod" name={this.state.mod.name} bio={this.state.mod.bio} icon={this.state.mod.icon} member_id={this.state.mod.member_id} badges={this.state.badges}/>
+				</div>
 			</div>
 			)
 	}
