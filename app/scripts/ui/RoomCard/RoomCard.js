@@ -13,7 +13,8 @@ var RoomCard = React.createClass({
 				icon:'',
 				member_id:''
 			},
-			badges: []
+			badges: [],
+			participantCount:0
 		}
 	},
 	componentDidMount:function() {
@@ -33,6 +34,14 @@ var RoomCard = React.createClass({
 			}, errorLog('Error getting badge info for room card'));
 		}
 
+		var particRef = new Firebase(process.env.FIREBASE_URL + "participants/" + this.props.room.id);
+		particRef.on("child_added", function() {
+			self.setState(function(prevState) {
+				prevState.participantCount += 1;
+				return prevState;
+			})
+		})
+
 	},
 	componentWillUnmount:function() {
 		var modRef = new Firebase(process.env.FIREBASE_URL + "participants/" + this.props.room.mod);
@@ -42,6 +51,10 @@ var RoomCard = React.createClass({
 			var badgeRef = new Firebase(process.env.FIREBASE_URL + "badges/" + this.props.room.mod_badges[i]);
 			badgeRef.off('value');
 		}
+		this.setState(function(prevState) {
+			prevState.participantCount =0;
+			return prevState;
+		})
 	},
 	goToRoom:function() {
 		window.location="/#/rooms/" + this.props.room.id;
@@ -58,8 +71,12 @@ var RoomCard = React.createClass({
 						<b>started:</b> 2 days ago<br/>
 						<b>ends:</b> in 1 week
 					</div>
-					<a href={"/#/rooms/" + this.props.room.id}><h3>{this.props.room.title}</h3></a>
-					<p class="roomDesc">{this.props.room.description}</p>
+					<h3>{this.props.room.title}</h3>
+					<p className="roomDesc">
+						{this.props.room.description}<br/>
+						<p className="participantCount">{this.state.participantCount} participant{this.state.participantCount == 1 || 's'}</p>
+					</p>
+
 					<hr></hr>
 					<Participant className="mod" name={this.state.mod.name} bio={this.state.mod.bio} icon={this.state.mod.icon} member_id={this.state.mod.member_id} badges={this.state.badges}/>
 				</div>

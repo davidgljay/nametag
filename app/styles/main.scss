@@ -11,6 +11,7 @@ $green:#2C6700;
 $yellow:#ffff00;
 $lightyellow:#fff2cc;
 $rose:#efcfd7;
+$purple:#67137D;
 
 
 .hide {
@@ -277,12 +278,35 @@ $rose:#efcfd7;
 
     .roomInfo {
 
+        h3 {
+            color:$purple;
+        }
+
+        hr {
+            margin-top:5px;
+        }
+
+        .participantCount {
+            color:$purple;
+            font-size:11px;
+            font-style:italic;
+        }
+
         .roomTime {
             float:right;
+            font-size: 11px;
+            font-style: italic;
+            color: $purple;
         }
 
         .ismod {
             margin-bottom:5px;
+            color:$purple;
+
+            .modTitle {
+                margin-left: 5px;
+                font-weight: bold;
+            }
         }
 
         .modTitle {
@@ -298,6 +322,10 @@ $rose:#efcfd7;
             border: 1px solid $grey;
             padding: 5px;
             border-radius: 4px;
+
+            .name {
+                font-weight:bold;
+            }
         }
     }
 
