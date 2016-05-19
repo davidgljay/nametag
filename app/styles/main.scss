@@ -268,10 +268,18 @@ $rose:#efcfd7;
     margin-top: 50px;
     margin-left: auto;
     margin-right: auto;
+    border-radius: 6px;
     
     .roomCard {
-        margin-bottom:30px
+        margin-bottom:30px;
+        padding:0px;
     }
+
+    .roomImage {
+        float:left;
+    }
+
+
 
  }
 

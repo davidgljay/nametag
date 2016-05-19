@@ -50,6 +50,9 @@ var RoomCard = React.createClass({
 		console.log(this.state.mod);
 		return (
 			<div className="roomCard well">
+				<div className="roomImage">
+					<img className="img-rounded" src={this.props.room.icon}/>
+				</div>
 				<a href={"/#/rooms/" + this.props.room.id}><h3>{this.props.room.title}</h3></a>
 				<p class="roomDesc">{this.props.room.description}</p>
 				<hr></hr>
