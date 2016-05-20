@@ -12,8 +12,8 @@ var CreateRoom = React.createClass({
 				description:'',
 				image:'',
 				mod:'',
-				badges:[]				
-			}
+				badges:[]
+			},
 			mod:{
 				name:'',
 				bio:'',
@@ -38,7 +38,7 @@ var CreateRoom = React.createClass({
 		//Todo add participant screen
 		return (
 				<div id="createRoom">
-					<Alert alert={this.state.alert} type={this.state.alert_type} />
+					<Alert alert={this.state.alert} type={this.state.alertType} />
 					<div className="form-group">
 					    <input type="text" className="form-control" id="RoomTopic" placeholder="Room Topic"/>
 					    <input type="text" className="form-control" id="RoomDescription" placeholder="Room Description"/>
