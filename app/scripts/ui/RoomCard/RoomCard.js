@@ -62,11 +62,11 @@ var RoomCard = React.createClass({
 	render: function() {
 		//TODO: 
 		return (
-			<div className="roomCard row">
-				<div className="roomImage col-md-3">
+			<div className="roomCard">
+				<div className="roomImage">
 					<img className="img-rounded" src={this.props.room.icon}/>
 				</div>
-				<div className="roomInfo col-md-5">
+				<div className="roomInfo">
 					<div className="roomTime">
 						<b>started:</b> 2 days ago<br/>
 						<b>ends:</b> in 1 week

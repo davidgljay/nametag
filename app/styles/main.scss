@@ -270,6 +270,10 @@ $purple:#67137D;
     margin-left: auto;
     margin-right: auto;
     border-radius: 6px;
+
+    .roomImage, .roomInfo {
+        display:inline-block;
+    }
     
     .roomCard {
         margin-bottom:30px;
