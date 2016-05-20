@@ -64,7 +64,7 @@ var RoomCard = React.createClass({
 		return (
 			<div className="roomCard">
 				<div className="roomImage">
-					<img className="img-rounded" src={this.props.room.icon}/>
+					<img className="img-rounded" src={this.props.room.image}/>
 				</div>
 				<div className="roomInfo">
 					<div className="roomTime">
