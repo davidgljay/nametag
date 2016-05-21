@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react'),
-Participants = require('./Participants'),
+Participants = require('../Participant/Participants'),
 Messages = require('./Messages'),
 Compose = require('./Compose'),
 errorLog = require('../../utils/errorLog');
