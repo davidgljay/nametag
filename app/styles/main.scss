@@ -12,6 +12,7 @@ $yellow:#ffff00;
 $lightyellow:#fff2cc;
 $rose:#efcfd7;
 $purple:#67137D;
+$lightpurple:#FCEFFF;
 
 
 .hide {
@@ -49,7 +50,7 @@ $purple:#67137D;
 
 #leftBar {
     min-height:400px;
-    background: $navy;
+    background: $purple;
     padding-top: 80px;
     height: 100vh;
     padding-left:15px;
@@ -73,7 +74,7 @@ $purple:#67137D;
 .profile {
 
     .ismod {
-        color:$yellow; 
+        color:$purple; 
         float:right;  
         font-size: 10px;    
     }
@@ -181,7 +182,7 @@ $purple:#67137D;
 #modAction {
     width:60%;
     border-radius:6px;
-    border: 1px $navy solid; 
+    border: 1px $purple solid; 
     padding: 10px;
     margin-top: 20px;
 
@@ -274,13 +275,26 @@ $purple:#67137D;
     .roomImage, .roomInfo {
         display:inline-block;
     }
+
+    .roomImage {
+        vertical-align: initial;
+    }
     
     .roomCard {
         margin-bottom:30px;
         padding:0px;
+        max-height: 254px;
+        background: $lightpurple;
+        width: 940px;
+        border-radius: 6px;
+        border: 2px solid $purple;
     }
 
     .roomInfo {
+        vertical-align: top;
+        margin-top:20px;
+        margin-left:20px;
+        width:70%;
 
         h3 {
             color:$purple;

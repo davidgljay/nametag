@@ -1,7 +1,7 @@
 'user stict';
 
 var React = require('react'),
-Participant = require('../Room/Participant'),
+Participant = require('../Participant/Participant'),
 errorLog = require("../../utils/errorLog");
 
 var RoomCard = React.createClass({
@@ -72,10 +72,10 @@ var RoomCard = React.createClass({
 						<b>ends:</b> in 1 week
 					</div>
 					<h3>{this.props.room.title}</h3>
-					<p className="roomDesc">
+					<div className="roomDesc">
 						{this.props.room.description}<br/>
 						<p className="participantCount">{this.state.participantCount} participant{this.state.participantCount == 1 || 's'}</p>
-					</p>
+					</div>
 
 					<hr></hr>
 					<Participant className="mod" name={this.state.mod.name} bio={this.state.mod.bio} icon={this.state.mod.icon} member_id={this.state.mod.member_id} badges={this.state.badges}/>
