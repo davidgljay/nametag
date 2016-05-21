@@ -303,7 +303,7 @@ nav {
 
     .roomInfo {
         vertical-align: top;
-        margin-top:20px;
+        margin-top:10px;
         margin-left:20px;
         width:70%;
 
@@ -355,6 +355,12 @@ nav {
             .name {
                 font-weight:bold;
             }
+        }
+
+        .chevronDown {
+            width: 12px;
+            margin-right: auto;
+            margin-left: auto;
         }
     }
 

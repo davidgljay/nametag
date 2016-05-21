@@ -79,6 +79,9 @@ var RoomCard = React.createClass({
 
 					<hr></hr>
 					<Participant className="mod" name={this.state.mod.name} bio={this.state.mod.bio} icon={this.state.mod.icon} member_id={this.state.mod.member_id} badges={this.state.badges}/>
+					<div className="downChevron">
+						<span className="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+					</div>
 				</div>
 			</div>
 			)
