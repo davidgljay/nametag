@@ -25,23 +25,34 @@ $lightpurple:#FCEFFF;
 }
 
 /* Custom page header */
-.header {
-    border-bottom: 3px solid $navy;
-    position: fixed;
-    top:0px;
-    z-index:100;
-    background:white;
-    width:100%;
-    padding-left:15px;
-    padding-bottom:5px;
-    padding-right:15px;
+// .header {
+//     border-bottom: 3px solid $navy;
+//     position: fixed;
+//     top:0px;
+//     z-index:100;
+//     background:white;
+//     width:100%;
+//     padding-left:15px;
+//     padding-bottom:5px;
+//     padding-right:15px;
 
 
-    /* Make the masthead heading the same height as the navigation */
-    h3 {
-        margin-top: 0;
-        margin-bottom: 0;
-        line-height: 40px;
+//     /* Make the masthead heading the same height as the navigation */
+//     h3 {
+//         margin-top: 0;
+//         margin-bottom: 0;
+//         line-height: 40px;
+//     }
+// }
+
+/*Top Nav*/
+nav {
+    background: $grey;
+    padding-left:30px;
+    padding-right:30px;
+
+    a {
+        color:black;
     }
 }
 

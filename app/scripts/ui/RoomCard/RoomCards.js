@@ -2,7 +2,8 @@
 
 var React = require('react'),
 RoomCard = require('./RoomCard'),
-errorLog = require('../../utils/errorLog');
+errorLog = require('../../utils/errorLog'),
+Navbar = require('../Utils/Navbar');
 
 var RoomCards= React.createClass({
 	getInitialState:function() {
@@ -37,9 +38,12 @@ var RoomCards= React.createClass({
 	},
 	render:function() {
 		return (
+			<div id="roomSelection">
+				<Navbar/>
 				<div id="roomCards">
 					{this.state.rooms.map(this.showRoomCard)}
 				</div>
+			</div>
 			)
 	}
 });
