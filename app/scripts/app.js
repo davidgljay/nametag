@@ -9,10 +9,22 @@ import { Router, Route, Link, hashHistory } from 'react-router';
 
 require('./config')
 
-ReactDOM.render((
-	  <Router history={hashHistory}>
-	  	<Route path="/rooms" component={RoomCards}/>
-	  	<Route path="/rooms/:roomId" component={Room}/>
-	  </Router>
-	), mountNode);
+var Nametag = React.createClass({
+	// childContextTypes: {
+	//     userAuth: React.PropTypes.Object
+	// },
+	// getChildContext: function() {
+	//     return {
+	//     	userAuth: new Firebase.auth()
+	//     };
+	// },
+	render: function() {
+		<Router history={hashHistory}>
+			<Route path="/rooms" component={RoomCards}/>
+			<Route path="/rooms/:roomId" component={Room}/>
+		</Router>
+	}
+});
+
+ReactDOM.render(NameTag, mountNode);
 
