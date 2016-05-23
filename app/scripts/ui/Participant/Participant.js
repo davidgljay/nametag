@@ -10,7 +10,7 @@ var Participant = React.createClass({
 		if (this.props.mod==this.props.member_id) {
 			star=(<div className="ismod">
 					<span className="glyphicon glyphicon-star" aria-hidden="true"></span>
-					<div className="modTitle">Mod</div>
+					<div className="modTitle">Host</div>
 				  </div>);
 		}
 
