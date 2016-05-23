@@ -19,12 +19,12 @@ var Nametag = React.createClass({
 	//     };
 	// },
 	render: function() {
-		<Router history={hashHistory}>
+		return (<Router history={hashHistory}>
 			<Route path="/rooms" component={RoomCards}/>
 			<Route path="/rooms/:roomId" component={Room}/>
-		</Router>
+		</Router>);
 	}
 });
 
-ReactDOM.render(NameTag, mountNode);
+ReactDOM.render(<Nametag/>, mountNode);
 
