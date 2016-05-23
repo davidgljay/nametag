@@ -277,7 +277,7 @@ nav {
 
 /*Room Cards*/
  #roomCards {
-    width: 80%;
+    width: 950px;
     margin-top: 50px;
     margin-left: auto;
     margin-right: auto;
@@ -294,7 +294,7 @@ nav {
     .roomCard {
         margin-bottom:30px;
         padding:0px;
-        max-height: 254px;
+        // max-height: 254px;
         background: $lightpurple;
         width: 940px;
         border-radius: 6px;
@@ -354,6 +354,28 @@ nav {
 
             .name {
                 font-weight:bold;
+            }
+        }
+
+        .norms {
+            margin-top: 40px;
+            text-align: center;
+
+            h4 {
+                color:$purple;
+            }
+            p {
+                font-style:italic;
+            }
+
+            li {
+                text-align: left;
+                padding-left:10px;
+            }
+
+            .glyphicon {
+                color:$green;
+                margin-right:20px;
             }
         }
 

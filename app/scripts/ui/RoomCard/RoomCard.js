@@ -7,6 +7,7 @@ errorLog = require("../../utils/errorLog");
 var RoomCard = React.createClass({
 	getInitialState:function() {
 		return {
+			expanded:false,
 			mod:{
 				name:'',
 				bio:'',
@@ -59,8 +60,45 @@ var RoomCard = React.createClass({
 	goToRoom:function() {
 		window.location="/#/rooms/" + this.props.room.id;
 	},
+	toggle:function(expanded) {
+		var self=this;
+		return function(e) {
+			self.setState({expanded:expanded});
+		}
+	},
 	render: function() {
-		//TODO: 
+		var joinPrompt = '',
+		normkey=0;
+		if (this.state.expanded) {
+			joinPrompt=(
+					<div className="expanded">
+						<div className="norms">
+							<h4>Conversation Norms</h4>
+							<p>By joining this conversation, you agree to abide by the following:</p>
+							<ul className="list-group">
+								{this.props.room.norms.map(function(norm) {
+									normkey++;
+									return (
+										<li key={normkey} className="list-group-item">
+											<span className="glyphicon glyphicon-ok" aria-hidden="true" ></span>
+											{norm}
+										</li>
+										);
+								})}
+						</ul>
+						</div>
+						<div className="downChevron" onClick={this.toggle(false)}>
+							<span className="glyphicon glyphicon-chevron-up" aria-hidden="true" ></span>
+						</div>
+					</div>
+				)
+		} else {
+			joinPrompt = (
+				<div className="downChevron" onClick={this.toggle(true)}>
+					<span className="glyphicon glyphicon-chevron-down" aria-hidden="true" ></span>
+				</div>
+				);
+		}
 		return (
 			<div className="roomCard">
 				<div className="roomImage">
@@ -79,9 +117,7 @@ var RoomCard = React.createClass({
 
 					<hr></hr>
 					<Participant className="mod" name={this.state.mod.name} bio={this.state.mod.bio} icon={this.state.mod.icon} member_id={this.state.mod.member_id} badges={this.state.badges}/>
-					<div className="downChevron">
-						<span className="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
-					</div>
+					{joinPrompt}	
 				</div>
 			</div>
 			)
