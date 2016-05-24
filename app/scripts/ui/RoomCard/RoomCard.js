@@ -2,6 +2,7 @@
 
 var React = require('react'),
 Participant = require('../Participant/Participant'),
+Login = require('../Participant/Login'),
 errorLog = require("../../utils/errorLog");
 
 var RoomCard = React.createClass({
@@ -87,6 +88,7 @@ var RoomCard = React.createClass({
 								})}
 						</ul>
 						</div>
+						<Login/>
 						<div className="downChevron" onClick={this.toggle(false)}>
 							<span className="glyphicon glyphicon-chevron-up" aria-hidden="true" ></span>
 						</div>
