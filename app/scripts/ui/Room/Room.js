@@ -82,11 +82,11 @@ var Room = React.createClass({
   }
 });
 
-// Room.propTypes = { roomId: React.PropTypes.string };
-// Room.defaultProps = {
-//   roomId:'stampi',
-//   participantId:'wxyz'
-// };
+Room.propTypes = { roomId: React.PropTypes.string };
+Room.defaultProps = {
+  roomId:'stampi',
+  participantId:'wxyz'
+};
 
 
 module.exports = Room;

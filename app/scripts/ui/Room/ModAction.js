@@ -85,6 +85,7 @@ var ModAction = React.createClass({
 			self.setState({alert:"Please check at least one norm."});
 			return;
 		}
+		
 		//Update firebase with modaction for the user.
 		if (this.state.isPublic) {
 			modActionRef.child( this.context.roomId + "/public/" + this.props.msgId + "/").set(modAction, postComplete)
