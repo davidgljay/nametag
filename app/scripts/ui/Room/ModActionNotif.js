@@ -53,7 +53,7 @@ var ModActionNotif = React.createClass({
 		if (this.state.author.id == this.context.participantId) {
 			callout = (
 					<div>
-						<h4>Heads up!</h4>
+						<h5>Heads up</h5>
 						<p>
 							{this.state.mod.name} would like to remind you of the following norm{this.props.modAction.norms.length == 1 || "s"}:
 						</p>
