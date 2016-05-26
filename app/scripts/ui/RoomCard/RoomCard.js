@@ -67,6 +67,9 @@ var RoomCard = React.createClass({
 			self.setState({expanded:expanded});
 		}
 	},
+	checkLogin:function() {
+		return new Firebase(process.env.FIREBASE_URL).getAuth();
+	},
 	render: function() {
 		var joinPrompt = '',
 		normkey=0;
@@ -75,7 +78,6 @@ var RoomCard = React.createClass({
 					<div className="expanded">
 						<div className="norms">
 							<h4>Conversation Norms</h4>
-							<p>By joining this conversation, you agree to abide by the following:</p>
 							<ul className="list-group">
 								{this.props.room.norms.map(function(norm) {
 									normkey++;
@@ -86,9 +88,13 @@ var RoomCard = React.createClass({
 										</li>
 										);
 								})}
-						</ul>
+							</ul>
+							<label class="c-input c-checkbox">
+							  <input type="checkbox"/>
+							  <span>I agree to abide by these norms</span>
+							</label>
 						</div>
-						<Login/>
+						<Login checkLogin={this.checkLogin}/>
 						<div className="downChevron" onClick={this.toggle(false)}>
 							<span className="glyphicon glyphicon-chevron-up" aria-hidden="true" ></span>
 						</div>
