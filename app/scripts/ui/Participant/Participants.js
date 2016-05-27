@@ -40,7 +40,7 @@ var Participants = React.createClass({
 		pRef.off('value');
 		for (var participant in this.state.participants) {
 		    var pBadgeRef = new Firebase(process.env.FIREBASE_URL + 'participant_badges/'+this.props.userid+'/'+this.props.roomId + '/' + participant);
-		    bBadgeRef.off('value');
+		    pBadgeRef.off('value');
 		}
 	},
 	render:function(){
