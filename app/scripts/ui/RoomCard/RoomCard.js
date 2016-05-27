@@ -93,7 +93,7 @@ var RoomCard = React.createClass({
 							  <span>I agree to abide by these norms</span>
 							</label>
 						</div>
-						<Join roomId={this.props.roomId}/>
+						<Join roomId={this.props.room.id}/>
 						<div className="downChevron" onClick={this.toggle(false)}>
 							<span className="glyphicon glyphicon-chevron-up" aria-hidden="true" ></span>
 						</div>

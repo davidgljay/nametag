@@ -1,13 +1,15 @@
 'use strict'
 
-module.exports = function(props) {
-	var alert ='';
-	if (this.props.alert) {
-		alert = (
-			<div className={"alert alert-" + this.props.alertType} role="alert">
-					{this.props.alert}
+var Alert = (props) => {
+	if (props.alert) {
+		return (
+			<div className={"alert alert-" + props.alertType} role="alert">
+					{props.alert}
 			</div>
 			);
+	} else {
+		return null;
 	}
-	return alert;
-}
+};
+
+module.exports=Alert;
