@@ -2,7 +2,7 @@
 
 var React = require('react'),
 Participant = require('../Participant/Participant'),
-Login = require('../Participant/Login'),
+Join = require('./Join'),
 errorLog = require("../../utils/errorLog");
 
 var RoomCard = React.createClass({
@@ -16,7 +16,8 @@ var RoomCard = React.createClass({
 				member_id:''
 			},
 			badges: [],
-			participantCount:0
+			participantCount:0,
+			login: new Firebase(process.env.FIREBASE_URL).getAuth()
 		}
 	},
 	componentDidMount:function() {
@@ -67,12 +68,10 @@ var RoomCard = React.createClass({
 			self.setState({expanded:expanded});
 		}
 	},
-	checkLogin:function() {
-		return new Firebase(process.env.FIREBASE_URL).getAuth();
-	},
 	render: function() {
 		var joinPrompt = '',
 		normkey=0;
+
 		if (this.state.expanded) {
 			joinPrompt=(
 					<div className="expanded">
@@ -94,7 +93,7 @@ var RoomCard = React.createClass({
 							  <span>I agree to abide by these norms</span>
 							</label>
 						</div>
-						<Login checkLogin={this.checkLogin}/>
+						<Join roomId={this.props.roomId}/>
 						<div className="downChevron" onClick={this.toggle(false)}>
 							<span className="glyphicon glyphicon-chevron-up" aria-hidden="true" ></span>
 						</div>
@@ -107,6 +106,7 @@ var RoomCard = React.createClass({
 				</div>
 				);
 		}
+
 		return (
 			<div className="roomCard">
 				<div className="roomImage">

@@ -382,6 +382,7 @@ nav {
             margin-right: auto;
             margin-left: auto;
             color:$purple;
+            cursor:pointer;
         }
     }
 
@@ -389,6 +390,9 @@ nav {
 
  #login {
     text-align: center;
+    img {
+        cursor:pointer;
+    }
  }
 
 
