@@ -15,12 +15,11 @@ var Join = React.createClass({
 		this.setState({login:new Firebase(process.env.FIREBASE_URL).getAuth()});
 	},
 	render:function() {
-		// console.log(EditNametag);
-		var login = {
-			uid:'abcd'
-		};
+		// var login = {
+		// 	uid:'abcd'
+		// };
 		if (this.state.login) {
-			return (<EditNametag login={login} roomId={this.props.roomId}/>);
+			return (<EditNametag login={this.state.login} roomId={this.props.roomId}/>);
 		} else {
 			return (<Login checkLogin={this.checkLogin}/>);
 		}
