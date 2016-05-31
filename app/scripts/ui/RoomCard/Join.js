@@ -6,22 +6,18 @@ Login = require('../Participant/Login'),
 EditNametag = require('../Participant/EditNametag');
 
 var Join = React.createClass({
-	getInitialState:function() {
-		return {
-			login: new Firebase(process.env.FIREBASE_URL).getAuth()
-		}
-	},
-	checkLogin:function() {
-		this.setState({login:new Firebase(process.env.FIREBASE_URL).getAuth()});
+	contextTypes: {
+		userAuth:React.PropTypes.object,
+		checkAuth:React.PropTypes.func
 	},
 	render:function() {
 		// var login = {
 		// 	uid:'abcd'
 		// };
-		if (this.state.login) {
-			return (<EditNametag login={this.state.login} roomId={this.props.roomId}/>);
+		if (this.context.userAuth) {
+			return (<EditNametag login={this.context.userAuth} roomId={this.props.roomId}/>);
 		} else {
-			return (<Login checkLogin={this.checkLogin}/>);
+			return (<Login/>);
 		}
 	}
 });

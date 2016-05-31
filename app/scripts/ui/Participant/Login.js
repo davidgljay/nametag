@@ -20,8 +20,9 @@ TODO: Handle login if twitter is already activated
 
 var Login = React.createClass({
 	contextTypes: {
-    	userAuth: React.PropTypes.func,
-    	unAuth: React.PropTypes.func
+    	userAuth: React.PropTypes.object,
+    	unAuth: React.PropTypes.func,
+    	checkAuth: React.PropTypes.func
   	},
 	getInitialState:function() {
 		return {
@@ -33,7 +34,10 @@ var Login = React.createClass({
 		defaultsRef = new Firebase(process.env.FIREBASE_URL + 'user_defaults/' + userinfo.uid);
 
 		fbref.child(userinfo.provider).set(userinfo[userinfo.provider].cachedUserProfile);
-		this.addIfUniq(defaultsRef, 'names', userinfo[userinfo.provider].cachedUserProfile.description);
+		this.addIfUniq(defaultsRef, 'bios', userinfo[userinfo.provider].cachedUserProfile.description);
+		this.addIfUniq(defaultsRef, 'names', userinfo[userinfo.provider].username);
+		// this.addIfUniq(defaultsRef, 'names', userinfo[userinfo.provider].displayName);
+		this.addIfUniq(defaultsRef, 'icons', userinfo[userinfo.provider].profileImageURL);
 		// defaultsRef.child('bios').push(userinfo[userinfo.provider].cachedUserProfile.description);
 		// defaultsRef.child('names').push(userinfo[userinfo.provider].username);
 		// defaultsRef.child('names').push(userinfo[userinfo.provider].displayName);
@@ -46,12 +50,14 @@ var Login = React.createClass({
 		ref.child(child).transaction(function(currentData) {
 			console.log(currentData);
 			var uniq = true;
+			if (currentData === null) {
+				return [data];
+			}
 			for (var key in currentData) {
 				if (currentData[key]==data) {
 					uniq = false;
 				}
 			}
-
 			if (uniq) {
 				currentData.push(data)
 				return currentData;

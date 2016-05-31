@@ -24,9 +24,9 @@ var EditNametag = React.createClass({
 			self.setState(function(prevState) {
 				prevState.defaults=value.val();
 				console.log(prevState.defaults);
-				prevState.default.name = prevState.defaults.names[Object.keys(prevState.defaults.names)[0]];
-				prevState.default.bio = prevState.defaults.bios[Object.keys(prevState.defaults.bios)[0]];
-				prevState.default.icon = prevState.defaults.icons[Object.keys(prevState.defaults.icons)[0]];
+				prevState.default.name = prevState.defaults.names[0];
+				prevState.default.bio = prevState.defaults.bios[0];
+				prevState.default.icon = prevState.defaults.icons[0];
 				return prevState;
 			});
 		})
