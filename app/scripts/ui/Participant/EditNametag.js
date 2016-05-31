@@ -46,12 +46,12 @@ var EditNametag = React.createClass({
 		//TODO:Add badges
 		// return (<div>Editname</div>);
 		return (
-				<div className="editProfile">
+				<div className="editProfile profile">
 					<Alert alert={this.state.alert} type={this.state.alertType} />
 					<div className="form-group">
 						<img src={this.state.default.icon} className="img-circle icon"/>
 					    <input type="text" className="form-control name" id="participantName" placeholder={this.state.default.name}/>
-					    <input type="text" className="form-control bio" id="participantDescription" placeholder={this.state.default.bio}/>
+					    <textarea rows="2" className="form-control bio" id="participantDescription" placeholder={this.state.default.bio}/>
 					</div>
 				</div>
 			)

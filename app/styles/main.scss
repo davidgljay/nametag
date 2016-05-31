@@ -109,6 +109,18 @@ nav {
     }
 }
 
+.editProfile {
+    border-radius:6px;
+    background:white;
+    .form-control {
+        border: none;
+        background: none;   
+        box-shadow:none;
+        resize:none;     
+    }
+    width:270px;
+}
+
 /* Message display */
 #messages{
     height:100%;
