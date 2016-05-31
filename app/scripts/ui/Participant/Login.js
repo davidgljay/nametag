@@ -19,6 +19,10 @@ TODO: Handle login if twitter is already activated
 */
 
 var Login = React.createClass({
+	contextTypes: {
+    	userAuth: React.PropTypes.func,
+    	unAuth: React.PropTypes.func
+  	},
 	getInitialState:function() {
 		return {
 			showEmail:false
@@ -29,13 +33,30 @@ var Login = React.createClass({
 		defaultsRef = new Firebase(process.env.FIREBASE_URL + 'user_defaults/' + userinfo.uid);
 
 		fbref.child(userinfo.provider).set(userinfo[userinfo.provider].cachedUserProfile);
-		defaultsRef.child('bios').push(userinfo[userinfo.provider].cachedUserProfile.description);
-		defaultsRef.child('username').push(userinfo[userinfo.provider].username);
-		defaultsRef.child('username').push(userinfo[userinfo.provider].displayName);
-		//TODO: copy profile image to s3
-		defaultsRef.child('icons').push(userinfo[userinfo.provider].profileImageURL);
+		this.addIfUniq(defaultsRef, 'names', userinfo[userinfo.provider].cachedUserProfile.description);
+		// defaultsRef.child('bios').push(userinfo[userinfo.provider].cachedUserProfile.description);
+		// defaultsRef.child('names').push(userinfo[userinfo.provider].username);
+		// defaultsRef.child('names').push(userinfo[userinfo.provider].displayName);
+		// //TODO: copy profile image to s3
+		// defaultsRef.child('icons').push(userinfo[userinfo.provider].profileImageURL);
 
-		this.props.checkLogin();
+		this.context.checkAuth();
+	},
+	addIfUniq:function(ref, child, data) {
+		ref.child(child).transaction(function(currentData) {
+			console.log(currentData);
+			var uniq = true;
+			for (var key in currentData) {
+				if (currentData[key]==data) {
+					uniq = false;
+				}
+			}
+
+			if (uniq) {
+				currentData.push(data)
+				return currentData;
+			}
+		})
 	},
 	providerAuth:function(provider) {
 		var self=this;

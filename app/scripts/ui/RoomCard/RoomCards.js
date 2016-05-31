@@ -7,14 +7,12 @@ Navbar = require('../Utils/Navbar');
 
 var RoomCards= React.createClass({
 	getInitialState:function() {
-		return {rooms:[
-			// {
-			// 	title:"Test room",
-			// 	description:"Lorem ipsum",
-			// 	id:"abcd"
-			// }
-		]}
+		return {rooms:[]}
 	},
+	contextTypes: {
+    	userAuth: React.PropTypes.object,
+    	unAuth: React.PropTypes.func
+  	},
 	componentDidMount:function() {
 		var roomsRef = new Firebase(process.env.FIREBASE_URL + "/rooms"),
 		self=this;
@@ -39,7 +37,7 @@ var RoomCards= React.createClass({
 	render:function() {
 		return (
 			<div id="roomSelection">
-				<Navbar/>
+				<Navbar userAuth={this.context.userAuth} unAuth={this.context.unAuth}/>
 				<div id="roomCards">
 					{this.state.rooms.map(this.showRoomCard)}
 				</div>

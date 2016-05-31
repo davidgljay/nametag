@@ -1,6 +1,14 @@
 'use strict';
 
 module.exports = function(props) {
+	var login;
+
+	if (props.userAuth) {
+		login = (<a className="nav-link" onClick={props.unAuth}>Log out</a>);
+	} else {
+		login = (<a className="nav-link" href="#">Log In</a>);
+	}
+
 	return (
 		<nav className="navbar navbar-light bg-faded">
 		  <a className="navbar-brand" href="#">Nametag</a>
@@ -14,7 +22,11 @@ module.exports = function(props) {
 		    <li className="nav-item">
 		      <a className="nav-link" href="#">About</a>
 		    </li>
+		    <li className="nav-item">
+		      {login}
+		    </li> 
 		  </ul>
 		</nav>
 	)
 }
+
