@@ -27,7 +27,7 @@ var Message = React.createClass({
 			})
 		}, errorLog("Error getting message author info"), this);
 	},
-	compomnentWillUnmount:function() {
+	componentWillUnmount:function() {
 		var authorRef = new Firebase(process.env.FIREBASE_URL + 'participants/'+this.props.roomId+"/"+this.props.author);
 		authorRef.off()
 	},
