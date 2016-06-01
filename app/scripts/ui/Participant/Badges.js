@@ -11,42 +11,47 @@ var Badges = React.createClass({
 			badges:[]
 		};
 	},
+	contextTypes: {
+		userAuth:React.PropTypes.object
+	},
 	componentDidMount:function() {
-		//TODO: Replace with a function that checks the blockchain, probably a node cluster.
-		var badgeRef = new Firebase(process.env.FIREBASE_URL + "badges"),
-		self = this;
-		for (var i=0; i<this.props.badges.length; i++) {
-			badgeRef.child(this.props.badges[i])
-				.on('value', function(value) {
+		var self = this,
+		userBadgeRef = new Firebase(process.env.FIREBASE_URL + "/user_badges/" + this.context.userAuth.uid),
+		badgeRef = new Firebase(process.env.FIREBASE_URL + "badges");
+		userBadgeRef.on("child_added", function(badgeId) {
+			badgeRef.child(badgeId.val())
+				.on('value', function(badge) {
 					self.setState(function(prevState) {
-						prevState.badges.push(value.val());
+						var badgeData = badge.val();
+						badgeData.id = badgeId.val();
+						prevState.badges.push(badgeData);
 						return prevState;
-					})
+					});
 				}, errorLog("Error getting badge info"));
-		}
+		});
+		//TODO: Replace with a function that checks the blockchain, probably a node cluster.
+	
 	},
 	componentWillUnmount:function() {
-		var badgeRef = new Firebase(process.env.FIREBASE_URL + "badges");
-		for (var i=0; i<this.props.badges.length; i++) {
-			badgeRef.child(this.props.badges[i])
+		var userBadgeRef = new Firebase(process.env.FIREBASE_URL + "/user_badges/" + this.context.userAuth.uid),
+		badgeRef = new Firebase(process.env.FIREBASE_URL + "badges");
+		for (var i=0; i<this.state.badges.length; i++) {
+			badgeRef.child(this.state.badges[i].id)
 				.off('value');
-		}	
+		}
+		userBadgeRef.off('child_added');
 
 	},
 	render: function() {
 		//TODO: Figure out how to expand and contract badges
 		return (
 				<div id="badges">
-					<ul>
-					{this.props.badges.map(function(badge) {
-						return <Badge name={badge.name} key={badge.name}/>;
-					})}
-					</ul>
+					 {this.state.badges.map(function(badge) {
+					 	return <Badge badge={badge} key={badge.id}/>;
+					 })}
 				</div>
 			)
 	}
 })
-
-Badges.propTypes = { badges: React.propTypes.Array };
 
 module.exports = Badges;

@@ -1,41 +1,49 @@
 'uses strict';
 
+var React = require('react'),
+moment = require('../../../bower_components/moment/moment')
+
+//TODO: This currently displays all user badges, as opposed to only the participant badges. A major violation of trust!
+
 var Badge = React.createClass({
 	getInitialState:function() {
 		return {
 			expanded:false,
 		};
 	},
-	toggle:function(expanded) {
-		var self=this;
-		return function(e) {
-			self.setState({expanded:expanded});
-		}
+	toggleExpanded:function() {
+		this.setState({expanded:!this.state.expanded});
 	},
 	render:function() {
-		if (self.state.expanded) {
+		if (this.state.expanded) {
 			return (
-					<div className="badge">
-						<img className="icon" alt="icon" src={this.props.badge.icon}/>
+					<div className="badgeExpanded">
+						<span aria-hidden="true" className="glyphicon glyphicon-remove" onClick={this.toggleExpanded}></span>
+						<img className="icon" alt="icon" src={this.props.badge.icon_array[0]}/>
 						<div className="name">{this.props.badge.name}</div>
-						<div className="granter">{this.props.badge.granter}</div>
-						<div className="description">{this.props.badge.description}</div>
+						<div className="granter">Verified by: {this.props.badge.granter}</div>
+						<div className="description">{this.props.badge.description_array[0]}</div>
+						<hr/>
 						<div className="notes">
 							{this.props.badge.notes.map(function(note) {
-								<div className="note" key={note.date}>
-									<div className="date">{note.date}</div>
-									<div className="msg">{note.msg}</div>
-								</div>
+								return (
+									<div className="note" key={note.date}>
+										<div className="date">{moment(note.date).format("MMMM Do, YYYY")}:</div>
+										<div className="msg">{note.msg}</div>
+									</div>
+								)
 							})}
 						</div>
 					</div>
 				)
 		} else {
 			return (
-					<li>{this.props.name}</li>
+					<div className="label label-pill badge" onClick={this.toggleExpanded}>{this.props.badge.name}</div>
 				)
 		}
 	}
 });
 
-Badge.propTypes={id:React.PropType.string};
+Badge.propTypes={badge:React.PropTypes.object};
+
+module.exports=Badge;
