@@ -120,13 +120,23 @@ nav {
 #editNametag {
     background:white;
     border-radius:6px;
+
+    .nametagFields {
+        display:inline-block;
+    }
     
     .form-control {
+        padding-left:0px;
         border: none;
         background: none;   
         box-shadow:none;
         resize:none;   
     }  
+
+    img {
+        margin:10px;
+        padding:0px;
+    }
 }
 
 #userBadges .userBadgeText {
