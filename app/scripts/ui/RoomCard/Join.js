@@ -10,7 +10,12 @@ Alert = require('../Utils/Alert');
 var Join = React.createClass({
 	getInitialState:function() {
 		return {
-			alert:null
+			alert:null,
+			nametag: {
+				name:'',
+				bio:'',
+				icon:''
+			}
 		};
 	},
 	contextTypes: {
@@ -22,11 +27,28 @@ var Join = React.createClass({
 		return function(e) {
 			var val = e.target.value;
 			self.setState(function(prevState) {
-				prevState.nametag['name']=e.target.value;
+				prevState.nametag[property]=val;
 				return prevState;
 			});
 		}
 
+	},
+	componentDidMount:function() {
+		var self=this,
+		defaultsRef = new Firebase(process.env.FIREBASE_URL + "user_defaults/" + this.context.userAuth.uid);
+		defaultsRef.on("value", function(value) {
+			self.setState(function(prevState) {
+				prevState.defaults=value.val();
+				prevState.nametag.name = prevState.defaults.names[0];
+				prevState.nametag.bio = prevState.defaults.bios[0];
+				prevState.nametag.icon = prevState.defaults.icons[0];
+				return prevState;
+			});
+		})
+	},
+	componentWillUnmount:function() {
+		var defaultsRef = new Firebase(process.env.FIREBASE_URL + "user_defaults/" + this.context.userAuth.uid);
+		defaultsRef.off("value");
 	},
 	joinRoom:function() {
 		if (!this.props.normsChecked) {
@@ -48,7 +70,7 @@ var Join = React.createClass({
 						<p className="userBadgeText">Share these badges by dragging them onto your nametag.</p>
 						<Badges/>
 					</div>
-					<EditNametag login={this.context.userAuth} roomId={this.props.roomId} updateNametag={this.updateNametag}/>
+					<EditNametag nametag={this.state.nametag} updateNametag={this.updateNametag}/>
 					<br/>
 					<button className="btn btn-primary" onClick={this.joinRoom}>Join</button>
 				</div>
