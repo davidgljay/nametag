@@ -40,7 +40,7 @@ var EditNametag = React.createClass({
 		//TODO: change id to make sense once dragging works
 		// return (<div>Editname</div>);
 		return (
-				<div className="editNametag profile">
+				<div id="editNametag" className="profile">
 					<Alert alert={this.state.alert} type={this.state.alertType} />
 					<div className="form-group">
 						<img src={this.state.nametag.icon} className="img-circle icon"/>

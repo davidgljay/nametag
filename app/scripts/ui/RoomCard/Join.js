@@ -43,9 +43,13 @@ var Join = React.createClass({
 			return (
 				<div id="join">
 					<Alert alertType='danger' alert={this.state.alert}/>
-					<h4>How would you like to appear in this room?</h4>
-					<Badges/>
+					<h4>Set Up Your Nametag For This Conversation</h4>
+					<div id="userBadges">
+						<p className="userBadgeText">Share these badges by dragging them onto your nametag.</p>
+						<Badges/>
+					</div>
 					<EditNametag login={this.context.userAuth} roomId={this.props.roomId} updateNametag={this.updateNametag}/>
+					<br/>
 					<button className="btn btn-primary" onClick={this.joinRoom}>Join</button>
 				</div>
 				);

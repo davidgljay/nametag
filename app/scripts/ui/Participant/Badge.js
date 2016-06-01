@@ -1,5 +1,8 @@
 'uses strict';
 
+var React = require('react'),
+moment = require('../../../bower_components/moment/moment')
+
 var Badge = React.createClass({
 	getInitialState:function() {
 		return {
@@ -10,7 +13,7 @@ var Badge = React.createClass({
 		this.setState({expanded:!this.state.expanded});
 	},
 	render:function() {
-		console.log(this.props.badge);
+		console.log(this.props.badge.notes);
 		if (this.state.expanded) {
 			return (
 					<div className="badgeExpanded">
@@ -19,12 +22,15 @@ var Badge = React.createClass({
 						<div className="name">{this.props.badge.name}</div>
 						<div className="granter">Verified by: {this.props.badge.granter}</div>
 						<div className="description">{this.props.badge.description_array[0]}</div>
+						<hr/>
 						<div className="notes">
 							{this.props.badge.notes.map(function(note) {
-								<div className="note" key={note.date}>
-									<div className="date">{note.date}</div>
-									<div className="msg">{note.msg}</div>
-								</div>
+								return (
+									<div className="note" key={note.date}>
+										<div className="date">{moment(note.date).format("MMMM Do, YYYY")}:</div>
+										<div className="msg">{note.msg}</div>
+									</div>
+								)
 							})}
 						</div>
 					</div>

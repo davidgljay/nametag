@@ -109,18 +109,76 @@ nav {
     }
 }
 
-.editNametag {
-    border-radius:6px;
+#editNametag, #userBadges {
+    width:270px;
+    display:inline-block;
+    min-height:100px;
+    vertical-align: top;
+    padding:5px;
+    margin:5px;
+}
+#editNametag {
     background:white;
-    margin-left:auto;
-    margin-right: auto;
+    border-radius:6px;
+    
     .form-control {
         border: none;
         background: none;   
         box-shadow:none;
-        resize:none;     
+        resize:none;   
+    }  
+}
+
+#userBadges .userBadgeText {
+    font-style: italic;
+    font-size: 12px;
+    color: grey;
+}
+
+.badge {
+    margin-left:5px;
+    margin-bottom:5px;
+    cursor: pointer;
+}
+
+.badgeExpanded {
+    margin:5px;
+    padding:10px;
+    border-radius:6px;
+    background:$grey;
+
+    .glyphicon-remove {
+        float:right;
+        font-size:12px;
+        cursor: pointer;
     }
-    width:270px;
+
+    .icon {
+        width:40px;
+    }
+
+    .name {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .granter {
+        font-size: 12px;
+        font-style: italic;
+    }
+
+    .description {
+        text-align:left;
+    }
+
+    .note {
+        font-size:12px;
+
+        .date {
+            font-style:italic;
+            float:left;
+        }
+    }
 }
 
 /* Message display */
