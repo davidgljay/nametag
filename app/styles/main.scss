@@ -73,6 +73,15 @@ nav {
 
 #norms {
     color:white;
+
+    #normlist {
+        list-style:none;
+        font-weight:bold;
+        padding-left:15px;
+        li {
+            margin-bottom:10px;
+        }
+    }
 }
 
 #participants {

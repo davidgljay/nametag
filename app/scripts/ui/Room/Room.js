@@ -73,10 +73,10 @@ var Room = React.createClass({
               </div>
             </div>
             <div id="chat">
-              <Messages roomId={this.context.roomId} participantId={this.props.participantId}/>
+              <Messages roomId={this.props.params.roomId} participantId={this.props.participantId}/>
             </div>
           </div>
-          <Compose roomId={this.context.roomId} participantId={this.props.participantId} />
+          <Compose roomId={this.props.params.roomId} participantId={this.props.participantId} />
       </div>
     );
   }
