@@ -3,6 +3,8 @@
 var React = require('react'),
 moment = require('../../../bower_components/moment/moment')
 
+//TODO: This currently displays all user badges, as opposed to only the participant badges. A major violation of trust!
+
 var Badge = React.createClass({
 	getInitialState:function() {
 		return {
@@ -13,7 +15,6 @@ var Badge = React.createClass({
 		this.setState({expanded:!this.state.expanded});
 	},
 	render:function() {
-		console.log(this.props.badge.notes);
 		if (this.state.expanded) {
 			return (
 					<div className="badgeExpanded">
