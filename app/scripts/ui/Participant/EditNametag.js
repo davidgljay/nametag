@@ -37,6 +37,7 @@ var EditNametag = React.createClass({
 	render:function() {
 		//TODO:Add badges
 		//TODO: Figure out image caching
+		//TODO: change id to make sense once dragging works
 		// return (<div>Editname</div>);
 		return (
 				<div className="editNametag profile">

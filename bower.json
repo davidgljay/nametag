@@ -6,6 +6,6 @@
     "bootstrap-sass-official": ">=3.3.0",
     "modernizr": "^2.8.3",
     "moment":"2.13.0",
-    "react-collapse": "https://npmcdn.com/react-collapse/bower.zip"
+    "react-dnd":"2.1.4"
   }
 }
