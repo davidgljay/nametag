@@ -109,9 +109,11 @@ nav {
     }
 }
 
-.editProfile {
+.editNametag {
     border-radius:6px;
     background:white;
+    margin-left:auto;
+    margin-right: auto;
     .form-control {
         border: none;
         background: none;   
@@ -407,6 +409,9 @@ nav {
     }
  }
 
+#join {
+    text-align: center;
+}
 
 
 input[type="checkbox"] {

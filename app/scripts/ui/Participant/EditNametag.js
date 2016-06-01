@@ -7,7 +7,7 @@ Alert = require("../Utils/Alert");
 var EditNametag = React.createClass({
 	getInitialState:function() {
 		return {
-			default: {
+			nametag: {
 				name:'',
 				bio:'',
 				icon:''				
@@ -23,10 +23,9 @@ var EditNametag = React.createClass({
 		defaultsRef.on("value", function(value) {
 			self.setState(function(prevState) {
 				prevState.defaults=value.val();
-				console.log(prevState.defaults);
-				prevState.default.name = prevState.defaults.names[0];
-				prevState.default.bio = prevState.defaults.bios[0];
-				prevState.default.icon = prevState.defaults.icons[0];
+				prevState.nametag.name = prevState.defaults.names[0];
+				prevState.nametag.bio = prevState.defaults.bios[0];
+				prevState.nametag.icon = prevState.defaults.icons[0];
 				return prevState;
 			});
 		})
@@ -35,29 +34,23 @@ var EditNametag = React.createClass({
 		var defaultsRef = new Firebase(process.env.FIREBASE_URL + "user_defaults/" + this.props.login.uid);
 		defaultsRef.off("value");
 	},
-	postRoom:function() {
-		var participantRef = new Firebase(process.env.FIREBASE_URL + "participants/" + roomId);
-		participantRef.push(this.state.participant);
-
-		//TODO:Move to room.
-	},
 	render:function() {
-		//TODO: Style like participant card
 		//TODO:Add badges
+		//TODO: Figure out image caching
 		// return (<div>Editname</div>);
 		return (
-				<div className="editProfile profile">
+				<div className="editNametag profile">
 					<Alert alert={this.state.alert} type={this.state.alertType} />
 					<div className="form-group">
-						<img src={this.state.default.icon} className="img-circle icon"/>
-					    <input type="text" className="form-control name" id="participantName" placeholder={this.state.default.name}/>
-					    <textarea rows="2" className="form-control bio" id="participantDescription" placeholder={this.state.default.bio}/>
+						<img src={this.state.nametag.icon} className="img-circle icon"/>
+					    <input type="text" className="form-control name" id="participantName" onChange={this.props.updateNametag('name')} value={this.state.nametag.name}/>
+					    <textarea rows="2" className="form-control bio" id="participantDescription" onChange={this.props.updateNametag('bio')} value={this.state.nametag.bio}/>
 					</div>
 				</div>
 			)
 	}
 });
 
-EditNametag.propTypes = {login:React.PropTypes.object};
+EditNametag.propTypes = {login:React.PropTypes.object, roomId:React.PropTypes.string, updateNametag:React.PropTypes.func};
 
 module.exports=EditNametag;

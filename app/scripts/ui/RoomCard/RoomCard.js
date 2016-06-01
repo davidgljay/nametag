@@ -16,10 +16,12 @@ var RoomCard = React.createClass({
 				member_id:''
 			},
 			badges: [],
+			normsChecked:false,
 			participantCount:0,
 			login: new Firebase(process.env.FIREBASE_URL).getAuth()
 		}
 	},
+
 	componentDidMount:function() {
 		var modRef = new Firebase(process.env.FIREBASE_URL + "participants/" + this.props.room.id + "/" + this.props.room.mod),
 		self=this;
@@ -59,8 +61,9 @@ var RoomCard = React.createClass({
 			return prevState;
 		})
 	},
-	goToRoom:function() {
-		window.location="/#/rooms/" + this.props.room.id;
+	onNormsCheck: function(e) {
+		console.log(e.target.checked);
+		this.setState({normsChecked:e.target.checked});
 	},
 	toggle:function(expanded) {
 		var self=this;
@@ -89,11 +92,11 @@ var RoomCard = React.createClass({
 								})}
 							</ul>
 							<label class="c-input c-checkbox">
-							  <input type="checkbox"/>
+							  <input type="checkbox" onClick={this.onNormsCheck}/>
 							  <span>I agree to abide by these norms</span>
 							</label>
 						</div>
-						<Join roomId={this.props.room.id}/>
+						<Join roomId={this.props.room.id} normsChecked={this.state.normsChecked}/>
 						<div className="downChevron" onClick={this.toggle(false)}>
 							<span className="glyphicon glyphicon-chevron-up" aria-hidden="true" ></span>
 						</div>
