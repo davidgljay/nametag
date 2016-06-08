@@ -20,8 +20,6 @@ TODO: Handle login if twitter is already activated
 
 var Login = React.createClass({
 	contextTypes: {
-    	userAuth: React.PropTypes.object,
-    	unAuth: React.PropTypes.func,
     	checkAuth: React.PropTypes.func
   	},
 	getInitialState:function() {
