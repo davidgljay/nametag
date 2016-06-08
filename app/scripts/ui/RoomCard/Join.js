@@ -83,7 +83,7 @@ class Join extends Component {
           <br/>
           <button
             className="btn btn-primary"
-            onClick={this.joinRoom}>
+            onClick={this.joinRoom.bind(this)}>
               Join
           </button>
         </div>;

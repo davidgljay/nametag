@@ -67,7 +67,6 @@ class RoomCard extends Component {
   }
 
   onNormsCheck(e) {
-    console.log(e.target.checked);
     this.setState({normsChecked: e.target.checked});
   }
 
@@ -92,8 +91,8 @@ class RoomCard extends Component {
                   normkey++;
                   return (
                     <li key={normkey} className="list-group-item">
-                      <span 
-                        className="glyphicon glyphicon-ok" 
+                      <span
+                        className="glyphicon glyphicon-ok"
                         aria-hidden="true" >
                       </span>
                       {norm}
@@ -102,14 +101,14 @@ class RoomCard extends Component {
                 })}
               </ul>
               <label class="c-input c-checkbox">
-                <input type="checkbox" onClick={this.onNormsCheck}/>
+                <input type="checkbox" onClick={this.onNormsCheck.bind(this)}/>
                 <span>I agree to abide by these norms</span>
               </label>
             </div>
             <Join
               roomId={this.props.room.id}
               normsChecked={this.state.normsChecked}/>
-            <div className="downChevron" onClick={this.toggle(false)}>
+            <div className="downChevron" onClick={this.toggle(false).bind(this)}>
               <span
                 className="glyphicon glyphicon-chevron-up"
                 aria-hidden="true" ></span>
@@ -117,7 +116,7 @@ class RoomCard extends Component {
           </div>;
     } else {
       joinPrompt =
-        <div className="downChevron" onClick={this.toggle(true)}>
+        <div className="downChevron" onClick={this.toggle(true).bind(this)}>
           <span
             className="glyphicon glyphicon-chevron-down" 
             aria-hidden="true" ></span>

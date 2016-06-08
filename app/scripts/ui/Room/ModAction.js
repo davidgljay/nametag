@@ -124,6 +124,10 @@ class ModAction extends Component {
     this.setState({note: e.target.value});
   }
 
+  notifyBadge() {
+    // TODO:Notify badge granters
+  }
+
   render() {
     // TODO: I could add complexity here, cite multiple posts, etc.
     // TODO: Create a system for notifying badgeholders.
@@ -161,28 +165,28 @@ class ModAction extends Component {
         <span
           aria-hidden="true"
           className="glyphicon glyphicon-remove"
-          onClick={this.props.close}></span>
+          onClick={this.props.close.bind(this)}></span>
         <h4>Remind {this.props.author.name} of Conversation Norms</h4>
         <ul className="list-group">
-        {this.state.norms.map(this.showNorm)}
+        {this.state.norms.map(this.showNorm.bind(this))}
         </ul>
         <input
           type="text"
           className="form-control"
-          onChange={this.addNote}
+          onChange={this.addNote.bind(this)}
           placeholder="Add an optional note."
           value={this.state.message}/>
         <div className="chooseVis">
           <div className="btn-group" data-toggle="buttons">
-            <label
-              className={
-                'btn btn-default ' + (this.state.isPublic || 'active')
-              }>
-              <input type="radio" id="privateAction" onClick={this.setPublic(false)} />
+            <label className={'btn btn-default ' + (this.state.isPublic || 'active')}>
+              <input
+                type="radio"
+                id="privateAction"
+                onClick={this.setPublic(false).bind(this)} />
               Private
             </label>
             <label className={'btn btn-default ' + (!this.state.isPublic || 'active')}>
-              <input type="radio" id="publicAction" onClick={this.setPublic(true)}/>
+              <input type="radio" id="publicAction" onClick={this.setPublic(true).bind(this)}/>
               Public
             </label>
           </div>
@@ -191,22 +195,22 @@ class ModAction extends Component {
           </div>
         </div>
         <div className="modActions">
-          <button className="btn btn-primary" onClick={this.remindOfNorms}>
+          <button className="btn btn-primary" onClick={this.remindOfNorms.bind(this)}>
             Remind
           </button>
           <button
             className={'btn btn-link escalateLink ' + (!this.state.escalated || 'hide')}
-            onClick={this.escalate}>
+            onClick={this.escalate.bind(this)}>
               Escalate
           </button>
           <button
             className={'btn btn-danger ' + (this.state.escalated || 'hide')}
-            onClick={this.removeUser}>
+            onClick={this.removeUser.bind(this)}>
               Remove {this.props.author.name} From Room
           </button>
           <button
             className={'btn btn-danger ' + (this.state.escalated || 'hide')}
-            onClick={this.notifyBadge}>
+            onClick={this.notifyBadge.bind(this)}>
               Notify Badge Granters
           </button>
         </div>

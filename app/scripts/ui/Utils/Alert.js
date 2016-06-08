@@ -1,5 +1,5 @@
 const Alert = (props) => {
-  let alert;
+  let alert = null;
   if (props.alert) {
     alert =
       <div className={'alert alert-' + props.alertType} role="alert">

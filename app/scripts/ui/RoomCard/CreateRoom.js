@@ -3,8 +3,9 @@ import errorLog from '../../utils/errorLog';
 import Alert from '../Utils/Alert';
 
 class CreateRoom extends Component {
-  getInitialState() {
-    return {
+  constructor(props) {
+    super(props);
+    this.state = {
       room: {
         title: '',
         description: '',
@@ -17,6 +18,8 @@ class CreateRoom extends Component {
         bio: '',
         badges: [],
       },
+      alert='',
+      alertType='',
     };
   }
 

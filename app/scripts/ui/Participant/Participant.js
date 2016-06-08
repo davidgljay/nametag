@@ -1,36 +1,38 @@
-'use strict';
+import React, { Component, PropTypes } from 'react';
+import Badges from './Badges';
 
-var React = require('react'),
-Badges = require('./Badges');
+class Participant extends Component {
+  render() {
+    let star = '';
 
-var Participant = React.createClass({
-	render:function() {
-		var star ='';
+    // Show if user is a mod.
+    if (this.props.mod === this.props.member_id) {
+      star = <div className="ismod">
+          <span className="glyphicon glyphicon-star" aria-hidden="true"></span>
+          <div className="modTitle">Host</div>
+          </div>;
+    }
 
-		//Show if user is a mod.
-		if (this.props.mod==this.props.member_id) {
-			star=(<div className="ismod">
-					<span className="glyphicon glyphicon-star" aria-hidden="true"></span>
-					<div className="modTitle">Host</div>
-				  </div>);
-		}
+    return <div key={this.props.name} >
+        {star}
+        <img src={this.props.icon} alt={this.props.name} className="img-circle icon"/>
+        <div className="name">{this.props.name}</div>
+        <div className="bio">{this.props.bio}</div>
+        <Badges/>
+      </div>;
+  }
+}
 
-		return(
-			<div key={this.props.name} >
-				{star}
-				<img src={this.props.icon} alt={this.props.name} className="img-circle icon"/>
-				<div className="name">{this.props.name}</div>
-				<div className="bio">{this.props.bio}</div>
-				<Badges/>
-			</div>
-			);
-	}
-})
-
-Participant.propTypes = { name: React.PropTypes.string, bio: React.PropTypes.string, member_id: React.PropTypes.string, icon: React.PropTypes.string, badges:React.PropTypes.array };
+Participant.propTypes = {
+  name: PropTypes.string,
+  bio: PropTypes.string,
+  member_id: PropTypes.string,
+  icon: PropTypes.string,
+  badges: PropTypes.array,
+};
 Participant.defaultProps = {
-	name:'davidgljay',
-	bio:'Here to party!'
+  name: 'davidgljay',
+  bio: 'Here to party!',
 };
 
-module.exports=Participant;
+export default Participant;

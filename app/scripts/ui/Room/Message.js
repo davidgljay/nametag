@@ -50,8 +50,16 @@ class Message extends Component {
     };
   }
 
+  heartAction() {
+    return function onClick() {
+      // TODO: Add heart action;
+    };
+  }
+
   render() {
-    let icon, name, below;
+    let icon;
+    let name;
+    let below;
     if (this.state.author) {
       icon = this.state.author.icon;
       name = this.state.author.name;
@@ -62,13 +70,13 @@ class Message extends Component {
         <div className="actions">
           <span
             className="glyphicon glyphicon-heart"
-            onClick={this.heartAction}
+            onClick={this.heartAction.bind(this)}
             aria-hidden="true"/>
           <span
             className="glyphicon glyphicon-flag"
-            onClick={this.modAction(true)}
+            onClick={this.modAction(true).bind(this)}
             aria-hidden="true"/>
-        </div>; 
+        </div>;
     } else {
       below =
         <div className="date">
@@ -87,8 +95,8 @@ class Message extends Component {
 
     return <tr
         className="message"
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}>
+        onMouseEnter={this.onMouseEnter.bind(this)}
+        onMouseLeave={this.onMouseLeave.bind(this)}>
         <td className="icon">
           <img className="img-circle" src={icon}/>
         </td>
