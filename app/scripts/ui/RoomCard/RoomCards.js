@@ -11,7 +11,7 @@ var RoomCards= React.createClass({
 	},
 	contextTypes: {
     	userAuth: React.PropTypes.object,
-    	unAuth: React.PropTypes.func
+    	unAuth: React.PropTypes.func,
   	},
 	componentDidMount:function() {
 		var roomsRef = new Firebase(process.env.FIREBASE_URL + "/rooms"),
