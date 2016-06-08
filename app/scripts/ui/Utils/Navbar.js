@@ -1,5 +1,7 @@
 'use strict';
 
+import React from 'react';
+
 module.exports = function(props) {
 	var login;
 

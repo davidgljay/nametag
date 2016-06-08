@@ -1,51 +1,58 @@
 
-var React = window.React = require('react'),
-    ReactDOM = require("react-dom"),
-    Room = require("./ui/Room/Room"),
-    RoomCards = require('./ui/RoomCard/RoomCards'),
-    mountNode = document.getElementById("app");
+import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
+import Room from './ui/Room/Room';
+import RoomCards from './ui/RoomCard/RoomCards';
+
+const mountNode = document.getElementById('app');
 
 import { Router, Route, Link, hashHistory } from 'react-router';
 
-require('./config')
+require('./config');
 
-var Nametag = React.createClass({
-	getInitialState: function() {
-		var auth = new Firebase(process.env.FIREBASE_URL).getAuth();
-		return {
-			auth:auth
-		};
-	},
-	childContextTypes: {
-	    userAuth: React.PropTypes.object,
-	    unAuth: React.PropTypes.func,
-	    checkAuth: React.PropTypes.func
-	},
-	getChildContext: function() {
-	    return {
-	    	userAuth: this.state.auth,
-	    	unAuth: this.unAuth,
-	    	checkAuth: this.checkAuth
-	    };
-	},
-	unAuth: function(e) {
-		e.preventDefault();
-		new Firebase(process.env.FIREBASE_URL).unauth();
-		this.checkAuth();
-	},
-	checkAuth: function() {
-		this.setState( {
-			auth:new Firebase(process.env.FIREBASE_URL).getAuth()
-		});
-	},
-	render: function() {
-		return (<Router history={hashHistory}>
-			<Route path="/" component={RoomCards} />
-			<Route path="/rooms" component={RoomCards}/>
-			<Route path="/rooms/:roomId" component={Room}/>
-		</Router>);
-	}
-});
+class Nametag extends Component {
+  constructor(props) {
+    super(props);
+    const auth = new Firebase(process.env.FIREBASE_URL).getAuth();
+    this.state = {
+      auth: auth,
+    };
+  }
+
+  getChildContext() {
+    return {
+      userAuth: this.state.auth,
+      unAuth: this.unAuth,
+      checkAuth: this.checkAuth,
+    };
+  }
+
+  unAuth(e) {
+    e.preventDefault();
+    new Firebase(process.env.FIREBASE_URL).unauth();
+    this.checkAuth();
+  }
+
+  checkAuth() {
+    this.setState( {
+      auth: new Firebase(process.env.FIREBASE_URL).getAuth(),
+    });
+  }
+
+  render() {
+    return <Router history={hashHistory}>
+      <Route path="/" component={RoomCards} />
+      <Route path="/rooms" component={RoomCards}/>
+      <Route path="/rooms/:roomId" component={Room}/>
+    </Router>;
+  }
+}
+
+Nametag.childContextTypes = {
+  userAuth: PropTypes.object,
+  unAuth: PropTypes.func,
+  checkAuth: PropTypes.func,
+};
 
 ReactDOM.render(<Nametag/>, mountNode);
 
