@@ -22,7 +22,7 @@ var EditNametag = React.createClass({
 						<img src="https://s3.amazonaws.com/badgeproject_icons/users/dj_cropped.jpg" className="img-circle icon"/>
 						<div className="nametagFields">
 						    <input type="text" className="form-control name" id="participantName" onChange={this.props.updateNametag('name')} value={this.props.nametag.name}/>
-						    <textarea rows="2" className="form-control bio" id="participantDescription" onChange={this.props.updateNametag('bio')} value={this.props.nametag.bio}/>
+						    <textarea rows="3" className="form-control bio" id="participantDescription" onChange={this.props.updateNametag('bio')} value={this.props.nametag.bio}/>
 						</div>
 					</div>
 				</div>

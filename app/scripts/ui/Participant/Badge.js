@@ -28,7 +28,7 @@ var Badge = React.createClass({
 							{this.props.badge.notes.map(function(note) {
 								return (
 									<div className="note" key={note.date}>
-										<div className="date">{moment(note.date).format("MMMM Do, YYYY")}:</div>
+										<div className="date">{moment(note.date).format("MMMM Do, YYYY")}: </div>
 										<div className="msg">{note.msg}</div>
 									</div>
 								)
