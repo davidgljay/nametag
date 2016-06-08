@@ -1,88 +1,99 @@
-'use strict';
+import React, { Component, PropTypes } from 'react';
+import errorLog from '../../utils/errorLog';
 
-var React = require('react'),
-errorLog = require('../../utils/errorLog');
+class ModActionNotif extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      message: '',
+      mod: '',
+      author: '',
+    };
+  }
 
-var ModActionNotif = React.createClass({
-	contextTypes: {
-    	roomId: React.PropTypes.string,
-    	participantId: React.PropTypes.string
-  	},
-	getInitialState:function() {
-		return {
-			message:'',
-			mod:'',
-			author:''
-		};
-	},
-	componentDidMount:function() {
-		//Get info for the mod and the message in question.
-		var msgRef = new Firebase(process.env.FIREBASE_URL + "messages/" + this.props.modAction.msgId),
-		modRef = new Firebase(process.env.FIREBASE_URL + "participants/" + this.context.roomId  + "/" + this.props.modAction.modId),
-		authorRef = new Firebase(process.env.FIREBASE_URL + "participants/" + this.context.roomId + "/" + this.props.modAction.author)
-		self = this;
-		msgRef.on('value', function(value) {
-			self.setState({message:value.val().text})
-		},errorLog("Error getting message in modActionNotif"));
-		modRef.on('value', function(value) {
-			self.setState({mod:value.val()})
-		},errorLog("Error getting mod info in modActionNotif"));
-		authorRef.on('value', function(value) {
-			self.setState(function(prevState) {
-				prevState.author = value.val();
-				prevState.author.id = value.key();
-				return prevState;
-			})
-		},errorLog("Error getting author info in modActionNotif"))
-	},
-	componentWillUnmount:function() {
-		var msgRef = new Firebase(process.env.FIREBASE_URL + "messages/" + this.props.modAction.msgId),
-		modRef = new Firebase(process.env.FIREBASE_URL + "participants/" + this.context.roomId  + "/" + this.props.modAction.modId),
-		authorRef = new Firebase(process.env.FIREBASE_URL + "participants/" + this.context.roomId + "/" + this.props.modAction.author);
-		msgRef.off('value');
-		modRef.off('value');
-		authorRef.off('value');
-	},
-	render: function() {
-		var callout,
-		showNorms = function(norm) {
-			return <li className="list-group-item" key={norm.id}>{norm.text}</li>
-		};
+  componentDidMount() {
+    // Get info for the mod and the message in question.
+    const msgRef = new Firebase(process.env.FIREBASE_URL +
+      'messages/' + this.props.modAction.msgId);
+    const modRef = new Firebase(process.env.FIREBASE_URL +
+      'participants/' + this.context.roomId  + '/' + this.props.modAction.modId);
+    const authorRef = new Firebase(process.env.FIREBASE_URL +
+      'participants/' + this.context.roomId + '/' + this.props.modAction.author);
+    let self = this;
+    msgRef.on('value', function onValue(value) {
+      self.setState({message: value.val().text});
+    }, errorLog('Error getting message in modActionNotif'));
 
-		//Change callout based on whether the message is addressed to the current user.
-		if (this.state.author.id == this.context.participantId) {
-			callout = (
-					<div>
-						<h5>Heads up</h5>
-						<p>
-							{this.state.mod.name} would like to remind you of the following norm{this.props.modAction.norms.length == 1 || "s"}:
-						</p>
-					</div>
-				);
-		} else {
-			callout = (
-				<p>{this.state.mod.name} has reminded {this.state.author.name} of the following norm{this.props.modAction.norms.length == 1 || "s"}:</p>
-				);
-		}
-		return (
-			<tr className="modActionNotif message">
-				<td className="icon">
-					<img className="img-circle" src={this.state.mod.icon}/>
-				</td>
-				<td>
-					{callout}
-					<ul className="list-group">
-						{this.props.modAction.norms.map(showNorms)}
-					</ul>
-					<p>Regarding the statement:</p>
-					<div className="quote well">{this.state.message}</div>
-					<div className="modNote">{this.props.modAction.note}</div>
-				</td>
-			</tr>
-			);
-	}
-});
+    modRef.on('value', function onValue(value) {
+      self.setState({mod: value.val()});
+    }, errorLog('Error getting mod info in modActionNotif'));
+    authorRef.on('value', function onValue(value) {
+      self.setState(function setState(prevState) {
+        prevState.author = value.val();
+        prevState.author.id = value.key();
+        return prevState;
+      });
+    }, errorLog('Error getting author info in modActionNotif'));
+  }
 
-ModActionNotif.propTypes = {modAction: React.PropTypes.object};
+  componentWillUnmount() {
+    const msgRef = new Firebase(process.env.FIREBASE_URL +
+      'messages/' + this.props.modAction.msgId);
+    const modRef = new Firebase(process.env.FIREBASE_URL +
+      'participants/' + this.context.roomId  + '/' + this.props.modAction.modId);
+    const authorRef = new Firebase(process.env.FIREBASE_URL +
+      'participants/' + this.context.roomId + '/' + this.props.modAction.author);
+    msgRef.off('value');
+    modRef.off('value');
+    authorRef.off('value');
+  }
 
-module.exports=ModActionNotif;
+  render() {
+    let callout;
+    function showNorms(norm) {
+      return <li className="list-group-item" key={norm.id}>{norm.text}</li>;
+    }
+
+    // Change callout based on whether the message is addressed to the current user.
+    if (this.state.author.id === this.context.participantId) {
+      callout =
+          <div>
+            <h5>Heads up</h5>
+            <p>
+              {this.state.mod.name} would like to remind you of the
+              following norm{this.props.modAction.norms.length === 1 || 's'}:
+            </p>
+          </div>;
+    } else {
+      callout =
+        <p>
+          {this.state.mod.name} has reminded {this.state.author.name}
+          of the following norm{this.props.modAction.norms.length === 1 || 's'}:
+        </p>;
+    }
+    return (
+      <tr className="modActionNotif message">
+        <td className="icon">
+          <img className="img-circle" src={this.state.mod.icon}/>
+        </td>
+        <td>
+          {callout}
+          <ul className="list-group">
+            {this.props.modAction.norms.map(showNorms)}
+          </ul>
+          <p>Regarding the statement:</p>
+          <div className="quote well">{this.state.message}</div>
+          <div className="modNote">{this.props.modAction.note}</div>
+        </td>
+      </tr>
+      );
+  }
+}
+
+ModActionNotif.propTypes = {modAction: PropTypes.object};
+ModActionNotif.contextTypes = {
+  roomId: PropTypes.string,
+  participantId: PropTypes.string,
+};
+
+export default ModActionNotif;
