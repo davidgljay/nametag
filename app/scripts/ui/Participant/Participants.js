@@ -1,87 +1,100 @@
-'use strict';
+import React, { Component, PropTypes } from 'react';
+import Participant from './Participant';
+import errorLog from '../../utils/errorLog';
 
-var React = require('react'),
-Participant = require('./Participant'),
-errorLog = require('../../utils/errorLog');
+class Participants extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      participants: {},
+    };
+  }
 
-var Participants = React.createClass({
-	getInitialState:function(){
-		return {
-			participants:{}
-		};
-	},
-	componentDidMount:function(){
-		var self = this;
+  componentDidMount() {
+    let self = this;
 
-		//Get badge data for each participants
-	    var pBadgeRef = new Firebase(process.env.FIREBASE_URL + 'participant_badges/'+this.props.userid+'/'+this.props.roomId);
-	    var getpBadges = function(memberid) {
-	    	pBadgeRef.child(memberid).on('value', function(badges) {
-	    		self.setState(function(previousState) {
-	    			previousState.participants[memberid].badges = badges.val();
-	    			return previousState;
-	    		})
-	    	},errorLog("Error getting participant badges"));
-	    }
+    // Get badge data for each participants
+    const pBadgeRef = new Firebase(process.env.FIREBASE_URL +
+      'participant_badges/' + this.props.userid + '/' + this.props.roomId);
+    function getpBadges(memberid) {
+      pBadgeRef.child(memberid).on('value', function onValue(badges) {
+        self.setState(function setState(previousState) {
+          previousState.participants[memberid].badges = badges.val();
+          return previousState;
+        });
+      }, errorLog('Error getting participant badges'));
+    }
 
-	    		//Get participant data
-		var pRef = new Firebase(process.env.FIREBASE_URL + 'participants/'+this.props.roomId);
-		pRef.on('value',function(participants) {
-			var pdata = participants.val();
-       		self.setState({participants:pdata});
-       		for (var participant in pdata) {
-       			getpBadges(pdata[participant].member_id);
-       		}
+    // Get participant data
+    const pRef = new Firebase(process.env.FIREBASE_URL +
+      'participants/' + this.props.roomId);
+    pRef.on('value', function onValue(participants) {
+      let pdata = participants.val();
+      self.setState({participants: pdata});
+      for (let participant in pdata) {
+        if ({}.hasOwnProperty.call(pdata, participant)) {
+          getpBadges(pdata[participant].member_id);
+        }
+      }
+    }, errorLog('Error getting partipant info'));
+  }
 
-	    }, errorLog("Error getting partipant info"));
-	},
-	componentWillUnmount:function(){
-		var pRef = new Firebase(process.env.FIREBASE_URL + 'participants/'+this.props.roomId);
-		pRef.off('value');
-		for (var participant in this.state.participants) {
-		    var pBadgeRef = new Firebase(process.env.FIREBASE_URL + 'participant_badges/'+this.props.userid+'/'+this.props.roomId + '/' + participant);
-		    pBadgeRef.off('value');
-		}
-	},
-	render:function(){
-		//Push participants into an array;
-		var participants_arr = [];
-		for (var key in this.state.participants) {
-			this.state.participants[key].member_id=key;
-			participants_arr.push(this.state.participants[key]);
-		}
-		participants_arr.sort(function(a,b) {
-			if (a.mod) {
-				return 1
-			} else {
-				return -1;
-			}
-		})
+  componentWillUnmount() {
+    const pRef = new Firebase(process.env.FIREBASE_URL +
+      'participants/' + this.props.roomId);
+    pRef.off('value');
+    for (let participant in this.state.participants) {
+      if ({}.hasOwnProperty.call(this.state.participants, participant)) {
+        const pBadgeRef = new Firebase(process.env.FIREBASE_URL +
+          'participant_badges/' + this.props.userid + '/'
+          + this.props.roomId + '/' + participant);
+        pBadgeRef.off('value');
+      }
+    }
+  }
 
-		//Create a function to return list items
-		var creatParticipant = function(participant, mod) {
-			//Make participant.badges an empty array if it not already assigned.
-			participant.badges = participant.badges || [];
+  render() {
+    // Push participants into an array;
+    let participantsArr = [];
+    for (let participant in this.state.participants) {
+      if ({}.hasOwnProperty.call(this.state.participants, participant)) {
+        this.state.participants[participant].member_id = participant;
+        participantsArr.push(this.state.participants[participant]);
+      }
+    }
+    participantsArr.sort(function sortParticipants(a) {
+      let score = -1;
+      if (a.mod) {
+        score = 1;
+      }
+      return score;
+    });
 
-			return  (
-			<li key={participant.name} className="list-group-item profile">
-				<Participant name={participant.name} bio={participant.bio} icon={participant.icon} member_id={participant.member_id} badges={participant.badges} mod={mod}/>
-			</li>
-			);
-		};
+    // Create a function to return list items
+    function creatParticipant(participant, mod) {
+      // Make participant.badges an empty array if it not already assigned.
+      participant.badges = participant.badges || [];
 
-		return (
-			<ul id="participants" className="list-group">
-				{participants_arr.map(function(participant) {
-					return creatParticipant(participant, this.props.mod);
-				}, this)}
-			</ul>
-		);
-	}
-});
+      return <li key={participant.name} className="list-group-item profile">
+        <Participant
+          name={participant.name}
+          bio={participant.bio}
+          icon={participant.icon}
+          member_id={participant.member_id}
+          badges={participant.badges}
+          mod={mod}/>
+      </li>;
+    }
 
-Participants.propTypes = { roomId: React.PropTypes.string, mod:React.PropTypes.string };
-Participants.defaultProps = {roomId: "stampi", mod:"wxyz", userid:"abcd"};
+    return <ul id="participants" className="list-group">
+        {participantsArr.map(function mapParticipant(participant) {
+          return creatParticipant(participant, this.props.mod);
+        }, this)}
+      </ul>;
+  }
+}
 
+Participants.propTypes = { roomId: PropTypes.string, mod: PropTypes.string };
+Participants.defaultProps = {roomId: 'stampi', mod: 'wxyz', userid: 'abcd'};
 
-module.exports = Participants;
+export default Participants;

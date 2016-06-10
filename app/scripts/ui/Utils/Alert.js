@@ -1,15 +1,12 @@
-'use strict'
-
-var Alert = (props) => {
-	if (props.alert) {
-		return (
-			<div className={"alert alert-" + props.alertType} role="alert">
-					{props.alert}
-			</div>
-			);
-	} else {
-		return null;
-	}
+const Alert = (props) => {
+  let alert = null;
+  if (props.alert) {
+    alert =
+      <div className={'alert alert-' + props.alertType} role="alert">
+          {props.alert}
+      </div>;
+  }
+  return alert;
 };
 
-module.exports=Alert;
+export default Alert;

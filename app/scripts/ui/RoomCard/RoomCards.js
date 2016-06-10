@@ -1,49 +1,53 @@
-'user stict';
 
-var React = require('react'),
-RoomCard = require('./RoomCard'),
-errorLog = require('../../utils/errorLog'),
-Navbar = require('../Utils/Navbar');
 
-var RoomCards= React.createClass({
-	getInitialState:function() {
-		return {rooms:[]}
-	},
-	contextTypes: {
-    	userAuth: React.PropTypes.object,
-    	unAuth: React.PropTypes.func
-  	},
-	componentDidMount:function() {
-		var roomsRef = new Firebase(process.env.FIREBASE_URL + "/rooms"),
-		self=this;
-		roomsRef.on('child_added', function(value) {
-			self.setState(function(prevState) {
-				var room = value.val();
-				room.id = value.key();
-				prevState.rooms.push(room);
-				return prevState;
-			})
-		},errorLog("Error getting roomCards"))
-	},
-	componentWillUnmount:function() {
-		var roomsRef = new Firebase(process.env.FIREBASE_URL + "/rooms");
-		roomsRef.off('child_added')
-	},
-	showRoomCard:function(room) {
-		return (
-				<RoomCard room={room} key={room.id}/>
-			)
-	},
-	render:function() {
-		return (
-			<div id="roomSelection">
-				<Navbar userAuth={this.context.userAuth} unAuth={this.context.unAuth}/>
-				<div id="roomCards">
-					{this.state.rooms.map(this.showRoomCard)}
-				</div>
-			</div>
-			)
-	}
-});
+import React, { Component, PropTypes } from 'react';
+import RoomCard from './RoomCard';
+import errorLog from '../../utils/errorLog';
+import Navbar from '../Utils/Navbar';
 
-module.exports=RoomCards;
+class RoomCards extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {rooms: []};
+  }
+
+  componentDidMount() {
+    const roomsRef = new Firebase(process.env.FIREBASE_URL + '/rooms');
+    let self = this;
+    roomsRef.on('child_added', function onChildAdded(value) {
+      self.setState(function setState(prevState) {
+        const room = value.val();
+        room.id = value.key();
+        prevState.rooms.push(room);
+        return prevState;
+      });
+    }, errorLog('Error getting roomCards'));
+  }
+
+  componentWillUnmount() {
+    const roomsRef = new Firebase(process.env.FIREBASE_URL + '/rooms');
+    roomsRef.off('child_added');
+  }
+
+  showRoomCard(room) {
+    return (
+        <RoomCard room={room} key={room.id}/>
+      );
+  }
+
+  render() {
+    return <div id="roomSelection">
+        <Navbar userAuth={this.context.userAuth} unAuth={this.context.unAuth}/>
+        <div id="roomCards">
+          {this.state.rooms.map(this.showRoomCard)}
+        </div>
+      </div>;
+  }
+}
+
+RoomCards.contectTypes = {
+  userAuth: PropTypes.object,
+  unAuth: PropTypes.func,
+};
+
+export default RoomCards;
