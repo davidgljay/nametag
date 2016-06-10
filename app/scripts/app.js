@@ -3,17 +3,16 @@ import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import Room from './ui/Room/Room';
 import RoomCards from './ui/RoomCard/RoomCards';
+import fbase from './api/firebase';
 
 const mountNode = document.getElementById('app');
 
 import { Router, Route, Link, hashHistory } from 'react-router';
 
-require('./config');
-
 class Nametag extends Component {
   constructor(props) {
     super(props);
-    const auth = new Firebase(process.env.FIREBASE_URL).getAuth();
+    const auth = fbase.getAuth();
     this.state = {
       auth: auth,
     };
@@ -29,13 +28,13 @@ class Nametag extends Component {
 
   unAuth(e) {
     e.preventDefault();
-    new Firebase(process.env.FIREBASE_URL).unauth();
+    new fbase.unauth();
     this.checkAuth();
   }
 
   checkAuth() {
     this.setState( {
-      auth: new Firebase(process.env.FIREBASE_URL).getAuth(),
+      auth: fbase.getAuth(),
     });
   }
 

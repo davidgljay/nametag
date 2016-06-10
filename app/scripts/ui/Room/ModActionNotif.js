@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import errorLog from '../../utils/errorLog';
+import fbase from '../../api/firebase';
 
 class ModActionNotif extends Component {
   constructor(props) {
@@ -13,12 +14,9 @@ class ModActionNotif extends Component {
 
   componentDidMount() {
     // Get info for the mod and the message in question.
-    const msgRef = new Firebase(process.env.FIREBASE_URL +
-      'messages/' + this.props.modAction.msgId);
-    const modRef = new Firebase(process.env.FIREBASE_URL +
-      'participants/' + this.context.roomId  + '/' + this.props.modAction.modId);
-    const authorRef = new Firebase(process.env.FIREBASE_URL +
-      'participants/' + this.context.roomId + '/' + this.props.modAction.author);
+    const msgRef = fbase.child('messages/' + this.props.modAction.msgId);
+    const modRef = fbase.child('participants/' + this.context.roomId  + '/' + this.props.modAction.modId);
+    const authorRef = fbase.child('participants/' + this.context.roomId + '/' + this.props.modAction.author);
     let self = this;
     msgRef.on('value', function onValue(value) {
       self.setState({message: value.val().text});
@@ -37,12 +35,9 @@ class ModActionNotif extends Component {
   }
 
   componentWillUnmount() {
-    const msgRef = new Firebase(process.env.FIREBASE_URL +
-      'messages/' + this.props.modAction.msgId);
-    const modRef = new Firebase(process.env.FIREBASE_URL +
-      'participants/' + this.context.roomId  + '/' + this.props.modAction.modId);
-    const authorRef = new Firebase(process.env.FIREBASE_URL +
-      'participants/' + this.context.roomId + '/' + this.props.modAction.author);
+    const msgRef = fbase.child('messages/' + this.props.modAction.msgId);
+    const modRef = fbase.child('participants/' + this.context.roomId  + '/' + this.props.modAction.modId);
+    const authorRef = fbase.child('participants/' + this.context.roomId + '/' + this.props.modAction.author);
     msgRef.off('value');
     modRef.off('value');
     authorRef.off('value');

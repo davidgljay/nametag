@@ -4,6 +4,7 @@ import Login  from '../Participant/Login';
 import EditNametag  from '../Participant/EditNametag';
 import Badges  from '../Participant/Badges';
 import Alert  from '../Utils/Alert';
+import fbase from '../../api/firebase';
 
 class Join extends Component {
   constructor(props) {
@@ -31,8 +32,7 @@ class Join extends Component {
 
   componentDidMount() {
     const self = this;
-    const defaultsRef = new Firebase(process.env.FIREBASE_URL +
-      'user_defaults/' + this.context.userAuth.uid);
+    const defaultsRef = fbase.child('user_defaults/' + this.context.userAuth.uid);
     defaultsRef.on('value', function setDefault(value) {
       self.setState(function setState(prevState) {
         prevState.defaults = value.val();
@@ -45,8 +45,7 @@ class Join extends Component {
   }
 
   componentWillUnmount() {
-    const defaultsRef = new Firebase(process.env.FIREBASE_URL +
-      'user_defaults/' + this.context.userAuth.uid);
+    const defaultsRef = fbase.child('user_defaults/' + this.context.userAuth.uid);
     defaultsRef.off('value');
   }
 
@@ -57,8 +56,7 @@ class Join extends Component {
         'in order to join this conversation.',
       });
     } else {
-      const participantRef = new Firebase(process.env.FIREBASE_URL +
-        'participants/' + this.props.roomId);
+      const participantRef = fbase.child('participants/' + this.props.roomId);
       participantRef.push(this.state.participant);
 
       window.location = '/#/rooms/' + this.props.roomId;

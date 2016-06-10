@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Participant from './Participant';
 import errorLog from '../../utils/errorLog';
+import fbase from '../../api/firebase';
 
 class Participants extends Component {
   constructor(props) {
@@ -14,8 +15,7 @@ class Participants extends Component {
     let self = this;
 
     // Get badge data for each participants
-    const pBadgeRef = new Firebase(process.env.FIREBASE_URL +
-      'participant_badges/' + this.props.userid + '/' + this.props.roomId);
+    const pBadgeRef = fbase.child('participant_badges/' + this.props.userid + '/' + this.props.roomId);
     function getpBadges(memberid) {
       pBadgeRef.child(memberid).on('value', function onValue(badges) {
         self.setState(function setState(previousState) {
@@ -26,8 +26,7 @@ class Participants extends Component {
     }
 
     // Get participant data
-    const pRef = new Firebase(process.env.FIREBASE_URL +
-      'participants/' + this.props.roomId);
+    const pRef = fbase.child('participants/' + this.props.roomId);
     pRef.on('value', function onValue(participants) {
       let pdata = participants.val();
       self.setState({participants: pdata});
@@ -40,13 +39,11 @@ class Participants extends Component {
   }
 
   componentWillUnmount() {
-    const pRef = new Firebase(process.env.FIREBASE_URL +
-      'participants/' + this.props.roomId);
+    const pRef = fbase.child('participants/' + this.props.roomId);
     pRef.off('value');
     for (let participant in this.state.participants) {
       if ({}.hasOwnProperty.call(this.state.participants, participant)) {
-        const pBadgeRef = new Firebase(process.env.FIREBASE_URL +
-          'participant_badges/' + this.props.userid + '/'
+        const pBadgeRef = fbase.child(    'participant_badges/' + this.props.userid + '/'
           + this.props.roomId + '/' + participant);
         pBadgeRef.off('value');
       }

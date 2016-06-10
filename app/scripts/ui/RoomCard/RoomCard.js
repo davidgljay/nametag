@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Participant from '../Participant/Participant';
 import Join from './Join';
 import errorLog from '../../utils/errorLog';
+import fbase from '../../api/firebase';
 
 class RoomCard extends Component {
   constructor(props) {
@@ -17,21 +18,23 @@ class RoomCard extends Component {
       badges: [],
       normsChecked: false,
       participantCount: 0,
-      login: new Firebase(process.env.FIREBASE_URL).getAuth(),
+      login: fbase.getAuth(),
     };
   }
 
   componentDidMount() {
-    const modRef = new Firebase(process.env.FIREBASE_URL +
-    'participants/' + this.props.room.id + '/' + this.props.room.mod);
     let self = this;
+
+    const modRef = fbase.child('participants/' +
+     this.props.room.id + '/' + this.props.room.mod);
 
     modRef.on('value', function onValue(value) {
       self.setState({mod: value.val()});
     }, errorLog('Error getting mod info in room card'));
     for (let i = this.props.room.mod_badges.length - 1; i >= 0; i--) {
-      const badgeRef = new Firebase(process.env.FIREBASE_URL +
-        'badges/' + this.props.room.mod_badges[i]);
+      const badgeRef = fbase.child('badges/' +
+        this.props.room.mod_badges[i]);
+
       badgeRef.on('value', function onValue(value) {
         self.setState(function setState(prevState) {
           prevState.badges.push(value.val());
@@ -40,8 +43,9 @@ class RoomCard extends Component {
       }, errorLog('Error getting badge info for room card'));
     }
 
-    const particRef = new Firebase(process.env.FIREBASE_URL +
-      'participants/' + this.props.room.id);
+    const particRef = fbase.child('participants/' +
+      this.props.room.id);
+
     particRef.on('child_added', function onChildAdded() {
       self.setState(function setState(prevState) {
         prevState.participantCount += 1;
@@ -51,13 +55,11 @@ class RoomCard extends Component {
   }
 
   componentWillUnmount() {
-    const modRef = new Firebase(process.env.FIREBASE_URL +
-      'participants/' + this.props.room.mod);
+    const modRef = fbase.child('participants/' + this.props.room.mod);
     modRef.off('value');
 
     for (let i = this.props.room.mod_badges.length - 1; i >= 0; i--) {
-      const badgeRef = new Firebase(process.env.FIREBASE_URL +
-        'badges/' + this.props.room.mod_badges[i]);
+      const badgeRef = fbase.child('badges/' + this.props.room.mod_badges[i]);
       badgeRef.off('value');
     }
     this.setState(function setState(prevState) {

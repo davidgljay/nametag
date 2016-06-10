@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import errorLog from '../../utils/errorLog';
+import fbase from '../../api/firebase';
 
 
 /* Function to Log in users via an auth provider or e-mail.
@@ -25,10 +26,8 @@ class Login extends Component {
   }
 
   createUser(userinfo) {
-    const fbref = new Firebase(process.env.FIREBASE_URL +
-      'users/' + userinfo.uid);
-    const defaultsRef = new Firebase(process.env.FIREBASE_URL +
-      'user_defaults/' + userinfo.uid);
+    const fbref = fbase.child('users/' + userinfo.uid);
+    const defaultsRef = fbase.child('user_defaults/' + userinfo.uid);
 
     fbref.child(userinfo.provider).set(userinfo[userinfo.provider].cachedUserProfile);
     this.addIfUniq(
@@ -75,7 +74,7 @@ class Login extends Component {
   providerAuth(provider) {
     let self = this;
     return function onClick() {
-      new Firebase(process.env.FIREBASE_URL).authWithOAuthPopup(provider)
+      new fbase.authWithOAuthPopup(provider)
         .then(self.createUser, errorLog('Error creating user'));
     };
   }

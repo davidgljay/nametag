@@ -3,6 +3,7 @@ import Participants from '../Participant/Participants';
 import Messages from './Messages';
 import Compose from './Compose';
 import errorLog from '../../utils/errorLog';
+import fbase from '../../api/firebase';
 
 class Room extends Component {
   constructor(props) {
@@ -24,8 +25,7 @@ class Room extends Component {
 
   componentDidMount() {
   	// TODO: mark the user as active in the room.
-    const roomRef = new Firebase(process.env.FIREBASE_URL +
-      '/rooms/' + this.props.params.roomId);
+    const roomRef = fbase.child('/rooms/' + this.props.params.roomId);
 
     roomRef.on('value', function onValye(value) {
       this.setState({room: value.val()});
@@ -33,8 +33,7 @@ class Room extends Component {
   }
 
   componentWillUnmount() {
-    const roomRef = new Firebase(process.env.FIREBASE_URL +
-      'rooms/' + this.props.params.roomId);
+    const roomRef = fbase.child('rooms/' + this.props.params.roomId);
     roomRef.off('value');
   	// TODO: mark the user as inactive when they leave the room.
   }
