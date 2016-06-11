@@ -138,7 +138,7 @@ class RoomCard extends Component {
           <div className="roomDesc">
             {this.props.room.description}<br/>
             <p className="NametagCount">
-              {this.state.nametagCount} Nametag{this.state.nametagCount === 1 || 's'}
+              {this.state.nametagCount} participant{this.state.nametagCount === 1 || 's'}
             </p>
           </div>
 
