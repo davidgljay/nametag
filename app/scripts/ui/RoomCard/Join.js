@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import errorLog  from '../../utils/errorLog';
 import Login  from '../User/Login';
 import EditNametag  from '../Nametag/EditNametag';
-import Badges  from '../Badge/UserBadges';
+import UserBadges  from '../Badge/UserBadges';
 import Alert  from '../Utils/Alert';
 import fbase from '../../api/firebase';
 
