@@ -21,7 +21,7 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showEmail: false
+      showEmail: false,
     };
   }
 
@@ -30,22 +30,30 @@ class Login extends Component {
     const defaultsRef = fbase.child('user_defaults/' + userinfo.uid);
 
     fbref.child(userinfo.provider).set(userinfo[userinfo.provider].cachedUserProfile);
-    this.addIfUniq(
-      defaultsRef,
-      'bios',
-      userinfo[userinfo.provider].cachedUserProfile.description);
-    this.addIfUniq(
-      defaultsRef,
-      'names',
-      userinfo[userinfo.provider].username);
-    // this.addIfUniq(defaultsRef, 'names', userinfo[userinfo.provider].displayName);
-    this.addIfUniq(
-      defaultsRef,
-      'icons',
-      userinfo[userinfo.provider].profileImageURL);
-    // defaultsRef.child('bios').push(userinfo[userinfo.provider].cachedUserProfile.description);
-    // defaultsRef.child('names').push(userinfo[userinfo.provider].username);
-    // defaultsRef.child('names').push(userinfo[userinfo.provider].displayName);
+    if (userinfo.provider === 'twitter' || userinfo.provider === 'facebook') {
+      this.addIfUniq(
+        defaultsRef,
+        'names',
+        userinfo[userinfo.provider].cachedUserProfile.displayName
+      );
+      this.addIfUniq(
+        defaultsRef,
+        'icons',
+        userinfo[userinfo.provider].profileImageURL
+      );
+    }
+    if (userinfo.provider === 'twitter') {
+      this.addIfUniq(
+        defaultsRef,
+        'bios',
+        userinfo[userinfo.provider].cachedUserProfile.description
+      );
+      this.addIfUniq(
+        defaultsRef,
+        'names',
+        userinfo[userinfo.provider].username
+      );
+    }
     // //TODO: copy profile image to s3
     // defaultsRef.child('icons').push(userinfo[userinfo.provider].profileImageURL);
 
@@ -74,7 +82,7 @@ class Login extends Component {
   providerAuth(provider) {
     let self = this;
     return function onClick() {
-      new fbase.authWithOAuthPopup(provider)
+      fbase.authWithOAuthPopup(provider)
         .then(self.createUser, errorLog('Error creating user'));
     };
   }
