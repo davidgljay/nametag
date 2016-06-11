@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import errorLog  from '../../utils/errorLog';
-import Login  from '../Participant/Login';
-import EditNametag  from '../Participant/EditNametag';
-import Badges  from '../Participant/Badges';
+import Login  from '../User/Login';
+import EditNametag  from '../Nametag/EditNametag';
+import Badges  from '../Badge/UserBadges';
 import Alert  from '../Utils/Alert';
 import fbase from '../../api/firebase';
 
@@ -32,16 +32,18 @@ class Join extends Component {
 
   componentDidMount() {
     const self = this;
-    const defaultsRef = fbase.child('user_defaults/' + this.context.userAuth.uid);
-    defaultsRef.on('value', function setDefault(value) {
-      self.setState(function setState(prevState) {
-        prevState.defaults = value.val();
-        prevState.nametag.name = prevState.defaults.names[0];
-        prevState.nametag.bio = prevState.defaults.bios[0];
-        prevState.nametag.icon = prevState.defaults.icons[0];
-        return prevState;
+    if (this.context.userAuth) {
+      const defaultsRef = fbase.child('user_defaults/' + this.context.userAuth.uid);
+      defaultsRef.on('value', function setDefault(value) {
+        self.setState(function setState(prevState) {
+          prevState.defaults = value.val();
+          prevState.nametag.name = prevState.defaults.names[0];
+          prevState.nametag.bio = prevState.defaults.bios[0];
+          prevState.nametag.icon = prevState.defaults.icons[0];
+          return prevState;
+        });
       });
-    });
+    }
   }
 
   componentWillUnmount() {
@@ -56,8 +58,8 @@ class Join extends Component {
         'in order to join this conversation.',
       });
     } else {
-      const participantRef = fbase.child('participants/' + this.props.roomId);
-      participantRef.push(this.state.participant);
+      const NametagRef = fbase.child('nametags/' + this.props.roomId);
+      NametagRef.push(this.state.Nametag);
 
       window.location = '/#/rooms/' + this.props.roomId;
     }
@@ -73,7 +75,7 @@ class Join extends Component {
             <p className="userBadgeText">
               Share these badges by dragging them onto your nametag.
             </p>
-            <Badges/>
+            <UserBadges/>
           </div>
           <EditNametag
             nametag={this.state.nametag}

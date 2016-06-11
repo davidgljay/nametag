@@ -76,7 +76,7 @@ class ModAction extends Component {
       norms: this.state.norms.filter(isChecked),
       note: this.state.note,
       timestamp: new Date().getTime(),
-      modId: this.context.participantId,
+      modId: this.context.nametagId,
       author: this.props.author.id,
     };
 
@@ -225,7 +225,7 @@ ModAction.propTypes = {
   close: PropTypes.func,
   author: PropTypes.object };
 ModAction.contextTypes = {
-  participantId: PropTypes.string,
+  nametagId: PropTypes.string,
   roomId: PropTypes.string,
 };
 

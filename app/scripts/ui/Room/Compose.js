@@ -22,7 +22,7 @@ class Compose extends Component {
       const newMsg = msgRef.push({
         text: this.state.message,
         timestamp: Date.now(),
-        author: this.props.participantId,
+        author: this.props.nametagId,
       }, function fbPushResponse(err) {
         if (err) {
           errorLog('Error posting message')(err);
@@ -50,6 +50,6 @@ class Compose extends Component {
   }
 }
 
-Compose.propTypes = {roomId: PropTypes.string, participantId: PropTypes.string};
+Compose.propTypes = {roomId: PropTypes.string, nametagId: PropTypes.string};
 
 export default Compose;

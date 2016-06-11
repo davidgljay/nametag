@@ -13,7 +13,6 @@ class RoomCards extends Component {
   }
 
   componentDidMount() {
-    console.log('component mounted');
     let self = this;
     const roomsRef = fbase.child('rooms');
     roomsRef.on('child_added', function onChildAdded(value) {

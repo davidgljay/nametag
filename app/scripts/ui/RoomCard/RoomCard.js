@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import Participant from '../Participant/Participant';
+import Nametag from '../Nametag/Nametag';
 import Join from './Join';
 import errorLog from '../../utils/errorLog';
 import fbase from '../../api/firebase';
@@ -17,7 +17,7 @@ class RoomCard extends Component {
       },
       badges: [],
       normsChecked: false,
-      participantCount: 0,
+      nametagCount: 0,
       login: fbase.getAuth(),
     };
   }
@@ -25,7 +25,7 @@ class RoomCard extends Component {
   componentDidMount() {
     let self = this;
 
-    const modRef = fbase.child('participants/' +
+    const modRef = fbase.child('nametags/' +
      this.props.room.id + '/' + this.props.room.mod);
 
     modRef.on('value', function onValue(value) {
@@ -43,19 +43,19 @@ class RoomCard extends Component {
       }, errorLog('Error getting badge info for room card'));
     }
 
-    const particRef = fbase.child('participants/' +
+    const particRef = fbase.child('nametags/' +
       this.props.room.id);
 
     particRef.on('child_added', function onChildAdded() {
       self.setState(function setState(prevState) {
-        prevState.participantCount += 1;
+        prevState.nametagCount += 1;
         return prevState;
       });
     });
   }
 
   componentWillUnmount() {
-    const modRef = fbase.child('participants/' + this.props.room.mod);
+    const modRef = fbase.child('nametags/' + this.props.room.mod);
     modRef.off('value');
 
     for (let i = this.props.room.mod_badges.length - 1; i >= 0; i--) {
@@ -63,7 +63,7 @@ class RoomCard extends Component {
       badgeRef.off('value');
     }
     this.setState(function setState(prevState) {
-      prevState.participantCount = 0;
+      prevState.nametagCount = 0;
       return prevState;
     });
   }
@@ -137,13 +137,13 @@ class RoomCard extends Component {
           <h3>{this.props.room.title}</h3>
           <div className="roomDesc">
             {this.props.room.description}<br/>
-            <p className="participantCount">
-              {this.state.participantCount} participant{this.state.participantCount === 1 || 's'}
+            <p className="NametagCount">
+              {this.state.nametagCount} Nametag{this.state.nametagCount === 1 || 's'}
             </p>
           </div>
 
           <hr></hr>
-          <Participant
+          <Nametag
             className="mod"
             name={this.state.mod.name}
             bio={this.state.mod.bio}

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import Participants from '../Participant/Participants';
+import Participants from '../Nametag/Nametags';
 import Messages from './Messages';
 import Compose from './Compose';
 import errorLog from '../../utils/errorLog';
@@ -18,7 +18,7 @@ class Room extends Component {
 
   getChildContext() {
     return {
-      participantId: this.props.participantId,
+      NametagId: this.props.NametagId,
       roomId: this.props.params.roomId,
     };
   }
@@ -68,7 +68,7 @@ class Room extends Component {
                     })}
                   </ul>
                 </div>
-                <Participants roomId={this.context.roomId} mod={this.props.mod}/>
+                <Nametags roomId={this.context.roomId} mod={this.props.mod}/>
                 <div className="footer">
                     <p>Built with ♥ by some queers</p>
                 </div>
@@ -77,12 +77,12 @@ class Room extends Component {
             <div id="chat">
               <Messages
               roomId={this.props.params.roomId}
-              participantId={this.props.participantId}/>
+              nametagId={this.props.NametagId}/>
             </div>
           </div>
           <Compose
             roomId={this.props.params.roomId}
-            participantId={this.props.participantId}/>
+            NametagId={this.props.NametagId}/>
       </div>
     );
   }
@@ -91,7 +91,7 @@ class Room extends Component {
 Room.propTypes = { roomId: PropTypes.string };
 Room.defaultProps = {
   roomId: 'stampi',
-  participantId: 'wxyz',
+  NametagId: 'wxyz',
 };
 Room.childContextTypes = {
   participantId: PropTypes.string,

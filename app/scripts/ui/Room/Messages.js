@@ -45,7 +45,7 @@ class Messages extends Component {
     // Add mod actions to state for display
     const modActionPubRef = fbase.child('mod_actions/' + this.props.roomId + '/public');
     const modActionPrivRef = fbase.child('mod_actions/' + this.props.roomId + '/private/' +
-      this.props.participantId);
+      this.props.nametagId);
 
     function addModAction(data) {
       let modAction = data.val();
@@ -63,7 +63,7 @@ class Messages extends Component {
   componentWillUnmount() {
     const modActionPubRef = fbase.child('mod_actions/' + this.props.roomId + '/public');
     const modActionPrivRef = fbase.child('mod_actions/' + this.props.roomId + '/private/' +
-      this.props.participantId);
+      this.props.nametagId);
     const messageListRef = fbase.child('room_messages/' + this.props.roomId);
 
     modActionPubRef.off('child_added');
@@ -134,7 +134,7 @@ class Messages extends Component {
 
 Messages.propTypes = {
   roomId: PropTypes.string,
-  participantId: PropTypes.string,
+  nametagId: PropTypes.string,
 };
 Messages.defaultProps = { roomId: 'stampi' };
 
