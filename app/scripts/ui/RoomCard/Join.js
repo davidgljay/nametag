@@ -31,6 +31,7 @@ class Join extends Component {
   }
 
   componentDidMount() {
+    //TODO: Add autocomplete on click
     const self = this;
     if (this.context.userAuth) {
       const defaultsRef = fbase.child('user_defaults/' + this.context.userAuth.uid);
