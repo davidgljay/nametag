@@ -37,9 +37,9 @@ class Join extends Component {
       defaultsRef.on('value', function setDefault(value) {
         self.setState(function setState(prevState) {
           prevState.defaults = value.val();
-          prevState.nametag.name = prevState.defaults.names[0];
-          prevState.nametag.bio = prevState.defaults.bios[0];
-          prevState.nametag.icon = prevState.defaults.icons[0];
+          prevState.nametag.name = prevState.defaults ? prevState.defaults.names[0] : 'Name';
+          prevState.nametag.bio = prevState.defaults ? prevState.defaults.bios[0] : 'Description';
+          prevState.nametag.icon = prevState.defaults ? prevState.defaults.icons[0] : '';
           return prevState;
         });
       });
@@ -66,11 +66,12 @@ class Join extends Component {
   }
   render() {
     let join;
+    console.log(this.state.nametag);
     if (this.context.userAuth) {
       join =
         <div id="join">
           <Alert alertType='danger' alert={this.state.alert}/>
-          <h4>Set Up Your Nametag For This Conversation</h4>
+          <h4>Write Your Nametag For This Conversation</h4>
           <div id="userBadges">
             <p className="userBadgeText">
               Share these badges by dragging them onto your nametag.

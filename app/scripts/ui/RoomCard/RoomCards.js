@@ -46,9 +46,10 @@ class RoomCards extends Component {
   }
 }
 
-RoomCards.contectTypes = {
+RoomCards.contextTypes = {
   userAuth: PropTypes.object,
   unAuth: PropTypes.func,
+  checkAuth: PropTypes.func,
 };
 
 export default RoomCards;

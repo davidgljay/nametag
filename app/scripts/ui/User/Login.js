@@ -30,19 +30,23 @@ class Login extends Component {
     const defaultsRef = fbase.child('user_defaults/' + userinfo.uid);
 
     fbref.child(userinfo.provider).set(userinfo[userinfo.provider].cachedUserProfile);
-    if (userinfo.provider === 'twitter' || userinfo.provider === 'facebook') {
+    this.addIfUniq(
+        defaultsRef,
+        'icons',
+        userinfo[userinfo.provider].profileImageURL
+      );
+    if ( userinfo.provider === 'facebook') {
+      this.addIfUniq(
+        defaultsRef,
+        'names',
+        userinfo[userinfo.provider].cachedUserProfile.name);
+    }
+    if (userinfo.provider === 'twitter') {
       this.addIfUniq(
         defaultsRef,
         'names',
         userinfo[userinfo.provider].cachedUserProfile.displayName
       );
-      this.addIfUniq(
-        defaultsRef,
-        'icons',
-        userinfo[userinfo.provider].profileImageURL
-      );
-    }
-    if (userinfo.provider === 'twitter') {
       this.addIfUniq(
         defaultsRef,
         'bios',
@@ -61,6 +65,7 @@ class Login extends Component {
   }
 
   addIfUniq(ref, child, data) {
+    console.log(data);
     ref.child(child).transaction(function transaction(currentData) {
       let uniq = true;
       if (currentData === null) {
@@ -83,7 +88,7 @@ class Login extends Component {
     let self = this;
     return function onClick() {
       fbase.authWithOAuthPopup(provider)
-        .then(self.createUser, errorLog('Error creating user'));
+        .then(self.createUser.bind(self), errorLog('Error creating user'));
     };
   }
 
@@ -96,15 +101,15 @@ class Login extends Component {
         <img
           src="./images/twitter.jpg"
           className="loginOption img-circle"
-          onClick={this.providerAuth('twitter')}/>
+          onClick={this.providerAuth('twitter').bind(this)}/>
         <img
           src="./images/fb.jpg"
           className="loginOption img-circle"
-          onClick={this.providerAuth('facebook')}/>
+          onClick={this.providerAuth('facebook').bind(this)}/>
         <img
           src="./images/tumblr.png"
           className="loginOption img-circle"
-          onClick={this.providerAuth('tumblr')}/>
+          onClick={this.providerAuth('tumblr').bind(this)}/>
       </div>;
   }
 }

@@ -21,14 +21,15 @@ class Nametag extends Component {
   getChildContext() {
     return {
       userAuth: this.state.auth,
-      unAuth: this.unAuth,
-      checkAuth: this.checkAuth,
+      unAuth: this.unAuth.bind(this),
+      checkAuth: this.checkAuth.bind(this),
     };
   }
 
   unAuth(e) {
+    console.log(this);
     e.preventDefault();
-    new fbase.unauth();
+    fbase.unauth();
     this.checkAuth();
   }
 
