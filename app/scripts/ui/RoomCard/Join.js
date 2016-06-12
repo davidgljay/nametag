@@ -37,9 +37,9 @@ class Join extends Component {
       defaultsRef.on('value', function setDefault(value) {
         self.setState(function setState(prevState) {
           prevState.defaults = value.val();
-          prevState.nametag.name = prevState.defaults ? prevState.defaults.names[0] : 'Name';
-          prevState.nametag.bio = prevState.defaults ? prevState.defaults.bios[0] : 'Description';
-          prevState.nametag.icon = prevState.defaults ? prevState.defaults.icons[0] : '';
+          prevState.nametag.name = prevState.defaults && prevState.defaults.names ? prevState.defaults.names[0] : 'Name';
+          prevState.nametag.bio = prevState.defaults && prevState.defaults.bios ? prevState.defaults.bios[0] : 'Description';
+          prevState.nametag.icon = prevState.defaults && prevState.defaults.icons ? prevState.defaults.icons[0] : '';
           return prevState;
         });
       });
