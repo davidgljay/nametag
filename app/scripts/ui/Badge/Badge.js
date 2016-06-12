@@ -22,7 +22,7 @@ class Badge extends Component {
             <span
               aria-hidden="true"
               className="glyphicon glyphicon-remove"
-              onClick={this.toggleExpanded}>
+              onClick={this.toggleExpanded.bind(this)}>
             </span>
             <img className="icon" alt="icon" src={this.props.badge.icon_array[0]}/>
             <div className="name">{this.props.badge.name}</div>
@@ -41,7 +41,7 @@ class Badge extends Component {
     } else {
       badge = <div
         className="label label-pill badge"
-        onClick={this.toggleExpanded}>
+        onClick={this.toggleExpanded.bind(this)}>
           {this.props.badge.name}
         </div>;
     }

@@ -43,10 +43,10 @@ class RoomCard extends Component {
       }, errorLog('Error getting badge info for room card'));
     }
 
-    const particRef = fbase.child('nametags/' +
+    const nametagRef = fbase.child('nametags/' +
       this.props.room.id);
 
-    particRef.on('child_added', function onChildAdded() {
+    nametagRef.on('child_added', function onChildAdded() {
       self.setState(function setState(prevState) {
         prevState.nametagCount += 1;
         return prevState;
@@ -149,7 +149,7 @@ class RoomCard extends Component {
             bio={this.state.mod.bio}
             icon={this.state.mod.icon}
             member_id={this.state.mod.member_id}
-            badges={this.state.badges}/>
+            roomId={this.props.room.id}/>
           {joinPrompt}
         </div>
       </div>;

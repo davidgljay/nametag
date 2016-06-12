@@ -79,7 +79,8 @@ class Nametags extends Component {
           icon={nametag.icon}
           member_id={nametag.member_id}
           badges={nametag.badges}
-          mod={mod}/>
+          mod={mod}
+          roomId={this.props.roomId}/>
       </li>;
     }
 
