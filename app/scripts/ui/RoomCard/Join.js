@@ -67,7 +67,6 @@ class Join extends Component {
   }
   render() {
     let join;
-    console.log(this.state.nametag);
     if (this.context.userAuth) {
       join =
         <div id="join">
