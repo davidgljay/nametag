@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import Participants from '../Nametag/Nametags';
+import Nametags from '../Nametag/Nametags';
 import Messages from './Messages';
 import Compose from './Compose';
 import errorLog from '../../utils/errorLog';
@@ -16,9 +16,11 @@ class Room extends Component {
     };
   }
 
+  // TODO: update user_rooms to user_nametags, add logic to detect curently logged in user;
+
   getChildContext() {
     return {
-      NametagId: this.props.NametagId,
+      nametagId: this.props.nametagId,
       roomId: this.props.params.roomId,
     };
   }
@@ -94,7 +96,7 @@ Room.defaultProps = {
   NametagId: 'wxyz',
 };
 Room.childContextTypes = {
-  participantId: PropTypes.string,
+  nametagId: PropTypes.string,
   roomId: PropTypes.string,
 };
 

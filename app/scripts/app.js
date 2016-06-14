@@ -27,7 +27,6 @@ class Nametag extends Component {
   }
 
   unAuth(e) {
-    console.log(this);
     e.preventDefault();
     fbase.unauth();
     this.checkAuth();

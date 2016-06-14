@@ -31,26 +31,39 @@ class Join extends Component {
   }
 
   componentDidMount() {
-    //TODO: Add autocomplete on click
-    const self = this;
+    // TODO: Add autocomplete on click
     if (this.context.userAuth) {
-      const defaultsRef = fbase.child('user_defaults/' + this.context.userAuth.uid);
-      defaultsRef.on('value', function setDefault(value) {
-        self.setState(function setState(prevState) {
-          prevState.defaults = value.val();
-          prevState.nametag.name = prevState.defaults && prevState.defaults.names ? prevState.defaults.names[0] : 'Name';
-          prevState.nametag.bio = prevState.defaults && prevState.defaults.bios ? prevState.defaults.bios[0] : 'Description';
-          prevState.nametag.icon = prevState.defaults && prevState.defaults.icons ? prevState.defaults.icons[0] : '';
-          return prevState;
-        });
-      });
+      this.setDefaults();
+    }
+  }
+
+  componentWillUpdate() {
+    if (this.state.defaults === undefined && this.context.userAuth) {
+      this.setDefaults();
     }
   }
 
   componentWillUnmount() {
-    const defaultsRef = fbase.child('user_defaults/' + this.context.userAuth.uid);
-    defaultsRef.off('value');
+    if (this.state.defaults) {
+      const defaultsRef = fbase.child('user_defaults/' + this.context.userAuth.uid);
+      defaultsRef.off('value');
+    }
   }
+
+  setDefaults() {
+    let self = this;
+    const defaultsRef = fbase.child('user_defaults/' + this.context.userAuth.uid);
+    defaultsRef.on('value', function setDefault(value) {
+      self.setState(function setState(prevState) {
+        prevState.defaults = value.val();
+        prevState.nametag.name = prevState.defaults && prevState.defaults.names ? prevState.defaults.names[0] : 'Name';
+        prevState.nametag.bio = prevState.defaults && prevState.defaults.bios ? prevState.defaults.bios[0] : 'Description';
+        prevState.nametag.icon = prevState.defaults && prevState.defaults.icons ? prevState.defaults.icons[0] : '';
+        return prevState;
+      });
+    });
+  }
+
 
   joinRoom() {
     if (!this.props.normsChecked) {
@@ -67,6 +80,7 @@ class Join extends Component {
   }
   render() {
     let join;
+    console.log(this.context.userAuth);
     if (this.context.userAuth) {
       join =
         <div id="join">

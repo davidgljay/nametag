@@ -29,7 +29,6 @@ class Badges extends Component {
 
   render() {
     // TODO: Figure out how to expand and contract badges
-    console.log(this.state.badges);
     return <div id="badges">
            {this.state.badges.map(function mapBadges(badge) {
              return <Badge badge={badge} key={badge.id}/>;

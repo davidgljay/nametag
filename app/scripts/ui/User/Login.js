@@ -65,7 +65,9 @@ class Login extends Component {
   }
 
   addIfUniq(ref, child, data) {
-    console.log(data);
+    if (!data) {
+      return;
+    }
     ref.child(child).transaction(function transaction(currentData) {
       let uniq = true;
       if (currentData === null) {
