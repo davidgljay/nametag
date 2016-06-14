@@ -21,11 +21,13 @@ class Message extends Component {
     const authorRef = fbase.child('participants/' + this.props.roomId +
       '/' + this.props.author);
     authorRef.on('value', function onValue(author) {
-      self.setState(function setState(previousState) {
-        previousState.author = author.val();
-        previousState.author.id = this.props.author;
-        return previousState;
-      });
+      if (author.val()) {
+        self.setState(function setState(prevState) {
+          prevState.author = author.val();
+          prevState.author.id = this.props.author;
+          return prevState;
+        });
+      }
     }, errorLog('Error getting message author info'), this);
   }
 

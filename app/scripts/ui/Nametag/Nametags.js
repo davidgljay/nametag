@@ -53,6 +53,7 @@ class Nametags extends Component {
   render() {
     // Push nametags into an array;
     let nametagsArr = [];
+    let self = this;
     for (let nametag in this.state.nametags) {
       if ({}.hasOwnProperty.call(this.state.nametags, nametag)) {
         this.state.nametags[nametag].member_id = nametag;
@@ -80,7 +81,7 @@ class Nametags extends Component {
           member_id={nametag.member_id}
           badges={nametag.badges}
           mod={mod}
-          roomId={this.props.roomId}/>
+          roomId={self.props.roomId}/>
       </li>;
     }
 
