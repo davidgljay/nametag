@@ -55,8 +55,6 @@ class Join extends Component {
     const defaultsRef = fbase.child('user_defaults/' + this.context.userAuth.uid);
     defaultsRef.on('value', function setDefault(value) {
       self.setState(function setState(prevState) {
-        console.log("Got defaults, setting");
-        console.log(value.val());
         prevState.defaults = value.val();
         prevState.nametag.name = prevState.defaults && prevState.defaults.names ? prevState.defaults.names[0] : '';
         prevState.nametag.icon = prevState.defaults && prevState.defaults.icons ? prevState.defaults.icons[0] : '';
@@ -67,6 +65,7 @@ class Join extends Component {
 
 
   joinRoom() {
+    var self=this;
     if (!this.props.normsChecked) {
       this.setState({
         'alert': 'You must agree to the norms above' +
@@ -74,9 +73,21 @@ class Join extends Component {
       });
     } else {
       const NametagRef = fbase.child('nametags/' + this.props.roomId);
-      NametagRef.push(this.state.Nametag);
+      NametagRef.push(this.state.nametag)
+        .then(function(nametagref) {
+          console.log('Set nametagref');
+          return fbase.child('user_rooms/' + self.context.userAuth.uid + '/' + self.props.roomId)
+              .set({
+                mod: false,
+                creator: false,
+                nametag_id: nametagref.key(),
+              });
+        })
+        .then(function() {
+          window.location = '/#/rooms/' + self.props.roomId;
+        }, errorLog("Joining room:"));
 
-      window.location = '/#/rooms/' + this.props.roomId;
+
     }
   }
   render() {
@@ -94,7 +105,7 @@ class Join extends Component {
           </div>
           <EditNametag
             nametag={this.state.nametag}
-            updateNametag={this.updateNametag}/>
+            updateNametag={this.updateNametag.bind(this)}/>
           <br/>
           <button
             className="btn btn-primary"
