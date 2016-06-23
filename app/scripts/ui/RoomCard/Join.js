@@ -55,9 +55,10 @@ class Join extends Component {
     const defaultsRef = fbase.child('user_defaults/' + this.context.userAuth.uid);
     defaultsRef.on('value', function setDefault(value) {
       self.setState(function setState(prevState) {
+        console.log("Got defaults, setting");
+        console.log(value.val());
         prevState.defaults = value.val();
-        prevState.nametag.name = prevState.defaults && prevState.defaults.names ? prevState.defaults.names[0] : 'Name';
-        prevState.nametag.bio = prevState.defaults && prevState.defaults.bios ? prevState.defaults.bios[0] : 'Description';
+        prevState.nametag.name = prevState.defaults && prevState.defaults.names ? prevState.defaults.names[0] : '';
         prevState.nametag.icon = prevState.defaults && prevState.defaults.icons ? prevState.defaults.icons[0] : '';
         return prevState;
       });
@@ -80,7 +81,6 @@ class Join extends Component {
   }
   render() {
     let join;
-    console.log(this.context.userAuth);
     if (this.context.userAuth) {
       join =
         <div id="join">

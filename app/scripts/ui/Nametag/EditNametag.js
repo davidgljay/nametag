@@ -15,7 +15,6 @@ class EditNametag extends Component {
     // TODO:Add badges
     // TODO: Figure out image caching
     // TODO: change id to make sense once dragging works
-    // return (<div>Editname</div>);
     return <div id="editNametag" className="profile">
           <div className="form-group">
             <img
@@ -27,13 +26,15 @@ class EditNametag extends Component {
                   className="form-control name"
                   id="participantName"
                   onChange={this.props.updateNametag('name')}
-                  value={this.props.nametag.name}/>
+                  value={this.props.nametag.name}
+                  placeholder='Name'/>
                 <textarea
                   rows="3"
                   className="form-control bio"
                   id="participantDescription"
                   onChange={this.props.updateNametag('bio')}
-                  value={this.props.nametag.bio}/>
+                  value={this.props.nametag.bio}
+                  placeholder='Why are you joining this conversation?'/>
             </div>
           </div>
         </div>;
