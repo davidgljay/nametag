@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import fbase from '../../api/firebase';
 import Badge from './Badge';
 
+//TODO: Change to Certificates
+
 class Badges extends Component {
   constructor(props) {
     super(props);
