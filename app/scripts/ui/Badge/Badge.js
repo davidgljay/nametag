@@ -35,8 +35,7 @@ class Badge extends Component {
             <hr/>
             <div className="notes">
               {this.props.badge.notes.map(function mapNotes(note) {
-                    console.log(note.date);
-                return <div className="note" key={note.date}>
+                 return <div className="note" key={note.date}>
                     <div className="date">{moment(note.date).format('MMMM Do, YYYY')}: </div>
                     <div className="msg">{note.msg}</div>
                   </div>;

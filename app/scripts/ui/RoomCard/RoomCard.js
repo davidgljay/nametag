@@ -13,7 +13,7 @@ class RoomCard extends Component {
         name: '',
         bio: '',
         icon: '',
-        member_id: '',
+        nametagId: '',
       },
       badges: [],
       normsChecked: false,
@@ -29,19 +29,10 @@ class RoomCard extends Component {
      this.props.room.id + '/' + this.props.room.mod);
 
     modRef.on('value', function onValue(value) {
-      self.setState({mod: value.val()});
+      let modInfo = value.val();
+      modInfo.nametagId = value.key();
+      self.setState({mod: modInfo});
     }, errorLog('Error getting mod info in room card'));
-    for (let i = this.props.room.mod_badges.length - 1; i >= 0; i--) {
-      const badgeRef = fbase.child('badges/' +
-        this.props.room.mod_badges[i]);
-
-      badgeRef.on('value', function onValue(value) {
-        self.setState(function setState(prevState) {
-          prevState.badges.push(value.val());
-          return prevState;
-        });
-      }, errorLog('Error getting badge info for room card'));
-    }
 
     const nametagRef = fbase.child('nametags/' +
       this.props.room.id);
@@ -148,7 +139,7 @@ class RoomCard extends Component {
             name={this.state.mod.name}
             bio={this.state.mod.bio}
             icon={this.state.mod.icon}
-            member_id={this.state.mod.member_id}
+            nametagId={this.state.mod.nametagId}
             roomId={this.props.room.id}/>
           {joinPrompt}
         </div>

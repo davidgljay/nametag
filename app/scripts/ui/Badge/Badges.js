@@ -14,7 +14,7 @@ class Badges extends Component {
 
   componentDidMount() {
     let self = this;
-    const badgesRef = fbase.child('/nametag_badges/' + this.props.roomId);
+    const badgesRef = fbase.child('/nametag_badges/' + this.props.roomId + '/' + this.props.nametagId);
     badgesRef.on('child_added', function onChildAdded(badgeInfo) {
       self.setState(function setState(prevState) {
         prevState.badges.push(badgeInfo.val());
@@ -25,7 +25,7 @@ class Badges extends Component {
   }
 
   componentWillUnmount() {
-    const badgesRef = fbase.child('/nametag_badges/' + this.props.uid);
+    const badgesRef = fbase.child('/nametag_badges/' + this.props.uid + '/' + this.props.nametagId);
     badgesRef.off('child_added');
   }
 
@@ -33,12 +33,13 @@ class Badges extends Component {
     // TODO: Figure out how to expand and contract badges
     return <div id="badges">
            {this.state.badges.map(function mapBadges(badge) {
+            console.log(badge);
              return <Badge badge={badge} key={badge.id}/>;
            })}
         </div>;
   }
 }
 
-Badges.propTypes = { roomId: PropTypes.string };
+Badges.propTypes = { roomId: PropTypes.string.isRequired, nametagId: PropTypes.string.isRequired };
 
 export default Badges;

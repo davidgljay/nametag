@@ -15,24 +15,24 @@ class Nametags extends Component {
     let self = this;
 
     // Get badge data for each nametags
-    const pBadgeRef = fbase.child('nametag_badges/' + this.props.userid + '/' + this.props.roomId);
+    const nametagBadgeRef = fbase.child('nametag_badges/' + this.props.userid + '/' + this.props.roomId);
     function getpBadges(memberid) {
-      pBadgeRef.child(memberid).on('value', function onValue(badges) {
+      nametagBadgeRef.child(memberid).on('value', function onValue(badges) {
         self.setState(function setState(previousState) {
-          previousState.nametags[memberid].badges = badges.val();
+          previousState.nametags[id].badges = badges.val();
           return previousState;
         });
       }, errorLog('Error getting nametag badges'));
     }
 
     // Get nametag data
-    const pRef = fbase.child('nametags/' + this.props.roomId);
-    pRef.on('value', function onValue(nametags) {
-      let pdata = nametags.val();
-      self.setState({nametags: pdata});
-      for (let nametag in pdata) {
-        if ({}.hasOwnProperty.call(pdata, nametag)) {
-          getpBadges(pdata[nametag].member_id);
+    const nametagsRef = fbase.child('nametags/' + this.props.roomId);
+    nametagsRef.on('value', function onValue(nametags) {
+      let nametagsData = nametags.val();
+      self.setState({nametags: nametagsData});
+      for (let nametag in nametagsData) {
+        if ({}.hasOwnProperty.call(nametagsData, nametag)) {
+          getpBadges(nametagsData[nametag].nametagId);
         }
       }
     }, errorLog('Error getting partipant info'));
@@ -52,11 +52,11 @@ class Nametags extends Component {
 
   render() {
     // Push nametags into an array;
-    let nametagsArr = [];
     let self = this;
+    let nametagsArr = [];
     for (let nametag in this.state.nametags) {
       if ({}.hasOwnProperty.call(this.state.nametags, nametag)) {
-        this.state.nametags[nametag].member_id = nametag;
+        this.state.nametags[nametag].id = nametag;
         nametagsArr.push(this.state.nametags[nametag]);
       }
     }
@@ -73,12 +73,12 @@ class Nametags extends Component {
       // Make nametag.badges an empty array if it not already assigned.
       nametag.badges = nametag.badges || [];
 
-      return <li key={nametag.name} className="list-group-item profile">
+      return <li key={nametag.id} className="list-group-item profile">
         <Nametag
           name={nametag.name}
           bio={nametag.bio}
           icon={nametag.icon}
-          member_id={nametag.member_id}
+          nametagId={nametag.id}
           badges={nametag.badges}
           mod={mod}
           roomId={self.props.roomId}/>
