@@ -80,9 +80,8 @@ class Login extends Component {
       }
       if (uniq) {
         currentData.push(data);
-        return currentData;
       }
-      return null;
+      return currentData;
     });
   }
 
