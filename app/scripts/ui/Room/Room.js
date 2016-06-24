@@ -9,6 +9,7 @@ class Room extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      nametagId: '',
       room: {
         title: '',
         norms: [],
@@ -16,13 +17,9 @@ class Room extends Component {
     };
   }
 
-  // TODO: update user_rooms to user_nametags, add logic to detect curently logged in user;
-
   getChildContext() {
-    console.log("Params Roomid")
-    console.log(this.props.params.roomId);
     return {
-      nametagId: this.props.nametagId,
+      nametagId: this.state.nametagId,
       roomId: this.props.params.roomId,
     };
   }
@@ -31,14 +28,27 @@ class Room extends Component {
   	// TODO: mark the user as active in the room.
     const roomRef = fbase.child('/rooms/' + this.props.params.roomId);
 
-    roomRef.on('value', function onValye(value) {
+    roomRef.on('value', function onValue(value) {
       this.setState({room: value.val()});
     }, errorLog('Error getting room from FB'), this);
+
+    const nametagIdRef = fbase.child('user_rooms/'
+      + this.context.userAuth.uid + '/'
+      + this.props.params.roomId);
+
+    nametagIdRef.on('value', function onValue(value) {
+      this.setState({nametagId: value.val().nametag_id});
+    });
   }
 
   componentWillUnmount() {
     const roomRef = fbase.child('rooms/' + this.props.params.roomId);
     roomRef.off('value');
+
+    const nametagIdRef = fbase.child('user_rooms/'
+     + this.context.userAuth.uid + '/'
+     + this.props.params.roomId);
+    nametagIdRef.off('value');
   	// TODO: mark the user as inactive when they leave the room.
   }
 
@@ -86,7 +96,7 @@ class Room extends Component {
           </div>
           <Compose
             roomId={this.props.params.roomId}
-            NametagId={this.props.NametagId}/>
+            nametagId={this.state.nametagId}/>
       </div>
     );
   }

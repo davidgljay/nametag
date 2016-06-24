@@ -50,6 +50,6 @@ class Compose extends Component {
   }
 }
 
-Compose.propTypes = {roomId: PropTypes.string, nametagId: PropTypes.string};
+Compose.propTypes = {roomId: PropTypes.string.isRequired, nametagId: PropTypes.string.isRequired};
 
 export default Compose;
