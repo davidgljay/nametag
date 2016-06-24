@@ -4,6 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import RoomCard from './RoomCard';
 import errorLog from '../../utils/errorLog';
 import Navbar from '../Utils/Navbar';
+import fbase from '../../api/firebase';
 
 class RoomCards extends Component {
   constructor(props) {
@@ -12,8 +13,8 @@ class RoomCards extends Component {
   }
 
   componentDidMount() {
-    const roomsRef = new Firebase(process.env.FIREBASE_URL + '/rooms');
     let self = this;
+    const roomsRef = fbase.child('rooms');
     roomsRef.on('child_added', function onChildAdded(value) {
       self.setState(function setState(prevState) {
         const room = value.val();
@@ -25,7 +26,7 @@ class RoomCards extends Component {
   }
 
   componentWillUnmount() {
-    const roomsRef = new Firebase(process.env.FIREBASE_URL + '/rooms');
+    const roomsRef = fbase.child('rooms');
     roomsRef.off('child_added');
   }
 
@@ -45,9 +46,10 @@ class RoomCards extends Component {
   }
 }
 
-RoomCards.contectTypes = {
+RoomCards.contextTypes = {
   userAuth: PropTypes.object,
   unAuth: PropTypes.func,
+  checkAuth: PropTypes.func,
 };
 
 export default RoomCards;

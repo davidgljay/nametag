@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import moment from '../../../bower_components/moment/moment';
 import ModAction from './ModAction';
 import errorLog from '../../utils/errorLog';
+import fbase from '../../api/firebase';
 
 class Message extends Component {
   constructor(props) {
@@ -17,20 +18,22 @@ class Message extends Component {
     // TODO: Does this belong in getInitialState of componentDidMount?
     // It seems like it's bad to set state before the component mounts, so maybe here?
     const self = this;
-    const authorRef = new Firebase(process.env.FIREBASE_URL +
-      'participants/' + this.props.roomId + '/' + this.props.author);
+    const authorRef = fbase.child('participants/' + this.props.roomId +
+      '/' + this.props.author);
     authorRef.on('value', function onValue(author) {
-      self.setState(function setState(previousState) {
-        previousState.author = author.val();
-        previousState.author.id = this.props.author;
-        return previousState;
-      });
+      if (author.val()) {
+        self.setState(function setState(prevState) {
+          prevState.author = author.val();
+          prevState.author.id = this.props.author;
+          return prevState;
+        });
+      }
     }, errorLog('Error getting message author info'), this);
   }
 
   componentWillUnmount() {
-    const authorRef = new Firebase(process.env.FIREBASE_URL +
-      'participants/' + this.props.roomId + '/' + this.props.author);
+    const authorRef = fbase.child('participants/' + this.props.roomId +
+      '/' + this.props.author);
     authorRef.off();
   }
 

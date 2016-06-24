@@ -1,13 +1,15 @@
 import React, { Component, PropTypes } from 'react';
-import Participants from '../Participant/Participants';
+import Nametags from '../Nametag/Nametags';
 import Messages from './Messages';
 import Compose from './Compose';
 import errorLog from '../../utils/errorLog';
+import fbase from '../../api/firebase';
 
 class Room extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      nametagId: '',
       room: {
         title: '',
         norms: [],
@@ -17,25 +19,36 @@ class Room extends Component {
 
   getChildContext() {
     return {
-      participantId: this.props.participantId,
+      nametagId: this.state.nametagId,
       roomId: this.props.params.roomId,
     };
   }
 
   componentDidMount() {
   	// TODO: mark the user as active in the room.
-    const roomRef = new Firebase(process.env.FIREBASE_URL +
-      '/rooms/' + this.props.params.roomId);
+    const roomRef = fbase.child('/rooms/' + this.props.params.roomId);
 
-    roomRef.on('value', function onValye(value) {
+    roomRef.on('value', function onValue(value) {
       this.setState({room: value.val()});
     }, errorLog('Error getting room from FB'), this);
+
+    const nametagIdRef = fbase.child('user_rooms/'
+      + this.context.userAuth.uid + '/'
+      + this.props.params.roomId);
+
+    nametagIdRef.on('value', function onValue(value) {
+      this.setState({nametagId: value.val().nametag_id});
+    });
   }
 
   componentWillUnmount() {
-    const roomRef = new Firebase(process.env.FIREBASE_URL +
-      'rooms/' + this.props.params.roomId);
+    const roomRef = fbase.child('rooms/' + this.props.params.roomId);
     roomRef.off('value');
+
+    const nametagIdRef = fbase.child('user_rooms/'
+     + this.context.userAuth.uid + '/'
+     + this.props.params.roomId);
+    nametagIdRef.off('value');
   	// TODO: mark the user as inactive when they leave the room.
   }
 
@@ -69,7 +82,7 @@ class Room extends Component {
                     })}
                   </ul>
                 </div>
-                <Participants roomId={this.context.roomId} mod={this.props.mod}/>
+                <Nametags roomId={this.props.params.roomId} mod={this.state.room.mod}/>
                 <div className="footer">
                     <p>Built with ♥ by some queers</p>
                 </div>
@@ -78,12 +91,12 @@ class Room extends Component {
             <div id="chat">
               <Messages
               roomId={this.props.params.roomId}
-              participantId={this.props.participantId}/>
+              nametagId={this.props.NametagId}/>
             </div>
           </div>
           <Compose
             roomId={this.props.params.roomId}
-            participantId={this.props.participantId}/>
+            nametagId={this.state.nametagId}/>
       </div>
     );
   }
@@ -92,10 +105,10 @@ class Room extends Component {
 Room.propTypes = { roomId: PropTypes.string };
 Room.defaultProps = {
   roomId: 'stampi',
-  participantId: 'wxyz',
+  nametagId: 'wxyz',
 };
 Room.childContextTypes = {
-  participantId: PropTypes.string,
+  nametagId: PropTypes.string,
   roomId: PropTypes.string,
 };
 

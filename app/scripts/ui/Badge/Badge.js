@@ -17,21 +17,25 @@ class Badge extends Component {
 
   render() {
     let badge;
+    let icon = '';
+    if (this.props.badge.icon_array) {
+      icon = <img className="icon" alt="icon" src={this.props.badge.icon_array[0]}/>;
+    }
     if (this.state.expanded) {
       badge = <div className="badgeExpanded">
             <span
               aria-hidden="true"
               className="glyphicon glyphicon-remove"
-              onClick={this.toggleExpanded}>
+              onClick={this.toggleExpanded.bind(this)}>
             </span>
-            <img className="icon" alt="icon" src={this.props.badge.icon_array[0]}/>
+            { icon }
             <div className="name">{this.props.badge.name}</div>
             <div className="granter">Verified by: {this.props.badge.granter}</div>
             <div className="description">{this.props.badge.description_array[0]}</div>
             <hr/>
             <div className="notes">
               {this.props.badge.notes.map(function mapNotes(note) {
-                return <div className="note" key={note.date}>
+                 return <div className="note" key={note.date}>
                     <div className="date">{moment(note.date).format('MMMM Do, YYYY')}: </div>
                     <div className="msg">{note.msg}</div>
                   </div>;
@@ -41,7 +45,7 @@ class Badge extends Component {
     } else {
       badge = <div
         className="label label-pill badge"
-        onClick={this.toggleExpanded}>
+        onClick={this.toggleExpanded.bind(this)}>
           {this.props.badge.name}
         </div>;
     }

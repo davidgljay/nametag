@@ -2,6 +2,7 @@ import React, { Component, PropTypes} from 'react';
 import Message from './Message';
 import ModActionNotif from './ModActionNotif';
 import errorLog from '../../utils/errorLog';
+import fbase from '../../api/firebase';
 
 class Messages extends Component {
   constructor(props) {
@@ -17,12 +18,10 @@ class Messages extends Component {
     const self = this;
 
     // Add messages for display
-    const messageListRef = new Firebase(process.env.FIREBASE_URL +
-      '/room_messages/' + this.props.roomId);
+    const messageListRef = fbase.child('room_messages/' + this.props.roomId);
     messageListRef.on('child_added', function onChildAded(value) {
       const mId = value.val();
-      const messageRef = new Firebase(process.env.FIREBASE_URL +
-        '/messages/' + mId);
+      const messageRef = fbase.child('messages/' + mId);
       messageRef.on('value', function onValue(messageObj) {
         if (!messageObj.exists()) {
           return;
@@ -44,11 +43,9 @@ class Messages extends Component {
 
 
     // Add mod actions to state for display
-    const modActionPubRef = new Firebase(process.env.FIREBASE_URL +
-      '/mod_actions/' + this.props.roomId + '/public');
-    const modActionPrivRef = new Firebase(process.env.FIREBASE_URL +
-      '/mod_actions/' + this.props.roomId + '/private/' +
-      this.props.participantId);
+    const modActionPubRef = fbase.child('mod_actions/' + this.props.roomId + '/public');
+    const modActionPrivRef = fbase.child('mod_actions/' + this.props.roomId + '/private/' +
+      this.props.nametagId);
 
     function addModAction(data) {
       let modAction = data.val();
@@ -64,13 +61,10 @@ class Messages extends Component {
   }
 
   componentWillUnmount() {
-    const modActionPubRef = new Firebase(process.env.FIREBASE_URL +
-      '/mod_actions/' + this.props.roomId + '/public');
-    const modActionPrivRef = new Firebase(process.env.FIREBASE_URL +
-      '/mod_actions/' + this.props.roomId + '/private/' +
-      this.props.participantId);
-    const messageListRef = new Firebase(process.env.FIREBASE_URL +
-      'room_messages/' + this.props.roomId);
+    const modActionPubRef = fbase.child('mod_actions/' + this.props.roomId + '/public');
+    const modActionPrivRef = fbase.child('mod_actions/' + this.props.roomId + '/private/' +
+      this.props.nametagId);
+    const messageListRef = fbase.child('room_messages/' + this.props.roomId);
 
     modActionPubRef.off('child_added');
     modActionPrivRef.off('child_added');
@@ -78,8 +72,7 @@ class Messages extends Component {
 
     for (let message in this.state.messages) {
       if ({}.hasOwnProperty.call(this.state.messages, message)) {
-        const messageRef = new Firebase(process.env.FIREBASE_URL +
-          '/messages/' + message);
+        const messageRef = fbase.child(    '/messages/' + message);
         messageRef.off('value');
       }
     }
@@ -141,7 +134,7 @@ class Messages extends Component {
 
 Messages.propTypes = {
   roomId: PropTypes.string,
-  participantId: PropTypes.string,
+  nametagId: PropTypes.string,
 };
 Messages.defaultProps = { roomId: 'stampi' };
 

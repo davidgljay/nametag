@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import errorLog  from '../../utils/errorLog';
-import Login  from '../Participant/Login';
-import EditNametag  from '../Participant/EditNametag';
-import Badges  from '../Participant/Badges';
+import Login  from '../User/Login';
+import EditNametag  from '../Nametag/EditNametag';
+import UserBadges  from '../Badge/UserBadges';
 import Alert  from '../Utils/Alert';
+import fbase from '../../api/firebase';
 
 class Join extends Component {
   constructor(props) {
@@ -30,38 +31,63 @@ class Join extends Component {
   }
 
   componentDidMount() {
-    const self = this;
-    const defaultsRef = new Firebase(process.env.FIREBASE_URL +
-      'user_defaults/' + this.context.userAuth.uid);
+    // TODO: Add autocomplete on click
+    if (this.context.userAuth) {
+      this.setDefaults();
+    }
+  }
+
+  componentWillUpdate() {
+    if (this.state.defaults === undefined && this.context.userAuth) {
+      this.setDefaults();
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.state.defaults) {
+      const defaultsRef = fbase.child('user_defaults/' + this.context.userAuth.uid);
+      defaultsRef.off('value');
+    }
+  }
+
+  setDefaults() {
+    let self = this;
+    const defaultsRef = fbase.child('user_defaults/' + this.context.userAuth.uid);
     defaultsRef.on('value', function setDefault(value) {
       self.setState(function setState(prevState) {
         prevState.defaults = value.val();
-        prevState.nametag.name = prevState.defaults.names[0];
-        prevState.nametag.bio = prevState.defaults.bios[0];
-        prevState.nametag.icon = prevState.defaults.icons[0];
+        prevState.nametag.name = prevState.defaults && prevState.defaults.names ? prevState.defaults.names[0] : '';
+        prevState.nametag.icon = prevState.defaults && prevState.defaults.icons ? prevState.defaults.icons[0] : '';
         return prevState;
       });
     });
   }
 
-  componentWillUnmount() {
-    const defaultsRef = new Firebase(process.env.FIREBASE_URL +
-      'user_defaults/' + this.context.userAuth.uid);
-    defaultsRef.off('value');
-  }
 
   joinRoom() {
+    var self=this;
     if (!this.props.normsChecked) {
       this.setState({
         'alert': 'You must agree to the norms above' +
         'in order to join this conversation.',
       });
     } else {
-      const participantRef = new Firebase(process.env.FIREBASE_URL +
-        'participants/' + this.props.roomId);
-      participantRef.push(this.state.participant);
+      const NametagRef = fbase.child('nametags/' + this.props.roomId);
+      NametagRef.push(this.state.nametag)
+        .then(function(nametagref) {
+          console.log('Set nametagref');
+          return fbase.child('user_rooms/' + self.context.userAuth.uid + '/' + self.props.roomId)
+              .set({
+                mod: false,
+                creator: false,
+                nametag_id: nametagref.key(),
+              });
+        })
+        .then(function() {
+          window.location = '/#/rooms/' + self.props.roomId;
+        }, errorLog("Joining room:"));
 
-      window.location = '/#/rooms/' + this.props.roomId;
+
     }
   }
   render() {
@@ -70,16 +96,16 @@ class Join extends Component {
       join =
         <div id="join">
           <Alert alertType='danger' alert={this.state.alert}/>
-          <h4>Set Up Your Nametag For This Conversation</h4>
+          <h4>Write Your Nametag For This Conversation</h4>
           <div id="userBadges">
             <p className="userBadgeText">
               Share these badges by dragging them onto your nametag.
             </p>
-            <Badges/>
+            <UserBadges/>
           </div>
           <EditNametag
             nametag={this.state.nametag}
-            updateNametag={this.updateNametag}/>
+            updateNametag={this.updateNametag.bind(this)}/>
           <br/>
           <button
             className="btn btn-primary"

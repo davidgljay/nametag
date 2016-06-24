@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import errorLog from '../../utils/errorLog';
 import Alert from '../Utils/Alert';
+import fbase from '../../api/firebase';
 
 class CreateRoom extends Component {
   constructor(props) {
@@ -24,10 +25,9 @@ class CreateRoom extends Component {
   }
 
   postRoom() {
-    const roomsRef = new Firebase(process.env.FIREBASE_URL + 'rooms/');
+    const roomsRef = fbase.child('rooms/');
     const roomId = roomsRef.push(this.state.room);
-    const modRef = new Firebase(process.env.FIREBASE_URL +
-      'participants/' + roomId);
+    const modRef = fbase.child('participants/' + roomId);
     const modId = modRef.push(this.state.mod);
 
     roomsRef.child(roomId + '/mod').set(modId);

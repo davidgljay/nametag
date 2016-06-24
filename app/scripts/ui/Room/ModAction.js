@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import errorLog from '../../utils/errorLog';
+import fbase from '../../api/firebase';
 
 class ModAction extends Component {
   constructor(props) {
@@ -14,8 +15,7 @@ class ModAction extends Component {
 
   componentDidMount() {
     const self = this;
-    const normsRef = new Firebase(process.env.FIREBASE_URL +
-      'rooms/' + this.context.roomId + '/norms');
+    const normsRef = fbase.child('rooms/' + this.context.roomId + '/norms');
     normsRef.on('child_added', function onChildAdded(value) {
       self.setState(function setState(previousState) {
         previousState.norms.push({
@@ -27,6 +27,8 @@ class ModAction extends Component {
       });
     }, errorLog('Error getting room norms'));
   }
+
+  //TODO: handle unmount
 
   showNorm(norm) {
     return <li
@@ -62,7 +64,7 @@ class ModAction extends Component {
 
   remindOfNorms() {
     let self = this;
-    const modActionRef = new Firebase(process.env.FIREBASE_URL + 'mod_actions/');
+    const modActionRef = fbase.child('mod_actions/');
     // TODO: Allow edits without breaking append-only rule (right now there's one modaction per comment)
 
     function isChecked(item) {
@@ -74,7 +76,7 @@ class ModAction extends Component {
       norms: this.state.norms.filter(isChecked),
       note: this.state.note,
       timestamp: new Date().getTime(),
-      modId: this.context.participantId,
+      modId: this.context.nametagId,
       author: this.props.author.id,
     };
 
@@ -223,7 +225,7 @@ ModAction.propTypes = {
   close: PropTypes.func,
   author: PropTypes.object };
 ModAction.contextTypes = {
-  participantId: PropTypes.string,
+  nametagId: PropTypes.string,
   roomId: PropTypes.string,
 };
 

@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import Participant from '../Participant/Participant';
+import Nametag from '../Nametag/Nametag';
 import Join from './Join';
 import errorLog from '../../utils/errorLog';
+import fbase from '../../api/firebase';
 
 class RoomCard extends Component {
   constructor(props) {
@@ -12,56 +13,48 @@ class RoomCard extends Component {
         name: '',
         bio: '',
         icon: '',
-        member_id: '',
+        nametagId: '',
       },
       badges: [],
       normsChecked: false,
-      participantCount: 0,
-      login: new Firebase(process.env.FIREBASE_URL).getAuth(),
+      nametagCount: 0,
+      login: fbase.getAuth(),
     };
   }
 
   componentDidMount() {
-    const modRef = new Firebase(process.env.FIREBASE_URL +
-    'participants/' + this.props.room.id + '/' + this.props.room.mod);
     let self = this;
 
-    modRef.on('value', function onValue(value) {
-      self.setState({mod: value.val()});
-    }, errorLog('Error getting mod info in room card'));
-    for (let i = this.props.room.mod_badges.length - 1; i >= 0; i--) {
-      const badgeRef = new Firebase(process.env.FIREBASE_URL +
-        'badges/' + this.props.room.mod_badges[i]);
-      badgeRef.on('value', function onValue(value) {
-        self.setState(function setState(prevState) {
-          prevState.badges.push(value.val());
-          return prevState;
-        });
-      }, errorLog('Error getting badge info for room card'));
-    }
+    const modRef = fbase.child('nametags/' +
+     this.props.room.id + '/' + this.props.room.mod);
 
-    const particRef = new Firebase(process.env.FIREBASE_URL +
-      'participants/' + this.props.room.id);
-    particRef.on('child_added', function onChildAdded() {
+    modRef.on('value', function onValue(value) {
+      let modInfo = value.val();
+      modInfo.nametagId = value.key();
+      self.setState({mod: modInfo});
+    }, errorLog('Error getting mod info in room card'));
+
+    const nametagRef = fbase.child('nametags/' +
+      this.props.room.id);
+
+    nametagRef.on('child_added', function onChildAdded() {
       self.setState(function setState(prevState) {
-        prevState.participantCount += 1;
+        prevState.nametagCount += 1;
         return prevState;
       });
     });
   }
 
   componentWillUnmount() {
-    const modRef = new Firebase(process.env.FIREBASE_URL +
-      'participants/' + this.props.room.mod);
+    const modRef = fbase.child('nametags/' + this.props.room.mod);
     modRef.off('value');
 
     for (let i = this.props.room.mod_badges.length - 1; i >= 0; i--) {
-      const badgeRef = new Firebase(process.env.FIREBASE_URL +
-        'badges/' + this.props.room.mod_badges[i]);
+      const badgeRef = fbase.child('badges/' + this.props.room.mod_badges[i]);
       badgeRef.off('value');
     }
     this.setState(function setState(prevState) {
-      prevState.participantCount = 0;
+      prevState.nametagCount = 0;
       return prevState;
     });
   }
@@ -135,19 +128,19 @@ class RoomCard extends Component {
           <h3>{this.props.room.title}</h3>
           <div className="roomDesc">
             {this.props.room.description}<br/>
-            <p className="participantCount">
-              {this.state.participantCount} participant{this.state.participantCount === 1 || 's'}
+            <p className="NametagCount">
+              {this.state.nametagCount} participant{this.state.nametagCount === 1 || 's'}
             </p>
           </div>
 
           <hr></hr>
-          <Participant
+          <Nametag
             className="mod"
             name={this.state.mod.name}
             bio={this.state.mod.bio}
             icon={this.state.mod.icon}
-            member_id={this.state.mod.member_id}
-            badges={this.state.badges}/>
+            nametagId={this.state.mod.nametagId}
+            roomId={this.props.room.id}/>
           {joinPrompt}
         </div>
       </div>;

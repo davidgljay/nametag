@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import errorLog from '../../utils/errorLog';
+import fbase from '../../api/firebase';
 
 
 /* Function to Log in users via an auth provider or e-mail.
@@ -20,33 +21,43 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showEmail: false
+      showEmail: false,
     };
   }
 
   createUser(userinfo) {
-    const fbref = new Firebase(process.env.FIREBASE_URL +
-      'users/' + userinfo.uid);
-    const defaultsRef = new Firebase(process.env.FIREBASE_URL +
-      'user_defaults/' + userinfo.uid);
+    const fbref = fbase.child('users/' + userinfo.uid);
+    const defaultsRef = fbase.child('user_defaults/' + userinfo.uid);
 
     fbref.child(userinfo.provider).set(userinfo[userinfo.provider].cachedUserProfile);
     this.addIfUniq(
-      defaultsRef,
-      'bios',
-      userinfo[userinfo.provider].cachedUserProfile.description);
-    this.addIfUniq(
-      defaultsRef,
-      'names',
-      userinfo[userinfo.provider].username);
-    // this.addIfUniq(defaultsRef, 'names', userinfo[userinfo.provider].displayName);
-    this.addIfUniq(
-      defaultsRef,
-      'icons',
-      userinfo[userinfo.provider].profileImageURL);
-    // defaultsRef.child('bios').push(userinfo[userinfo.provider].cachedUserProfile.description);
-    // defaultsRef.child('names').push(userinfo[userinfo.provider].username);
-    // defaultsRef.child('names').push(userinfo[userinfo.provider].displayName);
+        defaultsRef,
+        'icons',
+        userinfo[userinfo.provider].profileImageURL
+      );
+    if ( userinfo.provider === 'facebook') {
+      this.addIfUniq(
+        defaultsRef,
+        'names',
+        userinfo[userinfo.provider].cachedUserProfile.name);
+    }
+    if (userinfo.provider === 'twitter') {
+      this.addIfUniq(
+        defaultsRef,
+        'names',
+        userinfo[userinfo.provider].cachedUserProfile.displayName
+      );
+      this.addIfUniq(
+        defaultsRef,
+        'bios',
+        userinfo[userinfo.provider].cachedUserProfile.description
+      );
+      this.addIfUniq(
+        defaultsRef,
+        'names',
+        userinfo[userinfo.provider].username
+      );
+    }
     // //TODO: copy profile image to s3
     // defaultsRef.child('icons').push(userinfo[userinfo.provider].profileImageURL);
 
@@ -54,6 +65,9 @@ class Login extends Component {
   }
 
   addIfUniq(ref, child, data) {
+    if (!data) {
+      return;
+    }
     ref.child(child).transaction(function transaction(currentData) {
       let uniq = true;
       if (currentData === null) {
@@ -66,17 +80,16 @@ class Login extends Component {
       }
       if (uniq) {
         currentData.push(data);
-        return currentData;
       }
-      return null;
+      return currentData;
     });
   }
 
   providerAuth(provider) {
     let self = this;
     return function onClick() {
-      new Firebase(process.env.FIREBASE_URL).authWithOAuthPopup(provider)
-        .then(self.createUser, errorLog('Error creating user'));
+      fbase.authWithOAuthPopup(provider)
+        .then(self.createUser.bind(self), errorLog('Error creating user'));
     };
   }
 
@@ -89,15 +102,15 @@ class Login extends Component {
         <img
           src="./images/twitter.jpg"
           className="loginOption img-circle"
-          onClick={this.providerAuth('twitter')}/>
+          onClick={this.providerAuth('twitter').bind(this)}/>
         <img
           src="./images/fb.jpg"
           className="loginOption img-circle"
-          onClick={this.providerAuth('facebook')}/>
+          onClick={this.providerAuth('facebook').bind(this)}/>
         <img
           src="./images/tumblr.png"
           className="loginOption img-circle"
-          onClick={this.providerAuth('tumblr')}/>
+          onClick={this.providerAuth('tumblr').bind(this)}/>
       </div>;
   }
 }
