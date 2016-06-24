@@ -19,6 +19,8 @@ class Room extends Component {
   // TODO: update user_rooms to user_nametags, add logic to detect curently logged in user;
 
   getChildContext() {
+    console.log("Params Roomid")
+    console.log(this.props.params.roomId);
     return {
       nametagId: this.props.nametagId,
       roomId: this.props.params.roomId,
@@ -70,7 +72,7 @@ class Room extends Component {
                     })}
                   </ul>
                 </div>
-                <Nametags roomId={this.context.roomId} mod={this.props.mod}/>
+                <Nametags roomId={this.props.params.roomId} mod={this.state.room.mod}/>
                 <div className="footer">
                     <p>Built with ♥ by some queers</p>
                 </div>
@@ -93,7 +95,7 @@ class Room extends Component {
 Room.propTypes = { roomId: PropTypes.string };
 Room.defaultProps = {
   roomId: 'stampi',
-  NametagId: 'wxyz',
+  nametagId: 'wxyz',
 };
 Room.childContextTypes = {
   nametagId: PropTypes.string,

@@ -7,47 +7,30 @@ class Nametags extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      nametags: {},
+      nametags: [],
     };
   }
 
   componentDidMount() {
     let self = this;
 
-    // Get badge data for each nametags
-    const nametagBadgeRef = fbase.child('nametag_badges/' + this.props.userid + '/' + this.props.roomId);
-    function getpBadges(memberid) {
-      nametagBadgeRef.child(memberid).on('value', function onValue(badges) {
-        self.setState(function setState(previousState) {
-          previousState.nametags[id].badges = badges.val();
-          return previousState;
-        });
-      }, errorLog('Error getting nametag badges'));
-    }
-
     // Get nametag data
+    console.log(this.props.roomId);
     const nametagsRef = fbase.child('nametags/' + this.props.roomId);
-    nametagsRef.on('value', function onValue(nametags) {
-      let nametagsData = nametags.val();
-      self.setState({nametags: nametagsData});
-      for (let nametag in nametagsData) {
-        if ({}.hasOwnProperty.call(nametagsData, nametag)) {
-          getpBadges(nametagsData[nametag].nametagId);
-        }
-      }
+    nametagsRef.on('child_added', function onValue(nametag) {
+      let nametagData = nametag.val();
+      nametagData.id = nametag.key();
+      console.log(nametagData.id)
+      self.setState(function setState(prevState) {
+        prevState.nametags.push(nametagData);
+        return prevState;
+      });
     }, errorLog('Error getting partipant info'));
   }
 
   componentWillUnmount() {
-    const pRef = fbase.child('nametags/' + this.props.roomId);
-    pRef.off('value');
-    for (let nametag in this.state.nametags) {
-      if ({}.hasOwnProperty.call(this.state.nametags, nametag)) {
-        const pBadgeRef = fbase.child(    'nametag_badges/' + this.props.userid + '/'
-          + this.props.roomId + '/' + nametag);
-        pBadgeRef.off('value');
-      }
-    }
+    const nametagsRef = fbase.child('nametags/' + this.props.roomId);
+    nametagsRef.off('value');
   }
 
   render() {
@@ -67,6 +50,8 @@ class Nametags extends Component {
       }
       return score;
     });
+
+    console.log(nametagsArr);
 
     // Create a function to return list items
     function creatnametag(nametag, mod) {
