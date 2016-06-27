@@ -9,6 +9,12 @@ const certSource = {
   beginDrag(props) {
     return props.certificate;
   },
+  endDrag(props) {
+    //TODO: fix drag animation to intuitively communicate badge removal
+    if (props.removeFromSource) {
+      props.removeFromSource(props.certificate.id);
+    }
+  }
 };
 
 function collect(connect, monitor) {
@@ -79,6 +85,7 @@ Certificate.propTypes = {
   draggable: PropTypes.bool.isRequired,
   certificate: PropTypes.object,
   isDragging: PropTypes.bool.isRequired,
+  removeFromSource: PropTypes.func,
 };
 
 //TODO: Create constants file.

@@ -9,7 +9,7 @@ import fbase from '../../api/firebase';
 const nametagTarget = {
   drop(props, monitor) {
     addCertificate(props, monitor.getItem());
-  }
+  },
 };
 
 function collect(connect, monitor) {
@@ -58,8 +58,12 @@ class EditNametag extends Component {
             </div>
             <div className="certificates">
               {this.props.nametag.certificates.map(function mapCertificates(cert) {
-                return <Certificate certificate={cert} draggable={true} key={cert.id} />;
-              })}
+                return <Certificate
+                  certificate={cert}
+                  draggable={true}
+                  removeFromSource={this.props.removeNametagCertificate}
+                  key={cert.id} />;
+              }, this)}
             </div>
           </div>
         </div>);

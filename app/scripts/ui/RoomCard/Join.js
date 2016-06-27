@@ -37,6 +37,18 @@ class Join extends Component {
     });
   }
 
+  removeNametagCertificate(certId) {
+    this.setState(function setState(prevState) {
+      //Check to prevent duplicate certificate entries;
+      for (let i = prevState.nametag.certificates.length - 1; i >= 0; i--) {
+        if (certId === prevState.nametag.certificates[i].id) {
+          prevState.nametag.certificates.splice(i,1);
+        }
+      }
+      return prevState;
+    });
+  }
+
   updateNametag(property) {
     const self = this;
     return function onClick(e) {
@@ -124,7 +136,8 @@ class Join extends Component {
           <EditNametag
             nametag={this.state.nametag}
             updateNametag={this.updateNametag.bind(this)}
-            addNametagCertificate={this.addNametagCertificate.bind(this)} />
+            addNametagCertificate={this.addNametagCertificate.bind(this)}
+            removeNametagCertificate={this.removeNametagCertificate.bind(this)} />
           <br/>
           <button
             className="btn btn-primary"
