@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import errorLog  from '../../utils/errorLog';
 import Login  from '../User/Login';
 import EditNametag  from '../Nametag/EditNametag';
-import UserBadges  from '../Badge/UserBadges';
+import UserCertificates  from '../Certificate/UserCertificates';
 import Alert  from '../Utils/Alert';
 import fbase from '../../api/firebase';
 
@@ -97,11 +97,12 @@ class Join extends Component {
         <div id="join">
           <Alert alertType='danger' alert={this.state.alert}/>
           <h4>Write Your Nametag For This Conversation</h4>
-          <div id="userBadges">
-            <p className="userBadgeText">
-              Share these badges by dragging them onto your nametag.
+          <div id="userCertificates">
+            <p className="userCertificateText">
+              Click to view your certificates.<br/>
+              Drag them onto your nametag to share them in this conversation.
             </p>
-            <UserBadges/>
+            <UserCertificates/>
           </div>
           <EditNametag
             nametag={this.state.nametag}

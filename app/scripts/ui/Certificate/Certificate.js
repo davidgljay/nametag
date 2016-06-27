@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import moment from '../../../bower_components/moment/moment';
 
-// TODO: This currently displays all user badges, as opposed to only the participant badges. A major violation of trust!
+// TODO: This currently displays all user certificates, as opposed to only the participant certificates. A major violation of trust!
 
-class Badge extends Component {
+class Certificate extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,25 +16,25 @@ class Badge extends Component {
   }
 
   render() {
-    let badge;
+    let certificate;
     let icon = '';
-    if (this.props.badge.icon_array) {
-      icon = <img className="icon" alt="icon" src={this.props.badge.icon_array[0]}/>;
+    if (this.props.certificate.icon_array) {
+      icon = <img className="icon" alt="icon" src={this.props.certificate.icon_array[0]}/>;
     }
     if (this.state.expanded) {
-      badge = <div className="badgeExpanded">
+      certificate = <div className="certificateExpanded">
             <span
               aria-hidden="true"
               className="glyphicon glyphicon-remove"
               onClick={this.toggleExpanded.bind(this)}>
             </span>
             { icon }
-            <div className="name">{this.props.badge.name}</div>
-            <div className="granter">Verified by: {this.props.badge.granter}</div>
-            <div className="description">{this.props.badge.description_array[0]}</div>
+            <div className="name">{this.props.certificate.name}</div>
+            <div className="granter">Verified by: {this.props.certificate.granter}</div>
+            <div className="description">{this.props.certificate.description_array[0]}</div>
             <hr/>
             <div className="notes">
-              {this.props.badge.notes.map(function mapNotes(note) {
+              {this.props.certificate.notes.map(function mapNotes(note) {
                  return <div className="note" key={note.date}>
                     <div className="date">{moment(note.date).format('MMMM Do, YYYY')}: </div>
                     <div className="msg">{note.msg}</div>
@@ -43,16 +43,16 @@ class Badge extends Component {
             </div>
           </div>;
     } else {
-      badge = <div
-        className="label label-pill badge"
+      certificate = <div
+        className="label label-pill certificate"
         onClick={this.toggleExpanded.bind(this)}>
-          {this.props.badge.name}
+          {this.props.certificate.name}
         </div>;
     }
-    return badge;
+    return certificate;
   }
 }
 
-Badge.propTypes = {badge: PropTypes.object};
+Certificate.propTypes = {certificate: PropTypes.object};
 
-export default Badge;
+export default Certificate;
