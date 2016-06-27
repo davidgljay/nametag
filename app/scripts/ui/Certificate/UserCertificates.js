@@ -5,6 +5,7 @@ import fbase from '../../api/firebase';
 
 
 class UserCertificates extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -44,7 +45,7 @@ class UserCertificates extends Component {
     // TODO: Figure out how to expand and contract certificates
     return <div id="certificates">
           {this.state.certificates.map(function mapCertificates(certificate) {
-            return <Certificate certificate={certificate} key={certificate.id}/>;
+            return <Certificate certificate={certificate} key={certificate.id} draggable={true}/>;
           })}
         </div>;
   }

@@ -36,7 +36,7 @@ class Certificates extends Component {
     // TODO: Figure out how to expand and contract certificates
     return <div id="certificates">
            {this.state.certificates.map(function mapCertificates(certificate) {
-             return <Certificate certificate={certificate} key={certificate.id}/>;
+             return <Certificate certificate={certificate} key={certificate.id} draggable={false}/>;
            })}
         </div>;
   }
@@ -44,7 +44,7 @@ class Certificates extends Component {
 
 Certificates.propTypes = {
   roomId: PropTypes.string.isRequired,
-  nametagId: PropTypes.string.isRequired,
+  nametagId: PropTypes.string.isRequired
 };
 
 export default Certificates;

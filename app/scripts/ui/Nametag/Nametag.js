@@ -18,7 +18,7 @@ class Nametag extends Component {
         <img src={this.props.icon} alt={this.props.name} className="img-circle icon"/>
         <div className="name">{this.props.name}</div>
         <div className="bio">{this.props.bio}</div>
-        <Certificates roomId={this.props.roomId} nametagId={this.props.nametagId}/>
+        <Certificates roomId={this.props.roomId} nametagId={this.props.nametagId} />
       </div>;
   }
 }
@@ -28,7 +28,6 @@ Nametag.propTypes = {
   bio: PropTypes.string,
   nametagId: PropTypes.string,
   icon: PropTypes.string,
-  certificates: PropTypes.array,
   roomId: PropTypes.string,
 };
 Nametag.defaultProps = {

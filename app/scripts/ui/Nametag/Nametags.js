@@ -15,12 +15,10 @@ class Nametags extends Component {
     let self = this;
 
     // Get nametag data
-    console.log(this.props.roomId);
     const nametagsRef = fbase.child('nametags/' + this.props.roomId);
     nametagsRef.on('child_added', function onValue(nametag) {
       let nametagData = nametag.val();
       nametagData.id = nametag.key();
-      console.log(nametagData.id)
       self.setState(function setState(prevState) {
         prevState.nametags.push(nametagData);
         return prevState;
@@ -50,8 +48,6 @@ class Nametags extends Component {
       }
       return score;
     });
-
-    console.log(nametagsArr);
 
     // Create a function to return list items
     function creatnametag(nametag, mod) {

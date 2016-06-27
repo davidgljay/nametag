@@ -24,6 +24,12 @@ $lightpurple:#FCEFFF;
     margin:0px;
 }
 
+.unselectable {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
 /* Room header */
 .header {
     border-bottom: 3px solid $navy;

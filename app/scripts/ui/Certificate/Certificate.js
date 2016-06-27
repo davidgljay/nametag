@@ -1,7 +1,23 @@
 import React, { Component, PropTypes } from 'react';
 import moment from '../../../bower_components/moment/moment';
+import { dragTypes } from '../../constants';
+import { DragSource } from 'react-dnd';
 
 // TODO: This currently displays all user certificates, as opposed to only the participant certificates. A major violation of trust!
+
+const certSource = {
+  beginDrag(props) {
+    return {certificateId: props.certificate.id};
+  },
+};
+
+function collect(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging(),
+    connectDragPreview: connect.dragPreview(),
+  };
+}
 
 class Certificate extends Component {
   constructor(props) {
@@ -44,15 +60,26 @@ class Certificate extends Component {
           </div>;
     } else {
       certificate = <div
-        className="label label-pill certificate"
+        className="label label-pill certificate unselectable"
         onClick={this.toggleExpanded.bind(this)}>
           {this.props.certificate.name}
         </div>;
+    }
+
+    //Make some certificates draggable
+    if (this.props.draggable) {
+      certificate = this.props.connectDragSource(certificate);
     }
     return certificate;
   }
 }
 
-Certificate.propTypes = {certificate: PropTypes.object};
+Certificate.propTypes = {
+  connectDragSource: PropTypes.func.isRequired,
+  draggable: PropTypes.object.bool,
+  certificate: PropTypes.object,
+  isDragging: PropTypes.bool.isRequired,
+};
 
-export default Certificate;
+//TODO: Create constants file.
+export default DragSource(dragTypes.certificate, certSource, collect)(Certificate);

@@ -6,6 +6,7 @@ import UserCertificates  from '../Certificate/UserCertificates';
 import Alert  from '../Utils/Alert';
 import fbase from '../../api/firebase';
 
+
 class Join extends Component {
   constructor(props) {
     super(props);
