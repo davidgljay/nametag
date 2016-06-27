@@ -386,6 +386,7 @@ nav {
 
     .roomImage {
         vertical-align: initial;
+        cursor:pointer;
     }
     
     .roomCard {
@@ -406,6 +407,7 @@ nav {
 
         h3 {
             color:$purple;
+            cursor:pointer;
         }
 
         hr {

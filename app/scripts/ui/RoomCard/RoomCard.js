@@ -63,10 +63,10 @@ class RoomCard extends Component {
     this.setState({normsChecked: e.target.checked});
   }
 
-  toggle(expanded) {
+  toggle() {
     const self = this;
     return function onClick() {
-      self.setState({expanded: expanded});
+      self.setState({expanded: !self.state.expanded});
     };
   }
 
@@ -101,7 +101,7 @@ class RoomCard extends Component {
             <Join
               roomId={this.props.room.id}
               normsChecked={this.state.normsChecked}/>
-            <div className="downChevron" onClick={this.toggle(false).bind(this)}>
+            <div className="downChevron" onClick={this.toggle().bind(this)}>
               <span
                 className="glyphicon glyphicon-chevron-up"
                 aria-hidden="true" ></span>
@@ -109,7 +109,7 @@ class RoomCard extends Component {
           </div>;
     } else {
       joinPrompt =
-        <div className="downChevron" onClick={this.toggle(true).bind(this)}>
+        <div className="downChevron" onClick={this.toggle().bind(this)}>
           <span
             className="glyphicon glyphicon-chevron-down" 
             aria-hidden="true" ></span>
@@ -117,7 +117,7 @@ class RoomCard extends Component {
     }
 
     return <div className="roomCard">
-        <div className="roomImage">
+        <div className="roomImage" onClick={this.toggle().bind(this)}>
           <img className="img-rounded" src={this.props.room.image}/>
         </div>
         <div className="roomInfo">
@@ -125,7 +125,7 @@ class RoomCard extends Component {
             <b>started:</b> 2 days ago<br/>
             <b>ends:</b> in 1 week
           </div>
-          <h3>{this.props.room.title}</h3>
+          <h3 onClick={this.toggle().bind(this)}>{this.props.room.title}</h3>
           <div className="roomDesc">
             {this.props.room.description}<br/>
             <p className="NametagCount">
