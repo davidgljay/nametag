@@ -60,9 +60,8 @@ class Nametags extends Component {
           bio={nametag.bio}
           icon={nametag.icon}
           nametagId={nametag.id}
-          badges={nametag.badges}
-          mod={mod}
-          roomId={self.props.roomId}/>
+          certificates={nametag.certificates}
+          mod={mod}/>
       </li>;
     }
 
@@ -75,6 +74,5 @@ class Nametags extends Component {
 }
 
 Nametags.propTypes = { roomId: PropTypes.string, mod: PropTypes.string };
-Nametags.defaultProps = {roomId: 'stampi', mod: 'wxyz', userid: 'abcd'};
 
 export default Nametags;

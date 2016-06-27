@@ -13,7 +13,7 @@ class RoomCard extends Component {
         name: '',
         bio: '',
         icon: '',
-        nametagId: '',
+        certificates:[],
       },
       badges: [],
       normsChecked: false,
@@ -139,7 +139,7 @@ class RoomCard extends Component {
             name={this.state.mod.name}
             bio={this.state.mod.bio}
             icon={this.state.mod.icon}
-            nametagId={this.state.mod.nametagId}
+            certificates={this.state.mod.certificates}
             roomId={this.props.room.id}/>
           {joinPrompt}
         </div>
