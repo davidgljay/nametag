@@ -101,7 +101,7 @@ class Join extends Component {
           <div id="userCertificates">
             <p className="userCertificateText">
               Click to view your certificates.<br/>
-              Drag them onto your nametag to share them in this conversation.
+              Drag them over to show them in this conversation.
             </p>
             <UserCertificates/>
           </div>
