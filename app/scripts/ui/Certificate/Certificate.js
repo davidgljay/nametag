@@ -76,7 +76,7 @@ class Certificate extends Component {
 
 Certificate.propTypes = {
   connectDragSource: PropTypes.func.isRequired,
-  draggable: PropTypes.object.bool,
+  draggable: PropTypes.bool.isRequired,
   certificate: PropTypes.object,
   isDragging: PropTypes.bool.isRequired,
 };
