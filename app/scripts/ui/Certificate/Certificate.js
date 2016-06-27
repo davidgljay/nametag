@@ -7,7 +7,7 @@ import { DragSource } from 'react-dnd';
 
 const certSource = {
   beginDrag(props) {
-    return {certificateId: props.certificate.id};
+    return props.certificate;
   },
 };
 

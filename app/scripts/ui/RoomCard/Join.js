@@ -16,8 +16,25 @@ class Join extends Component {
         name: '',
         bio: '',
         icon: '',
+        certificates: [],
       },
     };
+  }
+
+  addNametagCertificate(cert) {
+    this.setState(function setState(prevState) {
+      let unique = true;
+      //Check to prevent duplicate certificate entries;
+      for (let i = prevState.nametag.certificates.length - 1; i >= 0; i--) {
+        if (cert.id === prevState.nametag.certificates[i].id) {
+          unique = false;
+        }
+      }
+      if (unique) {
+        prevState.nametag.certificates.push(cert);
+      }
+      return prevState;
+    });
   }
 
   updateNametag(property) {
@@ -76,7 +93,6 @@ class Join extends Component {
       const NametagRef = fbase.child('nametags/' + this.props.roomId);
       NametagRef.push(this.state.nametag)
         .then(function(nametagref) {
-          console.log('Set nametagref');
           return fbase.child('user_rooms/' + self.context.userAuth.uid + '/' + self.props.roomId)
               .set({
                 mod: false,
@@ -107,7 +123,8 @@ class Join extends Component {
           </div>
           <EditNametag
             nametag={this.state.nametag}
-            updateNametag={this.updateNametag.bind(this)}/>
+            updateNametag={this.updateNametag.bind(this)}
+            addNametagCertificate={this.addNametagCertificate.bind(this)} />
           <br/>
           <button
             className="btn btn-primary"

@@ -1,12 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import errorLog from '../../utils/errorLog';
 import Alert from '../Utils/Alert';
+import Certificate from '../Certificate/Certificate';
 import { DropTarget } from 'react-dnd';
 import { dragTypes } from '../../constants';
+import fbase from '../../api/firebase';
 
 const nametagTarget = {
   drop(props, monitor) {
-    console.log(monitor.getItem());
+    addCertificate(props, monitor.getItem());
   }
 };
 
@@ -15,6 +17,10 @@ function collect(connect, monitor) {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
   };
+}
+
+function addCertificate(props, certificate) {
+  props.addNametagCertificate(certificate);
 }
 
 class EditNametag extends Component {
@@ -50,13 +56,19 @@ class EditNametag extends Component {
                   value={this.props.nametag.bio}
                   placeholder='Why are you joining this conversation?'/>
             </div>
+            <div className="certificates">
+              {this.props.nametag.certificates.map(function mapCertificates(cert) {
+                return <Certificate certificate={cert} draggable={true} key={cert.id} />;
+              })}
+            </div>
           </div>
         </div>);
   }
 }
 
 EditNametag.propTypes = {
-  updateNametag: PropTypes.func,
+  updateNametag: PropTypes.func.isRequired,
+  addNametagCertificate: PropTypes.func.isRequired,
   nametag: PropTypes.object,
   isOver: PropTypes.bool.isRequired,
 };
