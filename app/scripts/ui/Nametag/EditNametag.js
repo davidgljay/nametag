@@ -1,6 +1,21 @@
 import React, { Component, PropTypes } from 'react';
 import errorLog from '../../utils/errorLog';
 import Alert from '../Utils/Alert';
+import { DropTarget } from 'react-dnd';
+import { dragTypes } from '../../constants';
+
+const nametagTarget = {
+  drop(props, monitor) {
+    console.log(monitor.getItem());
+  }
+};
+
+function collect(connect, monitor) {
+  return {
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver(),
+  };
+}
 
 class EditNametag extends Component {
   constructor(props) {
@@ -12,10 +27,9 @@ class EditNametag extends Component {
   }
 
   render() {
-    // TODO:Add badges
     // TODO: Figure out image caching
     // TODO: change id to make sense once dragging works
-    return <div id="editNametag" className="profile">
+    return this.props.connectDropTarget(<div id="editNametag" className="profile">
           <div className="form-group">
             <img
               src="https://s3.amazonaws.com/badgeproject_icons/users/dj_cropped.jpg"
@@ -37,13 +51,14 @@ class EditNametag extends Component {
                   placeholder='Why are you joining this conversation?'/>
             </div>
           </div>
-        </div>;
+        </div>);
   }
 }
 
 EditNametag.propTypes = {
   updateNametag: PropTypes.func,
   nametag: PropTypes.object,
+  isOver: PropTypes.bool.isRequired,
 };
 
-export default EditNametag;
+export default DropTarget(dragTypes.certificate, nametagTarget, collect)(EditNametag);
