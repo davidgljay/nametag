@@ -14,6 +14,9 @@ class Certificates extends Component {
 
   componentDidMount() {
     let self = this;
+    if (!this.props.nametagId) {
+      return;
+    }
     const certificatesRef = fbase.child('/nametag_certificates/' + this.props.roomId + '/' + this.props.nametagId);
     certificatesRef.on('child_added', function onChildAdded(certificateInfo) {
       self.setState(function setState(prevState) {
@@ -31,7 +34,6 @@ class Certificates extends Component {
 
   render() {
     // TODO: Figure out how to expand and contract certificates
-    console.log(this.state.certificates);
     return <div id="certificates">
            {this.state.certificates.map(function mapCertificates(certificate) {
              return <Certificate certificate={certificate} key={certificate.id}/>;
@@ -40,6 +42,9 @@ class Certificates extends Component {
   }
 }
 
-Certificates.propTypes = { roomId: PropTypes.string.isRequired, nametagId: PropTypes.string.isRequired };
+Certificates.propTypes = {
+  roomId: PropTypes.string.isRequired,
+  nametagId: PropTypes.string.isRequired,
+};
 
 export default Certificates;
