@@ -54,7 +54,7 @@ class Nametags extends Component {
       // Make nametag.badges an empty array if it not already assigned.
       nametag.badges = nametag.badges || [];
 
-      return <li key={nametag.id} className="list-group-item profile">
+      return <li key={nametag.id} className="list-group-item nametag">
         <Nametag
           name={nametag.name}
           bio={nametag.bio}

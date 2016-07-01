@@ -22,7 +22,7 @@ var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 
 // Styles
-gulp.task('styles', ['sass', 'moveCss']);
+gulp.task('styles', ['css-modulesify']);
 
 gulp.task('moveCss',['clean'], function(){
   // the base option sets the relative root for the set of files,
@@ -42,15 +42,26 @@ gulp.task('sass', function() {
         .pipe($.size());
 });
 
+gulp.task('css-modulesify', function() {
+    var b = browserify();
+    b.add(sourceFile);
+    b.plugin(['css-modulesify', {
+        output:'./dist/styles/main.css',
+    }]);
+
+    return b.bundle();
+})
+
 
 
 var bundler = watchify(browserify({
     entries: [sourceFile],
     debug: true,
+    plugin:['css-modulesify'],
     insertGlobals: true,
     cache: {},
     packageCache: {},
-    fullPaths: true
+    fullPaths: true,
 }));
 
 bundler.on('update', rebundle);

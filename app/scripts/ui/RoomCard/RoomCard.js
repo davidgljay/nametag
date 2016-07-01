@@ -3,6 +3,7 @@ import Nametag from '../Nametag/Nametag';
 import Join from './Join';
 import errorLog from '../../utils/errorLog';
 import fbase from '../../api/firebase';
+import style from '../../../styles/RoomCard/RoomCard.css';
 
 class RoomCard extends Component {
   constructor(props) {
@@ -13,7 +14,7 @@ class RoomCard extends Component {
         name: '',
         bio: '',
         icon: '',
-        certificates:[],
+        certificates: [],
       },
       badges: [],
       normsChecked: false,
@@ -76,8 +77,8 @@ class RoomCard extends Component {
 
     if (this.state.expanded) {
       joinPrompt =
-          <div className="expanded">
-            <div className="norms">
+          <div className={style.expanded}>
+            <div className={style.norms}>
               <h4>Conversation Norms</h4>
               <ul className="list-group">
                 {this.props.room.norms.map(function(norm) {
@@ -85,7 +86,7 @@ class RoomCard extends Component {
                   return (
                     <li key={normkey} className="list-group-item">
                       <span
-                        className="glyphicon glyphicon-ok"
+                        className={style.glyphicon + ' glyphicon glyphicon-ok'}
                         aria-hidden="true" >
                       </span>
                       {norm}
@@ -101,7 +102,7 @@ class RoomCard extends Component {
             <Join
               roomId={this.props.room.id}
               normsChecked={this.state.normsChecked}/>
-            <div className="downChevron" onClick={this.toggle().bind(this)}>
+            <div className={style.downChevron} onClick={this.toggle().bind(this)}>
               <span
                 className="glyphicon glyphicon-chevron-up"
                 aria-hidden="true" ></span>
@@ -109,33 +110,33 @@ class RoomCard extends Component {
           </div>;
     } else {
       joinPrompt =
-        <div className="downChevron" onClick={this.toggle().bind(this)}>
+        <div className={style.downChevron} onClick={this.toggle().bind(this)}>
           <span
-            className="glyphicon glyphicon-chevron-down" 
+            className="glyphicon glyphicon-chevron-down"
             aria-hidden="true" ></span>
         </div>;
     }
 
-    return <div className="roomCard">
-        <div className="roomImage" onClick={this.toggle().bind(this)}>
+    return <div className={style.roomCard}>
+        <div className={style.roomImage} onClick={this.toggle().bind(this)}>
           <img className="img-rounded" src={this.props.room.image}/>
         </div>
-        <div className="roomInfo">
-          <div className="roomTime">
+        <div className={style.roomInfo}>
+          <div className={style.roomTime}>
             <b>started:</b> 2 days ago<br/>
             <b>ends:</b> in 1 week
           </div>
           <h3 onClick={this.toggle().bind(this)}>{this.props.room.title}</h3>
-          <div className="roomDesc">
+          <div className={style.roomDesc}>
             {this.props.room.description}<br/>
-            <p className="NametagCount">
+            <p className={style.nametagCount}>
               {this.state.nametagCount} participant{this.state.nametagCount === 1 || 's'}
             </p>
           </div>
 
           <hr></hr>
           <Nametag
-            className="mod"
+            className={style.mod}
             name={this.state.mod.name}
             bio={this.state.mod.bio}
             icon={this.state.mod.icon}

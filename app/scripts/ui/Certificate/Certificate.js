@@ -10,11 +10,11 @@ const certSource = {
     return props.certificate;
   },
   endDrag(props) {
-    //TODO: fix drag animation to intuitively communicate badge removal
+    // TODO: fix drag animation to intuitively communicate badge removal
     if (props.removeFromSource) {
       props.removeFromSource(props.certificate.id);
     }
-  }
+  },
 };
 
 function collect(connect, monitor) {
@@ -41,32 +41,32 @@ class Certificate extends Component {
     let certificate;
     let icon = '';
     if (this.props.certificate.icon_array) {
-      icon = <img className="icon" alt="icon" src={this.props.certificate.icon_array[0]}/>;
+      icon = <img className={style.icon} alt="icon" src={this.props.certificate.icon_array[0]}/>;
     }
     if (this.state.expanded) {
-      certificate = <div className="certificateExpanded">
+      certificate = <div className={style.certificateExpanded}>
             <span
               aria-hidden="true"
               className="glyphicon glyphicon-remove"
               onClick={this.toggleExpanded.bind(this)}>
             </span>
             { icon }
-            <div className="name">{this.props.certificate.name}</div>
-            <div className="granter">Verified by: {this.props.certificate.granter}</div>
-            <div className="description">{this.props.certificate.description_array[0]}</div>
+            <div className={style.name}>{this.props.certificate.name}</div>
+            <div className={style.granter}>Verified by: {this.props.certificate.granter}</div>
+            <div className={style.description}>{this.props.certificate.description_array[0]}</div>
             <hr/>
-            <div className="notes">
+            <div className={style.notes}>
               {this.props.certificate.notes.map(function mapNotes(note) {
-                 return <div className="note" key={note.date}>
-                    <div className="date">{moment(note.date).format('MMMM Do, YYYY')}: </div>
-                    <div className="msg">{note.msg}</div>
+                 return <div className={style.note} key={note.date}>
+                    <div className={style.date}>{moment(note.date).format('MMMM Do, YYYY')}: </div>
+                    <div className={style.msg}>{note.msg}</div>
                   </div>;
               })}
             </div>
           </div>;
     } else {
       certificate = <div
-        className="label label-pill certificate unselectable"
+        className={style.certificate + ' label label-pill'}
         onClick={this.toggleExpanded.bind(this)}>
           {this.props.certificate.name}
         </div>;
@@ -88,5 +88,4 @@ Certificate.propTypes = {
   removeFromSource: PropTypes.func,
 };
 
-//TODO: Create constants file.
 export default DragSource(dragTypes.certificate, certSource, collect)(Certificate);

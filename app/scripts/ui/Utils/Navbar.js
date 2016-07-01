@@ -1,6 +1,7 @@
 import React from 'react';
+import style from '../../../styles/Utils/Navbar.css';
 
-let NavBar = (props) => {
+const Navbar = (props) => {
   let login;
   if (props.userAuth) {
     login = <a className="nav-link" onClick={props.unAuth}>Log out</a>;
@@ -10,7 +11,7 @@ let NavBar = (props) => {
 
   return <nav className="navbar navbar-light bg-faded">
       <a className="navbar-brand" href="#">Nametag</a>
-      <ul className="nav navbar-nav pull-right">
+      <ul className={style.nav + 'navbar-nav pull-right'}>
         <li className="nav-item active">
           <a className="nav-link" href="#">
             Home
@@ -30,4 +31,4 @@ let NavBar = (props) => {
     </nav>;
 };
 
-export default NavBar;
+export default Navbar;

@@ -1,0 +1,28 @@
+/** Nametag.css **/
+
+@value colors: "../colors.css";
+
+.ismod {
+    color:text-primary from colors; 
+    float:right;  
+    font-size: 10px;    
+}
+
+.bio {
+    font-size: 12px;
+    font-style: italic;
+}
+
+.hosticon {
+    font-size: 20px;
+}
+
+.name {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.icon {
+    float:left;
+    margin-right:10px;
+}

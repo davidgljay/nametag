@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Certificates from '../Certificate/Certificates';
+import style from '../../../styles/Nametag/Nametag.css';
 
 class Nametag extends Component {
   render() {
@@ -7,17 +8,17 @@ class Nametag extends Component {
 
     // Show if user is a mod.
     if (this.props.mod === this.props.nametagId) {
-      star = <div className="ismod">
-          <span className="glyphicon glyphicon-star" aria-hidden="true"></span>
-          <div className="modTitle">Host</div>
+      star = <div className={style.ismod}>
+          <span className={style.hosticon + ' glyphicon glyphicon-star'} aria-hidden="true"></span>
+          <div className={style.modTitle}>Host</div>
           </div>;
     }
 
     return <div key={this.props.name} >
         {star}
-        <img src={this.props.icon} alt={this.props.name} className="img-circle icon"/>
-        <div className="name">{this.props.name}</div>
-        <div className="bio">{this.props.bio}</div>
+        <img src={this.props.icon} alt={this.props.name} className={style.icon + ' img-circle'}/>
+        <div className={style.name}>{this.props.name}</div>
+        <div className={style.bio}>{this.props.bio}</div>
         <Certificates certificates={this.props.certificates} />
       </div>;
   }

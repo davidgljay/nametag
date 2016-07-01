@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import errorLog from '../../utils/errorLog';
 import fbase from '../../api/firebase';
+import style from '../../../styles/User/Login.css';
 
 
 /* Function to Log in users via an auth provider or e-mail.
@@ -95,21 +96,20 @@ class Login extends Component {
 
   render() {
   // TODO: Add e-mail (This will probably involve adding state, oh well.)
-  // TODO: Add FB
 
-    return <div id="login">
+    return <div id={style.login}>
         <h4>Log in to join</h4>
         <img
           src="./images/twitter.jpg"
-          className="loginOption img-circle"
+          className={style.loginOption + ' img-circle'}
           onClick={this.providerAuth('twitter').bind(this)}/>
         <img
           src="./images/fb.jpg"
-          className="loginOption img-circle"
+          className={style.loginOption + ' img-circle'}
           onClick={this.providerAuth('facebook').bind(this)}/>
         <img
           src="./images/tumblr.png"
-          className="loginOption img-circle"
+          className={style.loginOption + ' img-circle'}
           onClick={this.providerAuth('tumblr').bind(this)}/>
       </div>;
   }

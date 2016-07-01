@@ -5,6 +5,7 @@ import EditNametag  from '../Nametag/EditNametag';
 import UserCertificates  from '../Certificate/UserCertificates';
 import Alert  from '../Utils/Alert';
 import fbase from '../../api/firebase';
+import style from '../../../styles/RoomCard/Join.css';
 
 
 class Join extends Component {
@@ -24,7 +25,7 @@ class Join extends Component {
   addNametagCertificate(cert) {
     this.setState(function setState(prevState) {
       let unique = true;
-      //Check to prevent duplicate certificate entries;
+      // Check to prevent duplicate certificate entries;
       for (let i = prevState.nametag.certificates.length - 1; i >= 0; i--) {
         if (cert.id === prevState.nametag.certificates[i].id) {
           unique = false;
@@ -95,7 +96,7 @@ class Join extends Component {
 
 
   joinRoom() {
-    var self=this;
+    let self = this;
     if (!this.props.normsChecked) {
       this.setState({
         'alert': 'You must agree to the norms above' +
@@ -123,11 +124,11 @@ class Join extends Component {
     let join;
     if (this.context.userAuth) {
       join =
-        <div id="join">
+        <div id={style.join}>
           <Alert alertType='danger' alert={this.state.alert}/>
           <h4>Write Your Nametag For This Conversation</h4>
-          <div id="userCertificates">
-            <p className="userCertificateText">
+          <div id={style.userCertificates}>
+            <p className={style.userCertificateText}>
               Click to view your certificates.<br/>
               Drag them over to show them in this conversation.
             </p>

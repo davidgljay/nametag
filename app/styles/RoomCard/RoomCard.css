@@ -1,0 +1,105 @@
+/** RoomCard.css **/
+
+@value colors: "../colors.css";
+
+.roomImage {
+    display:inline-block;
+    vertical-align: initial;
+    cursor:pointer;
+}
+
+.roomCard {
+    margin-bottom: 30px;
+    padding: 0px;
+    max-height: 254px;
+    width: 940px;
+    border-radius: 6px;
+    border: 2px solid $purple;
+}
+
+.roomInfo {
+    display:inline-block;
+    vertical-align: top;
+    margin-top:10px;
+    margin-left:20px;
+    width:70%;
+}
+
+.roomCard h3 {
+ color:purple;
+ cursor:pointer;
+}
+
+
+.roomCard hr {
+    margin-top:5px;
+}
+
+.participantCount {
+    color:purple;
+    font-size:11px;
+    font-style:italic;
+}
+
+.roomTime {
+    float:right;
+    font-size: 11px;
+    font-style: italic;
+    color: purple;
+}
+
+.ismod {
+    margin-bottom:5px;
+    color:text-primary from colors;
+}
+
+.modTitle {
+    margin-left: 5px;
+    font-weight: bold;
+    display:inline-block;
+}
+
+.icon {
+    float:left;
+    padding-right:10px;
+}
+
+.participant {
+    border: 1px solid grey;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.name {
+    font-weight:bold;
+}
+
+.norms {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.norms h4 {
+    color:text-primary from colors;
+}
+.norms p {
+    font-style:italic;
+}
+
+.norms li {
+    text-align: left;
+    padding-left:10px;
+}
+
+.norms .glyphicon {
+    color:text-green from colors;
+    margin-right:20px;
+}
+
+.downChevron {
+    width: 12px;
+    margin-right: auto;
+    margin-left: auto;
+    color:text-primary from colors;
+    cursor:pointer;
+}

@@ -1,0 +1,53 @@
+/** Certificate.css **/
+
+@value colors: "../colors.css";
+
+.certificate {
+    margin-left:5px;
+    margin-bottom:5px;
+    cursor: pointer;
+    background:grey;
+    display:inline-block;
+    -webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+}
+
+.certificateExpanded {
+    margin:5px;
+    padding:10px;
+    border-radius:6px;
+    background:bg-grey from colors;
+}
+.glyphicon-remove {
+    float:right;
+    font-size:12px;
+    cursor: pointer;
+}
+
+.icon {
+    width:40px;
+}
+
+.name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.granter {
+    font-size: 12px;
+    font-style: italic;
+}
+
+.description {
+    text-align:left;
+}
+
+.note {
+    font-size:12px;
+}
+
+.date {
+    font-style:italic;
+    float:left;
+}

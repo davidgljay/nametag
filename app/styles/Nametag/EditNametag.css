@@ -1,0 +1,29 @@
+/** ExitNametag.css **/
+
+#editNametag {
+    width:270px;
+    display:inline-block;
+    min-height:100px;
+    vertical-align: top;
+    padding:5px;
+    margin:5px;
+    background:white;
+    border-radius:6px;
+}
+
+.nametagFields {
+    display:inline-block;
+}
+
+.form-control {
+    padding-left:0px;
+    border: none;
+    background: none;   
+    box-shadow:none;
+    resize:none;   
+}  
+
+#editNametag img {
+    margin:10px;
+    padding:0px;
+}

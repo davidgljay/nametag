@@ -5,6 +5,7 @@ import Certificate from '../Certificate/Certificate';
 import { DropTarget } from 'react-dnd';
 import { dragTypes } from '../../constants';
 import fbase from '../../api/firebase';
+import style from '../../../styles/Nametag/EditNametag.css';
 
 const nametagTarget = {
   drop(props, monitor) {
@@ -35,23 +36,23 @@ class EditNametag extends Component {
   render() {
     // TODO: Figure out image caching
     // TODO: change id to make sense once dragging works
-    return this.props.connectDropTarget(<div id="editNametag" className="profile">
+    return this.props.connectDropTarget(<div id={style.editNametag} className="profile">
           <div className="form-group">
             <img
               src="https://s3.amazonaws.com/badgeproject_icons/users/dj_cropped.jpg"
               className="img-circle icon"/>
-            <div className="nametagFields">
+            <div className={style.nametagFields}>
                 <input
                   type="text"
                   className="form-control name"
-                  id="participantName"
+                  id={style.participantName}
                   onChange={this.props.updateNametag('name')}
                   value={this.props.nametag.name}
                   placeholder='Name'/>
                 <textarea
                   rows="3"
                   className="form-control bio"
-                  id="participantDescription"
+                  id={style.participantDescription}
                   onChange={this.props.updateNametag('bio')}
                   value={this.props.nametag.bio}
                   placeholder='Why are you joining this conversation?'/>
