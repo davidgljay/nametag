@@ -141,7 +141,7 @@ class Join extends Component {
             removeNametagCertificate={this.removeNametagCertificate.bind(this)} />
           <br/>
           <button
-            className="btn btn-primary"
+            className={style.btnPrimary}
             onClick={this.joinRoom.bind(this)}>
               Join
           </button>

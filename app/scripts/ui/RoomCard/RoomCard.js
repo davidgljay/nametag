@@ -95,7 +95,7 @@ class RoomCard extends Component {
               </ul>
               <label class={style.checkbox}>
                 <input type="checkbox" onClick={this.onNormsCheck.bind(this)}/>
-                <span>I agree to abide by these norms</span>
+                <span className={style.checkboxLabel} >I agree to abide by these norms</span>
               </label>
             </div>
             <Join

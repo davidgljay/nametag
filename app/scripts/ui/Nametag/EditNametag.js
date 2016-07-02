@@ -35,23 +35,22 @@ class EditNametag extends Component {
 
   render() {
     // TODO: Figure out image caching
-    // TODO: change id to make sense once dragging works
     return this.props.connectDropTarget(<div id={style.editNametag} className="profile">
-          <div className="form-group">
+          <div className={style.form}>
             <img
               src="https://s3.amazonaws.com/badgeproject_icons/users/dj_cropped.jpg"
-              className="img-circle icon"/>
+              className={style.icon}/>
             <div className={style.nametagFields}>
                 <input
                   type="text"
-                  className="form-control name"
+                  className={style.formControl + ' ' + style.name}
                   id={style.participantName}
                   onChange={this.props.updateNametag('name')}
                   value={this.props.nametag.name}
                   placeholder='Name'/>
                 <textarea
                   rows="3"
-                  className="form-control bio"
+                  className={style.formControl + ' ' + style.bio}
                   id={style.participantDescription}
                   onChange={this.props.updateNametag('bio')}
                   value={this.props.nametag.bio}

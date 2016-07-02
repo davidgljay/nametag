@@ -1,7 +1,7 @@
 /** RoomCard.css **/
 
 @value colors: "../colors.css";
-@value primary, grey, green from colors;
+@value primary, secondary, grey, green from colors;
 @value bootstrap: "../../bower_components/bootstrap/dist/css/bootstrap.css";
 
 .roomImage {
@@ -11,7 +11,7 @@
 }
 
 .roomImage img {
-    border-radius:6px;
+    border-radius:5px;
 }
 
 .roomCard {
@@ -21,6 +21,8 @@
     width: 940px;
     border-radius: 6px;
     border: 2px solid primary;
+    background: secondary;
+
 }
 
 .roomInfo {
@@ -98,7 +100,7 @@
 }
 
 .check {
-    width:250px;
+    width:50px;
     height:25px;
     margin-right:20px;
 }
@@ -120,7 +122,6 @@
     composes: list-group-item from bootstrap;
 }
 
-/*.checkbox {
-    composes: c-input from bootstrap;
-    composes: c-checkbox from bootstrap;
-}*/
+.checkboxLabel {
+    margin-left:10px;
+}
