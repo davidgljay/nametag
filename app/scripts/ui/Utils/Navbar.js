@@ -12,19 +12,19 @@ const Navbar = (props) => {
   return <nav className={style.navbar}>
       <a className={style.navbrand} href="#">Nametag</a>
       <ul className={style.navlist}>
-        <li className={style.navitem}>
-          <a className={style.navlink} href="#">
+        <li>
+          <a href="#">
             Home
           <span className={style.sronly}>(current)</span>
           </a>
         </li>
-        <li className="nav-item">
-          <a className="nav-link" href="#">Profile</a>
+        <li>
+          <a href="#">Profile</a>
         </li>
-        <li className="nav-item">
-          <a className="nav-link" href="#">About</a>
+        <li>
+          <a href="#">About</a>
         </li>
-        <li className="nav-item">
+        <li>
           {login}
         </li>
       </ul>
