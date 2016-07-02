@@ -1,7 +1,5 @@
 /* RoomCards.css  */
-
 @value colors: "../colors.css";
-
  #roomCards {
     width: 950px;
     margin-top: 50px;
@@ -14,7 +12,7 @@
 @media screen and (min-width: 768px) {
 
     .footer {
-        color: text-grey from colors;
+        color: grey from colors;
         font-size: 11px;
         font-style: italic;
         position: fixed;

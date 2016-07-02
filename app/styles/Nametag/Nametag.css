@@ -3,7 +3,7 @@
 @value colors: "../colors.css";
 
 .ismod {
-    color:text-primary from colors; 
+    color:primary from colors; 
     float:right;  
     font-size: 10px;    
 }

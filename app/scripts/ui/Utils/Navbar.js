@@ -9,13 +9,13 @@ const Navbar = (props) => {
     login = <a className="nav-link" href="#">Log In</a>;
   }
 
-  return <nav className="navbar navbar-light bg-faded">
-      <a className="navbar-brand" href="#">Nametag</a>
-      <ul className={style.nav + 'navbar-nav pull-right'}>
-        <li className="nav-item active">
-          <a className="nav-link" href="#">
+  return <nav className={style.navbar}>
+      <a className={style.navbrand} href="#">Nametag</a>
+      <ul className={style.navlist}>
+        <li className={style.navitem}>
+          <a className={style.navlink} href="#">
             Home
-          <span className="sr-only">(current)</span>
+          <span className={style.sronly}>(current)</span>
           </a>
         </li>
         <li className="nav-item">

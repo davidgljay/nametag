@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import errorLog from '../../utils/errorLog';
 import Certificate from './Certificate';
 import fbase from '../../api/firebase';
-import style from '../../../styles/Certificate/UserCertificates.css';
 
 
 class UserCertificates extends Component {
