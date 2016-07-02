@@ -42,10 +42,6 @@ nav {
     composes: pull-right from bootstrap;
 }
 
-.navitem {
-    composes: nav-item from bootstrap;
-}
-
 .active {
     composes: active from bootstrap;
 }

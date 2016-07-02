@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+ import React, { Component, PropTypes } from 'react';
 import Nametag from '../Nametag/Nametag';
 import Join from './Join';
 import errorLog from '../../utils/errorLog';
@@ -80,21 +80,20 @@ class RoomCard extends Component {
           <div className={style.expanded}>
             <div className={style.norms}>
               <h4>Conversation Norms</h4>
-              <ul className="list-group">
+              <ul className={style.listgroup}>
                 {this.props.room.norms.map(function(norm) {
                   normkey++;
                   return (
-                    <li key={normkey} className="list-group-item">
-                      <span
-                        className={style.glyphicon + ' glyphicon glyphicon-ok'}
-                        aria-hidden="true" >
-                      </span>
+                    <li key={normkey} className={style.listitem}>
+                      <img
+                        src="/icons/check.svg"
+                        className={style.check}/>
                       {norm}
                     </li>
                     );
                 })}
               </ul>
-              <label class="c-input c-checkbox">
+              <label class={style.checkbox}>
                 <input type="checkbox" onClick={this.onNormsCheck.bind(this)}/>
                 <span>I agree to abide by these norms</span>
               </label>
@@ -102,24 +101,24 @@ class RoomCard extends Component {
             <Join
               roomId={this.props.room.id}
               normsChecked={this.state.normsChecked}/>
-            <div className={style.downChevron} onClick={this.toggle().bind(this)}>
-              <span
-                className="glyphicon glyphicon-chevron-up"
-                aria-hidden="true" ></span>
+            <div className={style.chevron} onClick={this.toggle().bind(this)}>
+              <img
+                src="/icons/upchevron.svg"
+                className={style.chevron}/>
             </div>
-          </div>;
+          </div>
     } else {
       joinPrompt =
-        <div className={style.downChevron} onClick={this.toggle().bind(this)}>
-          <span
-            className="glyphicon glyphicon-chevron-down"
-            aria-hidden="true" ></span>
-        </div>;
+        <div className={style.chevron} onClick={this.toggle().bind(this)}>
+          <img
+            src="/icons/downchevron.svg"
+            className={style.chevron}/>
+        </div>
     }
 
     return <div className={style.roomCard}>
         <div className={style.roomImage} onClick={this.toggle().bind(this)}>
-          <img className="img-rounded" src={this.props.room.image}/>
+          <img src={this.props.room.image}/>
         </div>
         <div className={style.roomInfo}>
           <div className={style.roomTime}>
@@ -148,6 +147,6 @@ class RoomCard extends Component {
   }
 }
 
-RoomCard.propTypes = {room: PropTypes.object};
+ RoomCard.propTypes = {room: PropTypes.object};
 
-export default RoomCard;
+ export default RoomCard;

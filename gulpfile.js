@@ -22,13 +22,20 @@ var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 
 // Styles
-gulp.task('styles', ['css-modulesify']);
+gulp.task('styles', ['moveIcons','css-modules']);
 
 gulp.task('moveCss',['clean'], function(){
   // the base option sets the relative root for the set of files,
   // preserving the folder structure
   gulp.src(['./app/styles/**/*.css'], { base: './app/styles/' })
   .pipe(gulp.dest('dist/styles'));
+});
+
+gulp.task('moveIcons',['clean'], function(){
+  // the base option sets the relative root for the set of files,
+  // preserving the folder structure
+  gulp.src(['./app/icons/**/*.svg'], { base: './app/icons/' })
+  .pipe(gulp.dest('dist/icons'));
 });
 
 gulp.task('sass', function() {
@@ -42,7 +49,7 @@ gulp.task('sass', function() {
         .pipe($.size());
 });
 
-gulp.task('css-modulesify', function() {
+gulp.task('css-modules', function() {
     var b = browserify();
     b.add(sourceFile);
     b.plugin(['css-modulesify', {
@@ -124,7 +131,7 @@ gulp.task('fonts', function() {
 // Clean
 gulp.task('clean', function(cb) {
     $.cache.clearAll();
-    cb(del.sync(['dist/styles', 'dist/scripts', 'dist/images']));
+    cb(del.sync(['dist/styles', 'dist/scripts', 'dist/images', 'dist/icons']));
 });
 
 // Bundle
