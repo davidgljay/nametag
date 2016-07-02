@@ -46,11 +46,10 @@ class Certificate extends Component {
     }
     if (this.state.expanded) {
       certificate = <div className={style.certificateExpanded}>
-            <span
-              aria-hidden="true"
-              className="glyphicon glyphicon-remove"
-              onClick={this.toggleExpanded.bind(this)}>
-            </span>
+            <img
+              src="/icons/close.svg"
+              className={style.close}
+              onClick={this.toggleExpanded.bind(this)}/>
             { icon }
             <div className={style.name}>{this.props.certificate.name}</div>
             <div className={style.granter}>Verified by: {this.props.certificate.granter}</div>
@@ -67,7 +66,7 @@ class Certificate extends Component {
           </div>;
     } else {
       certificate = <div
-        className={style.certificate + ' label label-pill'}
+        className={style.certificate}
         onClick={this.toggleExpanded.bind(this)}>
           {this.props.certificate.name}
         </div>;

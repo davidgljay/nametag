@@ -1,12 +1,15 @@
 /** Certificate.css **/
 
 @value colors: "../colors.css";
+@value grey from colors;
+@value bootstrap: "../../bower_components/bootstrap/dist/css/bootstrap.css";
 
 .certificate {
+    composes: label from bootstrap;
     margin-left:5px;
     margin-bottom:5px;
     cursor: pointer;
-    background:grey;
+    background: grey;
     display:inline-block;
     -webkit-user-select: none;
 	-moz-user-select: none;
@@ -15,11 +18,15 @@
 
 .certificateExpanded {
     margin:5px;
+    margin-top:20px;
     padding:10px;
     border-radius:6px;
-    background:grey from colors;
+    background: grey;
 }
-.glyphicon-remove {
+
+.close {
+    width:15px;
+    height:15px;
     float:right;
     font-size:12px;
     cursor: pointer;
