@@ -99,7 +99,7 @@ class Join extends Component {
     let self = this;
     if (!this.props.normsChecked) {
       this.setState({
-        'alert': 'You must agree to the norms above' +
+        'alert': 'You must agree to the norms above ' +
         'in order to join this conversation.',
       });
     } else {
