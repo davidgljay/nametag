@@ -3,18 +3,6 @@
 @value colors: "../colors.css";
 @value bootstrap: "../../bower_components/bootstrap/dist/css/bootstrap.css";
 
-.header {
-    border-bottom: 3px solid primary from colors;
-    position: fixed;
-    top:0px;
-    z-index:100;
-    background:white;
-    width:100%;
-    padding-left:15px;
-    padding-bottom:5px;
-    padding-right:15px;
-}
-
 h3 {
     margin-top: 0;
     margin-bottom: 0;

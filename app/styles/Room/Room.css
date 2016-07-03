@@ -1,0 +1,52 @@
+/** Room.css **/
+
+@value colors: "../colors.css";
+@value primary, secondary, grey, green from colors;
+
+.header {
+    border-bottom: 3px solid primary;
+    position: fixed;
+    top:0px;
+    z-index:100;
+    background:white;
+    width:100%;
+    padding-left:15px;
+    padding-bottom:5px;
+    padding-right:15px;
+}
+
+.close {
+   width:15px;
+    height:15px;
+    float:right;
+    font-size:12px;
+    cursor: pointer;
+}
+
+#leftBar {
+    min-height:400px;
+    background: primary;
+    padding-top: 80px;
+    height: 100vh;
+    padding-left:15px;
+    padding-right:15px;
+    width: 275px;
+    position:fixed;
+    top:0px;
+    left:0px;
+    z-index:50;
+}
+
+#norms {
+    color:white;
+}
+
+#normlist {
+    list-style:none;
+    font-weight:bold;
+    padding-left:15px;
+}
+
+#norms li {
+    margin-bottom:10px;
+}

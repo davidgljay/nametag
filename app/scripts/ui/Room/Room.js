@@ -4,6 +4,7 @@ import Messages from './Messages';
 import Compose from './Compose';
 import errorLog from '../../utils/errorLog';
 import fbase from '../../api/firebase';
+import style from '../../../styles/Room/Room.css';
 
 class Room extends Component {
   constructor(props) {
@@ -56,26 +57,22 @@ class Room extends Component {
     // TODO: Move norms to stateless object
     return (
     	<div>
-    	    <div className="header">
-                <ul className="nav nav-pills pull-right">
-                    <li>
-                      <a href="#">
-                        <span className="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                      </a>
-                    </li>
-                </ul>
-                <h3 className="text-muted">{this.state.room.title}</h3>
-              <div id="description">{this.state.room.description}</div>
+    	    <div className={style.header}>
+                 <img
+                    src="/icons/close.svg"
+                    className={style.close}/>
+                <h3>{this.state.room.title}</h3>
+              <div id={style.description}>{this.state.room.description}</div>
           </div>
           <div>
-            <div id="leftBar">
-              <div id="leftBarContent">
-                <div id="norms">
+            <div id={style.leftBar}>
+              <div id={style.leftBarContent}>
+                <div id={style.norms}>
                   <h4>Norms:</h4>
-                  <ul id="normlist">
+                  <ul id={style.normlist}>
                     {this.state.room.norms.map(function(norm) {
                       return (
-                        <li key={norm} className="norm">
+                        <li key={norm} className={style.norm}>
                           {norm}
                         </li>
                       );

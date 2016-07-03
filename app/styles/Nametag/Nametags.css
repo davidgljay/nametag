@@ -1,0 +1,11 @@
+/** Nametags.css **/
+@value bootstrap: "../../bower_components/bootstrap/dist/css/bootstrap.css";
+
+.nametag {
+	composes: list-group-item from bootstrap;
+}
+
+#nametags {
+	composes: list-group from bootstrap;
+}
+

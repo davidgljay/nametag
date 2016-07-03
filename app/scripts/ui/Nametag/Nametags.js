@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Nametag from './Nametag';
 import errorLog from '../../utils/errorLog';
 import fbase from '../../api/firebase';
+import style from '../../../styles/Nametag/Nametags.css';
 
 class Nametags extends Component {
   constructor(props) {
@@ -54,7 +55,7 @@ class Nametags extends Component {
       // Make nametag.badges an empty array if it not already assigned.
       nametag.badges = nametag.badges || [];
 
-      return <li key={nametag.id} className="list-group-item nametag">
+      return <li key={nametag.id} className={style.nametag}>
         <Nametag
           name={nametag.name}
           bio={nametag.bio}
@@ -65,7 +66,7 @@ class Nametags extends Component {
       </li>;
     }
 
-    return <ul id="nametags" className="list-group">
+    return <ul id={style.nametags}>
         {nametagsArr.map(function mapnametag(nametag) {
           return creatnametag(nametag, this.props.mod);
         }, this)}
