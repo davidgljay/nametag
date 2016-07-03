@@ -5,7 +5,7 @@
 	composes: list-group-item from bootstrap;
 }
 
-#nametags {
+.nametags {
 	composes: list-group from bootstrap;
 }
 

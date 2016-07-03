@@ -66,7 +66,7 @@ class Nametags extends Component {
       </li>;
     }
 
-    return <ul id={style.nametags}>
+    return <ul className={style.nametags}>
         {nametagsArr.map(function mapnametag(nametag) {
           return creatnametag(nametag, this.props.mod);
         }, this)}

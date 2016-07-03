@@ -80,9 +80,6 @@ class Room extends Component {
                   </ul>
                 </div>
                 <Nametags roomId={this.props.params.roomId} mod={this.state.room.mod}/>
-                <div className="footer">
-                    <p>Built with ♥ by some queers</p>
-                </div>
               </div>
             </div>
             <div id="chat">

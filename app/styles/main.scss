@@ -12,101 +12,10 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
     margin:0px;
 }
 
-/*Left Nav*/
-
-#leftBar {
-    min-height:400px;
-    background: $purple;
-    padding-top: 80px;
-    height: 100vh;
-    padding-left:15px;
-    padding-right:15px;
-    width: 275px;
-    position:fixed;
-    top:0px;
-    left:0px;
-    z-index:50;
-}
-
-#norms {
-    color:white;
-
-    #normlist {
-        list-style:none;
-        font-weight:bold;
-        padding-left:15px;
-        li {
-            margin-bottom:10px;
-        }
-    }
-}
-
 #participants {
     margin-top: 40px;
 }
 
-
-/* Message display */
-
-#messages{
-    height:100%;
-    width:100%;
-    padding-top:80px;
-    overflow:scroll;
-
-
-    #msgContainer {
-        margin-left: 275px;
-        margin-bottom:65px;
-    }
-
-    .message {
-        padding-top:10px;
-        padding-bottom:5px;
-
-        .messageText {
-            width: 90%;
-        }
-
-        .icon {
-            padding-right:10px;
-            padding-left:25px;
-            padding-top:5px;
-            vertical-align: top;
-        }
-
-        .name {
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .date {
-            font-size: 10px;
-            font-style: italic;
-            color: grey;
-            height:22px;
-        }
-
-        .text {
-            font-size: 16px;
-        }
-    }
-
-    .msgPadding {
-        height:15px;
-    }
-
-    .actions {
-        color:grey;
-        height:22px;
-        font-size: 16px;
-        cursor: pointer;
-
-        span {
-            padding-right:20px;
-        }
-    }
-}
 
     /* Message composition */
 

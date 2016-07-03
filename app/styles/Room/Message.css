@@ -1,0 +1,48 @@
+/** Message.css **/
+
+.message {
+    padding-top:10px;
+    padding-bottom:5px;
+
+    .messageText {
+        width: 90%;
+    }
+
+    .icon {
+        padding-right:10px;
+        padding-left:25px;
+        padding-top:5px;
+        vertical-align: top;
+    }
+
+    .name {
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .date {
+        font-size: 10px;
+        font-style: italic;
+        color: grey;
+        height:22px;
+    }
+
+    .text {
+        font-size: 16px;
+    }
+}
+
+.msgPadding {
+    height:15px;
+}
+
+.actions {
+    color:grey;
+    height:22px;
+    font-size: 16px;
+    cursor: pointer;
+
+    span {
+        padding-right:20px;
+    }
+}

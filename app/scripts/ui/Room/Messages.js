@@ -3,6 +3,7 @@ import Message from './Message';
 import ModActionNotif from './ModActionNotif';
 import errorLog from '../../utils/errorLog';
 import fbase from '../../api/firebase';
+import style from '../../../styles/Room/Messages.css';
 
 class Messages extends Component {
   constructor(props) {
@@ -102,8 +103,8 @@ class Messages extends Component {
 
     // TODO: remove bootstrap formatting and make full width;
 
-    return <div id="messages">
-        <table id="msgContainer">
+    return <div id={style.messages}>
+        <table id={style.msgContainer}>
           <tbody>
           {messages.map(function mapMessages(message) {
             if (message.type === 'message') {

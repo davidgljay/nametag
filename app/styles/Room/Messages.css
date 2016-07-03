@@ -1,0 +1,13 @@
+/** Messages.css **/
+
+#messages {
+    height:100%;
+    width:100%;
+    padding-top:80px;
+    overflow:scroll;
+}
+
+#msgContainer {
+    margin-left: 275px;
+    margin-bottom:65px;
+}
