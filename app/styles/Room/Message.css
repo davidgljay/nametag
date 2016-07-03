@@ -3,33 +3,40 @@
 .message {
     padding-top:10px;
     padding-bottom:5px;
+}
 
-    .messageText {
-        width: 90%;
-    }
+.messageText {
+    width: 90%;
+}
 
-    .icon {
-        padding-right:10px;
-        padding-left:25px;
-        padding-top:5px;
-        vertical-align: top;
-    }
+.icon {
+    margin-right:10px;
+    margin-left:25px;
+    margin-top:5px;
+    vertical-align: top;
+}
 
-    .name {
-        font-weight: bold;
-        font-size: 14px;
-    }
+.actionIcon {
+    width:25px;
+    height:22px;
+    cursor:pointer;
+    margin-right: 20px;
+}
 
-    .date {
-        font-size: 10px;
-        font-style: italic;
-        color: grey;
-        height:22px;
-    }
+.name {
+    font-weight: bold;
+    font-size: 14px;
+}
 
-    .text {
-        font-size: 16px;
-    }
+.date {
+    font-size: 10px;
+    font-style: italic;
+    color: grey;
+    height:22px;
+}
+
+.text {
+    font-size: 16px;
 }
 
 .msgPadding {
@@ -37,12 +44,5 @@
 }
 
 .actions {
-    color:grey;
     height:22px;
-    font-size: 16px;
-    cursor: pointer;
-
-    span {
-        padding-right:20px;
-    }
 }
