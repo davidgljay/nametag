@@ -38,48 +38,7 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 }
 
 /*ModAction*/
-#modAction {
-    width:60%;
-    border-radius:6px;
-    border: 1px $purple solid; 
-    padding: 10px;
-    margin-top: 20px;
 
-    .glyphicon-remove {
-        float:right;
-        color:$blue;
-        cursor:pointer;
-    }
-
-    .chooseNorm {
-        cursor:pointer;
-    }
-
-    .chooseVis {
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
-
-    .visText {
-        padding-top: 10px;
-        font-style: italic;
-
-        .glyphicon {
-            margin-right: 10px;
-            font-style: none;
-        }
-    }
-
-    .escalateLink {
-        color:red;
-    }
-
-    .modActions .btn {
-        margin-right:10px;
-        margin-bottom: 10px;
-    }
-
-}
 
 .modActionNotif {
     background:$lightyellow;
