@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import errorLog from '../../utils/errorLog';
 import fbase from '../../api/firebase';
+import style from '../../../styles/Room/ModAction.css';
+import Alert from '../Utils/Alert'
 
 class ModAction extends Component {
   constructor(props) {
@@ -28,17 +30,21 @@ class ModAction extends Component {
     }, errorLog('Error getting room norms'));
   }
 
-  //TODO: handle unmount
+  componentWillUnMount() {
+    const normsRef = fbase.child('rooms/' + this.context.roomId + '/norms');
+    normsRef.off('child_added');
+  }
 
   showNorm(norm) {
     return <li
-      className="list-group-item chooseNorm"
+      className={style.chooseNorm}
       key={norm.id}
       onClick={this.checkNorm(norm.id)}>
         <label className="c-input c-checkbox" >
           <input type="checkbox" checked={norm.checked}/>
-          <span className="c-indicator"></span>
+          <span className={style.norm}>
            {norm.text}
+          </span>
         </label>
       </li>;
   }
@@ -136,10 +142,7 @@ class ModAction extends Component {
     let visText;
     let alert;
     if (this.state.alert) {
-      alert =
-        <div className="alert alert-danger" role="alert">
-          {this.state.alert}
-        </div>;
+      alert = <Alert msg={this.state.alert} alertType="danger"/>;
     }
 
     if (this.state.isPublic) {
@@ -162,14 +165,16 @@ class ModAction extends Component {
         </p>;
     }
 
-    return <div id="modAction">
+    // TODO: Re-add visibility icons.
+
+    return <div id={style.modAction}>
         {alert}
         <span
           aria-hidden="true"
           className="glyphicon glyphicon-remove"
           onClick={this.props.close.bind(this)}></span>
         <h4>Remind {this.props.author.name} of Conversation Norms</h4>
-        <ul className="list-group">
+        <ul className={style.norms}>
         {this.state.norms.map(this.showNorm.bind(this))}
         </ul>
         <input
@@ -178,40 +183,40 @@ class ModAction extends Component {
           onChange={this.addNote.bind(this)}
           placeholder="Add an optional note."
           value={this.state.message}/>
-        <div className="chooseVis">
-          <div className="btn-group" data-toggle="buttons">
-            <label className={'btn btn-default ' + (this.state.isPublic || 'active')}>
+        <div className={style.chooseVis}>
+          <div className={style.toggle} data-toggle="buttons">
+            <label className={style.toggleOption + ' ' + (this.state.isPublic || style.active)}>
               <input
                 type="radio"
                 id="privateAction"
                 onClick={this.setPublic(false).bind(this)} />
               Private
             </label>
-            <label className={'btn btn-default ' + (!this.state.isPublic || 'active')}>
+            <label className={style.toggleOption + ' ' + (!this.state.isPublic || style.active)}>
               <input type="radio" id="publicAction" onClick={this.setPublic(true).bind(this)}/>
               Public
             </label>
           </div>
-          <div className="visText">
+          <div className={style.visText}>
             {visText}
           </div>
         </div>
-        <div className="modActions">
-          <button className="btn btn-primary" onClick={this.remindOfNorms.bind(this)}>
+        <div className={style.modAction}>
+          <button className={style.primary} onClick={this.remindOfNorms.bind(this)}>
             Remind
           </button>
           <button
-            className={'btn btn-link escalateLink ' + (!this.state.escalated || 'hide')}
+            className={style.escalateLink + ' ' + (!this.state.escalated || style.hide)}
             onClick={this.escalate.bind(this)}>
               Escalate
           </button>
           <button
-            className={'btn btn-danger ' + (this.state.escalated || 'hide')}
+            className={style.danger + ' ' + (this.state.escalated || style.hide)}
             onClick={this.removeUser.bind(this)}>
               Remove {this.props.author.name} From Room
           </button>
           <button
-            className={'btn btn-danger ' + (this.state.escalated || 'hide')}
+            className={style.danger + ' ' + (this.state.escalated || style.hide)}
             onClick={this.notifyBadge.bind(this)}>
               Notify Badge Granters
           </button>

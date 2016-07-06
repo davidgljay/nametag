@@ -5,6 +5,7 @@ import RoomCard from './RoomCard';
 import errorLog from '../../utils/errorLog';
 import Navbar from '../Utils/Navbar';
 import fbase from '../../api/firebase';
+import style from '../../../styles/RoomCard/RoomCards.css';
 
 class RoomCards extends Component {
   constructor(props) {
@@ -37,10 +38,13 @@ class RoomCards extends Component {
   }
 
   render() {
-    return <div id="roomSelection">
+    return <div id={style.roomSelection}>
         <Navbar userAuth={this.context.userAuth} unAuth={this.context.unAuth}/>
-        <div id="roomCards">
+        <div id={style.roomCards}>
           {this.state.rooms.map(this.showRoomCard)}
+        </div>
+        <div class="footer">
+          <p>♥ from all the queers</p>
         </div>
       </div>;
   }

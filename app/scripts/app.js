@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 import Room from './ui/Room/Room';
 import RoomCards from './ui/RoomCard/RoomCards';
 import fbase from './api/firebase';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
 const mountNode = document.getElementById('app');
 
@@ -53,5 +55,7 @@ Nametag.childContextTypes = {
   checkAuth: PropTypes.func,
 };
 
-ReactDOM.render(<Nametag/>, mountNode);
+let NametagWithDragging = DragDropContext(HTML5Backend)(Nametag);
+
+ReactDOM.render(<NametagWithDragging/>, mountNode);
 

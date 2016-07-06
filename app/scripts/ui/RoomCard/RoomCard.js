@@ -1,8 +1,9 @@
-import React, { Component, PropTypes } from 'react';
+ import React, { Component, PropTypes } from 'react';
 import Nametag from '../Nametag/Nametag';
 import Join from './Join';
 import errorLog from '../../utils/errorLog';
 import fbase from '../../api/firebase';
+import style from '../../../styles/RoomCard/RoomCard.css';
 
 class RoomCard extends Component {
   constructor(props) {
@@ -13,7 +14,7 @@ class RoomCard extends Component {
         name: '',
         bio: '',
         icon: '',
-        nametagId: '',
+        certificates: [],
       },
       badges: [],
       normsChecked: false,
@@ -63,10 +64,10 @@ class RoomCard extends Component {
     this.setState({normsChecked: e.target.checked});
   }
 
-  toggle(expanded) {
+  toggle() {
     const self = this;
     return function onClick() {
-      self.setState({expanded: expanded});
+      self.setState({expanded: !self.state.expanded});
     };
   }
 
@@ -76,70 +77,66 @@ class RoomCard extends Component {
 
     if (this.state.expanded) {
       joinPrompt =
-          <div className="expanded">
-            <div className="norms">
+          <div className={style.expanded}>
+            <div className={style.norms}>
               <h4>Conversation Norms</h4>
-              <ul className="list-group">
+              <ul className={style.listgroup}>
                 {this.props.room.norms.map(function(norm) {
                   normkey++;
                   return (
-                    <li key={normkey} className="list-group-item">
+                    <li key={normkey} className={style.listitem}>
                       <span
-                        className="glyphicon glyphicon-ok"
-                        aria-hidden="true" >
-                      </span>
+                        className={style.check + ' glyphicon + glyphicon-ok'}/>
                       {norm}
                     </li>
                     );
                 })}
               </ul>
-              <label class="c-input c-checkbox">
+              <label class={style.checkbox}>
                 <input type="checkbox" onClick={this.onNormsCheck.bind(this)}/>
-                <span>I agree to abide by these norms</span>
+                <span className={style.checkboxLabel} >I agree to abide by these norms</span>
               </label>
             </div>
             <Join
               roomId={this.props.room.id}
               normsChecked={this.state.normsChecked}/>
-            <div className="downChevron" onClick={this.toggle(false).bind(this)}>
+            <div className={style.chevron} onClick={this.toggle().bind(this)}>
               <span
-                className="glyphicon glyphicon-chevron-up"
-                aria-hidden="true" ></span>
+                className={style.chevron + ' glyphicon glyphicon-chevron-up'}/>
             </div>
-          </div>;
+          </div>
     } else {
       joinPrompt =
-        <div className="downChevron" onClick={this.toggle(true).bind(this)}>
+        <div className={style.chevron} onClick={this.toggle().bind(this)}>
           <span
-            className="glyphicon glyphicon-chevron-down" 
-            aria-hidden="true" ></span>
-        </div>;
+            className={style.chevron + ' glyphicon glyphicon-chevron-down'}/>
+        </div>
     }
 
-    return <div className="roomCard">
-        <div className="roomImage">
-          <img className="img-rounded" src={this.props.room.image}/>
+    return <div className={style.roomCard}>
+        <div className={style.roomImage} onClick={this.toggle().bind(this)}>
+          <img src={this.props.room.image}/>
         </div>
-        <div className="roomInfo">
-          <div className="roomTime">
+        <div className={style.roomInfo}>
+          <div className={style.roomTime}>
             <b>started:</b> 2 days ago<br/>
             <b>ends:</b> in 1 week
           </div>
-          <h3>{this.props.room.title}</h3>
-          <div className="roomDesc">
+          <h3 onClick={this.toggle().bind(this)}>{this.props.room.title}</h3>
+          <div className={style.roomDesc}>
             {this.props.room.description}<br/>
-            <p className="NametagCount">
+            <p className={style.nametagCount}>
               {this.state.nametagCount} participant{this.state.nametagCount === 1 || 's'}
             </p>
           </div>
 
           <hr></hr>
           <Nametag
-            className="mod"
+            className={style.mod}
             name={this.state.mod.name}
             bio={this.state.mod.bio}
             icon={this.state.mod.icon}
-            nametagId={this.state.mod.nametagId}
+            certificates={this.state.mod.certificates}
             roomId={this.props.room.id}/>
           {joinPrompt}
         </div>
@@ -147,6 +144,6 @@ class RoomCard extends Component {
   }
 }
 
-RoomCard.propTypes = {room: PropTypes.object};
+ RoomCard.propTypes = {room: PropTypes.object};
 
-export default RoomCard;
+ export default RoomCard;

@@ -1,0 +1,127 @@
+/** RoomCard.css **/
+
+@value colors: "../colors.css";
+@value primary, secondary, grey, green from colors;
+@value bootstrap: "../../bower_components/bootstrap/dist/css/bootstrap.css";
+
+.roomImage {
+    display:inline-block;
+    vertical-align: initial;
+    cursor:pointer;
+}
+
+.roomImage img {
+    border-radius:5px;
+}
+
+.roomCard {
+    margin-bottom: 30px;
+    padding: 0px;
+    min-height: 254px;
+    width: 940px;
+    border-radius: 6px;
+    border: 2px solid primary;
+    background: secondary;
+
+}
+
+.roomInfo {
+    display:inline-block;
+    vertical-align: top;
+    margin-top:10px;
+    margin-left:20px;
+    width:70%;
+}
+
+.roomCard h3 {
+ color: primary;
+ cursor:pointer;
+}
+
+
+.roomCard hr {
+    margin-top:5px;
+}
+
+.participantCount {
+    color:primary;
+    font-size:11px;
+    font-style:italic;
+}
+
+.roomTime {
+    float:right;
+    font-size: 11px;
+    font-style: italic;
+    color: primary;
+}
+
+.ismod {
+    margin-bottom:5px;
+    color:primary;
+}
+
+.modTitle {
+    margin-left: 5px;
+    font-weight: bold;
+    display:inline-block;
+}
+
+.icon {
+    float:left;
+    padding-right:10px;
+}
+
+.participant {
+    border: 1px solid grey;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.name {
+    font-weight:bold;
+}
+
+.norms {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.norms h4 {
+    color:primary;
+}
+.norms p {
+    font-style:italic;
+}
+
+.norms li {
+    text-align: left;
+    padding-left:10px;
+}
+
+.check {
+    height:25px;
+    margin-right:20px;
+    color:green;
+}
+
+.chevron {
+    width: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    color:primary;
+    fill:primary;
+    cursor:pointer;
+}
+
+.listgroup {
+    composes: list-group from bootstrap;
+}
+
+.listitem {
+    composes: list-group-item from bootstrap;
+}
+
+.checkboxLabel {
+    margin-left:10px;
+}

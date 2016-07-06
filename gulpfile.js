@@ -22,13 +22,20 @@ var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 
 // Styles
-gulp.task('styles', ['sass', 'moveCss']);
+gulp.task('styles', ['moveIcons','css-modules']);
 
 gulp.task('moveCss',['clean'], function(){
   // the base option sets the relative root for the set of files,
   // preserving the folder structure
   gulp.src(['./app/styles/**/*.css'], { base: './app/styles/' })
   .pipe(gulp.dest('dist/styles'));
+});
+
+gulp.task('moveIcons',['clean'], function(){
+  // the base option sets the relative root for the set of files,
+  // preserving the folder structure
+  gulp.src(['./app/icons/**/*.svg'], { base: './app/icons/' })
+  .pipe(gulp.dest('dist/icons'));
 });
 
 gulp.task('sass', function() {
@@ -42,15 +49,26 @@ gulp.task('sass', function() {
         .pipe($.size());
 });
 
+gulp.task('css-modules', function() {
+    var b = browserify();
+    b.add(sourceFile);
+    b.plugin(['css-modulesify', {
+        output:'./dist/styles/main.css',
+    }]);
+
+    return b.bundle();
+})
+
 
 
 var bundler = watchify(browserify({
     entries: [sourceFile],
     debug: true,
+    plugin:['css-modulesify'],
     insertGlobals: true,
     cache: {},
     packageCache: {},
-    fullPaths: true
+    fullPaths: true,
 }));
 
 bundler.on('update', rebundle);
@@ -113,7 +131,7 @@ gulp.task('fonts', function() {
 // Clean
 gulp.task('clean', function(cb) {
     $.cache.clearAll();
-    cb(del.sync(['dist/styles', 'dist/scripts', 'dist/images']));
+    cb(del.sync(['dist/styles', 'dist/scripts', 'dist/images', 'dist/icons']));
 });
 
 // Bundle

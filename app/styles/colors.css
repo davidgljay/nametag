@@ -1,0 +1,21 @@
+/** colors.css **/
+/*
+$lime:#92CD00;
+$navy:#1B264F;
+$lightblue:#BEC9F3;
+$blue:#3083b3;
+$grey:#E5E5E5;
+$green:;
+$yellow:#ffff00;
+$lightyellow:#fff2cc;
+$rose:#efcfd7;
+$purple:#67137D;
+$lightpurple:#FCEFFF;
+
+*/
+
+@value primary: #3083b3;
+@value secondary: #d6e9f4;
+@value white: #fff;
+@value grey: #a8a8a8;
+@value green: #2C6700;

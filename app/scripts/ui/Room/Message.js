@@ -3,6 +3,7 @@ import moment from '../../../bower_components/moment/moment';
 import ModAction from './ModAction';
 import errorLog from '../../utils/errorLog';
 import fbase from '../../api/firebase';
+import style from '../../../styles/Room/Message.css';
 
 class Message extends Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class Message extends Component {
     // TODO: Does this belong in getInitialState of componentDidMount?
     // It seems like it's bad to set state before the component mounts, so maybe here?
     const self = this;
-    const authorRef = fbase.child('participants/' + this.props.roomId +
+    const authorRef = fbase.child('nametags/' + this.props.roomId +
       '/' + this.props.author);
     authorRef.on('value', function onValue(author) {
       if (author.val()) {
@@ -32,7 +33,7 @@ class Message extends Component {
   }
 
   componentWillUnmount() {
-    const authorRef = fbase.child('participants/' + this.props.roomId +
+    const authorRef = fbase.child('nametags/' + this.props.roomId +
       '/' + this.props.author);
     authorRef.off();
   }
@@ -70,19 +71,18 @@ class Message extends Component {
 
     if (this.state.mouseOver) {
       below =
-        <div className="actions">
+        <div className={style.actions}>
+          <span className={style.actionIcon + ' glyphicon glyphicon-heart'}
+          aria-hidden="true"
+          onClick={this.heartAction.bind(this)}/>
           <span
-            className="glyphicon glyphicon-heart"
-            onClick={this.heartAction.bind(this)}
-            aria-hidden="true"/>
-          <span
-            className="glyphicon glyphicon-flag"
+            className={style.actionIcon + ' glyphicon glyphicon-flag'}
             onClick={this.modAction(true).bind(this)}
             aria-hidden="true"/>
         </div>;
     } else {
       below =
-        <div className="date">
+        <div className={style.date}>
           {moment(this.props.timestamp).format('h:mm A, ddd MMM DD YYYY')}
         </div>;
     }
@@ -97,17 +97,17 @@ class Message extends Component {
     }
 
     return <tr
-        className="message"
+        className={style.message}
         onMouseEnter={this.onMouseEnter.bind(this)}
         onMouseLeave={this.onMouseLeave.bind(this)}>
-        <td className="icon">
+        <td className={style.icon}>
           <img className="img-circle" src={icon}/>
         </td>
-        <td className="messageText">
-          <div className="name">{name}</div>
-          <div className="text">{this.props.text}</div>
+        <td className={style.messageText}>
+          <div className={style.name}>{name}</div>
+          <div className={style.text}>{this.props.text}</div>
           {below}
-          <div className="msgPadding"></div>
+          <div className={style.msgPadding}></div>
         </td>
       </tr>;
   }

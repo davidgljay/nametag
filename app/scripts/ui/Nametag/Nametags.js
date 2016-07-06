@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Nametag from './Nametag';
 import errorLog from '../../utils/errorLog';
 import fbase from '../../api/firebase';
+import style from '../../../styles/Nametag/Nametags.css';
 
 class Nametags extends Component {
   constructor(props) {
@@ -12,20 +13,16 @@ class Nametags extends Component {
   }
 
   componentDidMount() {
-    let self = this;
-
     // Get nametag data
-    console.log(this.props.roomId);
     const nametagsRef = fbase.child('nametags/' + this.props.roomId);
     nametagsRef.on('child_added', function onValue(nametag) {
       let nametagData = nametag.val();
       nametagData.id = nametag.key();
-      console.log(nametagData.id)
-      self.setState(function setState(prevState) {
+      this.setState(function setState(prevState) {
         prevState.nametags.push(nametagData);
         return prevState;
       });
-    }, errorLog('Error getting partipant info'));
+    }, errorLog('Error getting partipant info'), this);
   }
 
   componentWillUnmount() {
@@ -51,34 +48,30 @@ class Nametags extends Component {
       return score;
     });
 
-    console.log(nametagsArr);
-
     // Create a function to return list items
-    function creatnametag(nametag, mod) {
-      // Make nametag.badges an empty array if it not already assigned.
-      nametag.badges = nametag.badges || [];
+    function creatNametag(nametag, mod) {
+      // Make nametag.certificates an empty array if it not already assigned.
+      nametag.certificates = nametag.certificates || [];
 
-      return <li key={nametag.id} className="list-group-item profile">
+      return <li key={nametag.id} className={style.nametag}>
         <Nametag
           name={nametag.name}
           bio={nametag.bio}
           icon={nametag.icon}
           nametagId={nametag.id}
-          badges={nametag.badges}
-          mod={mod}
-          roomId={self.props.roomId}/>
+          certificates={nametag.certificates}
+          mod={mod}/>
       </li>;
     }
 
-    return <ul id="nametags" className="list-group">
-        {nametagsArr.map(function mapnametag(nametag) {
-          return creatnametag(nametag, this.props.mod);
+    return <ul className={style.nametags}>
+        {nametagsArr.map(function mapNametag(nametag) {
+          return creatNametag(nametag, this.props.mod);
         }, this)}
       </ul>;
   }
 }
 
 Nametags.propTypes = { roomId: PropTypes.string, mod: PropTypes.string };
-Nametags.defaultProps = {roomId: 'stampi', mod: 'wxyz', userid: 'abcd'};
 
 export default Nametags;

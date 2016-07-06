@@ -4,6 +4,7 @@ import Messages from './Messages';
 import Compose from './Compose';
 import errorLog from '../../utils/errorLog';
 import fbase from '../../api/firebase';
+import style from '../../../styles/Room/Room.css';
 
 class Room extends Component {
   constructor(props) {
@@ -37,8 +38,9 @@ class Room extends Component {
       + this.props.params.roomId);
 
     nametagIdRef.on('value', function onValue(value) {
-      this.setState({nametagId: value.val().nametag_id});
-    });
+      const ntid = value.val().nametag_id;
+      this.setState({nametagId: ntid});
+    },this);
   }
 
   componentWillUnmount() {
@@ -52,30 +54,32 @@ class Room extends Component {
   	// TODO: mark the user as inactive when they leave the room.
   }
 
+  closeRoom() {
+    window.location = '/#/rooms/';
+  }
+
   render() {
     // TODO: Move norms to stateless object
-    return (
-    	<div>
-    	    <div className="header">
-                <ul className="nav nav-pills pull-right">
-                    <li>
-                      <a href="#">
-                        <span className="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                      </a>
-                    </li>
-                </ul>
-                <h3 className="text-muted">{this.state.room.title}</h3>
-              <div id="description">{this.state.room.description}</div>
+    let room = <div>Loading</div>;
+
+    if (this.state.nametagId) {
+      room = <div>
+    	    <div className={style.header}>
+                 <span
+                  onClick={this.closeRoom}
+                  className={style.close + ' glyphicon glyphicon-remove'}/>
+                <h3>{this.state.room.title}</h3>
+              <div id={style.description}>{this.state.room.description}</div>
           </div>
           <div>
-            <div id="leftBar">
-              <div id="leftBarContent">
-                <div id="norms">
+            <div id={style.leftBar}>
+              <div id={style.leftBarContent}>
+                <div id={style.norms}>
                   <h4>Norms:</h4>
-                  <ul id="normlist">
+                  <ul id={style.normlist}>
                     {this.state.room.norms.map(function(norm) {
                       return (
-                        <li key={norm} className="norm">
+                        <li key={norm} className={style.norm}>
                           {norm}
                         </li>
                       );
@@ -83,33 +87,28 @@ class Room extends Component {
                   </ul>
                 </div>
                 <Nametags roomId={this.props.params.roomId} mod={this.state.room.mod}/>
-                <div className="footer">
-                    <p>Built with ♥ by some queers</p>
-                </div>
               </div>
             </div>
-            <div id="chat">
               <Messages
-              roomId={this.props.params.roomId}
-              nametagId={this.props.NametagId}/>
-            </div>
+                roomId={this.props.params.roomId}
+                nametagId={this.state.nametagId}/>
           </div>
           <Compose
             roomId={this.props.params.roomId}
             nametagId={this.state.nametagId}/>
-      </div>
-    );
+      </div>;
+    };
+
+    return room;
   }
 }
 
-Room.propTypes = { roomId: PropTypes.string };
-Room.defaultProps = {
-  roomId: 'stampi',
-  nametagId: 'wxyz',
-};
 Room.childContextTypes = {
   nametagId: PropTypes.string,
   roomId: PropTypes.string,
+};
+Room.contextTypes = {
+    userAuth: PropTypes.object,
 };
 
 export default Room;

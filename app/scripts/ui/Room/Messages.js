@@ -3,6 +3,7 @@ import Message from './Message';
 import ModActionNotif from './ModActionNotif';
 import errorLog from '../../utils/errorLog';
 import fbase from '../../api/firebase';
+import style from '../../../styles/Room/Messages.css';
 
 class Messages extends Component {
   constructor(props) {
@@ -40,7 +41,6 @@ class Messages extends Component {
         window.scrollBy(0, 90);
       });
     }, errorLog('Error getting room from FB'), this);
-
 
     // Add mod actions to state for display
     const modActionPubRef = fbase.child('mod_actions/' + this.props.roomId + '/public');
@@ -102,8 +102,8 @@ class Messages extends Component {
 
     // TODO: remove bootstrap formatting and make full width;
 
-    return <div id="messages">
-        <table id="msgContainer">
+    return <div id={style.messages}>
+        <table id={style.msgContainer}>
           <tbody>
           {messages.map(function mapMessages(message) {
             if (message.type === 'message') {
@@ -133,9 +133,8 @@ class Messages extends Component {
 }
 
 Messages.propTypes = {
-  roomId: PropTypes.string,
-  nametagId: PropTypes.string,
+  roomId: PropTypes.string.isRequired,
+  nametagId: PropTypes.string.isRequired,
 };
-Messages.defaultProps = { roomId: 'stampi' };
 
 export default Messages;
