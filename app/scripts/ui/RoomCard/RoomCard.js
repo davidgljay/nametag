@@ -85,9 +85,8 @@ class RoomCard extends Component {
                   normkey++;
                   return (
                     <li key={normkey} className={style.listitem}>
-                      <img
-                        src="/icons/check.svg"
-                        className={style.check}/>
+                      <span
+                        className={style.check + ' glyphicon + glyphicon-ok'}/>
                       {norm}
                     </li>
                     );

@@ -72,13 +72,11 @@ class Message extends Component {
     if (this.state.mouseOver) {
       below =
         <div className={style.actions}>
-          <img
-            src="/icons/heart.svg"
-            className={style.actionIcon}
-            onClick={this.heartAction.bind(this)} />
-          <img
-            src="/icons/flag.svg"
-            className={style.actionIcon}
+          <span className={style.actionIcon + ' glyphicon glyphicon-heart'}
+          aria-hidden="true"
+          onClick={this.heartAction.bind(this)}/>
+          <span
+            className={style.actionIcon + ' glyphicon glyphicon-flag'}
             onClick={this.modAction(true).bind(this)}
             aria-hidden="true"/>
         </div>;

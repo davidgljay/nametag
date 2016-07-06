@@ -54,6 +54,10 @@ class Room extends Component {
   	// TODO: mark the user as inactive when they leave the room.
   }
 
+  closeRoom() {
+    window.location = '/#/rooms/';
+  }
+
   render() {
     // TODO: Move norms to stateless object
     let room = <div>Loading</div>;
@@ -61,9 +65,9 @@ class Room extends Component {
     if (this.state.nametagId) {
       room = <div>
     	    <div className={style.header}>
-                 <img
-                    src="/icons/close.svg"
-                    className={style.close}/>
+                 <span
+                  onClick={this.closeRoom}
+                  className={style.close + ' glyphicon glyphicon-remove'}/>
                 <h3>{this.state.room.title}</h3>
               <div id={style.description}>{this.state.room.description}</div>
           </div>
