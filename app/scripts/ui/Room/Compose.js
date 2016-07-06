@@ -36,7 +36,7 @@ class Compose extends Component {
 
   render() {
     // TODO: Add GIFs, image upload, emoticons
-    return <form className={'input-group ' + style.compose} onSubmit={this.post.bind(this)}>
+    return <form className={style.compose} onSubmit={this.post.bind(this)}>
         <input
           type="text"
           className="form-control"
