@@ -82,16 +82,15 @@ class Join extends Component {
   }
 
   setDefaults() {
-    let self = this;
     const defaultsRef = fbase.child('user_defaults/' + this.context.userAuth.uid);
     defaultsRef.on('value', function setDefault(value) {
-      self.setState(function setState(prevState) {
+      this.setState(function setState(prevState) {
         prevState.defaults = value.val();
         prevState.nametag.name = prevState.defaults && prevState.defaults.names ? prevState.defaults.names[0] : '';
         prevState.nametag.icon = prevState.defaults && prevState.defaults.icons ? prevState.defaults.icons[0] : '';
         return prevState;
       });
-    });
+    },this);
   }
 
 // TODO: Use existing nametagid if one is present.

@@ -101,17 +101,15 @@ class RoomCard extends Component {
               roomId={this.props.room.id}
               normsChecked={this.state.normsChecked}/>
             <div className={style.chevron} onClick={this.toggle().bind(this)}>
-              <img
-                src="/icons/upchevron.svg"
-                className={style.chevron}/>
+              <span
+                className={style.chevron + ' glyphicon glyphicon-chevron-up'}/>
             </div>
           </div>
     } else {
       joinPrompt =
         <div className={style.chevron} onClick={this.toggle().bind(this)}>
-          <img
-            src="/icons/downchevron.svg"
-            className={style.chevron}/>
+          <span
+            className={style.chevron + ' glyphicon glyphicon-chevron-down'}/>
         </div>
     }
 
