@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import moment from '../../../bower_components/moment/moment';
 import ModAction from './ModAction';
+import Media from './Media';
 import errorLog from '../../utils/errorLog';
 import fbase from '../../api/firebase';
 import style from '../../../styles/Room/Message.css';
@@ -60,13 +61,28 @@ class Message extends Component {
     };
   }
 
+  checkYouTube(message) {
+    return /[^ ]+youtube\.com[^ \.\!\?]+/.exec(message);
+  }
+
+  checkImage(message) {
+    return /[^ ]+(\.gif|\.jpg|\.png)/.exec(message);
+  }
+
   render() {
     let icon;
     let name;
     let below;
+    let media;
     if (this.state.author) {
       icon = this.state.author.icon;
       name = this.state.author.name;
+    }
+
+    if (this.checkYouTube(this.props.text)) {
+      media = <Media url={this.checkYouTube(this.props.text)[0]}/>;
+    } else if (this.checkImage(this.props.text)) {
+      media = <Media url={this.checkImage(this.props.text)[0]}/>;
     }
 
     if (this.state.mouseOver) {
@@ -106,6 +122,7 @@ class Message extends Component {
         <td className={style.messageText}>
           <div className={style.name}>{name}</div>
           <div className={style.text}>{this.props.text}</div>
+          {media}
           {below}
           <div className={style.msgPadding}></div>
         </td>
