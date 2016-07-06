@@ -114,6 +114,7 @@ class Join extends Component {
       this.setState(function setState(prevState) {
         prevState.nametag = value.val();
         prevState.nametagId = value.key();
+        prevState.nametag.certificates = prevState.nametag.certificates || [];
         return prevState;
       });
     }, errorLog("Getting nametag in Join component"), this);
