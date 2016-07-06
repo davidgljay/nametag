@@ -19,7 +19,7 @@ class Message extends Component {
     // TODO: Does this belong in getInitialState of componentDidMount?
     // It seems like it's bad to set state before the component mounts, so maybe here?
     const self = this;
-    const authorRef = fbase.child('participants/' + this.props.roomId +
+    const authorRef = fbase.child('nametags/' + this.props.roomId +
       '/' + this.props.author);
     authorRef.on('value', function onValue(author) {
       if (author.val()) {
@@ -33,7 +33,7 @@ class Message extends Component {
   }
 
   componentWillUnmount() {
-    const authorRef = fbase.child('participants/' + this.props.roomId +
+    const authorRef = fbase.child('nametags/' + this.props.roomId +
       '/' + this.props.author);
     authorRef.off();
   }

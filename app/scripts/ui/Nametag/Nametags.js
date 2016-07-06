@@ -13,18 +13,16 @@ class Nametags extends Component {
   }
 
   componentDidMount() {
-    let self = this;
-
     // Get nametag data
     const nametagsRef = fbase.child('nametags/' + this.props.roomId);
     nametagsRef.on('child_added', function onValue(nametag) {
       let nametagData = nametag.val();
       nametagData.id = nametag.key();
-      self.setState(function setState(prevState) {
+      this.setState(function setState(prevState) {
         prevState.nametags.push(nametagData);
         return prevState;
       });
-    }, errorLog('Error getting partipant info'));
+    }, errorLog('Error getting partipant info'), this);
   }
 
   componentWillUnmount() {
@@ -51,9 +49,9 @@ class Nametags extends Component {
     });
 
     // Create a function to return list items
-    function creatnametag(nametag, mod) {
-      // Make nametag.badges an empty array if it not already assigned.
-      nametag.badges = nametag.badges || [];
+    function creatNametag(nametag, mod) {
+      // Make nametag.certificates an empty array if it not already assigned.
+      nametag.certificates = nametag.certificates || [];
 
       return <li key={nametag.id} className={style.nametag}>
         <Nametag
@@ -67,8 +65,8 @@ class Nametags extends Component {
     }
 
     return <ul className={style.nametags}>
-        {nametagsArr.map(function mapnametag(nametag) {
-          return creatnametag(nametag, this.props.mod);
+        {nametagsArr.map(function mapNametag(nametag) {
+          return creatNametag(nametag, this.props.mod);
         }, this)}
       </ul>;
   }

@@ -42,7 +42,6 @@ class Messages extends Component {
       });
     }, errorLog('Error getting room from FB'), this);
 
-
     // Add mod actions to state for display
     const modActionPubRef = fbase.child('mod_actions/' + this.props.roomId + '/public');
     const modActionPrivRef = fbase.child('mod_actions/' + this.props.roomId + '/private/' +
@@ -134,9 +133,8 @@ class Messages extends Component {
 }
 
 Messages.propTypes = {
-  roomId: PropTypes.string,
-  nametagId: PropTypes.string,
+  roomId: PropTypes.string.isRequired,
+  nametagId: PropTypes.string.isRequired,
 };
-Messages.defaultProps = { roomId: 'stampi' };
 
 export default Messages;

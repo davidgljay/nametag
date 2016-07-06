@@ -26,6 +26,7 @@ class ModActionNotif extends Component {
     modRef.on('value', function onValue(value) {
       self.setState({mod: value.val()});
     }, errorLog('Error getting mod info in modActionNotif'));
+
     authorRef.on('value', function onValue(value) {
       self.setState(function setState(prevState) {
         prevState.author = value.val();

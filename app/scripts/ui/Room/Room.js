@@ -38,8 +38,9 @@ class Room extends Component {
       + this.props.params.roomId);
 
     nametagIdRef.on('value', function onValue(value) {
-      this.setState({nametagId: value.val().nametag_id});
-    });
+      const ntid = value.val().nametag_id;
+      this.setState({nametagId: ntid});
+    },this);
   }
 
   componentWillUnmount() {
@@ -55,8 +56,10 @@ class Room extends Component {
 
   render() {
     // TODO: Move norms to stateless object
-    return (
-    	<div>
+    let room = <div>Loading</div>;
+
+    if (this.state.nametagId) {
+      room = <div>
     	    <div className={style.header}>
                  <img
                     src="/icons/close.svg"
@@ -83,25 +86,25 @@ class Room extends Component {
               </div>
             </div>
               <Messages
-              roomId={this.props.params.roomId}
-              nametagId={this.props.NametagId}/>
+                roomId={this.props.params.roomId}
+                nametagId={this.state.nametagId}/>
           </div>
           <Compose
             roomId={this.props.params.roomId}
             nametagId={this.state.nametagId}/>
-      </div>
-    );
+      </div>;
+    };
+
+    return room;
   }
 }
 
-Room.propTypes = { roomId: PropTypes.string };
-Room.defaultProps = {
-  roomId: 'stampi',
-  nametagId: 'wxyz',
-};
 Room.childContextTypes = {
   nametagId: PropTypes.string,
   roomId: PropTypes.string,
+};
+Room.contextTypes = {
+    userAuth: PropTypes.object,
 };
 
 export default Room;

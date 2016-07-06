@@ -94,7 +94,7 @@ class Join extends Component {
     });
   }
 
-
+// TODO: Use existing nametagid if one is present.
   joinRoom() {
     let self = this;
     if (!this.props.normsChecked) {
@@ -120,6 +120,7 @@ class Join extends Component {
 
     }
   }
+
   render() {
     let join;
     if (this.context.userAuth) {
