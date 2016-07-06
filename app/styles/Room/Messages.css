@@ -3,11 +3,12 @@
 #messages {
     height:100%;
     width:100%;
+    padding-left:275px;
     padding-top:100px;
     overflow:scroll;
 }
 
 #msgContainer {
-    margin-left: 275px;
+	width:inherit;
     margin-bottom:65px;
 }
