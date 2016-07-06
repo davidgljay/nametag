@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import errorLog from '../../utils/errorLog';
 import fbase from '../../api/firebase';
+import style from '../../../styles/Room/ModActionNotif.css'
 
 class ModActionNotif extends Component {
   constructor(props) {
@@ -46,14 +47,13 @@ class ModActionNotif extends Component {
   render() {
     let callout;
     function showNorms(norm) {
-      return <li className="list-group-item" key={norm.id}>{norm.text}</li>;
+      return <li className={style.norm} key={norm.id}>{norm.text}</li>;
     }
 
     // Change callout based on whether the message is addressed to the current user.
     if (this.state.author.id === this.context.nametagId) {
       callout =
           <div>
-            <h5>Heads up</h5>
             <p>
               {this.state.mod.name} would like to remind you of the
               following norm{this.props.modAction.norms.length === 1 || 's'}:
@@ -67,18 +67,18 @@ class ModActionNotif extends Component {
         </p>;
     }
     return (
-      <tr className="modActionNotif message">
+      <tr className={style.modActionNotif}>
         <td className="icon">
           <img className="img-circle" src={this.state.mod.icon}/>
         </td>
         <td>
           {callout}
-          <ul className="list-group">
+          <ul>
             {this.props.modAction.norms.map(showNorms)}
           </ul>
           <p>Regarding the statement:</p>
-          <div className="quote well">{this.state.message}</div>
-          <div className="modNote">{this.props.modAction.note}</div>
+          <div className={style.quote}>{this.state.message}</div>
+          <div className={style.modNote}>{this.props.modAction.note}</div>
         </td>
       </tr>
       );

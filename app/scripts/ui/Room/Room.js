@@ -82,11 +82,9 @@ class Room extends Component {
                 <Nametags roomId={this.props.params.roomId} mod={this.state.room.mod}/>
               </div>
             </div>
-            <div id="chat">
               <Messages
               roomId={this.props.params.roomId}
               nametagId={this.props.NametagId}/>
-            </div>
           </div>
           <Compose
             roomId={this.props.params.roomId}
