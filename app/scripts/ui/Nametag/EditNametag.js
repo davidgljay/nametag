@@ -34,6 +34,7 @@ class EditNametag extends Component {
   }
 
   render() {
+    console.log(this.props.nametag);
     // TODO: Figure out image caching
     return this.props.connectDropTarget(<div id={style.editNametag} className="profile">
           <div className={style.form}>
@@ -57,7 +58,7 @@ class EditNametag extends Component {
                   placeholder='Why are you joining this conversation?'/>
             </div>
             <div className="certificates">
-              {this.props.nametag.certificates.map(function mapCertificates(cert) {
+              {this.props.nametag.certificates && this.props.nametag.certificates.map(function mapCertificates(cert) {
                 return <Certificate
                   certificate={cert}
                   draggable={true}
