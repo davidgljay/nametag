@@ -40,10 +40,10 @@ class Join extends Component {
 
   removeNametagCertificate(certId) {
     this.setState(function setState(prevState) {
-      //Check to prevent duplicate certificate entries;
+      // Check to prevent duplicate certificate entries;
       for (let i = prevState.nametag.certificates.length - 1; i >= 0; i--) {
         if (certId === prevState.nametag.certificates[i].id) {
-          prevState.nametag.certificates.splice(i,1);
+          prevState.nametag.certificates.splice(i, 1);
         }
       }
       return prevState;
