@@ -64,13 +64,13 @@ class Join extends Component {
   componentDidMount() {
     // TODO: Add autocomplete on click
     if (this.context.userAuth) {
-      this.setDefaults();
+      this.checkIfJoined();
     }
   }
 
   componentWillUpdate() {
-    if (this.state.defaults === undefined && this.context.userAuth) {
-      this.setDefaults();
+    if (this.state.nametag.name.length === 0 && this.context.userAuth) {
+      this.checkIfJoined();
     }
   }
 
@@ -81,7 +81,21 @@ class Join extends Component {
     }
   }
 
+  checkIfJoined() {
+    //Check to see if the user has already joined this room.
+    const userRoomRef = fbase.child('user_rooms/' + this.context.userAuth.uid + '/' + this.props.roomId);
+    userRoomRef.on('value', function onValue(value) {
+      if (value.val()) {
+        this.loadNametag(value.val().nametag_id);
+      } else {
+        this.setDefaults();
+      }
+    },errorLog("Getting user_room in Join component"),this)
+
+  }
+
   setDefaults() {
+    //Load user's default nametag settings
     const defaultsRef = fbase.child('user_defaults/' + this.context.userAuth.uid);
     defaultsRef.on('value', function setDefault(value) {
       this.setState(function setState(prevState) {
@@ -90,7 +104,23 @@ class Join extends Component {
         prevState.nametag.icon = prevState.defaults && prevState.defaults.icons ? prevState.defaults.icons[0] : '';
         return prevState;
       });
-    },this);
+    }, errorLog('Setting defaults in Join component'),this);
+  }
+
+  loadNametag(nametagId) {
+    //Load existing nametag for this room.
+    const nametagRef = fbase.child('nametags/' + this.props.roomId + '/' + nametagId);
+    return nametagRef.on('value', function onValue(value) {
+      this.setState(function setState(prevState) {
+        prevState.nametag = value.val();
+        prevState.nametagId = value.key();
+        return prevState;
+      });
+    }, errorLog("Getting nametag in Join component"), this);
+  }
+
+  updateUrl() {
+   window.location = '/#/rooms/' + this.props.roomId;
   }
 
 // TODO: Use existing nametagid if one is present.
@@ -102,19 +132,27 @@ class Join extends Component {
         'in order to join this conversation.',
       });
     } else {
-      const NametagRef = fbase.child('nametags/' + this.props.roomId);
-      NametagRef.push(this.state.nametag)
-        .then(function(nametagref) {
-          return fbase.child('user_rooms/' + self.context.userAuth.uid + '/' + self.props.roomId)
-              .set({
-                mod: false,
-                creator: false,
-                nametag_id: nametagref.key(),
-              });
-        })
-        .then(function() {
-          window.location = '/#/rooms/' + self.props.roomId;
-        }, errorLog("Joining room:"));
+      const nametagRef = fbase.child('nametags/' + this.props.roomId);
+      if (this.state.nametagId) {
+        nametagRef.child(this.state.nametagId)
+          .set(this.state.nametag)
+          .then(function() {
+            self.updateUrl();
+          }, errorLog("Joining room "), this);
+      } else {
+        nametagRef.push(this.state.nametag)
+          .then(function(nametagref) {
+            return fbase.child('user_rooms/' + this.context.userAuth.uid + '/' + this.props.roomId)
+                .set({
+                  mod: false,
+                  creator: false,
+                  nametag_id: nametagref.key(),
+                });
+          }, errorLog('Updating user room in Join component'))
+          .then(function() {
+            self.updateUrl();
+          }, errorLog('Joining room '));
+      }
 
 
     }
