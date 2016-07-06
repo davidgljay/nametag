@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import errorLog from '../../utils/errorLog';
 import fbase from '../../api/firebase';
+import style from '../../../styles/Room/Compose.css';
 
 class Compose extends Component {
   constructor(props) {
@@ -35,7 +36,7 @@ class Compose extends Component {
 
   render() {
     // TODO: Add GIFs, image upload, emoticons
-    return <form id="compose" className="input-group" onSubmit={this.post.bind(this)}>
+    return <form className={style.compose + ' input-group'} onSubmit={this.post.bind(this)}>
         <input
           type="text"
           className="form-control"
