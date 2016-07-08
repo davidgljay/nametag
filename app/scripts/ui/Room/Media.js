@@ -5,12 +5,16 @@ import style from '../../../styles/Room/Media.css';
 const Media = (props) => {
 	let media;
 	if (/youtube\.com/.exec(props.url)) {
-		media = //Youtube Embed code
+    let ytCode = /youtube\.com\/watch\?v=([a-zA-Z]+)/.exec(props.url)[1];
+    console.log(ytCode);
+    media = <div className={style.video}>
+        <iframe width='560' height='315' src={'https://www.youtube.com/embed/' + ytCode} frameborder='0' allowfullscreen/>;
+      </div>;
 	} else if (/.gif|.png|.jpg/.exec(props.url)) {
-		media = <img src={props.url} clasName={style.mediaImage}/>;
+    media = <img src={props.url} className={style.mediaImage}/>;
 	}
 
-	return <div className={style.media}>
+  return <div className={style.media}>
 			{media}
 		</div>;
 };

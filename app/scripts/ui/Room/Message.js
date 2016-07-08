@@ -62,7 +62,7 @@ class Message extends Component {
   }
 
   checkYouTube(message) {
-    return /[^ ]+youtube\.com[^ \.\!\?]+/.exec(message);
+    return /[^ ]+youtube\.com[^ \.\!]+/.exec(message);
   }
 
   checkImage(message) {
