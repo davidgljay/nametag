@@ -9,7 +9,7 @@ class RoomCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      expanded: false,
+      flipped: '',
       mod: {
         name: '',
         bio: '',
@@ -65,19 +65,42 @@ class RoomCard extends Component {
   }
 
   toggle() {
-    const self = this;
-    return function onClick() {
-      self.setState({expanded: !self.state.expanded});
-    };
+    let flipped = this.state.flipped === style.flippedFront ? style.flippedBack : style.flippedFront;
+    this.setState({flipped: flipped});
   }
 
+// TODO: Turn norms (and possibly other things) into seperate component.
   render() {
-    let details = '';
     let normkey = 0;
 
-    if (this.state.expanded) {
-      details =
-          <div className={style.expanded}>
+      return <div className={style.roomCard + ' ' + this.state.flipped}>
+          <div className={style.front}>
+            <div className={style.roomImage} onClick={this.toggle.bind(this)}>
+          <img src={this.props.room.image}/>
+          </div>
+            <div className={style.roomInfo}>
+              <div className={style.roomTime}>
+                <b>Started</b> 2 days ago | <b>Ends</b> in 1 week
+              </div>
+              <h3 onClick={this.toggle.bind(this)}>{this.props.room.title}</h3>
+              <div className={style.roomDesc}>
+                {this.props.room.description}<br/>
+                <p className={style.nametagCount}>
+                  {this.state.nametagCount} participant{this.state.nametagCount === 1 || 's'}
+                </p>
+              </div>
+              <hr></hr>
+              <Nametag
+              className={style.mod}
+                name={this.state.mod.name}
+                bio={this.state.mod.bio}
+                icon={this.state.mod.icon}
+                certificates={this.state.mod.certificates}
+                roomId={this.props.room.id}/>
+            </div>
+          </div>
+          <div className={style.back}>
+            <h3 onClick={this.toggle.bind(this)}>{this.props.room.title}</h3>
             <div className={style.norms}>
               <h4>Conversation Norms</h4>
               <ul className={style.listgroup}>
@@ -100,48 +123,8 @@ class RoomCard extends Component {
             <Join
               roomId={this.props.room.id}
               normsChecked={this.state.normsChecked}/>
-            <div className={style.chevron} onClick={this.toggle().bind(this)}>
-              <span
-                className={style.chevron + ' glyphicon glyphicon-chevron-up'}/>
-            </div>
           </div>;
-    } else {
-      details =
-          <div className={style.roomDetails}>
-            <div className={style.roomDesc}>
-              {this.props.room.description}<br/>
-              <p className={style.nametagCount}>
-                {this.state.nametagCount} participant{this.state.nametagCount === 1 || 's'}
-              </p>
-            </div>
-            <hr></hr>
-            <Nametag
-              className={style.mod}
-              name={this.state.mod.name}
-              bio={this.state.mod.bio}
-              icon={this.state.mod.icon}
-              certificates={this.state.mod.certificates}
-              roomId={this.props.room.id}/>
-          <div className={style.chevron} onClick={this.toggle().bind(this)}>
-            <span
-              className={style.chevron + ' glyphicon glyphicon-chevron-down'}/>
-          </div>
         </div>;
-    }
-
-// TODO: More elegantly handle room transitions, maybe with a card flip;
-    return <div className={style.roomCard}>
-        <div className={style.roomImage} onClick={this.toggle().bind(this)}>
-          {!this.state.expanded && <img src={this.props.room.image}/>}
-        </div>
-        <div className={style.roomInfo}>
-          <div className={style.roomTime}>
-            <b>Started</b> 2 days ago | <b>Ends</b> in 1 week
-          </div>
-          <h3 onClick={this.toggle().bind(this)}>{this.props.room.title}</h3>
-          {details}
-        </div>
-      </div>;
   }
 }
 

@@ -18,19 +18,55 @@
 .roomCard {
     margin: 10px;
     padding: 0px;
-    width: 300px;
+    width:300px;
+    height:800px;
+    display: inline-block;
+    backface-visibility: hidden;
+    vertical-align: top;
+    perspective: 1000px;
+}
+
+.flippedFront {
+    animation-name: flip-over;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    transform-style: preserve-3d;
+}
+
+.flippedBack {
+    animation-name: flip-back;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    transform-style: preserve-3d;
+}
+
+.front, .back {
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.front {
+    z-index:2;
+    width:300px;
     background: white;
     border-radius: 5px;
-    display: inline-block;
-    vertical-align: top;
+}
+
+.back {
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: center;
+    width: 300px;
+    z-index: 0;
+    border-radius: 5px;
+    background: white;
+    transform: rotateY(180deg);
 }
 
 .roomInfo {
-    vertical-align: top;
-    margin-top:10px;
-    margin-left:20px;
-    margin-right:20px;
-    width: 260px
+    padding:10px;
 }
 
 .roomCard h3 {
@@ -119,3 +155,6 @@
 .checkboxLabel {
     margin-left:10px;
 }
+
+@keyframes flip-over{ from {transform: rotateY(0deg);} to { transform: rotateY(180deg); } } 
+@keyframes flip-back{ from {transform: rotateY(180deg);} to { transform: rotateY(360deg); } } 
