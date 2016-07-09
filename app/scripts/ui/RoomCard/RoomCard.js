@@ -72,11 +72,11 @@ class RoomCard extends Component {
   }
 
   render() {
-    let joinPrompt = '';
+    let details = '';
     let normkey = 0;
 
     if (this.state.expanded) {
-      joinPrompt =
+      details =
           <div className={style.expanded}>
             <div className={style.norms}>
               <h4>Conversation Norms</h4>
@@ -104,41 +104,42 @@ class RoomCard extends Component {
               <span
                 className={style.chevron + ' glyphicon glyphicon-chevron-up'}/>
             </div>
-          </div>
+          </div>;
     } else {
-      joinPrompt =
-        <div className={style.chevron} onClick={this.toggle().bind(this)}>
-          <span
-            className={style.chevron + ' glyphicon glyphicon-chevron-down'}/>
-        </div>
+      details =
+          <div className={style.roomDetails}>
+            <div className={style.roomDesc}>
+              {this.props.room.description}<br/>
+              <p className={style.nametagCount}>
+                {this.state.nametagCount} participant{this.state.nametagCount === 1 || 's'}
+              </p>
+            </div>
+            <hr></hr>
+            <Nametag
+              className={style.mod}
+              name={this.state.mod.name}
+              bio={this.state.mod.bio}
+              icon={this.state.mod.icon}
+              certificates={this.state.mod.certificates}
+              roomId={this.props.room.id}/>
+          <div className={style.chevron} onClick={this.toggle().bind(this)}>
+            <span
+              className={style.chevron + ' glyphicon glyphicon-chevron-down'}/>
+          </div>
+        </div>;
     }
 
+// TODO: More elegantly handle room transitions, maybe with a card flip;
     return <div className={style.roomCard}>
         <div className={style.roomImage} onClick={this.toggle().bind(this)}>
-          <img src={this.props.room.image}/>
+          {!this.state.expanded && <img src={this.props.room.image}/>}
         </div>
         <div className={style.roomInfo}>
           <div className={style.roomTime}>
-            <b>started:</b> 2 days ago<br/>
-            <b>ends:</b> in 1 week
+            <b>Started</b> 2 days ago | <b>Ends</b> in 1 week
           </div>
           <h3 onClick={this.toggle().bind(this)}>{this.props.room.title}</h3>
-          <div className={style.roomDesc}>
-            {this.props.room.description}<br/>
-            <p className={style.nametagCount}>
-              {this.state.nametagCount} participant{this.state.nametagCount === 1 || 's'}
-            </p>
-          </div>
-
-          <hr></hr>
-          <Nametag
-            className={style.mod}
-            name={this.state.mod.name}
-            bio={this.state.mod.bio}
-            icon={this.state.mod.icon}
-            certificates={this.state.mod.certificates}
-            roomId={this.props.room.id}/>
-          {joinPrompt}
+          {details}
         </div>
       </div>;
   }

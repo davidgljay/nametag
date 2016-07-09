@@ -4,7 +4,7 @@
 @value bootstrap: "../../bower_components/bootstrap/dist/css/bootstrap.css";
 
 #editNametag {
-    width:270px;
+    width:250px;
     display:inline-block;
     min-height:100px;
     vertical-align: top;
@@ -12,6 +12,7 @@
     margin:5px;
     background:white;
     border-radius:6px;
+    border: 1px solid grey;
 }
 
 .nametagFields {
@@ -20,6 +21,7 @@
 
 .form {
     composes: form-group from bootstrap;
+    margin-bottom: 0px;
 }
 
 .formControl {
@@ -29,6 +31,10 @@
     background: none;   
     box-shadow:none;
     resize:none;   
+}
+
+.formControl:focus {
+    box-shadow: none;
 }
 
 .icon {

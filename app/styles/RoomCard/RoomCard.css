@@ -1,36 +1,36 @@
 /** RoomCard.css **/
 
 @value colors: "../colors.css";
-@value primary, secondary, grey, green from colors;
+@value primary, secondary, white, grey, green from colors;
 @value bootstrap: "../../bower_components/bootstrap/dist/css/bootstrap.css";
 
 .roomImage {
-    display:inline-block;
+    display:block;
     vertical-align: initial;
     cursor:pointer;
 }
 
 .roomImage img {
     border-radius:5px;
+    width:300px;
 }
 
 .roomCard {
-    margin-bottom: 30px;
+    margin: 10px;
     padding: 0px;
-    min-height: 254px;
-    width: 940px;
-    border-radius: 6px;
-    border: 2px solid primary;
-    background: secondary;
-
+    width: 300px;
+    background: white;
+    border-radius: 5px;
+    display: inline-block;
+    vertical-align: top;
 }
 
 .roomInfo {
-    display:inline-block;
     vertical-align: top;
     margin-top:10px;
     margin-left:20px;
-    width:70%;
+    margin-right:20px;
+    width: 260px
 }
 
 .roomCard h3 {
@@ -43,17 +43,11 @@
     margin-top:5px;
 }
 
-.participantCount {
-    color:primary;
-    font-size:11px;
-    font-style:italic;
-}
-
-.roomTime {
-    float:right;
+.roomTime, .nametagCount {
+    text-align:right;
     font-size: 11px;
     font-style: italic;
-    color: primary;
+    color: grey;
 }
 
 .ismod {
@@ -101,7 +95,7 @@
 
 .check {
     height:25px;
-    margin-right:20px;
+    margin-right:10px;
     color:green;
 }
 
