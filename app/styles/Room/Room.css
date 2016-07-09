@@ -2,6 +2,8 @@
 
 @value colors: "../colors.css";
 @value primary, secondary, grey, green from colors;
+@value sizes: "../sizes.css";
+@value mobile from sizes;
 
 .header {
     border-bottom: 3px solid primary;
@@ -19,7 +21,7 @@
    width:15px;
     height:15px;
     float:right;
-    margin-top:15px;
+    margin-top:15pxcd;
     font-size:12px;
     cursor: pointer;
 }
@@ -36,6 +38,12 @@
     top:0px;
     left:0px;
     z-index:50;
+}
+
+@media (mobile) {
+    #leftBar {
+        left:-260px;
+    }
 }
 
 #norms {

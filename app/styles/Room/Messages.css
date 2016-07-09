@@ -1,4 +1,6 @@
 /** Messages.css **/
+@value sizes: "../sizes.css";
+@value mobile from sizes;
 
 #messages {
     height:100%;
@@ -11,4 +13,10 @@
 #msgContainer {
 	width:inherit;
     margin-bottom:65px;
+}
+
+@media (mobile) {
+	#messages {
+		padding-left:30px;
+	}
 }
