@@ -11,6 +11,7 @@ class Message extends Component {
     this.state = {
       author: {},
       modAction: false,
+      showActions: '',
     };
   }
 
@@ -50,6 +51,11 @@ class Message extends Component {
     };
   }
 
+  toggleActions() {
+    let showActions = this.state.showActions === style.slideOutActions ? style.slideInActions : style.slideOutActions;
+    this.setState({showActions: showActions});
+  }
+
   render() {
     let icon;
     let name;
@@ -70,7 +76,11 @@ class Message extends Component {
           close={this.modAction(false)}/>;
     } else {
       below =  <div className={style.below}>
-          <div className={style.actions}>
+          <div className={style.actions + ' ' + this.state.showActions }>
+              <span
+                className={style.showActions + ' ' + style.actionIcon + ' glyphicon glyphicon-option-vertical'}
+                onClick={this.toggleActions.bind(this)}
+                aria-hidden="true"/>
               <span
                 className={style.actionIcon + ' glyphicon glyphicon-star'}
                 aria-hidden="true"/>
@@ -80,6 +90,10 @@ class Message extends Component {
               <span
                 className={style.actionIcon + ' glyphicon glyphicon-flag'}
                 onClick={this.modAction(true).bind(this)}
+                aria-hidden="true"/>
+              <span
+                className={style.hideActions + ' ' + style.actionIcon + ' glyphicon glyphicon-remove'}
+                onClick={this.toggleActions.bind(this)}
                 aria-hidden="true"/>
           </div>
           <div className={style.date}>

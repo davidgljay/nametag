@@ -1,18 +1,24 @@
 /** Message.css **/
 
+@value sizes: "../sizes.css";
+@value mobile from sizes;
+
 .message {
     padding-top:10px;
     padding-bottom:5px;
 }
 
 .messageText {
-    width: 90%;
+    width:100%;
+    font-size: 14px;
+    padding-right: 20px;
 }
 
 .icon {
     margin-right:10px;
     margin-left:25px;
     margin-top:5px;
+    width:50px;
     vertical-align: top;
 }
 
@@ -52,3 +58,66 @@
     height:22px;
     display: inline-block;
 }
+
+.actions .showActions, .actions .hideActions {
+    display: none;
+}
+
+@media (mobile) {
+    .actions {
+        height: auto;
+        float: right;
+        vertical-align: top;
+        position: relative;
+        top: -21px;
+        left: 135px; 
+        background: white;
+        border-radius: 3px;
+        padding-left: 5px      
+    }
+
+    .actions .showActions, .actions .hideActions {
+        display: inline-block;
+    }
+
+    .slideOutActions {
+        animation-name: slide-out;
+    }
+
+    .slideInActions {
+        animation-name: slide-in;
+    }
+
+    .slideOutActions, .slideInActions {
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+    }
+
+    .slideOutActions .showActions {
+        animation-name: fade-out;
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+    }
+
+    .slideInActions .showActions {
+        animation-name: fade-in;
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+    }
+
+    .actionIcon {
+        font-size:20px;
+        margin-right: 15px;
+        opacity: .5;
+    }
+
+    .slideActions .actionIcon {
+        opacity: .8;
+    }
+}
+
+/*TODO: Add cross-browser stuff */
+@keyframes slide-out { from { left:135px; } to { left:0px; }  }
+@keyframes slide-in { from { left:0px; } to { left:135px; }  }
+@keyframes fade-out { from {opacity:.5;} to {opacity:0;}}
+@keyframes fade-in { from {opacity:0;} to {opacity:.5;} }
