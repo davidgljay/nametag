@@ -1,7 +1,6 @@
 /** Navbar.css **/
 
 @value colors: "../colors.css";
-@value bootstrap: "../../bower_components/bootstrap/dist/css/bootstrap.css";
 
 h3 {
     margin-top: 0;
@@ -13,33 +12,6 @@ nav {
     background: grey from colors;
     padding-left:30px;
     padding-right:30px;
-}
-
-.navbar {
-    composes: navbar from bootstrap;
-    composes: navbar-default from bootstrap;
-}
-
-.navbrand {
-    composes: navbar-brand from bootstrap;
-}
-
-.navlist {
-    composes: nav from bootstrap;
-    composes: navbar-nav from bootstrap;
-    composes: pull-right from bootstrap;
-}
-
-.active {
-    composes: active from bootstrap;
-}
-
-.sronly {
-    composes: sr-only from bootstrap;
-}
-
-.navlink {
-    composes: navbar-link from bootstrap;
 }
 
 a {
