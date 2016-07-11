@@ -10,8 +10,8 @@ class Message extends Component {
     super(props);
     this.state = {
       author: {},
-      mouseOver: false,
       modAction: false,
+      showActions: '',
     };
   }
 
@@ -38,15 +38,6 @@ class Message extends Component {
     authorRef.off();
   }
 
-  onMouseEnter() {
-    // TODO: Figure out ok for mobile (no mouseover)
-    this.setState({mouseOver: true});
-  }
-
-  onMouseLeave() {
-    this.setState({mouseOver: false});
-  }
-
   modAction(open) {
     const self = this;
     return function onClick() {
@@ -60,6 +51,11 @@ class Message extends Component {
     };
   }
 
+  toggleActions() {
+    let showActions = this.state.showActions === style.slideOutActions ? style.slideInActions : style.slideOutActions;
+    this.setState({showActions: showActions});
+  }
+
   render() {
     let icon;
     let name;
@@ -69,23 +65,7 @@ class Message extends Component {
       name = this.state.author.name;
     }
 
-    if (this.state.mouseOver) {
-      below =
-        <div className={style.actions}>
-          <span className={style.actionIcon + ' glyphicon glyphicon-heart'}
-          aria-hidden="true"
-          onClick={this.heartAction.bind(this)}/>
-          <span
-            className={style.actionIcon + ' glyphicon glyphicon-flag'}
-            onClick={this.modAction(true).bind(this)}
-            aria-hidden="true"/>
-        </div>;
-    } else {
-      below =
-        <div className={style.date}>
-          {moment(this.props.timestamp).format('h:mm A, ddd MMM DD YYYY')}
-        </div>;
-    }
+    // TODO: Replace heart with Emoji icon and display
 
     if (this.state.modAction) {
       below =
@@ -94,12 +74,36 @@ class Message extends Component {
           msgId={this.props.id}
           author={this.state.author}
           close={this.modAction(false)}/>;
+    } else {
+      below =  <div className={style.below}>
+          <div className={style.actions + ' ' + this.state.showActions }>
+              <span
+                className={style.showActions + ' ' + style.actionIcon + ' glyphicon glyphicon-option-vertical'}
+                onClick={this.toggleActions.bind(this)}
+                aria-hidden="true"/>
+              <span
+                className={style.actionIcon + ' glyphicon glyphicon-star'}
+                aria-hidden="true"/>
+              <span className={style.actionIcon + ' glyphicon glyphicon-heart'}
+              aria-hidden="true"
+              onClick={this.heartAction.bind(this)}/>
+              <span
+                className={style.actionIcon + ' glyphicon glyphicon-flag'}
+                onClick={this.modAction(true).bind(this)}
+                aria-hidden="true"/>
+              <span
+                className={style.hideActions + ' ' + style.actionIcon + ' glyphicon glyphicon-remove'}
+                onClick={this.toggleActions.bind(this)}
+                aria-hidden="true"/>
+          </div>
+          <div className={style.date}>
+              {moment(this.props.timestamp).format('h:mm A, ddd MMM DD YYYY')}
+          </div>
+        </div>;
     }
 
     return <tr
-        className={style.message}
-        onMouseEnter={this.onMouseEnter.bind(this)}
-        onMouseLeave={this.onMouseLeave.bind(this)}>
+        className={style.message}>
         <td className={style.icon}>
           <img className="img-circle" src={icon}/>
         </td>

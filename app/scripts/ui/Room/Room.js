@@ -15,6 +15,7 @@ class Room extends Component {
         title: '',
         norms: [],
       },
+      leftBarExpanded:false,
     };
   }
 
@@ -58,9 +59,14 @@ class Room extends Component {
     window.location = '/#/rooms/';
   }
 
+  toggleLeftBar() {
+    this.setState({leftBarExpanded: !this.state.leftBarExpanded});
+  }
+
   render() {
     // TODO: Move norms to stateless object
     let room = <div>Loading</div>;
+    let expanded = this.state.leftBarExpanded ? style.expanded : style.collapsed;
 
     if (this.state.nametagId) {
       room = <div>
@@ -69,10 +75,12 @@ class Room extends Component {
                   onClick={this.closeRoom}
                   className={style.close + ' glyphicon glyphicon-remove'}/>
                 <h3>{this.state.room.title}</h3>
-              <div id={style.description}>{this.state.room.description}</div>
+              <div className={style.description}>
+                {this.state.room.description}
+              </div>
           </div>
           <div>
-            <div id={style.leftBar}>
+            <div id={style.leftBar} className={expanded}>
               <div id={style.leftBarContent}>
                 <div id={style.norms}>
                   <h4>Norms:</h4>
@@ -87,6 +95,12 @@ class Room extends Component {
                   </ul>
                 </div>
                 <Nametags roomId={this.props.params.roomId} mod={this.state.room.mod}/>
+              </div>
+              <div id={style.leftBarChevron}>
+                <span 
+                  onClick={this.toggleLeftBar.bind(this)}
+                  className={'glyphicon glyphicon-chevron-right'}
+                  />
               </div>
             </div>
               <Messages

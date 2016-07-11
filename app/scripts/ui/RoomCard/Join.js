@@ -40,10 +40,10 @@ class Join extends Component {
 
   removeNametagCertificate(certId) {
     this.setState(function setState(prevState) {
-      //Check to prevent duplicate certificate entries;
+      // Check to prevent duplicate certificate entries;
       for (let i = prevState.nametag.certificates.length - 1; i >= 0; i--) {
         if (certId === prevState.nametag.certificates[i].id) {
-          prevState.nametag.certificates.splice(i,1);
+          prevState.nametag.certificates.splice(i, 1);
         }
       }
       return prevState;
@@ -166,6 +166,11 @@ class Join extends Component {
         <div id={style.join}>
           <Alert alertType='danger' alert={this.state.alert}/>
           <h4>Write Your Nametag For This Conversation</h4>
+          <EditNametag
+            nametag={this.state.nametag}
+            updateNametag={this.updateNametag.bind(this)}
+            addNametagCertificate={this.addNametagCertificate.bind(this)}
+            removeNametagCertificate={this.removeNametagCertificate.bind(this)} />
           <div id={style.userCertificates}>
             <p className={style.userCertificateText}>
               Click to view your certificates.<br/>
@@ -173,11 +178,6 @@ class Join extends Component {
             </p>
             <UserCertificates/>
           </div>
-          <EditNametag
-            nametag={this.state.nametag}
-            updateNametag={this.updateNametag.bind(this)}
-            addNametagCertificate={this.addNametagCertificate.bind(this)}
-            removeNametagCertificate={this.removeNametagCertificate.bind(this)} />
           <br/>
           <button
             className={style.btnPrimary}

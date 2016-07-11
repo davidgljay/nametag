@@ -43,9 +43,6 @@ class RoomCards extends Component {
         <div id={style.roomCards}>
           {this.state.rooms.map(this.showRoomCard)}
         </div>
-        <div class="footer">
-          <p>♥ from all the queers</p>
-        </div>
       </div>;
   }
 }

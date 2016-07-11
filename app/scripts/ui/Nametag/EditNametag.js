@@ -50,7 +50,7 @@ class EditNametag extends Component {
                   value={this.props.nametag.name}
                   placeholder='Name'/>
                 <textarea
-                  rows="3"
+                  rows="2"
                   className={style.formControl + ' ' + style.bio}
                   id={style.participantDescription}
                   onChange={this.props.updateNametag('bio')}

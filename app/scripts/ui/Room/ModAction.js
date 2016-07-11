@@ -165,13 +165,11 @@ class ModAction extends Component {
         </p>;
     }
 
-    // TODO: Re-add visibility icons.
-
     return <div id={style.modAction}>
         {alert}
         <span
           aria-hidden="true"
-          className="glyphicon glyphicon-remove"
+          className={style.close + ' glyphicon glyphicon-remove'}
           onClick={this.props.close.bind(this)}></span>
         <h4>Remind {this.props.author.name} of Conversation Norms</h4>
         <ul className={style.norms}>

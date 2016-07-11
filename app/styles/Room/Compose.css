@@ -1,5 +1,7 @@
 /** Compose.css **/
 
+@value sizes: "../sizes.css";
+@value mobile from sizes;
 
 .compose {
     position:fixed;
@@ -15,3 +17,11 @@
     padding-right:15px;
     z-index:40;
 }
+
+@media (mobile){
+    .compose {
+        padding-left:30px;
+    }
+}
+
+
