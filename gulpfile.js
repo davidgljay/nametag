@@ -22,7 +22,7 @@ var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 
 // Styles
-gulp.task('styles', ['moveIcons','css-modules']);
+gulp.task('styles', ['css-modules']);
 
 gulp.task('moveCss',['clean'], function(){
   // the base option sets the relative root for the set of files,
@@ -131,7 +131,7 @@ gulp.task('fonts', function() {
 // Clean
 gulp.task('clean', function(cb) {
     $.cache.clearAll();
-    cb(del.sync(['dist/styles', 'dist/scripts', 'dist/images', 'dist/icons']));
+    cb(del.sync(['dist/styles/*', 'dist/scripts/*', 'dist/images/*', 'dist/icons/*']));
 });
 
 // Bundle

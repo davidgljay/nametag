@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import moment from '../../../bower_components/moment/moment';
 import ModAction from './ModAction';
+import Media from './Media';
 import errorLog from '../../utils/errorLog';
 import fbase from '../../api/firebase';
 import style from '../../../styles/Room/Message.css';
@@ -51,21 +52,57 @@ class Message extends Component {
     };
   }
 
+<<<<<<< HEAD
   toggleActions() {
     let showActions = this.state.showActions === style.slideOutActions ? style.slideInActions : style.slideOutActions;
     this.setState({showActions: showActions});
+=======
+  checkYouTube(message) {
+    return /[^ ]+youtube\.com[^ \.\!]+/.exec(message);
+  }
+
+  checkImage(message) {
+    return /[^ ]+(\.gif|\.jpg|\.png)/.exec(message);
+>>>>>>> feature-chat-emojis
   }
 
   render() {
     let icon;
     let name;
     let below;
+    let media;
     if (this.state.author) {
       icon = this.state.author.icon;
       name = this.state.author.name;
     }
 
+<<<<<<< HEAD
     // TODO: Replace heart with Emoji icon and display
+=======
+    if (this.checkYouTube(this.props.text)) {
+      media = <Media url={this.checkYouTube(this.props.text)[0]}/>;
+    } else if (this.checkImage(this.props.text)) {
+      media = <Media url={this.checkImage(this.props.text)[0]}/>;
+    }
+
+    if (this.state.mouseOver) {
+      below =
+        <div className={style.actions}>
+          <span className={style.actionIcon + ' glyphicon glyphicon-heart'}
+          aria-hidden="true"
+          onClick={this.heartAction.bind(this)}/>
+          <span
+            className={style.actionIcon + ' glyphicon glyphicon-flag'}
+            onClick={this.modAction(true).bind(this)}
+            aria-hidden="true"/>
+        </div>;
+    } else {
+      below =
+        <div className={style.date}>
+          {moment(this.props.timestamp).format('h:mm A, ddd MMM DD YYYY')}
+        </div>;
+    }
+>>>>>>> feature-chat-emojis
 
     if (this.state.modAction) {
       below =
@@ -110,6 +147,7 @@ class Message extends Component {
         <td className={style.messageText}>
           <div className={style.name}>{name}</div>
           <div className={style.text}>{this.props.text}</div>
+          {media}
           {below}
           <div className={style.msgPadding}></div>
         </td>

@@ -9,9 +9,16 @@
 }
 
 .messageText {
+<<<<<<< HEAD
     width:100%;
     font-size: 14px;
     padding-right: 20px;
+=======
+    width: 90%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+>>>>>>> feature-chat-emojis
 }
 
 .icon {
