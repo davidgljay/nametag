@@ -139,11 +139,11 @@ class Join extends Component {
           .set(this.state.nametag)
           .then(function() {
             self.updateUrl();
-          }, errorLog("Joining room "), this);
+          }, errorLog("Joining room "));
       } else {
         nametagRef.push(this.state.nametag)
           .then(function(nametagref) {
-            return fbase.child('user_rooms/' + this.context.userAuth.uid + '/' + this.props.roomId)
+            return fbase.child('user_rooms/' + self.context.userAuth.uid + '/' + self.props.roomId)
                 .set({
                   mod: false,
                   creator: false,
