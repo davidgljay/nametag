@@ -52,18 +52,17 @@ class Message extends Component {
     };
   }
 
-<<<<<<< HEAD
   toggleActions() {
     let showActions = this.state.showActions === style.slideOutActions ? style.slideInActions : style.slideOutActions;
     this.setState({showActions: showActions});
-=======
+  }
+
   checkYouTube(message) {
     return /[^ ]+youtube\.com[^ \.\!]+/.exec(message);
   }
 
   checkImage(message) {
     return /[^ ]+(\.gif|\.jpg|\.png)/.exec(message);
->>>>>>> feature-chat-emojis
   }
 
   render() {
@@ -76,33 +75,14 @@ class Message extends Component {
       name = this.state.author.name;
     }
 
-<<<<<<< HEAD
+
     // TODO: Replace heart with Emoji icon and display
-=======
+
     if (this.checkYouTube(this.props.text)) {
       media = <Media url={this.checkYouTube(this.props.text)[0]}/>;
     } else if (this.checkImage(this.props.text)) {
       media = <Media url={this.checkImage(this.props.text)[0]}/>;
     }
-
-    if (this.state.mouseOver) {
-      below =
-        <div className={style.actions}>
-          <span className={style.actionIcon + ' glyphicon glyphicon-heart'}
-          aria-hidden="true"
-          onClick={this.heartAction.bind(this)}/>
-          <span
-            className={style.actionIcon + ' glyphicon glyphicon-flag'}
-            onClick={this.modAction(true).bind(this)}
-            aria-hidden="true"/>
-        </div>;
-    } else {
-      below =
-        <div className={style.date}>
-          {moment(this.props.timestamp).format('h:mm A, ddd MMM DD YYYY')}
-        </div>;
-    }
->>>>>>> feature-chat-emojis
 
     if (this.state.modAction) {
       below =
@@ -129,7 +109,7 @@ class Message extends Component {
                 onClick={this.modAction(true).bind(this)}
                 aria-hidden="true"/>
               <span
-                className={style.hideActions + ' ' + style.actionIcon + ' glyphicon glyphicon-remove'}
+                className={style.hideActions + ' ' + style.actionIcon + ' glyphicon glyphicon-chevron-right'}
                 onClick={this.toggleActions.bind(this)}
                 aria-hidden="true"/>
           </div>

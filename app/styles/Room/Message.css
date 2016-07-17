@@ -9,24 +9,24 @@
 }
 
 .messageText {
-<<<<<<< HEAD
     width:100%;
     font-size: 14px;
     padding-right: 20px;
-=======
-    width: 90%;
     overflow-wrap: break-word;
     word-wrap: break-word;
     word-break: break-word;
->>>>>>> feature-chat-emojis
 }
 
 .icon {
-    margin-right:10px;
-    margin-left:25px;
-    margin-top:5px;
-    width:50px;
+    padding-right: 10px;
+    padding-left: 25px;
+    padding-top: 5px;
+    min-width:50px;
     vertical-align: top;
+}
+
+.icon img {
+    width:50px;
 }
 
 .actionIcon {
@@ -77,10 +77,10 @@
         vertical-align: top;
         position: relative;
         top: -21px;
-        left: 135px; 
+        left: 170px; 
         background: white;
         border-radius: 3px;
-        padding-left: 5px      
+        padding: 5px; 
     }
 
     .actions .showActions, .actions .hideActions {
@@ -124,7 +124,7 @@
 }
 
 /*TODO: Add cross-browser stuff */
-@keyframes slide-out { from { left:135px; } to { left:0px; }  }
-@keyframes slide-in { from { left:0px; } to { left:135px; }  }
+@keyframes slide-out { from { left:170px; } to { left:0px; }  }
+@keyframes slide-in { from { left:0px; } to { left:170px; }  }
 @keyframes fade-out { from {opacity:.5;} to {opacity:0;}}
 @keyframes fade-in { from {opacity:0;} to {opacity:.5;} }
