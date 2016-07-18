@@ -19,21 +19,21 @@
     margin: 10px;
     padding: 0px;
     width:300px;
-    height:800px;
+    height:700px;
     display: inline-block;
     backface-visibility: hidden;
     vertical-align: top;
     perspective: 1000px;
 }
 
-.flippedFront {
+.flippingFront {
     animation-name: flip-over;
     animation-duration: 1s;
     animation-fill-mode: forwards;
     transform-style: preserve-3d;
 }
 
-.flippedBack {
+.flippingBack {
     animation-name: flip-back;
     animation-duration: 1s;
     animation-fill-mode: forwards;
@@ -61,7 +61,10 @@
     z-index: 0;
     border-radius: 5px;
     background: white;
-    transform: rotateY(180deg);
+}
+
+.flippingFront .back, .flippingBack .back{
+    transform:rotateY(180deg);
 }
 
 .roomInfo {

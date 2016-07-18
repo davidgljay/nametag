@@ -9,7 +9,8 @@ class RoomCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      flipped: '',
+      flipped: false,
+      flipping: false,
       mod: {
         name: '',
         bio: '',
@@ -65,17 +66,26 @@ class RoomCard extends Component {
   }
 
   toggle() {
-    let flipped = this.state.flipped === style.flippedFront ? style.flippedBack : style.flippedFront;
-    this.setState({flipped: flipped});
+
+    this.setState({flipped: !this.state.flipped});
+
+    //Set as flipping for as long as the animation is running.
+    //TODO: find a way to tie this to a consistent constant.
+    this.setState({flipping:true});
+    setTimeout(
+      function() {
+        this.setState({flipping:false});
+      }.bind(this), 1000);
   }
 
 // TODO: Turn norms (and possibly other things) into seperate component.
   render() {
     let normkey = 0;
+    let card;
+    let flipping = '';
 
-      return <div className={style.roomCard + ' ' + this.state.flipped}>
-          <div className={style.front}>
-            <div className={style.roomImage} onClick={this.toggle.bind(this)}>
+    let front =  <div className={style.front}>
+            <div key='front' className={style.roomImage} onClick={this.toggle.bind(this)}>
           <img src={this.props.room.image}/>
           </div>
             <div className={style.roomInfo}>
@@ -99,7 +109,8 @@ class RoomCard extends Component {
                 roomId={this.props.room.id}/>
             </div>
           </div>
-          <div className={style.back}>
+
+      let back = <div key='back' className={style.back}>
             <h3 onClick={this.toggle.bind(this)}>{this.props.room.title}</h3>
             <div className={style.norms}>
               <h4>Conversation Norms</h4>
@@ -124,6 +135,20 @@ class RoomCard extends Component {
               roomId={this.props.room.id}
               normsChecked={this.state.normsChecked}/>
           </div>;
+
+      //Show both front and back only if the card is flipping
+      //Otherwise only show the active part of the card.
+      //This is to prevent errors in some browsers (like Chrome.)
+
+      if (this.state.flipping) {
+        card = [front, back];
+        flipping = this.state.flipped ? style.flippingFront : style.flippingBack;
+      } else {
+        card = this.state.flipped ? back : front;
+      }
+
+      return <div className={style.roomCard + ' ' + flipping}>
+          {card}
         </div>;
   }
 }
