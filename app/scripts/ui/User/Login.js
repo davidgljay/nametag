@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import errorLog from '../../utils/errorLog';
 import fbase from '../../api/firebase';
 import style from '../../../styles/User/Login.css';
-
+import https from 'https';
 
 /* Function to Log in users via an auth provider or e-mail.
 
@@ -60,7 +60,7 @@ class Login extends Component {
       );
     }
     // //TODO: copy profile image to s3
-    // defaultsRef.child('icons').push(userinfo[userinfo.provider].profileImageURL);
+    this.addProfileImage(userinfo[userinfo.provider].profileImageURL);
 
     this.context.checkAuth();
   }
@@ -85,6 +85,46 @@ class Login extends Component {
       return currentData;
     });
   }
+
+  addProfileImage(url) {
+    let postData = {
+      url: url,
+      sizes: [
+        {
+          width: 50,
+          height: 50,
+        },
+        {
+          width:300,
+          height: 300,
+        }
+      ],
+    };
+    let options = {
+      hostname: 'cl3z6j4irk.execute-api.us-east-1.amazonaws.com',
+      path: '/prod/user_icon',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(postData),
+      },
+    };
+    let buffer = [];
+    console.log("resizing image");
+
+    let req = https.request(options, function(res) {
+      if (res.responseCode  === 200) {
+        res.on("data", function(data) {
+          buffer.push(data);
+        });
+      }
+    });
+    req.write(JSON.stringify(postData));
+
+    req.on("end", function() {
+      console.log(new Buffer.concat(buffer).toString);
+    });
+  };
 
   providerAuth(provider) {
     let self = this;
