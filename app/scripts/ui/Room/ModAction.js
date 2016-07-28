@@ -150,7 +150,7 @@ class ModAction extends Component {
         <p>
           <span
             aria-hidden="true"
-            className="glyphicon glyphicon-eye-open">
+            className={style.visIcon + 'glyphicon glyphicon-eye-open'}>
           </span>
           Visible to everyone in the room.
         </p>;
@@ -159,7 +159,7 @@ class ModAction extends Component {
         <p>
           <span
           aria-hidden="true"
-          className="glyphicon glyphicon-eye-close">
+          className={style.visIcon + 'glyphicon glyphicon-eye-close'}>
           </span>
           Visible only to the author of this message.
         </p>;
