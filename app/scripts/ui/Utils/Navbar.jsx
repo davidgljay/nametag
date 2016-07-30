@@ -1,12 +1,12 @@
-import React from 'react';
-import style from '../../../styles/Utils/Navbar.css';
+import React from 'react'
+import style from '../../../styles/Utils/Navbar.css'
 
 const Navbar = (props) => {
-  let login;
+  let login
   if (props.userAuth) {
-    login = <a className='navbar-link' onClick={props.unAuth}>Log out</a>;
+    login = <a className='navbar-link' onClick={props.unAuth}>Log out</a>
   } else {
-    login = <a className='navbar-link' href='#'>Log In</a>;
+    login = <a className='navbar-link' href='#'>Log In</a>
   }
 
   return <nav className='navbar navbar-default'>
@@ -28,7 +28,7 @@ const Navbar = (props) => {
           {login}
         </li>
       </ul>
-    </nav>;
-};
+    </nav>
+}
 
-export default Navbar;
+export default Navbar

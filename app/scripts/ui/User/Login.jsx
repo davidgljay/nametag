@@ -1,8 +1,8 @@
-import React, { Component, PropTypes } from 'react';
-import errorLog from '../../utils/errorLog';
-import fbase from '../../api/firebase';
-import style from '../../../styles/User/Login.css';
-import https from 'https';
+import React, { Component, PropTypes } from 'react'
+import errorLog from '../../utils/errorLog'
+import fbase from '../../api/firebase'
+import style from '../../../styles/User/Login.css'
+import https from 'https'
 
 /* Function to Log in users via an auth provider or e-mail.
 
@@ -20,70 +20,70 @@ TODO: Handle login if twitter is already activated
 
 class Login extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       showEmail: false,
-    };
+    }
   }
 
   createUser(userinfo) {
-    const fbref = fbase.child('users/' + userinfo.uid);
-    const defaultsRef = fbase.child('user_defaults/' + userinfo.uid);
+    const fbref = fbase.child('users/' + userinfo.uid)
+    const defaultsRef = fbase.child('user_defaults/' + userinfo.uid)
 
-    fbref.child(userinfo.provider).set(userinfo[userinfo.provider].cachedUserProfile);
+    fbref.child(userinfo.provider).set(userinfo[userinfo.provider].cachedUserProfile)
     this.addIfUniq(
         defaultsRef,
         'icons',
         userinfo[userinfo.provider].profileImageURL
-      );
+      )
     if ( userinfo.provider === 'facebook') {
       this.addIfUniq(
         defaultsRef,
         'names',
-        userinfo[userinfo.provider].cachedUserProfile.name);
+        userinfo[userinfo.provider].cachedUserProfile.name)
     }
     if (userinfo.provider === 'twitter') {
       this.addIfUniq(
         defaultsRef,
         'names',
         userinfo[userinfo.provider].cachedUserProfile.displayName
-      );
+      )
       this.addIfUniq(
         defaultsRef,
         'bios',
         userinfo[userinfo.provider].cachedUserProfile.description
-      );
+      )
       this.addIfUniq(
         defaultsRef,
         'names',
         userinfo[userinfo.provider].username
-      );
+      )
     }
     // //TODO: copy profile image to s3
-    this.addProfileImage(userinfo[userinfo.provider].profileImageURL);
+    this.addProfileImage(userinfo[userinfo.provider].profileImageURL)
 
-    this.context.checkAuth();
+    this.context.checkAuth()
   }
 
   addIfUniq(ref, child, data) {
     if (!data) {
-      return;
+      return
     }
     ref.child(child).transaction(function transaction(currentData) {
-      let uniq = true;
+      let uniq = true
       if (currentData === null) {
-        return [data];
+        return [data]
       }
       for (let key in currentData) {
         if (currentData[key] === data) {
-          uniq = false;
+          uniq = false
         }
       }
       if (uniq) {
-        currentData.push(data);
+        currentData.push(data)
       }
-      return currentData;
-    });
+      return currentData
+    })
   }
 
   addProfileImage(url) {
@@ -99,7 +99,7 @@ class Login extends Component {
           height: 300,
         }
       ],
-    };
+    }
     let options = {
       hostname: 'cl3z6j4irk.execute-api.us-east-1.amazonaws.com',
       path: '/prod/user_icon',
@@ -108,30 +108,30 @@ class Login extends Component {
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(postData),
       },
-    };
-    let buffer = [];
-    console.log("resizing image");
+    }
+    let buffer = []
+    console.log("resizing image")
 
     let req = https.request(options, function(res) {
       if (res.responseCode  === 200) {
         res.on("data", function(data) {
-          buffer.push(data);
-        });
+          buffer.push(data)
+        })
       }
-    });
-    req.write(JSON.stringify(postData));
+    })
+    req.write(JSON.stringify(postData))
 
     req.on("end", function() {
-      console.log(new Buffer.concat(buffer).toString);
-    });
-  };
+      console.log(new Buffer.concat(buffer).toString)
+    })
+  }
 
   providerAuth(provider) {
-    let self = this;
+    let self = this
     return function onClick() {
       fbase.authWithOAuthPopup(provider)
-        .then(self.createUser.bind(self), errorLog('Error creating user'));
-    };
+        .then(self.createUser.bind(self), errorLog('Error creating user'))
+    }
   }
 
   render() {
@@ -151,11 +151,11 @@ class Login extends Component {
           src="./images/tumblr.png"
           className={style.loginOption + ' img-circle'}
           onClick={this.providerAuth('tumblr').bind(this)}/>
-      </div>;
+      </div>
   }
 }
 
-Login.propTypes = {checkLogin: PropTypes.func};
-Login.contextTypes = {checkAuth: PropTypes.func};
+Login.propTypes = {checkLogin: PropTypes.func}
+Login.contextTypes = {checkAuth: PropTypes.func}
 
-export default Login;
+export default Login

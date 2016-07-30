@@ -1,11 +1,16 @@
-import React, { Component, PropTypes } from 'react';
-import errorLog from '../../utils/errorLog';
-import Alert from '../Utils/Alert';
-import fbase from '../../api/firebase';
+import React, { Component, PropTypes } from 'react'
+
+import errorLog from '../../utils/errorLog'
+
+import Alert from '../Utils/Alert'
+
+import fbase from '../../api/firebase'
+
 
 class CreateRoom extends Component {
   constructor(props) {
-    super(props);
+    super(props)
+    
     this.state = {
       room: {
         title: '',
@@ -21,16 +26,22 @@ class CreateRoom extends Component {
       },
       alert='',
       alertType='',
-    };
+    }
+    
   }
 
   postRoom() {
-    const roomsRef = fbase.child('rooms/');
-    const roomId = roomsRef.push(this.state.room);
-    const modRef = fbase.child('participants/' + roomId);
-    const modId = modRef.push(this.state.mod);
+    const roomsRef = fbase.child('rooms/')
+    
+    const roomId = roomsRef.push(this.state.room)
+    
+    const modRef = fbase.child('participants/' + roomId)
+    
+    const modId = modRef.push(this.state.mod)
+    
 
-    roomsRef.child(roomId + '/mod').set(modId);
+    roomsRef.child(roomId + '/mod').set(modId)
+    
 
     // TODO:Create confirmation of post.
   }
@@ -60,4 +71,4 @@ class CreateRoom extends Component {
         </div>
       )
   }
-};
+}
