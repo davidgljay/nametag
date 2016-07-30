@@ -26,7 +26,7 @@ class Join extends Component {
     this.setState(function setState(prevState) {
       let unique = true
       // Check to prevent duplicate certificate entries
-      for (let i = prevState.nametag.certificates.length - 1 i >= 0 i--) {
+      for (let i = prevState.nametag.certificates.length - 1; i >= 0; i--) {
         if (cert.id === prevState.nametag.certificates[i].id) {
           unique = false
         }
@@ -41,7 +41,7 @@ class Join extends Component {
   removeNametagCertificate(certId) {
     this.setState(function setState(prevState) {
       // Check to prevent duplicate certificate entries
-      for (let i = prevState.nametag.certificates.length - 1 i >= 0 i--) {
+      for (let i = prevState.nametag.certificates.length - 1; i >= 0; i--) {
         if (certId === prevState.nametag.certificates[i].id) {
           prevState.nametag.certificates.splice(i, 1)
         }

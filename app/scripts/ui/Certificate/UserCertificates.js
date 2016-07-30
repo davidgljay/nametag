@@ -34,7 +34,7 @@ class UserCertificates extends Component {
   componentWillUnmount() {
     const usercertificateRef = fbase.child('/user_certificates/' + this.context.userAuth.uid)
     const certificateRef = fbase.child('certificates')
-    for (let i = 0 i < this.state.certificates.length i++) {
+    for (let i = 0; i < this.state.certificates.length; i++) {
       certificateRef.child(this.state.certificates[i].id)
          .off('value')
     }

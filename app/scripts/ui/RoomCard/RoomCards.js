@@ -6,6 +6,7 @@ import errorLog from '../../utils/errorLog'
 import Navbar from '../Utils/Navbar'
 import fbase from '../../api/firebase'
 import style from '../../../styles/RoomCard/RoomCards.css'
+import RoomCardActions from '../../actions/RoomCard/RoomCard'
 
 
 class RoomCards extends Component {

@@ -51,7 +51,7 @@ class RoomCard extends Component {
     const modRef = fbase.child('nametags/' + this.props.room.mod)
     modRef.off('value')
 
-    for (let i = this.props.room.mod_badges.length - 1 i >= 0 i--) {
+    for (let i = this.props.room.mod_badges.length - 1; i >= 0; i--) {
       const badgeRef = fbase.child('badges/' + this.props.room.mod_badges[i])
       badgeRef.off('value')
     }
