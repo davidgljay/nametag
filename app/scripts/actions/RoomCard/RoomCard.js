@@ -1,22 +1,27 @@
 import fbase from '../../api/firebase'
 
-// Meet our first thunk action creator!
-// Though its insides are different, you would use it just like any other action creator:
-// store.dispatch(fetchPosts('reactjs'))
+/*
+* Subscribe to a list of RoomCards
+*
+* @params
+*    none
+* TODO: add params for filtering and search
+*
+* @returns
+*    Promise
+*/
 export function subscribe() {
-  return function subscribeAction(dispatch) {
-    // The function called by the thunk middleware can return a value,
-    // that is passed on as the return value of the dispatch method.
-
-    // In this case, we return a promise to wait for.
-    // This is not required by thunk middleware, but it is convenient for us.
-
+  return function(dispatch) {
     return fbase.on('value', function onValue(value) {
       console.log('Got value')
-      console.log(value)
+      console.log(value.val())
     })
+    // TODO:Add error handling
+  }
+}
 
-      // In a real world app, you also want to
-      // catch any error in the network call.
+export function unsubscribe() {
+  return function(dispatch) {
+    return fbase.off('value')
   }
 }
