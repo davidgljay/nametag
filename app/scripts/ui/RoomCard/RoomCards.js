@@ -5,8 +5,7 @@ import RoomCard from './RoomCard'
 import errorLog from '../../utils/errorLog'
 import Navbar from '../Utils/Navbar'
 import fbase from '../../api/firebase'
-import style from '../../../styles/RoomCard/RoomCards.css'
-import RoomCardActions from '../../actions/RoomCard/RoomCard'
+import style from '../../../styles/RoomCard/RoomCards'
 
 
 class RoomCards extends Component {
@@ -16,6 +15,8 @@ class RoomCards extends Component {
   }
 
   componentDidMount() {
+    this.props.subscribe()
+
     let self = this
     const roomsRef = fbase.child('rooms')
     roomsRef.on('child_added', function onChildAdded(value) {
@@ -29,6 +30,7 @@ class RoomCards extends Component {
   }
 
   componentWillUnmount() {
+    this.props.unsubscribe()
     const roomsRef = fbase.child('rooms')
     roomsRef.off('child_added')
   }
@@ -40,9 +42,9 @@ class RoomCards extends Component {
   }
 
   render() {
-    return <div id={style.roomSelection}>
+    return <div style={style.roomSelection}>
         <Navbar userAuth={this.context.userAuth} unAuth={this.context.unAuth}/>
-        <div id={style.roomCards}>
+        <div style={style.roomCards}>
           {this.state.rooms.map(this.showRoomCard)}
         </div>
       </div>
