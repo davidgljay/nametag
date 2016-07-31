@@ -27,6 +27,7 @@ class Nametag extends Component {
         <img src={this.props.icon} alt={this.props.name} className={style.icon + ' img-circle'}/>
         <div className={style.name}>{this.props.name}</div>
         <div className={style.bio}>{this.props.bio}</div>
+        <Certificates certificates={this.props.certificates} />
       </div>
   }
 }

@@ -8,7 +8,7 @@ const Norms = (props) => {
     norms =
 		<ul className={style.norms + ' list-group'}>
             {props.norms.map(function(norm) {
-              normkey++;
+              normkey++
               return (
                 <li key={normkey} className="list-group-item">
                   <span

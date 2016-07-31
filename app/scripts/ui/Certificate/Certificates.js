@@ -5,13 +5,11 @@ import Certificate from './Certificate'
 //TODO: Change to Certificates
 
 class Certificates extends Component {
-  constructor(props) {
-    super(props)
-  }
 
   render() {
+    let certificates = this.props.certificates || []
     return <div id="certificates">
-           {this.props.certificates.map(function mapCertificates(certificate) {
+           {certificates.map(function mapCertificates(certificate) {
              return <Certificate certificate={certificate} key={certificate.id} draggable={false}/>
            })}
         </div>
