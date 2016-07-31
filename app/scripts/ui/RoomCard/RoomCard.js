@@ -84,7 +84,8 @@ class RoomCard extends Component {
               <Nametag
               className={style.mod}
                 roomId={this.props.id}
-                id={this.props.room.mod} />
+                id={this.props.room.mod}
+                mod={this.props.room.mod} />
             </div>
           </div>
 

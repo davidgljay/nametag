@@ -32,8 +32,8 @@ class Nametag extends Component {
 }
 
 Nametag.propTypes = {
-  id: PropTypes.string,
-  roomId: PropTypes.string,
+  id: PropTypes.string.isRequired,
+  roomId: PropTypes.string.isRequired,
 }
 
 export default Nametag
