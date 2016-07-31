@@ -1,6 +1,6 @@
-import fbase from '../../api/firebase'
-import errorLog from '../../utils/errorLog'
-import constants from '../../constants'
+import fbase from '../api/firebase'
+import errorLog from '../utils/errorLog'
+import constants from '../constants'
 
 export const addRoom = (room, key) => {
   return {
@@ -23,10 +23,8 @@ export const addRoom = (room, key) => {
 export function subscribe() {
   return function(dispatch) {
     return fbase.child('rooms').on('child_added', function onValue(value) {
-      console.log(value.val())
       dispatch(addRoom(value.val(), value.key()))
     }, errorLog('Error subscribing to RoomCards'))
-    // TODO:Add error handling
   }
 }
 
