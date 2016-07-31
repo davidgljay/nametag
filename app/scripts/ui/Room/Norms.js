@@ -1,9 +1,9 @@
-import React from 'react';
-import style from '../../../styles/Room/Norms.css';
+import React from 'react'
+import style from '../../../styles/Room/Norms.css'
 
 const Norms = (props) => {
-  let norms = null;
-  let normkey = 0;
+  let norms = null
+  let normkey = 0
   if (props.norms) {
     norms =
 		<ul className={style.norms + ' listgroup'}>
@@ -15,11 +15,11 @@ const Norms = (props) => {
                     className={style.check + ' glyphicon + glyphicon-ok'}/>
                   {norm}
                 </li>
-                );
+                )
             })}
-          </ul>;
+          </ul>
   }
-  return norms;
-};
+  return norms
+}
 
-export default Norms;
+export default Norms

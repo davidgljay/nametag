@@ -22,7 +22,7 @@ class RoomCards extends Component {
       if (!rooms.hasOwnProperty(id)) {
         continue
       }
-      roomCards.push(<RoomCard room={rooms[id]} key={id}/>)
+      roomCards.push(<RoomCard room={rooms[id]} id={id} key={id}/>)
     }
     return roomCards
   }
