@@ -43,7 +43,7 @@ export function subscribe() {
 *    none
 *
 * @returns
-*    Promise
+*    none
 */
 export function unsubscribe(rooms) {
   return function() {
@@ -68,7 +68,6 @@ export function unsubscribe(rooms) {
 *    Promise
 */
 export function getNametagCount(roomId) {
-  console.log('Getting nametag count for:' + roomId)
   return function(dispatch) {
     return fbase.child('nametags').child(roomId).on('child_added', function() {
       dispatch(incrementRoomNametagCount(roomId))

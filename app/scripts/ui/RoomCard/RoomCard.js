@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import Nametag from '../Nametag/Nametag'
+import Nametag from '../../containers/Nametag/Nametag'
 import Norms from '../Room/Norms'
 import Join from './Join'
 import errorLog from '../../utils/errorLog'
@@ -83,11 +83,8 @@ class RoomCard extends Component {
               <hr></hr>
               <Nametag
               className={style.mod}
-                name={this.state.mod.name}
-                bio={this.state.mod.bio}
-                icon={this.state.mod.icon}
-                certificates={this.state.mod.certificates}
-                roomId={this.props.room.id}/>
+                roomId={this.props.id}
+                id={this.props.room.mod} />
             </div>
           </div>
 
