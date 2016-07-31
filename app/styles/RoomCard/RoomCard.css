@@ -2,7 +2,6 @@
 
 @value colors: "../colors.css";
 @value primary, secondary, white, grey, green from colors;
-@value bootstrap: "../../bower_components/bootstrap/dist/css/bootstrap.css";
 
 .roomImage {
     display:block;
@@ -144,14 +143,6 @@
     color:primary;
     fill:primary;
     cursor:pointer;
-}
-
-.listgroup {
-    composes: list-group from bootstrap;
-}
-
-.listitem {
-    composes: list-group-item from bootstrap;
 }
 
 .checkboxLabel {
