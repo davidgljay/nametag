@@ -13,42 +13,17 @@ class RoomCard extends Component {
     this.state = {
       flipped: false,
       flipping: false,
-      //Set in seperate component
-      mod: {
-        name: '',
-        bio: '',
-        icon: '',
-        certificates: [],
-      },
       normsChecked: false,
       //Set in container ? 
       login: fbase.getAuth(),
     }
   }
 
-  componentDidMount() {
-    let self = this
-
-    const modRef = fbase.child('nametags/' +
-     this.props.id + '/' + this.props.room.mod)
-
-    modRef.on('value', function onValue(value) {
-      let modInfo = value.val()
-      modInfo.nametagId = value.key()
-      self.setState({mod: modInfo})
-    }, errorLog('Error getting mod info in room card'))
-  }
-
-  componentWillUnmount() {
-    const modRef = fbase.child('nametags/' + this.props.room.mod)
-    modRef.off('value')
-  }
-
   onNormsCheck(e) {
     this.setState({normsChecked: e.target.checked})
   }
 
-  toggle() {
+  flip() {
     this.setState({flipped: !this.state.flipped})
 
     //Set as flipping for as long as the animation is running.
@@ -66,14 +41,14 @@ class RoomCard extends Component {
     let flipping = ''
 
     let front =  <div className={style.front}>
-            <div key='front' className={style.roomImage} onClick={this.toggle.bind(this)}>
+            <div key='front' className={style.roomImage} onClick={this.flip.bind(this)}>
           <img src={this.props.room.image}/>
           </div>
             <div className={style.roomInfo}>
               <div className={style.roomTime}>
                 <b>Started</b> 2 days ago | <b>Ends</b> in 1 week
               </div>
-              <h3 onClick={this.toggle.bind(this)}>{this.props.room.title}</h3>
+              <h3 onClick={this.flip.bind(this)}>{this.props.room.title}</h3>
               <div className={style.roomDesc}>
                 {this.props.room.description}<br/>
                 <p className={style.nametagCount}>
@@ -90,7 +65,7 @@ class RoomCard extends Component {
           </div>
 
       let back = <div key='back' className={style.back}>
-            <h3 onClick={this.toggle.bind(this)}>{this.props.room.title}</h3>
+            <h3 onClick={this.flip.bind(this)}>{this.props.room.title}</h3>
             <div className={style.norms}>
               <h4>Conversation Norms</h4>
               <Norms norms={this.props.room.norms} />
@@ -100,7 +75,7 @@ class RoomCard extends Component {
               </label>
             </div>
             <Join
-              roomId={this.props.room.id}
+              roomId={this.props.id}
               normsChecked={this.state.normsChecked}/>
           </div>
 
@@ -121,6 +96,9 @@ class RoomCard extends Component {
   }
 }
 
- RoomCard.propTypes = {room: PropTypes.object}
+ RoomCard.propTypes = {
+  room: PropTypes.object
+  id: PropTypes.string
+}
 
  export default RoomCard
