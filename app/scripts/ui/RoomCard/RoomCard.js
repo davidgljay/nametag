@@ -2,8 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import Nametag from '../../containers/Nametag/Nametag'
 import Norms from '../Room/Norms'
 import Join from './Join'
-import errorLog from '../../utils/errorLog'
-import fbase from '../../api/firebase'
 import style from '../../../styles/RoomCard/RoomCard.css'
 import constants from '../../constants'
 
@@ -14,7 +12,6 @@ class RoomCard extends Component {
       flipped: false,
       flipping: false,
       normsChecked: false,
-      //Set in container ? 
       login: fbase.getAuth(),
     }
   }
@@ -36,7 +33,6 @@ class RoomCard extends Component {
 
 // TODO: Turn norms (and possibly other things) into seperate component.
   render() {
-    let normkey = 0
     let card
     let flipping = ''
 
@@ -64,41 +60,41 @@ class RoomCard extends Component {
             </div>
           </div>
 
-      let back = <div key='back' className={style.back}>
-            <h3 onClick={this.flip.bind(this)}>{this.props.room.title}</h3>
-            <div className={style.norms}>
-              <h4>Conversation Norms</h4>
-              <Norms norms={this.props.room.norms} />
-              <label class={style.checkbox}>
-                <input type="checkbox" onClick={this.onNormsCheck.bind(this)}/>
-                <span className={style.checkboxLabel} >I agree to abide by these norms</span>
-              </label>
-            </div>
-            <Join
-              roomId={this.props.id}
-              normsChecked={this.state.normsChecked}/>
+    let back = <div key='back' className={style.back}>
+          <h3 onClick={this.flip.bind(this)}>{this.props.room.title}</h3>
+          <div className={style.norms}>
+            <h4>Conversation Norms</h4>
+            <Norms norms={this.props.room.norms} />
+            <label class={style.checkbox}>
+              <input type="checkbox" onClick={this.onNormsCheck.bind(this)}/>
+              <span className={style.checkboxLabel} >I agree to abide by these norms</span>
+            </label>
           </div>
-
-      //Show both front and back only if the card is flipping
-      //Otherwise only show the active part of the card.
-      //This is to prevent errors in some browsers (like Chrome.)
-
-      if (this.state.flipping) {
-        card = [front, back]
-        flipping = this.state.flipped ? style.flippingFront : style.flippingBack
-      } else {
-        card = this.state.flipped ? back : front
-      }
-
-      return <div className={style.roomCard + ' ' + flipping}>
-          {card}
+          <Join
+            roomId={this.props.id}
+            normsChecked={this.state.normsChecked}/>
         </div>
+
+    //Show both front and back only if the card is flipping
+    //Otherwise only show the active part of the card.
+    //This is to prevent errors in some browsers (like Chrome.)
+
+    if (this.state.flipping) {
+      card = [front, back]
+      flipping = this.state.flipped ? style.flippingFront : style.flippingBack
+    } else {
+      card = this.state.flipped ? back : front
+    }
+
+    return <div className={style.roomCard + ' ' + flipping}>
+        {card}
+      </div>
   }
 }
 
- RoomCard.propTypes = {
-  room: PropTypes.object
-  id: PropTypes.string
+RoomCard.propTypes = {
+  room: PropTypes.object,
+  id: PropTypes.string,
 }
 
- export default RoomCard
+export default RoomCard
