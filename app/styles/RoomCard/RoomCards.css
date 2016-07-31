@@ -1,0 +1,9 @@
+/** RoomCards.css **/
+
+@value colors: "../colors.css";
+@value secondary from colors;
+
+#roomSelection {
+  background: secondary;
+  height: 200vh;
+}

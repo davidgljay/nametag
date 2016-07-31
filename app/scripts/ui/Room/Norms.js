@@ -6,13 +6,13 @@ const Norms = (props) => {
   let normkey = 0
   if (props.norms) {
     norms =
-		<ul className={style.norms + ' listgroup'}>
+		<ul className={style.norms + ' list-group'}>
             {props.norms.map(function(norm) {
               normkey++;
               return (
-                <li key={normkey} className="listitem">
+                <li key={normkey} className="list-group-item">
                   <span
-                    className={style.check + ' glyphicon + glyphicon-ok'}/>
+                    className={style.check + ' glyphicon glyphicon-ok'}/>
                   {norm}
                 </li>
                 )

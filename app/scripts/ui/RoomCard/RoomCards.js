@@ -3,7 +3,7 @@
 import React, { Component, PropTypes } from 'react'
 import RoomCard from './RoomCard'
 import Navbar from '../Utils/Navbar'
-import style from '../../../styles/RoomCard/RoomCards'
+import style from '../../../styles/RoomCard/RoomCards.css'
 
 
 class RoomCards extends Component {
@@ -28,9 +28,9 @@ class RoomCards extends Component {
   }
 
   render() {
-    return <div style={style.roomSelection}>
+    return <div id={style.roomSelection}>
         <Navbar userAuth={this.context.userAuth} unAuth={this.context.unAuth}/>
-        <div style={style.roomCards}>
+        <div id={style.roomCards}>
           {this.showRoomCards(this.props.rooms)}
         </div>
       </div>

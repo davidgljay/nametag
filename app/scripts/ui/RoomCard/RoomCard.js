@@ -37,8 +37,8 @@ class RoomCard extends Component {
     let card
     let flipping = ''
 
-    let front =  <div className={style.front}>
-          <div key='front' className={style.roomImage} onClick={this.flip.bind(this)}>
+    let front =  <div key='front' className={style.front}>
+          <div className={style.roomImage} onClick={this.flip.bind(this)}>
             <img src={this.props.room.image}/>
           </div>
           <div className={style.roomInfo}>
