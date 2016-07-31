@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import Nametag from '../../containers/Nametag/Nametag'
 import Norms from '../Room/Norms'
 import Join from './Join'
+import fbase from '../../api/firebase'
 import style from '../../../styles/RoomCard/RoomCard.css'
 import constants from '../../constants'
 
@@ -37,27 +38,27 @@ class RoomCard extends Component {
     let flipping = ''
 
     let front =  <div className={style.front}>
-            <div key='front' className={style.roomImage} onClick={this.flip.bind(this)}>
-          <img src={this.props.room.image}/>
+          <div key='front' className={style.roomImage} onClick={this.flip.bind(this)}>
+            <img src={this.props.room.image}/>
           </div>
-            <div className={style.roomInfo}>
-              <div className={style.roomTime}>
-                <b>Started</b> 2 days ago | <b>Ends</b> in 1 week
-              </div>
-              <h3 onClick={this.flip.bind(this)}>{this.props.room.title}</h3>
-              <div className={style.roomDesc}>
-                {this.props.room.description}<br/>
-                <p className={style.nametagCount}>
-                  {this.props.room.nametagCount} participant{this.props.room.nametagCount === 1 || 's'}
-                </p>
-              </div>
-              <hr></hr>
-              <Nametag
-              className={style.mod}
-                roomId={this.props.id}
-                id={this.props.room.mod}
-                mod={this.props.room.mod} />
+          <div className={style.roomInfo}>
+            <div className={style.roomTime}>
+              <b>Started</b> 2 days ago | <b>Ends</b> in 1 week
             </div>
+            <h3 onClick={this.flip.bind(this)}>{this.props.room.title}</h3>
+            <div className={style.roomDesc}>
+              {this.props.room.description}<br/>
+              <p className={style.nametagCount}>
+                {this.props.room.nametagCount} participant{this.props.room.nametagCount === 1 || 's'}
+              </p>
+            </div>
+            <hr></hr>
+            <Nametag
+              className={style.mod}
+              roomId={this.props.id}
+              id={this.props.room.mod}
+              mod={this.props.room.mod} />
+          </div>
           </div>
 
     let back = <div key='back' className={style.back}>
