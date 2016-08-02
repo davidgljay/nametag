@@ -10,6 +10,9 @@ export const addRoom = (room, key) => {
   }
 }
 
+const hz = Horizon({host: 'localhost:8181'})
+
+
 export const incrementRoomNametagCount = (roomId) => {
   return {
     type: constants.INCREMENT_ROOM_NT_COUNT,
@@ -29,6 +32,12 @@ export const incrementRoomNametagCount = (roomId) => {
 */
 export function subscribe() {
   return function(dispatch) {
+    hz.connect('nametag')
+
+    // Triggers when client successfully connects to server
+    hz.onReady().subscribe(
+      () => console.log('Connected to Horizon server')
+    )
     return fbase.child('rooms').on('child_added', function onValue(value) {
       dispatch(addRoom(value.val(), value.key()))
       getNametagCount(value.key())(dispatch)

@@ -11,6 +11,7 @@ import style from '../../../styles/RoomCard/Join.css'
 class Join extends Component {
   constructor(props) {
     super(props)
+    //TODO: move this to application state via Redux
     this.state = {
       alert: null,
       nametag: {
