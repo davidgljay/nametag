@@ -3,11 +3,10 @@ import hz from '../api/horizon'
 import errorLog from '../utils/errorLog'
 import constants from '../constants'
 
-const roomsDb = hz('rooms')
 let roomSubscription
 let nametagSubscriptions = []
 
-export const addRoom = (room, key) => {
+export function addRoom(room, key) {
   return {
     type: constants.ADD_ROOM,
     room,
@@ -15,7 +14,7 @@ export const addRoom = (room, key) => {
   }
 }
 
-export const setRoomNametagCount = (roomId, nametagCount) => {
+export function setRoomNametagCount(roomId, nametagCount) {
   return {
     type: constants.SET_ROOM_NT_COUNT,
     roomId,
@@ -34,6 +33,8 @@ export const setRoomNametagCount = (roomId, nametagCount) => {
 *    Promise resolving to list of rooms
 */
 export function subscribe() {
+  const roomsDb = hz('rooms')
+  console.log(hz)
   return function(dispatch) {
     return new Promise((resolve, reject) => {
       roomSubscription = roomsDb.watch().subscribe(

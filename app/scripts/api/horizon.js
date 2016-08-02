@@ -1,1 +1,1 @@
-export default new Horizon({host: 'localhost:8181'})
+export default Horizon({host: 'localhost:8181'})

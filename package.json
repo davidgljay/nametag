@@ -24,6 +24,7 @@
     "gulp-ruby-sass": "~1.0.5",
     "browser-sync": "latest",
     "gulp-size": "~1.1.0",
+    "babel-jest": "^14.1.0",
     "gulp-useref": "~0.4.4",
     "gulp-util": "~3.0.1",
     "gulp-webserver": "latest",
@@ -45,13 +46,21 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest "
   },
   "jest": {
-    "scriptPreprocessor": "<rootDir>/preprocessor.js",
+    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
     "unmockedModulePathPatterns": [
       "<rootDir>/node_modules/react"
+    ],
+    "testPathIgnorePatterns": [
+      "/app/bower_components/",
+      "/dist/bower_components",
+      "/node_modules/"
     ]
+  },
+  "babel": {
+    "presets":["es2015"]
   },
   "browserify": {
     "transform": [
