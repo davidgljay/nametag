@@ -1,6 +1,9 @@
 import fbase from '../api/firebase'
+import hz from '../api/horizon'
 import errorLog from '../utils/errorLog'
 import constants from '../constants'
+
+const roomsDb = hz('rooms')
 
 export const addRoom = (room, key) => {
   return {
@@ -9,9 +12,6 @@ export const addRoom = (room, key) => {
     key,
   }
 }
-
-const hz = Horizon({host: 'localhost:8181'})
-
 
 export const incrementRoomNametagCount = (roomId) => {
   return {
@@ -32,16 +32,14 @@ export const incrementRoomNametagCount = (roomId) => {
 */
 export function subscribe() {
   return function(dispatch) {
-    hz.connect('nametag')
+    const next = (rooms) => {
+      for (let i = rooms.length - 1; i >= 0; i--) {
+        dispatch(addRoom(rooms[i], rooms[i].id))
+        getNametagCount(rooms[i].id)(dispatch)
+      }
+    }
 
-    // Triggers when client successfully connects to server
-    hz.onReady().subscribe(
-      () => console.log('Connected to Horizon server')
-    )
-    return fbase.child('rooms').on('child_added', function onValue(value) {
-      dispatch(addRoom(value.val(), value.key()))
-      getNametagCount(value.key())(dispatch)
-    }, errorLog('Error subscribing to RoomCards'))
+    return roomsDb.watch().subscribe(next, errorLog('Error subscribing to rooms'))
   }
 }
 

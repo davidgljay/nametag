@@ -1,0 +1,1 @@
+export default new Horizon({host: 'localhost:8181'})
