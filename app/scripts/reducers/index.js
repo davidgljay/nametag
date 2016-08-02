@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
-import rooms from './Room'
-import nametags from './Nametag'
+import rooms from './RoomReducer'
+import nametags from './NametagReducer'
 
 const mainReducer = combineReducers({
   rooms,

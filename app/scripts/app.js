@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import Room from './ui/Room/Room'
-import RoomCards from './containers/RoomCard/RoomCards'
+import RoomCards from './containers/Room/RoomCardsContainer'
 import fbase from './api/firebase'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'

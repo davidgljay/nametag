@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import * as actions from '../../actions/Nametag'
+import * as actions from '../../actions/NametagActions'
 import component from '../../ui/Nametag/Nametag'
 
 const mapStateToProps = (state, ownProps) => {
