@@ -5,6 +5,7 @@ import constants from '../constants'
 
 const roomsDb = hz('rooms')
 let roomSubscription
+let nametagSubscriptions = []
 
 export const addRoom = (room, key) => {
   return {
@@ -14,10 +15,11 @@ export const addRoom = (room, key) => {
   }
 }
 
-export const incrementRoomNametagCount = (roomId) => {
+export const setRoomNametagCount = (roomId, nametagCount) => {
   return {
-    type: constants.INCREMENT_ROOM_NT_COUNT,
+    type: constants.SET_ROOM_NT_COUNT,
     roomId,
+    nametagCount,
   }
 }
 
@@ -34,20 +36,18 @@ export const incrementRoomNametagCount = (roomId) => {
 export function subscribe() {
   return function(dispatch) {
     return new Promise((resolve, reject) => {
-      const next = (rooms) => {
-        for (let i = rooms.length - 1; i >= 0; i--) {
-          dispatch(addRoom(rooms[i], rooms[i].id))
-          getNametagCount(rooms[i].id)(dispatch)
-        }
-        resolve(rooms)
-      }
-
-      const error = (err) => {
-        errorLog('Error subscribing to rooms')(err)
-        reject(err)
-      }
-
-      roomSubscription = roomsDb.watch().subscribe(next, error)
+      roomSubscription = roomsDb.watch().subscribe(
+        (rooms) => {
+          for (let i = rooms.length - 1; i >= 0; i--) {
+            dispatch(addRoom(rooms[i], rooms[i].id))
+            getNametagCount(rooms[i].id)(dispatch)
+          }
+          resolve(rooms)
+        },
+        (err) => {
+          errorLog('Subscribing to rooms: ')(err)
+          reject(err)
+        })
     })
   }
 }
@@ -65,8 +65,14 @@ export function unsubscribe() {
   return function() {
     if (roomSubscription) {
       roomSubscription.unsubscribe()
+      for (let id in nametagSubscriptions) {
+        if (!Object.hasOwnProperty()) {
+          continue
+        }
+        nametagSubscriptions[id].unsubscribe()
+      }
     } else {
-      errorLog("Tried to unsubscribe from rooms before subscribing")
+      errorLog('Tried to unsubscribe from rooms before subscribing')
     }
   }
 }
@@ -83,9 +89,17 @@ export function unsubscribe() {
 */
 export function getNametagCount(roomId) {
   return function(dispatch) {
-    return fbase.child('nametags').child(roomId).on('child_added', function() {
-      dispatch(incrementRoomNametagCount(roomId))
-    }, errorLog('Error counting room Nametags'))
+    return new Promise((resolve, reject) => {
+      nametagSubscriptions.push(hz('nametags').watch(roomId).subscribe(
+          (nametags) => {
+            resolve(dispatch(setRoomNametagCount(roomId, nametags.length)))
+          },
+          (err) => {
+            errorLog('Getting nametag count ')(err)
+            reject(err)
+          }
+        ))
+    })
   }
 }
 
