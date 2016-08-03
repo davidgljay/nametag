@@ -9,7 +9,7 @@ import style from '../../../styles/Nametag/EditNametag.css';
 
 const nametagTarget = {
   drop(props, monitor) {
-    addCertificate(props, monitor.getItem());
+    props.addNametagCertificat(monitor.getItem().id);
   },
 };
 
@@ -20,21 +20,16 @@ function collect(connect, monitor) {
   };
 }
 
-function addCertificate(props, certificate) {
-  props.addNametagCertificate(certificate);
-}
-
 class EditNametag extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       alert: null,
       alertType: null,
     };
-  }
+  
 
   render() {
-    console.log(this.props.nametag);
     // TODO: Figure out image caching
     return this.props.connectDropTarget(<div id={style.editNametag} className="profile">
           <div className={style.form}>
@@ -63,7 +58,7 @@ class EditNametag extends Component {
                   certificate={cert}
                   draggable={true}
                   removeFromSource={this.props.removeNametagCertificate}
-                  key={cert.id} />;
+                  key={cert.id} />
               }, this)}
             </div>
           </div>

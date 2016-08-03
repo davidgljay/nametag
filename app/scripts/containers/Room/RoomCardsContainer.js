@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import * as actions from '../../actions/RoomActions'
-import component from '../../ui/RoomCard/RoomCards'
+import component from '../../ui/Room/RoomCards'
 
 const mapStateToProps = (state) => {
   return {

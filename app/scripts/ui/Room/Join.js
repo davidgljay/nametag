@@ -11,7 +11,7 @@ import style from '../../../styles/RoomCard/Join.css'
 class Join extends Component {
   constructor(props) {
     super(props)
-    //TODO: move this to application state via Redux
+    // TODO: move this to application state via Redux?
     this.state = {
       alert: null,
       nametag: {
@@ -23,12 +23,13 @@ class Join extends Component {
     }
   }
 
-  addNametagCertificate(cert) {
+  //Make room action
+  addNametagCertificate(certId) {
     this.setState(function setState(prevState) {
       let unique = true
       // Check to prevent duplicate certificate entries
       for (let i = prevState.nametag.certificates.length - 1; i >= 0; i--) {
-        if (cert.id === prevState.nametag.certificates[i].id) {
+        if (certId === prevState.nametag.certificates[i].id) {
           unique = false
         }
       }
@@ -39,6 +40,7 @@ class Join extends Component {
     })
   }
 
+  //Make room action
   removeNametagCertificate(certId) {
     this.setState(function setState(prevState) {
       // Check to prevent duplicate certificate entries
@@ -51,6 +53,7 @@ class Join extends Component {
     })
   }
 
+  // Make user action (these temporary nametags can be part of app state until stored in nametags)
   updateNametag(property) {
     const self = this
     return function onClick(e) {
@@ -82,6 +85,7 @@ class Join extends Component {
     }
   }
 
+  //Need to rethink. This seems tied to login. Belongs in user action
   checkIfJoined() {
     //Check to see if the user has already joined this room.
     const userRoomRef = fbase.child('user_rooms/' + this.context.userAuth.uid + '/' + this.props.roomId)
@@ -91,10 +95,11 @@ class Join extends Component {
       } else {
         this.setDefaults()
       }
-    },errorLog("Getting user_room in Join component"),this)
+    }, errorLog('Getting user_room in Join component'), this)
 
   }
 
+  //Move to user action
   setDefaults() {
     //Load user's default nametag settings
     const defaultsRef = fbase.child('user_defaults/' + this.context.userAuth.uid)
@@ -105,9 +110,10 @@ class Join extends Component {
         prevState.nametag.icon = prevState.defaults && prevState.defaults.icons ? prevState.defaults.icons[0] : ''
         return prevState
       })
-    }, errorLog('Setting defaults in Join component'),this)
+    }, errorLog('Setting defaults in Join component'), this)
   }
 
+  //Move to user action
   loadNametag(nametagId) {
     //Load existing nametag for this room.
     const nametagRef = fbase.child('nametags/' + this.props.roomId + '/' + nametagId)
@@ -118,14 +124,13 @@ class Join extends Component {
         prevState.nametag.certificates = prevState.nametag.certificates || []
         return prevState
       })
-    }, errorLog("Getting nametag in Join component"), this)
+    }, errorLog('Getting nametag in Join component'), this)
   }
 
   updateUrl() {
-   window.location = '/#/rooms/' + this.props.roomId
+    window.location = '/#/rooms/' + this.props.roomId
   }
 
-// TODO: Use existing nametagid if one is present.
   joinRoom() {
     let self = this
     if (!this.props.normsChecked) {
