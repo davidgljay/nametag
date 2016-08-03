@@ -18,5 +18,30 @@ describe('Nametag Actions', () => {
         })
     })
   })
+
+  describe('subscribe', () => {
+    let dispatch
+    let results
+    beforeEach(() => {
+      results = []
+      dispatch = (res) => {results.push(res)}
+    })
+    it('should subscribe to a list of nametags', (done) => {
+      hzMock([{id: 1}])
+      let NametagActions = require('../NametagActions')
+
+      NametagActions.subscribe(1, 'abc')(dispatch).then(
+        () => {
+          expect(results[0]).toEqual(
+            {
+              type: constants.ADD_NAMETAG,
+              nametag: {id: 1},
+              id: 1,
+              roomId: 'abc',
+            })
+          done()
+        })
+    })
+  })
 })
 

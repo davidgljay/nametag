@@ -1,6 +1,9 @@
 import fbase from '../api/firebase'
 import errorLog from '../utils/errorLog'
 import constants from '../constants'
+import hz from '../api/horizon'
+
+let nametagSubscription
 
 export const addNametag = (nametag, id, roomId) => {
   return {
@@ -22,9 +25,16 @@ export const addNametag = (nametag, id, roomId) => {
 */
 export function subscribe(nametagId, roomId) {
   return function(dispatch) {
-    return fbase.child('nametags').child(roomId).child(nametagId).on('value', function onValue(value) {
-      dispatch(addNametag(value.val(), value.key(), roomId))
-    }, errorLog('Error subscribing to Nametag ' + nametagId))
+    return new Promise((resolve, reject) => {
+      nametagSubscription = hz('nametags').find({id:nametagId}).watch().subscribe(
+        (nametag) => {
+          resolve(dispatch(addNametag(nametag, nametag.id, roomId)))
+        },
+        (err) => {
+          errorLog('Error subscribing to Nametag ' + nametagId)(err)
+          reject(err)
+        })
+    })
   }
 }
 
@@ -39,6 +49,7 @@ export function subscribe(nametagId, roomId) {
 */
 export function unsubscribe(nametagId, roomId) {
   return function() {
-    fbase.child('nametag').child(roomId).child(nametagId).off('value')
+    nametagSubscription.unsubscribe()
+    // fbase.child('nametag').child(roomId).child(nametagId).off('value')
   }
 }

@@ -72,8 +72,5 @@ describe('RoomActions', () => {
       })
     })
   })
-    // beforeEach(function () {
-    //     timer = TestUtils.renderIntoDocument(<Timer/>);
-    // });
 })
 
