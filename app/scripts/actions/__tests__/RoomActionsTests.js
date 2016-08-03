@@ -13,7 +13,7 @@ describe('RoomActions', () => {
       expect(addRoom).toEqual({
         type: constants.ADD_ROOM,
         room: 'test',
-        key: '123',
+        id: '123',
       })
     })
   })
@@ -51,7 +51,7 @@ describe('RoomActions', () => {
         expect(results[0]).toEqual({
           type: constants.ADD_ROOM,
           room: {id: 2},
-          key: 2,
+          id: 2,
         })
         expect(results[1]).toEqual({
           type: constants.SET_ROOM_NT_COUNT,
@@ -61,7 +61,7 @@ describe('RoomActions', () => {
         expect(results[2]).toEqual({
           type: constants.ADD_ROOM,
           room: {id: 1},
-          key: 1,
+          id: 1,
         })
         expect(results[3]).toEqual({
           type: constants.SET_ROOM_NT_COUNT,

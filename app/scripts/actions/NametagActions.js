@@ -3,7 +3,7 @@ import errorLog from '../utils/errorLog'
 import constants from '../constants'
 import hz from '../api/horizon'
 
-let nametagSubscriptions= {}
+let nametagSubscriptions = {}
 
 export const addNametag = (nametag, id, roomId) => {
   return {

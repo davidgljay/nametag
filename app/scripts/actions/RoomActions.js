@@ -6,11 +6,11 @@ import constants from '../constants'
 let roomSubscription
 let nametagSubscriptions = []
 
-export function addRoom(room, key) {
+export function addRoom(room, id) {
   return {
     type: constants.ADD_ROOM,
     room,
-    key,
+    id,
   }
 }
 
