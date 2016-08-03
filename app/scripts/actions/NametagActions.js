@@ -3,7 +3,7 @@ import errorLog from '../utils/errorLog'
 import constants from '../constants'
 import hz from '../api/horizon'
 
-let nametagSubscription
+let nametagSubscriptions= {}
 
 export const addNametag = (nametag, id, roomId) => {
   return {
@@ -26,7 +26,7 @@ export const addNametag = (nametag, id, roomId) => {
 export function subscribe(nametagId, roomId) {
   return function(dispatch) {
     return new Promise((resolve, reject) => {
-      nametagSubscription = hz('nametags').find({id:nametagId}).watch().subscribe(
+      nametagSubscriptions[nametagId] = hz('nametags').find({id:nametagId}).watch().subscribe(
         (nametag) => {
           resolve(dispatch(addNametag(nametag, nametag.id, roomId)))
         },
@@ -47,9 +47,8 @@ export function subscribe(nametagId, roomId) {
 * @returns
 *    none
 */
-export function unsubscribe(nametagId, roomId) {
+export function unsubscribe(nametagId) {
   return function() {
-    nametagSubscription.unsubscribe()
-    // fbase.child('nametag').child(roomId).child(nametagId).off('value')
+    nametagSubscriptions[nametagId].unsubscribe()
   }
 }
