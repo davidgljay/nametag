@@ -34,7 +34,6 @@ export function setRoomNametagCount(roomId, nametagCount) {
 */
 export function subscribe() {
   const roomsDb = hz('rooms')
-  console.log(hz)
   return function(dispatch) {
     return new Promise((resolve, reject) => {
       roomSubscription = roomsDb.watch().subscribe(

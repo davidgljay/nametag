@@ -57,7 +57,8 @@
       "/app/bower_components/",
       "/dist/bower_components",
       "/node_modules/"
-    ]
+    ],
+    "setupTestFrameworkScriptFile":"<rootDir>/app/scripts/tests/mockGlobals.js"
   },
   "babel": {
     "presets":["es2015"]

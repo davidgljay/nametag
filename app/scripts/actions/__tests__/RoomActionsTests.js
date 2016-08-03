@@ -3,8 +3,7 @@ jest.unmock('../../tests/mockGlobals')
 jest.unmock('../../api/horizon')
 
 import constants from '../../constants'
-import {hzMock, setGlobals} from '../../tests/mockGlobals'
-setGlobals()
+import {hzMock} from '../../tests/mockGlobals'
 
 describe('RoomActions', () => {
   describe('addRoom', () => {
@@ -40,8 +39,12 @@ describe('RoomActions', () => {
     })
 
     it('should subscribe to a room', function(done) {
-      let rooms = [{id: 1}, {id: 2}]
-      hzMock(rooms)
+      let mockResponses = [
+        [{id: 1}, {id: 2}],
+        [{}],
+        [{}, {}, {}],
+      ]
+      hzMock(mockResponses)
       let RoomActions = require('../RoomActions')
       RoomActions.subscribe()(dispatch)
       .then(function() {
@@ -63,7 +66,7 @@ describe('RoomActions', () => {
         expect(results[3]).toEqual({
           type: constants.SET_ROOM_NT_COUNT,
           roomId: 1,
-          nametagCount: 2,
+          nametagCount: 1,
         })
         done()
       })

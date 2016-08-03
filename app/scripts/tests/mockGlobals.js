@@ -1,11 +1,14 @@
-export function hzMock(result) {
+let i = 0
+
+export function hzMock(results) {
   window.Horizon = () => {
     return () => {
       return {
         watch: () => {
           return {
             subscribe: (complete) => {
-              complete(result)
+              complete(results[i])
+              i = i + 1 % results.length
             },
           }
         },
@@ -14,20 +17,17 @@ export function hzMock(result) {
   }
 }
 
-
-export function setGlobals() {
-  window.Firebase = () => {}
-  window.Horizon = () => {
-    return () => {
-      return {
-        watch: () => {
-          return {
-            subscribe: (complete) => {
-              complete()
-            },
-          }
-        },
-      }
+window.Firebase = () => {}
+window.Horizon = () => {
+  return () => {
+    return {
+      watch: () => {
+        return {
+          subscribe: (complete) => {
+            complete()
+          },
+        }
+      },
     }
   }
 }
