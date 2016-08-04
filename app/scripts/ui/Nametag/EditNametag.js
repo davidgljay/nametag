@@ -1,23 +1,23 @@
-import React, { Component, PropTypes } from 'react';
-import errorLog from '../../utils/errorLog';
-import Alert from '../Utils/Alert';
-import Certificate from '../Certificate/Certificate';
-import { DropTarget } from 'react-dnd';
-import { dragTypes } from '../../constants';
-import fbase from '../../api/firebase';
-import style from '../../../styles/Nametag/EditNametag.css';
+import React, { Component, PropTypes } from 'react'
+import errorLog from '../../utils/errorLog'
+import Alert from '../Utils/Alert'
+import Certificate from '../Certificate/Certificate'
+import { DropTarget } from 'react-dnd'
+import { dragTypes } from '../../constants'
+import fbase from '../../api/firebase'
+import style from '../../../styles/Nametag/EditNametag.css'
 
 const nametagTarget = {
   drop(props, monitor) {
-    props.addNametagCertificat(monitor.getItem());
+    props.addNametagCertificat(monitor.getItem())
   },
-};
+}
 
 function collect(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
-  };
+  }
 }
 
 class EditNametag extends Component {
@@ -26,8 +26,8 @@ class EditNametag extends Component {
     this.state = {
       alert: null,
       alertType: null,
-    };
-  
+    }
+  }
 
   render() {
     // TODO: Figure out image caching
