@@ -40,6 +40,7 @@ describe('Room reducer', () => {
       })
     })
   })
+
   describe('SET_ROOM_NT_COUNT', () => {
     it('should set the room nametag count', () => {
       let newState = roomReducer(
@@ -58,6 +59,154 @@ describe('Room reducer', () => {
             nametagCount: 3,
           },
         })
+    })
+  })
+
+  describe('ADD_USER_NT_CERT', () => {
+    it('should add a certificate to a nametag for the room', () => {
+      let testCert = {
+        name: 'test certificate',
+        id: 'wudda',
+      }
+
+      let newState = roomReducer({
+        1: { title: 'Test Room'},
+      }, {
+        type: constants.ADD_USER_NT_CERT,
+        roomId: 1,
+        cert: testCert,
+      })
+      expect(newState).toEqual(
+        {
+          1: {
+            title: 'Test Room',
+            userNametag: {
+              certificates: [testCert],
+            },
+          },
+        })
+    })
+
+    it('should add a second certificate', () => {
+      let testCert = {
+        name: 'test certificate 2',
+        id: 'womps',
+      }
+
+      let newState = roomReducer({
+        1: {
+          title: 'Test Room',
+          userNametag: {
+            certificates: [
+              {
+                name: 'test certificate',
+                id: 'wudda',
+              },
+            ],
+          },
+        },
+      }, {
+        type: constants.ADD_USER_NT_CERT,
+        roomId: 1,
+        cert: testCert,
+      })
+      expect(newState).toEqual({
+        1: {
+          title: 'Test Room',
+          userNametag: {
+            certificates: [
+              {
+                name: 'test certificate',
+                id: 'wudda',
+              },
+              testCert,
+            ],
+          },
+        },
+      })
+    })
+    it('should not add a second certificate with the same id', () => {
+      let testCert = {
+        name: 'test certificate',
+        id: 'wudda',
+      }
+
+      let newState = roomReducer({
+        1: {
+          title: 'Test Room',
+          userNametag: {
+            certificates: [testCert],
+          },
+        },
+      }, {
+        type: constants.ADD_USER_NT_CERT,
+        roomId: 1,
+        cert: testCert,
+      })
+      expect(newState).toEqual(
+        {
+          1: {
+            title: 'Test Room',
+            userNametag: {
+              certificates: [testCert],
+            },
+          },
+        })
+    })
+  })
+
+  describe('REMOVE_USER_NT_CERT', () => {
+    it('should remove a certificate from a nametag for the room', () => {
+      let testCert = {
+        name: 'test certificate',
+        id: 'wudda',
+      }
+
+      let newState = roomReducer({
+        1: {
+          title: 'Test Room',
+          userNametag: {
+            certificates: [testCert],
+          },
+        },
+      },
+        {
+          type: constants.REMOVE_USER_NT_CERT,
+          roomId: 1,
+          certId: 'wudda',
+        })
+      expect(newState).toEqual(
+        {
+          1: {
+            title: 'Test Room',
+            userNametag: {
+              certificates: [],
+            },
+          },
+        })
+    })
+    it('should have no effect when no certificates are present', () => {
+      let newState = roomReducer({
+        1: {
+          title: 'Test Room',
+          userNametag: {
+            certificates: [],
+          },
+        },
+      },
+        {
+          type: constants.REMOVE_USER_NT_CERT,
+          roomId: 1,
+          certId: 'wudda',
+        })
+      expect(newState).toEqual({
+        1: {
+          title: 'Test Room',
+          userNametag: {
+            certificates: [],
+          },
+        },
+      })
     })
   })
 })

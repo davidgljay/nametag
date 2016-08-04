@@ -9,7 +9,7 @@ import style from '../../../styles/Nametag/EditNametag.css';
 
 const nametagTarget = {
   drop(props, monitor) {
-    props.addNametagCertificat(monitor.getItem().id);
+    props.addNametagCertificat(monitor.getItem());
   },
 };
 

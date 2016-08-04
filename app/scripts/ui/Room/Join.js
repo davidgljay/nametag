@@ -23,13 +23,13 @@ class Join extends Component {
     }
   }
 
-  //Make room action
-  addNametagCertificate(certId) {
+  // Make room action
+  addNametagCertificate(cert) {
     this.setState(function setState(prevState) {
       let unique = true
       // Check to prevent duplicate certificate entries
       for (let i = prevState.nametag.certificates.length - 1; i >= 0; i--) {
-        if (certId === prevState.nametag.certificates[i].id) {
+        if (cert.id === prevState.nametag.certificates[i].id) {
           unique = false
         }
       }
@@ -40,7 +40,7 @@ class Join extends Component {
     })
   }
 
-  //Make room action
+  // Make room action
   removeNametagCertificate(certId) {
     this.setState(function setState(prevState) {
       // Check to prevent duplicate certificate entries
@@ -53,7 +53,7 @@ class Join extends Component {
     })
   }
 
-  // Make user action (these temporary nametags can be part of app state until stored in nametags)
+  // Make room action (these temporary nametags can be part of app state until stored in nametags)
   updateNametag(property) {
     const self = this
     return function onClick(e) {

@@ -1,4 +1,3 @@
-import fbase from '../api/firebase'
 import errorLog from '../utils/errorLog'
 import constants from '../constants'
 import hz from '../api/horizon'

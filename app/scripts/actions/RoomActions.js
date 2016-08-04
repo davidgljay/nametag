@@ -1,4 +1,3 @@
-import fbase from '../api/firebase'
 import hz from '../api/horizon'
 import errorLog from '../utils/errorLog'
 import constants from '../constants'
@@ -19,6 +18,22 @@ export function setRoomNametagCount(roomId, nametagCount) {
     type: constants.SET_ROOM_NT_COUNT,
     roomId,
     nametagCount,
+  }
+}
+
+export function addUserNametagCert(cert, roomId) {
+  return {
+    type: constants.ADD_USER_NT_CERT,
+    cert,
+    roomId,
+  }
+}
+
+export function removeUserNametagCert(certId, roomId) {
+  return {
+    type: constants.REMOVE_USER_NT_CERT,
+    certId,
+    roomId,
   }
 }
 
