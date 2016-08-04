@@ -23,7 +23,7 @@ class Join extends Component {
     }
   }
 
-  // Make room action
+  // Make room action (check)
   addNametagCertificate(cert) {
     this.setState(function setState(prevState) {
       let unique = true
@@ -40,7 +40,7 @@ class Join extends Component {
     })
   }
 
-  // Make room action
+  // Make room action (check)
   removeNametagCertificate(certId) {
     this.setState(function setState(prevState) {
       // Check to prevent duplicate certificate entries
@@ -53,7 +53,9 @@ class Join extends Component {
     })
   }
 
-  // Make room action (these temporary nametags can be part of app state until stored in nametags)
+  // Make room action (these temporary nametags can
+  // be part of app state until stored in nametags)
+  // (check)
   updateNametag(property) {
     const self = this
     return function onClick(e) {
@@ -85,7 +87,11 @@ class Join extends Component {
     }
   }
 
-  //Need to rethink. This seems tied to login. Belongs in user action
+  // Need to rethink. This seems tied to login.
+  // Belongs in user action
+  // On login I want to load user defaults into user
+  // I also want to load default vals into each room
+  // That eliminates this function
   checkIfJoined() {
     //Check to see if the user has already joined this room.
     const userRoomRef = fbase.child('user_rooms/' + this.context.userAuth.uid + '/' + this.props.roomId)
@@ -96,10 +102,10 @@ class Join extends Component {
         this.setDefaults()
       }
     }, errorLog('Getting user_room in Join component'), this)
-
   }
 
-  //Move to user action
+  // Move to user action
+  // This is handled by above function
   setDefaults() {
     //Load user's default nametag settings
     const defaultsRef = fbase.child('user_defaults/' + this.context.userAuth.uid)
@@ -113,7 +119,9 @@ class Join extends Component {
     }, errorLog('Setting defaults in Join component'), this)
   }
 
-  //Move to user action
+  // Move to user action
+  // Needs to be distinct room action
+  // Shuold have no effect if user is not logged in
   loadNametag(nametagId) {
     //Load existing nametag for this room.
     const nametagRef = fbase.child('nametags/' + this.props.roomId + '/' + nametagId)
@@ -131,6 +139,7 @@ class Join extends Component {
     window.location = '/#/rooms/' + this.props.roomId
   }
 
+  //Should be a distinct action
   joinRoom() {
     let self = this
     if (!this.props.normsChecked) {
