@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import moment from '../../../bower_components/moment/moment';
-import ModAction from './ModAction';
+import ModAction from '../ModAction/ModAction';
 import Media from './Media';
 import errorLog from '../../utils/errorLog';
 import fbase from '../../api/firebase';

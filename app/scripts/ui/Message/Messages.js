@@ -1,6 +1,6 @@
 import React, { Component, PropTypes} from 'react';
 import Message from './Message';
-import ModActionNotif from './ModActionNotif';
+import ModActionNotif from '../ModAction/ModActionNotif';
 import errorLog from '../../utils/errorLog';
 import fbase from '../../api/firebase';
 import style from '../../../styles/Room/Messages.css';
