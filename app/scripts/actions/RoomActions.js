@@ -37,6 +37,15 @@ export function removeUserNametagCert(certId, roomId) {
   }
 }
 
+export function updateUserNametag(roomId, property, value) {
+  return {
+    type: constants.UPDATE_USER_NAMETAG,
+    roomId,
+    property,
+    value,
+  }
+}
+
 /*
 * Subscribe to a list of Rooms
 *

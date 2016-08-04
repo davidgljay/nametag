@@ -209,4 +209,54 @@ describe('Room reducer', () => {
       })
     })
   })
+
+  describe('UPDATE_USER_NAMETAG', () => {
+    it('should add an arbitrary value to a user nametag', () => {
+      let newState = roomReducer({
+        1: {
+          title: 'Test Room',
+        },
+      },
+        {
+          type: constants.UPDATE_USER_NAMETAG,
+          roomId: 1,
+          property: 'name',
+          value: 'Dinosaur',
+        })
+      expect(newState).toEqual({
+        1: {
+          title: 'Test Room',
+          userNametag: {
+            name: 'Dinosaur',
+          },
+        },
+      })
+    })
+
+    it('should not overwrite other values in a user nametag', () => {
+      let newState = roomReducer({
+        1: {
+          title: 'Test Room',
+          userNametag: {
+            name: 'Dinosaur',
+          },
+        },
+      },
+        {
+          type: constants.UPDATE_USER_NAMETAG,
+          roomId: 1,
+          property: 'bio',
+          value: 'Rwaaarr!!!',
+        })
+      expect(newState).toEqual({
+        1: {
+          title: 'Test Room',
+          userNametag: {
+            name: 'Dinosaur',
+            bio: 'Rwaaarr!!!',
+          },
+        },
+      })
+    })
+  })
 })

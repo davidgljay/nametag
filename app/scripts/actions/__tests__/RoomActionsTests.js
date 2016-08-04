@@ -54,6 +54,19 @@ describe('RoomActions', () => {
     })
   })
 
+  describe('updateUserNametag', () => {
+    it('should update the user nametag', () => {
+      let RoomActions = require('../RoomActions')
+      expect(RoomActions.updateUserNametag('abc', 'name', 'Allosaur'))
+        .toEqual({
+          type: constants.UPDATE_USER_NAMETAG,
+          roomId: 'abc',
+          property: 'name',
+          value: 'Allosaur',
+        })
+    })
+  })
+
   describe('subscribe', () => {
     let dispatch
     let results

@@ -38,6 +38,13 @@ const removeCertificate = (state, action) => {
   return Object.assign({}, state, {[action.roomId]: newRoom})
 }
 
+const updateNametag = (state, action) => {
+  let room = state[action.roomId]
+  let newNametag = Object.assign({}, room.userNametag, {[action.property]:action.value})
+  let newRoom = Object.assign({}, room, {userNametag: newNametag})
+  return Object.assign({}, state, {[action.roomId]: newRoom})
+}
+
 const rooms = (state = {}, action) => {
   switch (action.type) {
   case constants.ADD_ROOM:
@@ -49,6 +56,8 @@ const rooms = (state = {}, action) => {
     return addCertificate(state, action)
   case constants.REMOVE_USER_NT_CERT:
     return removeCertificate(state, action)
+  case constants.UPDATE_USER_NAMETAG:
+    return updateNametag(state, action)
 
   default:
     return state
