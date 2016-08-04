@@ -1,7 +1,8 @@
+export const dragTypes = {
+  certificate: 'certificate',
+}
+
 export default {
-  dragTypes: {
-    certificate: 'certificate',
-  },
 
   // Actions
   ADD_ROOM: 'ADD_ROOM',
