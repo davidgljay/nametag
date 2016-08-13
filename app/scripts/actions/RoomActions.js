@@ -1,4 +1,4 @@
-import hz from '../api/horizon'
+import {hz} from '../api/horizon'
 import errorLog from '../utils/errorLog'
 import constants from '../constants'
 

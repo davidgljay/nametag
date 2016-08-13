@@ -1,6 +1,6 @@
 import errorLog from '../utils/errorLog'
 import constants from '../constants'
-import hz from '../api/horizon'
+import {hz} from '../api/horizon'
 
 let nametagSubscriptions = {}
 
