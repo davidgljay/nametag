@@ -126,15 +126,15 @@ class Login extends Component {
         <img
           src="./images/twitter.jpg"
           className={style.loginOption + ' img-circle'}
-          onClick={this.props.dispatch(providerAuth('twitter'))}/>
+          onClick={() => this.props.dispatch(providerAuth('twitter'))}/>
         <img
           src="./images/fb.jpg"
           className={style.loginOption + ' img-circle'}
-          onClick={this.props.dispatch(providerAuth('facebook'))}/>
+          onClick={() => this.props.dispatch(providerAuth('facebook'))}/>
         <img
           src="./images/google.png"
           className={style.loginOption + ' img-circle'}
-          onClick={this.props.dispatch(providerAuth('google'))}/>
+          onClick={() => this.props.dispatch(providerAuth('google'))}/>
       </div>
   }
 }

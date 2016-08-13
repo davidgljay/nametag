@@ -73,7 +73,8 @@ class RoomCard extends Component {
           <Join
             roomId={this.props.id}
             auth={this.props.auth}
-            normsChecked={this.state.normsChecked}/>
+            normsChecked={this.state.normsChecked}
+            dispatch={this.props.dispatch}/>
         </div>
 
     //Show both front and back only if the card is flipping

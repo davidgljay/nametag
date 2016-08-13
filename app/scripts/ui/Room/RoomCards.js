@@ -1,6 +1,6 @@
 
 
-import {Component} from 'react'
+import React, {Component} from 'react'
 import RoomCard from './RoomCard'
 import Navbar from '../Utils/Navbar'
 import {subscribe, unsubscribe} from '../../actions/RoomActions'

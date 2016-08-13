@@ -138,39 +138,37 @@ class Join extends Component {
   }
 
   // TODO: Move to room action
-  joinRoom() {
-    let self = this
-    if (!this.props.normsChecked) {
-      this.setState({
-        'alert': 'You must agree to the norms above ' +
-        'in order to join this conversation.',
-      })
-    } else {
-      const nametagRef = fbase.child('nametags/' + this.props.roomId)
-      if (this.state.nametagId) {
-        nametagRef.child(this.state.nametagId)
-          .set(this.state.nametag)
-          .then(function() {
-            self.updateUrl()
-          }, errorLog("Joining room "))
-      } else {
-        nametagRef.push(this.state.nametag)
-          .then(function(nametagref) {
-            return fbase.child('user_rooms/' + self.context.userAuth.uid + '/' + self.props.roomId)
-                .set({
-                  mod: false,
-                  creator: false,
-                  nametag_id: nametagref.key(),
-                })
-          }, errorLog('Updating user room in Join component'))
-          .then(function() {
-            self.updateUrl()
-          }, errorLog('Joining room '))
-      }
-
-
-    }
-  }
+  // joinRoom() {
+  //   let self = this
+  //   if (!this.props.normsChecked) {
+  //     this.setState({
+  //       'alert': 'You must agree to the norms above ' +
+  //       'in order to join this conversation.',
+  //     })
+  //   } else {
+  //     const nametagRef = fbase.child('nametags/' + this.props.roomId)
+  //     if (this.state.nametagId) {
+  //       nametagRef.child(this.state.nametagId)
+  //         .set(this.state.nametag)
+  //         .then(function() {
+  //           self.updateUrl()
+  //         }, errorLog("Joining room "))
+  //     } else {
+  //       nametagRef.push(this.state.nametag)
+  //         .then(function(nametagref) {
+  //           return fbase.child('user_rooms/' + self.context.userAuth.uid + '/' + self.props.roomId)
+  //               .set({
+  //                 mod: false,
+  //                 creator: false,
+  //                 nametag_id: nametagref.key(),
+  //               })
+  //         }, errorLog('Updating user room in Join component'))
+  //         .then(function() {
+  //           self.updateUrl()
+  //         }, errorLog('Joining room '))
+  //     }
+  //   }
+  // }
 
   render() {
     let join
@@ -191,8 +189,7 @@ class Join extends Component {
           </div>
           <br/>
           <button
-            className={style.btnPrimary}
-            onClick={this.joinRoom.bind(this)}>
+            className={style.btnPrimary}>
               Join
           </button>
         </div>
@@ -207,6 +204,7 @@ Join.propTypes = {
   roomId: PropTypes.string.isRequired,
   normsChecked: PropTypes.bool.isRequired,
   auth: PropTypes.object,
+  dispatch: PropTypes.func.isRequired,
 }
 
 export default Join
