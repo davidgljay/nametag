@@ -30,10 +30,10 @@ describe('RoomActions', () => {
     })
   })
 
-  describe('addUserNametagCert', () => {
+  describe('addNametagCert', () => {
     it('should add a certificate to the user nametag for this room', () => {
       let RoomActions = require('../RoomActions')
-      expect(RoomActions.addUserNametagCert({name: 'Test Certificate', id: '123' }, 'abc'))
+      expect(RoomActions.addNametagCert({name: 'Test Certificate', id: '123' }, 'abc'))
         .toEqual({
           type: constants.ADD_USER_NT_CERT,
           cert: {name: 'Test Certificate', id: '123' },
@@ -42,10 +42,10 @@ describe('RoomActions', () => {
     })
   })
 
-  describe('removeUserNametagCert', () => {
+  describe('removeNametagCert', () => {
     it('should remove a certificate from the user nametag for this room', () => {
       let RoomActions = require('../RoomActions')
-      expect(RoomActions.removeUserNametagCert('123', 'abc'))
+      expect(RoomActions.removeNametagCert('123', 'abc'))
         .toEqual({
           type: constants.REMOVE_USER_NT_CERT,
           certId: '123',
@@ -54,10 +54,10 @@ describe('RoomActions', () => {
     })
   })
 
-  describe('updateUserNametag', () => {
+  describe('updateNametag', () => {
     it('should update the user nametag', () => {
       let RoomActions = require('../RoomActions')
-      expect(RoomActions.updateUserNametag('abc', 'name', 'Allosaur'))
+      expect(RoomActions.updateNametag('abc', 'name', 'Allosaur'))
         .toEqual({
           type: constants.UPDATE_USER_NAMETAG,
           roomId: 'abc',

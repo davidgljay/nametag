@@ -32,7 +32,6 @@ class RoomCard extends Component {
       }.bind(this), constants.ANIMATION_LONG)
   }
 
-// TODO: Turn norms (and possibly other things) into seperate component.
   render() {
     let card
     let flipping = ''
@@ -73,6 +72,7 @@ class RoomCard extends Component {
           </div>
           <Join
             roomId={this.props.id}
+            auth={this.props.auth}
             normsChecked={this.state.normsChecked}/>
         </div>
 

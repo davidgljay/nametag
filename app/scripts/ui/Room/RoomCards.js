@@ -1,19 +1,20 @@
 
 
-import React, { Component, PropTypes } from 'react'
+import {Component} from 'react'
 import RoomCard from './RoomCard'
 import Navbar from '../Utils/Navbar'
+import {subscribe, unsubscribe} from '../../actions/RoomActions'
 import style from '../../../styles/RoomCard/RoomCards.css'
 
 
 class RoomCards extends Component {
 
   componentDidMount() {
-    this.props.subscribe()
+    this.props.dispatch(subscribe())
   }
 
   componentWillUnmount() {
-    this.props.unsubscribe()
+    this.props.dispatch(unsubscribe())
   }
 
   showRoomCards(rooms) {
@@ -22,7 +23,9 @@ class RoomCards extends Component {
       if (!rooms.hasOwnProperty(id)) {
         continue
       }
-      roomCards.push(<RoomCard room={rooms[id]} id={id} key={id}/>)
+      roomCards.push(
+        <RoomCard room={rooms[id]} id={id} key={id} dispatch={this.props.dispatch}/>
+      )
     }
     return roomCards
   }
@@ -35,12 +38,6 @@ class RoomCards extends Component {
         </div>
       </div>
   }
-}
-
-RoomCards.contextTypes = {
-  userAuth: PropTypes.object,
-  unAuth: PropTypes.func,
-  checkAuth: PropTypes.func,
 }
 
 export default RoomCards

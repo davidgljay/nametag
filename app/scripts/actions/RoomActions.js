@@ -21,7 +21,7 @@ export function setRoomNametagCount(roomId, nametagCount) {
   }
 }
 
-export function addUserNametagCert(cert, roomId) {
+export function addNametagCert(cert, roomId) {
   return {
     type: constants.ADD_USER_NT_CERT,
     cert,
@@ -29,7 +29,7 @@ export function addUserNametagCert(cert, roomId) {
   }
 }
 
-export function removeUserNametagCert(certId, roomId) {
+export function removeNametagCert(certId, roomId) {
   return {
     type: constants.REMOVE_USER_NT_CERT,
     certId,
@@ -37,7 +37,7 @@ export function removeUserNametagCert(certId, roomId) {
   }
 }
 
-export function updateUserNametag(roomId, property, value) {
+export function updateNametag(roomId, property, value) {
   return {
     type: constants.UPDATE_USER_NAMETAG,
     roomId,
@@ -105,13 +105,13 @@ export function unsubscribe() {
 *
 * TODO: this may violate privacy expecations in some instances, think about how to refactor
 * @params
-*    none
+*    roomId- the id of the room to get the nametag count for
 *
 * @returns
 *    Promise
 */
 export function getNametagCount(roomId) {
-  return function(dispatch) {
+  return (dispatch) => {
     return new Promise((resolve, reject) => {
       nametagSubscriptions.push(hz('nametags').watch(roomId).subscribe(
           (nametags) => {
@@ -125,4 +125,5 @@ export function getNametagCount(roomId) {
     })
   }
 }
+
 

@@ -1,22 +1,15 @@
 import { connect } from 'react-redux'
-import * as actions from '../../actions/RoomActions'
 import component from '../../ui/Room/RoomCards'
 
 const mapStateToProps = (state) => {
   return {
     rooms: state.rooms,
+    auth: state.auth,
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    subscribe: () => {
-      dispatch(actions.subscribe())
-    },
-    unsubscribe: () => {
-      dispatch(actions.unsubscribe())
-    },
-  }
+  return {dispatch}
 }
 
 const RoomCards = connect(
