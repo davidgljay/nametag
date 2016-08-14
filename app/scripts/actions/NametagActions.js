@@ -25,15 +25,19 @@ export const addNametag = (nametag, id, roomId) => {
 export function subscribe(nametagId, roomId) {
   return function(dispatch) {
     return new Promise((resolve, reject) => {
-      nametagSubscriptions[nametagId] = hz('nametags').find({id:nametagId}).watch().subscribe(
+      nametagSubscriptions[nametagId] = hz('nametags').find(nametagId).watch().subscribe(
         (nametag) => {
-          resolve(dispatch(addNametag(nametag, nametag.id, roomId)))
+          if (nametag) {
+            resolve(dispatch(addNametag(nametag, nametag.id, roomId)))
+          } else {
+            reject('Nametag not found')
+          }
         },
         (err) => {
-          errorLog('Error subscribing to Nametag ' + nametagId)(err)
           reject(err)
         })
     })
+    .catch(errorLog('Error subscribing to Nametag ' + nametagId + ': '))
   }
 }
 
