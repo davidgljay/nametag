@@ -46,10 +46,7 @@ class Certificate extends Component {
     }
     if (this.state.expanded) {
       certificate = <div className={style.certificateExpanded}>
-            <img
-              src="/icons/close.svg"
-              className={style.close}
-              onClick={this.toggleExpanded.bind(this)}/>
+      <span className={style.close + ' glyphicon glyphicon-remove'} onClick={this.toggleExpanded.bind(this)} aria-hidden="true"/>
             { icon }
             <div className={style.name}>{this.props.certificate.name}</div>
             <div className={style.granter}>Verified by: {this.props.certificate.granter}</div>

@@ -8,7 +8,7 @@ class Nametag extends Component {
   }
 
   componentDidUnMount() {
-    this.props.unsubscribe(this.props.id, this.props.roomId)
+    this.props.unsubscribe(this.props.id)
   }
 
   render() {

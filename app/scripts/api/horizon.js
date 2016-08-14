@@ -15,3 +15,14 @@ export function hzAuth(provider) {
   }
   return promise
 }
+
+export function getAuth() {
+  if (hz.hasAuthToken()) {
+    return new Promise((resolve) => {
+      hz.currentUser().fetch().subscribe((user) => {
+        resolve(user)
+      })
+    })
+  }
+  return new Promise((resolve) => resolve(false))
+}
