@@ -9,7 +9,7 @@ describe('Room reducer', () => {
       let newState = roomReducer({},
         {
           type: constants.ADD_ROOM,
-          key: 1,
+          id: 1,
           room: {
             title: 'Test Room',
           },
@@ -27,7 +27,7 @@ describe('Room reducer', () => {
         },
         {
           type: constants.ADD_ROOM,
-          key: 1,
+          id: 1,
           room: {
             title: 'Test Room 2',
           },

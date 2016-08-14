@@ -48,7 +48,7 @@ const updateNametag = (state, action) => {
 const rooms = (state = {}, action) => {
   switch (action.type) {
   case constants.ADD_ROOM:
-    return Object.assign({}, state, {[action.key]: action.room})
+    return Object.assign({}, state, {[action.id]: action.room})
   case constants.SET_ROOM_NT_COUNT:
     let newRoom = Object.assign({}, state[action.roomId], {nametagCount: action.nametagCount})
     return Object.assign({}, state, {[action.roomId]: newRoom})
