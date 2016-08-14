@@ -3,3 +3,5 @@
 .sass-cache/
 /app/bower_components/
 config.js
+/.hz
+/.keys

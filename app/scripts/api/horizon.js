@@ -1,4 +1,4 @@
-export const hz = Horizon({host: 'localhost:8181'})
+export const hz = Horizon()
 
 export function hzAuth(provider) {
   hz({authType: 'token'})
