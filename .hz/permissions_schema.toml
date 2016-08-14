@@ -1,0 +1,21 @@
+# For now, let any user read or write.
+
+[collections.nametags]
+[collections.users]
+[collections.rooms]
+
+[groups.default.rules.read_nametags]
+template = "collection('nametags').anyRead()"
+
+[groups.default.rules.write_nametags]
+template = "collection('nametags').anyWrite()"
+
+[groups.default.rules.read_rooms]
+template = "collection('rooms').anyRead()"
+
+[groups.default.rules.write_rooms]
+template = "collection('rooms').anyWrite()"
+
+# This will also let users write to their user (can they rewrite ids?)
+[groups.default.rules.read_current_user]
+template = "collection('users').find({id: userId()})"
