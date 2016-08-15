@@ -1,10 +1,11 @@
 import React from 'react'
 import style from '../../../styles/Utils/Navbar.css'
+import {logout} from '../../actions/UserActions'
 
 const Navbar = (props) => {
   let login
-  if (props.userAuth) {
-    login = <a className='navbar-link' onClick={props.unAuth}>Log out</a>
+  if (props.user) {
+    login = <a className='navbar-link' onClick={() => props.dispatch(logout())}>Log out</a>
   } else {
     login = <a className='navbar-link' href='#'>Log In</a>
   }

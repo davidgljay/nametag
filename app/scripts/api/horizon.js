@@ -26,3 +26,7 @@ export function getAuth() {
   }
   return new Promise((resolve) => resolve(false))
 }
+
+export function unAuth() {
+  Horizon.clearAuthTokens()
+}

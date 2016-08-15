@@ -20,4 +20,15 @@ describe('User reducer', () => {
       })
     })
   })
+
+  describe('LOGOUT_USER', () => {
+    it('should set the user state to false', () => {
+      let newState = userReducer({
+        id: '123',
+      }, {
+        type: constants.LOGOUT_USER,
+      })
+      expect(newState).toEqual(false)
+    })
+  })
 })

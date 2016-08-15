@@ -4,7 +4,7 @@ import component from '../../ui/Room/RoomCards'
 const mapStateToProps = (state) => {
   return {
     rooms: state.rooms,
-    auth: state.auth,
+    user: state.user,
   }
 }
 

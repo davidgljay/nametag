@@ -1,6 +1,6 @@
 
 
-import React, {Component} from 'react'
+import React, {Component, PropTypes} from 'react'
 import RoomCard from './RoomCard'
 import Navbar from '../Utils/Navbar'
 import {subscribe, unsubscribe} from '../../actions/RoomActions'
@@ -32,12 +32,18 @@ class RoomCards extends Component {
 
   render() {
     return <div id={style.roomSelection}>
-        <Navbar userAuth={this.context.userAuth} unAuth={this.context.unAuth}/>
+        <Navbar user={this.props.user} dispatch={this.props.dispatch}/>
         <div id={style.roomCards}>
           {this.showRoomCards(this.props.rooms)}
         </div>
       </div>
   }
+}
+
+RoomCards.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  rooms: PropTypes.object.isRequired,
+  user: PropTypes.object,
 }
 
 export default RoomCards

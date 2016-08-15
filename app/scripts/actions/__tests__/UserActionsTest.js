@@ -1,11 +1,11 @@
 jest.unmock('../UserActions')
 jest.unmock('../../tests/mockGlobals')
-// jest.unmock('../../api/horizon')
+
 jest.unmock('redux-mock-store')
 jest.unmock('redux-thunk')
 
 import constants from '../../constants'
-import {hzAuth, getAuth} from '../../api/horizon'
+import {hzAuth, getAuth, unAuth} from '../../api/horizon'
 import configureStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 let UserActions = require('../UserActions')
@@ -69,6 +69,17 @@ describe('User Actions', () => {
     it('should call hzAuth with the provider', () => {
       UserActions.providerAuth('facebook')()
       expect(hzAuth.mock.calls[0][0]).toEqual('facebook')
+    })
+  })
+
+  describe('logout', () => {
+    it('should clear localStorage tokens and dispatch a logout action', () => {
+      let store = mockStore({})
+      UserActions.logout()(store.dispatch, store.getState)
+      expect(unAuth.mock.calls.length).toEqual(1)
+      expect(store.getActions()[0]).toEqual({
+        type: constants.LOGOUT_USER,
+      })
     })
   })
 })
