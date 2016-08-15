@@ -40,7 +40,7 @@ const removeCertificate = (state, action) => {
 
 const updateNametag = (state, action) => {
   let room = state[action.roomId]
-  let newNametag = Object.assign({}, room.userNametag, {[action.property]:action.value})
+  let newNametag = Object.assign({}, room.userNametag, {[action.property]: action.value})
   let newRoom = Object.assign({}, room, {userNametag: newNametag})
   return Object.assign({}, state, {[action.roomId]: newRoom})
 }

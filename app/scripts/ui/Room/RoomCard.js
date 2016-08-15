@@ -13,7 +13,6 @@ class RoomCard extends Component {
       flipped: false,
       flipping: false,
       normsChecked: false,
-      login: fbase.getAuth(),
     }
   }
 
@@ -72,7 +71,8 @@ class RoomCard extends Component {
           </div>
           <Join
             roomId={this.props.id}
-            auth={this.props.auth}
+            userNametag={this.props.userNametag}
+            user={this.props.user}
             normsChecked={this.state.normsChecked}
             dispatch={this.props.dispatch}/>
         </div>
@@ -95,8 +95,10 @@ class RoomCard extends Component {
 }
 
 RoomCard.propTypes = {
-  room: PropTypes.object,
-  id: PropTypes.string,
+  room: PropTypes.object.isRequired,
+  id: PropTypes.string.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  user: PropTypes.object,
 }
 
 export default RoomCard

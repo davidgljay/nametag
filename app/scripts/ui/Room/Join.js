@@ -26,113 +26,6 @@ class Join extends Component {
     }
   }
 
-  // Make room action (check)
-  // addNametagCertificate(cert) {
-  //   this.setState(function setState(prevState) {
-  //     let unique = true
-  //     // Check to prevent duplicate certificate entries
-  //     for (let i = prevState.nametag.certificates.length - 1; i >= 0; i--) {
-  //       if (cert.id === prevState.nametag.certificates[i].id) {
-  //         unique = false
-  //       }
-  //     }
-  //     if (unique) {
-  //       prevState.nametag.certificates.push(cert)
-  //     }
-  //     return prevState
-  //   })
-  // }
-
-  // Make room action (check)
-  // removeNametagCertificate(certId) {
-  //   this.setState(function setState(prevState) {
-  //     // Check to prevent duplicate certificate entries
-  //     for (let i = prevState.nametag.certificates.length - 1; i >= 0; i--) {
-  //       if (certId === prevState.nametag.certificates[i].id) {
-  //         prevState.nametag.certificates.splice(i, 1)
-  //       }
-  //     }
-  //     return prevState
-  //   })
-  // }
-
-  // Make room action (these temporary nametags can
-  // be part of app state until stored in nametags)
-  // (check)
-  updateNametag(property) {
-    return (e) => {
-      this.props.updateNametag(property, e.target.value);
-    }
-  }
-
-  // componentDidMount() {
-  //   // TODO: Add autocomplete on click
-  //   if (this.context.userAuth) {
-  //     this.checkIfJoined()
-  //   }
-  // }
-
-  // componentWillUpdate() {
-  //   if (this.state.nametag.name.length === 0 && this.context.userAuth) {
-  //     this.checkIfJoined()
-  //   }
-  // }
-
-  // componentWillUnmount() {
-  //   if (this.state.defaults) {
-  //     const defaultsRef = fbase.child('user_defaults/' + this.context.userAuth.uid)
-  //     defaultsRef.off('value')
-  //   }
-  // }
-
-  // TODO: Need to rethink. This seems tied to login.
-  // Belongs in user action
-  // On login I want to load user defaults into user
-  // I also want to load default vals into each room
-  // That eliminates this function
-  // checkIfJoined() {
-  //   //Check to see if the user has already joined this room.
-  //   const userRoomRef = fbase.child('user_rooms/' + this.context.userAuth.uid + '/' + this.props.roomId)
-  //   userRoomRef.on('value', function onValue(value) {
-  //     if (value.val()) {
-  //       this.loadNametag(value.val().nametag_id)
-  //     } else {
-  //       this.setDefaults()
-  //     }
-  //   }, errorLog('Getting user_room in Join component'), this)
-  // }
-
-  // TODO: Move to user action
-  // This is handled by above function
-  // setDefaults() {
-  //   //Load user's default nametag settings
-  //   const defaultsRef = fbase.child('user_defaults/' + this.context.userAuth.uid)
-  //   defaultsRef.on('value', function setDefault(value) {
-  //     this.setState(function setState(prevState) {
-  //       prevState.defaults = value.val()
-  //       prevState.nametag.name = prevState.defaults && prevState.defaults.names ? prevState.defaults.names[0] : ''
-  //       prevState.nametag.icon = prevState.defaults && prevState.defaults.icons ? prevState.defaults.icons[0] : ''
-  //       return prevState
-  //     })
-  //   }, errorLog('Setting defaults in Join component'), this)
-  // }
-
-  // TODO: Move to user action
-  // Needs to be distinct room action
-  // Shuold have no effect if user is not logged in
-  // loadNametag(nametagId) {
-  //   //Load existing nametag for this room.
-  //   const nametagRef = fbase.child('nametags/' + this.props.roomId + '/' + nametagId)
-  //   return nametagRef.on('value', function onValue(value) {
-  //     this.setState(function setState(prevState) {
-  //       prevState.nametag = value.val()
-  //       prevState.nametagId = value.key()
-  //       prevState.nametag.certificates = prevState.nametag.certificates || []
-  //       return prevState
-  //     })
-  //   }, errorLog('Getting nametag in Join component'), this)
-  // }
-
   updateUrl() {
     window.location = '/#/rooms/' + this.props.roomId
   }
@@ -172,14 +65,15 @@ class Join extends Component {
 
   render() {
     let join
-    if (this.props.auth) {
+    if (this.props.user) {
       join =
         <div id={style.join}>
-          <Alert alertType='danger' alert={this.state.alert}/>
+          <Alert alertType='danger' alert={this.props.alert}/>
           <h4>Write Your Nametag For This Conversation</h4>
           <EditNametag
-            nametag={this.state.nametag}
-            dispatch={this.props.dispatch}/>
+            nametag={this.props.userNametag}
+            dispatch={this.props.dispatch}
+            roomId={this.props.roomId}/>
           <div id={style.userCertificates}>
             <p className={style.userCertificateText}>
               Click to view your certificates.<br/>
@@ -203,7 +97,7 @@ class Join extends Component {
 Join.propTypes = {
   roomId: PropTypes.string.isRequired,
   normsChecked: PropTypes.bool.isRequired,
-  auth: PropTypes.object,
+  user: PropTypes.object,
   dispatch: PropTypes.func.isRequired,
 }
 

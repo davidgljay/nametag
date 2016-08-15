@@ -24,7 +24,11 @@ class RoomCards extends Component {
         continue
       }
       roomCards.push(
-        <RoomCard room={rooms[id]} id={id} key={id} dispatch={this.props.dispatch}/>
+        <RoomCard
+          room={rooms[id]}
+          id={id} key={id}
+          dispatch={this.props.dispatch}
+          user={this.props.user}/>
       )
     }
     return roomCards
