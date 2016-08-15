@@ -18,24 +18,26 @@ var source = require('vinyl-source-stream'),
     destFolder = './dist/scripts',
     destFileName = 'app.js'
 
-var browserSync = require('browser-sync')
-var reload = browserSync.reload
+let browserSync = require('browser-sync')
+let reload = browserSync.reload
 
 // Styles
 gulp.task('styles', ['css-modules'])
 
-gulp.task('moveCss',['clean'], function(){
+gulp.task('moveCss',['clean'], function() {
   // the base option sets the relative root for the set of files,
   // preserving the folder structure
   gulp.src(['./app/styles/**/*.css'], { base: './app/styles/' })
   .pipe(gulp.dest('dist/styles'))
 })
 
-gulp.task('moveIcons',['clean'], function(){
+gulp.task('moveIcons', ['clean'], function() {
   // the base option sets the relative root for the set of files,
   // preserving the folder structure
   gulp.src(['./app/icons/**/*.svg'], { base: './app/icons/' })
   .pipe(gulp.dest('dist/icons'))
+  gulp.src(['./favicon.ico'])
+  .pipe(gulp.dest('dist/'))
 })
 
 // gulp.task('sass', function() {
@@ -50,39 +52,37 @@ gulp.task('moveIcons',['clean'], function(){
 // })
 
 gulp.task('css-modules', function() {
-    var b = browserify()
-    b.add(sourceFile)
-    b.plugin(['css-modulesify', {
-        output:'./dist/styles/main.css',
-    }])
+  let b = browserify()
+  b.add(sourceFile)
+  b.plugin(['css-modulesify', {
+      output:'./dist/styles/main.css',
+  }])
 
-    return b.bundle()
+  return b.bundle()
 })
 
-
-
-var bundler = watchify(browserify({
-    entries: [sourceFile],
-    debug: true,
-    plugin:['css-modulesify'],
-    insertGlobals: true,
-    cache: {},
-    packageCache: {},
-    fullPaths: true,
+let bundler = watchify(browserify({
+  entries: [sourceFile],
+  debug: true,
+  plugin:['css-modulesify'],
+  insertGlobals: true,
+  cache: {},
+  packageCache: {},
+  fullPaths: true,
 }))
 
 bundler.on('update', rebundle)
 bundler.on('log', $.util.log)
 
 function rebundle() {
-    return bundler.bundle()
-        // log errors if they happen
-        .on('error', $.util.log.bind($.util, 'Browserify Error'))
-        .pipe(source(destFileName))
-        .pipe(gulp.dest(destFolder))
-        .on('end', function() {
-            reload()
-        })
+  return bundler.bundle()
+    // log errors if they happen
+    .on('error', $.util.log.bind($.util, 'Browserify Error'))
+    .pipe(source(destFileName))
+    .pipe(gulp.dest(destFolder))
+    .on('end', function() {
+      reload() 
+    })
 }
 
 // Scripts
