@@ -36,7 +36,7 @@ gulp.task('moveIcons', ['clean'], function() {
   // preserving the folder structure
   gulp.src(['./app/icons/**/*.svg'], { base: './app/icons/' })
   .pipe(gulp.dest('dist/icons'))
-  gulp.src(['./favicon.ico'])
+  gulp.src(['./app/favicon.ico'])
   .pipe(gulp.dest('dist/'))
 })
 
