@@ -4,4 +4,4 @@
 /app/bower_components/
 config.js
 /.hz/config.toml
-/.keys
+/.keys/

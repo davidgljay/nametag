@@ -1,4 +1,4 @@
-import roomReducer from '../NametagReducer'
+import nametagReducer from '../NametagReducer'
 import constants from '../../constants'
 
 jest.unmock('../NametagReducer')
@@ -6,7 +6,7 @@ jest.unmock('../NametagReducer')
 describe('Nametag reducer', () => {
   describe('ADD_NAMETAG', () => {
     it('should assign a nametag', () => {
-      let newState = roomReducer({},
+      let newState = nametagReducer({},
         {
           type: constants.ADD_NAMETAG,
           id: 1,
