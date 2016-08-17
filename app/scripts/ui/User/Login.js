@@ -126,20 +126,20 @@ class Login extends Component {
         <img
           src="./images/twitter.jpg"
           className={style.loginOption + ' img-circle'}
-          onClick={() => this.props.dispatch(providerAuth('twitter'))}/>
+          onClick={() => this.context.dispatch(providerAuth('twitter'))}/>
         <img
           src="./images/fb.jpg"
           className={style.loginOption + ' img-circle'}
-          onClick={() => this.props.dispatch(providerAuth('facebook'))}/>
+          onClick={() => this.context.dispatch(providerAuth('facebook'))}/>
         <img
           src="./images/google.png"
           className={style.loginOption + ' img-circle'}
-          onClick={() => this.props.dispatch(providerAuth('google'))}/>
+          onClick={() => this.context.dispatch(providerAuth('google'))}/>
       </div>
   }
 }
 
-Login.propTypes = {
+Login.contextTypes = {
   dispatch: PropTypes.func.isRequired,
 }
 

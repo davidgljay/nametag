@@ -25,6 +25,13 @@ class Nametag extends Component {
     store.dispatch(getUser())
   }
 
+  getChildContext() {
+    return {
+      user: store.getState().user,
+      dispatch: store.dispatch,
+    }
+  }
+
   render() {
     return <Provider store={store}>
       <Router history={hashHistory}>
@@ -34,6 +41,11 @@ class Nametag extends Component {
       </Router>
     </Provider>
   }
+}
+
+Nametag.childContextTypes = {
+  user: React.PropTypes.object,
+  dispatch: React.PropTypes.func,
 }
 
 let NametagWithDragging = DragDropContext(HTML5Backend)(Nametag)

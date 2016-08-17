@@ -55,7 +55,7 @@ gulp.task('css-modules', function() {
   let b = browserify()
   b.add(sourceFile)
   b.plugin(['css-modulesify', {
-      output:'./dist/styles/main.css',
+    output: './dist/styles/main.css',
   }])
 
   return b.bundle()

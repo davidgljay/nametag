@@ -65,14 +65,13 @@ class Join extends Component {
 
   render() {
     let join
-    if (this.props.user) {
+    if (this.context.user) {
       join =
         <div id={style.join}>
           <Alert alertType='danger' alert={this.props.alert}/>
           <h4>Write Your Nametag For This Conversation</h4>
           <EditNametag
             nametag={this.props.userNametag}
-            dispatch={this.props.dispatch}
             roomId={this.props.roomId}/>
           <div id={style.userCertificates}>
             <p className={style.userCertificateText}>
@@ -97,8 +96,11 @@ class Join extends Component {
 Join.propTypes = {
   roomId: PropTypes.string.isRequired,
   normsChecked: PropTypes.bool.isRequired,
+}
+
+Join.contextTypes = {
   user: PropTypes.object,
-  dispatch: PropTypes.func.isRequired,
+  dispatch: PropTypes.fund,
 }
 
 export default Join
