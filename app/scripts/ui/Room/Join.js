@@ -97,7 +97,7 @@ class Join extends Component {
 Join.propTypes = {
   roomId: PropTypes.string.isRequired,
   normsChecked: PropTypes.bool.isRequired,
-  userNametag: PropTypes.object.isRequired,
+  userNametag: PropTypes.object,
 }
 
 Join.contextTypes = {

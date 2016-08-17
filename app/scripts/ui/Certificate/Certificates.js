@@ -14,7 +14,7 @@ class Certificates extends Component {
 }
 
 Certificates.propTypes = {
-  certificates: PropTypes.array.isRequired,
+  certificates: PropTypes.array,
 }
 
 export default Certificates
