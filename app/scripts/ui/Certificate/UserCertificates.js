@@ -7,15 +7,10 @@ import {fetch} from '../../actions/CertificateActions'
 
 class UserCertificates extends Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      certificates: [],
-    }
-  }
-
   componentDidMount() {
-    if (!this.context.user || !this.context.user.data || !this.context.user.data.certificates) {
+    if (!this.context.user ||
+      !this.context.user.data ||
+      !this.context.user.data.certificates) {
       return
     }
     let certificates = this.context.user.data.certificates
