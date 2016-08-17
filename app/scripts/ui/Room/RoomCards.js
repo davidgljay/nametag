@@ -17,6 +17,12 @@ class RoomCards extends Component {
     this.context.dispatch(unsubscribe())
   }
 
+  getChildContext() {
+    return {
+      user: this.props.user,
+    }
+  }
+
   showRoomCards(rooms) {
     let roomCards = []
     for (let id in rooms) {
@@ -34,7 +40,7 @@ class RoomCards extends Component {
 
   render() {
     return <div id={style.roomSelection}>
-        <Navbar user={this.context.user} dispatch={this.context.dispatch}/>
+        <Navbar user={this.props.user} dispatch={this.context.dispatch}/>
         <div id={style.roomCards}>
           {this.showRoomCards(this.props.rooms)}
         </div>
@@ -47,8 +53,11 @@ RoomCards.propTypes = {
 }
 
 RoomCards.contextTypes = {
-  user: React.PropTypes.object,
   dispatch: React.PropTypes.func,
+}
+
+RoomCards.childContextTypes = {
+  user: React.PropTypes.object,
 }
 
 export default RoomCards

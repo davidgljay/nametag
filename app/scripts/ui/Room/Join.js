@@ -65,14 +65,15 @@ class Join extends Component {
 
   render() {
     let join
-    if (this.context.user) {
+    if (this.context.user && this.context.user.id) {
       join =
         <div id={style.join}>
           <Alert alertType='danger' alert={this.props.alert}/>
           <h4>Write Your Nametag For This Conversation</h4>
           <EditNametag
             nametag={this.props.userNametag}
-            roomId={this.props.roomId}/>
+            roomId={this.props.roomId}
+            dispatch={this.context.dispatch}/>
           <div id={style.userCertificates}>
             <p className={style.userCertificateText}>
               Click to view your certificates.<br/>
@@ -100,7 +101,7 @@ Join.propTypes = {
 
 Join.contextTypes = {
   user: PropTypes.object,
-  dispatch: PropTypes.fund,
+  dispatch: PropTypes.func,
 }
 
 export default Join

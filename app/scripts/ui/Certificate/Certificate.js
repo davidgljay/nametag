@@ -39,6 +39,9 @@ class Certificate extends Component {
   }
 
   render() {
+    if (!this.props.certificate) {
+      return null
+    }
     let certificate
     let icon = ''
     if (this.props.certificate.icon_array) {

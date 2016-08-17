@@ -1,23 +1,19 @@
 'use strict'
 
-var gulp = require('gulp')
-var del = require('del')
+let gulp = require('gulp')
+let del = require('del')
+let fs = require('fs')
 
-
-var path = require('path')
-
+let path = require('path')
 
 // Load plugins
-var $ = require('gulp-load-plugins')()
-var browserify = require('browserify')
-var watchify = require('watchify')
-var source = require('vinyl-source-stream'),
-
-    sourceFile = './app/scripts/app.js',
-
-    destFolder = './dist/scripts',
-    destFileName = 'app.js'
-
+let $ = require('gulp-load-plugins')()
+let browserify = require('browserify')
+let watchify = require('watchify')
+let source = require('vinyl-source-stream')
+let sourceFile = './app/scripts/app.js'
+let destFolder = './dist/scripts'
+let destFileName = 'app.js'
 let browserSync = require('browser-sync')
 let reload = browserSync.reload
 
@@ -27,6 +23,7 @@ gulp.task('styles', ['css-modules'])
 gulp.task('moveCss',['clean'], function() {
   // the base option sets the relative root for the set of files,
   // preserving the folder structure
+
   gulp.src(['./app/styles/**/*.css'], { base: './app/styles/' })
   .pipe(gulp.dest('dist/styles'))
 })
@@ -108,14 +105,14 @@ gulp.task('html', function() {
 
 // Images
 gulp.task('images', function() {
-    return gulp.src('app/images/**/*')
-        .pipe($.cache($.imagemin({
-            optimizationLevel: 3,
-            progressive: true,
-            interlaced: true
-        })))
-        .pipe(gulp.dest('dist/images'))
-        .pipe($.size())
+  return gulp.src(['app/images/**/*'], { base: './app/images/'})
+    .pipe($.cache($.imagemin({
+      optimizationLevel: 3,
+      progressive: true,
+      interlaced: true,
+    })))
+    .pipe(gulp.dest('dist/images'))
+    .pipe($.size())
 })
 
 // Fonts
@@ -184,7 +181,7 @@ gulp.task('extras', function() {
 })
 
 // Watch
-gulp.task('watch', ['html', 'fonts', 'bundle'], function() {
+gulp.task('watch', ['html', 'fonts', 'images', 'bundle'], function() {
 
     browserSync({
         notify: false,
@@ -193,7 +190,7 @@ gulp.task('watch', ['html', 'fonts', 'bundle'], function() {
         // Note: this uses an unsigned certificate which on first access
         //       will present a certificate warning in the browser.
         // https: true,
-        server: ['dist', 'app']
+        server: ['dist', 'app'],
     })
 
     // Watch .json files
@@ -207,7 +204,7 @@ gulp.task('watch', ['html', 'fonts', 'bundle'], function() {
     
 
     // Watch image files
-    gulp.watch('app/images/**/*', reload)
+    gulp.watch('app/images/**/*', ['images', reload])
 })
 
 // Build
@@ -219,4 +216,4 @@ gulp.task('build', ['html', 'buildBundle', 'images', 'fonts', 'extras'], functio
 })
 
 // Default task
-gulp.task('default', ['clean', 'build'  , 'jest'  ])
+gulp.task('default', ['clean', 'build', 'jest'  ])

@@ -27,7 +27,6 @@ class Nametag extends Component {
 
   getChildContext() {
     return {
-      user: store.getState().user,
       dispatch: store.dispatch,
     }
   }
@@ -44,7 +43,6 @@ class Nametag extends Component {
 }
 
 Nametag.childContextTypes = {
-  user: React.PropTypes.object,
   dispatch: React.PropTypes.func,
 }
 
