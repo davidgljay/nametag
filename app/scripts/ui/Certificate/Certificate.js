@@ -39,24 +39,24 @@ class Certificate extends Component {
   }
 
   render() {
-    if (!this.props.name) {
+    if (!this.props.certificate) {
       return null
     }
     let certificate
     let icon = ''
-    if (this.props.icon_array) {
-      icon = <img className={style.icon} alt="icon" src={this.props.icon_array[0]}/>
+    if (this.props.certificate.icon_array) {
+      icon = <img className={style.icon} alt="icon" src={this.props.certificate.icon_array[0]}/>
     }
     if (this.state.expanded) {
       certificate = <div className={style.certificateExpanded}>
       <span className={style.close + ' glyphicon glyphicon-remove'} onClick={this.toggleExpanded.bind(this)} aria-hidden="true"/>
             { icon }
-            <div className={style.name}>{this.props.name}</div>
-            <div className={style.granter}>Verified by: {this.props.granter}</div>
-            <div className={style.description}>{this.props.description_array[0]}</div>
+            <div className={style.name}>{this.props.certificate.name}</div>
+            <div className={style.granter}>Verified by: {this.props.certificate.granter}</div>
+            <div className={style.description}>{this.props.certificate.description_array[0]}</div>
             <hr/>
             <div className={style.notes}>
-              {this.props.notes.map(function mapNotes(note) {
+              {this.props.certificate.notes.map(function mapNotes(note) {
                  return <div className={style.note} key={note.date}>
                     <div className={style.date}>{moment(note.date).format('MMMM Do, YYYY')}: </div>
                     <div className={style.msg}>{note.msg}</div>
@@ -68,7 +68,7 @@ class Certificate extends Component {
       certificate = <div
         className={style.certificate}
         onClick={this.toggleExpanded.bind(this)}>
-          {this.props.name}
+          {this.props.certificate.name}
         </div>
     }
 
