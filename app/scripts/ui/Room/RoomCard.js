@@ -71,7 +71,7 @@ class RoomCard extends Component {
           </div>
           <Join
             roomId={this.props.id}
-            userNametag={this.props.userNametag}
+            userNametag={this.props.room.userNametag}
             normsChecked={this.state.normsChecked}/>
         </div>
 

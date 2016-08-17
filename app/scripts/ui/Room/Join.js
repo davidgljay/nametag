@@ -71,7 +71,7 @@ class Join extends Component {
           <Alert alertType='danger' alert={this.props.alert}/>
           <h4>Write Your Nametag For This Conversation</h4>
           <EditNametag
-            nametag={this.props.userNametag}
+            userNametag={this.props.userNametag}
             roomId={this.props.roomId}
             dispatch={this.context.dispatch}/>
           <div id={style.userCertificates}>
@@ -97,6 +97,7 @@ class Join extends Component {
 Join.propTypes = {
   roomId: PropTypes.string.isRequired,
   normsChecked: PropTypes.bool.isRequired,
+  userNametag: PropTypes.object.isRequired,
 }
 
 Join.contextTypes = {
