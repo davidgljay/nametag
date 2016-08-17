@@ -1,8 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import fbase from '../../api/firebase'
 import Certificate from './Certificate'
-
-//TODO: Change to Certificates
 
 class Certificates extends Component {
 
