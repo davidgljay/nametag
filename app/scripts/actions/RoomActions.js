@@ -126,4 +126,26 @@ export function getNametagCount(roomId) {
   }
 }
 
-
+/*
+* Join a room
+*
+* @params
+*   roomId - The room to join
+*   nametag - The nametag with which to join the room
+*
+* @returns
+*   Promise
+*/
+export function joinRoom(roomId, nametag) {
+  return (dispatch) => {
+    return new Promise((resolve, reject) => {
+      // Can subscribe be a promise?
+      hz('nametags').insert(nametag).subscribe(
+        (result) => {
+          console.log(result)
+          // How to push to an array?
+          hz('room_nametags').get('roomId')
+        })
+    })
+  }
+}
