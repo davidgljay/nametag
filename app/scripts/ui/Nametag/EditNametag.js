@@ -44,7 +44,7 @@ class EditNametag extends Component {
   }
 
   render() {
-    let nametag = this.props.userNametag || {name: '', bio: ''}
+    let nametag = this.props.userNametag || {name: '', bio: '', roomId: this.props.roomId}
     // TODO: Figure out image caching
     return this.props.connectDropTarget(<div id={style.editNametag} className="profile">
           <div className={style.form}>

@@ -4,7 +4,6 @@
 [collections.users]
 [collections.rooms]
 [collections.certificates]
-[collections.room_nametags]
 
 [groups.default.rules.read_nametags]
 template = "collection('nametags').anyRead()"
@@ -23,12 +22,6 @@ template = "collection('certificates').anyRead()"
 
 [groups.default.rules.write_certificates]
 template = "collection('certificates').anyWrite()"
-
-[groups.default.rules.read_room_nametags]
-template = "collection('room_nametags').anyRead()"
-
-[groups.default.rules.write_room_nametags]
-template = "collection('room_nametags').anyWrite()"
 
 # This will also let users write to their user (can they rewrite ids?)
 [groups.default.rules.read_current_user]
