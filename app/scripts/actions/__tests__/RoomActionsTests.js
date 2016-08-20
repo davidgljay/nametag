@@ -1,15 +1,22 @@
 jest.unmock('../RoomActions')
 jest.unmock('../../tests/mockGlobals')
-jest.unmock('../../api/horizon')
 
+jest.unmock('redux-mock-store')
+jest.unmock('redux-thunk')
+
+import * as actions from '../RoomActions'
 import constants from '../../constants'
-import {hzMock} from '../../tests/mockGlobals'
+import {hz} from '../../api/horizon'
+import configureStore from 'redux-mock-store'
+import thunk from 'redux-thunk'
+
+const middlewares = [thunk]
+const mockStore = configureStore(middlewares)
 
 describe('RoomActions', () => {
   describe('addRoom', () => {
     it('creates an addRoom action', () => {
-      let RoomActions = require('../RoomActions')
-      let addRoom = RoomActions.addRoom('test', '123')
+      let addRoom = actions.addRoom('test', '123')
       expect(addRoom).toEqual({
         type: constants.ADD_ROOM,
         room: 'test',
@@ -20,8 +27,7 @@ describe('RoomActions', () => {
 
   describe('setRoomNametagCount', () => {
     it('should set the room nametag count', () => {
-      let RoomActions = require('../RoomActions')
-      expect(RoomActions.setRoomNametagCount('123', 10))
+      expect(actions.setRoomNametagCount('123', 10))
         .toEqual({
           type: constants.SET_ROOM_NT_COUNT,
           roomId: '123',
@@ -32,8 +38,7 @@ describe('RoomActions', () => {
 
   describe('addNametagCert', () => {
     it('should add a certificate to the user nametag for this room', () => {
-      let RoomActions = require('../RoomActions')
-      expect(RoomActions.addNametagCert({name: 'Test Certificate', id: '123' }, 'abc'))
+      expect(actions.addNametagCert({name: 'Test Certificate', id: '123' }, 'abc'))
         .toEqual({
           type: constants.ADD_USER_NT_CERT,
           cert: {name: 'Test Certificate', id: '123' },
@@ -44,8 +49,7 @@ describe('RoomActions', () => {
 
   describe('removeNametagCert', () => {
     it('should remove a certificate from the user nametag for this room', () => {
-      let RoomActions = require('../RoomActions')
-      expect(RoomActions.removeNametagCert('123', 'abc'))
+      expect(actions.removeNametagCert('123', 'abc'))
         .toEqual({
           type: constants.REMOVE_USER_NT_CERT,
           certId: '123',
@@ -56,8 +60,7 @@ describe('RoomActions', () => {
 
   describe('updateNametag', () => {
     it('should update the user nametag', () => {
-      let RoomActions = require('../RoomActions')
-      expect(RoomActions.updateNametag('abc', 'name', 'Allosaur'))
+      expect(actions.updateNametag('abc', 'name', 'Allosaur'))
         .toEqual({
           type: constants.UPDATE_USER_NAMETAG,
           roomId: 'abc',
@@ -81,9 +84,34 @@ describe('RoomActions', () => {
         [{}],
         [{}, {}, {}],
       ]
-      hzMock(mockResponses)
-      let RoomActions = require('../RoomActions')
-      RoomActions.subscribe()(dispatch)
+      hz.mockReturnValueOnce({
+        watch: () => {
+          return {
+            subscribe: (subs) => {
+              return subs(mockResponses[0])
+            },
+          }
+        },
+      })
+      hz.mockReturnValueOnce({
+        find: () => {
+          return {
+            subscribe: (subs) => {
+              return subs(mockResponses[1])
+            },
+          }
+        },
+      })
+      hz.mockReturnValueOnce({
+        find: () => {
+          return {
+            subscribe: (subs) => {
+              return subs(mockResponses[2])
+            },
+          }
+        },
+      })
+      actions.subscribe()(dispatch)
       .then(function() {
         expect(results[0]).toEqual({
           type: constants.ADD_ROOM,
@@ -93,7 +121,7 @@ describe('RoomActions', () => {
         expect(results[1]).toEqual({
           type: constants.SET_ROOM_NT_COUNT,
           roomId: 2,
-          nametagCount: 2,
+          nametagCount: 1,
         })
         expect(results[2]).toEqual({
           type: constants.ADD_ROOM,
@@ -103,11 +131,16 @@ describe('RoomActions', () => {
         expect(results[3]).toEqual({
           type: constants.SET_ROOM_NT_COUNT,
           roomId: 1,
-          nametagCount: 1,
+          nametagCount: 3,
         })
         done()
       })
     })
+  })
+
+  describe('joinRoom', () => {
+
+
   })
 })
 
