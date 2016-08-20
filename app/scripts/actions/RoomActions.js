@@ -143,7 +143,7 @@ export function joinRoom(nametag) {
       // Need to figure out a way to make subscribe a promise to avoid nested callbacks.
       hz('nametags').upsert(nametag).subscribe(
         (id) => {
-          dispatch(addNametag(nametag, id, roomId))
+          dispatch(addNametag(nametag, id, nametag.roomId))
           resolve()
         }, reject)
     }).catch(errorLog('Error joining room'))

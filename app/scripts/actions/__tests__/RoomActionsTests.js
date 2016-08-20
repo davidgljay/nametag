@@ -150,17 +150,13 @@ describe('RoomActions', () => {
           }
         },
       })
-      actions.joinRoom('1234', {name: 'tag'})(store.dispatch)
+      actions.joinRoom({name: 'tag', roomId: '1234'})(store.dispatch)
         .then(()=> {
-          expect(calls[0]).toEqual({name: 'tag'})
-          expect(calls[1]).toEqual({
-            room: '1234',
-            nametag: 'abcd',
-          })
+          expect(calls[0]).toEqual({name: 'tag', roomId: '1234'})
           expect(store.getActions()[0]).toEqual({
             type: 'ADD_NAMETAG',
             id: 'abcd',
-            nametag: {name: 'tag'},
+            nametag: {name: 'tag', roomId: '1234'},
             roomId: '1234',
           })
           done()
