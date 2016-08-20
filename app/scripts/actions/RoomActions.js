@@ -1,6 +1,7 @@
 import {hz} from '../api/horizon'
 import errorLog from '../utils/errorLog'
 import constants from '../constants'
+import {addNametag} from './NametagActions'
 
 let roomSubscription
 let nametagSubscriptions = []
@@ -113,7 +114,7 @@ export function unsubscribe() {
 export function getNametagCount(roomId) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      nametagSubscriptions.push(hz('nametags').watch(roomId).subscribe(
+      nametagSubscriptions.push(hz('room_nametags').find({room: roomId}).subscribe(
           (nametags) => {
             resolve(dispatch(setRoomNametagCount(roomId, nametags.length)))
           },
@@ -139,13 +140,17 @@ export function getNametagCount(roomId) {
 export function joinRoom(roomId, nametag) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      // Can subscribe be a promise?
-      hz('nametags').insert(nametag).subscribe(
-        (result) => {
-          console.log(result)
-          // How to push to an array?
-          hz('room_nametags').get('roomId')
-        })
-    })
+      // Need to figure out a way to make subscribe a promise to avoid nested callbacks.
+      hz('nametags').upsert(nametag).subscribe(
+        (id) => {
+          dispatch(addNametag(nametag, id, roomId))
+          hz('room_nametags').upsert({
+            nametag: id,
+            room: roomId,
+          }).subscribe(()=>{
+            resolve()
+          }, reject)
+        }, reject)
+    }).catch(errorLog('Error joining room'))
   }
 }
