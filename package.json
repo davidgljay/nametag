@@ -48,7 +48,8 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "jest --watch",
+    "test": "jest",
+    "test-watch" : "jest --watch",
     "start" : "gulp watch"
   },
   "jest": {

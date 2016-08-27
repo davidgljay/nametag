@@ -168,5 +168,39 @@ describe('RoomActions', () => {
         })
     })
   })
+
+  describe('getRoom', () => {
+    it('should watch a room', (done) => {
+      let calls = []
+      let room = {
+        id: '123',
+        name: 'A Room',
+      }
+      hz.mockReturnValue({
+        find: (id) => {
+          calls.push({find: id})
+          return {
+            watch: () => {
+              return {
+                subscribe: (subs) => {
+                  return subs(room)
+                },
+              }
+            },
+          }
+        },
+      })
+      actions.getRoom('123')(store.dispatch).then((res) => {
+        expect(calls[0]).toEqual({find: '123'})
+        expect(res).toEqual(room)
+        expect(store.getActions()[0]).toEqual({
+          type: 'ADD_ROOM',
+          room: room,
+          id: room.id,
+        })
+        done()
+      })
+    })
+  })
 })
 

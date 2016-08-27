@@ -140,7 +140,6 @@ export function getNametagCount(roomId) {
 export function joinRoom(nametag) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      // Need to figure out a way to make subscribe a promise to avoid nested callbacks.
       hz('nametags').upsert(nametag).subscribe(
         (id) => {
           dispatch(addNametag(nametag, id, nametag.roomId))
@@ -149,3 +148,23 @@ export function joinRoom(nametag) {
     }).catch(errorLog('Error joining room'))
   }
 }
+
+/*
+* Get room
+* @params
+*   roomId - The room to watch
+*
+* @returns
+*   Promise
+*/
+export function getRoom(id) {
+  return (dispatch) => {
+    return new Promise((resolve, reject) => {
+      hz('rooms').find(id).watch().subscribe((room) => {
+        dispatch(addRoom(room, room.id))
+        resolve(room)
+      }, reject)
+    }).catch(errorLog('Error getting room'))
+  }
+}
+
