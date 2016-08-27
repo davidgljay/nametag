@@ -14,7 +14,7 @@ describe('Nametag Actions', () => {
           type: constants.ADD_NAMETAG,
           nametag: {name: 'tag'},
           id: '123',
-          roomId: 'abc',
+          room: 'abc',
         })
     })
   })
@@ -37,7 +37,7 @@ describe('Nametag Actions', () => {
               type: constants.ADD_NAMETAG,
               nametag: {id: 1},
               id: 1,
-              roomId: 'abc',
+              room: 'abc',
             })
           done()
         })

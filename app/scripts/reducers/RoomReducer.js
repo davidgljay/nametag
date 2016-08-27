@@ -2,7 +2,7 @@ import constants from '../constants'
 
 const addCertificate = (state, action) => {
   let certs = [action.cert]
-  let room = state[action.roomId]
+  let room = state[action.room]
   if (room.userNametag && room.userNametag.certificates) {
     let unique = true
     let currentCerts = room.userNametag.certificates
@@ -17,12 +17,12 @@ const addCertificate = (state, action) => {
   }
   let newNametag = Object.assign({}, room.userNametag, {certificates: certs})
   let newRoom = Object.assign({}, room, {userNametag: newNametag})
-  return Object.assign({}, state, {[action.roomId]: newRoom})
+  return Object.assign({}, state, {[action.room]: newRoom})
 }
 
 const removeCertificate = (state, action) => {
   let certs = []
-  let room = state[action.roomId]
+  let room = state[action.room]
 
   if (room.userNametag && room.userNametag.certificates) {
     certs = room.userNametag.certificates
@@ -35,14 +35,14 @@ const removeCertificate = (state, action) => {
   }
   let newNametag = Object.assign({}, room.userNametag, {certificates: newCerts})
   let newRoom = Object.assign({}, room, {userNametag: newNametag})
-  return Object.assign({}, state, {[action.roomId]: newRoom})
+  return Object.assign({}, state, {[action.room]: newRoom})
 }
 
 const updateNametag = (state, action) => {
-  let room = state[action.roomId]
+  let room = state[action.room]
   let newNametag = Object.assign({}, room.userNametag, {[action.property]: action.value})
   let newRoom = Object.assign({}, room, {userNametag: newNametag})
-  return Object.assign({}, state, {[action.roomId]: newRoom})
+  return Object.assign({}, state, {[action.room]: newRoom})
 }
 
 const rooms = (state = {}, action) => {
@@ -50,8 +50,8 @@ const rooms = (state = {}, action) => {
   case constants.ADD_ROOM:
     return Object.assign({}, state, {[action.id]: action.room})
   case constants.SET_ROOM_NT_COUNT:
-    let newRoom = Object.assign({}, state[action.roomId], {nametagCount: action.nametagCount})
-    return Object.assign({}, state, {[action.roomId]: newRoom})
+    let newRoom = Object.assign({}, state[action.room], {nametagCount: action.nametagCount})
+    return Object.assign({}, state, {[action.room]: newRoom})
   case constants.ADD_USER_NT_CERT:
     return addCertificate(state, action)
   case constants.REMOVE_USER_NT_CERT:

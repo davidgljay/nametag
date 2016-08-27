@@ -8,7 +8,7 @@ import style from '../../../styles/Nametag/EditNametag.css'
 
 const nametagTarget = {
   drop(props, monitor) {
-    props.dispatch(addNametagCert(monitor.getItem(), props.roomId))
+    props.dispatch(addNametagCert(monitor.getItem(), props.room))
   },
 }
 
@@ -28,10 +28,19 @@ class EditNametag extends Component {
     }
   }
 
+  componentWillMount() {
+    this.props.dispatch(updateNametag(
+        this.props.room,
+        'room',
+        this.props.room
+        )
+      )
+  }
+
   updateNametagProperty(property) {
     return (e) => {
       this.props.dispatch(updateNametag(
-        this.props.roomId,
+        this.props.room,
         property,
         e.target.value
         )
@@ -40,11 +49,11 @@ class EditNametag extends Component {
   }
 
   removeCert(cert) {
-    props.dispatch(removeNametagCert(cert.id, this.props.roomId))
+    this.props.dispatch(removeNametagCert(cert, this.props.room))
   }
 
   render() {
-    let nametag = this.props.userNametag || {name: '', bio: '', roomId: this.props.roomId}
+    let nametag = this.props.userNametag || {name: '', bio: ''}
     // TODO: Figure out image caching
     return this.props.connectDropTarget(<div id={style.editNametag} className="profile">
           <div className={style.form}>
@@ -85,7 +94,7 @@ class EditNametag extends Component {
 EditNametag.propTypes = {
   dispatch: PropTypes.func.isRequired,
   userNametag: PropTypes.object,
-  roomId: PropTypes.string.isRequired,
+  room: PropTypes.string.isRequired,
   isOver: PropTypes.bool.isRequired,
 }
 

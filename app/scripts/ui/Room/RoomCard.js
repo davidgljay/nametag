@@ -53,7 +53,7 @@ class RoomCard extends Component {
             <hr></hr>
             <Nametag
               className={style.mod}
-              roomId={this.props.id}
+              room={this.props.id}
               id={this.props.room.mod}
               mod={this.props.room.mod} />
           </div>
@@ -70,7 +70,7 @@ class RoomCard extends Component {
             </label>
           </div>
           <Join
-            roomId={this.props.id}
+            room={this.props.id}
             userNametag={this.props.room.userNametag}
             normsChecked={this.state.normsChecked}/>
         </div>

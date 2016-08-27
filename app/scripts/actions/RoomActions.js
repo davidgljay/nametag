@@ -14,34 +14,34 @@ export function addRoom(room, id) {
   }
 }
 
-export function setRoomNametagCount(roomId, nametagCount) {
+export function setRoomNametagCount(room, nametagCount) {
   return {
     type: constants.SET_ROOM_NT_COUNT,
-    roomId,
+    room,
     nametagCount,
   }
 }
 
-export function addNametagCert(cert, roomId) {
+export function addNametagCert(cert, room) {
   return {
     type: constants.ADD_USER_NT_CERT,
     cert,
-    roomId,
+    room,
   }
 }
 
-export function removeNametagCert(certId, roomId) {
+export function removeNametagCert(certId, room) {
   return {
     type: constants.REMOVE_USER_NT_CERT,
     certId,
-    roomId,
+    room,
   }
 }
 
-export function updateNametag(roomId, property, value) {
+export function updateNametag(room, property, value) {
   return {
     type: constants.UPDATE_USER_NAMETAG,
-    roomId,
+    room,
     property,
     value,
   }
@@ -106,24 +106,20 @@ export function unsubscribe() {
 *
 * TODO: this may violate privacy expecations in some instances, think about how to refactor
 * @params
-*    roomId- the id of the room to get the nametag count for
+*    room- the id of the room to get the nametag count for
 *
 * @returns
 *    Promise
 */
-export function getNametagCount(roomId) {
+export function getNametagCount(room) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      nametagSubscriptions.push(hz('room_nametags').find({room: roomId}).subscribe(
+      nametagSubscriptions.push(hz('nametags').findAll({room: room}).watch().subscribe(
           (nametags) => {
-            resolve(dispatch(setRoomNametagCount(roomId, nametags.length)))
-          },
-          (err) => {
-            errorLog('Getting nametag count ')(err)
-            reject(err)
-          }
-        ))
-    })
+            resolve(dispatch(setRoomNametagCount(room, nametags.length)))
+          }, reject)
+        )
+    }).catch(errorLog('Error joining room'))
   }
 }
 
@@ -131,7 +127,7 @@ export function getNametagCount(roomId) {
 * Join a room
 *
 * @params
-*   roomId - The room to join
+*   room - The room to join
 *   nametag - The nametag with which to join the room
 *
 * @returns
@@ -142,8 +138,8 @@ export function joinRoom(nametag) {
     return new Promise((resolve, reject) => {
       hz('nametags').upsert(nametag).subscribe(
         (id) => {
-          dispatch(addNametag(nametag, id, nametag.roomId))
-          resolve()
+          dispatch(addNametag(nametag, id, nametag.room))
+          resolve(id)
         }, reject)
     }).catch(errorLog('Error joining room'))
   }
