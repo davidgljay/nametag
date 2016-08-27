@@ -1,15 +1,28 @@
 jest.unmock('../NametagActions')
 jest.unmock('../../tests/mockGlobals')
-jest.unmock('../../api/horizon')
+
+jest.unmock('redux-mock-store')
+jest.unmock('redux-thunk')
 
 import constants from '../../constants'
-import {hzMock} from '../../tests/mockGlobals'
+import {mockHz} from '../../tests/mockGlobals'
+import {hz} from '../../api/horizon'
+import configureStore from 'redux-mock-store'
+import thunk from 'redux-thunk'
+import * as actions from '../NametagActions'
+
+const middlewares = [thunk]
+const mockStore = configureStore(middlewares)
 
 describe('Nametag Actions', () => {
+  let store
+  beforeEach(() => {
+    store = mockStore({})
+  })
+
   describe('addNametag', () => {
     it('should add a namtag', () => {
-      let NametagActions = require('../NametagActions')
-      expect(NametagActions.addNametag({name: 'tag'}, '123', 'abc'))
+      expect(actions.addNametag({name: 'tag'}, '123', 'abc'))
         .toEqual({
           type: constants.ADD_NAMETAG,
           nametag: {name: 'tag'},
@@ -20,19 +33,14 @@ describe('Nametag Actions', () => {
   })
 
   describe('subscribe', () => {
-    let dispatch
-    let results
-    beforeEach(() => {
-      results = []
-      dispatch = (res) => {results.push(res)}
-    })
     it('should subscribe to a list of nametags', (done) => {
-      hzMock([{id: 1}])
-      let NametagActions = require('../NametagActions')
-
-      NametagActions.subscribe(1, 'abc')(dispatch).then(
+      let calls = []
+      hz.mockReturnValue(mockHz({id: 1}, calls)())
+      actions.subscribe(1, 'abc')(store.dispatch).then(
         () => {
-          expect(results[0]).toEqual(
+          expect(calls[1]).toEqual({type: 'find', req: 1})
+          expect(calls[2].type).toEqual('watch')
+          expect(store.getActions()[0]).toEqual(
             {
               type: constants.ADD_NAMETAG,
               nametag: {id: 1},

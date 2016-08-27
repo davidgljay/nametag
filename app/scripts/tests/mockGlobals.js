@@ -17,7 +17,23 @@ export function hzMock(results) {
   }
 }
 
-window.Firebase = () => {}
+export function mockHz(res, calls, type) {
+  return (req) => {
+    calls.push({type, req})
+    return {
+      watch: mockHz( res, calls, 'watch'),
+      fetch: mockHz(res, calls, 'fetch'),
+      find: mockHz(res, calls, 'find'),
+      findAll: mockHz(res, calls, 'findAll'),
+      subscribe: (cb) => {
+        calls.push({type: 'subscribe'})
+        cb(res)
+      },
+      unsubscribe: () => {calls.push({type: 'unsubscribe'})},
+    }
+  }
+}
+
 window.Horizon = () => {
   return () => {
     return {
