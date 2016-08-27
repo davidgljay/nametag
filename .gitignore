@@ -6,3 +6,4 @@ config.js
 /.hz/config.toml
 /.keys/
 npm-debug.log
+/rethinkdb_data/
