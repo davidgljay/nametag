@@ -165,7 +165,6 @@ describe('RoomActions', () => {
             type: 'ADD_NAMETAG',
             id: 'abcd',
             nametag: {name: 'tag', room: '1234'},
-            room: '1234',
           })
           done()
         },
