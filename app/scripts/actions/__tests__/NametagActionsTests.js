@@ -33,7 +33,7 @@ describe('Nametag Actions', () => {
     })
   })
 
-//Consider renaming to get or fetch, need to define a convention
+// Consider renaming to get or fetch, need to define a convention
   describe('subscribe', () => {
     it('should find to a single nametag', (done) => {
       hz.mockReturnValue(mockHz({id: 1, room: 'abc'}, calls)())
@@ -44,7 +44,7 @@ describe('Nametag Actions', () => {
           expect(store.getActions()[0]).toEqual(
             {
               type: constants.ADD_NAMETAG,
-              nametag: {id: 1, room:'abc'},
+              nametag: {id: 1, room: 'abc'},
               id: 1,
             })
           done()
