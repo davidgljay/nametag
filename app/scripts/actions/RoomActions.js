@@ -116,7 +116,6 @@ export function getNametagCount(roomId) {
     return new Promise((resolve, reject) => {
       nametagSubscriptions.push(hz('nametags').findAll({room: roomId}).watch().subscribe(
           (nametags) => {
-            console.log(nametags)
             resolve(dispatch(setRoomNametagCount(roomId, nametags.length)))
           }, reject)
         )

@@ -93,19 +93,27 @@ describe('RoomActions', () => {
         },
       })
       hz.mockReturnValueOnce({
-        find: () => {
+        findAll: () => {
           return {
-            subscribe: (subs) => {
-              return subs(mockResponses[1])
+            watch: () => {
+              return {
+                subscribe: (subs) => {
+                  return subs(mockResponses[1])
+                },
+              }
             },
           }
         },
       })
       hz.mockReturnValueOnce({
-        find: () => {
+        findAll: () => {
           return {
-            subscribe: (subs) => {
-              return subs(mockResponses[2])
+            watch: () => {
+              return {
+                subscribe: (subs) => {
+                  return subs(mockResponses[2])
+                },
+              }
             },
           }
         },
@@ -150,9 +158,9 @@ describe('RoomActions', () => {
           }
         },
       })
-      actions.joinRoom({name: 'tag', roomId: '1234'})(store.dispatch)
+      actions.joinRoom({name: 'tag', room: '1234'})(store.dispatch)
         .then(()=> {
-          expect(calls[0]).toEqual({name: 'tag', roomId: '1234'})
+          expect(calls[0]).toEqual({name: 'tag', room: '1234'})
           expect(store.getActions()[0]).toEqual({
             type: 'ADD_NAMETAG',
             id: 'abcd',
