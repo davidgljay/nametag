@@ -49,10 +49,7 @@ class EditNametag extends Component {
   }
 
   removeCert(cert) {
-    console.log("Removing cert")
-    console.log(cert)
-    console.log(this.props.room)
-    this.props.dispatch(removeNametagCert(cert.id, this.props.room))
+    this.props.dispatch(removeNametagCert(cert, this.props.room))
   }
 
   render() {
