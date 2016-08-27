@@ -31,7 +31,7 @@ class EditNametag extends Component {
   updateNametagProperty(property) {
     return (e) => {
       this.props.dispatch(updateNametag(
-        this.props.roomId,
+        this.props.room,
         property,
         e.target.value
         )
@@ -44,7 +44,7 @@ class EditNametag extends Component {
   }
 
   render() {
-    let nametag = this.props.userNametag || {name: '', bio: '', roomId: this.props.roomId}
+    let nametag = this.props.userNametag || {name: '', bio: '', room: this.props.room}
     // TODO: Figure out image caching
     return this.props.connectDropTarget(<div id={style.editNametag} className="profile">
           <div className={style.form}>
@@ -85,7 +85,7 @@ class EditNametag extends Component {
 EditNametag.propTypes = {
   dispatch: PropTypes.func.isRequired,
   userNametag: PropTypes.object,
-  roomId: PropTypes.string.isRequired,
+  room: PropTypes.string.isRequired,
   isOver: PropTypes.bool.isRequired,
 }
 

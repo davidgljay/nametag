@@ -10,9 +10,9 @@ import style from '../../../styles/RoomCard/Join.css'
 class Join extends Component {
 
   onJoinClick() {
-    joinRoom(this.props.userNametag)
+    this.context.dispatch(joinRoom(this.props.userNametag))
       .then(() => {
-        window.location = '/#/rooms/' + this.props.roomId
+        window.location = '/#/rooms/' + this.props.room
       })
   }
 
@@ -26,7 +26,7 @@ class Join extends Component {
           <EditNametag
             userNametag={this.props.userNametag}
             dispatch={this.context.dispatch}
-            roomId={this.props.roomId}/>
+            room={this.props.room}/>
           <div id={style.userCertificates}>
             <p className={style.userCertificateText}>
               Click to view your certificates.<br/>
@@ -49,7 +49,7 @@ class Join extends Component {
 }
 
 Join.propTypes = {
-  roomId: PropTypes.string.isRequired,
+  room: PropTypes.string.isRequired,
   normsChecked: PropTypes.bool.isRequired,
   userNametag: PropTypes.object,
 }
