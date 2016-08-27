@@ -114,16 +114,13 @@ export function unsubscribe() {
 export function getNametagCount(roomId) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      nametagSubscriptions.push(hz('room_nametags').find({room: roomId}).subscribe(
+      nametagSubscriptions.push(hz('nametags').findAll({room: roomId}).watch().subscribe(
           (nametags) => {
+            console.log(nametags)
             resolve(dispatch(setRoomNametagCount(roomId, nametags.length)))
-          },
-          (err) => {
-            errorLog('Getting nametag count ')(err)
-            reject(err)
-          }
-        ))
-    })
+          }, reject)
+        )
+    }).catch(errorLog('Error joining room'))
   }
 }
 
@@ -144,7 +141,7 @@ export function joinRoom(nametag) {
       hz('nametags').upsert(nametag).subscribe(
         (id) => {
           dispatch(addNametag(nametag, id, nametag.roomId))
-          resolve()
+          resolve(id)
         }, reject)
     }).catch(errorLog('Error joining room'))
   }

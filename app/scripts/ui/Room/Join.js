@@ -25,7 +25,8 @@ class Join extends Component {
           <h4>Write Your Nametag For This Conversation</h4>
           <EditNametag
             userNametag={this.props.userNametag}
-            dispatch={this.context.dispatch}/>
+            dispatch={this.context.dispatch}
+            roomId={this.props.roomId}/>
           <div id={style.userCertificates}>
             <p className={style.userCertificateText}>
               Click to view your certificates.<br/>
