@@ -8,7 +8,7 @@ import style from '../../../styles/Nametag/EditNametag.css'
 
 const nametagTarget = {
   drop(props, monitor) {
-    props.dispatch(addNametagCert(monitor.getItem(), props.roomId))
+    props.dispatch(addNametagCert(monitor.getItem(), props.room))
   },
 }
 
@@ -28,6 +28,15 @@ class EditNametag extends Component {
     }
   }
 
+  componentWillMount() {
+    this.props.dispatch(updateNametag(
+        this.props.room,
+        'room',
+        this.props.room
+        )
+      )
+  }
+
   updateNametagProperty(property) {
     return (e) => {
       this.props.dispatch(updateNametag(
@@ -40,11 +49,14 @@ class EditNametag extends Component {
   }
 
   removeCert(cert) {
-    props.dispatch(removeNametagCert(cert.id, this.props.roomId))
+    console.log("Removing cert")
+    console.log(cert)
+    console.log(this.props.room)
+    this.props.dispatch(removeNametagCert(cert.id, this.props.room))
   }
 
   render() {
-    let nametag = this.props.userNametag || {name: '', bio: '', room: this.props.room}
+    let nametag = this.props.userNametag || {name: '', bio: ''}
     // TODO: Figure out image caching
     return this.props.connectDropTarget(<div id={style.editNametag} className="profile">
           <div className={style.form}>

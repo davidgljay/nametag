@@ -49,7 +49,7 @@ describe('Room reducer', () => {
         },
         {
           type: constants.SET_ROOM_NT_COUNT,
-          roomId: 1,
+          room: 1,
           nametagCount: 3,
         })
       expect(newState).toEqual(
@@ -73,7 +73,7 @@ describe('Room reducer', () => {
         1: { title: 'Test Room'},
       }, {
         type: constants.ADD_USER_NT_CERT,
-        roomId: 1,
+        room: 1,
         cert: testCert,
       })
       expect(newState).toEqual(
@@ -107,7 +107,7 @@ describe('Room reducer', () => {
         },
       }, {
         type: constants.ADD_USER_NT_CERT,
-        roomId: 1,
+        room: 1,
         cert: testCert,
       })
       expect(newState).toEqual({
@@ -140,7 +140,7 @@ describe('Room reducer', () => {
         },
       }, {
         type: constants.ADD_USER_NT_CERT,
-        roomId: 1,
+        room: 1,
         cert: testCert,
       })
       expect(newState).toEqual(
@@ -172,7 +172,7 @@ describe('Room reducer', () => {
       },
         {
           type: constants.REMOVE_USER_NT_CERT,
-          roomId: 1,
+          room: 1,
           certId: 'wudda',
         })
       expect(newState).toEqual(
@@ -196,7 +196,7 @@ describe('Room reducer', () => {
       },
         {
           type: constants.REMOVE_USER_NT_CERT,
-          roomId: 1,
+          room: 1,
           certId: 'wudda',
         })
       expect(newState).toEqual({
@@ -219,7 +219,7 @@ describe('Room reducer', () => {
       },
         {
           type: constants.UPDATE_USER_NAMETAG,
-          roomId: 1,
+          room: 1,
           property: 'name',
           value: 'Dinosaur',
         })
@@ -244,7 +244,7 @@ describe('Room reducer', () => {
       },
         {
           type: constants.UPDATE_USER_NAMETAG,
-          roomId: 1,
+          room: 1,
           property: 'bio',
           value: 'Rwaaarr!!!',
         })

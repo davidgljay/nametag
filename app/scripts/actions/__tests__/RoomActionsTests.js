@@ -36,7 +36,7 @@ describe('RoomActions', () => {
       expect(actions.setRoomNametagCount('123', 10))
         .toEqual({
           type: constants.SET_ROOM_NT_COUNT,
-          roomId: '123',
+          room: '123',
           nametagCount: 10,
         })
     })
@@ -48,7 +48,7 @@ describe('RoomActions', () => {
         .toEqual({
           type: constants.ADD_USER_NT_CERT,
           cert: {name: 'Test Certificate', id: '123' },
-          roomId: 'abc',
+          room: 'abc',
         })
     })
   })
@@ -59,7 +59,7 @@ describe('RoomActions', () => {
         .toEqual({
           type: constants.REMOVE_USER_NT_CERT,
           certId: '123',
-          roomId: 'abc',
+          room: 'abc',
         })
     })
   })
@@ -69,7 +69,7 @@ describe('RoomActions', () => {
       expect(actions.updateNametag('abc', 'name', 'Allosaur'))
         .toEqual({
           type: constants.UPDATE_USER_NAMETAG,
-          roomId: 'abc',
+          room: 'abc',
           property: 'name',
           value: 'Allosaur',
         })
@@ -127,7 +127,7 @@ describe('RoomActions', () => {
         })
         expect(store.getActions()[1]).toEqual({
           type: constants.SET_ROOM_NT_COUNT,
-          roomId: 2,
+          room: 2,
           nametagCount: 1,
         })
         expect(store.getActions()[2]).toEqual({
@@ -137,7 +137,7 @@ describe('RoomActions', () => {
         })
         expect(store.getActions()[3]).toEqual({
           type: constants.SET_ROOM_NT_COUNT,
-          roomId: 1,
+          room: 1,
           nametagCount: 3,
         })
         done()
@@ -164,8 +164,8 @@ describe('RoomActions', () => {
           expect(store.getActions()[0]).toEqual({
             type: 'ADD_NAMETAG',
             id: 'abcd',
-            nametag: {name: 'tag', roomId: '1234'},
-            roomId: '1234',
+            nametag: {name: 'tag', room: '1234'},
+            room: '1234',
           })
           done()
         },

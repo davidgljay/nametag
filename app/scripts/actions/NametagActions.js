@@ -4,12 +4,12 @@ import {hz} from '../api/horizon'
 
 let nametagSubscriptions = {}
 
-export const addNametag = (nametag, id, roomId) => {
+export const addNametag = (nametag, id, room) => {
   return {
     type: constants.ADD_NAMETAG,
     nametag,
     id,
-    roomId,
+    room,
   }
 }
 
@@ -22,13 +22,13 @@ export const addNametag = (nametag, id, roomId) => {
 * @returns
 *    Promise
 */
-export function subscribe(nametagId, roomId) {
+export function subscribe(nametagId, room) {
   return function(dispatch) {
     return new Promise((resolve, reject) => {
       nametagSubscriptions[nametagId] = hz('nametags').find(nametagId).watch().subscribe(
         (nametag) => {
           if (nametag) {
-            resolve(dispatch(addNametag(nametag, nametag.id, roomId)))
+            resolve(dispatch(addNametag(nametag, nametag.id, room)))
           } else {
             reject('Nametag not found')
           }
