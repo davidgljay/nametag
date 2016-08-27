@@ -127,7 +127,6 @@ export function getNametagCount(room) {
 * Join a room
 *
 * @params
-*   room - The room to join
 *   nametag - The nametag with which to join the room
 *
 * @returns

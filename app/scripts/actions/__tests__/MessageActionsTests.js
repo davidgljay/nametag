@@ -22,7 +22,7 @@ describe('Message Actions', () => {
     calls = []
   })
 
-   describe('getRoomMessages', () => {
+  describe('getRoomMessages', () => {
     it('should fetch a list of messages from a room', (done) => {
       let results = [
         {msg: 'hi there', room: 'abc', id: '123'},
@@ -42,6 +42,29 @@ describe('Message Actions', () => {
             type: constants.ADD_MESSAGE,
             id: '456',
             message: results[1],
+          })
+          done()
+        })
+    })
+  })
+
+  describe('postMessage', () => {
+    it('should post a message to a room', (done) => {
+      let result = {id: '123'}
+      let message = {
+        type: 'message',
+        text: 'This is a message',
+        date: 'tuesday',
+      }
+      hz.mockReturnValue(mockHz(result, calls)())
+      actions.postMessage(message)(store.dispatch).then(
+        (id) => {
+          expect(id).toEqual('123')
+          expect(calls[1]).toEqual({type: 'upsert', req: message})
+          expect(store.getActions()[0]).toEqual({
+            type: constants.ADD_MESSAGE,
+            message: message,
+            id: '123',
           })
           done()
         })

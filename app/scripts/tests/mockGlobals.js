@@ -24,6 +24,7 @@ export function mockHz(res, calls, type) {
       watch: mockHz( res, calls, 'watch'),
       fetch: mockHz(res, calls, 'fetch'),
       find: mockHz(res, calls, 'find'),
+      upsert: mockHz(res, calls, 'upsert'),
       findAll: mockHz(res, calls, 'findAll'),
       subscribe: (cb) => {
         calls.push({type: 'subscribe'})
