@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 
-import Room from './ui/Room/Room'
+import Room from './components/Room/Room'
 import RoomCards from './containers/Room/RoomCardsContainer'
 import {getUser} from './actions/UserActions'
 
