@@ -5,18 +5,23 @@ jest.unmock('redux-mock-store')
 jest.unmock('redux-thunk')
 
 import constants from '../../constants'
-import {hzAuth, getAuth, unAuth} from '../../api/horizon'
+import {hz, hzAuth, getAuth, unAuth} from '../../api/horizon'
 import configureStore from 'redux-mock-store'
+import {mockHz} from '../../tests/mockGlobals'
 import thunk from 'redux-thunk'
-let UserActions = require('../UserActions')
+import * as actions from '../UserActions'
 
 const middlewares = [thunk]
 const mockStore = configureStore(middlewares)
 
 describe('User Actions', () => {
+  let store
+  beforeEach(() => {
+    store = mockStore({})
+  })
   describe('addUser', () => {
     it('should add a user', () => {
-      expect(UserActions.addUser( '123', {data: 'stuff'}))
+      expect(actions.addUser( '123', {data: 'stuff'}))
         .toEqual({
           type: constants.ADD_USER,
           data: {data: 'stuff'},
@@ -26,11 +31,6 @@ describe('User Actions', () => {
   })
 
   describe('getUser', () => {
-    let store
-    beforeEach(() => {
-      store = mockStore({})
-    })
-
     it('should return info if a user is logged in', (done) => {
       getAuth.mockReturnValue(
         new Promise((resolve) =>
@@ -38,7 +38,7 @@ describe('User Actions', () => {
           )
         )
 
-      UserActions.getUser()(store.dispatch, store.getState).then(
+      actions.getUser()(store.dispatch, store.getState).then(
         () => {
           expect(store.getActions()[0]).toEqual(
             {
@@ -57,7 +57,7 @@ describe('User Actions', () => {
           )
         )
 
-      UserActions.getUser()(store.dispatch, store.getState).then(
+      actions.getUser()(store.dispatch, store.getState).then(
         () => {
           expect(store.getActions().length).toEqual(0)
           done()
@@ -67,18 +67,36 @@ describe('User Actions', () => {
 
   describe('providerAuth', () => {
     it('should call hzAuth with the provider', () => {
-      UserActions.providerAuth('facebook')()
+      actions.providerAuth('facebook')()
       expect(hzAuth.mock.calls[0][0]).toEqual('facebook')
     })
   })
 
   describe('logout', () => {
     it('should clear localStorage tokens and dispatch a logout action', () => {
-      let store = mockStore({})
-      UserActions.logout()(store.dispatch, store.getState)
+      actions.logout()(store.dispatch, store.getState)
       expect(unAuth.mock.calls.length).toEqual(1)
       expect(store.getActions()[0]).toEqual({
         type: constants.LOGOUT_USER,
+      })
+    })
+  })
+
+  describe('addUserNametag', () => {
+    it('should add an entry to the user_nametags table', (done) => {
+      let calls = []
+      hz.mockReturnValue(mockHz({id: '123'}, calls)())
+      actions.addUserNametag('abc', 'me', '456')().then((id) => {
+        expect(id).toEqual({id: '123'})
+        expect(calls[1]).toEqual({
+          type: 'insert',
+          req: {
+            user: 'me',
+            nametag: '456',
+            room: 'abc',
+          },
+        })
+        done()
       })
     })
   })

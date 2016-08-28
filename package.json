@@ -36,7 +36,7 @@
     "main-bower-files": "~2.6.2",
     "react": "latest",
     "react-dom": "latest",
-    "react-test-renderer": "^15.3.0",
+    "react-test-renderer": "^15.3.1",
     "react-tools": "latest",
     "reactify": "latest",
     "redux-mock-store": "^1.1.2",
@@ -49,8 +49,8 @@
   },
   "scripts": {
     "test": "jest",
-    "test-watch" : "jest --watch",
-    "start" : "gulp watch"
+    "test-watch": "jest --watch",
+    "start": "gulp watch"
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
