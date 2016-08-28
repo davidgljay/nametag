@@ -100,5 +100,28 @@ describe('User Actions', () => {
       })
     })
   })
+
+  describe('getUserNametag', () => {
+    it('should get an entry for a room in the user_nametags table', (done) => {
+      let calls = []
+      hz.mockReturnValue(mockHz({user: 'me', nametag: '456', room: 'abc'}, calls)())
+      actions.getUserNametag('abc', 'me')().then((nametag) => {
+        expect(nametag).toEqual('456')
+        expect(calls[1]).toEqual({
+          type: 'findAll',
+          req: {
+            user: 'me',
+          },
+        })
+        expect(calls[2]).toEqual({
+          type: 'find',
+          req: {
+            room: 'abc',
+          },
+        })
+        done()
+      })
+    })
+  })
 })
 
