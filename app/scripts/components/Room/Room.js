@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import {getRoom} from '../../actions/RoomActions'
+import {getUserNametag} from '../../actions/UserActions'
 // import Nametags from '../Nametag/Nametags'
 // import Messages from '../Message/Messages'
 // import Compose from '../Message/Compose'
@@ -23,11 +24,22 @@ class Room extends Component {
   // }
 
   getUserNametag() {
-    
+
   }
 
   componentDidMount() {
     this.props.dispatch(getRoom(this.props.params.roomId))
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if ( nextProps.user.id &&
+    !(this.props.user.nametags && this.props.user.nametags[this.props.params.roomId])) {
+      this.props.dispatch(getUserNametag(this.props.params.roomId, nextProps.user.id))
+        .then(() => {
+          console.log('Found user nametag for this room')
+        })
+    }
+  }
   	// // TODO: mark the user as active in the room.
    //  const roomRef = fbase.child('/rooms/' + this.props.params.roomId)
 
@@ -49,8 +61,6 @@ class Room extends Component {
    //    this.setState({nametagId: ntid})
 
    //  },this)
-
-  }
 
   componentWillUnmount() {
    //  const roomRef = fbase.child('rooms/' + this.props.params.roomId)
