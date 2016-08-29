@@ -1,4 +1,4 @@
-sleep 5
+sleep 7
 
 echo 'Syncing schema'
 hz set-schema /usr/app/.hz/permissions_schema.toml --connect rethinkdb:28015

@@ -5,7 +5,7 @@
 [collections.rooms]
 [collections.certificates]
 [collections.messages]
-[collection.user_nametags]
+[collections.user_nametags]
 
 [groups.default.rules.read_nametags]
 template = "collection('nametags').anyRead()"

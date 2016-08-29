@@ -10,7 +10,7 @@ import style from '../../../styles/RoomCard/Join.css'
 class Join extends Component {
 
   onJoinClick() {
-    this.context.dispatch(joinRoom(this.props.userNametag))
+    this.context.dispatch(joinRoom(this.props.room, this.props.userNametag, this.context.user.id))
       .then(() => {
         window.location = '/#/rooms/' + this.props.room
       })
