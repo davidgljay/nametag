@@ -104,21 +104,28 @@ describe('User Actions', () => {
   describe('getUserNametag', () => {
     it('should get an entry for a room in the user_nametags table', (done) => {
       let calls = []
-      hz.mockReturnValue(mockHz({user: 'me', nametag: '456', room: 'abc'}, calls)())
-      actions.getUserNametag('abc', 'me')().then((nametag) => {
-        expect(nametag).toEqual('456')
+      hz.mockReturnValue(mockHz([{user: 'me', nametag: '456', room: 'abc'}], calls)())
+      actions.getUserNametag('abc', 'me')().then((user_nametag) => {
+        expect(user_nametag).toEqual({user: 'me', nametag: '456', room: 'abc'})
         expect(calls[1]).toEqual({
           type: 'findAll',
           req: {
             user: 'me',
           },
         })
-        expect(calls[2]).toEqual({
-          type: 'find',
-          req: {
-            room: 'abc',
-          },
-        })
+        done()
+      })
+    })
+
+    it('should return an error if no user nametag is found', (done) => {
+      let calls = []
+      hz.mockReturnValue(mockHz([{user: 'me', nametag: '456', room: 'abc'}], calls)())
+      actions.getUserNametag('def', 'me')().then(() => {
+        expect('Should not succeed').toBeFalsy()
+        done()
+      },
+      (err)  => {
+        expect(err).toBeTruthy()
         done()
       })
     })

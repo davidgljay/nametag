@@ -95,12 +95,13 @@ export function addUserNametag(room, user, nametag) {
 export function getUserNametag(room, user) {
   return () => {
     return new Promise((resolve, reject) => {
-      hz('user_nametags').findAll({user: user}).find({room: room}).fetch().subscribe((userNametag) => {
-        if (userNametag) {
-          resolve(userNametag.nametag)
-        } else {
-          reject('user nametag not found')
+      hz('user_nametags').findAll({user: user}).fetch().subscribe((userNametags) => {
+        for (let i = 0; i < userNametags.length; i++) {
+          if (userNametags[i].room === room) {
+            resolve(userNametags[i])
+          }
         }
+        reject('Error: User nametag not found')
       }, reject)
     }).catch(errorLog('Getting user nametag'))
   }
