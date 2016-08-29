@@ -31,4 +31,17 @@ describe('User reducer', () => {
       expect(newState).toEqual(false)
     })
   })
+
+  describe('ADD_USER_NAMETAG', () => {
+    it('should add a nametag id to the nametags object', () => {
+      let newState = userReducer({
+        id: '123',
+      }, {
+        type: constants.ADD_USER_NAMETAG,
+        room: 'abc',
+        nametag: 'def',
+      })
+      expect(newState.nametags).toEqual({abc: 'def'})
+    })
+  })
 })

@@ -93,11 +93,16 @@ export function addUserNametag(room, user, nametag) {
 *   none
 */
 export function getUserNametag(room, user) {
-  return () => {
+  return (dispatch) => {
     return new Promise((resolve, reject) => {
       hz('user_nametags').findAll({user: user}).fetch().subscribe((userNametags) => {
         for (let i = 0; i < userNametags.length; i++) {
           if (userNametags[i].room === room) {
+            dispatch({
+              type: constants.ADD_USER_NAMETAG,
+              room: room,
+              nametag: userNametags[i].nametag,
+            })
             resolve(userNametags[i])
           }
         }
