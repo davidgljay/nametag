@@ -1,7 +1,8 @@
 import {hz} from '../api/horizon'
 import errorLog from '../utils/errorLog'
 import constants from '../constants'
-import {addNametag} from './NametagActions'
+import {addNametag, putNametag} from './NametagActions'
+import {addUserNametag} from './UserActions'
 
 let roomSubscription
 let nametagSubscriptions = []
@@ -127,20 +128,25 @@ export function getNametagCount(room) {
 * Join a room
 *
 * @params
+*   roomId -The id of the room being joined
 *   nametag - The nametag with which to join the room
+*   userId - The id of the currently logged in user
 *
 * @returns
-*   Promise
+*   Promise resolving to the ID of the newly created nametag
 */
-export function joinRoom(nametag) {
+export function joinRoom(roomId, nametag, userId) {
+  let nametagId
   return (dispatch) => {
-    return new Promise((resolve, reject) => {
-      hz('nametags').upsert(nametag).subscribe(
-        (id) => {
-          dispatch(addNametag(nametag, id, nametag.room))
-          resolve(id)
-        }, reject)
-    }).catch(errorLog('Error joining room'))
+    return dispatch(putNametag(nametag))
+      .then((id) => {
+        nametagId = id
+        dispatch(addNametag(nametag, id, nametag.room))
+        return dispatch(addUserNametag(roomId, userId, id))
+      })
+      .then(() => {
+        return nametagId
+      }).catch(errorLog('Error joining room'))
   }
 }
 

@@ -1,12 +1,14 @@
 jest.unmock('../RoomActions')
 jest.unmock('../../tests/mockGlobals')
 jest.unmock('../NametagActions')
+jest.unmock('../UserActions')
 
 jest.unmock('redux-mock-store')
 jest.unmock('redux-thunk')
 
 import * as actions from '../RoomActions'
 import constants from '../../constants'
+import {mockHz} from '../../tests/mockGlobals'
 import {hz} from '../../api/horizon'
 import configureStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
@@ -16,8 +18,11 @@ const mockStore = configureStore(middlewares)
 
 describe('RoomActions', () => {
   let store
+  let calls
   beforeEach(() => {
     store = mockStore({})
+    calls = []
+    hz.mockClear()
   })
 
   describe('addRoom', () => {
@@ -147,30 +152,42 @@ describe('RoomActions', () => {
 
   describe('joinRoom', () => {
     it('should join a room', (done) => {
-      let calls = []
-      hz.mockReturnValue({
-        upsert: (upsert) => {
-          calls.push(upsert)
-          return {
-            subscribe: (subs) => {
-              return subs('abcd')
+      let calls2 = []
+      hz.mockReturnValueOnce(mockHz({id: '456'}, calls)())
+      hz.mockReturnValueOnce(mockHz({id: 'def'}, calls2)())
+      actions.joinRoom('1234', {name: 'tag', room: '1234'}, 'me')(store.dispatch)
+        .then((nametagId) => {
+          // Expect the promise to return the nametag value
+          expect(nametagId).toEqual('456')
+
+          // Expect the nametag to be inserted into the nametag db
+          expect(hz.mock.calls[0]).toEqual(['nametags'])
+          expect(calls[1]).toEqual({
+            type: 'upsert',
+            req: {name: 'tag', room: '1234'},
+          })
+
+          // Expect the nametag id to be inserted into the user_nametags table
+          expect(hz.mock.calls[1]).toEqual(['user_nametags'])
+          expect(calls2[1]).toEqual({
+            type: 'insert',
+            req: {
+              room: '1234',
+              user: 'me',
+              nametag: '456',
             },
-          }
-        },
-      })
-      actions.joinRoom({name: 'tag', room: '1234'})(store.dispatch)
-        .then(()=> {
-          expect(calls[0]).toEqual({name: 'tag', room: '1234'})
+          })
+
+          // Expect the nametag to be added to the store
           expect(store.getActions()[0]).toEqual({
             type: 'ADD_NAMETAG',
-            id: 'abcd',
             nametag: {name: 'tag', room: '1234'},
+            id: '456',
           })
           done()
         },
         (err) => {
           expect(err).toEqual(null)
-          console.error(err)
           done()
         })
     })
@@ -178,7 +195,6 @@ describe('RoomActions', () => {
 
   describe('getRoom', () => {
     it('should watch a room', (done) => {
-      let calls = []
       let room = {
         id: '123',
         name: 'A Room',

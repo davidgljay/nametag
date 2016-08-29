@@ -61,8 +61,9 @@ export function logout() {
   }
 }
 
+
 /*
-* Adds a nametag to the user's account
+* Adds a record linking a nametag to the user's account
 *
 *@params
 *   room -The id of the room that the nametag appears in

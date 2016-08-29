@@ -78,3 +78,24 @@ export function getRoomNametags(room) {
     .catch(errorLog('Error subscribing to Nametags for room ' + room + ': '))
   }
 }
+
+/*
+* Adds a nametag to the database
+*
+*@params
+*   nametag - The content of the nametag
+*
+* @returns
+*   none
+*/
+
+export function putNametag(nametag) {
+  return () => {
+    return new Promise((resolve, reject) => {
+      hz('nametags').upsert(nametag).subscribe((id) => {
+        resolve(id.id)
+      }, reject)
+    }).catch(errorLog('Adding user nametag'))
+  }
+}
+

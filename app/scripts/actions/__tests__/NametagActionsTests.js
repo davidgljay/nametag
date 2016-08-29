@@ -79,3 +79,20 @@ describe('Nametag Actions', () => {
   })
 })
 
+describe('putNametag', () => {
+  it('should add an entry to the nametags table', (done) => {
+    let calls = []
+    hz.mockReturnValue(mockHz({id: '123'}, calls)())
+    actions.putNametag({name: 'tag'})().then((id) => {
+      expect(id).toEqual('123')
+      expect(calls[1]).toEqual({
+        type: 'upsert',
+        req: {
+          name: 'tag',
+        },
+      })
+      done()
+    })
+  })
+})
+
