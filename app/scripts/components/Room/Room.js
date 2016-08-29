@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import {getRoom} from '../../actions/RoomActions'
 import {getUserNametag} from '../../actions/UserActions'
+import {Spinner} from 'react-mdl'
 // import Nametags from '../Nametag/Nametags'
 // import Messages from '../Message/Messages'
 // import Compose from '../Message/Compose'
@@ -87,7 +88,9 @@ class Room extends Component {
 
   render() {
     // TODO: Move norms to stateless object
-    let room = <div>Loading</div>
+    let room = <div className={style.spinner}>
+        <Spinner />
+      </div>
 
     // let expanded = this.state.leftBarExpanded ? style.expanded : style.collapsed
 

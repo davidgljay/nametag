@@ -85,6 +85,11 @@
     }
 }
 
+.spinner {
+    margin-left: 45%;
+    margin-top: 40vh;
+}
+
 #norms {
     color:white;
 }
