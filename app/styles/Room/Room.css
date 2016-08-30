@@ -18,6 +18,11 @@
     max-height:80px;
 }
 
+.header h3 {
+    margin-top:10px;
+    margin-bottom: 5px;
+}
+
 .close {
     width:15px;
     height:15px;
@@ -102,6 +107,7 @@
 
 #norms li {
     margin-bottom:10px;
+    background: none;
 }
 
 @keyframes slide-out { from { left:-260px; } to { left:0px; }  }

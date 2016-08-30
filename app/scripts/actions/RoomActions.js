@@ -151,14 +151,14 @@ export function joinRoom(roomId, nametag, userId) {
 }
 
 /*
-* Get room
+* Watch room
 * @params
 *   roomId - The room to watch
 *
 * @returns
 *   Promise
 */
-export function getRoom(id) {
+export function watchRoom(id) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
       hz('rooms').find(id).watch().subscribe((room) => {
@@ -166,6 +166,20 @@ export function getRoom(id) {
         resolve(room)
       }, reject)
     }).catch(errorLog('Error getting room'))
+  }
+}
+
+/*
+* Unwatch room
+* @params
+*   roomId - The room to watch
+*
+* @returns
+*   Promise
+*/
+export function unWatchRoom(id) {
+  return () => {
+    roomWatches[id].unsubscribe()
   }
 }
 

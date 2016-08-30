@@ -193,7 +193,7 @@ describe('RoomActions', () => {
     })
   })
 
-  describe('getRoom', () => {
+  describe('watchRoom', () => {
     it('should watch a room', (done) => {
       let room = {
         id: '123',
@@ -213,7 +213,7 @@ describe('RoomActions', () => {
           }
         },
       })
-      actions.getRoom('123')(store.dispatch).then((res) => {
+      actions.watchRoom('123')(store.dispatch).then((res) => {
         expect(calls[0]).toEqual({find: '123'})
         expect(res).toEqual(room)
         expect(store.getActions()[0]).toEqual({
