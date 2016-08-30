@@ -52,14 +52,14 @@ describe('Nametag Actions', () => {
     })
   })
 
-  describe('getRoomNametags', () => {
+  describe('watchRoomNametags', () => {
     it('should fetch a list of nametags from a room', (done) => {
       let results = [
         {name: 'tag', room: 'abc', id: '123'},
         {name: 'tag2', room: 'abc', id: '456'},
       ]
       hz.mockReturnValue(mockHz(results, calls)())
-      actions.getRoomNametags('abc')(store.dispatch).then(
+      actions.watchRoomNametags('abc')(store.dispatch).then(
         () => {
           expect(calls[1]).toEqual({type: 'findAll', req: {room: 'abc'}})
           expect(calls[2]).toEqual({type: 'watch', req: undefined})

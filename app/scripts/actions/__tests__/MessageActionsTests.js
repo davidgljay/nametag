@@ -1,5 +1,6 @@
 jest.unmock('../MessageActions')
 jest.unmock('../../tests/mockGlobals')
+jest.unmock('../RoomActions')
 
 jest.unmock('redux-mock-store')
 jest.unmock('redux-thunk')
@@ -22,14 +23,14 @@ describe('Message Actions', () => {
     calls = []
   })
 
-  describe('getRoomMessages', () => {
+  describe('watchRoomMessages', () => {
     it('should fetch a list of messages from a room', (done) => {
       let results = [
         {msg: 'hi there', room: 'abc', id: '123'},
         {msg: 'well hello', room: 'abc', id: '456'},
       ]
       hz.mockReturnValue(mockHz(results, calls)())
-      actions.getRoomMessages('abc')(store.dispatch).then(
+      actions.watchRoomMessages('abc')(store.dispatch).then(
         () => {
           expect(calls[1]).toEqual({type: 'findAll', req: {room: 'abc'}})
           expect(calls[2]).toEqual({type: 'watch', req: undefined})

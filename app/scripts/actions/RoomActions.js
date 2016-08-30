@@ -48,6 +48,15 @@ export function updateNametag(room, property, value) {
   }
 }
 
+export function setRoomProp(room, property, value) {
+  return {
+    type: constants.SET_ROOM_PROP,
+    room,
+    property,
+    value,
+  }
+}
+
 /*
 * Subscribe to a list of Rooms
 *

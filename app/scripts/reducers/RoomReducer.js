@@ -1,5 +1,10 @@
 import constants from '../constants'
 
+const addRoom = (state, action) => {
+  let newRoom = Object.assign({}, state[action.id], action.room)
+  return Object.assign({}, state, {[action.id]: newRoom})
+}
+
 const addCertificate = (state, action) => {
   let certs = [action.cert]
   let room = state[action.room]
@@ -45,10 +50,16 @@ const updateNametag = (state, action) => {
   return Object.assign({}, state, {[action.room]: newRoom})
 }
 
+const setRoomProp = (state, action) => {
+  let room = state[action.room]
+  let newRoom = Object.assign({}, room, {[action.property]: action.value})
+  return Object.assign({}, state, {[action.room]: newRoom})
+}
+
 const rooms = (state = {}, action) => {
   switch (action.type) {
   case constants.ADD_ROOM:
-    return Object.assign({}, state, {[action.id]: action.room})
+    return addRoom(state, action)
   case constants.SET_ROOM_NT_COUNT:
     let newRoom = Object.assign({}, state[action.room], {nametagCount: action.nametagCount})
     return Object.assign({}, state, {[action.room]: newRoom})
@@ -58,7 +69,8 @@ const rooms = (state = {}, action) => {
     return removeCertificate(state, action)
   case constants.UPDATE_USER_NAMETAG:
     return updateNametag(state, action)
-
+  case constants.SET_ROOM_PROP:
+    return setRoomProp(state, action)
   default:
     return state
   }

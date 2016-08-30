@@ -4,7 +4,7 @@ import {getUserNametag} from '../../actions/UserActions'
 import {Spinner} from 'react-mdl'
 import Norms from './Norms'
 import Nametags from '../../containers/Nametag/NametagsContainer'
-// import Messages from '../Message/Messages'
+import Messages from '../../containers/Message/MessagesContainer'
 // import Compose from '../Message/Compose'
 import style from '../../../styles/Room/Room.css'
 
@@ -72,7 +72,6 @@ class Room extends Component {
   }
 
   render() {
-    // TODO: Move norms to stateless object
     let room = <div className={style.spinner}>
         <Spinner />
       </div>
@@ -104,11 +103,10 @@ class Room extends Component {
                   />
               </div>
             </div>
-            {
-              // <Messages
-              //   roomId={this.props.params.roomId}
-              //   nametagId={this.state.nametagId}/>
-            }
+              {
+                <Messages
+                room={this.props.params.roomId}/>
+              }
           </div>
           {
           // <Compose

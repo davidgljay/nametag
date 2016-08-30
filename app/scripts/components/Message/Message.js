@@ -7,37 +7,6 @@ import fbase from '../../api/firebase';
 import style from '../../../styles/Room/Message.css';
 
 class Message extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      author: {},
-      modAction: false,
-      showActions: '',
-    };
-  }
-
-  componentDidMount() {
-    // TODO: Does this belong in getInitialState of componentDidMount?
-    // It seems like it's bad to set state before the component mounts, so maybe here?
-    const self = this;
-    const authorRef = fbase.child('nametags/' + this.props.roomId +
-      '/' + this.props.author);
-    authorRef.on('value', function onValue(author) {
-      if (author.val()) {
-        self.setState(function setState(prevState) {
-          prevState.author = author.val();
-          prevState.author.id = this.props.author;
-          return prevState;
-        });
-      }
-    }, errorLog('Error getting message author info'), this);
-  }
-
-  componentWillUnmount() {
-    const authorRef = fbase.child('nametags/' + this.props.roomId +
-      '/' + this.props.author);
-    authorRef.off();
-  }
 
   modAction(open) {
     const self = this;
