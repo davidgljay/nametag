@@ -4,7 +4,9 @@ import style from '../../../styles/Nametag/Nametag.css'
 
 class Nametag extends Component {
   componentWillMount() {
-    this.props.subscribe(this.props.id, this.props.room)
+    if (!this.props.name) {
+      this.props.subscribe(this.props.id, this.props.room)
+    }
   }
 
   componentDidUnMount() {
@@ -34,7 +36,7 @@ class Nametag extends Component {
 
 Nametag.propTypes = {
   id: PropTypes.string.isRequired,
-  room: PropTypes.string.isRequired,
+  room: PropTypes.string,
 }
 
 export default Nametag

@@ -64,7 +64,7 @@ export function unsubscribe(nametagId) {
 * @returns
 *    promise
 */
-export function getRoomNametags(room) {
+export function watchRoomNametags(room) {
   return function(dispatch) {
     return new Promise((resolve, reject) => {
       nametagSubscriptions[room] = hz('nametags').findAll({room: room}).watch().subscribe(
@@ -72,10 +72,25 @@ export function getRoomNametags(room) {
           for (let i = 0; i < nametags.length; i++) {
             dispatch(addNametag(nametags[i], nametags[i].id))
           }
-          resolve()
+          resolve(nametags)
         }, reject)
     })
     .catch(errorLog('Error subscribing to Nametags for room ' + room + ': '))
+  }
+}
+
+/*
+* Unwatched all nametags for a room
+*
+* @params
+*    roomId
+*
+* @returns
+*    promise
+*/
+export function unWatchRoomNametags(room) {
+  return function() {
+    nametagSubscriptions[room].unsubscribe()
   }
 }
 

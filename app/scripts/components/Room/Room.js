@@ -3,7 +3,7 @@ import {watchRoom, unWatchRoom} from '../../actions/RoomActions'
 import {getUserNametag} from '../../actions/UserActions'
 import {Spinner} from 'react-mdl'
 import Norms from './Norms'
-// import Nametags from '../Nametag/Nametags'
+import Nametags from '../../containers/Nametag/NametagsContainer'
 // import Messages from '../Message/Messages'
 // import Compose from '../Message/Compose'
 import style from '../../../styles/Room/Room.css'
@@ -35,9 +35,6 @@ class Room extends Component {
     if ( nextProps.user.id &&
     !(this.props.user.nametags && this.props.user.nametags[this.props.params.roomId])) {
       this.props.dispatch(getUserNametag(this.props.params.roomId, nextProps.user.id))
-        .then(() => {
-          console.log('Found user nametag for this room')
-        })
     }
   }
   	// // TODO: mark the user as active in the room.
@@ -98,9 +95,7 @@ class Room extends Component {
                 <div id={style.norms}>
                   <Norms norms={this.props.room.norms}/>
                 </div>
-                {
-                 // <Nametags roomId={this.props.params.roomId} mod={this.state.room.mod}/>
-                }
+                 <Nametags room={this.props.params.roomId} mod={this.props.room.mod}/>
               </div>
               <div id={style.leftBarChevron}>
                 <span

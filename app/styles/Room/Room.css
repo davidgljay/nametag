@@ -108,6 +108,12 @@
 #norms li {
     margin-bottom:10px;
     background: none;
+    border:none;
+    padding:0;
+}
+
+#norms .glyphicon {
+    display:none;
 }
 
 @keyframes slide-out { from { left:-260px; } to { left:0px; }  }

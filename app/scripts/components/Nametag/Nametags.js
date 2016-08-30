@@ -1,77 +1,59 @@
-import React, { Component, PropTypes } from 'react';
-import Nametag from './Nametag';
-import errorLog from '../../utils/errorLog';
-import fbase from '../../api/firebase';
-import style from '../../../styles/Nametag/Nametags.css';
+import React, { Component, PropTypes } from 'react'
+import Nametag from './Nametag'
+import style from '../../../styles/Nametag/Nametags.css'
+import {watchRoomNametags} from '../../actions/NametagActions'
 
 class Nametags extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      nametags: [],
-    };
-  }
 
   componentDidMount() {
-    // Get nametag data
-    const nametagsRef = fbase.child('nametags/' + this.props.roomId);
-    nametagsRef.on('child_added', function onValue(nametag) {
-      let nametagData = nametag.val();
-      nametagData.id = nametag.key();
-      this.setState(function setState(prevState) {
-        prevState.nametags.push(nametagData);
-        return prevState;
-      });
-    }, errorLog('Error getting partipant info'), this);
+    this.props.dispatch(watchRoomNametags(this.props.room))
   }
 
   componentWillUnmount() {
-    const nametagsRef = fbase.child('nametags/' + this.props.roomId);
-    nametagsRef.off('value');
+    this.props.dispatch(unWatchRoomNatage(this.props.room))
   }
 
   render() {
-    // Push nametags into an array;
-    let self = this;
-    let nametagsArr = [];
-    for (let nametag in this.state.nametags) {
-      if ({}.hasOwnProperty.call(this.state.nametags, nametag)) {
-        this.state.nametags[nametag].id = nametag;
-        nametagsArr.push(this.state.nametags[nametag]);
+    let nametags = []
+    for (let id in this.props.nametags) {
+      if (this.props.nametags[id].room === this.props.room) {
+        nametags.push(this.props.nametags[id])
       }
     }
-    nametagsArr.sort(function sortnametags(a) {
-      let score = -1;
-      if (a.mod) {
-        score = 1;
-      }
-      return score;
-    });
 
-    // Create a function to return list items
-    function creatNametag(nametag, mod) {
+    nametags.sort(function sortnametags(a) {
+      let score = -1
+      if (a.mod) {
+        score = 1
+      }
+      return score
+    })
+
+    function createNametag(nametag, mod) {
       // Make nametag.certificates an empty array if it not already assigned.
-      nametag.certificates = nametag.certificates || [];
+      nametag.certificates = nametag.certificates || []
 
       return <li key={nametag.id} className={style.nametag}>
         <Nametag
           name={nametag.name}
           bio={nametag.bio}
           icon={nametag.icon}
-          nametagId={nametag.id}
+          id={nametag.id}
           certificates={nametag.certificates}
           mod={mod}/>
-      </li>;
+      </li>
     }
 
     return <ul className={style.nametags}>
-        {nametagsArr.map(function mapNametag(nametag) {
-          return creatNametag(nametag, this.props.mod);
-        }, this)}
-      </ul>;
+        {
+          nametags.map((nametag) => {
+            return createNametag(nametag, this.props.mod)
+          })
+        }
+      </ul>
   }
 }
 
-Nametags.propTypes = { roomId: PropTypes.string, mod: PropTypes.string };
+Nametags.propTypes = { room: PropTypes.string, mod: PropTypes.string }
 
-export default Nametags;
+export default Nametags
