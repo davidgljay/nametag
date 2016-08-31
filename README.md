@@ -12,7 +12,7 @@ To address this problem Nametag is experimenting with a system of private, share
 On Nametag this certificate system is implemented in a flexible profiling system. Whenever a user enters a conversation they can choose to drag one or more certificates onto their "nametag", revealing those components of their reputation in that conversation only.
 
 ##Implementation
-The alpha version of Nametag is implemented in React with Firebase as a backend (though this is expected to change once a suitable open-source event-based solution can be found, sorry Meteor.) Assistance, and code review is appreciated from anyone with experience in React, blockchain technology, community organizing or digital privacy. 
+The alpha version of Nametag is implemented in React with RethinkDB and Horizon.io as a backend, with the goal of both hosting a central version of the service and making an open source version available to organizations wishing to host their own instance. Assistance and code review is appreciated from anyone with experience in React, blockchain technology, community organizing or digital privacy. 
 
 I am reachable on twitter @davidgljay.
 
