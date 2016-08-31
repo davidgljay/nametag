@@ -1,47 +1,46 @@
-import React, { Component, PropTypes } from 'react';
-import moment from '../../../bower_components/moment/moment';
-import ModAction from '../ModAction/ModAction';
-import Media from './Media';
-import errorLog from '../../utils/errorLog';
-import fbase from '../../api/firebase';
-import style from '../../../styles/Room/Message.css';
+import React, { Component, PropTypes } from 'react'
+import moment from '../../../bower_components/moment/moment'
+import ModAction from '../ModAction/ModAction'
+import Media from './Media'
+import style from '../../../styles/Room/Message.css'
 
 class Message extends Component {
 
   modAction(open) {
-    const self = this;
-    return function onClick() {
-      self.setState({modAction: open});
-    };
+    return (e) =>{
+      e.preventDefault()
+      this.setState({modAction: open})
+    }
   }
 
   heartAction() {
     return function onClick() {
-      // TODO: Add heart action;
-    };
+      // TODO: Add heart action
+    }
   }
 
   toggleActions() {
-    let showActions = this.state.showActions === style.slideOutActions ? style.slideInActions : style.slideOutActions;
-    this.setState({showActions: showActions});
+    let showActions = this.state.showActions === style.slideOutActions ? style.slideInActions : style.slideOutActions
+    this.setState({showActions: showActions})
   }
 
   checkYouTube(message) {
-    return /[^ ]+youtube\.com[^ \.\!]+/.exec(message);
+    return /[^ ]+youtube\.com[^ \.\!]+/.exec(message)
   }
 
   checkImage(message) {
-    return /[^ ]+(\.gif|\.jpg|\.png)/.exec(message);
+    return /[^ ]+(\.gif|\.jpg|\.png)/.exec(message)
   }
 
   render() {
-    let icon;
-    let name;
-    let below;
-    let media;
+    let icon
+    let name
+    let below
+    let media
+    // Need to get nametags
     if (this.state.author) {
-      icon = this.state.author.icon;
-      name = this.state.author.name;
+      icon = this.state.author.icon
+      name = this.state.author.name
     }
 
 
@@ -59,7 +58,7 @@ class Message extends Component {
           roomId={this.props.roomId}
           msgId={this.props.id}
           author={this.state.author}
-          close={this.modAction(false)}/>;
+          close={this.modAction(false)}/>
     } else {
       below =  <div className={style.below}>
           <div className={style.actions + ' ' + this.state.showActions }>
@@ -85,7 +84,7 @@ class Message extends Component {
           <div className={style.date}>
               {moment(this.props.timestamp).format('h:mm A, ddd MMM DD YYYY')}
           </div>
-        </div>;
+        </div>
     }
 
     return <tr
@@ -100,7 +99,7 @@ class Message extends Component {
           {below}
           <div className={style.msgPadding}></div>
         </td>
-      </tr>;
+      </tr>
   }
 }
 
@@ -110,11 +109,6 @@ Message.propTypes = {
   date: PropTypes.number,
   author: PropTypes.string,
   roomid: PropTypes.string,
-};
-Message.defaultProps = {
-  id: 'msg1',
-  text: 'This is the testiest message.',
-  timestamp: 1461977139344,
-};
+}
 
-export default Message;
+export default Message
