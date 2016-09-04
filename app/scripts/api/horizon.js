@@ -1,7 +1,7 @@
 export const hz = Horizon()
 
 export function hzAuth(provider) {
-  hz({authType: 'token'})
+  //   hz({authType: 'token'})
   let promise
   if (!hz.hasAuthToken()) {
     promise = hz.authEndpoint(provider).subscribe((endpoint) => {
