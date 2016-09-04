@@ -5,6 +5,7 @@ const mapStateToProps = (state, ownProps) => {
   return Object.assign({}, {
     messages: state.messages,
     messageList: state.rooms[ownProps.room].messages,
+    nametags: state.nametags,
   }, ownProps)
 }
 

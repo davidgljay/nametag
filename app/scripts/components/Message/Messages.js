@@ -2,9 +2,15 @@ import React, { Component, PropTypes} from 'react'
 // import Message from './Message'
 // import ModActionNotif from '../ModAction/ModActionNotif'
 import {watchRoomMessages, unWatchRoomMessages} from '../../actions/MessageActions'
-import style from '../../../styles/Room/Messages.css'
+import style from '../../../styles/Message/Messages.css'
 
 class Messages extends Component {
+
+  constructor(props) {
+    super(props)
+
+    this.mapMessage = this.mapMessage.bind(this)
+  }
 
   componentDidMount() {
     this.props.dispatch(watchRoomMessages(this.props.room))
@@ -17,12 +23,13 @@ class Messages extends Component {
   mapMessage(id) {
     let component = null
     let message = this.props.messages[id]
+    let author = this.props.nametags[message.author]
     if (message.type === 'message') {
       component = <Message
           id={message.id}
           text={message.text}
           timestamp={message.timestamp}
-          author={message.author}
+          author={author}
           roomId={this.props.room}
           key={message.id}/>
     } else if (message.type === 'modAction') {
@@ -40,7 +47,7 @@ class Messages extends Component {
         <table id={style.msgContainer}>
           <tbody>
           {
-            // this.props.messages.map(this.mapMessage.bind(this))
+            // this.props.messages.map(this.mapMessage)
           }
           </tbody>
         </table>
