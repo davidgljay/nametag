@@ -63,7 +63,7 @@ class RoomCard extends Component {
           <h3 onClick={this.flip.bind(this)}>{this.props.room.title}</h3>
           <div className={style.norms}>
             <h4>Conversation Norms</h4>
-            <Norms norms={this.props.room.norms} />
+            <Norms norms={this.props.room.norms} showChecks={true}/>
             <label className={style.checkbox}>
               <input type="checkbox" onClick={this.onNormsCheck.bind(this)}/>
               <span className={style.checkboxLabel} >I agree to abide by these norms</span>
