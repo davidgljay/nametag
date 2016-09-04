@@ -11,10 +11,13 @@ class Message extends Component {
     super(props)
     this.modAction = this.modAction.bind(this)
     this.heartAction = this.heartAction.bind(this)
+    this.toggleActions = this.toggleActions.bind(this)
+    this.checkYouTube = this.checkYouTube.bind(this)
+    this.checkImage = this.checkImage.bind(this)
   }
 
   modAction(open) {
-    return (e) =>{
+    return (e) => {
       e.preventDefault()
       this.setState({modAction: open})
     }
@@ -26,19 +29,23 @@ class Message extends Component {
     }
   }
 
-  toggleActions = () => this.setState({
-    showActions:
-    this.state.showActions === style.slideOutActions ? style.slideInActions : style.slideOutActions,
-  })
+  toggleActions() {
+    return this.setState({
+      showActions:
+      this.state.showActions === style.slideOutActions ? style.slideInActions : style.slideOutActions,
+    })
+  }
 
-  checkYouTube = (message) => /[^ ]+youtube\.com[^ \.\!]+/.exec(message)
+  checkYouTube(message) {
+    return /[^ ]+youtube\.com[^ \.\!]+/.exec(message)
+  }
 
-  checkImage = (message) => /[^ ]+(\.gif|\.jpg|\.png)/.exec(message)
+  checkImage(message) {
+    return /[^ ]+(\.gif|\.jpg|\.png)/.exec(message)
+  }
 
 
   render() {
-    let icon
-    let name
     let below
     let media
 
