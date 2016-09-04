@@ -181,7 +181,7 @@ gulp.task('extras', function() {
 })
 
 // Watch
-gulp.task('watch', ['html', 'fonts', 'images', 'bundle'], function() {
+gulp.task('watch', ['html', 'fonts', 'styles', 'images', 'bundle'], function() {
 
     browserSync({
         notify: false,
