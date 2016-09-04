@@ -1,38 +1,38 @@
-import React, { Component, PropTypes } from 'react';
-import errorLog from '../../utils/errorLog';
-import fbase from '../../api/firebase';
-import style from '../../../styles/Room/ModAction.css';
+import React, { Component, PropTypes } from 'react'
+import errorLog from '../../utils/errorLog'
+import fbase from '../../api/firebase'
+import style from '../../../styles/Message/ModAction.css'
 import Alert from '../Utils/Alert'
 
 class ModAction extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       norms: [],
       isPublic: false,
       note: '',
       escalated: false,
-    };
+    }
   }
 
   componentDidMount() {
-    const self = this;
-    const normsRef = fbase.child('rooms/' + this.context.roomId + '/norms');
+    const self = this
+    const normsRef = fbase.child('rooms/' + this.context.roomId + '/norms')
     normsRef.on('child_added', function onChildAdded(value) {
       self.setState(function setState(previousState) {
         previousState.norms.push({
           text: value.val(),
           id: previousState.norms.length,
           checked: false,
-        });
-        return previousState;
-      });
-    }, errorLog('Error getting room norms'));
+        })
+        return previousState
+      })
+    }, errorLog('Error getting room norms'))
   }
 
   componentWillUnMount() {
-    const normsRef = fbase.child('rooms/' + this.context.roomId + '/norms');
-    normsRef.off('child_added');
+    const normsRef = fbase.child('rooms/' + this.context.roomId + '/norms')
+    normsRef.off('child_added')
   }
 
   showNorm(norm) {
@@ -46,35 +46,35 @@ class ModAction extends Component {
            {norm.text}
           </span>
         </label>
-      </li>;
+      </li>
   }
 
   checkNorm(normId) {
-    let self = this;
+    let self = this
     return function onClick(e) {
-      e.preventDefault();
+      e.preventDefault()
       // Need to setTimeout so that preventDefault doesn't break checkboxes
       // This is a React-recommended hack.
       setTimeout(function delayed() {
         self.setState(function setState(previousState) {
-          previousState.norms[normId].checked = !previousState.norms[normId].checked;
-          return previousState;
-        });
-      }, 1);
-    };
+          previousState.norms[normId].checked = !previousState.norms[normId].checked
+          return previousState
+        })
+      }, 1)
+    }
   }
 
   preventDefault(e) {
-    e.preventDefault();
+    e.preventDefault()
   }
 
   remindOfNorms() {
-    let self = this;
-    const modActionRef = fbase.child('mod_actions/');
+    let self = this
+    const modActionRef = fbase.child('mod_actions/')
     // TODO: Allow edits without breaking append-only rule (right now there's one modaction per comment)
 
     function isChecked(item) {
-      return item.checked;
+      return item.checked
     }
 
     let modAction = {
@@ -84,44 +84,44 @@ class ModAction extends Component {
       timestamp: new Date().getTime(),
       modId: this.context.nametagId,
       author: this.props.author.id,
-    };
+    }
 
     function postComplete(err) {
       if (err) {
-        self.setState({alert: 'Error posting reminder'});
-        errorLog('Error putting mod Action')(err);
+        self.setState({alert: 'Error posting reminder'})
+        errorLog('Error putting mod Action')(err)
       } else {
-        self.props.close();
+        self.props.close()
       }
     }
 
     if (modAction.norms.length === 0) {
-      self.setState({alert: 'Please check at least one norm.'});
-      return;
+      self.setState({alert: 'Please check at least one norm.'})
+      return
     }
 
     // Update firebase with modaction for the user.
     if (this.state.isPublic) {
       modActionRef.child(this.context.roomId +
         '/public/' + this.props.msgId + '/')
-        .set(modAction, postComplete);
+        .set(modAction, postComplete)
     } else {
       modActionRef.child(this.context.roomId +
         '/private/' + this.props.author.id + '/' +
         this.props.msgId + '/')
-        .set(modAction, postComplete);
+        .set(modAction, postComplete)
     }
   }
 
   setPublic(isPublic) {
-    let self = this;
+    let self = this
     return function onClick() {
-      self.setState({isPublic: isPublic});
-    };
+      self.setState({isPublic: isPublic})
+    }
   }
 
   escalate() {
-    this.setState({escalated: true});
+    this.setState({escalated: true})
   }
 
   removeUser() {
@@ -129,7 +129,7 @@ class ModAction extends Component {
   }
 
   addNote(e) {
-    this.setState({note: e.target.value});
+    this.setState({note: e.target.value})
   }
 
   notifyBadge() {
@@ -139,10 +139,10 @@ class ModAction extends Component {
   render() {
     // TODO: I could add complexity here, cite multiple posts, etc.
     // TODO: Create a system for notifying badgeholders.
-    let visText;
-    let alert;
+    let visText
+    let alert
     if (this.state.alert) {
-      alert = <Alert msg={this.state.alert} alertType="danger"/>;
+      alert = <Alert msg={this.state.alert} alertType="danger"/>
     }
 
     if (this.state.isPublic) {
@@ -153,7 +153,7 @@ class ModAction extends Component {
             className={style.visIcon + 'glyphicon glyphicon-eye-open'}>
           </span>
           Visible to everyone in the room.
-        </p>;
+        </p>
     } else {
       visText =
         <p>
@@ -162,7 +162,7 @@ class ModAction extends Component {
           className={style.visIcon + 'glyphicon glyphicon-eye-close'}>
           </span>
           Visible only to the author of this message.
-        </p>;
+        </p>
     }
 
     return <div id={style.modAction}>
@@ -219,17 +219,17 @@ class ModAction extends Component {
               Notify Badge Granters
           </button>
         </div>
-        </div>;
+        </div>
   }
 }
 
 ModAction.propTypes = {
   msgId: PropTypes.string,
   close: PropTypes.func,
-  author: PropTypes.object };
+  author: PropTypes.object }
 ModAction.contextTypes = {
   nametagId: PropTypes.string,
   roomId: PropTypes.string,
-};
+}
 
-export default ModAction;
+export default ModAction
