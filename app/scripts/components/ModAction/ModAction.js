@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import errorLog from '../../utils/errorLog'
-import fbase from '../../api/firebase'
 import style from '../../../styles/ModAction/ModAction.css'
 import VisOptions from './VisibilityOptions'
 import ModActionButtons from './ModActionButtons'
