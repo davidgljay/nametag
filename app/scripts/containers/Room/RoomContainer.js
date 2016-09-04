@@ -5,6 +5,7 @@ const mapStateToProps = (state, props) => {
   return {
     room: state.rooms[props.params.roomId],
     user: state.user,
+    userNametag: state.user.nametags[props.params.roomId]
   }
 }
 

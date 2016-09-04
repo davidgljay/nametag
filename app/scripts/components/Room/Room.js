@@ -16,12 +16,12 @@ class Room extends Component {
     }
   }
 
-  // getChildContext() {
-  //   return {
-  //     nametagId: this.state.nametagId,
-  //     roomId: this.props.params.roomId,
-  //   }
-  // }
+  getChildContext() {
+    return {
+      userNametag: this.props.userNametag,
+      room: this.props.params.roomId,
+    }
+  }
 
   getUserNametag() {
 
@@ -37,27 +37,6 @@ class Room extends Component {
       this.props.dispatch(getUserNametag(this.props.params.roomId, nextProps.user.id))
     }
   }
-  	// // TODO: mark the user as active in the room.
-   //  const roomRef = fbase.child('/rooms/' + this.props.params.roomId)
-
-
-   //  roomRef.on('value', function onValue(value) {
-   //    this.setState({room: value.val()})
-
-   //  }, errorLog('Error getting room from FB'), this)
-
-
-   //  const nametagIdRef = fbase.child('user_rooms/'
-   //    + this.context.userAuth.uid + '/'
-   //    + this.props.params.roomId)
-
-
-   //  nametagIdRef.on('value', function onValue(value) {
-   //    const ntid = value.val().nametag_id
-
-   //    this.setState({nametagId: ntid})
-
-   //  },this)
 
   componentWillUnmount() {
     this.props.dispatch(unWatchRoom(this.props.params.roomId))
