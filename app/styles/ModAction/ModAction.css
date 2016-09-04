@@ -19,49 +19,11 @@
     cursor:pointer;
 }
 
-.norms {
-	composes: list-group from bootstrap;
-}
 
 .chooseNorm {
-	composes: list-group-item from bootstrap;
     cursor:pointer;
-}
-
-.active {
-	composes: active from bootstrap;
-}
-
-.btn {
-	composes: btn from bootstrap;
-    margin-right:10px;
-    margin-bottom: 10px;
-}
-
-
-.escalateLink {
-	background:none;
-	cursor: pointer;
-	color: red;
-	border:none;
-	vertical-align: middle;
-	margin-bottom:10px;
-}
-
-.escalateLink:hover {
-	text-decoration: underline;
 }
 
 .norm {
 	margin-left: 15px;
-}
-
-.primary {
-	composes: btn;
-	composes: btn-primary from bootstrap;
-}
-
-.danger {
-	composes: btn;
-	composes: btn-danger from bootstrap;
 }

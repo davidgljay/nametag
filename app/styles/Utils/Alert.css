@@ -1,8 +1,3 @@
 /** Alert.css **/
 
 @value bootstrap: "../../bower_components/bootstrap/dist/css/bootstrap.css";
-
-.danger {
-	composes: alert from bootstrap;
-	composes: alert-danger from bootstrap;
-}

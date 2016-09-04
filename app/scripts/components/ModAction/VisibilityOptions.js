@@ -1,5 +1,5 @@
 import React from 'react'
-import style from '../../../styles/ModActions/VisibilityOptions.css'
+import style from '../../../styles/ModAction/VisibilityOptions.css'
 
 const VisibilityOptions = (props) => <div className={style.chooseVis}>
     <div className={style.toggle} data-toggle="buttons">
