@@ -27,3 +27,7 @@
 .norm {
 	margin-left: 15px;
 }
+
+.norms {
+  list-style:none;
+}

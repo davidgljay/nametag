@@ -1,29 +1,25 @@
 import React, {PropTypes} from 'react'
 import style from '../../../styles/ModAction/ModActionButtons.css'
-import {Button} from 'react-mdl'
 
 const ModActionButtons = (props) => <div className={style.modAction}>
-    <Button colored raised onClick={props.remindOfNorms}>
+    <button className="btn btn-primary" onClick={props.remindOfNorms}>
       Remind
-    </Button>
-    <Button
-      raised
+    </button>
+    <button
       className={style.escalateLink + ' ' + (props.escalated ? style.hide : '')}
       onClick={props.escalate}>
         Escalate
-    </Button>
-    <Button
-      raised
-      className={!props.escalated ? style.hide : ''}
+    </button>
+    <button
+      className={!props.escalated ? style.hide : 'btn btn-danger'}
       onClick={props.removeUser}>
         Remove {props.authorName} From Room
-    </Button>
-    <Button
-      raised
-      className={!props.escalated ? style.hide : ''}
+    </button>
+    <button
+      className={!props.escalated ? style.hide : 'btn btn-danger'}
       onClick={props.notifyBadge}>
         Notify Badge Granters
-    </Button>
+    </button>
   </div>
 
 ModActionButtons.propTypes = {

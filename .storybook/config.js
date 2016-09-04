@@ -1,6 +1,5 @@
 import { configure } from '@kadira/storybook'
-import '../app/material.min.css'
-import '../app/material.min.js'
+import '../app/bower_components/bootstrap/dist/css/bootstrap.css'
 
 const req = require.context('../app/scripts/components', true, /.stories.js$/)
 
