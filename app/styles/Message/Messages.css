@@ -3,11 +3,11 @@
 @value mobile from sizes;
 
 #messages {
+    min-height: 100vh;
     height:100%;
     width:100%;
     padding-left:275px;
     padding-top:100px;
-    overflow:scroll;
 }
 
 #msgContainer {
