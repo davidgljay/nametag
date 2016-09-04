@@ -1,8 +1,8 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 import style from '../../../styles/Message/MessageMenu.css'
 
 const MessageMenu = (props) =>
-<div className={style.actions + ' ' + this.state.showActions }>
+<div className={style.actions + ' ' + props.showActions }>
   <span
     className={style.showActions + ' ' + style.actionIcon + ' glyphicon glyphicon-option-vertical'}
     onClick={props.toggleActions}
@@ -24,3 +24,10 @@ const MessageMenu = (props) =>
 </div>
 
 export default MessageMenu
+
+MessageMenu.propTypes = {
+  toggleActions: PropTypes.func.isRequired,
+  heartAction: PropTypes.func.isRequired,
+  modAction: PropTypes.func.isRequired,
+
+}

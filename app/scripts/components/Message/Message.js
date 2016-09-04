@@ -9,6 +9,7 @@ class Message extends Component {
 
   constructor(props) {
     super(props)
+    this.state = {modAction: false}
     this.modAction = this.modAction.bind(this)
     this.heartAction = this.heartAction.bind(this)
     this.toggleActions = this.toggleActions.bind(this)
@@ -60,7 +61,6 @@ class Message extends Component {
     if (this.state.modAction) {
       below =
         <ModAction
-          roomId={this.props.roomId}
           msgId={this.props.id}
           author={this.props.author}
           close={this.modAction(false)}/>
@@ -69,7 +69,8 @@ class Message extends Component {
           <MessageMenu
             modAction={this.modAction}
             toggleActions={this.toggleActions}
-            heartAction={this.heartAction}/>
+            heartAction={this.heartAction}
+            showActions={this.state.showActions}/>
           <div className={style.date}>
               {moment(this.props.timestamp).format('h:mm A, ddd MMM DD YYYY')}
           </div>
@@ -93,11 +94,11 @@ class Message extends Component {
 }
 
 Message.propTypes = {
-  id: PropTypes.string,
-  text: PropTypes.string,
-  date: PropTypes.number,
-  author: PropTypes.string,
-  roomid: PropTypes.string,
+  id: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
+  date: PropTypes.number.isRequired,
+  author: PropTypes.object.isRequired,
+  type: PropTypes.string.isRequired,
 }
 
 export default Message
