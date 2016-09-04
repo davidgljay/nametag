@@ -8,19 +8,19 @@ const ModActionButtons = (props) => <div className={style.modAction}>
     </Button>
     <Button
       raised
-      className={style.escalateLink + ' ' + (!props.escalated || style.hide)}
+      className={style.escalateLink + ' ' + (props.escalated ? style.hide : '')}
       onClick={props.escalate}>
         Escalate
     </Button>
     <Button
       raised
-      className={!props.escalated && style.hide}
+      className={!props.escalated ? style.hide : ''}
       onClick={props.removeUser}>
         Remove {props.authorName} From Room
     </Button>
     <Button
       raised
-      className={!props.escalated && style.hide}
+      className={!props.escalated ? style.hide : ''}
       onClick={props.notifyBadge}>
         Notify Badge Granters
     </Button>
