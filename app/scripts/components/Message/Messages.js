@@ -1,5 +1,5 @@
 import React, { Component, PropTypes} from 'react'
-// import Message from './Message'
+import Message from './Message'
 // import ModActionNotif from '../ModAction/ModActionNotif'
 import {watchRoomMessages, unWatchRoomMessages} from '../../actions/MessageActions'
 import style from '../../../styles/Message/Messages.css'
@@ -33,11 +33,11 @@ class Messages extends Component {
           roomId={this.props.room}
           key={message.id}/>
     } else if (message.type === 'modAction') {
-      component = <ModActionNotif
-            id={'ma' + message.id}
-            modAction={message}
-            roomId={this.props.room}
-            key={'ma' + message.id}/>
+      // component = <ModActionNotif
+      //       id={'ma' + message.id}
+      //       modAction={message}
+      //       roomId={this.props.room}
+      //       key={'ma' + message.id}/>
     }
     return component
   }
@@ -47,7 +47,8 @@ class Messages extends Component {
         <table id={style.msgContainer}>
           <tbody>
           {
-            // this.props.messages.map(this.mapMessage)
+            this.props.messageList &&
+            this.props.messageList.map(this.mapMessage)
           }
           </tbody>
         </table>
