@@ -1,0 +1,25 @@
+.chooseVis {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.visText {
+    padding-top: 10px;
+    font-style: italic;
+
+}
+
+.visIcons {
+    margin-right: 10px;
+    font-style: none;
+}
+
+
+.toggle {
+  composes: btn-group from bootstrap;
+}
+
+.toggleOption {
+  composes: btn from bootstrap;
+  composes: btn-default from bootstrap;
+}

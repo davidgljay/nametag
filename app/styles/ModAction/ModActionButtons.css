@@ -1,0 +1,28 @@
+.escalateLink {
+  background:none;
+  cursor: pointer;
+  color: red;
+  border:none;
+  vertical-align: middle;
+  margin-bottom:10px;
+}
+
+.escalateLink:hover {
+  text-decoration: underline;
+}
+
+.primary {
+  composes: btn;
+  composes: btn-primary from bootstrap;
+}
+
+.danger {
+  composes: btn;
+  composes: btn-danger from bootstrap;
+}
+
+.btn {
+  composes: btn from bootstrap;
+    margin-right:10px;
+    margin-bottom: 10px;
+}

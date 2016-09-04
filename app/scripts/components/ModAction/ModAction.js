@@ -1,38 +1,24 @@
 import React, { Component, PropTypes } from 'react'
 import errorLog from '../../utils/errorLog'
 import fbase from '../../api/firebase'
-import style from '../../../styles/Message/ModAction.css'
+import style from '../../../styles/ModAction/ModAction.css'
+import VisOptions from './VisibilityOptions'
+import ModActionButtons from './ModActionButtons'
 import Alert from '../Utils/Alert'
 
 class ModAction extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      norms: [],
       isPublic: false,
-      note: '',
+      text: '',
       escalated: false,
     }
-  }
-
-  componentDidMount() {
-    const self = this
-    const normsRef = fbase.child('rooms/' + this.context.roomId + '/norms')
-    normsRef.on('child_added', function onChildAdded(value) {
-      self.setState(function setState(previousState) {
-        previousState.norms.push({
-          text: value.val(),
-          id: previousState.norms.length,
-          checked: false,
-        })
-        return previousState
-      })
-    }, errorLog('Error getting room norms'))
-  }
-
-  componentWillUnMount() {
-    const normsRef = fbase.child('rooms/' + this.context.roomId + '/norms')
-    normsRef.off('child_added')
+    this.showNorm = this.showNorm.bind(this)
+    this.checkNorm = this.checkNorm.bind(this)
+    this.remindOfNorms = this.remindOfNorms.bind(this)
+    this.setPublic = this.setPublic.bind(this)
+    this.escalate = this.escalate.bind(this)
   }
 
   showNorm(norm) {
@@ -69,54 +55,37 @@ class ModAction extends Component {
   }
 
   remindOfNorms() {
-    let self = this
-    const modActionRef = fbase.child('mod_actions/')
     // TODO: Allow edits without breaking append-only rule (right now there's one modaction per comment)
 
-    function isChecked(item) {
-      return item.checked
+    if (this.state.norms.length === 0) {
+      self.setState({alert: 'Please check at least one norm.'})
+      return
     }
 
     let modAction = {
+      type: 'modAction',
       action: 'warn',
-      norms: this.state.norms.filter(isChecked),
-      note: this.state.note,
+      norms: this.state.norms.filter((item) => item.checked),
+      text: this.state.text,
       timestamp: new Date().getTime(),
       modId: this.context.nametagId,
       author: this.props.author.id,
     }
 
-    function postComplete(err) {
-      if (err) {
-        self.setState({alert: 'Error posting reminder'})
-        errorLog('Error putting mod Action')(err)
-      } else {
+    this.props.dispatch(postMessage(modAction))
+      .then(() => {
         self.props.close()
-      }
-    }
-
-    if (modAction.norms.length === 0) {
-      self.setState({alert: 'Please check at least one norm.'})
-      return
-    }
-
-    // Update firebase with modaction for the user.
-    if (this.state.isPublic) {
-      modActionRef.child(this.context.roomId +
-        '/public/' + this.props.msgId + '/')
-        .set(modAction, postComplete)
-    } else {
-      modActionRef.child(this.context.roomId +
-        '/private/' + this.props.author.id + '/' +
-        this.props.msgId + '/')
-        .set(modAction, postComplete)
-    }
+      },
+      (err) => {
+        this.setState({alert: 'Error posting reminder'})
+        errorLog('Error putting mod Action')(err)
+      })
   }
 
   setPublic(isPublic) {
-    let self = this
-    return function onClick() {
-      self.setState({isPublic: isPublic})
+    return (e) => {
+      e.preventDefault()
+      this.setState({isPublic})
     }
   }
 
@@ -128,7 +97,12 @@ class ModAction extends Component {
     // TODO: Add functionality to remove user.
   }
 
+  censorMessage() {
+    // TODO: Add functionality to censor a message
+  }
+
   addNote(e) {
+    e.preventDefault
     this.setState({note: e.target.value})
   }
 
@@ -139,30 +113,9 @@ class ModAction extends Component {
   render() {
     // TODO: I could add complexity here, cite multiple posts, etc.
     // TODO: Create a system for notifying badgeholders.
-    let visText
     let alert
     if (this.state.alert) {
       alert = <Alert msg={this.state.alert} alertType="danger"/>
-    }
-
-    if (this.state.isPublic) {
-      visText =
-        <p>
-          <span
-            aria-hidden="true"
-            className={style.visIcon + 'glyphicon glyphicon-eye-open'}>
-          </span>
-          Visible to everyone in the room.
-        </p>
-    } else {
-      visText =
-        <p>
-          <span
-          aria-hidden="true"
-          className={style.visIcon + 'glyphicon glyphicon-eye-close'}>
-          </span>
-          Visible only to the author of this message.
-        </p>
     }
 
     return <div id={style.modAction}>
@@ -170,66 +123,42 @@ class ModAction extends Component {
         <span
           aria-hidden="true"
           className={style.close + ' glyphicon glyphicon-remove'}
-          onClick={this.props.close.bind(this)}></span>
+          onClick={this.props.close}>
+        </span>
         <h4>Remind {this.props.author.name} of Conversation Norms</h4>
         <ul className={style.norms}>
-        {this.state.norms.map(this.showNorm.bind(this))}
+        {this.state.norms.map(this.showNorm)}
         </ul>
         <input
           type="text"
           className="form-control"
-          onChange={this.addNote.bind(this)}
+          onChange={this.addNote}
           placeholder="Add an optional note."
           value={this.state.message}/>
-        <div className={style.chooseVis}>
-          <div className={style.toggle} data-toggle="buttons">
-            <label className={style.toggleOption + ' ' + (this.state.isPublic || style.active)}>
-              <input
-                type="radio"
-                id="privateAction"
-                onClick={this.setPublic(false).bind(this)} />
-              Private
-            </label>
-            <label className={style.toggleOption + ' ' + (!this.state.isPublic || style.active)}>
-              <input type="radio" id="publicAction" onClick={this.setPublic(true).bind(this)}/>
-              Public
-            </label>
-          </div>
-          <div className={style.visText}>
-            {visText}
-          </div>
-        </div>
-        <div className={style.modAction}>
-          <button className={style.primary} onClick={this.remindOfNorms.bind(this)}>
-            Remind
-          </button>
-          <button
-            className={style.escalateLink + ' ' + (!this.state.escalated || style.hide)}
-            onClick={this.escalate.bind(this)}>
-              Escalate
-          </button>
-          <button
-            className={style.danger + ' ' + (this.state.escalated || style.hide)}
-            onClick={this.removeUser.bind(this)}>
-              Remove {this.props.author.name} From Room
-          </button>
-          <button
-            className={style.danger + ' ' + (this.state.escalated || style.hide)}
-            onClick={this.notifyBadge.bind(this)}>
-              Notify Badge Granters
-          </button>
-        </div>
-        </div>
+        <VisOptions
+          isPublic = {this.state.isPublic}
+          setPublic = {this.setPublic}/>
+        <ModActionButtons
+          escalate = {this.escalate}
+          escalated = {this.state.escalated}
+          remindOfNorms = {this.remindOfNorms}
+          removeUser = {this.removeUser}
+          notifyBadge = {this.notifyBadge}
+          authorName = {this.props.author.name}
+          censorMessage = {this.censorMessage}
+          />
+      </div>
   }
 }
 
 ModAction.propTypes = {
   msgId: PropTypes.string,
   close: PropTypes.func,
-  author: PropTypes.object }
+  author: PropTypes.object,
+}
 ModAction.contextTypes = {
-  nametagId: PropTypes.string,
-  roomId: PropTypes.string,
+  userNametag: PropTypes.string,
+  room: PropTypes.string,
 }
 
 export default ModAction
