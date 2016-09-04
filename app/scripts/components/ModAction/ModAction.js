@@ -9,40 +9,42 @@ class ModAction extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      normChecks:[],
       isPublic: false,
       text: '',
       escalated: false,
     }
     this.showNorm = this.showNorm.bind(this)
     this.checkNorm = this.checkNorm.bind(this)
+    this.addNote = this.addNote.bind(this)
     this.remindOfNorms = this.remindOfNorms.bind(this)
     this.setPublic = this.setPublic.bind(this)
     this.escalate = this.escalate.bind(this)
   }
 
-  showNorm(norm) {
+  showNorm(norm, i) {
     return <li
       className={style.chooseNorm}
-      key={norm.id}
-      onClick={this.checkNorm(norm.id)}>
+      key={i}
+      onClick={this.checkNorm(i)}>
         <label className="c-input c-checkbox" >
-          <input type="checkbox" checked={norm.checked}/>
+          <input type="checkbox" checked={this.state.normChecks[i]}/>
           <span className={style.norm}>
-           {norm.text}
+           {norm}
           </span>
         </label>
       </li>
   }
 
-  checkNorm(normId) {
+  checkNorm(normIndex) {
     let self = this
-    return function onClick(e) {
+    return (e) => {
       e.preventDefault()
       // Need to setTimeout so that preventDefault doesn't break checkboxes
       // This is a React-recommended hack.
-      setTimeout(function delayed() {
-        self.setState(function setState(previousState) {
-          previousState.norms[normId].checked = !previousState.norms[normId].checked
+      setTimeout(() => {
+        self.setState((previousState) => {
+          previousState.normChecks[normIndex] = !previousState.normChecks[normIndex]
           return previousState
         })
       }, 1)
@@ -56,7 +58,7 @@ class ModAction extends Component {
   remindOfNorms() {
     // TODO: Allow edits without breaking append-only rule (right now there's one modaction per comment)
 
-    if (this.state.norms.length === 0) {
+    if (this.props.norms.length === 0) {
       self.setState({alert: 'Please check at least one norm.'})
       return
     }
@@ -64,7 +66,7 @@ class ModAction extends Component {
     let modAction = {
       type: 'modAction',
       action: 'warn',
-      norms: this.state.norms.filter((item) => item.checked),
+      norms: this.props.norms.filter((item) => item.checked),
       text: this.state.text,
       timestamp: new Date().getTime(),
       modId: this.context.nametagId,
@@ -102,7 +104,7 @@ class ModAction extends Component {
 
   addNote(e) {
     e.preventDefault
-    this.setState({note: e.target.value})
+    this.setState({text: e.target.value})
   }
 
   notifyBadge() {
@@ -126,7 +128,7 @@ class ModAction extends Component {
         </span>
         <h4>Remind {this.props.author.name} of Conversation Norms</h4>
         <ul className={style.norms}>
-        {this.state.norms.map(this.showNorm)}
+        {this.props.norms.map(this.showNorm)}
         </ul>
         <input
           type="text"
@@ -154,6 +156,7 @@ ModAction.propTypes = {
   msgId: PropTypes.string,
   close: PropTypes.func,
   author: PropTypes.object,
+  norms: PropTypes.array.isRequired,
 }
 ModAction.contextTypes = {
   userNametag: PropTypes.string,
