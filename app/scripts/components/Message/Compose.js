@@ -1,56 +1,53 @@
-import React, { Component, PropTypes } from 'react';
-import errorLog from '../../utils/errorLog';
-import fbase from '../../api/firebase';
-import style from '../../../styles/Room/Compose.css';
+import React, { Component, PropTypes } from 'react'
+import style from '../../../styles/Message/Compose.css'
 
 class Compose extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       message: '',
-    };
+    }
+    this.onChange = this.onChange.bind(this)
+    this.post = this.post.bind(this)
   }
 
   onChange(e) {
-    this.setState({message: e.target.value});
+    this.setState({message: e.target.value})
   }
 
   post(e) {
-    const msgRef = fbase.child('messages');
-    const rmMsgRef = fbase.child('room_messages/' + this.props.roomId);
-    e.preventDefault();
+    e.preventDefault()
     if (this.state.message.length > 0) {
-      const newMsg = msgRef.push({
+      this.props.postMessage({
         text: this.state.message,
         timestamp: Date.now(),
-        author: this.props.nametagId,
-      }, function fbPushResponse(err) {
-        if (err) {
-          errorLog('Error posting message')(err);
-        }
-      });
-      rmMsgRef.push(newMsg.key());
-      this.setState({message: ''});
+        author: this.context.userNametag,
+        room: this.context.room,
+      })
+      this.setState({message: ''})
     }
   }
 
   render() {
     // TODO: Add GIFs, image upload, emoticons
-    return <form className={style.compose} onSubmit={this.post.bind(this)}>
+    return <form className={style.compose} onSubmit={this.post}>
         <input
           type="text"
           className="form-control"
-          onChange={this.onChange.bind(this)}
+          onChange={this.onChange}
           value={this.state.message}/>
         <span className="input-group-btn">
           <button className="btn btn-secondary">
             <span className="glyphicon glyphicon-send" aria-hidden="true"/>
           </button>
         </span>
-      </form>;
+      </form>
   }
 }
 
-Compose.propTypes = {roomId: PropTypes.string.isRequired, nametagId: PropTypes.string.isRequired};
+Compose.contextTypes = {
+  room: PropTypes.string.isRequired,
+  userNametag: PropTypes.string.isRequired,
+}
 
-export default Compose;
+export default Compose
