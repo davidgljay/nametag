@@ -63,7 +63,8 @@ class Message extends Component {
         <ModAction
           msgId={this.props.id}
           author={this.props.author}
-          close={this.modAction(false)}/>
+          close={this.modAction(false)}
+          postMessage={this.props.postMessage}/>
     } else {
       below = <div className={style.below}>
           <MessageMenu

@@ -28,18 +28,18 @@ class Room extends Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(watchRoom(this.props.params.roomId))
+    this.props.watchRoom(this.props.params.roomId)
   }
 
   componentWillReceiveProps(nextProps) {
     if ( nextProps.user.id &&
     !(this.props.user.nametags && this.props.user.nametags[this.props.params.roomId])) {
-      this.props.dispatch(getUserNametag(this.props.params.roomId, nextProps.user.id))
+      this.props.getUserNametag(this.props.params.roomId, nextProps.user.id)
     }
   }
 
   componentWillUnmount() {
-    this.props.dispatch(unWatchRoom(this.props.params.roomId))
+    this.props.unWatchRoom(this.props.params.roomId)
   }
 
   closeRoom() {
@@ -88,9 +88,8 @@ class Room extends Component {
               }
           </div>
           {
-          // <Compose
-            // roomId={this.props.params.roomId}
-            // nametagId={this.state.nametagId}/>
+          <Compose
+            postRoom={this.props.postRoom}/>
           }
       </div>
     }

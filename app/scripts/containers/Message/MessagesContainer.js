@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import component from '../../components/Message/Messages'
+import {watchRoomMessages, unWatchRoomMessages, postMessage} from '../../actions/MessageActions'
 
 const mapStateToProps = (state, ownProps) => {
   return Object.assign({}, {
@@ -11,7 +12,15 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dispatch,
+    watchRoomMessages(room) {
+      dispatch(watchRoomMessages(room))
+    },
+    unWatchRoomMessages(room) {
+      dispatch(unWatchRoomMessages(room))
+    },
+    postMessage(message) {
+      dispatch(postMessage(message))
+    },
   }
 }
 

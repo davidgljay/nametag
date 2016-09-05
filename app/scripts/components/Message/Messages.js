@@ -13,11 +13,11 @@ class Messages extends Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(watchRoomMessages(this.props.room))
+    this.props.watchRoomMessages(this.props.room)
   }
 
   componentWillUnmount() {
-    this.props.dispatch(unWatchRoomMessages(this.props.room))
+    this.props.unWatchRoomMessages(this.props.room)
   }
 
   mapMessage(id) {
@@ -31,7 +31,8 @@ class Messages extends Component {
           timestamp={message.timestamp}
           author={author}
           roomId={this.props.room}
-          key={message.id}/>
+          key={message.id}
+          postMessage={this.props.postMessage}/>
     } else if (message.type === 'modAction') {
       // component = <ModActionNotif
       //       id={'ma' + message.id}

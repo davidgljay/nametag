@@ -45,6 +45,9 @@ class Compose extends Component {
   }
 }
 
+Compose.propTypes = {
+  postMessage: PropTypes.func.isRequired
+}
 Compose.contextTypes = {
   room: PropTypes.string.isRequired,
   userNametag: PropTypes.string.isRequired,

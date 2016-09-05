@@ -73,7 +73,7 @@ class ModAction extends Component {
       author: this.props.author.id,
     }
 
-    this.props.dispatch(postMessage(modAction))
+    this.props.postMessage(modAction)
       .then(() => {
         self.props.close()
       },
@@ -157,6 +157,7 @@ ModAction.propTypes = {
   close: PropTypes.func,
   author: PropTypes.object,
   norms: PropTypes.array.isRequired,
+  postMessage: PropTypes.func.isRequired,
 }
 ModAction.contextTypes = {
   userNametag: PropTypes.string,
