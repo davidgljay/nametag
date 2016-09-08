@@ -21,18 +21,17 @@ class Messages extends Component {
   }
 
   mapMessage(id) {
+    if (!this.props.messages || !this.props.nametags) {return null}
     let component = null
     let message = this.props.messages[id]
     let author = this.props.nametags[message.author]
     if (message.type === 'message') {
       component = <Message
-          id={message.id}
-          text={message.text}
-          timestamp={message.timestamp}
+          {...message}
           author={author}
           roomId={this.props.room}
           key={message.id}
-          postMessage={this.props.postMessage}/>
+          postMessage={this.props.postMessage}}/>
     } else if (message.type === 'modAction') {
       // component = <ModActionNotif
       //       id={'ma' + message.id}

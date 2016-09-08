@@ -97,7 +97,7 @@ class Message extends Component {
 Message.propTypes = {
   id: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
-  date: PropTypes.number.isRequired,
+  timestamp: PropTypes.number.isRequired,
   author: PropTypes.object.isRequired,
   type: PropTypes.string.isRequired,
 }

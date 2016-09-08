@@ -81,7 +81,7 @@ class Room extends Component {
               </div>
               {
                 <Messages
-                room={this.props.params.roomId}/>
+                  room={this.props.params.roomId}/>
               }
             </div>
             {

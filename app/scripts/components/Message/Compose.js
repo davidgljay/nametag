@@ -23,6 +23,7 @@ class Compose extends Component {
         timestamp: Date.now(),
         author: this.context.userNametag,
         room: this.context.room,
+        type: 'message',
       })
       this.setState({message: ''})
     }
@@ -46,7 +47,7 @@ class Compose extends Component {
 }
 
 Compose.propTypes = {
-  postMessage: PropTypes.func.isRequired
+  postMessage: PropTypes.func.isRequired,
 }
 Compose.contextTypes = {
   room: PropTypes.string.isRequired,
