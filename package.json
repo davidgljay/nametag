@@ -68,7 +68,8 @@
       "/dist/bower_components",
       "/node_modules/"
     ],
-    "setupTestFrameworkScriptFile": "<rootDir>/app/scripts/tests/mockGlobals.js"
+    "setupTestFrameworkScriptFile": "<rootDir>/app/scripts/tests/mockGlobals.js",
+    "automock":true
   },
   "browserify": {
     "transform": [

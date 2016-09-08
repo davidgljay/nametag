@@ -110,7 +110,7 @@ describe('User Actions', () => {
         expect(calls[1]).toEqual({
           type: 'findAll',
           req: {
-            user: 'me',
+            room: 'abc',
           },
         })
         expect(store.getActions()[0]).toEqual({
@@ -124,7 +124,7 @@ describe('User Actions', () => {
 
     it('should return an error if no user nametag is found', (done) => {
       let calls = []
-      hz.mockReturnValue(mockHz([{user: 'me', nametag: '456', room: 'abc'}], calls)())
+      hz.mockReturnValue(mockHz([], calls)())
       actions.getUserNametag('def', 'me')(store.dispatch).then(() => {
         expect('Should not succeed').toBeFalsy()
         done()
