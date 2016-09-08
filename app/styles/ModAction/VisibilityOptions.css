@@ -1,12 +1,10 @@
 .chooseVis {
-    margin-top: 20px;
+    margin-top: 10px;
     margin-bottom: 20px;
 }
 
 .visText {
-    padding-top: 10px;
     font-style: italic;
-
 }
 
 .visIcons {

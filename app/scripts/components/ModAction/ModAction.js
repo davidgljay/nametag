@@ -4,12 +4,13 @@ import style from '../../../styles/ModAction/ModAction.css'
 import VisOptions from './VisibilityOptions'
 import ModActionButtons from './ModActionButtons'
 import Alert from '../Utils/Alert'
+import { Card, CardMenu, Grid, Cell, IconButton } from 'react-mdl'
 
 class ModAction extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      normChecks:[],
+      normChecks: [],
       isPublic: false,
       text: '',
       escalated: false,
@@ -119,36 +120,40 @@ class ModAction extends Component {
       alert = <Alert msg={this.state.alert} alertType="danger"/>
     }
 
-    return <div id={style.modAction}>
-        {alert}
-        <span
-          aria-hidden="true"
-          className={style.close + ' glyphicon glyphicon-remove'}
-          onClick={this.props.close}>
-        </span>
-        <h4>Remind {this.props.author.name} of Conversation Norms</h4>
-        <ul className={style.norms}>
-        {this.context.norms.map(this.showNorm)}
-        </ul>
-        <input
-          type="text"
-          className="form-control"
-          onChange={this.addNote}
-          placeholder="Add an optional note."
-          value={this.state.message}/>
-        <VisOptions
-          isPublic = {this.state.isPublic}
-          setPublic = {this.setPublic}/>
-        <ModActionButtons
-          escalate = {this.escalate}
-          escalated = {this.state.escalated}
-          remindOfNorms = {this.remindOfNorms}
-          removeUser = {this.removeUser}
-          notifyBadge = {this.notifyBadge}
-          authorName = {this.props.author.name}
-          censorMessage = {this.censorMessage}
-          />
-      </div>
+    return <Grid>
+      <Cell col={8}>
+        <Card className={style.modAction} shadow={1}>
+          {alert}
+          <CardMenu>
+            <IconButton
+              name='close'
+              onClick={this.props.close}/>
+          </CardMenu>
+          <h4>Remind {this.props.author.name} of Conversation Norms</h4>
+          <ul className={style.norms}>
+          {this.context.norms.map(this.showNorm)}
+          </ul>
+          <input
+            type="text"
+            className="form-control"
+            onChange={this.addNote}
+            placeholder="Add an optional note."
+            value={this.state.message}/>
+          <VisOptions
+            isPublic = {this.state.isPublic}
+            setPublic = {this.setPublic}/>
+          <ModActionButtons
+            escalate = {this.escalate}
+            escalated = {this.state.escalated}
+            remindOfNorms = {this.remindOfNorms}
+            removeUser = {this.removeUser}
+            notifyBadge = {this.notifyBadge}
+            authorName = {this.props.author.name}
+            censorMessage = {this.censorMessage}
+            />
+        </Card>
+      </Cell>
+    </Grid>
   }
 }
 

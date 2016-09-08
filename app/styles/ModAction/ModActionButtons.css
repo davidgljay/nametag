@@ -1,21 +1,6 @@
-.escalateLink {
-  background:none;
-  cursor: pointer;
-  color: red;
-  border:none;
-  vertical-align: middle;
-  margin-bottom:10px;
-}
+/* ModActionButtons.css */
 
-.escalateLink:hover {
-  text-decoration: underline;
-}
-
-.btn {
-    margin-right:10px;
-    margin-bottom: 10px;
-}
-
-.hide {
-  display: none
+.severe {
+  color:red;
+  font-size:14px;
 }

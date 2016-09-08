@@ -1,17 +1,8 @@
 /** ModAction.css **/
 
-@value bootstrap: "../../bower_components/bootstrap/dist/css/bootstrap.css";
-
-.hide {
-	display:none;
-}
-
-#modAction {
-    max-width:500px;
-    border-radius:6px;
-    border: 1px $purple solid; 
-    padding: 10px;
-    margin-top: 20px;
+.modAction {
+    padding: 20px;
+    width: 100%;
 }
 
 .close {
@@ -30,4 +21,5 @@
 
 .norms {
   list-style:none;
+  padding-left:10px;
 }
