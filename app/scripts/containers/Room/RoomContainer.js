@@ -5,10 +5,11 @@ import {getUserNametag} from '../../actions/UserActions'
 import {postMessage} from '../../actions/MessageActions'
 
 const mapStateToProps = (state, props) => {
+  let userNametag = state.user.nametags ? state.user.nametags[props.params.roomId] : null
   return {
     room: state.rooms[props.params.roomId],
     user: state.user,
-    userNametag: state.user.nametags[props.params.roomId],
+    userNametag: userNametag,
   }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -30,7 +31,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const Room = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(component)
 
 export default Room
