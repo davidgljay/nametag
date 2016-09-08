@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import errorLog from '../../utils/errorLog'
 import Certificate from '../../containers/Certificate/CertificateContainer'
-// import fbase from '../../api/firebase'
 import {fetch} from '../../actions/CertificateActions'
 
 

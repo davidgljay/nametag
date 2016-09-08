@@ -1,54 +1,53 @@
-import React, { Component, PropTypes } from 'react';
-import errorLog from '../../utils/errorLog';
-import fbase from '../../api/firebase';
+import React, { Component, PropTypes } from 'react'
+import errorLog from '../../utils/errorLog'
 import style from '../../../styles/Room/ModActionNotif.css'
 
 class ModActionNotif extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       message: '',
       mod: '',
       author: '',
-    };
+    }
   }
 
   componentDidMount() {
     // Get info for the mod and the message in question.
-    const msgRef = fbase.child('messages/' + this.props.modAction.msgId);
-    const modRef = fbase.child('nametags/' + this.context.roomId  + '/' + this.props.modAction.modId);
-    const authorRef = fbase.child('nametags/' + this.context.roomId + '/' + this.props.modAction.author);
-    let self = this;
+    const msgRef = fbase.child('messages/' + this.props.modAction.msgId)
+    const modRef = fbase.child('nametags/' + this.context.roomId  + '/' + this.props.modAction.modId)
+    const authorRef = fbase.child('nametags/' + this.context.roomId + '/' + this.props.modAction.author)
+    let self = this
     msgRef.on('value', function onValue(value) {
-      self.setState({message: value.val().text});
-    }, errorLog('Error getting message in modActionNotif'));
+      self.setState({message: value.val().text})
+    }, errorLog('Error getting message in modActionNotif'))
 
     modRef.on('value', function onValue(value) {
-      self.setState({mod: value.val()});
-    }, errorLog('Error getting mod info in modActionNotif'));
+      self.setState({mod: value.val()})
+    }, errorLog('Error getting mod info in modActionNotif'))
 
     authorRef.on('value', function onValue(value) {
       self.setState(function setState(prevState) {
-        prevState.author = value.val();
-        prevState.author.id = value.key();
-        return prevState;
-      });
-    }, errorLog('Error getting author info in modActionNotif'));
+        prevState.author = value.val()
+        prevState.author.id = value.key()
+        return prevState
+      })
+    }, errorLog('Error getting author info in modActionNotif'))
   }
 
   componentWillUnmount() {
-    const msgRef = fbase.child('messages/' + this.props.modAction.msgId);
-    const modRef = fbase.child('nametags/' + this.context.roomId  + '/' + this.props.modAction.modId);
-    const authorRef = fbase.child('nametags/' + this.context.roomId + '/' + this.props.modAction.author);
-    msgRef.off('value');
-    modRef.off('value');
-    authorRef.off('value');
+    const msgRef = fbase.child('messages/' + this.props.modAction.msgId)
+    const modRef = fbase.child('nametags/' + this.context.roomId  + '/' + this.props.modAction.modId)
+    const authorRef = fbase.child('nametags/' + this.context.roomId + '/' + this.props.modAction.author)
+    msgRef.off('value')
+    modRef.off('value')
+    authorRef.off('value')
   }
 
   render() {
-    let callout;
+    let callout
     function showNorms(norm) {
-      return <li className={style.norm} key={norm.id}>{norm.text}</li>;
+      return <li className={style.norm} key={norm.id}>{norm.text}</li>
     }
 
     // Change callout based on whether the message is addressed to the current user.
@@ -59,13 +58,13 @@ class ModActionNotif extends Component {
               {this.state.mod.name} would like to remind you of the
               following norm{this.props.modAction.norms.length === 1 || 's'}:
             </p>
-          </div>;
+          </div>
     } else {
       callout =
         <p>
           {this.state.mod.name} has reminded {this.state.author.name}
           of the following norm{this.props.modAction.norms.length === 1 || 's'}:
-        </p>;
+        </p>
     }
     return (
       <tr className={style.modActionNotif}>
@@ -82,14 +81,14 @@ class ModActionNotif extends Component {
           <div className={style.modNote}>{this.props.modAction.note}</div>
         </td>
       </tr>
-      );
+      )
   }
 }
 
-ModActionNotif.propTypes = {modAction: PropTypes.object};
+ModActionNotif.propTypes = {modAction: PropTypes.object}
 ModActionNotif.contextTypes = {
   roomId: PropTypes.string,
   nametagId: PropTypes.string,
-};
+}
 
-export default ModActionNotif;
+export default ModActionNotif

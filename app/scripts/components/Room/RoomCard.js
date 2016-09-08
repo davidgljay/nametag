@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import Nametag from '../../containers/Nametag/NametagContainer'
 import Norms from '../Room/Norms'
 import Join from './Join'
-import fbase from '../../api/firebase'
 import style from '../../../styles/RoomCard/RoomCard.css'
 import constants from '../../constants'
 

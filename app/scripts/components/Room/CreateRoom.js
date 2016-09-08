@@ -4,7 +4,6 @@ import errorLog from '../../utils/errorLog'
 
 import Alert from '../Utils/Alert'
 
-import fbase from '../../api/firebase'
 
 
 class CreateRoom extends Component {
