@@ -10,14 +10,18 @@ import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
 import { Provider } from 'react-redux'
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import mainReducer from './reducers'
 
 import { Router, Route, Link, hashHistory } from 'react-router'
 
 const mountNode = document.getElementById('app')
-let store = createStore(mainReducer, applyMiddleware(thunk))
+let store = createStore(mainReducer, compose(
+    applyMiddleware(thunk),
+    window.devToolsExtension ? window.devToolsExtension() : f => f
+  )
+)
 
 class Nametag extends Component {
 
