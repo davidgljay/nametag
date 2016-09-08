@@ -58,7 +58,7 @@ class ModAction extends Component {
   remindOfNorms() {
     // TODO: Allow edits without breaking append-only rule (right now there's one modaction per comment)
 
-    if (this.props.norms.length === 0) {
+    if (this.state.normChecks.length === 0) {
       self.setState({alert: 'Please check at least one norm.'})
       return
     }
@@ -66,7 +66,7 @@ class ModAction extends Component {
     let modAction = {
       type: 'modAction',
       action: 'warn',
-      norms: this.props.norms.filter((item) => item.checked),
+      norms: this.context.norms.filter((item) => item.checked),
       text: this.state.text,
       timestamp: new Date().getTime(),
       modId: this.context.nametagId,
@@ -128,7 +128,7 @@ class ModAction extends Component {
         </span>
         <h4>Remind {this.props.author.name} of Conversation Norms</h4>
         <ul className={style.norms}>
-        {this.props.norms.map(this.showNorm)}
+        {this.context.norms.map(this.showNorm)}
         </ul>
         <input
           type="text"
@@ -156,12 +156,12 @@ ModAction.propTypes = {
   msgId: PropTypes.string,
   close: PropTypes.func,
   author: PropTypes.object,
-  norms: PropTypes.array.isRequired,
   postMessage: PropTypes.func.isRequired,
 }
 ModAction.contextTypes = {
   userNametag: PropTypes.string,
   room: PropTypes.string,
+  norms: PropTypes.array,
 }
 
 export default ModAction

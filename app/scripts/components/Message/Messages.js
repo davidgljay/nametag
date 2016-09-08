@@ -31,7 +31,7 @@ class Messages extends Component {
           author={author}
           roomId={this.props.room}
           key={message.id}
-          postMessage={this.props.postMessage}}/>
+          postMessage={this.props.postMessage}/>
     } else if (message.type === 'modAction') {
       // component = <ModActionNotif
       //       id={'ma' + message.id}

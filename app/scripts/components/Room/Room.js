@@ -17,9 +17,11 @@ class Room extends Component {
   }
 
   getChildContext() {
+    let norms = this.props.room ? this.props.room.norms : []
     return {
       userNametag: this.props.userNametag,
       room: this.props.params.roomId,
+      norms,
     }
   }
 
@@ -107,6 +109,7 @@ Room.propTypes = {
 Room.childContextTypes = {
   userNametag: PropTypes.string,
   room: PropTypes.string,
+  norms: PropTypes.array,
 }
 
 export default Room
