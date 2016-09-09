@@ -11,7 +11,7 @@ export function hzAuth(provider) {
         // TODO: Add certificates and replace with https
         window.location = 'https://localhost:8181' + endpoint
         resolve()
-      }, (err) => reject(err))
+      }, reject)
     }).catch(errorLog('Error authenticating'))
   } else {
     console.log('Authed!')
@@ -23,10 +23,10 @@ export function hzAuth(provider) {
 
 export function getAuth() {
   if (hz.hasAuthToken()) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       hz.currentUser().fetch().subscribe((user) => {
         resolve(user)
-      })
+      }, reject)
     }).catch(errorLog('Getting auth token'))
   }
   return new Promise((resolve) => resolve(false))
