@@ -47,6 +47,23 @@ describe('Message Actions', () => {
           done()
         })
     })
+    it('should properly sort the messages by date', (done) => {
+      let results = [
+        {msg: 'hi there', room: 'abc', id: '123', timestamp: '999'},
+        {msg: 'well hello', room: 'abc', id: '456', timestamp: '001'},
+      ]
+      hz.mockReturnValue(mockHz(results, calls)())
+      actions.watchRoomMessages('abc')(store.dispatch).then(
+        () => {
+          expect(store.getActions()[2]).toEqual({
+            type: constants.SET_ROOM_PROP,
+            room: 'abc',
+            property: 'messages',
+            value: ['456', '123'],
+          })
+          done()
+        })
+    })
   })
 
   describe('postMessage', () => {

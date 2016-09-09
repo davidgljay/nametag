@@ -28,13 +28,13 @@ export function watchRoomMessages(room) {
       messageSubscriptions[room] = hz('messages').findAll({room: room}).watch().subscribe(
         (messages) => {
           let messageIds = []
+          messages.sort((a, b) => {
+            return a.timestamp - b.timestamp
+          })
           for (let i = 0; i < messages.length; i++) {
             dispatch(addMessage(messages[i], messages[i].id))
             messageIds.push(messages[i].id)
           }
-          messageIds.sort((a, b) => {
-            return a.timestamp - b.timestamp
-          })
           dispatch(setRoomProp(room, 'messages', messageIds))
           resolve()
         }, reject)
