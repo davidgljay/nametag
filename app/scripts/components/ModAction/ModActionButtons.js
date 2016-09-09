@@ -7,13 +7,7 @@ const ModActionButtons = (props) => <CardActions border>
       colored
       raised
       onClick={props.remindOfNorms}>
-      Remind
-    </Button>
-    <br/>
-    <Button
-      className={style.severe}
-      onClick={props.removeUser}>
-        Remove From Room
+      Send Message
     </Button>
     <Button
       className={style.severe}
@@ -22,8 +16,13 @@ const ModActionButtons = (props) => <CardActions border>
     </Button>
     <Button
       className={style.severe}
+      onClick={props.removeUser}>
+        Ban User
+    </Button>
+    <Button
+      className={style.severe}
       onClick={props.notifyBadge}>
-        Notify Badge Granters
+        Report User
     </Button>
   </CardActions>
 
