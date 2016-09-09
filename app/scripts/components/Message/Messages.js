@@ -1,7 +1,6 @@
 import React, { Component, PropTypes} from 'react'
 import Message from './Message'
 // import ModActionNotif from '../ModAction/ModActionNotif'
-import {watchRoomMessages, unWatchRoomMessages} from '../../actions/MessageActions'
 import style from '../../../styles/Message/Messages.css'
 
 class Messages extends Component {
@@ -14,6 +13,21 @@ class Messages extends Component {
 
   componentDidMount() {
     this.props.watchRoomMessages(this.props.room)
+  }
+
+  componentWillUpdate(nextProps) {
+    if (this.props.messageList &&
+      nextProps.messageList &&
+      nextProps.messageList.length > this.props.messageList.length) {
+      let counter = 0
+      let timer = setInterval(() => {
+        window.scrollBy(0, 1)
+        if (counter >= 100) {
+          clearInterval(timer)
+        }
+        counter++
+      }, 2)
+    }
   }
 
   componentWillUnmount() {
