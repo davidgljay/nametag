@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
 import component from '../../components/Room/Room'
-import {watchRoom, unWatchRoom} from '../../actions/RoomActions'
+import {watchRoom, unWatchRoom, addRoomMessage} from '../../actions/RoomActions'
 import {getUserNametag} from '../../actions/UserActions'
-import {postMessage} from '../../actions/MessageActions'
+import {postMessage, addMessage} from '../../actions/MessageActions'
 
 const mapStateToProps = (state, props) => {
   let userNametag = state.user.nametags ? state.user.nametags[props.params.roomId] : null
@@ -25,6 +25,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     postMessage(message) {
       dispatch(postMessage(message))
+    },
+    addRoomMessage(room, messageId) {
+      dispatch(addRoomMessage(room, messageId))
+    },
+    addMessage(message, id) {
+      dispatch(addMessage(message, id))
     },
   }
 }

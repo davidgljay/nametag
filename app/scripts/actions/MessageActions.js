@@ -68,13 +68,11 @@ export function unWatchRoomMessages(room) {
 *    promise
 */
 export function postMessage(message) {
-  return function(dispatch) {
+  return function() {
     return new Promise((resolve, reject) => {
       hz('messages').upsert(message).subscribe(
         (id) => {
-          Object.assign(message, id)
-          dispatch(addMessage(message, message.id))
-          resolve(message.id)
+          resolve(id)
         }, reject)
     })
     .catch(errorLog('Error posting a message ' + JSON.stringify(message) + ': '))

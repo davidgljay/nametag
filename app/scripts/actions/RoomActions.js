@@ -57,6 +57,14 @@ export function setRoomProp(room, property, value) {
   }
 }
 
+export function addRoomMessage(room, messageId) {
+  return {
+    type: constants.ADD_ROOM_MESSAGE,
+    room,
+    messageId
+  }
+}
+
 /*
 * Subscribe to a list of Rooms
 *

@@ -18,14 +18,18 @@ class Compose extends Component {
   post(e) {
     e.preventDefault()
     if (this.state.message.length > 0) {
-      this.props.postMessage({
+      let message = {
         text: this.state.message,
         timestamp: Date.now(),
         author: this.context.userNametag,
         room: this.context.room,
         type: 'message',
-      })
+      }
+      let tempId = new Date().getTime()
       this.setState({message: ''})
+      this.props.addMessage(message, tempId)
+      this.props.addRoomMessage(message.room, tempId)
+      this.props.postMessage(message)
     }
   }
 

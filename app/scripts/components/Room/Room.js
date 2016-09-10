@@ -88,7 +88,9 @@ class Room extends Component {
             </div>
             {
               <Compose
-                postMessage={this.props.postMessage}/>
+                postMessage={this.props.postMessage}
+                addMessage={this.props.addMessage}
+                addRoomMessage={this.props.addRoomMessage}/>
             }
           </div>
           :

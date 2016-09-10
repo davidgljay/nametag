@@ -21,8 +21,8 @@ class Messages extends Component {
       nextProps.messageList.length > this.props.messageList.length) {
       let counter = 0
       let timer = setInterval(() => {
-        window.scrollBy(0, 1)
-        if (counter >= 100) {
+        window.scrollBy(0, 2)
+        if (counter >= 50) {
           clearInterval(timer)
         }
         counter++
