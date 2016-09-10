@@ -56,6 +56,14 @@ const setRoomProp = (state, action) => {
   return Object.assign({}, state, {[action.room]: newRoom})
 }
 
+const addRoomMessage = (state, action) => {
+  let room = state[action.room]
+  let newMessages = room.messages.slice()
+  newMessages.push(action.messageId)
+  let newRoom = Object.assign({}, room, {messages: newMessages})
+  return Object.assign({}, state, {[action.room]: newRoom})
+}
+
 const rooms = (state = {}, action) => {
   switch (action.type) {
   case constants.ADD_ROOM:
@@ -71,6 +79,8 @@ const rooms = (state = {}, action) => {
     return updateNametag(state, action)
   case constants.SET_ROOM_PROP:
     return setRoomProp(state, action)
+  case constants.ADD_ROOM_MESSAGE:
+    return addRoomMessage(state, action)
   default:
     return state
   }

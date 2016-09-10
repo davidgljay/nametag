@@ -313,4 +313,39 @@ describe('Room reducer', () => {
       })
     })
   })
+
+  describe('ADD_ROOM_MESSAGE', () => {
+    let state
+    let action
+    beforeEach(() => {
+      state = {
+        1: {
+          title: 'Test Room',
+          messages: ['123'],
+        },
+      }
+      action = {
+        type: constants.ADD_ROOM_MESSAGE,
+        room: 1,
+        messageId: '456',
+      }
+    })
+
+    it('should not transform state', () => {
+      roomReducer(state, action)
+      expect(state).toEqual({
+        1: {
+          title: 'Test Room',
+          messages: ['123'],
+        },
+      })
+    })
+
+    it('should add an id to room.messages', () => {
+      let newState = roomReducer(state, action)
+      expect(newState[1].messages).toEqual(
+        ['123', '456']
+        )
+    })
+  })
 })
