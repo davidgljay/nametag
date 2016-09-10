@@ -17,6 +17,7 @@
     backface-visibility: hidden;
     vertical-align: top;
     perspective: 1000px;
+    display: inline-block;
 }
 
 .flippingFront {

@@ -3,7 +3,8 @@
 @value colors: "../colors.css";
 @value secondary from colors;
 
-#roomSelection {
+#roomCards {
   background: secondary;
   padding-bottom: 50px;
+  padding-top: 80px;
 }
