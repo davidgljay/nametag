@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import Nametag from './Nametag'
 import style from '../../../styles/Nametag/Nametags.css'
 import {watchRoomNametags} from '../../actions/NametagActions'
+import {Card} from 'react-mdl'
 
 class Nametags extends Component {
 
@@ -33,7 +34,7 @@ class Nametags extends Component {
       // Make nametag.certificates an empty array if it not already assigned.
       nametag.certificates = nametag.certificates || []
 
-      return <li key={nametag.id} className={style.nametag}>
+      return <Card key={nametag.id} className={style.nametag}>
         <Nametag
           name={nametag.name}
           bio={nametag.bio}
@@ -41,16 +42,16 @@ class Nametags extends Component {
           id={nametag.id}
           certificates={nametag.certificates}
           mod={mod}/>
-      </li>
+      </Card>
     }
 
-    return <ul className={style.nametags}>
+    return <div className={style.nametags}>
         {
           nametags.map((nametag) => {
             return createNametag(nametag, this.props.mod)
           })
         }
-      </ul>
+      </div>
   }
 }
 
