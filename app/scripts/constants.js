@@ -1,5 +1,25 @@
+export const dragTypes = {
+  certificate: 'certificate',
+}
+
 export default {
-	dragTypes: {
-		certificate:'certificate'
-	}
-};
+
+  // Actions
+  ADD_ROOM: 'ADD_ROOM',
+  SET_ROOM_NT_COUNT: 'SET_ROOM_NT_COUNT',
+  ADD_NAMETAG: 'ADD_NAMETAG',
+  ADD_USER_NT_CERT: 'ADD_USER_NT_CERT',
+  REMOVE_USER_NT_CERT: 'REMOVE_USER_NT_CERT',
+  UPDATE_USER_NAMETAG: 'UPDATE_USER_NAMETAG',
+  ADD_USER_NAMETAG: 'ADD_USER_NAMETAG',
+  ADD_USER: 'ADD_USER',
+  LOGOUT_USER: 'LOGOUT_USER',
+  ADD_CERTIFICATE: 'ADD_CERTIFICATE',
+  ADD_MESSAGE: 'ADD_MESSAGE',
+  SET_ROOM_PROP: 'SET_ROOM_PROP',
+  ADD_ROOM_MESSAGE: 'ADD_ROOM_MESSAGE',
+
+  // Timers
+  ANIMATION_LONG: 500,
+
+}

@@ -18,6 +18,11 @@
     max-height:80px;
 }
 
+.header h3 {
+    margin-top:10px;
+    margin-bottom: 5px;
+}
+
 .close {
     width:15px;
     height:15px;
@@ -30,23 +35,25 @@
 #leftBar {
     min-height:400px;
     background: primary;
-    padding-top: 80px;
-    height: 100vh;
+    margin-top: 65px;
+    height: 100%;
     padding-left:15px;
     padding-right:15px;
+    padding-bottom: 50px;
     width: 275px;
     position:fixed;
     top:0px;
     left:0px;
     z-index:50;
+    overflow-y: scroll;
 }
 
 #leftBarChevron {
     display:none;
     color: white;
     position: absolute;
-    top: 60%;
-    left: 260px;
+    top: 45%;
+    left: 255px;
     cursor: pointer;
 }
 
@@ -85,6 +92,11 @@
     }
 }
 
+.spinner {
+    margin-left: 45%;
+    margin-top: 40vh;
+}
+
 #norms {
     color:white;
 }
@@ -97,6 +109,13 @@
 
 #norms li {
     margin-bottom:10px;
+    background: none;
+    border:none;
+    padding:0;
+}
+
+#norms .glyphicon {
+    display:none;
 }
 
 @keyframes slide-out { from { left:-260px; } to { left:0px; }  }

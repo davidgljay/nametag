@@ -2,28 +2,22 @@
 
 @value colors: "../colors.css";
 @value primary, secondary, white, grey, green from colors;
-@value bootstrap: "../../bower_components/bootstrap/dist/css/bootstrap.css";
 
 .roomImage {
-    display:block;
     vertical-align: initial;
     cursor:pointer;
-}
-
-.roomImage img {
-    border-radius:5px;
     width:300px;
+    height:200px;
 }
 
 .roomCard {
     margin: 10px;
     padding: 0px;
     width:300px;
-    height:700px;
-    display: inline-block;
     backface-visibility: hidden;
     vertical-align: top;
     perspective: 1000px;
+    display: inline-block;
 }
 
 .flippingFront {
@@ -42,16 +36,12 @@
 
 .front, .back {
     backface-visibility: hidden;
-    position: absolute;
-    top: 0;
-    left: 0;
 }
 
 .front {
     z-index:2;
     width:300px;
     background: white;
-    border-radius: 5px;
 }
 
 .back {
@@ -59,12 +49,15 @@
     text-align: center;
     width: 300px;
     z-index: 0;
-    border-radius: 5px;
     background: white;
 }
 
 .flippingFront .back, .flippingBack .back{
     transform:rotateY(180deg);
+    position: absolute;
+    min-height:800px;
+    top: 0;
+    left: 0;
 }
 
 .roomInfo {
@@ -144,14 +137,6 @@
     color:primary;
     fill:primary;
     cursor:pointer;
-}
-
-.listgroup {
-    composes: list-group from bootstrap;
-}
-
-.listitem {
-    composes: list-group-item from bootstrap;
 }
 
 .checkboxLabel {

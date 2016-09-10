@@ -1,61 +1,56 @@
 
-import React, { Component, PropTypes } from 'react';
-import ReactDOM from 'react-dom';
-import Room from './ui/Room/Room';
-import RoomCards from './ui/RoomCard/RoomCards';
-import fbase from './api/firebase';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
+import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 
-const mountNode = document.getElementById('app');
+import Room from './containers/Room/RoomContainer'
+import RoomCards from './containers/Room/RoomCardsContainer'
+import {getUser} from './actions/UserActions'
 
-import { Router, Route, Link, hashHistory } from 'react-router';
+import { DragDropContext } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
+
+import { Provider } from 'react-redux'
+import { createStore, applyMiddleware, compose } from 'redux'
+import thunk from 'redux-thunk'
+import mainReducer from './reducers'
+
+import { Router, Route, Link, hashHistory } from 'react-router'
+
+const mountNode = document.getElementById('app')
+let store = createStore(mainReducer, compose(
+    applyMiddleware(thunk),
+    window.devToolsExtension ? window.devToolsExtension() : f => f
+  )
+)
 
 class Nametag extends Component {
-  constructor(props) {
-    super(props);
-    const auth = fbase.getAuth();
-    this.state = {
-      auth: auth,
-    };
+
+  componentWillMount() {
+    store.dispatch(getUser())
   }
 
   getChildContext() {
     return {
-      userAuth: this.state.auth,
-      unAuth: this.unAuth.bind(this),
-      checkAuth: this.checkAuth.bind(this),
-    };
-  }
-
-  unAuth(e) {
-    e.preventDefault();
-    fbase.unauth();
-    this.checkAuth();
-  }
-
-  checkAuth() {
-    this.setState( {
-      auth: fbase.getAuth(),
-    });
+      dispatch: store.dispatch,
+    }
   }
 
   render() {
-    return <Router history={hashHistory}>
-      <Route path="/" component={RoomCards} />
-      <Route path="/rooms" component={RoomCards}/>
-      <Route path="/rooms/:roomId" component={Room}/>
-    </Router>;
+    return <Provider store={store}>
+      <Router history={hashHistory}>
+        <Route path="/" component={RoomCards} />
+        <Route path="/rooms" component={RoomCards}/>
+        <Route path="/rooms/:roomId" component={Room}/>
+      </Router>
+    </Provider>
   }
 }
 
 Nametag.childContextTypes = {
-  userAuth: PropTypes.object,
-  unAuth: PropTypes.func,
-  checkAuth: PropTypes.func,
-};
+  dispatch: React.PropTypes.func,
+}
 
-let NametagWithDragging = DragDropContext(HTML5Backend)(Nametag);
+let NametagWithDragging = DragDropContext(HTML5Backend)(Nametag)
 
-ReactDOM.render(<NametagWithDragging/>, mountNode);
+ReactDOM.render(<NametagWithDragging/>, mountNode)
 

@@ -2,10 +2,12 @@
 @value bootstrap: "../../bower_components/bootstrap/dist/css/bootstrap.css";
 
 .nametag {
-	composes: list-group-item from bootstrap;
+  width: 240px;
+  min-height: 60px;
+  margin-bottom: 5px;
 }
 
 .nametags {
-	composes: list-group from bootstrap;
+	margin-bottom:40px;
 }
 

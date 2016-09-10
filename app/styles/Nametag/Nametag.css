@@ -5,7 +5,8 @@
 .ismod {
     color:primary from colors; 
     float:right;  
-    font-size: 10px;    
+    font-size: 10px;
+    margin:5px; 
 }
 
 .bio {
@@ -15,15 +16,17 @@
 
 .hosticon {
     font-size: 20px;
+    margin:10px;
 }
 
 .name {
     font-weight: bold;
     font-size: 14px;
+    margin-top: 5px;
 }
 
 .icon {
     float:left;
-    margin-right:10px;
+    margin:10px;
     width: 50px;
 }

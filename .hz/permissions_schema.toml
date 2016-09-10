@@ -1,0 +1,42 @@
+# For now, let any user read or write.
+
+[collections.nametags]
+[collections.users]
+[collections.rooms]
+[collections.certificates]
+[collections.messages]
+[collections.user_nametags]
+
+[groups.default.rules.read_nametags]
+template = "collection('nametags').anyRead()"
+
+[groups.default.rules.write_nametags]
+template = "collection('nametags').anyWrite()"
+
+[groups.default.rules.read_rooms]
+template = "collection('rooms').anyRead()"
+
+[groups.default.rules.write_rooms]
+template = "collection('rooms').anyWrite()"
+
+[groups.default.rules.read_certificates]
+template = "collection('certificates').anyRead()"
+
+[groups.default.rules.write_certificates]
+template = "collection('certificates').anyWrite()"
+
+[groups.default.rules.read_messages]
+template = "collection('messages').anyRead()"
+
+[groups.default.rules.write_messages]
+template = "collection('messages').anyWrite()"
+
+[groups.default.rules.read_user_nametags]
+template = "collection('user_nametags').anyRead()"
+
+[groups.default.rules.write_user_nametags]
+template = "collection('user_nametags').anyWrite()"
+
+# This will also let users write to their user (can they rewrite ids?)
+[groups.default.rules.read_current_user]
+template = "collection('users').find({id: userId()})"

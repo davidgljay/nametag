@@ -5,10 +5,19 @@
     "css-modulesify": "^0.25.1",
     "react-dnd": "^2.1.4",
     "react-dnd-html5-backend": "^2.1.2",
-    "react-router": "^2.4.0"
+    "react-mdl": "^1.7.0",
+    "react-redux": "^4.4.5",
+    "react-router": "^2.4.0",
+    "redux": "^3.5.2",
+    "redux-thunk": "^2.1.0"
   },
   "devDependencies": {
+    "babel-jest": "^14.1.0",
+    "babelify": "latest",
+    "browser-sync": "latest",
     "browserify": "latest",
+    "browserify-shim": "^3.8.0",
+    "css-loader": "^0.24.0",
     "del": "~0.1.3",
     "gulp": ">=3.8.8",
     "gulp-autoprefixer": "~1.0.1",
@@ -19,36 +28,48 @@
     "gulp-jshint": "~1.8.5",
     "gulp-load-plugins": "~0.7.0",
     "gulp-ruby-sass": "~1.0.5",
-    "browser-sync": "latest",
     "gulp-size": "~1.1.0",
+    "gulp-strip-debug": "^1.0.2",
+    "gulp-uglify": "^1.0.2",
     "gulp-useref": "~0.4.4",
     "gulp-util": "~3.0.1",
     "gulp-webserver": "latest",
     "jest-cli": "latest",
+    "jest-css-modules": "^1.0.2",
+    "main-bower-files": "~2.6.2",
     "react": "latest",
     "react-dom": "latest",
+    "react-storybook": "^1.0.0",
+    "react-test-renderer": "^15.3.1",
     "react-tools": "latest",
     "reactify": "latest",
-    "watchify": "~2.1",
-    "browserify-shim": "^3.8.0",
-    "gulp-uglify": "^1.0.2",
+    "redux-mock-store": "^1.1.2",
     "strip-debug": "^1.0.1",
-    "gulp-strip-debug": "^1.0.2",
+    "style-loader": "^0.13.1",
     "vinyl-source-stream": "^1.0.0",
-    "main-bower-files": "~2.6.2",
-    "babelify": "^6.1.3"
+    "watchify": "~2.1"
   },
   "engines": {
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test-watch": "jest --watch",
+    "start": "gulp watch",
+    "storybook": "start-storybook -p 9001 -c .storybook"
   },
   "jest": {
-    "scriptPreprocessor": "<rootDir>/preprocessor.js",
+    "scriptPreprocessor": "<rootDir>/node_modules/jest-css-modules",
     "unmockedModulePathPatterns": [
       "<rootDir>/node_modules/react"
-    ]
+    ],
+    "testPathIgnorePatterns": [
+      "/app/bower_components/",
+      "/dist/bower_components",
+      "/node_modules/"
+    ],
+    "setupTestFrameworkScriptFile": "<rootDir>/app/scripts/tests/mockGlobals.js",
+    "automock":true
   },
   "browserify": {
     "transform": [
