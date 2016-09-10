@@ -5,7 +5,8 @@
 .ismod {
     color:primary from colors; 
     float:right;  
-    font-size: 10px;    
+    font-size: 10px;
+    margin:5px; 
 }
 
 .bio {

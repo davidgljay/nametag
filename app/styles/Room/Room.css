@@ -36,9 +36,10 @@
     min-height:400px;
     background: primary;
     margin-top: 65px;
-    height: 100vh;
+    height: 100%;
     padding-left:15px;
     padding-right:15px;
+    padding-bottom: 50px;
     width: 275px;
     position:fixed;
     top:0px;
@@ -51,8 +52,8 @@
     display:none;
     color: white;
     position: absolute;
-    top: 60%;
-    left: 260px;
+    top: 45%;
+    left: 255px;
     cursor: pointer;
 }
 

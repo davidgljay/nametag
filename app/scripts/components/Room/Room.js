@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import {watchRoom, unWatchRoom} from '../../actions/RoomActions'
 import {getUserNametag} from '../../actions/UserActions'
-import {Spinner} from 'react-mdl'
+import {Spinner, Icon} from 'react-mdl'
 import Norms from './Norms'
 import Nametags from '../../containers/Nametag/NametagsContainer'
 import Messages from '../../containers/Message/MessagesContainer'
@@ -75,9 +75,9 @@ class Room extends Component {
                    <Nametags room={this.props.params.roomId} mod={this.props.room.mod}/>
                 </div>
                 <div id={style.leftBarChevron}>
-                  <span
+                  <Icon
                     onClick={this.toggleLeftBar.bind(this)}
-                    className={'glyphicon glyphicon-chevron-right'}
+                    name='chevron_right'
                     />
                 </div>
               </div>
