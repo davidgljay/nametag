@@ -4,22 +4,17 @@
 @value primary, secondary, white, grey, green from colors;
 
 .roomImage {
-    display:block;
     vertical-align: initial;
     cursor:pointer;
-}
-
-.roomImage img {
-    border-radius:5px;
     width:300px;
+    height:200px;
 }
 
 .roomCard {
     margin: 10px;
     padding: 0px;
     width:300px;
-    height:700px;
-    display: inline-block;
+    min-height:700px;
     backface-visibility: hidden;
     vertical-align: top;
     perspective: 1000px;
@@ -50,7 +45,6 @@
     z-index:2;
     width:300px;
     background: white;
-    border-radius: 5px;
 }
 
 .back {
@@ -58,7 +52,6 @@
     text-align: center;
     width: 300px;
     z-index: 0;
-    border-radius: 5px;
     background: white;
 }
 

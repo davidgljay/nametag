@@ -4,6 +4,7 @@ import Norms from '../Room/Norms'
 import Join from './Join'
 import style from '../../../styles/RoomCard/RoomCard.css'
 import constants from '../../constants'
+import {Card, CardTitle} from 'react-mdl'
 
 class RoomCard extends Component {
   constructor(props) {
@@ -13,6 +14,8 @@ class RoomCard extends Component {
       flipping: false,
       normsChecked: false,
     }
+    this.flip = this.flip.bind(this)
+    this.onNormsCheck = this.onNormsCheck.bind(this)
   }
 
   onNormsCheck(e) {
@@ -34,10 +37,10 @@ class RoomCard extends Component {
     let card
     let flipping = ''
 
-    let front =  <div key='front' className={style.front}>
-          <div className={style.roomImage} onClick={this.flip.bind(this)}>
-            <img src={this.props.room.image}/>
-          </div>
+    let front =  <Card key='front' className={style.front} shadow={1}>
+          <CardTitle className={style.roomImage}
+            style={{background: 'url(' + this.props.room.image + ') center / cover'}}
+            onClick={this.flip}/>
           <div className={style.roomInfo}>
             <div className={style.roomTime}>
               <b>Started</b> 2 days ago | <b>Ends</b> in 1 week
@@ -55,16 +58,16 @@ class RoomCard extends Component {
               room={this.props.id}
               id={this.props.room.mod}
               mod={this.props.room.mod} />
-          </div>
-          </div>
+              </div>
+          </Card>
 
-    let back = <div key='back' className={style.back}>
+    let back = <Card key='back' className={style.back} shadow={1}>
           <h3 onClick={this.flip.bind(this)}>{this.props.room.title}</h3>
           <div className={style.norms}>
             <h4>Conversation Norms</h4>
             <Norms norms={this.props.room.norms} showChecks={true}/>
             <label className={style.checkbox}>
-              <input type="checkbox" onClick={this.onNormsCheck.bind(this)}/>
+              <input type="checkbox" onClick={this.onNormsCheck}/>
               <span className={style.checkboxLabel} >I agree to abide by these norms</span>
             </label>
           </div>
@@ -72,7 +75,7 @@ class RoomCard extends Component {
             room={this.props.id}
             userNametag={this.props.room.userNametag}
             normsChecked={this.state.normsChecked}/>
-        </div>
+        </Card>
 
     //Show both front and back only if the card is flipping
     //Otherwise only show the active part of the card.

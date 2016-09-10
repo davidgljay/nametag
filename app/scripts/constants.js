@@ -20,6 +20,6 @@ export default {
   ADD_ROOM_MESSAGE: 'ADD_ROOM_MESSAGE',
 
   // Timers
-  ANIMATION_LONG: 1000,
+  ANIMATION_LONG: 500,
 
 }
