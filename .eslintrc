@@ -135,8 +135,8 @@
     }],
     "comma-style": [2, "last"],      // http://eslint.org/docs/rules/comma-style
     "eol-last": 2,                   // http://eslint.org/docs/rules/eol-last
-    "func-names": 1,                 // http://eslint.org/docs/rules/func-names
-    "func-style": [2, "declaration"], // http://eslint.org/docs/rules/func-style
+    "func-names": 0,                 // http://eslint.org/docs/rules/func-names
+    "func-style": [2, "declaration", { "allowArrowFunctions": true }], // http://eslint.org/docs/rules/func-style
     "key-spacing": [2, {             // http://eslint.org/docs/rules/key-spacing
         "beforeColon": false,
         "afterColon": true
@@ -156,7 +156,7 @@
     "no-underscore-dangle": 0,       // http://eslint.org/docs/rules/no-underscore-dangle
     "one-var": [2, "never"],         // http://eslint.org/docs/rules/one-var
     "padded-blocks": [2, "never"],   // http://eslint.org/docs/rules/padded-blocks
-    "semi": [2, "always"],           // http://eslint.org/docs/rules/semi
+    "semi": [2, "never"],           // http://eslint.org/docs/rules/semi
     "semi-spacing": [2, {            // http://eslint.org/docs/rules/semi-spacing
       "before": false,
       "after": true

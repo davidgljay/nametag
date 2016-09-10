@@ -1,0 +1,28 @@
+/** Media.css **/
+
+.media {
+	padding:10px;
+}
+
+.mediaImage {
+	max-width:80%;
+}
+
+@media (max-width:975px) {
+	.video {
+		position: relative;
+		padding-bottom: 56.25%; /* 16:9 */
+		padding-top: 25px;
+		height: 0;
+	}
+
+	.video iframe {
+		position: absolute;
+		top: 0;
+		left: 0;
+		max-width: 100%;
+		max-height: 100%;
+	}
+
+}
+

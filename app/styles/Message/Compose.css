@@ -1,0 +1,27 @@
+/** Compose.css **/
+
+@value sizes: "../sizes.css";
+@value mobile from sizes;
+
+.compose {
+    position:fixed;
+    bottom:0px;
+    display: table;
+    border-collapse: separate;
+    padding-right: 30px;
+    padding-bottom: 20px;
+    padding-top:10px;
+    background:white;
+    width:100%;
+    padding-left:300px;
+    padding-right:15px;
+    z-index:40;
+}
+
+@media (mobile){
+    .compose {
+        padding-left:30px;
+    }
+}
+
+

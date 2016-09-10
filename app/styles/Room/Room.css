@@ -2,6 +2,8 @@
 
 @value colors: "../colors.css";
 @value primary, secondary, grey, green from colors;
+@value sizes: "../sizes.css";
+@value mobile from sizes;
 
 .header {
     border-bottom: 3px solid primary;
@@ -13,29 +15,86 @@
     padding-left:15px;
     padding-bottom:5px;
     padding-right:15px;
+    max-height:80px;
+}
+
+.header h3 {
+    margin-top:10px;
+    margin-bottom: 5px;
 }
 
 .close {
-   width:15px;
+    width:15px;
     height:15px;
     float:right;
     margin-top:15px;
     font-size:12px;
     cursor: pointer;
-}
+    }
 
 #leftBar {
     min-height:400px;
     background: primary;
-    padding-top: 80px;
-    height: 100vh;
+    margin-top: 65px;
+    height: 100%;
     padding-left:15px;
     padding-right:15px;
+    padding-bottom: 50px;
     width: 275px;
     position:fixed;
     top:0px;
     left:0px;
     z-index:50;
+    overflow-y: scroll;
+}
+
+#leftBarChevron {
+    display:none;
+    color: white;
+    position: absolute;
+    top: 45%;
+    left: 255px;
+    cursor: pointer;
+}
+
+@media (mobile) {
+
+    .expanded {
+        animation-name: slide-out;
+        animation-duration: 1s;
+        animation-fill-mode:forwards;
+    }
+
+    .collapsed {
+        animation-name: slide-in;
+        animation-duration: 1s;
+        animation-fill-mode:forwards;
+    }
+
+    #leftBarChevron {
+        display: block;
+    }
+
+    .collapsed #leftBarChevron {
+        animation-name: spin-out;
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+    }
+
+    .expanded #leftBarChevron {
+        animation-name: spin-in;
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+    }
+
+    .description {
+        display: none;
+    }
+}
+
+.spinner {
+    margin-left: 45%;
+    margin-top: 40vh;
 }
 
 #norms {
@@ -50,4 +109,20 @@
 
 #norms li {
     margin-bottom:10px;
+    background: none;
+    border:none;
+    padding:0;
 }
+
+#norms .glyphicon {
+    display:none;
+}
+
+@keyframes slide-out { from { left:-260px; } to { left:0px; }  }
+@keyframes slide-in { from { left:0px; } to { left:-260px; } }
+@-moz-keyframes spin-in { from { -moz-transform: rotate(0deg);} to {-moz-transform: rotate(180deg); } }
+@-webkit-keyframes spin-in { from { -webkit-transform: rotate(0deg);} to {-webkit-transform: rotate(180deg); } }
+@keyframes spin-in { from { transform: rotate(0deg);} to {transform: rotate(180deg); } }
+@-moz-keyframes spin-out { from {-moz-transform: rotate(180deg);} to { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin-out { from {-webkit-transform: rotate(180deg);} to { -webkit-transform: rotate(360deg); } }
+@keyframes spin-out { from {transform: rotate(180deg);} to { transform: rotate(360deg); } }

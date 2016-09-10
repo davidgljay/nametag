@@ -1,36 +1,67 @@
 /** RoomCard.css **/
 
 @value colors: "../colors.css";
-@value primary, secondary, grey, green from colors;
-@value bootstrap: "../../bower_components/bootstrap/dist/css/bootstrap.css";
+@value primary, secondary, white, grey, green from colors;
 
 .roomImage {
-    display:inline-block;
     vertical-align: initial;
     cursor:pointer;
-}
-
-.roomImage img {
-    border-radius:5px;
+    width:300px;
+    height:200px;
 }
 
 .roomCard {
-    margin-bottom: 30px;
+    margin: 10px;
     padding: 0px;
-    min-height: 254px;
-    width: 940px;
-    border-radius: 6px;
-    border: 2px solid primary;
-    background: secondary;
+    width:300px;
+    backface-visibility: hidden;
+    vertical-align: top;
+    perspective: 1000px;
+    display: inline-block;
+}
 
+.flippingFront {
+    animation-name: flip-over;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    transform-style: preserve-3d;
+}
+
+.flippingBack {
+    animation-name: flip-back;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    transform-style: preserve-3d;
+}
+
+.front, .back {
+    backface-visibility: hidden;
+}
+
+.front {
+    z-index:2;
+    width:300px;
+    background: white;
+}
+
+.back {
+    padding: 0px 20px 20px 20px;
+    text-align: center;
+    width: 300px;
+    z-index: 0;
+    background: white;
+}
+
+.flippingFront .back, .flippingBack .back{
+    transform:rotateY(180deg);
+    position: absolute;
+    min-height:800px;
+    top: 0;
+    left: 0;
 }
 
 .roomInfo {
-    display:inline-block;
-    vertical-align: top;
-    margin-top:10px;
-    margin-left:20px;
-    width:70%;
+    padding:10px;
 }
 
 .roomCard h3 {
@@ -43,17 +74,11 @@
     margin-top:5px;
 }
 
-.participantCount {
-    color:primary;
-    font-size:11px;
-    font-style:italic;
-}
-
-.roomTime {
-    float:right;
+.roomTime, .nametagCount {
+    text-align:right;
     font-size: 11px;
     font-style: italic;
-    color: primary;
+    color: grey;
 }
 
 .ismod {
@@ -101,7 +126,7 @@
 
 .check {
     height:25px;
-    margin-right:20px;
+    margin-right:10px;
     color:green;
 }
 
@@ -114,14 +139,9 @@
     cursor:pointer;
 }
 
-.listgroup {
-    composes: list-group from bootstrap;
-}
-
-.listitem {
-    composes: list-group-item from bootstrap;
-}
-
 .checkboxLabel {
     margin-left:10px;
 }
+
+@keyframes flip-over{ from {transform: rotateY(0deg);} to { transform: rotateY(180deg); } } 
+@keyframes flip-back{ from {transform: rotateY(180deg);} to { transform: rotateY(360deg); } } 

@@ -1,0 +1,13 @@
+.chooseVis {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.visText {
+    font-style: italic;
+}
+
+.visIcons {
+    margin-right: 10px;
+    font-style: none;
+}
