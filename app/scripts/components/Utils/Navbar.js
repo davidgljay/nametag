@@ -1,35 +1,32 @@
 import React from 'react'
 import style from '../../../styles/Utils/Navbar.css'
 import {logout} from '../../actions/UserActions'
+import { Layout, Header, Navigation, Drawer } from 'react-mdl'
 
 const Navbar = (props) => {
-  let login
-  if (props.user && props.user.id) {
-    login = <a className='navbar-link' onClick={() => props.dispatch(logout())}>Log out</a>
-  } else {
-    login = <a className='navbar-link' href='#'>Log In</a>
-  }
+  return  <Layout fixedHeader={true}>
+        <Header title="Nametag" style={{color: 'white'}}>
+            <Navigation>
+                {
+                  props.user && props.user.id ?
+                    <a onClick={() => props.dispatch(logout())}>Log out</a>
+                    : <a href='#'>Log In</a>
+                }
+            </Navigation>
+        </Header>
+        <Drawer title="Nametag">
+            <Navigation>
+                <a href='#'>Profile</a>
+                <a href='#'>About</a>
+                {
+                  props.user && props.user.id ?
+                    <a onClick={() => props.dispatch(logout())}>Log out</a>
+                    : <a href='#'>Log In</a>
+                }
+            </Navigation>
+        </Drawer>
+    </Layout>
 
-  return <nav className='navbar navbar-default'>
-      <a className='navbar-brand' href='#'>Nametag</a>
-      <ul className='nav navbar-nav pull-right'>
-        <li>
-          <a href='#'>
-            Home
-          <span className='sr-only active'>(current)</span>
-          </a>
-        </li>
-        <li>
-          <a href='#'>Profile</a>
-        </li>
-        <li>
-          <a href='#'>About</a>
-        </li>
-        <li>
-          {login}
-        </li>
-      </ul>
-    </nav>
 }
 
 export default Navbar
