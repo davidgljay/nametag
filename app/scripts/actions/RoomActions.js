@@ -4,6 +4,7 @@ import constants from '../constants'
 import {addNametag, putNametag} from './NametagActions'
 import {addUserNametag} from './UserActions'
 
+let roomWatches = {}
 let roomSubscription
 let nametagSubscriptions = []
 
@@ -178,7 +179,7 @@ export function joinRoom(roomId, nametag, userId) {
 export function watchRoom(id) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      hz('rooms').find(id).watch().subscribe((room) => {
+      roomWatches[id] = hz('rooms').find(id).watch().subscribe((room) => {
         dispatch(addRoom(room, room.id))
         resolve(room)
       }, reject)

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import Nametag from './Nametag'
 import style from '../../../styles/Nametag/Nametags.css'
-import {watchRoomNametags} from '../../actions/NametagActions'
+import {watchRoomNametags, unWatchRoomNametags} from '../../actions/NametagActions'
 import {Card} from 'react-mdl'
 
 class Nametags extends Component {
@@ -11,7 +11,7 @@ class Nametags extends Component {
   }
 
   componentWillUnmount() {
-    this.props.dispatch(unWatchRoomNatage(this.props.room))
+    this.props.dispatch(unWatchRoomNametags(this.props.room))
   }
 
   render() {
