@@ -66,7 +66,7 @@ class Compose extends Component {
             border: '1px solid #ccc',
             borderRadius: 3,
           }}
-        selector={''}
+        selector={()=>null}
         handleEmoji={this.handleEmoji}/>
       <form className={style.compose} onSubmit={this.post}>
         <span className="input-group-addon">
