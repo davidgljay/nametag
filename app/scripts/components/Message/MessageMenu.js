@@ -1,6 +1,21 @@
 import React, {PropTypes} from 'react'
 import style from '../../../styles/Message/MessageMenu.css'
 import EmojiReactions from './EmojiReactions'
+import {Icon} from 'react-mdl'
+
+const wrapperStyle = {
+  height: '2em',
+}
+const selectorStyle = {
+  position: 'absolute',
+  left: 'unset',
+  top: 'unset',
+}
+const xStyle = {
+  color: 'black',
+  marginTop: -45,
+  marginRight: 7,
+}
 
 const MessageMenu = (props) =>
 <div className={style.actions + ' ' + props.showActions }>
@@ -8,8 +23,9 @@ const MessageMenu = (props) =>
       reactions={[{name: 'blush', count: 1}]}
       onReaction={(name) => console.log(name)}
       onEmojiClick={(name) => console.log(name)}
-      wrapperStyle={{height: '2em'}}
-      selectorStyle={{position:'absolute',left:'unset',top:'unset'}}/>
+      wrapperStyle={wrapperStyle}
+      selectorStyle={selectorStyle}
+      xStyle={xStyle}/>
   <span
     className={style.showActions + ' ' + style.actionIcon + ' glyphicon glyphicon-option-vertical'}
     onClick={props.toggleActions}
