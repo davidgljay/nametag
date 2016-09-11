@@ -1,6 +1,6 @@
 rethinkdb:
   image: rethinkdb
-  command: rethinkdb --bind "all" --no-update-check
+  command: rethinkdb --bind "all" #--no-update-check
   ports:
     - "28015:28015"
     - "8080:8080"

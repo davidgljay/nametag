@@ -3,6 +3,7 @@ import moment from '../../../bower_components/moment/moment'
 import ModAction from '../ModAction/ModAction'
 import Media from './Media'
 import MessageMenu from './MessageMenu'
+import emojis from 'react-emoji'
 import style from '../../../styles/Message/Message.css'
 
 class Message extends Component {
@@ -85,7 +86,7 @@ class Message extends Component {
         </td>
         <td className={style.messageText}>
           <div className={style.name}>{this.props.author.name}</div>
-          <div className={style.text}>{this.props.text}</div>
+          <div className={style.text}>{emojis.emojify(this.props.text)}</div>
           {media}
           {below}
           <div className={style.msgPadding}></div>
