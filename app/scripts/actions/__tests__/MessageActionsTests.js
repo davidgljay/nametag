@@ -24,13 +24,13 @@ describe('Message Actions', () => {
   })
 
   describe('watchRoomMessages', () => {
-    it('should fetch a list of messages from a room', (done) => {
+    it('should fetch a list of messages from a room', () => {
       let results = [
         {msg: 'hi there', room: 'abc', id: '123'},
         {msg: 'well hello', room: 'abc', id: '456'},
       ]
       hz.mockReturnValue(mockHz(results, calls)())
-      actions.watchRoomMessages('abc')(store.dispatch).then(
+      return actions.watchRoomMessages('abc')(store.dispatch).then(
         () => {
           expect(calls[1]).toEqual({type: 'findAll', req: {room: 'abc'}})
           expect(calls[2]).toEqual({type: 'watch', req: undefined})
@@ -44,16 +44,15 @@ describe('Message Actions', () => {
             id: '456',
             message: results[1],
           })
-          done()
         })
     })
-    it('should properly sort the messages by date', (done) => {
+    it('should properly sort the messages by date', () => {
       let results = [
         {msg: 'hi there', room: 'abc', id: '123', timestamp: '999'},
         {msg: 'well hello', room: 'abc', id: '456', timestamp: '001'},
       ]
       hz.mockReturnValue(mockHz(results, calls)())
-      actions.watchRoomMessages('abc')(store.dispatch).then(
+      return actions.watchRoomMessages('abc')(store.dispatch).then(
         () => {
           expect(store.getActions()[2]).toEqual({
             type: constants.SET_ROOM_PROP,
@@ -61,7 +60,6 @@ describe('Message Actions', () => {
             property: 'messages',
             value: ['456', '123'],
           })
-          done()
         })
     })
   })
