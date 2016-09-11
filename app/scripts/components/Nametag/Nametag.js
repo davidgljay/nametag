@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import Certificates from '../Certificate/Certificates'
 import style from '../../../styles/Nametag/Nametag.css'
+import { Icon, Tooltip } from 'react-mdl' 
 
 class Nametag extends Component {
   componentWillMount() {
@@ -18,10 +19,9 @@ class Nametag extends Component {
 
     // Show if user is a mod.
     if (this.props.mod === this.props.id) {
-      star = <div className={style.ismod}>
-          <span className={style.hosticon + ' glyphicon glyphicon-star'} aria-hidden="true"></span>
-          <div className={style.modTitle}>Host</div>
-          </div>
+      star = <Tooltip position='bottom' label="Host" className={style.ismod} >
+            <Icon className={style.hostIcon} name="star" />
+          </Tooltip>
     }
 
     return <div key={this.props.name} >

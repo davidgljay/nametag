@@ -3,10 +3,9 @@
 @value colors: "../colors.css";
 
 .ismod {
-    color:primary from colors; 
-    float:right;  
+    float: right;  
     font-size: 10px;
-    margin:5px; 
+    cursor: default;
 }
 
 .bio {
