@@ -36,11 +36,11 @@ describe('RoomActions', () => {
     it('should post a reaction', () => {
       let result = {id: '999'}
       hz.mockReturnValue(mockHz(result, calls)())
-      actions.addReaction(mockReaction)(store.dispatch).then(
-        (res) => {
-          expect(res).toEqual(result)
-          expect(calls[1]).toEqual({type: 'insert', req: mockReaction})
-        })
+      return actions.addReaction(mockReaction)(store.dispatch)
+          .then((res) => {
+            expect(res).toEqual(result)
+            expect(calls[1]).toEqual({type: 'insert', req: mockReaction})
+          })
     })
   })
 
@@ -51,13 +51,42 @@ describe('RoomActions', () => {
     })
     it('should delete a reaction', () => {
       hz.mockReturnValue(mockHz({}, calls)())
-      actions.removeReaction(mockReaction)(store.dispatch).then(
+      return actions.removeReaction(mockReaction)(store.dispatch).then(
         () => {
           expect(calls[1]).toEqual({type: 'find', req: mockReaction})
-          expect(calls[2]).toEqual({type: 'delete', req: null})
+          expect(calls[2]).toEqual({type: 'delete', req: undefined})
         })
     })
   })
 
-
+  describe('watchRoomReactions', () => {
+    let result
+    beforeEach(() => {
+      result = [
+        {emoji: ':100:'},
+        {emoji: ':whale:'},
+      ]
+    })
+    it('should watch a room for reactions', () => {
+      hz.mockReturnValue(mockHz(result, calls)())
+      return actions.watchRoomReactions('123')(store.dispatch).then(
+        (res) => {
+          expect(res).toEqual(result)
+          expect(calls[1]).toEqual({type: 'findAll', req: {room: '123'}})
+          expect(calls[2]).toEqual({type: 'watch', req: undefined})
+          expect(store.getActions()[0]).toEqual({
+            type: constants.ADD_REACTION,
+            reaction: {
+              emoji: ':100:',
+            },
+          })
+          expect(store.getActions()[1]).toEqual({
+            type: constants.ADD_REACTION,
+            reaction: {
+              emoji: ':whale:',
+            },
+          })
+        })
+    })
+  })
 })

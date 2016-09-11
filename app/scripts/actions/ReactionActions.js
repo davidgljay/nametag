@@ -2,7 +2,7 @@ import errorLog from '../utils/errorLog'
 import constants from '../constants'
 import {hz} from '../api/horizon'
 
-let certificateSubscriptions = {}
+let reactionSubscriptions = {}
 
 
 /*
@@ -50,30 +50,44 @@ export const removeReaction = (reactionId) => {
 }
 
 /*
-* Subscribe to reactions for a room
+* Watch to reactions for a room
 *
 * @params
 *    none
 *
 * @returns
-*    Promise
+*    Promise resolving to reactions
 */
-export function fetch(certificateId) {
+export function watchRoomReactions(roomId) {
   return function(dispatch) {
     return new Promise((resolve, reject) => {
-      certificateSubscriptions[certificateId] = hz('certificates')
-        .find(certificateId).fetch().subscribe(
-          (certificate) => {
-            if (certificate) {
-              resolve(dispatch(addCertificate(certificate, certificateId)))
-            } else {
-              reject('Certificate not found')
+      reactionSubscriptions[roomId] = hz('reactions')
+        .findAll({room: roomId}).watch().subscribe(
+          (reactions) => {
+            for (let i = 0; i < reactions.length; i++) {
+              dispatch({
+                type: constants.ADD_REACTION,
+                reaction: reactions[i],
+              })
             }
-          },
-          (err) => {
-            reject(err)
-          })
+            resolve(reactions)
+          }, reject)
     })
-    .catch(errorLog('Error subscribing to certificate ' + certificateId + ': '))
+    .catch(errorLog('Error subscribing to certificate ' + roomId + ': '))
+  }
+}
+
+/*
+* Unwatch to reactions for a room
+*
+* @params
+*    roomId - Id of the room to stop watching
+*
+* @returns
+*    nonre
+*/
+export function unWatchRoomReactions(roomId) {
+  return () => {
+    return reactionSubscriptions[roomId].unsubscribe()
   }
 }
