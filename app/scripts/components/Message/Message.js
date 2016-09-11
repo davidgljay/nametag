@@ -16,6 +16,8 @@ class Message extends Component {
     this.toggleActions = this.toggleActions.bind(this)
     this.checkYouTube = this.checkYouTube.bind(this)
     this.checkImage = this.checkImage.bind(this)
+    this.onReaction = this.onReaction.bind(this)
+    this.onEmojiClick = this.onEmojiClick.bind(this)
   }
 
   modAction(open) {
@@ -25,10 +27,12 @@ class Message extends Component {
     }
   }
 
-  heartAction() {
-    return function onClick() {
-      // TODO: Add heart action
-    }
+  onReaction(name) {
+    //this.props.updateReactionCount()
+  }
+
+  onEmojiClick(name) {
+    //this.props.addReaction()
   }
 
   toggleActions() {
@@ -71,8 +75,9 @@ class Message extends Component {
           <MessageMenu
             modAction={this.modAction}
             toggleActions={this.toggleActions}
-            heartAction={this.heartAction}
-            showActions={this.state.showActions}/>
+            showActions={this.state.showActions}
+            onReaction={this.onReaction}
+            onEmojiClick={this.onEmojiClick}/>
           <div className={style.date}>
               {moment(this.props.timestamp).format('h:mm A, ddd MMM DD YYYY')}
           </div>

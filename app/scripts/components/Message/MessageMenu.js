@@ -21,8 +21,8 @@ const MessageMenu = (props) =>
 <div className={style.actions + ' ' + props.showActions }>
   <EmojiReactions
       reactions={[{name: 'blush', count: 1}]}
-      onReaction={(name) => console.log(name)}
-      onEmojiClick={(name) => console.log(name)}
+      onReaction={this.props.onReaction}
+      onEmojiClick={this.props.onEmojiClick}
       wrapperStyle={wrapperStyle}
       selectorStyle={selectorStyle}
       xStyle={xStyle}/>
