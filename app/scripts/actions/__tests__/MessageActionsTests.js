@@ -67,7 +67,7 @@ describe('Message Actions', () => {
   })
 
   describe('postMessage', () => {
-    it('should post a message to a room', (done) => {
+    it('should post a message to a room', () => {
       let result = {id: '123'}
       let message = {
         type: 'message',
@@ -75,16 +75,10 @@ describe('Message Actions', () => {
         date: 'tuesday',
       }
       hz.mockReturnValue(mockHz(result, calls)())
-      actions.postMessage(message)(store.dispatch).then(
+      return actions.postMessage(message)(store.dispatch).then(
         (id) => {
-          expect(id).toEqual('123')
+          expect(id).toEqual({'id': '123'})
           expect(calls[1]).toEqual({type: 'upsert', req: message})
-          expect(store.getActions()[0]).toEqual({
-            type: constants.ADD_MESSAGE,
-            message: message,
-            id: '123',
-          })
-          done()
         })
     })
   })
