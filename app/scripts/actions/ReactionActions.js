@@ -50,19 +50,19 @@ export const removeReaction = (reactionId) => {
 }
 
 /*
-* Watch to reactions for a room
+* Watch to reactions for a message
 *
 * @params
-*    none
+*    message - The id of the message to be watched
 *
 * @returns
 *    Promise resolving to reactions
 */
-export function watchRoomReactions(roomId) {
+export function watchMessageReactions(message) {
   return function(dispatch) {
     return new Promise((resolve, reject) => {
-      reactionSubscriptions[roomId] = hz('reactions')
-        .findAll({room: roomId}).watch().subscribe(
+      reactionSubscriptions[message] = hz('reactions')
+        .findAll({message: message}).watch().subscribe(
           (reactions) => {
             for (let i = 0; i < reactions.length; i++) {
               dispatch({
@@ -73,21 +73,21 @@ export function watchRoomReactions(roomId) {
             resolve(reactions)
           }, reject)
     })
-    .catch(errorLog('Error subscribing to certificate ' + roomId + ': '))
+    .catch(errorLog('Error subscribing to certificate ' + message + ': '))
   }
 }
 
 /*
-* Unwatch to reactions for a room
+* Unwatch to reactions for a message
 *
 * @params
-*    roomId - Id of the room to stop watching
+*    message - Id of the message to stop watching
 *
 * @returns
 *    nonre
 */
-export function unWatchRoomReactions(roomId) {
+export function unWatchMessageReactions(message) {
   return () => {
-    return reactionSubscriptions[roomId].unsubscribe()
+    return reactionSubscriptions[message].unsubscribe()
   }
 }

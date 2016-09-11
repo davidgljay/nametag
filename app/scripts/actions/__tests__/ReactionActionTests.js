@@ -59,7 +59,7 @@ describe('RoomActions', () => {
     })
   })
 
-  describe('watchRoomReactions', () => {
+  describe('watchMessageReactions', () => {
     let result
     beforeEach(() => {
       result = [
@@ -67,12 +67,12 @@ describe('RoomActions', () => {
         {emoji: ':whale:'},
       ]
     })
-    it('should watch a room for reactions', () => {
+    it('should watch a message for reactions', () => {
       hz.mockReturnValue(mockHz(result, calls)())
-      return actions.watchRoomReactions('123')(store.dispatch).then(
+      return actions.watchMessageReactions('123')(store.dispatch).then(
         (res) => {
           expect(res).toEqual(result)
-          expect(calls[1]).toEqual({type: 'findAll', req: {room: '123'}})
+          expect(calls[1]).toEqual({type: 'findAll', req: {message: '123'}})
           expect(calls[2]).toEqual({type: 'watch', req: undefined})
           expect(store.getActions()[0]).toEqual({
             type: constants.ADD_REACTION,
