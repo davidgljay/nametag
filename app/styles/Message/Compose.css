@@ -18,6 +18,23 @@
     z-index:40;
 }
 
+:global{
+    #emojiButton {
+        display:none;
+    }
+
+    .input-group-addon .material-icons {
+        font-size: 18px;
+    }
+}
+
+.showEmoji {
+    cursor: pointer;
+    font-size:18px;
+}
+
+
+
 @media (mobile){
     .compose {
         padding-left:30px;
