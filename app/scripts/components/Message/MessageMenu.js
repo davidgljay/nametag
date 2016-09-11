@@ -1,8 +1,14 @@
 import React, {PropTypes} from 'react'
 import style from '../../../styles/Message/MessageMenu.css'
+import EmojiReactions from './EmojiReactions'
 
 const MessageMenu = (props) =>
 <div className={style.actions + ' ' + props.showActions }>
+  <EmojiReactions
+      reactions={[{name: 'blush', count: 1}]}
+      onReaction={(name) => console.log(name)}
+      onEmojiClick={(name) => console.log(name)}
+      wrapperStyle={{height: '2em'}}/>
   <span
     className={style.showActions + ' ' + style.actionIcon + ' glyphicon glyphicon-option-vertical'}
     onClick={props.toggleActions}
