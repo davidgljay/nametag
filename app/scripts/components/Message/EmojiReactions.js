@@ -164,19 +164,18 @@ class EmojiSelector extends Component {
 				/>
 			</div>
 		);
-		const x = (
+		const x =
 			<span 
-				style={xStyle}
 				onClick={() => {
 					this.setState({ xHovered: false});
 					close();
 				}}
+				style={Object.assign({},xStyle, this.props.customStyles.xStyle)}
 				onMouseEnter={() => this.setState({ xHovered: true})}
 				onMouseLeave={() => this.setState({ xHovered: false})}
 			> 
 				x
-			</span>
-		);
+			</span>;
 		const show = emoji.filter(name => name.indexOf(this.state.filter) !== -1);
 		const emptyStyle = {
 			height: '16px',
@@ -258,7 +257,8 @@ export default class EmojiReact extends Component {
 			wrapperHover: Object.assign({}, wrapperHover, this.props.wrapperHover),
 			countHover: Object.assign({}, countHover, this.props.countHover),
 			selectorStyle: Object.assign({}, selectorStyle, this.props.selectorStyle),
-			searchInput: this.props.searchInput
+			searchInput: this.props.searchInput,
+			xStyle: this.props.xStyle
 		}
 		const { reactions, onReaction, onEmojiClick } = this.props;
 		const plusButtonStyle = this.state.hovered ? Object.assign({}, customStyles.wrapperStyle, customStyles.wrapperHover) : customStyles.wrapperStyle;
