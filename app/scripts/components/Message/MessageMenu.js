@@ -8,7 +8,8 @@ const MessageMenu = (props) =>
       reactions={[{name: 'blush', count: 1}]}
       onReaction={(name) => console.log(name)}
       onEmojiClick={(name) => console.log(name)}
-      wrapperStyle={{height: '2em'}}/>
+      wrapperStyle={{height: '2em'}}
+      selectorStyle={{position:'absolute',left:'unset',top:'unset'}}/>
   <span
     className={style.showActions + ' ' + style.actionIcon + ' glyphicon glyphicon-option-vertical'}
     onClick={props.toggleActions}

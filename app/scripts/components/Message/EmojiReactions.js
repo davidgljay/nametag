@@ -156,7 +156,7 @@ class EmojiSelector extends Component {
 		const searchInput = (
 			<div>
 				<input 
-					style={Object.assign({}, this.props.searchInput, searchInputStyle)}
+					style={Object.assign({}, searchInputStyle, this.props.customStyles.searchInput)}
 					type='text' 
 					placeholder='Search'
 					value={this.state.filter} 
@@ -201,7 +201,7 @@ class EmojiSelector extends Component {
 			);
 		});
 		return (
-			<div style={showing ? Object.assign({}, selectorStyle, this.props.selectorStyle) : {display: 'none'}}>
+			<div style={showing ? this.props.customStyles.selectorStyle : {display: 'none'}}>
 				{searchInput}
 				{x}
 				<div 
@@ -256,7 +256,9 @@ export default class EmojiReact extends Component {
 			emojiStyle: Object.assign({}, emojiStyle, this.props.emojiStyle), 
 			countStyle: Object.assign({}, countStyle, this.props.countStyle),
 			wrapperHover: Object.assign({}, wrapperHover, this.props.wrapperHover),
-			countHover: Object.assign({}, countHover, this.props.countHover)
+			countHover: Object.assign({}, countHover, this.props.countHover),
+			selectorStyle: Object.assign({}, selectorStyle, this.props.selectorStyle),
+			searchInput: this.props.searchInput
 		}
 		const { reactions, onReaction, onEmojiClick } = this.props;
 		const plusButtonStyle = this.state.hovered ? Object.assign({}, customStyles.wrapperStyle, customStyles.wrapperHover) : customStyles.wrapperStyle;
@@ -275,6 +277,7 @@ export default class EmojiReact extends Component {
 					showing={this.state.showSelector} 
 					onEmojiClick={onEmojiClick} 
 					close={this.closeSelector}
+					customStyles={customStyles}
 				/>
 			</div>
 		);
