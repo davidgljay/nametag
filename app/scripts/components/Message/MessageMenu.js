@@ -1,8 +1,10 @@
 import React, {PropTypes} from 'react'
 import style from '../../../styles/Message/MessageMenu.css'
+import Reactions from '../../containers/Reaction/ReactionsContainer'
 
 const MessageMenu = (props) =>
 <div className={style.actions + ' ' + props.showActions }>
+  <Reactions message={props.id} />
   <span
     className={style.showActions + ' ' + style.actionIcon + ' glyphicon glyphicon-option-vertical'}
     onClick={props.toggleActions}
@@ -10,9 +12,6 @@ const MessageMenu = (props) =>
   <span
     className={style.actionIcon + ' glyphicon glyphicon-star'}
     aria-hidden="true"/>
-  <span className={style.actionIcon + ' glyphicon glyphicon-heart'}
-  aria-hidden="true"
-  onClick={props.heartAction}/>
   <span
     className={style.actionIcon + ' glyphicon glyphicon-flag'}
     onClick={props.modAction(true)}
@@ -27,7 +26,5 @@ export default MessageMenu
 
 MessageMenu.propTypes = {
   toggleActions: PropTypes.func.isRequired,
-  heartAction: PropTypes.func.isRequired,
   modAction: PropTypes.func.isRequired,
-
 }

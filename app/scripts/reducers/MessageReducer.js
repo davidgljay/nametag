@@ -1,6 +1,6 @@
 import constants from '../constants'
 
-const nametags = (state = {}, action) => {
+const messages = (state = {}, action) => {
   switch (action.type) {
   case constants.ADD_MESSAGE:
     return Object.assign({}, state, {[action.id]: action.message})
@@ -9,4 +9,4 @@ const nametags = (state = {}, action) => {
   }
 }
 
-export default nametags
+export default messages

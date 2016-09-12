@@ -3,6 +3,7 @@ import moment from '../../../bower_components/moment/moment'
 import ModAction from '../ModAction/ModAction'
 import Media from './Media'
 import MessageMenu from './MessageMenu'
+import emojis from 'react-emoji'
 import style from '../../../styles/Message/Message.css'
 
 class Message extends Component {
@@ -11,7 +12,6 @@ class Message extends Component {
     super(props)
     this.state = {modAction: false}
     this.modAction = this.modAction.bind(this)
-    this.heartAction = this.heartAction.bind(this)
     this.toggleActions = this.toggleActions.bind(this)
     this.checkYouTube = this.checkYouTube.bind(this)
     this.checkImage = this.checkImage.bind(this)
@@ -24,16 +24,11 @@ class Message extends Component {
     }
   }
 
-  heartAction() {
-    return function onClick() {
-      // TODO: Add heart action
-    }
-  }
-
   toggleActions() {
     return this.setState({
       showActions:
-      this.state.showActions === style.slideOutActions ? style.slideInActions : style.slideOutActions,
+      this.state.showActions === style.slideOutActions ?
+      style.slideInActions : style.slideOutActions,
     })
   }
 
@@ -70,8 +65,8 @@ class Message extends Component {
           <MessageMenu
             modAction={this.modAction}
             toggleActions={this.toggleActions}
-            heartAction={this.heartAction}
-            showActions={this.state.showActions}/>
+            showActions={this.state.showActions}
+            id = {this.props.id} />
           <div className={style.date}>
               {moment(this.props.timestamp).format('h:mm A, ddd MMM DD YYYY')}
           </div>
@@ -85,7 +80,7 @@ class Message extends Component {
         </td>
         <td className={style.messageText}>
           <div className={style.name}>{this.props.author.name}</div>
-          <div className={style.text}>{this.props.text}</div>
+          <div className={style.text}>{emojis.emojify(this.props.text)}</div>
           {media}
           {below}
           <div className={style.msgPadding}></div>

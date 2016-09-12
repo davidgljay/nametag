@@ -27,6 +27,7 @@ export function mockHz(res, calls, type) {
       upsert: mockHz(res, calls, 'upsert'),
       insert: mockHz(res, calls, 'insert'),
       findAll: mockHz(res, calls, 'findAll'),
+      delete: mockHz(res, calls, 'delete'),
       subscribe: (cb) => {
         calls.push({type: 'subscribe'})
         cb(res)
