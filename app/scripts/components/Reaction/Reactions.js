@@ -23,7 +23,19 @@ class Reactions extends Component {
       message: this.props.message,
       nametag: this.context.userNametag,
     }
-    this.props.addReaction(reaction)
+
+    //Do not add if the user had already indicated this reaction
+    let unique = true
+    Object.keys(this.props.reactions)
+      .reduce((prev, id) => {
+        if (this.props.reactions[id].emoji === reaction.emoji
+          && this.props.reactions[id].nametag === reaction.nametag) {
+          unique = false
+        }
+      }, [])
+    if (unique) {
+      this.props.addReaction(reaction)
+    }
   }
 
   reactionsToArray(reactions) {
