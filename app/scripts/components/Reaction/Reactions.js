@@ -1,5 +1,8 @@
 import React, {Component, PropTypes} from 'react'
 import EmojiReactions from './EmojiReactions'
+import EmojiSelector from './EmojiSelector'
+import { Icon } from 'react-mdl'
+import style from '../../../styles/Reaction/Reactions.css'
 
 class Reactions extends Component {
 
@@ -7,6 +10,10 @@ class Reactions extends Component {
     super(props)
     this.addReaction = this.addReaction.bind(this)
     this.reactionsToArray = this.reactionsToArray.bind(this)
+    this.toggleSelector = this.toggleSelector.bind(this)
+    this.state = {
+      showSelector:false,
+    }
   }
 
   componentDidMount() {
@@ -59,6 +66,10 @@ class Reactions extends Component {
       }, [])
   }
 
+  toggleSelector() {
+    this.setState({showSelector: !this.state.showSelector})
+  }
+
   render() {
     const wrapperStyle = {
       height: '2em',
@@ -75,13 +86,24 @@ class Reactions extends Component {
     }
 
     const reactionsArray = this.reactionsToArray(this.props.reactions)
-    return <EmojiReactions
-      reactions={reactionsArray}
-      onReaction={this.addReaction}
-      onEmojiClick={this.addReaction}
-      wrapperStyle={wrapperStyle}
-      selectorStyle={selectorStyle}
-      xStyle={xStyle}/>
+    return <span>
+        {
+         reactionsArray.length > 0 &&
+          <EmojiReactions
+            reactions={reactionsArray}
+            toggleSelector={this.toggleSelector}
+            onReaction={this.addReaction}
+            wrapperStyle={wrapperStyle}/>
+        }
+        <Icon className={style.reactionIcon}
+          name='insert_emoticon'
+          onClick={this.toggleSelector} />
+        <EmojiSelector
+          showing={this.state.showSelector}
+          onEmojiClick={this.addReaction}
+          close={this.toggleSelector}
+          customStyles={{selectorStyle, xStyle}}/>
+      </span>
   }
 }
 

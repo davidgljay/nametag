@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { emojiList as emoji } from 'get-emoji'
 import EmojiSelector from './EmojiSelector'
+import EmojiImage from './EmojiImage'
 
 
 const wrapperStyle = {
@@ -41,16 +42,6 @@ const countStyle = {
 
 const countHover = {
   color: '#4fb0fc',
-}
-
-const selectorStyle = {
-  boxShadow: '0 6px 8px 0 rgba(0, 0, 0, 0.24)',
-  backgroundColor: '#fff',
-  width: '250px',
-  height: '220px',
-  position: 'relative',
-  left: '10px',
-  top: '0px',
 }
 
 class SingleEmoji extends Component {
@@ -139,11 +130,8 @@ export default class EmojiReact extends Component {
 			countStyle: Object.assign({}, countStyle, this.props.countStyle),
 			wrapperHover: Object.assign({}, wrapperHover, this.props.wrapperHover),
 			countHover: Object.assign({}, countHover, this.props.countHover),
-			selectorStyle: Object.assign({}, selectorStyle, this.props.selectorStyle),
-			searchInput: this.props.searchInput,
-			xStyle: this.props.xStyle
 		}
-		const { reactions, onReaction, onEmojiClick } = this.props
+		const { reactions, onReaction } = this.props
 		const plusButtonStyle = this.state.hovered ? Object.assign({}, customStyles.wrapperStyle, customStyles.wrapperHover) : customStyles.wrapperStyle
 		const plusStyle = this.state.hovered ? Object.assign({}, customStyles.countStyle, customStyles.countHover) : customStyles.countStyle
 		const selector = (
@@ -152,16 +140,10 @@ export default class EmojiReact extends Component {
 					style={plusButtonStyle}
 					onMouseEnter={() => this.setState({ hovered: true })}
 					onMouseLeave={() => this.setState({ hovered: false})	}
-					onClick={() => this.setState({ showSelector: !this.state.showSelector})}
+					onClick={this.props.toggleSelector}
 				>
 					<span style={plusStyle}>+</span>
 				</div>
-				<EmojiSelector 
-					showing={this.state.showSelector}
-					onEmojiClick={onEmojiClick}
-					close={this.closeSelector}
-					customStyles={customStyles}
-				/>
 			</div>
 		)
   return (

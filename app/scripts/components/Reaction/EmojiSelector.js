@@ -2,6 +2,16 @@ import React, {Component} from 'react'
 import EmojiImage from './EmojiImage'
 import { emojiList as emoji } from 'get-emoji'
 
+const selectorStyle = {
+  boxShadow: '0 6px 8px 0 rgba(0, 0, 0, 0.24)',
+  backgroundColor: '#fff',
+  width: '250px',
+  height: '220px',
+  position: 'relative',
+  left: '10px',
+  top: '0px',
+}
+
 const PickerEmoji = ({onClick, image}) => (
   <span style={{cursor: 'pointer', padding: '5px'}} onClick={() => onClick()}>
     {image}
@@ -35,7 +45,7 @@ export default class EmojiSelector extends Component {
     const SINGLE_EMOJI_HEIGHT = 23
     const LOAD_HEIGHT = 500
     const EMOJIS_ACROSS = 8
-    
+
     const { showing, onEmojiClick, close } = this.props
     let xStyle = {
       color: '#E8E8E8',
@@ -43,7 +53,7 @@ export default class EmojiSelector extends Component {
       cursor: 'pointer',
       float: 'right',
       marginTop: '-32px',
-      marginRight: '5px'
+      marginRight: '5px',
     }
     if (this.state.xHovered) {
       xStyle.color = '#4fb0fc'
@@ -53,7 +63,7 @@ export default class EmojiSelector extends Component {
         margin: '10px',
         width: '85%',
         borderRadius: '5px',
-        border: '1px solid #E8E8E8'
+        border: '1px solid #E8E8E8',
       }
 
     const searchInput = (
@@ -73,7 +83,7 @@ export default class EmojiSelector extends Component {
           this.setState({ xHovered: false})
           close()
         }}
-        style={Object.assign({},xStyle, this.props.customStyles.xStyle)}
+        style={Object.assign({}, xStyle, this.props.customStyles.xStyle)}
         onMouseEnter={() => this.setState({ xHovered: true})}
         onMouseLeave={() => this.setState({ xHovered: false})}
       >
@@ -83,7 +93,7 @@ export default class EmojiSelector extends Component {
     const emptyStyle = {
       height: '16px',
       width: '16px',
-      display: 'inline-block'
+      display: 'inline-block',
     }
     const emojis = show.map((em, i) => {
       const row = Math.floor((i + 1) / EMOJIS_ACROSS)
@@ -103,7 +113,7 @@ export default class EmojiSelector extends Component {
       )
     })
     return (
-      <div style={showing ? this.props.customStyles.selectorStyle : {display: 'none'}}>
+      <div style={showing ? Object.assign({}, selectorStyle, this.props.customStyles.selectorStyle) : {display: 'none'}}>
         {searchInput}
         {x}
         <div
