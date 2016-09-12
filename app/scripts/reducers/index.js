@@ -4,7 +4,7 @@ import nametags from './NametagReducer'
 import user from './UserReducer'
 import certificates from './CertificateReducer'
 import messages from './MessageReducer'
-import reactions from './RecationReducer'
+import reactions from './ReactionReducer'
 
 const mainReducer = combineReducers({
   rooms,
