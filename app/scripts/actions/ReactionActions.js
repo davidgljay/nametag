@@ -73,7 +73,7 @@ export function watchMessageReactions(message) {
             resolve(reactions)
           }, reject)
     })
-    .catch(errorLog('Error subscribing to certificate ' + message + ': '))
+    .catch(errorLog('Error subscribing to message reactions ' + message + ': '))
   }
 }
 
