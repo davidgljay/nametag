@@ -12,12 +12,9 @@ class Message extends Component {
     super(props)
     this.state = {modAction: false}
     this.modAction = this.modAction.bind(this)
-    this.heartAction = this.heartAction.bind(this)
     this.toggleActions = this.toggleActions.bind(this)
     this.checkYouTube = this.checkYouTube.bind(this)
     this.checkImage = this.checkImage.bind(this)
-    this.onReaction = this.onReaction.bind(this)
-    this.onEmojiClick = this.onEmojiClick.bind(this)
   }
 
   modAction(open) {
@@ -27,18 +24,11 @@ class Message extends Component {
     }
   }
 
-  onReaction(name) {
-    //this.props.updateReactionCount()
-  }
-
-  onEmojiClick(name) {
-    //this.props.addReaction()
-  }
-
   toggleActions() {
     return this.setState({
       showActions:
-      this.state.showActions === style.slideOutActions ? style.slideInActions : style.slideOutActions,
+      this.state.showActions === style.slideOutActions ?
+      style.slideInActions : style.slideOutActions,
     })
   }
 
@@ -76,8 +66,7 @@ class Message extends Component {
             modAction={this.modAction}
             toggleActions={this.toggleActions}
             showActions={this.state.showActions}
-            onReaction={this.onReaction}
-            onEmojiClick={this.onEmojiClick}/>
+            id = {this.props.id} />
           <div className={style.date}>
               {moment(this.props.timestamp).format('h:mm A, ddd MMM DD YYYY')}
           </div>
