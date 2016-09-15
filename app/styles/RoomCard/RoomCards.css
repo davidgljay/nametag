@@ -7,4 +7,5 @@
   background: secondary;
   padding-bottom: 50px;
   padding-top: 80px;
+  min-height: 100vh;
 }
