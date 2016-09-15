@@ -29,8 +29,13 @@ class RoomCard extends Component {
 
   checkForNametag() {
     if (this.context.user.id &&
-      (!this.context.user.nametags || !this.context.user.nametags[this.props.id])) {
+      (!this.context.user.nametags || this.context.user.nametags[this.props.id] === undefined)) {
       this.props.getUserNametag(this.props.id, this.context.user.id)
+        .then((userNametag) => {
+          if (userNametag) {
+            this.props.watchNametag(userNametag.nametag)
+          }
+        })
     }
   }
 
@@ -89,7 +94,7 @@ class RoomCard extends Component {
           </div>
           <Join
             room={this.props.id}
-            userNametag={this.props.room.userNametag}
+            userNametag={this.props.userNametag}
             normsChecked={this.state.normsChecked}/>
         </Card>
 

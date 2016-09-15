@@ -29,12 +29,16 @@ class RoomCards extends Component {
       if (!rooms.hasOwnProperty(id)) {
         continue
       }
+      const userNametag = this.props.user.nametags ? this.props.nametags[this.props.user.nametags[id]] : null
       roomCards.push(
         <RoomCard
           room={rooms[id]}
           id={id}
           key={id}
-          getUserNametag={this.props.getUserNametag}/>
+          getUserNametag={this.props.getUserNametag}
+          userNametag={userNametag}
+          watchNametag={this.props.watchNametag}
+          unWatchNametag={this.props.unWatchNametag}/>
       )
     }
     return roomCards
