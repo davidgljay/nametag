@@ -6,12 +6,12 @@ import { Icon, Tooltip } from 'react-mdl'
 class Nametag extends Component {
   componentWillMount() {
     if (!this.props.name) {
-      this.props.subscribe(this.props.id, this.props.room)
+      this.props.watchNametag(this.props.id)
     }
   }
 
   componentDidUnMount() {
-    this.props.unsubscribe(this.props.id)
+    this.props.unWatchNametag(this.props.id)
   }
 
   render() {

@@ -13,7 +13,7 @@ export const addNametag = (nametag, id) => {
 }
 
 /*
-* Subscribe to a Nametags
+* Watch a Nametags
 *
 * @params
 *    none
@@ -21,7 +21,7 @@ export const addNametag = (nametag, id) => {
 * @returns
 *    Promise
 */
-export function subscribe(nametagId) {
+export function watchNametag(nametagId) {
   return function(dispatch) {
     return new Promise((resolve, reject) => {
       nametagSubscriptions[nametagId] = hz('nametags').find(nametagId).watch().subscribe(
@@ -49,7 +49,7 @@ export function subscribe(nametagId) {
 * @returns
 *    none
 */
-export function unsubscribe(nametagId) {
+export function unWatchNametag(nametagId) {
   return function() {
     nametagSubscriptions[nametagId].unsubscribe()
   }
