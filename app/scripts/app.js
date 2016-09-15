@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 
 import Room from './containers/Room/RoomContainer'
@@ -47,7 +47,7 @@ class Nametag extends Component {
 }
 
 Nametag.childContextTypes = {
-  dispatch: React.PropTypes.func,
+  dispatch: PropTypes.func,
 }
 
 let NametagWithDragging = DragDropContext(HTML5Backend)(Nametag)
