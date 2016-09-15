@@ -16,6 +16,22 @@ class RoomCard extends Component {
     }
     this.flip = this.flip.bind(this)
     this.onNormsCheck = this.onNormsCheck.bind(this)
+    this.checkForNametag = this.checkForNametag.bind(this)
+  }
+
+  componentDidMount() {
+    this.checkForNametag()
+  }
+
+  componentWillUpdate() {
+    this.checkForNametag()
+  }
+
+  checkForNametag() {
+    if (this.context.user.id &&
+      (!this.context.user.nametags || !this.context.user.nametags[this.props.id])) {
+      this.props.getUserNametag(this.props.id, this.context.user.id)
+    }
   }
 
   onNormsCheck(e) {
@@ -97,6 +113,10 @@ class RoomCard extends Component {
 RoomCard.propTypes = {
   room: PropTypes.object.isRequired,
   id: PropTypes.string.isRequired,
+}
+
+RoomCard.contextTypes = {
+  user: PropTypes.object
 }
 
 export default RoomCard

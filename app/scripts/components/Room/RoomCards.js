@@ -10,11 +10,11 @@ import style from '../../../styles/RoomCard/RoomCards.css'
 class RoomCards extends Component {
 
   componentDidMount() {
-    this.context.dispatch(subscribe())
+    this.props.subscribe()
   }
 
   componentWillUnmount() {
-    this.context.dispatch(unsubscribe())
+    this.props.unsubscribe()
   }
 
   getChildContext() {
@@ -32,7 +32,9 @@ class RoomCards extends Component {
       roomCards.push(
         <RoomCard
           room={rooms[id]}
-          id={id} key={id}/>
+          id={id}
+          key={id}
+          getUserNametag={this.props.getUserNametag}/>
       )
     }
     return roomCards
@@ -40,7 +42,7 @@ class RoomCards extends Component {
 
   render() {
     return <div id={style.roomSelection}>
-        <Navbar user={this.props.user} dispatch={this.context.dispatch}/>
+        <Navbar user={this.context.user} dispatch={this.context.dispatch}/>
         <div id={style.roomCards}>
           {this.showRoomCards(this.props.rooms)}
         </div>
@@ -52,12 +54,12 @@ RoomCards.propTypes = {
   rooms: PropTypes.object.isRequired,
 }
 
-RoomCards.contextTypes = {
-  dispatch: React.PropTypes.func,
+RoomCards.childContextTypes = {
+  user: PropTypes.object,
 }
 
-RoomCards.childContextTypes = {
-  user: React.PropTypes.object,
+RoomCards.contextTypes = {
+  dispatch: PropTypes.func,
 }
 
 export default RoomCards
