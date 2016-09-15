@@ -83,10 +83,10 @@ describe('User Actions', () => {
   })
 
   describe('addUserNametag', () => {
-    it('should add an entry to the user_nametags table', (done) => {
+    it('should add an entry to the user_nametags table', () => {
       let calls = []
       hz.mockReturnValue(mockHz({id: '123'}, calls)())
-      actions.addUserNametag('abc', 'me', '456')().then((id) => {
+      return actions.addUserNametag('abc', 'me', '456')().then((id) => {
         expect(id).toEqual({id: '123'})
         expect(calls[1]).toEqual({
           type: 'insert',
@@ -96,16 +96,15 @@ describe('User Actions', () => {
             room: 'abc',
           },
         })
-        done()
       })
     })
   })
 
   describe('getUserNametag', () => {
-    it('should get an entry for a room in the user_nametags table', (done) => {
+    it('should get an entry for a room in the user_nametags table', () => {
       let calls = []
       hz.mockReturnValue(mockHz([{user: 'me', nametag: '456', room: 'abc'}], calls)())
-      actions.getUserNametag('abc', 'me')(store.dispatch).then((user_nametag) => {
+      return actions.getUserNametag('abc', 'me')(store.dispatch).then((user_nametag) => {
         expect(user_nametag).toEqual({user: 'me', nametag: '456', room: 'abc'})
         expect(calls[1]).toEqual({
           type: 'findAll',
@@ -118,20 +117,18 @@ describe('User Actions', () => {
           room: 'abc',
           nametag: '456',
         })
-        done()
       })
     })
 
-    it('should return an error if no user nametag is found', (done) => {
+    it('should set the nametag value for the room to null if no user nametag is found', () => {
       let calls = []
       hz.mockReturnValue(mockHz([], calls)())
-      actions.getUserNametag('def', 'me')(store.dispatch).then(() => {
-        expect('Should not succeed').toBeFalsy()
-        done()
-      },
-      (err)  => {
-        expect(err).toBeTruthy()
-        done()
+      return actions.getUserNametag('def', 'me')(store.dispatch).then(() => {
+        expect(store.getActions()[0]).toEqual({
+          type: 'ADD_USER_NAMETAG',
+          room: 'def',
+          nametag: null,
+        })
       })
     })
   })

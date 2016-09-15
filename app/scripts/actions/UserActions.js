@@ -97,7 +97,12 @@ export function getUserNametag(room, user) {
     return new Promise((resolve, reject) => {
       hz('user_nametags').findAll({room}, {user}).fetch().subscribe((userNametags) => {
         if (userNametags.length === 0) {
-          reject('Error: User nametag not found')
+          dispatch({
+            type: constants.ADD_USER_NAMETAG,
+            room: room,
+            nametag: null,
+          })
+          resolve(null)
         } else {
           dispatch({
             type: constants.ADD_USER_NAMETAG,
