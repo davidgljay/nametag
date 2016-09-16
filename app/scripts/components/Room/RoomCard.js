@@ -13,6 +13,7 @@ class RoomCard extends Component {
       flipped: false,
       flipping: false,
       normsChecked: false,
+      checkingForNametag: false,
     }
     this.flip = this.flip.bind(this)
     this.onNormsCheck = this.onNormsCheck.bind(this)
@@ -28,14 +29,24 @@ class RoomCard extends Component {
   }
 
   checkForNametag() {
-    if (this.context.user.id &&
-      (!this.context.user.nametags || this.context.user.nametags[this.props.id] === undefined)) {
+    if ( this.context.user &&
+      this.context.user.id &&
+      !this.props.userNametag &&
+      this.state.checkingForNametag) {
+      this.setState({checkingForNametag: true})
       this.props.getUserNametag(this.props.id, this.context.user.id)
         .then((userNametag) => {
-          if (userNametag) {
-            this.props.watchNametag(userNametag.nametag)
+          this.setState({checkingForNametag: false})
+          if (!userNametag) {
+            return {room: this.props.id}
           }
+          console.log('Found user nametag:' + userNametag.nametag)
+          return this.props.watchNametag(userNametag.nametag)
         })
+        .then((nametag) => {
+          return this.props.addUserNametag(this.props.id, nametag)
+        })
+        .catch((err) => {console.log('Error checking for nametag: ' + err)})
     }
   }
 
@@ -118,10 +129,11 @@ class RoomCard extends Component {
 RoomCard.propTypes = {
   room: PropTypes.object.isRequired,
   id: PropTypes.string.isRequired,
+  userNametag: PropTypes.object,
 }
 
 RoomCard.contextTypes = {
-  user: PropTypes.object
+  user: PropTypes.object,
 }
 
 export default RoomCard

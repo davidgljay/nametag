@@ -29,12 +29,12 @@ class RoomCards extends Component {
   }
 
   mapRoomCards(roomId) {
-    if (!roomId) return
     let room = this.props.rooms[roomId]
     return <RoomCard
       room={room}
-      id={room.id}
-      key={room.id}
+      id={roomId}
+      key={roomId}
+      userNametag={this.props.userNametags[roomId]}
       addUserNametag={this.props.addUserNametag}
       getUserNametag={this.props.getUserNametag}
       watchNametag={this.props.watchNametag}
