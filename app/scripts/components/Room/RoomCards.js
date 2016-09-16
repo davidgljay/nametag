@@ -43,7 +43,7 @@ class RoomCards extends Component {
 
   render() {
     return <div id={style.roomSelection}>
-        <Navbar user={this.context.user} dispatch={this.context.dispatch}/>
+        <Navbar user={this.props.user} dispatch={this.context.dispatch}/>
         <div id={style.roomCards}>
           {Object.keys(this.props.rooms).map(this.mapRoomCards)}
         </div>
