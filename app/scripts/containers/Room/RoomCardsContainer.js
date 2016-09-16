@@ -1,14 +1,14 @@
 import { connect } from 'react-redux'
 import component from '../../components/Room/RoomCards'
-import {getUserNametag} from '../../actions/UserActions'
+import {addUserNametag, getUserNametag} from '../../actions/UserActions'
 import {watchNametag, unWatchNametag} from '../../actions/NametagActions'
 import {subscribe, unsubscribe} from '../../actions/RoomActions'
 
 const mapStateToProps = (state) => {
   return {
     rooms: state.rooms,
-    user: state.user,
     nametags: state.nametags,
+    user: state.user,
   }
 }
 
@@ -22,6 +22,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     unsubscribe(roomId) {
       return dispatch(unsubscribe(roomId))
+    },
+    addUserNametag(roomId, nametagId) {
+      return dispatch(addUserNametag(roomId, nametagId))
     },
     watchNametag(nametagId) {
       return dispatch(watchNametag(nametagId))

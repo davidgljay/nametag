@@ -2,7 +2,7 @@ import {hz} from '../api/horizon'
 import errorLog from '../utils/errorLog'
 import constants from '../constants'
 import {addNametag, putNametag} from './NametagActions'
-import {putUserNametag} from './UserActions'
+import {putUserNametag} from './UserNametagActions'
 
 let roomWatches = {}
 let roomSubscription
@@ -21,31 +21,6 @@ export function setRoomNametagCount(room, nametagCount) {
     type: constants.SET_ROOM_NT_COUNT,
     room,
     nametagCount,
-  }
-}
-
-export function addNametagCert(cert, room) {
-  return {
-    type: constants.ADD_USER_NT_CERT,
-    cert,
-    room,
-  }
-}
-
-export function removeNametagCert(certId, room) {
-  return {
-    type: constants.REMOVE_USER_NT_CERT,
-    certId,
-    room,
-  }
-}
-
-export function updateNametag(room, property, value) {
-  return {
-    type: constants.UPDATE_USER_NAMETAG,
-    room,
-    property,
-    value,
   }
 }
 
@@ -185,7 +160,9 @@ export function joinRoom(roomId, nametag, userId) {
 export function watchRoom(id) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
+      console.log("Watching room")
       roomWatches[id] = hz('rooms').find(id).watch().subscribe((room) => {
+        console.log("Got room response")
         dispatch(addRoom(room, room.id))
         resolve(room)
       }, reject)

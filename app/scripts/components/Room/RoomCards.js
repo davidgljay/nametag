@@ -9,6 +9,11 @@ import style from '../../../styles/RoomCard/RoomCards.css'
 
 class RoomCards extends Component {
 
+  constructor(props) {
+    super(props)
+    this.mapRoomCards = this.mapRoomCards.bind(this)
+  }
+
   componentDidMount() {
     this.props.subscribe()
   }
@@ -23,32 +28,24 @@ class RoomCards extends Component {
     }
   }
 
-  showRoomCards(rooms) {
-    let roomCards = []
-    for (let id in rooms) {
-      if (!rooms.hasOwnProperty(id)) {
-        continue
-      }
-      const userNametag = this.props.user.nametags ? this.props.nametags[this.props.user.nametags[id]] : null
-      roomCards.push(
-        <RoomCard
-          room={rooms[id]}
-          id={id}
-          key={id}
-          getUserNametag={this.props.getUserNametag}
-          userNametag={userNametag}
-          watchNametag={this.props.watchNametag}
-          unWatchNametag={this.props.unWatchNametag}/>
-      )
-    }
-    return roomCards
+  mapRoomCards(roomId) {
+    if (!roomId) return
+    let room = this.props.rooms[roomId]
+    return <RoomCard
+      room={room}
+      id={room.id}
+      key={room.id}
+      addUserNametag={this.props.addUserNametag}
+      getUserNametag={this.props.getUserNametag}
+      watchNametag={this.props.watchNametag}
+      unWatchNametag={this.props.unWatchNametag}/>
   }
 
   render() {
     return <div id={style.roomSelection}>
         <Navbar user={this.context.user} dispatch={this.context.dispatch}/>
         <div id={style.roomCards}>
-          {this.showRoomCards(this.props.rooms)}
+          {Object.keys(this.props.rooms).map(this.mapRoomCards)}
         </div>
       </div>
   }
