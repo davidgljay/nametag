@@ -32,7 +32,7 @@ class RoomCard extends Component {
     if ( this.context.user &&
       this.context.user.id &&
       !this.props.userNametag &&
-      this.state.checkingForNametag) {
+      !this.state.checkingForNametag) {
       this.setState({checkingForNametag: true})
       this.props.getUserNametag(this.props.id, this.context.user.id)
         .then((userNametag) => {
@@ -40,8 +40,7 @@ class RoomCard extends Component {
           if (!userNametag) {
             return {room: this.props.id}
           }
-          console.log('Found user nametag:' + userNametag.nametag)
-          return this.props.watchNametag(userNametag.nametag)
+          return this.props.watchNametag(userNametag)
         })
         .then((nametag) => {
           return this.props.addUserNametag(this.props.id, nametag)
