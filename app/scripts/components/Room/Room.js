@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import {watchRoom, unWatchRoom} from '../../actions/RoomActions'
-import {getUserNametag} from '../../actions/UserActions'
 import {Spinner, Icon} from 'react-mdl'
 import Norms from './Norms'
 import Nametags from '../../containers/Nametag/NametagsContainer'
@@ -14,6 +13,7 @@ class Room extends Component {
     this.state = {
       leftBarExpanded: false,
     }
+    this.getUserNametag = this.getUserNametag.bind(this)
   }
 
   getChildContext() {
@@ -25,22 +25,23 @@ class Room extends Component {
     }
   }
 
-  getUserNametag() {
-
-  }
-
   componentDidMount() {
     this.props.watchRoom(this.props.params.roomId)
+    this.getUserNametag(this.props)
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.userNametag && nextProps.user.id) {
-      this.props.getUserNametag(this.props.params.roomId, nextProps.user.id)
+  getUserNametag(props) {
+    if (!props.userNametag && props.user.id) {
+      props.getUserNametag(props.params.roomId, props.user.id)
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.getUserNametag(nextProps)
+  }
+
   componentWillUnmount() {
-    this.props.unWatchRoom(this.props.params.roomId)
+    props.unWatchRoom(this.props.params.roomId)
   }
 
   closeRoom() {

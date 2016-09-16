@@ -8,11 +8,11 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    subscribe: (nametagId, roomId) => {
-      dispatch(actions.subscribe(nametagId, roomId))
+    watchNametag: (nametagId, roomId) => {
+      dispatch(actions.watchNametag(nametagId, roomId))
     },
-    unsubscribe: (nametagId, roomId) => {
-      dispatch(actions.unsubscribe(nametagId, roomId))
+    unWatchNametag: (nametagId, roomId) => {
+      dispatch(actions.unWatchNametag(nametagId, roomId))
     },
   }
 }

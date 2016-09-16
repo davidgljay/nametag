@@ -2,6 +2,7 @@ jest.unmock('../RoomActions')
 jest.unmock('../../tests/mockGlobals')
 jest.unmock('../NametagActions')
 jest.unmock('../UserActions')
+jest.unmock('../UserNametagActions')
 
 jest.unmock('redux-mock-store')
 jest.unmock('redux-thunk')
@@ -47,40 +48,6 @@ describe('RoomActions', () => {
     })
   })
 
-  describe('addNametagCert', () => {
-    it('should add a certificate to the user nametag for this room', () => {
-      expect(actions.addNametagCert({name: 'Test Certificate', id: '123' }, 'abc'))
-        .toEqual({
-          type: constants.ADD_USER_NT_CERT,
-          cert: {name: 'Test Certificate', id: '123' },
-          room: 'abc',
-        })
-    })
-  })
-
-  describe('removeNametagCert', () => {
-    it('should remove a certificate from the user nametag for this room', () => {
-      expect(actions.removeNametagCert('123', 'abc'))
-        .toEqual({
-          type: constants.REMOVE_USER_NT_CERT,
-          certId: '123',
-          room: 'abc',
-        })
-    })
-  })
-
-  describe('updateNametag', () => {
-    it('should update the user nametag', () => {
-      expect(actions.updateNametag('abc', 'name', 'Allosaur'))
-        .toEqual({
-          type: constants.UPDATE_USER_NAMETAG,
-          room: 'abc',
-          property: 'name',
-          value: 'Allosaur',
-        })
-    })
-  })
-
   describe('subscribe', () => {
     it('should subscribe to a room', function(done) {
       let mockResponses = [
@@ -88,41 +55,9 @@ describe('RoomActions', () => {
         [{}],
         [{}, {}, {}],
       ]
-      hz.mockReturnValueOnce({
-        watch: () => {
-          return {
-            subscribe: (subs) => {
-              return subs(mockResponses[0])
-            },
-          }
-        },
-      })
-      hz.mockReturnValueOnce({
-        findAll: () => {
-          return {
-            watch: () => {
-              return {
-                subscribe: (subs) => {
-                  return subs(mockResponses[1])
-                },
-              }
-            },
-          }
-        },
-      })
-      hz.mockReturnValueOnce({
-        findAll: () => {
-          return {
-            watch: () => {
-              return {
-                subscribe: (subs) => {
-                  return subs(mockResponses[2])
-                },
-              }
-            },
-          }
-        },
-      })
+      hz.mockReturnValueOnce(mockHz(mockResponses[0], calls)())
+      hz.mockReturnValueOnce(mockHz(mockResponses[1], calls)())
+      hz.mockReturnValueOnce(mockHz(mockResponses[2], calls)())
       actions.subscribe()(store.dispatch, store.getState)
       .then(function() {
         expect(store.getActions()[0]).toEqual({
@@ -151,11 +86,11 @@ describe('RoomActions', () => {
   })
 
   describe('joinRoom', () => {
-    it('should join a room', (done) => {
+    it('should join a room', () => {
       let calls2 = []
       hz.mockReturnValueOnce(mockHz({id: '456'}, calls)())
       hz.mockReturnValueOnce(mockHz({id: 'def'}, calls2)())
-      actions.joinRoom('1234', {name: 'tag', room: '1234'}, 'me')(store.dispatch)
+      return actions.joinRoom('1234', {name: 'tag', room: '1234'}, 'me')(store.dispatch)
         .then((nametagId) => {
           // Expect the promise to return the nametag value
           expect(nametagId).toEqual('456')
@@ -184,44 +119,29 @@ describe('RoomActions', () => {
             nametag: {name: 'tag', room: '1234'},
             id: '456',
           })
-          done()
         },
         (err) => {
           expect(err).toEqual(null)
-          done()
         })
     })
   })
 
   describe('watchRoom', () => {
-    it('should watch a room', (done) => {
+    it('should watch a room', () => {
       let room = {
         id: '123',
         name: 'A Room',
       }
-      hz.mockReturnValue({
-        find: (id) => {
-          calls.push({find: id})
-          return {
-            watch: () => {
-              return {
-                subscribe: (subs) => {
-                  return subs(room)
-                },
-              }
-            },
-          }
-        },
-      })
-      actions.watchRoom('123')(store.dispatch).then((res) => {
-        expect(calls[0]).toEqual({find: '123'})
+      hz.mockReturnValue(mockHz(room, calls)())
+      return actions.watchRoom('123')(store.dispatch).then((res) => {
+        expect(calls[1]).toEqual({type: 'find', req: '123'})
+        expect(calls[2]).toEqual({type: 'watch', req: undefined})
         expect(res).toEqual(room)
         expect(store.getActions()[0]).toEqual({
           type: 'ADD_ROOM',
           room: room,
           id: room.id,
         })
-        done()
       })
     })
   })

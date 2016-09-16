@@ -52,7 +52,7 @@ export function getUser() {
 *   none
 *
 * @returns
-*   none
+*   Function which accepts dispatch and logs the user out.
 */
 export function logout() {
   return (dispatch) => {
@@ -62,54 +62,7 @@ export function logout() {
 }
 
 
-/*
-* Adds a record linking a nametag to the user's account
-*
-*@params
-*   room -The id of the room that the nametag appears in
-*   user - The id of the user
-*   nametag - The id of the nametag
-*
-* @returns
-*   none
-*/
-export function addUserNametag(room, user, nametag) {
-  return () => {
-    return new Promise((resolve, reject) => {
-      hz('user_nametags').insert({room, user, nametag}).subscribe((id) => {
-        resolve(id)
-      }, reject)
-    }).catch(errorLog('Adding user nametag'))
-  }
-}
 
-/*
-* Gets the user's nametag for a particular room
-*
-*@params
-*   nametagid
-*
-* @returns
-*   none
-*/
-export function getUserNametag(room, user) {
-  return (dispatch) => {
-    return new Promise((resolve, reject) => {
-      hz('user_nametags').findAll({room}, {user}).fetch().subscribe((userNametags) => {
-        if (userNametags.length === 0) {
-          reject('Error: User nametag not found')
-        } else {
-          dispatch({
-            type: constants.ADD_USER_NAMETAG,
-            room: room,
-            nametag: userNametags[0].nametag,
-          })
-          resolve(userNametags[0])
-        }
-      }, reject)
-    }).catch(errorLog('Getting user nametag'))
-  }
-}
 
 
 

@@ -31,14 +31,14 @@ describe('User Actions', () => {
   })
 
   describe('getUser', () => {
-    it('should return info if a user is logged in', (done) => {
+    it('should return info if a user is logged in', () => {
       getAuth.mockReturnValue(
         new Promise((resolve) =>
           resolve({id: 1, data: {stuff: 'things'}})
           )
         )
 
-      actions.getUser()(store.dispatch, store.getState).then(
+      return actions.getUser()(store.dispatch, store.getState).then(
         () => {
           expect(store.getActions()[0]).toEqual(
             {
@@ -46,21 +46,17 @@ describe('User Actions', () => {
               data: {stuff: 'things'},
               id: 1,
             })
-          done()
         })
     })
 
-    it('should take no action if user is not logged in', (done) => {
+    it('should take no action if user is not logged in', () => {
       getAuth.mockReturnValue(
-        new Promise((resolve) =>
-          resolve(false)
-          )
+          Promise.resolve(false)
         )
 
-      actions.getUser()(store.dispatch, store.getState).then(
+      return actions.getUser()(store.dispatch, store.getState).then(
         () => {
           expect(store.getActions().length).toEqual(0)
-          done()
         })
     })
   })
@@ -82,58 +78,5 @@ describe('User Actions', () => {
     })
   })
 
-  describe('addUserNametag', () => {
-    it('should add an entry to the user_nametags table', (done) => {
-      let calls = []
-      hz.mockReturnValue(mockHz({id: '123'}, calls)())
-      actions.addUserNametag('abc', 'me', '456')().then((id) => {
-        expect(id).toEqual({id: '123'})
-        expect(calls[1]).toEqual({
-          type: 'insert',
-          req: {
-            user: 'me',
-            nametag: '456',
-            room: 'abc',
-          },
-        })
-        done()
-      })
-    })
-  })
-
-  describe('getUserNametag', () => {
-    it('should get an entry for a room in the user_nametags table', (done) => {
-      let calls = []
-      hz.mockReturnValue(mockHz([{user: 'me', nametag: '456', room: 'abc'}], calls)())
-      actions.getUserNametag('abc', 'me')(store.dispatch).then((user_nametag) => {
-        expect(user_nametag).toEqual({user: 'me', nametag: '456', room: 'abc'})
-        expect(calls[1]).toEqual({
-          type: 'findAll',
-          req: {
-            room: 'abc',
-          },
-        })
-        expect(store.getActions()[0]).toEqual({
-          type: 'ADD_USER_NAMETAG',
-          room: 'abc',
-          nametag: '456',
-        })
-        done()
-      })
-    })
-
-    it('should return an error if no user nametag is found', (done) => {
-      let calls = []
-      hz.mockReturnValue(mockHz([], calls)())
-      actions.getUserNametag('def', 'me')(store.dispatch).then(() => {
-        expect('Should not succeed').toBeFalsy()
-        done()
-      },
-      (err)  => {
-        expect(err).toBeTruthy()
-        done()
-      })
-    })
-  })
 })
 

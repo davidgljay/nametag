@@ -8,14 +8,13 @@ export function hzAuth(provider) {
   if (!hz.hasAuthToken()) {
     promise = new Promise((resolve, reject) => {
       hz.authEndpoint(provider).subscribe((endpoint) => {
-        // TODO: Add certificates and replace with https
         window.location = 'https://localhost:8181' + endpoint
         resolve()
       }, reject)
     }).catch(errorLog('Error authenticating'))
   } else {
-    console.log('Authed!')
-    promise = new Promise(resolve => resolve('Already authed!'))
+    console.log('Already Authed!')
+    promise = Promise.resolve()
     // We have a token already, do authenticated Horizon stuff here
   }
   return promise

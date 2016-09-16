@@ -9,12 +9,17 @@ import style from '../../../styles/RoomCard/RoomCards.css'
 
 class RoomCards extends Component {
 
+  constructor(props) {
+    super(props)
+    this.mapRoomCards = this.mapRoomCards.bind(this)
+  }
+
   componentDidMount() {
-    this.context.dispatch(subscribe())
+    this.props.subscribe()
   }
 
   componentWillUnmount() {
-    this.context.dispatch(unsubscribe())
+    this.props.unsubscribe()
   }
 
   getChildContext() {
@@ -23,26 +28,24 @@ class RoomCards extends Component {
     }
   }
 
-  showRoomCards(rooms) {
-    let roomCards = []
-    for (let id in rooms) {
-      if (!rooms.hasOwnProperty(id)) {
-        continue
-      }
-      roomCards.push(
-        <RoomCard
-          room={rooms[id]}
-          id={id} key={id}/>
-      )
-    }
-    return roomCards
+  mapRoomCards(roomId) {
+    let room = this.props.rooms[roomId]
+    return <RoomCard
+      room={room}
+      id={roomId}
+      key={roomId}
+      userNametag={this.props.userNametags[roomId]}
+      addUserNametag={this.props.addUserNametag}
+      getUserNametag={this.props.getUserNametag}
+      watchNametag={this.props.watchNametag}
+      unWatchNametag={this.props.unWatchNametag}/>
   }
 
   render() {
     return <div id={style.roomSelection}>
         <Navbar user={this.props.user} dispatch={this.context.dispatch}/>
         <div id={style.roomCards}>
-          {this.showRoomCards(this.props.rooms)}
+          {Object.keys(this.props.rooms).map(this.mapRoomCards)}
         </div>
       </div>
   }
@@ -52,12 +55,12 @@ RoomCards.propTypes = {
   rooms: PropTypes.object.isRequired,
 }
 
-RoomCards.contextTypes = {
-  dispatch: React.PropTypes.func,
+RoomCards.childContextTypes = {
+  user: PropTypes.object,
 }
 
-RoomCards.childContextTypes = {
-  user: React.PropTypes.object,
+RoomCards.contextTypes = {
+  dispatch: PropTypes.func,
 }
 
 export default RoomCards
