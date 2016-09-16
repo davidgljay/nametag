@@ -227,6 +227,29 @@ describe('Room reducer', () => {
     })
   })
 
+  describe('ADD_USER_NAMETAG', () => {
+    it('should add a user nametag to state', () => {
+      let newState = roomReducer({
+        1: {
+          title: 'Test Room',
+        },
+      },
+        {
+          type: constants.ADD_USER_NAMETAG,
+          room: 1,
+          nametag: {'name': 'Dinosaur'},
+        })
+      expect(newState).toEqual({
+        1: {
+          title: 'Test Room',
+          userNametag: {
+            name: 'Dinosaur',
+          },
+        },
+      })
+    })
+  })
+
   describe('UPDATE_USER_NAMETAG', () => {
     it('should add an arbitrary value to a user nametag', () => {
       let newState = roomReducer({
