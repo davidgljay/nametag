@@ -3,12 +3,12 @@ import Alert from '../Utils/Alert'
 import Certificate from '../Certificate/Certificate'
 import { DropTarget } from 'react-dnd'
 import { dragTypes } from '../../constants'
-import {addNametagCert, removeNametagCert, updateNametag} from '../../actions/RoomActions'
+import {addUserNametagCert, removeUserNametagCert, updateUserNametag} from '../../actions/UserNametagActions'
 import style from '../../../styles/Nametag/EditNametag.css'
 
 const nametagTarget = {
   drop(props, monitor) {
-    props.dispatch(addNametagCert(monitor.getItem(), props.room))
+    props.dispatch(addUserNametagCert(monitor.getItem(), props.room))
   },
 }
 
@@ -29,7 +29,7 @@ class EditNametag extends Component {
   }
 
   componentWillMount() {
-    this.props.dispatch(updateNametag(
+    this.props.dispatch(updateUserNametag(
         this.props.room,
         'room',
         this.props.room
@@ -39,7 +39,7 @@ class EditNametag extends Component {
 
   updateNametagProperty(property) {
     return (e) => {
-      this.props.dispatch(updateNametag(
+      this.props.dispatch(updateUserNametag(
         this.props.room,
         property,
         e.target.value
@@ -49,7 +49,7 @@ class EditNametag extends Component {
   }
 
   removeCert(cert) {
-    this.props.dispatch(removeNametagCert(cert, this.props.room))
+    this.props.dispatch(removeUserNametagCert(cert, this.props.room))
   }
 
   render() {
