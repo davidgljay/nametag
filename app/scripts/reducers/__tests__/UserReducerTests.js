@@ -31,5 +31,4 @@ describe('User reducer', () => {
       expect(newState).toEqual(false)
     })
   })
-
 })
