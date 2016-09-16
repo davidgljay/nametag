@@ -52,20 +52,20 @@ export function putUserNametag(room, user, nametag) {
 *   none
 */
 export function getUserNametag(room, user) {
-  return () => {
+  return (dispatch) => {
     return new Promise((resolve, reject) => {
       hz('user_nametags').findAll({user}).fetch().subscribe((userNametags) => {
         let userNametag = null
         for (let i = 0; i < userNametags.length; i++) {
           if (userNametags[i].room === room) {
-            userNametag = userNametags[i]
+            userNametag = userNametags[i].nametag
           }
         }
         if (userNametag) {
-          resolve(userNametags[0])
-        } else {
-          resolve(null)
+          dispatch(updateUserNametag(room, 'id', userNametag))
         }
+        dispatch(updateUserNametag(room, 'room', room))
+        resolve(userNametag)
       }, reject)
     }).catch(errorLog('Getting user nametag'))
   }
