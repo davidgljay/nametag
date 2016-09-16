@@ -2,13 +2,16 @@ jest.unmock('../Reactions')
 
 import React from 'react'
 import Reactions from '../Reactions'
-import renderer from 'react-test-renderer'
 
 
 describe('Reactions component', () => {
+  let component
+  beforeEach(() => {
+    component = new Reactions()
+  })
+
   describe('reactionsToArray', () => {
     it('should transform reactions to an array', () => {
-      const reactionsToArray = new Reactions().reactionsToArray
       const reactionsObj = {
         '1': {
           emoji: '100',
@@ -20,14 +23,14 @@ describe('Reactions component', () => {
           emoji: 'thumbs_up',
         },
       }
-      const reactionsArray = reactionsToArray(reactionsObj)
+      const reactionsArray = component.reactionsToArray(reactionsObj)
       expect(reactionsArray).toEqual([
         {
-          emoji: '100',
+          name: '100',
           count: 2,
         },
         {
-          emoji: 'thumbs_up',
+          name: 'thumbs_up',
           count: 1,
         },
       ])
