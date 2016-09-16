@@ -52,7 +52,7 @@ export function getUser() {
 *   none
 *
 * @returns
-*   none
+*   Function which accepts dispatch and logs the user out.
 */
 export function logout() {
   return (dispatch) => {
@@ -63,7 +63,7 @@ export function logout() {
 
 
 /*
-* Adds a record linking a nametag to the user's account
+* Puts a record linking a nametag to the user's account
 *
 *@params
 *   room -The id of the room that the nametag appears in
@@ -71,15 +71,33 @@ export function logout() {
 *   nametag - The id of the nametag
 *
 * @returns
-*   none
+*   Promise resolving to nametag id
 */
-export function addUserNametag(room, user, nametag) {
+export function putUserNametag(room, user, nametag) {
   return () => {
     return new Promise((resolve, reject) => {
       hz('user_nametags').insert({room, user, nametag}).subscribe((id) => {
         resolve(id)
       }, reject)
-    }).catch(errorLog('Adding user nametag'))
+    }).catch(errorLog('Putting user nametag'))
+  }
+}
+
+/*
+* Adds a user nametag to the redux store
+*
+*@params
+*   room -The id of the room that the nametag appears in
+*   nametag - The complete nametag to be stored
+*
+* @returns
+*   Action object
+*/
+export function addUserNametag(room, nametag) {
+  return {
+    type: constants.ADD_USER_NAMETAG,
+    room: room,
+    nametag: nametag,
   }
 }
 
@@ -103,18 +121,10 @@ export function getUserNametag(room, user) {
           }
         }
         if (userNametag) {
-          dispatch({
-            type: constants.ADD_USER_NAMETAG,
-            room: userNametags[0].room,
-            nametag: userNametags[0].nametag,
-          })
+          dispatch(addUserNametag(userNametags[0].room, userNametags[0].nametag))
           resolve(userNametags[0])
         } else {
-          dispatch({
-            type: constants.ADD_USER_NAMETAG,
-            room: room,
-            nametag: null,
-          })
+          dispatch(addUserNametag(room, null))
           resolve(null)
         }
       }, reject)

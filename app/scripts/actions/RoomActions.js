@@ -2,7 +2,7 @@ import {hz} from '../api/horizon'
 import errorLog from '../utils/errorLog'
 import constants from '../constants'
 import {addNametag, putNametag} from './NametagActions'
-import {addUserNametag} from './UserActions'
+import {putUserNametag} from './UserActions'
 
 let roomWatches = {}
 let roomSubscription
@@ -166,7 +166,7 @@ export function joinRoom(roomId, nametag, userId) {
       .then((id) => {
         nametagId = id
         dispatch(addNametag(nametag, id, nametag.room))
-        return dispatch(addUserNametag(roomId, userId, id))
+        return dispatch(putUserNametag(roomId, userId, id))
       })
       .then(() => {
         return nametagId

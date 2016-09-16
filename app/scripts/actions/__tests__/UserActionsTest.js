@@ -31,14 +31,14 @@ describe('User Actions', () => {
   })
 
   describe('getUser', () => {
-    it('should return info if a user is logged in', (done) => {
+    it('should return info if a user is logged in', () => {
       getAuth.mockReturnValue(
         new Promise((resolve) =>
           resolve({id: 1, data: {stuff: 'things'}})
           )
         )
 
-      actions.getUser()(store.dispatch, store.getState).then(
+      return actions.getUser()(store.dispatch, store.getState).then(
         () => {
           expect(store.getActions()[0]).toEqual(
             {
@@ -46,21 +46,17 @@ describe('User Actions', () => {
               data: {stuff: 'things'},
               id: 1,
             })
-          done()
         })
     })
 
-    it('should take no action if user is not logged in', (done) => {
+    it('should take no action if user is not logged in', () => {
       getAuth.mockReturnValue(
-        new Promise((resolve) =>
-          resolve(false)
-          )
+          Promise.resolve(false)
         )
 
-      actions.getUser()(store.dispatch, store.getState).then(
+      return actions.getUser()(store.dispatch, store.getState).then(
         () => {
           expect(store.getActions().length).toEqual(0)
-          done()
         })
     })
   })
@@ -82,11 +78,11 @@ describe('User Actions', () => {
     })
   })
 
-  describe('addUserNametag', () => {
+  describe('putUserNametag', () => {
     it('should add an entry to the user_nametags table', () => {
       let calls = []
       hz.mockReturnValue(mockHz({id: '123'}, calls)())
-      return actions.addUserNametag('abc', 'me', '456')().then((id) => {
+      return actions.putUserNametag('abc', 'me', '456')().then((id) => {
         expect(id).toEqual({id: '123'})
         expect(calls[1]).toEqual({
           type: 'insert',
@@ -104,12 +100,12 @@ describe('User Actions', () => {
     it('should get an entry for a room in the user_nametags table', () => {
       let calls = []
       hz.mockReturnValue(mockHz([{user: 'me', nametag: '456', room: 'abc'}], calls)())
-      return actions.getUserNametag('abc', 'me')(store.dispatch).then((user_nametag) => {
-        expect(user_nametag).toEqual({user: 'me', nametag: '456', room: 'abc'})
+      return actions.getUserNametag('abc', 'me')(store.dispatch).then((userNametag) => {
+        expect(userNametag).toEqual({user: 'me', nametag: '456', room: 'abc'})
         expect(calls[1]).toEqual({
           type: 'findAll',
           req: {
-            room: 'abc',
+            user: 'me',
           },
         })
         expect(store.getActions()[0]).toEqual({
