@@ -27,7 +27,8 @@ export function watchNametag(nametagId) {
       nametagSubscriptions[nametagId] = hz('nametags').find(nametagId).watch().subscribe(
         (nametag) => {
           if (nametag) {
-            resolve(dispatch(addNametag(nametag, nametag.id)))
+            dispatch(addNametag(nametag, nametag.id))
+            resolve(nametag)
           } else {
             reject('Nametag not found')
           }

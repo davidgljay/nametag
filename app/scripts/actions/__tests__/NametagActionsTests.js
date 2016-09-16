@@ -34,11 +34,12 @@ describe('Nametag Actions', () => {
   })
 
 // Consider renaming to get or fetch, need to define a convention
-  describe('subscribe', () => {
-    it('should find to a single nametag', (done) => {
+  describe('watchNametag', () => {
+    it('should find to a single nametag', () => {
       hz.mockReturnValue(mockHz({id: 1, room: 'abc'}, calls)())
-      actions.subscribe(1)(store.dispatch).then(
-        () => {
+      return actions.watchNametag(1)(store.dispatch).then(
+        (nametag) => {
+          expect(nametag).toEqual({id: 1, room: 'abc'})
           expect(calls[1]).toEqual({type: 'find', req: 1})
           expect(calls[2].type).toEqual('watch')
           expect(store.getActions()[0]).toEqual(
@@ -47,19 +48,18 @@ describe('Nametag Actions', () => {
               nametag: {id: 1, room: 'abc'},
               id: 1,
             })
-          done()
         })
     })
   })
 
   describe('watchRoomNametags', () => {
-    it('should fetch a list of nametags from a room', (done) => {
+    it('should fetch a list of nametags from a room', () => {
       let results = [
         {name: 'tag', room: 'abc', id: '123'},
         {name: 'tag2', room: 'abc', id: '456'},
       ]
       hz.mockReturnValue(mockHz(results, calls)())
-      actions.watchRoomNametags('abc')(store.dispatch).then(
+      return actions.watchRoomNametags('abc')(store.dispatch).then(
         () => {
           expect(calls[1]).toEqual({type: 'findAll', req: {room: 'abc'}})
           expect(calls[2]).toEqual({type: 'watch', req: undefined})
@@ -73,17 +73,16 @@ describe('Nametag Actions', () => {
             id: '456',
             nametag: results[1],
           })
-          done()
         })
     })
   })
 })
 
 describe('putNametag', () => {
-  it('should add an entry to the nametags table', (done) => {
+  it('should add an entry to the nametags table', () => {
     let calls = []
     hz.mockReturnValue(mockHz({id: '123'}, calls)())
-    actions.putNametag({name: 'tag'})().then((id) => {
+    return actions.putNametag({name: 'tag'})().then((id) => {
       expect(id).toEqual('123')
       expect(calls[1]).toEqual({
         type: 'upsert',
@@ -91,7 +90,6 @@ describe('putNametag', () => {
           name: 'tag',
         },
       })
-      done()
     })
   })
 })
