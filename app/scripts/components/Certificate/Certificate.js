@@ -46,7 +46,8 @@ class Certificate extends Component {
     }
     let certificate
     if (this.state.expanded) {
-      certificate = <Card shadow={1} className={style.certificateExpanded}>
+      certificate = <div>
+        <Card shadow={1} className={style.certificateExpanded}>
             <CardMenu>
               <Icon name="close" className={style.close} onClick={this.toggleExpanded}/>
             </CardMenu>
@@ -73,11 +74,16 @@ class Certificate extends Component {
               })}
             </div>
           </Card>
+        </div>
     } else {
       certificate = <div
       style={styles.certificateChip}
         onClick={this.toggleExpanded}>
-         <div style={Object.assign({}, styles.miniIcon, {background: 'url(' + this.props.certificate.icon_array[0] + ') 0 0 / cover'})}/>
+        {
+          this.props.certificate.icon_array ?
+           <div style={Object.assign({}, styles.miniIcon, {background: 'url(' + this.props.certificate.icon_array[0] + ') 0 0 / cover'})}/>
+           : <div style={styles.spacer}/>
+        }
          <div style={styles.chipText}>{this.props.certificate.name}</div>
       </div>
     }
@@ -115,7 +121,7 @@ const styles = {
     height: 22,
     width: 22,
     borderRadius: 11,
-    marginRight: 8,
+    marginRight: 4,
     fontSize: 12,
     display: 'inline-block',
     lineHeight: '22px',
@@ -124,6 +130,11 @@ const styles = {
   chipText: {
     display: 'inline-block',
     paddingRight: 10,
+  },
+  spacer: {
+    width: 10,
+    height: 10,
+    display: 'inline-block',
   },
 
 }
