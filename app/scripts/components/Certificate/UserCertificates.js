@@ -27,6 +27,9 @@ class UserCertificates extends Component {
             this.context.user.data.certificates &&
             this.context.user.data.certificates
             .filter((certificateId) => {
+              if (!this.props.selectedCerts) {
+                return true
+              }
               let selected = false
               this.props.selectedCerts.reduce((prev, cert) => {
                 if (cert.id === certificateId) {
