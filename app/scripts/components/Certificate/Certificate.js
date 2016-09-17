@@ -3,6 +3,7 @@ import moment from '../../../bower_components/moment/moment'
 import { dragTypes } from '../../constants'
 import { DragSource } from 'react-dnd'
 import style from '../../../styles/Certificate/Certificate.css'
+import { Card, Icon, CardMenu, Grid, Cell } from 'react-mdl'
 
 // TODO: This currently displays all user certificates, as opposed to only the participant certificates. A major violation of trust!
 
@@ -43,32 +44,42 @@ class Certificate extends Component {
       return null
     }
     let certificate
-    let icon = ''
-    if (this.props.certificate.icon_array) {
-      icon = <img className={style.icon} alt="icon" src={this.props.certificate.icon_array[0]}/>
-    }
     if (this.state.expanded) {
-      certificate = <div className={style.certificateExpanded}>
-      <span className={style.close + ' glyphicon glyphicon-remove'} onClick={this.toggleExpanded.bind(this)} aria-hidden="true"/>
-            { icon }
-            <div className={style.name}>{this.props.certificate.name}</div>
-            <div className={style.granter}>Verified by: {this.props.certificate.granter}</div>
+      certificate = <Card shadow={1} className={style.certificateExpanded}>
+            <CardMenu>
+              <Icon name="close" style={close} onClick={this.toggleExpanded.bind(this)}/>
+            </CardMenu>
+            <div className={style.cardHeader}>
+              <div>
+                {
+                  this.props.certificate.icon_array &&
+                  <img className={style.icon} alt="icon" src={this.props.certificate.icon_array[0]}/>
+                }
+              </div>
+              <div>
+                <div className={style.name}>{this.props.certificate.name}</div>
+                <div className={style.granter}>Verified by: <br/>{this.props.certificate.granter}</div>
+              </div>
+            </div>
             <div className={style.description}>{this.props.certificate.description_array[0]}</div>
             <hr/>
             <div className={style.notes}>
               {this.props.certificate.notes.map(function mapNotes(note) {
                  return <div className={style.note} key={note.date}>
-                    <div className={style.date}>{moment(note.date).format('MMMM Do, YYYY')}: </div>
-                    <div className={style.msg}>{note.msg}</div>
+                    <div className={style.date}>{moment(note.date).format('MMMM Do, YYYY')}:</div>
+                    <div className={style.msg}>{' ' + note.msg}</div>
                   </div>
               })}
             </div>
-          </div>
+          </Card>
     } else {
       certificate = <div
         className={style.certificate}
         onClick={this.toggleExpanded.bind(this)}>
-          {this.props.certificate.name}
+          {
+          this.props.certificate.icon_array &&
+          <img className={style.miniIcon} src={this.props.certificate.icon_array[0]}/>
+          }
         </div>
     }
 
