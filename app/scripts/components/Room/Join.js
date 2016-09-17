@@ -32,7 +32,8 @@ class Join extends Component {
               Click to view your certificates.<br/>
               Drag them over to show them in this conversation.
             </p>
-            <UserCertificates/>
+            <UserCertificates
+              selectedCerts = {this.props.userNametag.certificates}/>
           </div>
           <br/>
           <button
