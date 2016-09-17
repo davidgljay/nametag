@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import moment from '../../../bower_components/moment/moment'
 import { dragTypes } from '../../constants'
 import { DragSource } from 'react-dnd'
-import style from '../../../styles/Certificate/Certificate.css'
 import { Card, Icon, CardMenu } from 'react-mdl'
 
 // TODO: This currently displays all user certificates, as opposed to only the participant certificates. A major violation of trust!
@@ -113,7 +112,7 @@ const styles = {
     borderRadius: 11,
     display: 'inline-block',
     background: '#dedede',
-    marginRight: 8,
+    margin: 8,
     fontSize: 12,
     lineHeight: '22px',
     cursor: 'pointer',
