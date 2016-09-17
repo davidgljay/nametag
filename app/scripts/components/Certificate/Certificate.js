@@ -3,7 +3,7 @@ import moment from '../../../bower_components/moment/moment'
 import { dragTypes } from '../../constants'
 import { DragSource } from 'react-dnd'
 import style from '../../../styles/Certificate/Certificate.css'
-import { Card, Icon, CardMenu, Grid, Cell } from 'react-mdl'
+import { Card, Icon, CardMenu } from 'react-mdl'
 
 // TODO: This currently displays all user certificates, as opposed to only the participant certificates. A major violation of trust!
 
@@ -33,6 +33,7 @@ class Certificate extends Component {
     this.state = {
       expanded: false,
     }
+    this.toggleExpanded = this.toggleExpanded.bind(this)
   }
 
   toggleExpanded() {
@@ -47,7 +48,7 @@ class Certificate extends Component {
     if (this.state.expanded) {
       certificate = <Card shadow={1} className={style.certificateExpanded}>
             <CardMenu>
-              <Icon name="close" style={close} onClick={this.toggleExpanded.bind(this)}/>
+              <Icon name="close" className={style.close} onClick={this.toggleExpanded}/>
             </CardMenu>
             <div className={style.cardHeader}>
               <div>
@@ -58,7 +59,7 @@ class Certificate extends Component {
               </div>
               <div>
                 <div className={style.name}>{this.props.certificate.name}</div>
-                <div className={style.granter}>Verified by: <br/>{this.props.certificate.granter}</div>
+                <div className={style.granter}><em>Verified by: </em><br/>{this.props.certificate.granter}</div>
               </div>
             </div>
             <div className={style.description}>{this.props.certificate.description_array[0]}</div>
@@ -66,21 +67,19 @@ class Certificate extends Component {
             <div className={style.notes}>
               {this.props.certificate.notes.map(function mapNotes(note) {
                  return <div className={style.note} key={note.date}>
-                    <div className={style.date}>{moment(note.date).format('MMMM Do, YYYY')}:</div>
-                    <div className={style.msg}>{' ' + note.msg}</div>
+                    <div className={style.date}>{moment(note.date).format('MMMM Do, YYYY')}</div>
+                    <div className={style.msg}>{': ' + note.msg}</div>
                   </div>
               })}
             </div>
           </Card>
     } else {
       certificate = <div
-        className={style.certificate}
-        onClick={this.toggleExpanded.bind(this)}>
-          {
-          this.props.certificate.icon_array &&
-          <img className={style.miniIcon} src={this.props.certificate.icon_array[0]}/>
-          }
-        </div>
+      style={styles.certificateChip}
+        onClick={this.toggleExpanded}>
+         <div style={Object.assign({}, styles.miniIcon, {background: 'url(' + this.props.certificate.icon_array[0] + ') 0 0 / cover'})}/>
+         <div style={styles.chipText}>{this.props.certificate.name}</div>
+      </div>
     }
 
     //Make some certificates draggable
@@ -100,3 +99,31 @@ Certificate.propTypes = {
 }
 
 export default DragSource(dragTypes.certificate, certSource, collect)(Certificate)
+
+const styles = {
+  certificateChip: {
+    height: 22,
+    borderRadius: 11,
+    display: 'inline-block',
+    background: '#dedede',
+    marginRight: 8,
+    fontSize: 12,
+    lineHeight: '22px',
+    cursor: 'pointer',
+  },
+  miniIcon: {
+    height: 22,
+    width: 22,
+    borderRadius: 11,
+    marginRight: 8,
+    fontSize: 12,
+    display: 'inline-block',
+    lineHeight: '22px',
+    verticalAlign: 'top',
+  },
+  chipText: {
+    display: 'inline-block',
+    paddingRight: 10,
+  },
+
+}
