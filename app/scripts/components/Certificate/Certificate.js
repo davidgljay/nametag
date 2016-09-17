@@ -47,29 +47,29 @@ class Certificate extends Component {
     let certificate
     if (this.state.expanded) {
       certificate = <div>
-        <Card shadow={1} className={style.certificateExpanded}>
-            <CardMenu>
-              <Icon name="close" className={style.close} onClick={this.toggleExpanded}/>
+        <Card shadow={1} style={styles.certificateExpanded}>
+            <CardMenu style={styles.closeMenu}>
+              <Icon name="close" style={styles.close} onClick={this.toggleExpanded}/>
             </CardMenu>
-            <div className={style.cardHeader}>
+            <div style={styles.cardHeader}>
               <div>
                 {
                   this.props.certificate.icon_array &&
-                  <img className={style.icon} alt="icon" src={this.props.certificate.icon_array[0]}/>
+                  <img style={styles.icon} alt="icon" src={this.props.certificate.icon_array[0]}/>
                 }
               </div>
               <div>
-                <div className={style.name}>{this.props.certificate.name}</div>
-                <div className={style.granter}><em>Verified by: </em><br/>{this.props.certificate.granter}</div>
+                <div style={styles.name}>{this.props.certificate.name}</div>
+                <div style={styles.granter}><em>Verified by: </em><br/>{this.props.certificate.granter}</div>
               </div>
             </div>
-            <div className={style.description}>{this.props.certificate.description_array[0]}</div>
+            <div style={styles.description}>{this.props.certificate.description_array[0]}</div>
             <hr/>
-            <div className={style.notes}>
+            <div style={styles.notes}>
               {this.props.certificate.notes.map(function mapNotes(note) {
-                 return <div className={style.note} key={note.date}>
-                    <div className={style.date}>{moment(note.date).format('MMMM Do, YYYY')}</div>
-                    <div className={style.msg}>{': ' + note.msg}</div>
+                 return <div style={styles.note} key={note.date}>
+                    <div style={styles.date}>{moment(note.date).format('MMMM Do, YYYY')}</div>
+                    <div style={styles.msg}>{': ' + note.msg}</div>
                   </div>
               })}
             </div>
@@ -77,7 +77,8 @@ class Certificate extends Component {
         </div>
     } else {
       certificate = <div
-      style={styles.certificateChip}
+        style={styles.certificateChip}
+        className="mdl-shadow--2dp"
         onClick={this.toggleExpanded}>
         {
           this.props.certificate.icon_array ?
@@ -136,5 +137,55 @@ const styles = {
     height: 10,
     display: 'inline-block',
   },
-
+  certificate: {
+    marginLeft: 5,
+    marginBottom: 5,
+    cursor: 'pointer',
+    display: 'inline-block',
+    userSelect: 'none',
+    textAlign: 'left',
+  },
+  certificateExpanded: {
+    margin: 5,
+    marginTop: 30,
+    padding: 10,
+    width: '96%',
+    minHeight: 100,
+    borderRadius: 11,
+    background: '#dedede',
+  },
+  closeMenu: {
+    top: 10,
+    right: 10,
+  },
+  cardHeader: {
+    display: 'flex',
+    flexBasis: 'auto',
+  },
+  close: {
+    fontSize: 18,
+    cursor: 'pointer',
+  },
+  icon: {
+    width: 50,
+    height: 50,
+    marginRight: 20,
+  },
+  name: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  granter: {
+    fontSize: 12,
+  },
+  description: {
+    textAlign: 'left',
+  },
+  note: {
+    fontSize: 12,
+  },
+  date: {
+    fontStyle: 'italic',
+    float: 'left',
+  },
 }
