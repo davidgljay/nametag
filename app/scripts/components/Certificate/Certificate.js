@@ -75,8 +75,12 @@ class Certificate extends Component {
           </Card>
         </div>
     } else {
+      let chipStyle = styles.certificateChip
+      if (this.props.isDragging) {
+        chipStyle = Object.assign({}, styles.certificateChip, {display: 'none'})
+      }
       certificate = <div
-        style={styles.certificateChip}
+        style={chipStyle}
         className="mdl-shadow--2dp"
         onClick={this.toggleExpanded}>
         {
@@ -106,16 +110,17 @@ Certificate.propTypes = {
 
 export default DragSource(dragTypes.certificate, certSource, collect)(Certificate)
 
-const styles = {
+let styles = {
   certificateChip: {
     height: 22,
     borderRadius: 11,
     display: 'inline-block',
     background: '#dedede',
-    margin: 8,
+    margin: 4,
     fontSize: 12,
     lineHeight: '22px',
     cursor: 'pointer',
+    userSelect: 'none',
   },
   miniIcon: {
     height: 22,
@@ -136,14 +141,6 @@ const styles = {
     height: 10,
     display: 'inline-block',
   },
-  certificate: {
-    marginLeft: 5,
-    marginBottom: 5,
-    cursor: 'pointer',
-    display: 'inline-block',
-    userSelect: 'none',
-    textAlign: 'left',
-  },
   certificateExpanded: {
     margin: 5,
     marginTop: 30,
@@ -152,6 +149,7 @@ const styles = {
     minHeight: 100,
     borderRadius: 11,
     background: '#dedede',
+    textAlign: 'left',
   },
   closeMenu: {
     top: 10,
