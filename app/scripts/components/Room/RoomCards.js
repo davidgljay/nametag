@@ -2,10 +2,16 @@
 
 import React, {Component, PropTypes} from 'react'
 import RoomCard from './RoomCard'
+import CreateRoom from './CreateRoom'
 import Navbar from '../Utils/Navbar'
 import {subscribe, unsubscribe} from '../../actions/RoomActions'
 import style from '../../../styles/RoomCard/RoomCards.css'
 
+const styles = {
+  fab: {
+    position: 'absolute',
+  },
+}
 
 class RoomCards extends Component {
 
@@ -45,6 +51,7 @@ class RoomCards extends Component {
     return <div id={style.roomSelection}>
         <Navbar user={this.props.user} dispatch={this.context.dispatch}/>
         <div id={style.roomCards}>
+          <CreateRoom/>
           {Object.keys(this.props.rooms).map(this.mapRoomCards)}
         </div>
       </div>
