@@ -3,6 +3,7 @@ import errorLog from '../utils/errorLog'
 import constants from '../constants'
 import {addNametag, putNametag} from './NametagActions'
 import {putUserNametag} from './UserNametagActions'
+import {fetchUrl} from 'fetch'
 
 let roomWatches = {}
 let roomSubscription
@@ -181,6 +182,30 @@ export function watchRoom(id) {
 export function unWatchRoom(id) {
   return () => {
     roomWatches[id].unsubscribe()
+  }
+}
+
+/*
+* Search Images
+* @params
+*   searchString
+*
+* @returns
+*   Promise resolving to search string queries
+*/
+export function searchImage(query, startAt) {
+  return (dispatch) => {
+    return new Promise((resolve, reject) => {
+      const start = startAt ? '&start=' + startAt : ''
+      fetchUrl('https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/image_search?query='+ query + start
+        , (err, meta, body) => {
+          if (err) {
+            reject(err)
+            return
+          }
+          resolve(JSON.parse(JSON.parse(body)))
+        })
+    }).catch(errorLog('Searching for image'))
   }
 }
 
