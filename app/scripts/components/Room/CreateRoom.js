@@ -37,12 +37,12 @@ class CreateRoom extends Component {
   }
 
   render() {
-    // Todo add participant screen
+    // TODO: Add dynamic image loading
     return <div style={styles.container}>
       <Card shadow={1} style={styles.createRoomCard}>
         <Textfield
           style={styles.textfield}
-          onChanges={() => {}}
+          onChange={() => {}}
           label="What do you want to talk about?"/>
         <CardActions>
           <Button style={styles.button} colored ripple>Start a Conversation</Button>
