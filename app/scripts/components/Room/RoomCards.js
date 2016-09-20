@@ -2,7 +2,7 @@
 
 import React, {Component, PropTypes} from 'react'
 import RoomCard from './RoomCard'
-import CreateRoom from './CreateRoom'
+import ImageSearch from './ImageSearch'
 import Navbar from '../Utils/Navbar'
 import {subscribe, unsubscribe} from '../../actions/RoomActions'
 import style from '../../../styles/RoomCard/RoomCards.css'
@@ -51,7 +51,10 @@ class RoomCards extends Component {
     return <div id={style.roomSelection}>
         <Navbar user={this.props.user} dispatch={this.context.dispatch}/>
         <div id={style.roomCards}>
-          <CreateRoom/>
+          <ImageSearch
+            setRoomProp={this.props.setRoomProp}
+            searchImage={this.props.searchImage}
+            imageQuery={this.props.rooms.new && this.props.rooms.new.imageQuery}/>
           {Object.keys(this.props.rooms).map(this.mapRoomCards)}
         </div>
       </div>

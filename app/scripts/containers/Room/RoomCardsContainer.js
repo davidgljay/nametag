@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import component from '../../components/Room/RoomCards'
 import {addUserNametag, getUserNametag} from '../../actions/UserNametagActions'
 import {watchNametag, unWatchNametag} from '../../actions/NametagActions'
-import {subscribe, unsubscribe} from '../../actions/RoomActions'
+import {subscribe, unsubscribe, setRoomProp, searchImage} from '../../actions/RoomActions'
 
 const mapStateToProps = (state) => {
   return {
@@ -32,6 +32,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     unWatchNametag(nametagId) {
       return dispatch(unWatchNametag(nametagId))
+    },
+    setRoomProp(room, property, value) {
+      return dispatch(setRoomProp(room, property, value))
+    },
+    searchImage(query, start) {
+      return dispatch(searchImage(query, start))
     },
   }
 }
