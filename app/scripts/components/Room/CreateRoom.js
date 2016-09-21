@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react'
+import React from 'react'
 import { Card, CardActions, Textfield, Button } from 'react-mdl'
 
 const styles = {
@@ -17,39 +17,22 @@ const styles = {
   },
 }
 
-class CreateRoom extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      room: {
-        title: '',
-        description: '',
-        image: '',
-        mod: '',
-        badges: [],
-      },
-      mod: {
-        name: '',
-        bio: '',
-        badges: [],
-      },
-    }
-  }
-
-  render() {
+const CreateRoom = () => {
     // TODO: Add dynamic image loading
-    return <div style={styles.container}>
-      <Card shadow={1} style={styles.createRoomCard}>
-        <Textfield
-          style={styles.textfield}
-          onChange={() => {}}
-          label="What do you want to talk about?"/>
-        <CardActions>
-          <Button style={styles.button} colored ripple>Start a Conversation</Button>
-        </CardActions>
-      </Card>
-    </div>
-  }
+  return <div style={styles.container}>
+    <Card shadow={1} style={styles.createRoomCard}>
+      <Textfield
+        style={styles.textfield}
+        onChange={() => {}}
+        label="What do you want to talk about?"/>
+      <CardActions>
+        <Button
+          style={styles.button}
+          colored
+          ripple>Start a Conversation</Button>
+      </CardActions>
+    </Card>
+  </div>
 }
 
 export default CreateRoom
