@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import { Card, CardActions, Textfield, Button } from 'react-mdl'
+import { Card, CardTitle, CardActions, Textfield, Button } from 'react-mdl'
 import ImageSearch from './ImageSearch'
 
 const styles = {
@@ -8,15 +8,17 @@ const styles = {
     margin: 10,
     width: 'inherit',
     maxWidth: 620,
-    padding: '5px 20px 5px 20px',
   },
   textfield: {
-    width: '100%',
     fontSize: 24,
     border: 'none',
+    margin: '20px 10px',
   },
   button: {
     float: 'right',
+  },
+  mainImage: {
+    height: 300,
   },
 }
 
@@ -33,6 +35,7 @@ class CreateRoom extends Component {
       newRoom: false,
     }
     this.onNameChange = this.onNameChange.bind(this)
+    this.setImage = this.setImage.bind(this)
   }
 
   onNameChange(e) {
@@ -46,9 +49,21 @@ class CreateRoom extends Component {
     })
   }
 
+  setImage(image) {
+    return (e) => {
+      e.preventDefault()
+      this.setState({image: image})
+    }
+  }
+
   render() {
     return <div style={styles.container}>
       <Card shadow={1} style={styles.createRoomCard}>
+        {
+          this.state.image &&
+          <CardTitle
+            style={Object.assign({}, styles.mainImage, {background: 'url(' + this.state.image + ') center / cover'})}/>
+        }
         <input type="text"
           style={styles.textfield}
           onChange={this.onNameChange}
@@ -69,6 +84,7 @@ class CreateRoom extends Component {
           <ImageSearch
             searchImage={this.props.searchImage}
             setImageQuery={(e) => this.setState({imageQuery: e.target.value})}
+            setImage={this.setImage}
             imageQuery={this.state.imageQuery}/>
         }
       </Card>

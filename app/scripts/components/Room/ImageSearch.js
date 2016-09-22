@@ -1,10 +1,10 @@
 import React, {Component, PropTypes} from 'react'
-import { CardActions, Icon, Button, Spinner, Grid, Cell } from 'react-mdl'
+import { Card, Icon, Button, Spinner } from 'react-mdl'
 
 const styles = {
   button: {
     float: 'right',
-    marginLeft: 10,
+    margin: 10,
   },
   container: {
     marginTop: 10,
@@ -15,6 +15,7 @@ const styles = {
   searchContainer: {
     width: '100%',
     display: 'flex',
+    marginBottom: 10,
   },
   searchField: {
     borderRadius: 3,
@@ -27,15 +28,26 @@ const styles = {
   },
   thumbnail: {
     width: 150,
-    height: 150,
+    height: 100,
     objectFit: 'cover',
   },
-  thumnailContainer: {
-    margin: 5,
+  thumbnailContainer: {
+    margin: '10px 3px',
+    width: 150,
+    height: 100,
+    minHeight: 100,
+    cursor: 'pointer',
   },
   imagesContainer: {
     display: 'flex',
     flexFlow: 'row wrap',
+    justifyContent: 'space-between',
+  },
+  noResults: {
+    fontStyle: 'italic',
+    fontSize: 14,
+    color: '#999',
+    textAlign: 'center',
   },
 }
 
@@ -81,12 +93,18 @@ class ImageSearch extends Component {
   }
 
   prepImages(searchResults) {
-    console.log(searchResults)
     this.setState((prevState) => {
+      prevState.searched =  true
       prevState.loading = false
       prevState.totalResults = parseInt(searchResults.searchInformation.totalResults)
+      if (prevState.totalResults === 0) {
+        return prevState
+      }
       prevState.images = prevState.images.concat(searchResults.items.map((item) => {
-        return item.image.thumbnailLink
+        return {
+          thumbnail: item.image.thumbnailLink,
+          link: item.link,
+        }
       }))
       return prevState
     })
@@ -113,13 +131,17 @@ class ImageSearch extends Component {
           colored
           raised
           style={styles.button}
-          onClick={this.onSearchClick}>Find an Image</Button>
+          onClick={this.onSearchClick}>Find Image</Button>
       </div>
       <div style={styles.imagesContainer}>
-        {this.state.images.map((imageUrl, i) => {
-          return <div style={styles.thumnailContainer} key ={i}>
-            <img src={imageUrl} style={styles.thumbnail}/>
-            </div>
+        {this.state.images.map((image, i) => {
+          return <Card
+            shadow={1}
+            style={styles.thumbnailContainer}
+            key ={i}
+            onClick={this.props.setImage(image.link)}>
+            <img src={image.thumbnail} style={styles.thumbnail}/>
+            </Card>
         })}
       </div>
       {
@@ -127,6 +149,11 @@ class ImageSearch extends Component {
         <div style={styles.spinnerDiv}>
           <Spinner />
         </div>
+      }
+      {
+        this.state.searched &&
+        this.state.images.length === 0 &&
+        <div style={styles.noResults}>No results found, please try again.</div>
       }
       <div id='scrollBottom'/>
     </div>
