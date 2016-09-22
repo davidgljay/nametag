@@ -194,16 +194,24 @@ export function unWatchRoom(id) {
 *   Promise resolving to search string queries
 */
 export function searchImage(query, startAt) {
-  return (dispatch) => {
+  return () => {
     return new Promise((resolve, reject) => {
       const start = startAt ? '&start=' + startAt : ''
-      fetchUrl('https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/image_search?query='+ query + start
+      fetchUrl('https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/image_search?query=' + query + start
         , (err, meta, body) => {
           if (err) {
             reject(err)
             return
           }
-          resolve(JSON.parse(JSON.parse(body)))
+          if (meta.status !== 200) {
+            reject(meta.status)
+          }
+          try {
+            resolve(JSON.parse(JSON.parse(body)))
+          } catch (error) {
+            console.log(JSON.parse(body))
+            reject('Error parsing JSON for ' + query + ',' + startAt)
+          }
         })
     }).catch(errorLog('Searching for image'))
   }
