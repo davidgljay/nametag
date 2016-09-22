@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import { Card, Icon, Button, Spinner } from 'react-mdl'
+import { Card, Textfield, Icon, Button, Spinner } from 'react-mdl'
 
 const styles = {
   button: {
@@ -48,6 +48,7 @@ const styles = {
     fontSize: 14,
     color: '#999',
     textAlign: 'center',
+    paddingBottom: 10,
   },
 }
 
@@ -122,9 +123,9 @@ class ImageSearch extends Component {
   render() {
     return <div style={styles.container}>
       <div style={styles.searchContainer}>
-        <input type='text'
+        <Textfield
           onChange={this.props.setImageQuery}
-          placeholder='Image search...'
+          label='Image search...'
           value={this.props.imageQuery}
           style={styles.searchField}/>
         <Button
