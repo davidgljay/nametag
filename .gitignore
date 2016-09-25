@@ -3,7 +3,7 @@
 .sass-cache/
 /app/bower_components/
 ./config.js
-/.hz/config.toml
+/.hz/secrets.toml
 /.keys/
 ./npm-debug.log
 /rethinkdb_data/

@@ -1,7 +1,7 @@
 sleep 7
 
 echo 'Syncing schema'
-hz set-schema /usr/app/.hz/permissions_schema.toml --connect rethinkdb:28015
+hz schema apply /usr/app/.hz/schema.toml --connect rethinkdb
 
 echo 'Starting horizon'
-hz serve --connect rethinkdb:28015 --bind all /usr/app
+hz serve --connect rethinkdb --bind all /usr/app

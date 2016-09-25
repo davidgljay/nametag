@@ -25,7 +25,20 @@ class UserCertificates extends Component {
             this.context.user &&
             this.context.user.data &&
             this.context.user.data.certificates &&
-            this.context.user.data.certificates.map(function mapCertificates(certificateId) {
+            this.context.user.data.certificates
+            .filter((certificateId) => {
+              if (!this.props.selectedCerts) {
+                return true
+              }
+              let selected = false
+              this.props.selectedCerts.reduce((prev, cert) => {
+                if (cert.id === certificateId) {
+                  selected = true
+                }
+              }, {})
+              return !selected
+            })
+            .map((certificateId) => {
               return <Certificate
                 id={certificateId}
                 key={certificateId}

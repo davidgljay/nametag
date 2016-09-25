@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import moment from '../../../bower_components/moment/moment'
 import { dragTypes } from '../../constants'
 import { DragSource } from 'react-dnd'
-import style from '../../../styles/Certificate/Certificate.css'
+import { Card, Icon, CardMenu } from 'react-mdl'
 
 // TODO: This currently displays all user certificates, as opposed to only the participant certificates. A major violation of trust!
 
@@ -32,6 +32,7 @@ class Certificate extends Component {
     this.state = {
       expanded: false,
     }
+    this.toggleExpanded = this.toggleExpanded.bind(this)
   }
 
   toggleExpanded() {
@@ -43,33 +44,52 @@ class Certificate extends Component {
       return null
     }
     let certificate
-    let icon = ''
-    if (this.props.certificate.icon_array) {
-      icon = <img className={style.icon} alt="icon" src={this.props.certificate.icon_array[0]}/>
-    }
     if (this.state.expanded) {
-      certificate = <div className={style.certificateExpanded}>
-      <span className={style.close + ' glyphicon glyphicon-remove'} onClick={this.toggleExpanded.bind(this)} aria-hidden="true"/>
-            { icon }
-            <div className={style.name}>{this.props.certificate.name}</div>
-            <div className={style.granter}>Verified by: {this.props.certificate.granter}</div>
-            <div className={style.description}>{this.props.certificate.description_array[0]}</div>
+      certificate = <div>
+        <Card shadow={1} style={styles.certificateExpanded}>
+            <CardMenu style={styles.closeMenu}>
+              <Icon name="close" style={styles.close} onClick={this.toggleExpanded}/>
+            </CardMenu>
+            <div style={styles.cardHeader}>
+              <div>
+                {
+                  this.props.certificate.icon_array &&
+                  <img style={styles.icon} alt="icon" src={this.props.certificate.icon_array[0]}/>
+                }
+              </div>
+              <div>
+                <div style={styles.name}>{this.props.certificate.name}</div>
+                <div style={styles.granter}><em>Verified by: </em><br/>{this.props.certificate.granter}</div>
+              </div>
+            </div>
+            <div style={styles.description}>{this.props.certificate.description_array[0]}</div>
             <hr/>
-            <div className={style.notes}>
+            <div style={styles.notes}>
               {this.props.certificate.notes.map(function mapNotes(note) {
-                 return <div className={style.note} key={note.date}>
-                    <div className={style.date}>{moment(note.date).format('MMMM Do, YYYY')}: </div>
-                    <div className={style.msg}>{note.msg}</div>
+                 return <div style={styles.note} key={note.date}>
+                    <div style={styles.date}>{moment(note.date).format('MMMM Do, YYYY')}</div>
+                    <div style={styles.msg}>{': ' + note.msg}</div>
                   </div>
               })}
             </div>
-          </div>
-    } else {
-      certificate = <div
-        className={style.certificate}
-        onClick={this.toggleExpanded.bind(this)}>
-          {this.props.certificate.name}
+          </Card>
         </div>
+    } else {
+      let chipStyle = styles.certificateChip
+      if (this.props.isDragging) {
+        chipStyle = Object.assign({}, styles.certificateChip, {display: 'none'})
+      }
+      certificate = <div
+        style={chipStyle}
+        className="mdl-shadow--2dp"
+        onClick={this.toggleExpanded}>
+        {
+          this.props.certificate.icon_array ?
+           <div style={Object.assign({}, styles.miniIcon, {background: 'url(' + this.props.certificate.icon_array[0] + ') 0 0 / cover'})}/>
+           : <div style={styles.spacer}/>
+        }
+         <div style={styles.chipText}>{this.props.certificate.name}</div>
+      </div>
     }
 
     //Make some certificates draggable
@@ -89,3 +109,80 @@ Certificate.propTypes = {
 }
 
 export default DragSource(dragTypes.certificate, certSource, collect)(Certificate)
+
+let styles = {
+  certificateChip: {
+    height: 22,
+    borderRadius: 11,
+    display: 'inline-block',
+    background: '#dedede',
+    margin: 4,
+    fontSize: 12,
+    lineHeight: '22px',
+    cursor: 'pointer',
+    userSelect: 'none',
+  },
+  miniIcon: {
+    height: 22,
+    width: 22,
+    borderRadius: 11,
+    marginRight: 4,
+    fontSize: 12,
+    display: 'inline-block',
+    lineHeight: '22px',
+    verticalAlign: 'top',
+  },
+  chipText: {
+    display: 'inline-block',
+    paddingRight: 10,
+  },
+  spacer: {
+    width: 10,
+    height: 10,
+    display: 'inline-block',
+  },
+  certificateExpanded: {
+    margin: 5,
+    marginTop: 30,
+    padding: 10,
+    width: '96%',
+    minHeight: 100,
+    borderRadius: 11,
+    background: '#dedede',
+    textAlign: 'left',
+  },
+  closeMenu: {
+    top: 10,
+    right: 10,
+  },
+  cardHeader: {
+    display: 'flex',
+    flexBasis: 'auto',
+  },
+  close: {
+    fontSize: 18,
+    cursor: 'pointer',
+  },
+  icon: {
+    width: 50,
+    height: 50,
+    marginRight: 20,
+  },
+  name: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  granter: {
+    fontSize: 12,
+  },
+  description: {
+    textAlign: 'left',
+  },
+  note: {
+    fontSize: 12,
+  },
+  date: {
+    fontStyle: 'italic',
+    float: 'left',
+  },
+}

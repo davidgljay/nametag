@@ -79,9 +79,14 @@ class RoomCard extends Component {
             <h3 onClick={this.flip.bind(this)}>{this.props.room.title}</h3>
             <div className={style.roomDesc}>
               {this.props.room.description}<br/>
-              <p className={style.nametagCount}>
-                {this.props.room.nametagCount} participant{this.props.room.nametagCount === 1 || 's'}
-              </p>
+              {
+                this.props.room.nametagCount &&
+                <p className={style.nametagCount}>
+                  {this.props.room.nametagCount} participant
+                  {this.props.room.nametagCount === 1 ? '' : 's'}
+                </p>
+              }
+
             </div>
             <hr></hr>
             <Nametag
@@ -89,8 +94,8 @@ class RoomCard extends Component {
               room={this.props.id}
               id={this.props.room.mod}
               mod={this.props.room.mod} />
-              </div>
-          </Card>
+          </div>
+        </Card>
 
     let back = <Card key='back' className={style.back} shadow={1}>
           <h3 onClick={this.flip.bind(this)}>{this.props.room.title}</h3>
