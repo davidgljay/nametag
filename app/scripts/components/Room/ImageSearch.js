@@ -42,6 +42,9 @@ const styles = {
     display: 'flex',
     flexFlow: 'row wrap',
     justifyContent: 'space-between',
+    margin: 5,
+    overflow: 'auto',
+    height: 300,
   },
   noResults: {
     fontStyle: 'italic',
@@ -77,9 +80,8 @@ class ImageSearch extends Component {
     const bottom = document.getElementById('scrollBottom')
     if (bottom && !this.state.loading &&
       this.state.images.length < this.state.totalResults &&
-      this.state.images.length + 10 < 100 &&
       this.scrolledToBottom(bottom)) {
-      this.loadMore(this.state.images.length - 1)
+      this.loadMore(Math.round(this.state.images.length / 50) + 1)
     }
   }
 
@@ -97,13 +99,13 @@ class ImageSearch extends Component {
     this.setState((prevState) => {
       prevState.searched =  true
       prevState.loading = false
-      prevState.totalResults = parseInt(searchResults.searchInformation.totalResults)
+      prevState.totalResults = parseInt(searchResults.total)
       if (prevState.totalResults === 0) {
         return prevState
       }
-      prevState.images = prevState.images.concat(searchResults.items.map((item) => {
+      prevState.images = prevState.images.concat(searchResults.photos.map((item) => {
         return {
-          thumbnail: item.image.thumbnailLink,
+          thumbnail: item.thumbnail,
           link: item.link,
         }
       }))
@@ -134,29 +136,32 @@ class ImageSearch extends Component {
           style={styles.button}
           onClick={this.onSearchClick}>Find Image</Button>
       </div>
-      <div style={styles.imagesContainer}>
-        {this.state.images.map((image, i) => {
-          return <Card
-            shadow={1}
-            style={styles.thumbnailContainer}
-            key ={i}
-            onClick={this.props.setImage(image.link)}>
-            <img src={image.thumbnail} style={styles.thumbnail}/>
-            </Card>
-        })}
-      </div>
       {
-        this.state.loading &&
-        <div style={styles.spinnerDiv}>
-          <Spinner />
+        (this.state.images.length > 0 || this.state.loading) &&
+        <div style={styles.imagesContainer}>
+          {this.state.images.map((image, i) => {
+            return <Card
+              shadow={1}
+              style={styles.thumbnailContainer}
+              key ={i}
+              onClick={this.props.setImage(image.link)}>
+              <img src={image.thumbnail} style={styles.thumbnail}/>
+              </Card>
+          })}
+          {
+            this.state.loading &&
+            <div style={styles.spinnerDiv}>
+              <Spinner />
+            </div>
+          }
+          {
+            this.state.searched &&
+            this.state.images.length === 0 &&
+            <div style={styles.noResults}>No results found, please try again.</div>
+          }
+          <div id='scrollBottom'/>
         </div>
       }
-      {
-        this.state.searched &&
-        this.state.images.length === 0 &&
-        <div style={styles.noResults}>No results found, please try again.</div>
-      }
-      <div id='scrollBottom'/>
     </div>
   }
 }
