@@ -1,5 +1,4 @@
 import React from 'react'
-import style from '../../../styles/Utils/Navbar.css'
 import {logout} from '../../actions/UserActions'
 import { Layout, Header, Navigation, Drawer } from 'react-mdl'
 
