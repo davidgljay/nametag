@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import Radium from 'radium'
 
 import Room from './containers/Room/RoomContainer'
 import RoomCards from './containers/Room/RoomCardsContainer'
@@ -56,7 +57,7 @@ Nametag.childContextTypes = {
   dispatch: PropTypes.func,
 }
 
-let NametagWithDragging = DragDropContext(HTML5Backend)(Nametag)
+const DecoratedNametag = Radium(DragDropContext(HTML5Backend)(Nametag))
 
-ReactDOM.render(<NametagWithDragging/>, mountNode)
+ReactDOM.render(<DecoratedNametag/>, mountNode)
 
