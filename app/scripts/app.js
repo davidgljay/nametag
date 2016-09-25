@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import Radium from 'radium'
+import Radium, {StyleRoot} from 'radium'
 
 import Room from './containers/Room/RoomContainer'
 import RoomCards from './containers/Room/RoomCardsContainer'
@@ -42,13 +42,15 @@ class Nametag extends Component {
 
   render() {
     return <Provider store={store}>
-      <MuiThemeProvider>
-        <Router history={hashHistory}>
-          <Route path="/" component={RoomCards} />
-          <Route path="/rooms" component={RoomCards}/>
-          <Route path="/rooms/:roomId" component={Room}/>
-        </Router>
-      </MuiThemeProvider>
+      <StyleRoot>
+        <MuiThemeProvider>
+          <Router history={hashHistory}>
+            <Route path="/" component={RoomCards} />
+            <Route path="/rooms" component={RoomCards}/>
+            <Route path="/rooms/:roomId" component={Room}/>
+          </Router>
+        </MuiThemeProvider>
+      </StyleRoot>
     </Provider>
   }
 }
