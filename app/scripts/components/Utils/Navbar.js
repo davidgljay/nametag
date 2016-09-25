@@ -1,24 +1,33 @@
 import React from 'react'
 import style from '../../../styles/Utils/Navbar.css'
 import {logout} from '../../actions/UserActions'
-import { Layout, Header, Navigation, Drawer } from 'react-mdl'
+import AppBar from 'material-ui/AppBar'
+import FlatButton from 'material-ui/FlatButton'
+import { indigo500 } from 'material-ui/styles/colors'
+
+const styles = {
+  appBar: {
+    fontWeight: 'bold',
+    background: indigo500,
+  },
+  button: {
+    color: '#fff',
+    marginTop: 13,
+  },
+}
 
 const Navbar = (props) => {
-  const navigation = <Navigation>
+  const auth = <div>
       {
       props.user && props.user.id ?
-        <a onClick={() => props.dispatch(logout())}>Log out</a>
-        : <a href='#'>Log In</a>
+        <FlatButton style={styles.button} onClick={() => props.dispatch(logout())}>LOG OUT</FlatButton>
+        : <FlatButton style={styles.button}>LOG IN</FlatButton>
       }
-    </Navigation>
-  return  <Layout fixedHeader={true}>
-    <Header title="Nametag" style={{color: 'white'}}>
-      {navigation}
-    </Header>
-    <Drawer title="Nametag">
-      {navigation}
-    </Drawer>
-  </Layout>
+    </div>
+  return  <AppBar
+    title="Nametag"
+    style = {styles.appBar}
+    iconElementRight={auth}/>
 }
 
 export default Navbar
