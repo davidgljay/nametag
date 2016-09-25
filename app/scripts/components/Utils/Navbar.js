@@ -12,7 +12,7 @@ const styles = {
   },
   button: {
     color: '#fff',
-    marginTop: 13,
+    marginTop: 6,
   },
 }
 

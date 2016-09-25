@@ -4,7 +4,80 @@ import Norms from '../Room/Norms'
 import Join from './Join'
 import constants from '../../constants'
 import style from '../../../styles/RoomCard/RoomCard.css'
+import {mobile} from '../../../styles/sizes'
 import {Card, CardTitle, CardMedia} from 'material-ui/Card'
+import {grey400} from 'material-ui/styles/colors'
+
+const styles = {
+  roomImage: {
+    verticalAlign: 'initial',
+    cursor: 'pointer',
+    width: 300,
+    height: 200,
+  },
+  roomCard: {
+    margin: 30,
+    paddingBottom: 30,
+    width: 300,
+    backfaceVisibility: 'hidden',
+    verticalAlign: 'top',
+    perspective: 1000,
+  },
+  flippingFront: {
+    animationName: 'flip-over',
+    animationDuration: 500,
+    animationFillMode: 'forwards',
+    transformStyle: 'preserve-3d',
+  },
+  flippingBack: {
+    animationName: 'flip-back',
+    animationDuration: 500,
+    animationFillMode: 'forwards',
+    transformStyle: 'preserve-3d',
+  },
+  front: {
+    backfaceVisibility: 'hidden',
+    zIndex: 2,
+    width: 300,
+    background: '#fff',
+  },
+  back: {
+    backfaceVisibility: 'hidden',
+    padding: '0px 20px 20px 20px',
+    textAlign: 'center',
+    width: 300,
+    zIndex: 0,
+    background: '#fff',
+  },
+  backFlipping: {
+    transform: 'rotateY(180deg)',
+    position: 'absolute',
+    minHeight: 800,
+    top: 0,
+    left: 0,
+  },
+  roomInfo: {
+    padding: 10,
+  },
+  greyText: {
+    textAlign: 'right',
+    fontSize: 11,
+    fontStyle: 'italic',
+    color: grey400,
+  },
+  ismod: {
+    marginBottom: 5,
+  },
+  modTitle: {
+    marginLeft: 5,
+    fontWeight: 'bold',
+    display: 'inline-block',
+  },
+  icon: {
+    float: 'left',
+    paddingRight: 10,
+  },
+}
 
 class RoomCard extends Component {
   constructor(props) {
@@ -68,13 +141,13 @@ class RoomCard extends Component {
     let card
     let flipping = ''
 
-    let front =  <Card key='front' className={style.front} shadow={1}>
+    let front =  <Card key='front' style={styles.front}>
           <CardMedia
             onClick={this.flip}>
             <img src={this.props.room.image}/>
           </CardMedia>
-          <div className={style.roomInfo}>
-            <div className={style.roomTime}>
+          <div style={styles.roomInfo}>
+            <div style={styles.roomTime}>
               <b>Started</b> 2 days ago | <b>Ends</b> in 1 week
             </div>
             <CardTitle
@@ -83,7 +156,7 @@ class RoomCard extends Component {
               {this.props.room.description}<br/>
               {
                 this.props.room.nametagCount &&
-                <p className={style.nametagCount}>
+                <p style={styles.nametagCount}>
                   {this.props.room.nametagCount} participant
                   {this.props.room.nametagCount === 1 ? '' : 's'}
                 </p>
@@ -92,20 +165,20 @@ class RoomCard extends Component {
             </div>
             <hr></hr>
             <Nametag
-              className={style.mod}
+              style={styles.mod}
               room={this.props.id}
               id={this.props.room.mod}
               mod={this.props.room.mod} />
         </Card>
 
-    let back = <Card key='back' className={style.back} shadow={1}>
+    let back = <Card key='back' style={styles.back}>
           <h3 onClick={this.flip.bind(this)}>{this.props.room.title}</h3>
-          <div className={style.norms}>
+          <div style={styles.norms}>
             <h4>Conversation Norms</h4>
             <Norms norms={this.props.room.norms} showChecks={true}/>
-            <label className={style.checkbox}>
+            <label>
               <input type="checkbox" onClick={this.onNormsCheck}/>
-              <span className={style.checkboxLabel} >I agree to abide by these norms</span>
+              <span>I agree to abide by these norms</span>
             </label>
           </div>
           <Join
@@ -125,7 +198,7 @@ class RoomCard extends Component {
       card = this.state.flipped ? back : front
     }
 
-    return <div className={style.roomCard + ' ' + flipping}>
+    return <div style={Object.assign({}, styles.roomCard, flipping)}>
         {card}
       </div>
   }
