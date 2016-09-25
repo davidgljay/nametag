@@ -16,6 +16,9 @@ import mainReducer from './reducers'
 
 import { Router, Route, Link, hashHistory } from 'react-router'
 
+import '../styles/animations.css'
+import '../styles/mdl-tweaks.css'
+
 const mountNode = document.getElementById('app')
 let store = createStore(mainReducer, compose(
     applyMiddleware(thunk),
