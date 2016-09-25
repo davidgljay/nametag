@@ -2,9 +2,9 @@ import React, { Component, PropTypes } from 'react'
 import Nametag from '../../containers/Nametag/NametagContainer'
 import Norms from '../Room/Norms'
 import Join from './Join'
-import style from '../../../styles/RoomCard/RoomCard.css'
 import constants from '../../constants'
-import {Card, CardTitle} from 'react-mdl'
+import style from '../../../styles/RoomCard/RoomCard.css'
+import {Card, CardTitle, CardMedia} from 'material-ui/Card'
 
 class RoomCard extends Component {
   constructor(props) {
@@ -69,15 +69,17 @@ class RoomCard extends Component {
     let flipping = ''
 
     let front =  <Card key='front' className={style.front} shadow={1}>
-          <CardTitle className={style.roomImage}
-            style={{background: 'url(' + this.props.room.image + ') center / cover'}}
-            onClick={this.flip}/>
+          <CardMedia
+            onClick={this.flip}>
+            <img src={this.props.room.image}/>
+          </CardMedia>
           <div className={style.roomInfo}>
             <div className={style.roomTime}>
               <b>Started</b> 2 days ago | <b>Ends</b> in 1 week
             </div>
-            <h3 onClick={this.flip.bind(this)}>{this.props.room.title}</h3>
-            <div className={style.roomDesc}>
+            <CardTitle
+              title={this.props.room.title}
+              onClick={this.flip.bind(this)}/>
               {this.props.room.description}<br/>
               {
                 this.props.room.nametagCount &&
@@ -94,7 +96,6 @@ class RoomCard extends Component {
               room={this.props.id}
               id={this.props.room.mod}
               mod={this.props.room.mod} />
-          </div>
         </Card>
 
     let back = <Card key='back' className={style.back} shadow={1}>
