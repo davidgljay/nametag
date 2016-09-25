@@ -3,14 +3,13 @@ import Nametag from '../../containers/Nametag/NametagContainer'
 import Norms from '../Room/Norms'
 import Join from './Join'
 import constants from '../../constants'
-import style from '../../../styles/RoomCard/RoomCard.css'
 import {mobile} from '../../../styles/sizes'
 import {Card, CardTitle, CardMedia} from 'material-ui/Card'
 import {grey400} from 'material-ui/styles/colors'
 
 const styles = {
   roomImage: {
-    verticalAlign: 'initial',
+    borderRadius: '2px 2px 0px 0px',
     cursor: 'pointer',
     width: 300,
     height: 200,
@@ -144,7 +143,9 @@ class RoomCard extends Component {
     let front =  <Card key='front' style={styles.front}>
           <CardMedia
             onClick={this.flip}>
-            <img src={this.props.room.image}/>
+            <img 
+            style={styles.roomImage}
+            src={this.props.room.image}/>
           </CardMedia>
           <div style={styles.roomInfo}>
             <div style={styles.roomTime}>

@@ -4,7 +4,6 @@ import React, {Component, PropTypes} from 'react'
 import RoomCard from './RoomCard'
 import Navbar from '../Utils/Navbar'
 import {subscribe, unsubscribe} from '../../actions/RoomActions'
-import style from '../../../styles/RoomCard/RoomCards.css'
 import {lightBlue200} from 'material-ui/styles/colors'
 
 const styles = {
@@ -57,7 +56,7 @@ class RoomCards extends Component {
   }
 
   render() {
-    return <div id={style.roomSelection}>
+    return <div>
         <Navbar user={this.props.user} dispatch={this.context.dispatch}/>
         <div style={styles.roomCards}>
           {Object.keys(this.props.rooms).map(this.mapRoomCards)}
