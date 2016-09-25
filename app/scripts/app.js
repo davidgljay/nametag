@@ -1,6 +1,8 @@
 
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 import Room from './containers/Room/RoomContainer'
 import RoomCards from './containers/Room/RoomCardsContainer'
@@ -15,6 +17,8 @@ import thunk from 'redux-thunk'
 import mainReducer from './reducers'
 
 import { Router, Route, Link, hashHistory } from 'react-router'
+
+injectTapEventPlugin()
 
 const mountNode = document.getElementById('app')
 let store = createStore(mainReducer, compose(
@@ -37,11 +41,13 @@ class Nametag extends Component {
 
   render() {
     return <Provider store={store}>
-      <Router history={hashHistory}>
-        <Route path="/" component={RoomCards} />
-        <Route path="/rooms" component={RoomCards}/>
-        <Route path="/rooms/:roomId" component={Room}/>
-      </Router>
+      <MuiThemeProvider>
+        <Router history={hashHistory}>
+          <Route path="/" component={RoomCards} />
+          <Route path="/rooms" component={RoomCards}/>
+          <Route path="/rooms/:roomId" component={Room}/>
+        </Router>
+      </MuiThemeProvider>
     </Provider>
   }
 }
