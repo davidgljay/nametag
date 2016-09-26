@@ -1,7 +1,35 @@
 import React, { Component, PropTypes } from 'react'
 import Certificates from '../Certificate/Certificates'
-import style from '../../../styles/Nametag/Nametag.css'
-import { Icon, Tooltip } from 'react-mdl' 
+import FontIcon from 'material-ui/FontIcon'
+
+const styles = {
+  ismod: {
+    float: 'right',
+    fontSize: 20,
+    cursor: 'default',
+    margin: 10,
+  },
+  bio: {
+    fontSize: 12,
+    fontStyle: 'italic',
+  },
+  name: {
+    fontWeight: 'bold',
+    fontSize: 14,
+    marginRop: 5,
+  },
+  icon: {
+    float: 'left',
+    margin: '3px 10px 3px 10px',
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+  },
+  nametag: {
+    padding: 5,
+  },
+}
+
 
 class Nametag extends Component {
   componentWillMount() {
@@ -19,16 +47,14 @@ class Nametag extends Component {
 
     // Show if user is a mod.
     if (this.props.mod === this.props.id) {
-      star = <Tooltip position='bottom' label="Host" className={style.ismod} >
-            <Icon className={style.hostIcon} name="star" />
-          </Tooltip>
+      star = <FontIcon style={styles.ismod} className='material-icons'>star</FontIcon>
     }
 
-    return <div key={this.props.name} >
+    return <div key={this.props.name} style={styles.nametag}>
         {star}
-        <img src={this.props.icon} alt={this.props.name} className={style.icon + ' img-circle'}/>
-        <div className={style.name}>{this.props.name}</div>
-        <div className={style.bio}>{this.props.bio}</div>
+        <img src={this.props.icon} alt={this.props.name} style={styles.icon}/>
+        <div style={styles.name}>{this.props.name}</div>
+        <div style={styles.bio}>{this.props.bio}</div>
         <Certificates certificates={this.props.certificates} />
       </div>
   }
