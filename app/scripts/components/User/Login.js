@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import style from '../../../styles/User/Login.css'
 import {providerAuth} from '../../actions/UserActions'
 
 /* Function to Log in users via an auth provider or e-mail.

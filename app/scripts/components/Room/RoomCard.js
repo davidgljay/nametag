@@ -24,6 +24,9 @@ const styles = {
     verticalAlign: 'top',
     perspective: 1000,
   },
+  roomName: {
+    cursor: 'pointer',
+  },
   flippingFront: {
     backfaceVisibility: 'hidden',
     transformStyle: 'preserve-3d',
@@ -159,6 +162,7 @@ class RoomCard extends Component {
             </div>
             <CardTitle
               title={this.props.room.title}
+              style={styles.roomName}
               onClick={this.flip.bind(this)}/>
               {this.props.room.description}<br/>
               {
@@ -181,6 +185,7 @@ class RoomCard extends Component {
     let backStyle = this.state.flipping ? { ...styles.back, ...styles.backWhileFlipping} : styles.back
     let back = <Card key='back' style={backStyle}>
           <CardTitle
+            style={styles.roomName}
             onClick={this.flip.bind(this)}
             title={this.props.room.title}/>
           <div style={styles.norms}>

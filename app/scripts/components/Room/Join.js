@@ -59,7 +59,6 @@ class Join extends Component {
           </div>
           <br/>
           <RaisedButton
-            primary={true}
             backgroundColor={indigo500}
             style={styles.button}
             onClick={this.onJoinClick.bind(this)}>
