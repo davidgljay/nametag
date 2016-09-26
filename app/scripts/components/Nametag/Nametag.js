@@ -7,7 +7,7 @@ const styles = {
     float: 'right',
     fontSize: 20,
     cursor: 'default',
-    margin: 10,
+    marginRight: 10,
   },
   bio: {
     fontSize: 12,

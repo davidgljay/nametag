@@ -174,7 +174,6 @@ class RoomCard extends Component {
               }
 
             </div>
-            <hr></hr>
             <Nametag
               style={styles.mod}
               room={this.props.id}
