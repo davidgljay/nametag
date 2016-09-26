@@ -184,7 +184,7 @@ class RoomCard extends Component {
             onClick={this.flip.bind(this)}
             title={this.props.room.title}/>
           <div style={styles.norms}>
-            <h5>Conversation Norms</h5>
+            <h4>Conversation Norms</h4>
             <Norms norms={this.props.room.norms} showChecks={true}/>
             <Checkbox
               style={styles.checkbox}
