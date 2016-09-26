@@ -21,6 +21,6 @@ export default {
   ADD_REACTION: 'ADD_REACTION',
 
   // Timers
-  ANIMATION_LONG: 500,
+  ANIMATION_LONG: 400,
 
 }
