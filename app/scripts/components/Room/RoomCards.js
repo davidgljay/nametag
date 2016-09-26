@@ -11,6 +11,7 @@ const styles = {
     background: lightBlue200,
     paddingBottom: 50,
     paddingTop: 20,
+    minHeight: '100vh',
     display: 'flex',
     justifyContent: 'flex-start',
     flexWrap: 'wrap',

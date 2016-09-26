@@ -75,7 +75,7 @@ const styles = {
   },
   checkbox: {
     textAlign: 'left',
-  }
+  },
 }
 
 class RoomCard extends Component {
