@@ -1,6 +1,9 @@
 
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
+import injectTapEventPlugin from 'react-tap-event-plugin'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import Radium, {StyleRoot} from 'radium'
 
 import Room from './containers/Room/RoomContainer'
 import RoomCards from './containers/Room/RoomCardsContainer'
@@ -18,6 +21,7 @@ import { Router, Route, Link, hashHistory } from 'react-router'
 
 import '../styles/animations.css'
 import '../styles/mdl-tweaks.css'
+injectTapEventPlugin()
 
 const mountNode = document.getElementById('app')
 let store = createStore(mainReducer, compose(
@@ -40,11 +44,15 @@ class Nametag extends Component {
 
   render() {
     return <Provider store={store}>
-      <Router history={hashHistory}>
-        <Route path="/" component={RoomCards} />
-        <Route path="/rooms" component={RoomCards}/>
-        <Route path="/rooms/:roomId" component={Room}/>
-      </Router>
+      <StyleRoot>
+        <MuiThemeProvider>
+          <Router history={hashHistory}>
+            <Route path="/" component={RoomCards} />
+            <Route path="/rooms" component={RoomCards}/>
+            <Route path="/rooms/:roomId" component={Room}/>
+          </Router>
+        </MuiThemeProvider>
+      </StyleRoot>
     </Provider>
   }
 }
@@ -53,7 +61,7 @@ Nametag.childContextTypes = {
   dispatch: PropTypes.func,
 }
 
-let NametagWithDragging = DragDropContext(HTML5Backend)(Nametag)
+const DecoratedNametag = Radium(DragDropContext(HTML5Backend)(Nametag))
 
-ReactDOM.render(<NametagWithDragging/>, mountNode)
+ReactDOM.render(<DecoratedNametag/>, mountNode)
 
