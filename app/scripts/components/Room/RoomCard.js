@@ -23,35 +23,30 @@ const styles = {
     perspective: 1000,
   },
   flippingFront: {
-    animationName: 'flip-over',
-    animationDuration: 500,
-    animationFillMode: 'forwards',
+    backfaceVisibility: 'hidden',
     transformStyle: 'preserve-3d',
   },
   flippingBack: {
-    animationName: 'flip-back',
-    animationDuration: 500,
-    animationFillMode: 'forwards',
+    backfaceVisibility: 'hidden',
     transformStyle: 'preserve-3d',
   },
   front: {
-    backfaceVisibility: 'hidden',
     zIndex: 2,
     width: 300,
     background: '#fff',
   },
   back: {
-    backfaceVisibility: 'hidden',
     padding: '0px 20px 20px 20px',
     textAlign: 'center',
     width: 300,
     zIndex: 0,
     background: '#fff',
+    transition: 'none',
   },
-  backFlipping: {
-    transform: 'rotateY(180deg)',
+  backWhileFlipping: {
+    transform: 'rotateY(-180deg)',
     position: 'absolute',
-    minHeight: 800,
+    backfaceVisibility: 'hidden',
     top: 0,
     left: 0,
   },
@@ -126,24 +121,30 @@ class RoomCard extends Component {
   }
 
   flip() {
-    this.setState({flipped: !this.state.flipped})
+    this.setState({flipped: !this.state.flipped, flipping: 0.001})
 
-    //Set as flipping for as long as the animation is running.
-    this.setState({flipping: true})
-    setTimeout(
-      function() {
+    // Run the flipping animation. This needs to be done w/ JS b/c Radium doesn't support it.
+    let counter = 0
+    let anim = setInterval(() => {
+      counter += 20
+      let complete = counter / constants.ANIMATION_LONG
+      if (complete >= 1) {
         this.setState({flipping: false})
-      }.bind(this), constants.ANIMATION_LONG)
+        clearInterval(anim)
+      } else {
+        this.setState({flipping: complete})
+      }
+    }, 20)
   }
 
   render() {
     let card
-    let flipping = ''
+    let flipping = {}
 
     let front =  <Card key='front' style={styles.front}>
           <CardMedia
             onClick={this.flip}>
-            <img 
+            <img
             style={styles.roomImage}
             src={this.props.room.image}/>
           </CardMedia>
@@ -172,7 +173,8 @@ class RoomCard extends Component {
               mod={this.props.room.mod} />
         </Card>
 
-    let back = <Card key='back' style={styles.back}>
+    let backStyle = this.state.flipping ? { ...styles.back, ...styles.backWhileFlipping} : styles.back
+    let back = <Card key='back' style={backStyle}>
           <h3 onClick={this.flip.bind(this)}>{this.props.room.title}</h3>
           <div style={styles.norms}>
             <h4>Conversation Norms</h4>
@@ -194,12 +196,14 @@ class RoomCard extends Component {
 
     if (this.state.flipping) {
       card = [front, back]
-      flipping = this.state.flipped ? style.flippingFront : style.flippingBack
+      let rotation = this.state.flipped ? this.state.flipping * 180 : this.state.flipping * 180 + 180
+      let flipType = this.state.flipped ? styles.flippingFront : styles.flippingBack
+      flipping = Object.assign({}, flipType, {transform: 'rotateY(' + rotation + 'deg)'})
     } else {
       card = this.state.flipped ? back : front
     }
 
-    return <div style={Object.assign({}, styles.roomCard, flipping)}>
+    return <div style={{...styles.roomCard, ...flipping}}>
         {card}
       </div>
   }
