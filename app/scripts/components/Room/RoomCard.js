@@ -129,7 +129,7 @@ class RoomCard extends Component {
   }
 
   flip() {
-    this.setState({flipped: !this.state.flipped, flipping: 0.001})
+    this.setState({flipped: !this.state.flipped, flipping: 0.01})
 
     // Run the flipping animation. This needs to be done w/ JS b/c Radium doesn't support it.
     let counter = 0
