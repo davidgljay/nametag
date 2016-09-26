@@ -5,6 +5,7 @@ import Join from './Join'
 import constants from '../../constants'
 import {mobile} from '../../../styles/sizes'
 import {Card, CardTitle, CardMedia} from 'material-ui/Card'
+import Checkbox from 'material-ui/Checkbox'
 import {grey400} from 'material-ui/styles/colors'
 
 const styles = {
@@ -13,6 +14,7 @@ const styles = {
     cursor: 'pointer',
     width: 300,
     height: 200,
+    objectFit: 'cover',
   },
   roomCard: {
     margin: 30,
@@ -71,6 +73,9 @@ const styles = {
     float: 'left',
     paddingRight: 10,
   },
+  checkbox: {
+    textAlign: 'left',
+  }
 }
 
 class RoomCard extends Component {
@@ -149,7 +154,7 @@ class RoomCard extends Component {
             src={this.props.room.image}/>
           </CardMedia>
           <div style={styles.roomInfo}>
-            <div style={styles.roomTime}>
+            <div style={styles.greyText}>
               <b>Started</b> 2 days ago | <b>Ends</b> in 1 week
             </div>
             <CardTitle
@@ -158,7 +163,7 @@ class RoomCard extends Component {
               {this.props.room.description}<br/>
               {
                 this.props.room.nametagCount &&
-                <p style={styles.nametagCount}>
+                <p style={styles.greyText}>
                   {this.props.room.nametagCount} participant
                   {this.props.room.nametagCount === 1 ? '' : 's'}
                 </p>
@@ -175,14 +180,16 @@ class RoomCard extends Component {
 
     let backStyle = this.state.flipping ? { ...styles.back, ...styles.backWhileFlipping} : styles.back
     let back = <Card key='back' style={backStyle}>
-          <h3 onClick={this.flip.bind(this)}>{this.props.room.title}</h3>
+          <CardTitle
+            onClick={this.flip.bind(this)}
+            title={this.props.room.title}/>
           <div style={styles.norms}>
-            <h4>Conversation Norms</h4>
+            <h5>Conversation Norms</h5>
             <Norms norms={this.props.room.norms} showChecks={true}/>
-            <label>
-              <input type="checkbox" onClick={this.onNormsCheck}/>
-              <span>I agree to abide by these norms</span>
-            </label>
+            <Checkbox
+              style={styles.checkbox}
+              label="I agree to these norms"
+              onClick={this.onNormsCheck}/>
           </div>
           <Join
             room={this.props.id}
