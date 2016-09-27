@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 import component from '../../components/Room/RoomCards'
 import {addUserNametag, getUserNametag} from '../../actions/UserNametagActions'
 import {watchNametag, unWatchNametag} from '../../actions/NametagActions'
+import {logout} from '../../actions/UserActions'
 import {subscribe, unsubscribe, setRoomProp, searchImage} from '../../actions/RoomActions'
 
 const mapStateToProps = (state) => {
@@ -38,6 +39,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     searchImage(query, start) {
       return dispatch(searchImage(query, start))
+    },
+    logout() {
+      return dispatch(logout())
     },
   }
 }

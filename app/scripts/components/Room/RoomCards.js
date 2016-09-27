@@ -59,7 +59,7 @@ class RoomCards extends Component {
 
   render() {
     return <div>
-        <Navbar user={this.props.user} dispatch={this.context.dispatch}/>
+        <Navbar user={this.props.user} logout={this.props.logout}/>
         <div style={styles.roomCards}>
           {Object.keys(this.props.rooms).map(this.mapRoomCards)}
         </div>

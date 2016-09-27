@@ -7,6 +7,7 @@ import Radium, {StyleRoot} from 'radium'
 
 import Room from './containers/Room/RoomContainer'
 import RoomCards from './containers/Room/RoomCardsContainer'
+import CreateRoom from './containers/Room/CreateRoomContainer'
 import {getUser} from './actions/UserActions'
 
 import { DragDropContext } from 'react-dnd'
@@ -49,6 +50,7 @@ class Nametag extends Component {
           <Router history={hashHistory}>
             <Route path="/" component={RoomCards} />
             <Route path="/rooms" component={RoomCards}/>
+            <Route path="/rooms/create" component={CreateRoom}/>
             <Route path="/rooms/:roomId" component={Room}/>
           </Router>
         </MuiThemeProvider>

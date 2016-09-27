@@ -1,5 +1,4 @@
 import React from 'react'
-import {logout} from '../../actions/UserActions'
 import AppBar from 'material-ui/AppBar'
 import FlatButton from 'material-ui/FlatButton'
 import { indigo500 } from 'material-ui/styles/colors'
@@ -17,9 +16,10 @@ const styles = {
 
 const Navbar = (props) => {
   const auth = <div>
+      <FlatButton style={styles.button}>CREATE ROOM</FlatButton>
       {
       props.user && props.user.id ?
-        <FlatButton style={styles.button} onClick={() => props.dispatch(logout())}>LOG OUT</FlatButton>
+        <FlatButton style={styles.button} onClick={() => props.logout()}>LOG OUT</FlatButton>
         : <FlatButton style={styles.button}>LOG IN</FlatButton>
       }
     </div>
