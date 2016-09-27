@@ -67,8 +67,8 @@ class CreateRoom extends Component {
   }
 
   render() {
-    return <div style={styles.container}>
-
+    return <div>
+      <Navbar user={this.props.user} logout={this.props.logout}/>
       <Card shadow={1} style={styles.createRoomCard}>
         <ReactCSSTransitionGroup
           transitionName="fadeslide"
