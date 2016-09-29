@@ -8,6 +8,9 @@ const styles = {
   },
   container: {
     marginTop: 10,
+    maxWidth: 600,
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
   searchIcon: {
     verticalAlign: 'middle',
@@ -96,6 +99,7 @@ class ImageSearch extends Component {
   }
 
   prepImages(searchResults) {
+    console.log(searchResults)
     this.setState((prevState) => {
       prevState.searched =  true
       prevState.loading = false
@@ -144,7 +148,7 @@ class ImageSearch extends Component {
               shadow={1}
               style={styles.thumbnailContainer}
               key ={i}
-              onClick={this.props.setImage(image.link)}>
+              onClick={() => this.props.updateRoom('image', image.link)}>
               <img src={image.thumbnail} style={styles.thumbnail}/>
               </Card>
           })}

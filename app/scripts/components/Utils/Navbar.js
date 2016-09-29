@@ -1,7 +1,7 @@
 import React from 'react'
 import AppBar from 'material-ui/AppBar'
 import FlatButton from 'material-ui/FlatButton'
-import { indigo500 } from 'material-ui/styles/colors'
+import {indigo500} from 'material-ui/styles/colors'
 
 const styles = {
   appBar: {
@@ -11,12 +11,19 @@ const styles = {
   button: {
     color: '#fff',
     marginTop: 6,
+    padding: '0px 10px',
   },
+}
+
+const onCreateRoomClick = () => {
+  window.location = '/#/rooms/create'
 }
 
 const Navbar = (props) => {
   const auth = <div>
-      <FlatButton style={styles.button}>CREATE ROOM</FlatButton>
+      <FlatButton
+        style={styles.button}
+        onClick={onCreateRoomClick}>CREATE ROOM</FlatButton>
       {
       props.user && props.user.id ?
         <FlatButton style={styles.button} onClick={() => props.logout()}>LOG OUT</FlatButton>

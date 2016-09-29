@@ -1,131 +1,148 @@
 import React, {Component, PropTypes} from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
-import { Card, CardTitle, CardActions, Textfield, Button } from 'react-mdl'
 import ImageSearch from './ImageSearch'
-
-const styles = {
-  createRoomCard: {
-    minHeight: 0,
-    margin: 10,
-    width: 'inherit',
-    maxWidth: 620,
-  },
-  textfield: {
-    fontSize: 24,
-    border: 'none',
-    flex: 1,
-    padding: 0,
-    margin: '20px 20px 0px 20px',
-  },
-  button: {
-    float: 'right',
-    margin: 10,
-  },
-  textfieldContainer: {
-    display: 'flex',
-    width: '100%',
-  },
-  description: {
-    flex: 1,
-    margin: 0,
-  },
-  mainImage: {
-    height: 300,
-    cursor: 'pointer',
-  },
-}
+import RoomCard from './RoomCard'
+import Navbar from '../Utils/Navbar'
+import TitleForm from './TitleForm'
+import {
+  Step,
+  Stepper,
+  StepLabel,
+} from 'material-ui/Stepper'
+import RaisedButton from 'material-ui/RaisedButton'
+import {indigo500} from 'material-ui/styles/colors'
 
 class CreateRoom extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
+      room: {},
       image: '',
       norms: [],
       newRoom: false,
+      finsihed: false,
+      stepIndex: 0,
     }
-    this.onNameChange = this.onNameChange.bind(this)
-    this.setImage = this.setImage.bind(this)
+    this.handleNext = this.handleNext.bind(this)
+    this.handlePrev = this.handlePrev.bind(this)
+    this.updateRoom = this.updateRoom.bind(this)
   }
 
-  onNameChange(e) {
-    const name = e.target.value
+  handleNext() {
     this.setState((prevState) => {
-      if (!prevState.imageQuery || prevState.imageQuery === prevState.name) {
-        prevState.imageQuery = name
-      }
-      prevState.name = name
+      prevState.stepIndex ++
+      prevState.finished = prevState.stepIndex >= 3
       return prevState
     })
   }
 
-  setImage(image) {
-    return (e) => {
-      e.preventDefault()
-      this.setState({image: image, step: 'desc'})
+  handlePrev() {
+    this.setState((prevState) => {
+      if (prevState.stepIndex > 0) {
+        prevState.stepIndex --
+      }
+      return prevState
+    })
+  }
+
+  getStepContent(stepIndex) {
+    switch (stepIndex) {
+    case 0:
+      return <div>
+        <h4>What would you like to talk about?</h4>
+        <TitleForm
+          updateRoom={this.updateRoom}
+          title={this.state.room.title}
+          desc={this.state.room.description}/>
+      </div>
+    case 1:
+      return <div>
+        <h4>Please select an image for your room.</h4>
+        <ImageSearch
+          style={styles.imageSearch}
+          searchImage={this.props.searchImage}
+          setImageQuery={(e) => this.setState({imageQuery: e.target.value})}
+          updateRoom={this.updateRoom}
+          imageQuery={this.state.imageQuery}/>
+      </div>
+    case 2:
+      return <div>
+        <h4>How would you like to appear in your room?</h4>
+        <EditUserNametag />
+      </div>
+    case 3:
+      return <div>
+        <h4>Please set norms for this discussion.</h4>
+        <NormForm/>
+      </div>
+    default:
+      return 'Something has gone wrong!'
     }
   }
 
-  render() {
-    return <div>
-      <Navbar user={this.props.user} logout={this.props.logout}/>
-      <Card shadow={1} style={styles.createRoomCard}>
-        <ReactCSSTransitionGroup
-          transitionName="fadeslide"
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={500}>
-        {
-          this.state.image &&
-          <CardTitle
-            style={Object.assign({}, styles.mainImage, {background: 'url(' + this.state.image + ') center / cover'})}
-            onClick={()=>this.setState({step: 'image'})} />
+  updateRoom(prop, val) {
+    this.setState((prevState) => {
+      prevState.room[prop] = val
+      return prevState
+    })
+  }
 
-        }
-        <div style={styles.textfieldContainer}>
-          <Textfield
-            style={styles.textfield}
-            onChange={this.onNameChange}
-            label="What would you like to talk about?"/>
+  render() {
+    const {user, logout} = this.props
+    const {room, stepIndex, desc, finished} = this.state
+    const orientation = window.innerWidth < 650 ? 'vertical' : 'horizontal'
+    return <div >
+      <Navbar user={user} logout={logout}/>
+      <Stepper activeStep={stepIndex} orientation={orientation}>
+          <Step>
+            <StepLabel>Choose a topic</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>Find an image</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>Build your nametag</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>Set the norms</StepLabel>
+          </Step>
+        </Stepper>
+        <div style={styles.roomPreview}>
+          <RoomCard
+            room={room}
+            id={'new'}
+            style={styles.previewCard}
+            creating={true}/>
         </div>
         {
-          (this.state.desc || this.state.step === 'desc') &&
-          <div style={styles.description}>
-            <Textfield
-              style={styles.textfield}
-              value={this.props.desc}
-              onChange={(e) => this.setState({desc: e.target.value})}
-              label="Description"/>
-          </div>
+          finished ?
+          <h4>Publish this room?</h4>
+          : <div style={styles.createRoom}>
+              <h3>{desc}</h3>
+              {
+                this.getStepContent(stepIndex)
+              }
+              <div>
+                {
+                  this.state.stepIndex > 0 &&
+                  <RaisedButton
+                    style={styles.button}
+                    backgroundColor={indigo500}
+                    onClick={this.handlePrev}>
+                    Prev
+                  </RaisedButton>
+                }
+                <RaisedButton
+                  style={styles.button}
+                  backgroundColor={indigo500}
+                  onClick={this.handleNext}>
+                  Next
+                </RaisedButton>
+              </div>
+
+            </div>
         }
-        {
-          this.state.step === 'desc' &&
-            <Button
-              colored
-              raised
-              onClick={() => this.setState({step: 'norms'})}
-              style={styles.button}>
-              Done
-            </Button>
-        }
-        {
-          this.state.name && !this.state.newRoom &&
-          <Button
-            colored
-            raised
-            style={styles.button}
-            onClick={()=>{this.setState({step: 'image', newRoom: true})}}
-            >Create New Room</Button>
-        }
-        {
-          this.state.step === 'image' &&
-          <ImageSearch
-            searchImage={this.props.searchImage}
-            setImageQuery={(e) => this.setState({imageQuery: e.target.value})}
-            setImage={this.setImage}
-            imageQuery={this.state.imageQuery}/>
-        }
-        </ReactCSSTransitionGroup>
-      </Card>
     </div>
   }
 }
@@ -135,3 +152,24 @@ CreateRoom.propTypes = {
 }
 
 export default CreateRoom
+
+const styles = {
+  createRoom: {
+    textAlign: 'center',
+  },
+  roomPreview: {
+    display: 'flex',
+    justifyContent: 'center',
+    textAlign: 'left',
+  },
+  previewCard: {
+    margin: 0,
+  },
+  button: {
+    color: '#fff',
+    margin: 20,
+  },
+  imageSearch: {
+    maxWidth: 600,
+  },
+}
