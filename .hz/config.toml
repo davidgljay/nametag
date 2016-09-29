@@ -59,4 +59,7 @@ auto_create_index = true
 #------------------------------------------------------------------------------
 debug = true
 
+allow_anonymous = false
+allow_unauthenticated = true
+auth_redirect = "/"
 
