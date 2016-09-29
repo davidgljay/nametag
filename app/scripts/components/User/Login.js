@@ -30,17 +30,14 @@ class Login extends Component {
         <img
           style={styles.loginImg}
           src="./images/twitter.jpg"
-          className={style.loginOption + ' img-circle'}
           onClick={() => this.context.dispatch(providerAuth('twitter'))}/>
         <img
           style={styles.loginImg}
           src="./images/fb.jpg"
-          className={style.loginOption + ' img-circle'}
           onClick={() => this.context.dispatch(providerAuth('facebook'))}/>
         <img
           style={styles.loginImg}
           src="./images/google.png"
-          className={style.loginOption + ' img-circle'}
           onClick={() => this.context.dispatch(providerAuth('google'))}/>
       </div>
   }
