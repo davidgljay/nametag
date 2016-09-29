@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import moment from '../../../bower_components/moment/moment'
 import { dragTypes } from '../../constants'
 import { DragSource } from 'react-dnd'
-import { Card, Icon, CardMenu } from 'react-mdl'
+import { Card, CardActions } from 'material-ui/Card'
+import FontIcon from 'material-ui/FontIcon'
 
 // TODO: This currently displays all user certificates, as opposed to only the participant certificates. A major violation of trust!
 
@@ -47,9 +48,9 @@ class Certificate extends Component {
     if (this.state.expanded) {
       certificate = <div>
         <Card shadow={1} style={styles.certificateExpanded}>
-            <CardMenu style={styles.closeMenu}>
-              <Icon name="close" style={styles.close} onClick={this.toggleExpanded}/>
-            </CardMenu>
+              <FontIcon style={styles.close} className='material-icons' onClick={this.toggleExpanded}>
+                close
+              </FontIcon>
             <div style={styles.cardHeader}>
               <div>
                 {
@@ -63,7 +64,6 @@ class Certificate extends Component {
               </div>
             </div>
             <div style={styles.description}>{this.props.certificate.description_array[0]}</div>
-            <hr/>
             <div style={styles.notes}>
               {this.props.certificate.notes.map(function mapNotes(note) {
                  return <div style={styles.note} key={note.date}>
@@ -110,7 +110,7 @@ Certificate.propTypes = {
 
 export default DragSource(dragTypes.certificate, certSource, collect)(Certificate)
 
-let styles = {
+const styles = {
   certificateChip: {
     height: 22,
     borderRadius: 11,
@@ -151,16 +151,14 @@ let styles = {
     background: '#dedede',
     textAlign: 'left',
   },
-  closeMenu: {
-    top: 10,
-    right: 10,
-  },
   cardHeader: {
     display: 'flex',
     flexBasis: 'auto',
   },
   close: {
     fontSize: 18,
+    float: 'right',
+    padding: 10,
     cursor: 'pointer',
   },
   icon: {
