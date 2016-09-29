@@ -130,14 +130,14 @@ class CreateRoom extends Component {
                     style={styles.button}
                     backgroundColor={indigo500}
                     onClick={this.handlePrev}>
-                    Prev
+                    PREV
                   </RaisedButton>
                 }
                 <RaisedButton
                   style={styles.button}
                   backgroundColor={indigo500}
                   onClick={this.handleNext}>
-                  Next
+                  NEXT
                 </RaisedButton>
               </div>
 
