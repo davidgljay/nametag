@@ -11,6 +11,7 @@ import {getUser} from './actions/UserActions'
 
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
+import TouchBackend from 'react-dnd-touch-backend'
 
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware, compose } from 'redux'
@@ -59,7 +60,7 @@ Nametag.childContextTypes = {
   dispatch: PropTypes.func,
 }
 
-const DecoratedNametag = Radium(DragDropContext(HTML5Backend)(Nametag))
+const DecoratedNametag = Radium(DragDropContext(TouchBackend({ enableMouseEvents: true }))(Nametag))
 
 ReactDOM.render(<DecoratedNametag/>, mountNode)
 
