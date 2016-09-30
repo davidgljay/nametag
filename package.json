@@ -2,6 +2,7 @@
   "name": "Nametag",
   "version": "0.0.1",
   "dependencies": {
+    "bower": "^1.7.9",
     "css-modulesify": "^0.25.1",
     "material-ui": "^0.15.4",
     "radium": "^0.18.1",
