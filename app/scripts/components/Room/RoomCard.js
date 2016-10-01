@@ -137,7 +137,10 @@ class RoomCard extends Component {
             <Join
               room={this.props.id}
               userNametag={this.props.userNametag}
-              normsChecked={this.state.normsChecked}/>
+              normsChecked={this.state.normsChecked}
+              addUserNametagCert={this.props.addUserNametagCert}
+              removeUserNametagCert={this.props.removeUserNametagCert}
+              updateUserNametag={this.props.updateUserNametag}/>
           }
         </Card>
 

@@ -54,7 +54,10 @@ class RoomCards extends Component {
       addUserNametag={this.props.addUserNametag}
       getUserNametag={this.props.getUserNametag}
       watchNametag={this.props.watchNametag}
-      unWatchNametag={this.props.unWatchNametag}/>
+      unWatchNametag={this.props.unWatchNametag}
+      addUserNametagCert={this.props.addUserNametagCert}
+      removeUserNametagCert={this.props.removeUserNametagCert}
+      updateUserNametag={this.props.updateUserNametag}/>
   }
 
   render() {

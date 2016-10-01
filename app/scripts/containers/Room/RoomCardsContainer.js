@@ -4,6 +4,7 @@ import {addUserNametag, getUserNametag} from '../../actions/UserNametagActions'
 import {watchNametag, unWatchNametag} from '../../actions/NametagActions'
 import {logout} from '../../actions/UserActions'
 import {subscribe, unsubscribe, setRoomProp, searchImage} from '../../actions/RoomActions'
+import {addUserNametagCert, removeUserNametagCert, updateUserNametag} from '../../actions/UserNametagActions'
 
 const mapStateToProps = (state) => {
   return {
@@ -42,6 +43,15 @@ const mapDispatchToProps = (dispatch) => {
     },
     logout() {
       return dispatch(logout())
+    },
+    addUserNametagCert(cert, room) {
+      return dispatch(addUserNametag(cert, room))
+    },
+    removeUserNametagCert(certId, room) {
+      return dispatch(removeUserNametagCert(certId, room))
+    },
+    updateUserNametag(room, property, value) {
+      return dispatch(updateUserNametag(room, property, value))
     },
   }
 }
