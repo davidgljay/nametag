@@ -68,7 +68,7 @@ class Join extends Component {
           </RaisedButton>
         </div>
     } else {
-      join = <Login dispatch={this.props.dispatch}/>
+      join = <Login providerAuth={this.props.providerAuth}/>
     }
     return join
   }

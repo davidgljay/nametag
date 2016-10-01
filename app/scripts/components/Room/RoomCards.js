@@ -57,7 +57,8 @@ class RoomCards extends Component {
       unWatchNametag={this.props.unWatchNametag}
       addUserNametagCert={this.props.addUserNametagCert}
       removeUserNametagCert={this.props.removeUserNametagCert}
-      updateUserNametag={this.props.updateUserNametag}/>
+      updateUserNametag={this.props.updateUserNametag}
+      providerAuth={this.props.providerAuth}/>
   }
 
   render() {

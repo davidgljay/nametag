@@ -140,7 +140,8 @@ class RoomCard extends Component {
               normsChecked={this.state.normsChecked}
               addUserNametagCert={this.props.addUserNametagCert}
               removeUserNametagCert={this.props.removeUserNametagCert}
-              updateUserNametag={this.props.updateUserNametag}/>
+              updateUserNametag={this.props.updateUserNametag}
+              providerAuth={this.props.providerAuth}/>
           }
         </Card>
 

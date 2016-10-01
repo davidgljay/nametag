@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import component from '../../components/Room/RoomCards'
 import {addUserNametag, getUserNametag} from '../../actions/UserNametagActions'
 import {watchNametag, unWatchNametag} from '../../actions/NametagActions'
-import {logout} from '../../actions/UserActions'
+import {logout, providerAuth} from '../../actions/UserActions'
 import {subscribe, unsubscribe, setRoomProp, searchImage} from '../../actions/RoomActions'
 import {addUserNametagCert, removeUserNametagCert, updateUserNametag} from '../../actions/UserNametagActions'
 
@@ -52,6 +52,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     updateUserNametag(room, property, value) {
       return dispatch(updateUserNametag(room, property, value))
+    },
+    providerAuth(provider) {
+      return dispatch(providerAuth(provider))
     },
   }
 }
