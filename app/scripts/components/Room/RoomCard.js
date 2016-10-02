@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
-import Nametag from '../../containers/Nametag/NametagContainer'
+import NametagContainer from '../../containers/Nametag/NametagContainer'
+import Nametag from '../Nametag/Nametag'
 import Norms from '../Room/Norms'
 import Join from './Join'
 import constants from '../../constants'
@@ -110,11 +111,22 @@ class RoomCard extends Component {
             </div>
             {
               this.props.room.mod &&
-              <Nametag
+              <NametagContainer
                 style={styles.mod}
                 room={this.props.id}
                 id={this.props.room.mod}
                 mod={this.props.room.mod} />
+            }
+            {
+              this.props.creating &&
+              (this.props.hostNametag.name || this.props.hostNametag.bio) &&
+              <Nametag
+                style={styles.mod}
+                id='1'
+                mod='1'
+                watchNametag={()=>{}}
+                unWatchNametag={()=>{}}
+                {...this.props.hostNametag}/>
             }
         </Card>
 
