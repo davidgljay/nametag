@@ -1,15 +1,11 @@
 import React, {Component, PropTypes} from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
-import ImageSearch from './ImageSearch'
 import RoomCard from './RoomCard'
 import Navbar from '../Utils/Navbar'
-import TitleForm from './TitleForm'
-import EditNametag from '../Nametag/EditNametag'
-import UserCertificates from '../Certificate/UserCertificates'
-import ChooseNorms from './Create/ChooseNorms'
+import CreateRoomForms from './Create/CreateRoomForms'
 import Stepper from './Create/Stepper'
 import RaisedButton from 'material-ui/RaisedButton'
-import {indigo500, grey400} from 'material-ui/styles/colors'
+import {indigo500} from 'material-ui/styles/colors'
 
 class CreateRoom extends Component {
 
@@ -118,67 +114,6 @@ class CreateRoom extends Component {
       })
   }
 
-  getStepContent(stepIndex) {
-    switch (stepIndex) {
-    case 0:
-      return <div>
-        <h4>What would you like to talk about?</h4>
-        <TitleForm
-          updateRoom={this.updateRoom}
-          title={this.state.room.title}
-          desc={this.state.room.description}/>
-      </div>
-    case 1:
-      return <div>
-        <h4>Please select an image for your room.</h4>
-        <ImageSearch
-          style={styles.imageSearch}
-          searchImage={this.props.searchImage}
-          setImageQuery={(e) => this.setState({imageQuery: e.target.value})}
-          updateRoom={this.updateRoom}
-          imageQuery={this.state.imageQuery}/>
-      </div>
-    case 2:
-      return <div>
-        <h4>How would you like to appear in your room?</h4>
-        <div style={styles.editNametagContainer}>
-          <div>
-            <EditNametag
-              userNametag={this.state.hostNametag}
-              addUserNametagCert={this.addNametagCert}
-              removeUserNametagCert={this.removeNametagCert}
-              updateUserNametag={this.updateNametag}
-              room=''/>
-            <div style={styles.userCertificates}>
-              <p style={styles.userCertificateText}>
-                Click to view your certificates.<br/>
-                Drag them over to show them in this conversation.
-              </p>
-              <UserCertificates
-                fetchCertificate={this.props.fetchCertificate}
-                selectedCerts={this.state.hostNametag.certificates}/>
-            </div>
-          </div>
-        </div>
-      </div>
-    case 3:
-      return <div>
-        <h4>Please set norms for this discussion.</h4>
-        <ChooseNorms
-          style={styles.chooseNorms}
-          addNorm={this.addNorm}
-          normsObj={this.state.norms}
-          removeNorm={this.removeNorm}/>
-      </div>
-    case 4:
-      return <div>
-            <h4>Ready to publish this conversation?</h4>
-          </div>
-    default:
-      return 'Something has gone wrong!'
-    }
-  }
-
   updateRoom(prop, val) {
     this.setState((prevState) => {
       prevState.room[prop] = val
@@ -204,9 +139,20 @@ class CreateRoom extends Component {
             hostNametag={this.state.hostNametag}/>
         </div>
         <div style={styles.createRoom}>
-          {
-            this.getStepContent(stepIndex)
-          }
+          <CreateRoomForms
+            stepIndex={this.state.stepIndex}
+            updateNametag={this.updateNametag}
+            room={this.state.room}
+            hostNametag={this.state.hostNametag}
+            updateRoom={this.updateRoom}
+            searchImage={this.props.searchImage}
+            addNametagCert={this.addNametagCert}
+            removeNametagCert={this.removeNametagCert}
+            updateNametag={this.updateNametag}
+            fetchCertificate={this.fetchCertificate}
+            addNorm={this.addNorm}
+            norms={this.state.norms}
+            removeNorm={this.removeNorm}/>
           <div>
             {
               this.state.stepIndex > 0 &&
@@ -261,30 +207,5 @@ const styles = {
     color: '#fff',
     margin: 20,
   },
-  imageSearch: {
-    maxWidth: 600,
-  },
-  userCertificates: {
-    width: 270,
-    display: 'flex',
-    flexWrap: 'wrap',
-    minHeight: 100,
-    verticalAlign: 'top',
-    padding: 5,
-    margin: 5,
-  },
-  userCertificateText: {
-    fontStyle: 'italic',
-    fontSize: 12,
-    color: grey400,
-  },
-  editNametagContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  chooseNorms: {
-    width: 350,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  },
+
 }
