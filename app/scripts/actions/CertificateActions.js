@@ -21,7 +21,7 @@ export const addCertificate = (certificate, id) => {
 * @returns
 *    Promise
 */
-export function fetchCetificates(certificateId) {
+export function fetchCertificate(certificateId) {
   return function(dispatch) {
     return new Promise((resolve, reject) => {
       certificateSubscriptions[certificateId] = hz('certificates')

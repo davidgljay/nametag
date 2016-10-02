@@ -76,7 +76,8 @@
     "testPathIgnorePatterns": [
       "/app/bower_components/",
       "/dist/bower_components",
-      "/node_modules/"
+      "/node_modules/",
+      "/dist/"
     ],
     "setupTestFrameworkScriptFile": "<rootDir>/app/scripts/tests/mockGlobals.js",
     "automock": true

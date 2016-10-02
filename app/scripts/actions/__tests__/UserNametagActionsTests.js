@@ -68,13 +68,13 @@ describe('UserNametagActions', () => {
             user: 'me',
           },
         })
-        expect(store.getActions[0]).toEqual({
+        expect(store.getActions()[0]).toEqual({
           type: constants.UPDATE_USER_NAMETAG,
           room: 'abc',
           property: 'id',
           value: '456',
         })
-        expect(store.getActions[1]).toEqual({
+        expect(store.getActions()[1]).toEqual({
           type: constants.UPDATE_USER_NAMETAG,
           room: 'abc',
           property: 'room',
