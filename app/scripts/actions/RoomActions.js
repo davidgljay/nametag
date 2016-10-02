@@ -217,3 +217,23 @@ export function searchImage(query, startAt) {
   }
 }
 
+/*
+* Posts a room
+*
+* @params
+*   room -The complete room object to be posted
+*
+* @returns
+*   Promise resolving to room id
+*/
+export function postRoom(room) {
+  return (dispatch) => {
+    return new Promise((resolve, reject) => {
+      hz('rooms').insert(room).subscribe((res) => {
+        dispatch(addRoom({ ...room, id: res.id }, res.id))
+        resolve(res.id)
+      }, reject)
+    }).catch(errorLog('Posting room'))
+  }
+}
+

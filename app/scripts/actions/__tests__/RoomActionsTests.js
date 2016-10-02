@@ -145,5 +145,23 @@ describe('RoomActions', () => {
       })
     })
   })
+
+  describe('postRoom', () => {
+    it('should post a room', () => {
+      let room = {
+        name: 'A Room',
+      }
+      hz.mockReturnValue(mockHz({id: '123'}, calls)())
+      return actions.postRoom(room)(store.dispatch).then((res) => {
+        expect(calls[1]).toEqual({type: 'insert', req: room})
+        expect(res).toEqual('123')
+        expect(store.getActions()[0]).toEqual({
+          type: 'ADD_ROOM',
+          room: { ...room, id: '123'},
+          id: '123',
+        })
+      })
+    })
+  })
 })
 
