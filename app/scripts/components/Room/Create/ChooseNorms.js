@@ -4,34 +4,6 @@ import {List, ListItem} from 'material-ui/List'
 import Check from 'material-ui/svg-icons/navigation/check'
 import TextField from 'material-ui/TextField'
 
-const styles = {
-  norms: {
-    textAlign: 'center',
-    padding: 0,
-    listStyle: 'none',
-  },
-
-  norm: {
-    textAlign: 'left',
-  },
-  normText: {
-    lineHeight: 1.4,
-    padding: '7px 7px 7px 72px',
-  },
-  check: {
-    height: 25,
-    marginRight: 10,
-    marginTop: 5,
-    fill: green500,
-  },
-  formCheck: {
-    height: 25,
-    marginRight: 10,
-    marginTop: 16,
-    fill: green500,
-  },
-}
-
 const defaultNorms = [
   'Refrain from personal attacks',
   'Respect the experiences of others',
@@ -45,35 +17,41 @@ class ChooseNorms extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      checkedNorms: [],
-      customNorms: [''],
+      customNorms: [],
     }
     this.onNormClick = this.onNormClick.bind(this)
     this.normChecked = this.normChecked.bind(this)
     this.onCustomNormChange = this.onCustomNormChange.bind(this)
   }
 
+  static propTypes = {
+    addNorm: PropTypes.func.isRequired,
+    removeNorm: PropTypes.func.isRequired,
+    normsObj: PropTypes.object.isRequired,
+  }
+
+  componentDidMount() {
+    this.setState((prev) => {
+      prev.customNorms = Object.keys(this.props.normsObj)
+        .filter((key) => key >= defaultNorms.length)
+        .reduce((arr, key) => arr.concat(this.props.normsObj[key]), [])
+      prev.customNorms.push('')
+      return prev
+    })
+  }
+
   onNormClick(norm, i) {
     return () => {
       if (this.normChecked(i)) {
-        this.setState((prev) => {
-          const index = prev.checkedNorms.indexOf(i)
-          prev.checkedNorms = prev.checkedNorms.slice(0, index).concat(prev.checkedNorms.slice(index + 1, prev.checkedNorms.length))
-          return prev
-        })
         this.props.removeNorm(i)
       } else {
-        this.setState((prev) => {
-          prev.checkedNorms.push(i)
-          return prev
-        })
         this.props.addNorm(norm, i)
       }
     }
   }
 
   normChecked(i) {
-    return this.state.checkedNorms.indexOf(i) >= 0
+    return this.props.normsObj[i] ? true : false
   }
 
   onCustomNormChange(subIndex, i) {
@@ -125,12 +103,34 @@ class ChooseNorms extends Component {
         </List>
     </div>
   }
-
 }
 
-ChooseNorms.propTypes = {
-  addNorm: PropTypes.func.isRequired,
-  removeNorm: PropTypes.func.isRequired,
+const styles = {
+  norms: {
+    textAlign: 'center',
+    padding: 0,
+    listStyle: 'none',
+  },
+
+  norm: {
+    textAlign: 'left',
+  },
+  normText: {
+    lineHeight: 1.4,
+    padding: '7px 7px 7px 72px',
+  },
+  check: {
+    height: 25,
+    marginRight: 10,
+    marginTop: 5,
+    fill: green500,
+  },
+  formCheck: {
+    height: 25,
+    marginRight: 10,
+    marginTop: 16,
+    fill: green500,
+  },
 }
 
 
