@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import {green500} from 'material-ui/styles/colors'
 import {List, ListItem} from 'material-ui/List'
 import Check from 'material-ui/svg-icons/navigation/check'
+import TextField from 'material-ui/TextField'
 
 const styles = {
   norms: {
@@ -23,6 +24,12 @@ const styles = {
     marginTop: 5,
     fill: green500,
   },
+  formCheck: {
+    height: 25,
+    marginRight: 10,
+    marginTop: 16,
+    fill: green500,
+  },
 }
 
 const defaultNorms = [
@@ -38,26 +45,27 @@ class Norms extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      customNorm: '',
       checkedNorms: [],
+      customNorms: [''],
     }
     this.onNormClick = this.onNormClick.bind(this)
     this.normChecked = this.normChecked.bind(this)
+    this.onCustomNormChange = this.onCustomNormChange.bind(this)
   }
 
   onNormClick(norm, i) {
     return () => {
       if (this.normChecked(i)) {
-        this.setState((prevState) => {
-          const index = prevState.checkedNorms.indexOf(i)
-          prevState.checkedNorms = prevState.checkedNorms.slice(0, index).concat(prevState.checkedNorms.slice(index + 1, prevState.checkedNorms.length))
-          return prevState
+        this.setState((prev) => {
+          const index = prev.checkedNorms.indexOf(i)
+          prev.checkedNorms = prev.checkedNorms.slice(0, index).concat(prev.checkedNorms.slice(index + 1, prev.checkedNorms.length))
+          return prev
         })
         this.props.removeNorm(norm, i)
       } else {
-        this.setState((prevState) => {
-          prevState.checkedNorms.push(i)
-          return prevState
+        this.setState((prev) => {
+          prev.checkedNorms.push(i)
+          return prev
         })
         this.props.addNorm(norm, i)
       }
@@ -68,9 +76,23 @@ class Norms extends Component {
     return this.state.checkedNorms.indexOf(i) >= 0
   }
 
+  onCustomNormChange(subIndex, i) {
+    return (e) => {
+      const val = e.target.value
+      this.setState((prev) => {
+        if (subIndex === prev.customNorms.length - 1
+          && prev.customNorms[subIndex].length === 0) {
+          prev.customNorms.push('')
+        }
+        prev.customNorms[subIndex] = val
+        return prev
+      })
+      this.props.addNorm(val, i)
+    }
+  }
+
   render() {
     return   <div>
-      {
         <List style={styles.norms}>
           {
             defaultNorms.map((norm, i) => {
@@ -81,11 +103,25 @@ class Norms extends Component {
                 innerDivStyle={styles.normText}
                 leftIcon={this.normChecked(i) ? <Check style={styles.check}/> : <div/>}
                 style={styles.norm}/>
-            }
-            )
+            })
+          }
+          {
+            this.state.customNorms.map((norm, subIndex) => {
+              let i = subIndex + defaultNorms.length
+              return <ListItem
+                key={i}
+                primaryText={<TextField
+                  value={norm}
+                  hintText='Add a norm...'
+                  onChange={this.onCustomNormChange(subIndex, i)}
+                  />}
+                onClick={this.onNormClick(norm, i)}
+                innerDivStyle={styles.normText}
+                leftIcon={this.normChecked(i) ? <Check style={styles.formCheck}/> : <div/>}
+                style={styles.norm}/>
+            })
           }
         </List>
-      }
     </div>
   }
 
