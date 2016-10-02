@@ -4,13 +4,15 @@ import ImageSearch from './ImageSearch'
 import RoomCard from './RoomCard'
 import Navbar from '../Utils/Navbar'
 import TitleForm from './TitleForm'
+import EditNametag from '../Nametag/EditNametag'
+import UserCertificates from '../Certificate/UserCertificates'
 import {
   Step,
   Stepper,
   StepLabel,
 } from 'material-ui/Stepper'
 import RaisedButton from 'material-ui/RaisedButton'
-import {indigo500} from 'material-ui/styles/colors'
+import {indigo500, grey400} from 'material-ui/styles/colors'
 
 class CreateRoom extends Component {
 
@@ -18,6 +20,9 @@ class CreateRoom extends Component {
     super(props)
     this.state = {
       room: {},
+      hostNametag: {
+        certificates: [],
+      },
       image: '',
       norms: [],
       newRoom: false,
@@ -26,6 +31,10 @@ class CreateRoom extends Component {
     }
     this.handleNext = this.handleNext.bind(this)
     this.handlePrev = this.handlePrev.bind(this)
+    this.updateRoom = this.updateRoom.bind(this)
+    this.updateNametag = this.updateNametag.bind(this)
+    this.addNametagCert = this.addNametagCert.bind(this)
+    this.removeNametagCert = this.removeNametagCert.bind(this)
     this.updateRoom = this.updateRoom.bind(this)
   }
 
@@ -41,6 +50,29 @@ class CreateRoom extends Component {
     this.setState((prevState) => {
       if (prevState.stepIndex > 0) {
         prevState.stepIndex --
+      }
+      return prevState
+    })
+  }
+
+  updateNametag(room, prop, val) {
+    this.setState({hostNametag: {[prop]: val}})
+  }
+
+  addNametagCert(cert) {
+    this.setState((prevState) => {
+      prevState.hostNametag.certificates.push(cert)
+      return prevState
+    })
+  }
+
+  removeNametagCert(certId) {
+    this.setState((prevState) => {
+      let certs = prevState.hostNametag.certificates
+      for (let i = 0; i < certs.length; i++) {
+        if (certs[i].id === certId) {
+          certs = certs.slice(0, i).concat(certs.slice(i + 1, certs.length))
+        }
       }
       return prevState
     })
@@ -69,7 +101,25 @@ class CreateRoom extends Component {
     case 2:
       return <div>
         <h4>How would you like to appear in your room?</h4>
-        <EditUserNametag />
+        <div style={styles.editNametagContainer}>
+          <div>
+            <EditNametag
+              userNametag={this.state.hostNametag}
+              addUserNametagCert={this.addNametagCert}
+              removeUserNametagCert={this.removeNametagCert}
+              updateUserNametag={this.updateNametag}
+              room=''/>
+            <div style={styles.userCertificates}>
+              <p style={styles.userCertificateText}>
+                Click to view your certificates.<br/>
+                Drag them over to show them in this conversation.
+              </p>
+              <UserCertificates
+                fetchCertificate={this.props.fetchCertificate}
+                selectedCerts={this.state.hostNametag.certificates}/>
+            </div>
+          </div>
+        </div>
       </div>
     case 3:
       return <div>
@@ -149,6 +199,12 @@ class CreateRoom extends Component {
 
 CreateRoom.propTypes = {
   searchImage: PropTypes.func.isRequired,
+  addUserNametag: PropTypes.func.isRequired,
+  watchNametag: PropTypes.func.isRequired,
+  unWatchNametag: PropTypes.func.isRequired,
+  setRoomProp: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
+  fetchCertificate: PropTypes.func.isRequired,
 }
 
 export default CreateRoom
@@ -171,5 +227,23 @@ const styles = {
   },
   imageSearch: {
     maxWidth: 600,
+  },
+  userCertificates: {
+    width: 270,
+    display: 'flex',
+    flexWrap: 'wrap',
+    minHeight: 100,
+    verticalAlign: 'top',
+    padding: 5,
+    margin: 5,
+  },
+  userCertificateText: {
+    fontStyle: 'italic',
+    fontSize: 12,
+    color: grey400,
+  },
+  editNametagContainer: {
+    display: 'flex',
+    justifyContent: 'center',
   },
 }

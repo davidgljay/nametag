@@ -1,9 +1,10 @@
 import { connect } from 'react-redux'
 import component from '../../components/Room/CreateRoom'
-import {addUserNametag, getUserNametag} from '../../actions/UserNametagActions'
+import {addUserNametag} from '../../actions/UserNametagActions'
 import {watchNametag, unWatchNametag} from '../../actions/NametagActions'
 import {setRoomProp, searchImage} from '../../actions/RoomActions'
 import {logout} from '../../actions/UserActions'
+import {fetchCertificate} from '../../actions/CertificateActions'
 
 const mapStateToProps = (state) => {
   return {
@@ -15,9 +16,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getUserNametag(roomId, userId) {
-      return dispatch(getUserNametag(roomId, userId))
-    },
     addUserNametag(roomId, nametagId) {
       return dispatch(addUserNametag(roomId, nametagId))
     },
@@ -35,6 +33,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     logout() {
       return dispatch(logout())
+    },
+    fetchCertificate(certId) {
+      return dispatch(fetchCertificate(certId))
     },
   }
 }
