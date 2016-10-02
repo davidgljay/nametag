@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import Login  from '../User/Login'
 import EditNametag  from '../Nametag/EditNametag'
 import UserCertificates  from '../Certificate/UserCertificates'
-import {joinRoom} from '../../actions/RoomActions'
 import {grey400, indigo500} from 'material-ui/styles/colors'
 import RaisedButton from 'material-ui/RaisedButton'
 
@@ -33,7 +32,7 @@ const styles = {
 class Join extends Component {
 
   onJoinClick() {
-    this.context.dispatch(joinRoom(this.props.room, this.props.userNametag, this.context.user.id))
+    this.peops.joinRoom(this.props.room, this.props.userNametag, this.context.user.id)
       .then(() => {
         window.location = '/#/rooms/' + this.props.room
       })
@@ -57,7 +56,8 @@ class Join extends Component {
               Drag them over to show them in this conversation.
             </p>
             <UserCertificates
-              selectedCerts = {this.props.userNametag.certificates}/>
+              fetchCertificate={this.props.fetchCertificate}
+              selectedCerts={this.props.userNametag.certificates}/>
           </div>
           <br/>
           <RaisedButton
@@ -78,11 +78,16 @@ Join.propTypes = {
   room: PropTypes.string.isRequired,
   normsChecked: PropTypes.bool.isRequired,
   userNametag: PropTypes.object,
+  addUserNametagCert: PropTypes.func.isRequired,
+  removeUserNametagCert: PropTypes.func.isRequired,
+  updateUserNametag: PropTypes.func.isRequired,
+  providerAuth: PropTypes.func.isRequired,
+  fetchCertificate: PropTypes.func.isRequired,
+  joinRoom: PropTypes.func.isRequired,
 }
 
 Join.contextTypes = {
   user: PropTypes.object,
-  dispatch: PropTypes.func,
 }
 
 export default Join

@@ -2,10 +2,8 @@ import { connect } from 'react-redux'
 import component from '../../components/Room/RoomCards'
 import {addUserNametag, getUserNametag} from '../../actions/UserNametagActions'
 import {watchNametag, unWatchNametag} from '../../actions/NametagActions'
-import {logout, providerAuth} from '../../actions/UserActions'
-import {subscribe, unsubscribe, setRoomProp, searchImage} from '../../actions/RoomActions'
-import {addUserNametagCert, removeUserNametagCert, updateUserNametag} from '../../actions/UserNametagActions'
-
+import {logout} from '../../actions/UserActions'
+import {subscribe, unsubscribe} from '../../actions/RoomActions'
 const mapStateToProps = (state) => {
   return {
     rooms: state.rooms,
@@ -35,26 +33,8 @@ const mapDispatchToProps = (dispatch) => {
     unWatchNametag(nametagId) {
       return dispatch(unWatchNametag(nametagId))
     },
-    setRoomProp(room, property, value) {
-      return dispatch(setRoomProp(room, property, value))
-    },
-    searchImage(query, start) {
-      return dispatch(searchImage(query, start))
-    },
     logout() {
       return dispatch(logout())
-    },
-    addUserNametagCert(cert, room) {
-      return dispatch(addUserNametag(cert, room))
-    },
-    removeUserNametagCert(certId, room) {
-      return dispatch(removeUserNametagCert(certId, room))
-    },
-    updateUserNametag(room, property, value) {
-      return dispatch(updateUserNametag(room, property, value))
-    },
-    providerAuth(provider) {
-      return dispatch(providerAuth(provider))
     },
   }
 }
