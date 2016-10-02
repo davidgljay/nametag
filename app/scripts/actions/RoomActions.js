@@ -115,7 +115,7 @@ export function unsubscribe() {
 export function getNametagCount(room) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      nametagSubscriptions.push(hz('nametags').findAll({room: room}).watch().subscribe(
+      nametagSubscriptions.push(hz('nametags').findAll({room}).watch().subscribe(
           (nametags) => {
             resolve(dispatch(setRoomNametagCount(room, nametags.length)))
           }, reject)
@@ -161,9 +161,7 @@ export function joinRoom(roomId, nametag, userId) {
 export function watchRoom(id) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      console.log("Watching room")
       roomWatches[id] = hz('rooms').find(id).watch().subscribe((room) => {
-        console.log("Got room response")
         dispatch(addRoom(room, room.id))
         resolve(room)
       }, reject)
@@ -217,7 +215,7 @@ export function searchImage(query, startAt) {
 }
 
 /*
-* Posts a room
+* Posts a room to the server
 *
 * @params
 *   room -The complete room object to be posted
@@ -233,6 +231,28 @@ export function postRoom(room) {
         resolve(res.id)
       }, reject)
     }).catch(errorLog('Posting room'))
+  }
+}
+
+/*
+* Updates a room on the server
+*
+* @params
+*   room -The id of the room to be updated
+*   property - The property to be updated
+*   value -The new value to be set
+*
+* @returns
+*   Promise resolving to a response from horizon
+*/
+export function updateRoom(room, property, value) {
+  return (dispatch) => {
+    return new Promise((resolve, reject) => {
+      hz('rooms').find(room).update({[property]: value}).subscribe((res) => {
+        dispatch(setRoomProp(room, property, value))
+        resolve(res)
+      }, reject)
+    }).catch(errorLog('Updating room'))
   }
 }
 
