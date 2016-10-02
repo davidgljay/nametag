@@ -208,7 +208,7 @@ export function searchImage(query, startAt) {
           }
           try {
             resolve(JSON.parse(JSON.parse(body)))
-          } catch (error) {
+        } catch (error) {
             reject('Error parsing JSON for ' + query + ',' + startAt)
           }
         })

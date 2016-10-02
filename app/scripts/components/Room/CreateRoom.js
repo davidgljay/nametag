@@ -35,6 +35,18 @@ class CreateRoom extends Component {
     this.updateRoom = this.updateRoom.bind(this)
     this.addNorm = this.addNorm.bind(this)
     this.removeNorm = this.removeNorm.bind(this)
+    this.postRoom = this.postRoom.bind(this)
+  }
+
+  static propTypes = {
+    searchImage: PropTypes.func.isRequired,
+    postRoom: PropTypes.func.isRequired,
+    addUserNametag: PropTypes.func.isRequired,
+    watchNametag: PropTypes.func.isRequired,
+    unWatchNametag: PropTypes.func.isRequired,
+    setRoomProp: PropTypes.func.isRequired,
+    logout: PropTypes.func.isRequired,
+    fetchCertificate: PropTypes.func.isRequired,
   }
 
   handleNext() {
@@ -96,6 +108,16 @@ class CreateRoom extends Component {
     })
   }
 
+  postRoom() {
+    this.props.postRoom(this.state.room)
+      .then((roomId) => {
+        this.props.addUserNametag(roomId, this.state.hostNametag)
+      })
+      .then(() => {
+        window.location = '/#/'
+      })
+  }
+
   getStepContent(stepIndex) {
     switch (stepIndex) {
     case 0:
@@ -145,8 +167,13 @@ class CreateRoom extends Component {
         <ChooseNorms
           style={styles.chooseNorms}
           addNorm={this.addNorm}
+          normsObj={this.state.norms}
           removeNorm={this.removeNorm}/>
       </div>
+    case 4:
+      return <div>
+            <h4>Ready to publish this conversation?</h4>
+          </div>
     default:
       return 'Something has gone wrong!'
     }
@@ -161,10 +188,13 @@ class CreateRoom extends Component {
 
   render() {
     const {user, logout} = this.props
-    const {room, stepIndex, finished} = this.state
+    const {room, stepIndex} = this.state
     return <div>
       <Navbar user={user} logout={logout}/>
-        <Stepper stepIndex={stepIndex}/>
+        <div style={styles.title}>
+          <h1>Start a Conversation</h1>
+          <Stepper stepIndex={stepIndex}/>
+        </div>
         <div style={styles.roomPreview}>
           <RoomCard
             room={room}
@@ -173,45 +203,41 @@ class CreateRoom extends Component {
             creating={true}
             hostNametag={this.state.hostNametag}/>
         </div>
-        {
-          finished ?
-          <h4>Publish this room?</h4>
-          : <div style={styles.createRoom}>
-              {
-                this.getStepContent(stepIndex)
-              }
-              <div>
-                {
-                  this.state.stepIndex > 0 &&
-                  <RaisedButton
-                    style={styles.button}
-                    backgroundColor={indigo500}
-                    onClick={this.handlePrev}>
-                    PREV
-                  </RaisedButton>
-                }
-                <RaisedButton
-                  style={styles.button}
-                  backgroundColor={indigo500}
-                  onClick={this.handleNext}>
-                  NEXT
-                </RaisedButton>
-              </div>
+        <div style={styles.createRoom}>
+          {
+            this.getStepContent(stepIndex)
+          }
+          <div>
+            {
+              this.state.stepIndex > 0 &&
+              <RaisedButton
+                style={styles.button}
+                backgroundColor={indigo500}
+                onClick={this.handlePrev}>
+                BACK
+              </RaisedButton>
+            }
+            {
+              this.state.stepIndex >= 4 ?
+              <RaisedButton
+                style={styles.button}
+                backgroundColor={indigo500}
+                onClick={this.postRoom}>
+                PUBLISH
+              </RaisedButton>
+              : <RaisedButton
+                style={styles.button}
+                backgroundColor={indigo500}
+                onClick={this.handleNext}>
+                NEXT
+              </RaisedButton>
+            }
 
-            </div>
-        }
+        </div>
+
+        </div>
     </div>
   }
-}
-
-CreateRoom.propTypes = {
-  searchImage: PropTypes.func.isRequired,
-  addUserNametag: PropTypes.func.isRequired,
-  watchNametag: PropTypes.func.isRequired,
-  unWatchNametag: PropTypes.func.isRequired,
-  setRoomProp: PropTypes.func.isRequired,
-  logout: PropTypes.func.isRequired,
-  fetchCertificate: PropTypes.func.isRequired,
 }
 
 export default CreateRoom
@@ -219,6 +245,9 @@ export default CreateRoom
 const styles = {
   createRoom: {
     textAlign: 'center',
+  },
+  title: {
+    margin: 40,
   },
   roomPreview: {
     display: 'flex',
@@ -257,5 +286,5 @@ const styles = {
     width: 350,
     marginLeft: 'auto',
     marginRight: 'auto',
-  }
+  },
 }

@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import component from '../../components/Room/CreateRoom'
 import {addUserNametag} from '../../actions/UserNametagActions'
 import {watchNametag, unWatchNametag} from '../../actions/NametagActions'
-import {setRoomProp, searchImage} from '../../actions/RoomActions'
+import {setRoomProp, searchImage, postRoom} from '../../actions/RoomActions'
 import {logout} from '../../actions/UserActions'
 import {fetchCertificate} from '../../actions/CertificateActions'
 
@@ -36,6 +36,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     fetchCertificate(certId) {
       return dispatch(fetchCertificate(certId))
+    },
+    postRoom(room) {
+      return dispatch(postRoom(room))
     },
   }
 }
