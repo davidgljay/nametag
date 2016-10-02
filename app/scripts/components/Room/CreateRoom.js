@@ -6,6 +6,7 @@ import Navbar from '../Utils/Navbar'
 import TitleForm from './TitleForm'
 import EditNametag from '../Nametag/EditNametag'
 import UserCertificates from '../Certificate/UserCertificates'
+import ChooseNorms from './Create/ChooseNorms'
 import Stepper from './Create/Stepper'
 import RaisedButton from 'material-ui/RaisedButton'
 import {indigo500, grey400} from 'material-ui/styles/colors'
@@ -20,7 +21,7 @@ class CreateRoom extends Component {
         certificates: [],
       },
       image: '',
-      norms: [],
+      norms: {},
       newRoom: false,
       finsihed: false,
       stepIndex: 0,
@@ -32,12 +33,14 @@ class CreateRoom extends Component {
     this.addNametagCert = this.addNametagCert.bind(this)
     this.removeNametagCert = this.removeNametagCert.bind(this)
     this.updateRoom = this.updateRoom.bind(this)
+    this.addNorm = this.addNorm.bind(this)
+    this.removeNorm = this.removeNorm.bind(this)
   }
 
   handleNext() {
     this.setState((prevState) => {
       prevState.stepIndex ++
-      prevState.finished = prevState.stepIndex >= 3
+      prevState.finished = prevState.stepIndex > 3
       return prevState
     })
   }
@@ -62,6 +65,22 @@ class CreateRoom extends Component {
     this.setState((prevState) => {
       prevState.hostNametag.certificates.push(cert)
       return prevState
+    })
+  }
+
+  addNorm(norm, key) {
+    this.setState((prev) => {
+      prev.norms[key] = norm
+      prev.room.norms = Object.keys(prev.norms).map((k) => prev.norms[k])
+      return prev
+    })
+  }
+
+  removeNorm(key) {
+    this.setState((prev) => {
+      delete prev.norms[key]
+      prev.room.norms = Object.keys(prev.norms).map((k) => prev.norms[k])
+      return prev
     })
   }
 
@@ -123,7 +142,10 @@ class CreateRoom extends Component {
     case 3:
       return <div>
         <h4>Please set norms for this discussion.</h4>
-        <NormForm/>
+        <ChooseNorms
+          style={styles.chooseNorms}
+          addNorm={this.addNorm}
+          removeNorm={this.removeNorm}/>
       </div>
     default:
       return 'Something has gone wrong!'
@@ -231,4 +253,9 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
   },
+  chooseNorms: {
+    width: 350,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  }
 }

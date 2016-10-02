@@ -41,7 +41,7 @@ const defaultNorms = [
 ]
 
 
-class Norms extends Component {
+class ChooseNorms extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -61,7 +61,7 @@ class Norms extends Component {
           prev.checkedNorms = prev.checkedNorms.slice(0, index).concat(prev.checkedNorms.slice(index + 1, prev.checkedNorms.length))
           return prev
         })
-        this.props.removeNorm(norm, i)
+        this.props.removeNorm(i)
       } else {
         this.setState((prev) => {
           prev.checkedNorms.push(i)
@@ -92,7 +92,7 @@ class Norms extends Component {
   }
 
   render() {
-    return   <div>
+    return   <div style={this.props.style}>
         <List style={styles.norms}>
           {
             defaultNorms.map((norm, i) => {
@@ -112,6 +112,7 @@ class Norms extends Component {
                 key={i}
                 primaryText={<TextField
                   value={norm}
+                  multiLine={true}
                   hintText='Add a norm...'
                   onChange={this.onCustomNormChange(subIndex, i)}
                   />}
@@ -127,10 +128,10 @@ class Norms extends Component {
 
 }
 
-Norms.propTypes = {
+ChooseNorms.propTypes = {
   addNorm: PropTypes.func.isRequired,
   removeNorm: PropTypes.func.isRequired,
 }
 
 
-export default Norms
+export default ChooseNorms
