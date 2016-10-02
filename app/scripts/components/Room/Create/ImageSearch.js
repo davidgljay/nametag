@@ -47,7 +47,6 @@ class ImageSearch extends Component {
   }
 
   prepImages(searchResults) {
-    console.log(searchResults)
     this.setState((prevState) => {
       prevState.searched =  true
       prevState.loading = false

@@ -1,8 +1,7 @@
 import { connect } from 'react-redux'
 import component from '../../components/Room/CreateRoom'
-import {addUserNametag} from '../../actions/UserNametagActions'
 import {watchNametag, unWatchNametag} from '../../actions/NametagActions'
-import {setRoomProp, searchImage, postRoom} from '../../actions/RoomActions'
+import {setRoomProp, searchImage, postRoom, updateRoom, joinRoom} from '../../actions/RoomActions'
 import {logout} from '../../actions/UserActions'
 import {fetchCertificate} from '../../actions/CertificateActions'
 
@@ -16,8 +15,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addUserNametag(roomId, nametagId) {
-      return dispatch(addUserNametag(roomId, nametagId))
+    joinRoom(roomId, nametagId, userId) {
+      return dispatch(joinRoom(roomId, nametagId, userId))
     },
     watchNametag(nametagId) {
       return dispatch(watchNametag(nametagId))
@@ -39,6 +38,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     postRoom(room) {
       return dispatch(postRoom(room))
+    },
+    updateRoom(room, property, value) {
+      return dispatch(updateRoom(room, property, value))
     },
   }
 }

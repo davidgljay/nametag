@@ -166,13 +166,9 @@ describe('RoomActions', () => {
 
   describe('upateRoom', () => {
     it('should update a room on the server', () => {
-      let room = {
-        name: 'A Room',
-      }
       hz.mockReturnValue(mockHz({updated: 1}, calls)())
       return actions.updateRoom('123', 'name', 'A new name')(store.dispatch).then((res) => {
-        expect(calls[1]).toEqual({type: 'find', req: '123'})
-        expect(calls[2]).toEqual({type: 'update', req: {name: 'A new name'}})
+        expect(calls[1]).toEqual({type: 'update', req: {id: '123', name: 'A new name'}})
         expect(res).toEqual({updated: 1})
         expect(store.getActions()[0]).toEqual({
           type: 'SET_ROOM_PROP',

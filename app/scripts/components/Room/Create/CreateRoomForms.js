@@ -18,7 +18,7 @@ const getForm = (props) => {
     </div>
   case 1:
     return <div>
-      <h4>Please select an image for your room.</h4>
+      <h4>Please select an image for this conversation.</h4>
       <ImageSearch
         style={styles.imageSearch}
         searchImage={props.searchImage}

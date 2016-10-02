@@ -248,7 +248,7 @@ export function postRoom(room) {
 export function updateRoom(room, property, value) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      hz('rooms').find(room).update({[property]: value}).subscribe((res) => {
+      hz('rooms').update({id: room, [property]: value}).subscribe((res) => {
         dispatch(setRoomProp(room, property, value))
         resolve(res)
       }, reject)

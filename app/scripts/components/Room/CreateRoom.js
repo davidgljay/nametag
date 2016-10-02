@@ -37,12 +37,22 @@ class CreateRoom extends Component {
   static propTypes = {
     searchImage: PropTypes.func.isRequired,
     postRoom: PropTypes.func.isRequired,
-    addUserNametag: PropTypes.func.isRequired,
+    joinRoom: PropTypes.func.isRequired,
     watchNametag: PropTypes.func.isRequired,
     unWatchNametag: PropTypes.func.isRequired,
     setRoomProp: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
     fetchCertificate: PropTypes.func.isRequired,
+  }
+
+  static childContextTypes = {
+    user: PropTypes.object,
+  }
+
+  getChildContext() {
+    return {
+      user: this.props.user,
+    }
   }
 
   handleNext() {
@@ -105,9 +115,14 @@ class CreateRoom extends Component {
   }
 
   postRoom() {
+    let id
     this.props.postRoom(this.state.room)
       .then((roomId) => {
-        this.props.addUserNametag(roomId, this.state.hostNametag)
+        id = roomId
+        return this.props.joinRoom(roomId, this.state.hostNametag, this.props.user.id)
+      })
+      .then((nametagId) => {
+        return this.props.updateRoom(id, 'mod', nametagId)
       })
       .then(() => {
         window.location = '/#/'
@@ -149,7 +164,7 @@ class CreateRoom extends Component {
             addNametagCert={this.addNametagCert}
             removeNametagCert={this.removeNametagCert}
             updateNametag={this.updateNametag}
-            fetchCertificate={this.fetchCertificate}
+            fetchCertificate={this.props.fetchCertificate}
             addNorm={this.addNorm}
             norms={this.state.norms}
             removeNorm={this.removeNorm}/>

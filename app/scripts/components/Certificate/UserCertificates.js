@@ -14,7 +14,7 @@ class UserCertificates extends Component {
     }
     let certificates = this.context.user.data.certificates
     for (let i = 0; i < certificates.length; i++) {
-      this.props.fetchCertificates(certificates[i])
+      this.props.fetchCertificate(certificates[i])
     }
   }
 
