@@ -119,7 +119,7 @@ class CreateRoom extends Component {
     this.props.postRoom(this.state.room)
       .then((roomId) => {
         id = roomId
-        return this.props.joinRoom(roomId, this.state.hostNametag, this.props.user.id)
+        return this.props.joinRoom(roomId, {...this.state.hostNametag, room: roomId}, this.props.user.id)
       })
       .then((nametagId) => {
         return this.props.updateRoom(id, 'mod', nametagId)
