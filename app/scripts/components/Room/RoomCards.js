@@ -18,7 +18,6 @@ const styles = {
     flexWrap: 'wrap',
   },
   roomCard: {
-    flex: 1,
   },
 }
 

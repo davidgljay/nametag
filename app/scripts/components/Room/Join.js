@@ -31,8 +31,24 @@ const styles = {
 
 class Join extends Component {
 
+  static propTypes = {
+    room: PropTypes.string.isRequired,
+    normsChecked: PropTypes.bool.isRequired,
+    userNametag: PropTypes.object,
+    addUserNametagCert: PropTypes.func.isRequired,
+    removeUserNametagCert: PropTypes.func.isRequired,
+    updateUserNametag: PropTypes.func.isRequired,
+    providerAuth: PropTypes.func.isRequired,
+    fetchCertificate: PropTypes.func.isRequired,
+    joinRoom: PropTypes.func.isRequired,
+  }
+
+  static contextTypes = {
+    user: PropTypes.object,
+  }
+
   onJoinClick() {
-    this.peops.joinRoom(this.props.room, this.props.userNametag, this.context.user.id)
+    this.props.joinRoom(this.props.room, this.props.userNametag, this.context.user.id)
       .then(() => {
         window.location = '/#/rooms/' + this.props.room
       })
@@ -72,22 +88,6 @@ class Join extends Component {
     }
     return join
   }
-}
-
-Join.propTypes = {
-  room: PropTypes.string.isRequired,
-  normsChecked: PropTypes.bool.isRequired,
-  userNametag: PropTypes.object,
-  addUserNametagCert: PropTypes.func.isRequired,
-  removeUserNametagCert: PropTypes.func.isRequired,
-  updateUserNametag: PropTypes.func.isRequired,
-  providerAuth: PropTypes.func.isRequired,
-  fetchCertificate: PropTypes.func.isRequired,
-  joinRoom: PropTypes.func.isRequired,
-}
-
-Join.contextTypes = {
-  user: PropTypes.object,
 }
 
 export default Join

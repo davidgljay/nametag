@@ -41,7 +41,7 @@ class Room extends Component {
   }
 
   componentWillUnmount() {
-    props.unWatchRoom(this.props.params.roomId)
+    this.props.unWatchRoom(this.props.params.roomId)
   }
 
   closeRoom() {
