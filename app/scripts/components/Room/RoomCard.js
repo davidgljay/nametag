@@ -10,17 +10,12 @@ import Checkbox from 'material-ui/Checkbox'
 import {grey400} from 'material-ui/styles/colors'
 
 class RoomCard extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      flipped: false,
-      flipping: false,
-      normsChecked: false,
-      checkingForNametag: false,
-    }
-    this.flip = this.flip.bind(this)
-    this.onNormsCheck = this.onNormsCheck.bind(this)
-    this.checkForNametag = this.checkForNametag.bind(this)
+
+  state = {
+    flipped: false,
+    flipping: false,
+    normsChecked: false,
+    checkingForNametag: false,
   }
 
   componentDidMount() {
@@ -29,13 +24,17 @@ class RoomCard extends Component {
     }
   }
 
-  componentWillUpdate() {
+  componentWillUpdate(nextProps) {
     if (!this.props.creating) {
       this.checkForNametag()
     }
+    if (nextProps.flipped !== this.props.flipped &&
+      nextProps.flipped !== this.state.flipped) {
+      this.flip()
+    }
   }
 
-  checkForNametag() {
+  checkForNametag = () => {
     if ( this.context.user &&
       this.context.user.id &&
       !this.props.userNametag &&
@@ -56,11 +55,11 @@ class RoomCard extends Component {
     }
   }
 
-  onNormsCheck(e) {
+  onNormsCheck = (e) => {
     this.setState({normsChecked: e.target.checked})
   }
 
-  flip() {
+  flip = () => {
     this.setState({flipped: !this.state.flipped, flipping: 0.01})
 
     // Run the flipping animation. This needs to be done w/ JS b/c Radium doesn't support it.

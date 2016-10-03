@@ -161,7 +161,7 @@ class CreateRoom extends Component {
     case 3:
       return {
         valid: this.state.room.norms && this.state.room.norms.length > 0 ? true : false,
-        error: this.state.room.norms && this.state.room.norms.length > 0 ? '' : 'Please select at least one norm',
+      error: this.state.room.norms && this.state.room.norms.length > 0 ? '' : 'Please select at least one norm',
       }
     default:
       return {
@@ -186,6 +186,7 @@ class CreateRoom extends Component {
             id={'new'}
             style={styles.previewCard}
             creating={true}
+            flipped={stepIndex === 3}
             hostNametag={this.state.hostNametag}/>
         </div>
         <div style={styles.createRoom}>
