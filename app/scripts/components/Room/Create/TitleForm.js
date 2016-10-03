@@ -6,6 +6,7 @@ const TitleForm = (props) =>
     <TextField
       style={styles.textfield}
       value={props.title}
+      errorText={props.error && props.error.titleError}
       onChange={(e) => props.updateRoom('title', e.target.value)}
       floatingLabelText="Title"
       /><br/>
@@ -13,6 +14,7 @@ const TitleForm = (props) =>
       style={styles.textfield}
       value={props.desc}
       multiLine={true}
+      errorText={props.error && props.error.descriptionError}
       inputStyle={styles.descriptionField}
       onChange={(e) => props.updateRoom('description', e.target.value)}
       floatingLabelText="Description"/>

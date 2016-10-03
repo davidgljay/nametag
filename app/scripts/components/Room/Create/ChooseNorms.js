@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {green500} from 'material-ui/styles/colors'
+import {green500, red500} from 'material-ui/styles/colors'
 import {List, ListItem} from 'material-ui/List'
 import Check from 'material-ui/svg-icons/navigation/check'
 import TextField from 'material-ui/TextField'
@@ -71,6 +71,12 @@ class ChooseNorms extends Component {
 
   render() {
     return   <div style={this.props.style}>
+        {
+          this.props.error &&
+          <div style={styles.error}>
+            {this.props.error}
+          </div>
+        }
         <List style={styles.norms}>
           {
             defaultNorms.map((norm, i) => {
@@ -130,6 +136,9 @@ const styles = {
     marginRight: 10,
     marginTop: 16,
     fill: green500,
+  },
+  error: {
+    color: red500,
   },
 }
 

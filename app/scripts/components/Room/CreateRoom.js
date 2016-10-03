@@ -9,29 +9,16 @@ import {indigo500} from 'material-ui/styles/colors'
 
 class CreateRoom extends Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      room: {},
-      hostNametag: {
-        certificates: [],
-      },
-      image: '',
-      norms: {},
-      newRoom: false,
-      finsihed: false,
-      stepIndex: 0,
-    }
-    this.handleNext = this.handleNext.bind(this)
-    this.handlePrev = this.handlePrev.bind(this)
-    this.updateRoom = this.updateRoom.bind(this)
-    this.updateNametag = this.updateNametag.bind(this)
-    this.addNametagCert = this.addNametagCert.bind(this)
-    this.removeNametagCert = this.removeNametagCert.bind(this)
-    this.updateRoom = this.updateRoom.bind(this)
-    this.addNorm = this.addNorm.bind(this)
-    this.removeNorm = this.removeNorm.bind(this)
-    this.postRoom = this.postRoom.bind(this)
+  state = {
+    room: {},
+    hostNametag: {
+      certificates: [],
+    },
+    image: '',
+    norms: {},
+    newRoom: false,
+    finsihed: false,
+    stepIndex: 0,
   }
 
   static propTypes = {
@@ -49,44 +36,56 @@ class CreateRoom extends Component {
     user: PropTypes.object,
   }
 
-  getChildContext() {
+  getChildContext = () => {
     return {
       user: this.props.user,
     }
   }
 
-  handleNext() {
-    this.setState((prevState) => {
-      prevState.stepIndex ++
-      prevState.finished = prevState.stepIndex > 3
-      return prevState
-    })
+  handleNext = () => {
+    const validation = this.validate(this.state.stepIndex)
+    if (validation.valid) {
+      this.setState((prevState) => {
+        delete prevState.error
+        prevState.stepIndex ++
+        prevState.finished = prevState.stepIndex > 3
+        return prevState
+      })
+    } else {
+      this.setState({error: validation.error})
+    }
   }
 
-  handlePrev() {
-    this.setState((prevState) => {
-      if (prevState.stepIndex > 0) {
-        prevState.stepIndex --
-      }
-      return prevState
-    })
+  handlePrev= () => {
+    const validation = this.validate(this.state.stepIndex)
+    if (validation.valid) {
+      this.setState((prevState) => {
+        delete prevState.error
+        if (prevState.stepIndex > 0) {
+          prevState.stepIndex --
+        }
+        return prevState
+      })
+    } else {
+      this.setState({error: validation.error})
+    }
   }
 
-  updateNametag(room, prop, val) {
+  updateNametag = (room, prop, val) => {
     this.setState((prevState) => {
       prevState.hostNametag[prop] = val
       return prevState
     })
   }
 
-  addNametagCert(cert) {
+  addNametagCert = (cert) => {
     this.setState((prevState) => {
       prevState.hostNametag.certificates.push(cert)
       return prevState
     })
   }
 
-  addNorm(norm, key) {
+  addNorm = (norm, key) => {
     this.setState((prev) => {
       prev.norms[key] = norm
       prev.room.norms = Object.keys(prev.norms).map((k) => prev.norms[k])
@@ -94,7 +93,7 @@ class CreateRoom extends Component {
     })
   }
 
-  removeNorm(key) {
+  removeNorm = (key) => {
     this.setState((prev) => {
       delete prev.norms[key]
       prev.room.norms = Object.keys(prev.norms).map((k) => prev.norms[k])
@@ -102,7 +101,7 @@ class CreateRoom extends Component {
     })
   }
 
-  removeNametagCert(certId) {
+  removeNametagCert = (certId) => {
     this.setState((prevState) => {
       let certs = prevState.hostNametag.certificates
       for (let i = 0; i < certs.length; i++) {
@@ -114,9 +113,9 @@ class CreateRoom extends Component {
     })
   }
 
-  postRoom() {
+  postRoom = () => {
     let id
-    this.props.postRoom(this.state.room)
+    this.props.postRoom(this.state. room)
       .then((roomId) => {
         id = roomId
         return this.props.joinRoom(roomId, {...this.state.hostNametag, room: roomId}, this.props.user.id)
@@ -129,11 +128,47 @@ class CreateRoom extends Component {
       })
   }
 
-  updateRoom(prop, val) {
+  updateRoom = (prop, val) => {
     this.setState((prevState) => {
       prevState.room[prop] = val
       return prevState
     })
+  }
+
+  validate = (stepIndex) => {
+    switch (stepIndex) {
+    case 0:
+      return {
+        valid: this.state.room.title && this.state.room.description ? true : false,
+        error: {
+          titleError: this.state.room.title ? '' : 'Please add a title',
+          descriptionError: this.state.room.description ? '' : 'Please add a description',
+        },
+      }
+    case 1:
+      return {
+        valid: this.state.room.image ? true : false,
+        error: this.state.room.image ? '' : 'Please provide an image',
+      }
+    case 2:
+      return {
+        valid: this.state.hostNametag.name && this.state.hostNametag.bio ? true : false,
+        error: {
+          nameError: this.state.hostNametag.name ? '' : 'Please choose a name for this room',
+          bioError: this.state.hostNametag.bio ? '' : 'Please provide a brief bio',
+        },
+      }
+    case 3:
+      return {
+        valid: this.state.room.norms && this.state.room.norms.length > 0 ? true : false,
+        error: this.state.room.norms && this.state.room.norms.length > 0 ? '' : 'Please select at least one norm',
+      }
+    default:
+      return {
+        valid: true,
+        error: '',
+      }
+    }
   }
 
   render() {
@@ -167,7 +202,8 @@ class CreateRoom extends Component {
             fetchCertificate={this.props.fetchCertificate}
             addNorm={this.addNorm}
             norms={this.state.norms}
-            removeNorm={this.removeNorm}/>
+            removeNorm={this.removeNorm}
+            error={this.state.error}/>
           <div>
             {
               this.state.stepIndex > 0 &&

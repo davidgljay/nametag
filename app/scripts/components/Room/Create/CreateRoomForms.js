@@ -12,6 +12,7 @@ const getForm = (props) => {
     return <div>
       <h4>What would you like to talk about?</h4>
       <TitleForm
+        error={props.error}
         updateRoom={props.updateRoom}
         title={props.room.title}
         desc={props.room.description}/>
@@ -20,6 +21,7 @@ const getForm = (props) => {
     return <div>
       <h4>Please select an image for this conversation.</h4>
       <ImageSearch
+        error={props.error}
         style={styles.imageSearch}
         searchImage={props.searchImage}
         updateRoom={props.updateRoom}/>
@@ -30,6 +32,7 @@ const getForm = (props) => {
       <div style={styles.editNametagContainer}>
         <div>
           <EditNametag
+            error={props.error}
             userNametag={props.hostNametag}
             addUserNametagCert={props.addNametagCert}
             removeUserNametagCert={props.removeNametagCert}
@@ -51,6 +54,7 @@ const getForm = (props) => {
     return <div>
       <h4>Please set norms for this discussion.</h4>
       <ChooseNorms
+        error={props.error}
         style={styles.chooseNorms}
         addNorm={props.addNorm}
         normsObj={props.norms}

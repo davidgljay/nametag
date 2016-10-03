@@ -86,6 +86,7 @@ class EditNametag extends Component {
                     inputStyle={{height: 50, margin: 0}}
                     floatingLabelStyle={{top: 20}}
                     underlineShow={false}
+                    errorText={this.props.error && this.props.error.nameError}
                     onChange={this.updateNametagProperty('name')}
                     value={nametag.name}
                     hintText='Name'/>
@@ -94,6 +95,7 @@ class EditNametag extends Component {
                     rows={2}
                     multiLine={true}
                     fullWidth={true}
+                    errorText={this.props.error && this.props.error.bioError}
                     underlineShow={false}
                     onChange={this.updateNametagProperty('bio')}
                     value={nametag.bio}

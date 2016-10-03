@@ -1,5 +1,9 @@
 import React, {Component, PropTypes} from 'react'
-import { Card, Textfield, Icon, Button, Spinner } from 'react-mdl'
+import TextField from 'material-ui/TextField'
+import {Card} from 'material-ui/Card'
+import RaisedButton from 'material-ui/RaisedButton'
+import CircularProgress from 'material-ui/CircularProgress'
+import {indigo500} from 'material-ui/styles/colors'
 
 class ImageSearch extends Component {
 
@@ -78,23 +82,22 @@ class ImageSearch extends Component {
   render() {
     return <div style={styles.container}>
       <div style={styles.searchContainer}>
-        <Textfield
+        <TextField
           onChange={this.setImageQuery}
-          label='Image search...'
+          floatingLabelText='Search Flickr...'
+          errorText={this.props.error}
           value={this.state.imageQuery}
           style={styles.searchField}/>
-        <Button
-          colored
-          raised
+        <RaisedButton
+          backgroundColor={indigo500}
           style={styles.button}
-          onClick={this.onSearchClick}>Find Image</Button>
+          onClick={this.onSearchClick}>FIND IMAGE</RaisedButton>
       </div>
       {
         (this.state.images.length > 0 || this.state.loading) &&
         <div style={styles.imagesContainer}>
           {this.state.images.map((image, i) => {
             return <Card
-              shadow={1}
               style={styles.thumbnailContainer}
               key ={i}
               onClick={() => this.props.updateRoom('image', image.link)}>
@@ -104,7 +107,7 @@ class ImageSearch extends Component {
           {
             this.state.loading &&
             <div style={styles.spinnerDiv}>
-              <Spinner />
+              <CircularProgress />
             </div>
           }
           {
@@ -123,8 +126,8 @@ export default ImageSearch
 
 const styles = {
   button: {
-    float: 'right',
-    margin: 10,
+    color: '#fff',
+    margin: 20,
   },
   container: {
     marginTop: 10,
