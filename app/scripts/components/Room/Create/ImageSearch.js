@@ -1,37 +1,32 @@
 import React, {Component, PropTypes} from 'react'
+import FileUpload from 'react-fileupload'
 import TextField from 'material-ui/TextField'
 import {Card} from 'material-ui/Card'
 import RaisedButton from 'material-ui/RaisedButton'
 import CircularProgress from 'material-ui/CircularProgress'
-import {indigo500} from 'material-ui/styles/colors'
+import {indigo500, grey500} from 'material-ui/styles/colors'
+import IconButton from 'material-ui/IconButton'
+import FontIcon from 'material-ui/FontIcon'
 
 class ImageSearch extends Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      images: [],
-    }
-    this.onSearchClick = this.onSearchClick.bind(this)
-    this.loadMore = this.loadMore.bind(this)
-    this.prepImages = this.prepImages.bind(this)
-    this.handleScroll = this.handleScroll.bind(this)
-    this.setImageQuery = this.setImageQuery.bind(this)
+  state = {
+    images: [],
   }
 
   static propTypes = {
     searchImage: PropTypes.func.isRequired,
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     window.addEventListener('scroll', this.handleScroll)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount = () => {
     window.removeEventListener('scroll', this.handleScroll)
   }
 
-  handleScroll() {
+  handleScroll = () => {
     const bottom = document.getElementById('scrollBottom')
     if (bottom && !this.state.loading &&
       this.state.images.length < this.state.totalResults &&
@@ -68,18 +63,30 @@ class ImageSearch extends Component {
     })
   }
 
-  onSearchClick() {
+  onSearchClick = () => {
     this.props.searchImage(this.state.imageQuery)
       .then(this.prepImages)
     this.setState({loading: true})
     this.setState({images: []})
   }
 
-  setImageQuery(e) {
+  setImageQuery = (e) => {
     this.setState({imageQuery: e.target.value})
   }
 
+  onUpload = (res) => {
+    if (res.url) {
+      this.props.updateRoom('image', image.link)
+    }
+  }
+
   render() {
+    const uploadOptions = {
+      baseUrl: 'https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/nametag_img_upload',
+      chooseAndUpload: true,
+      accept: '.jpg,.jpeg,.png',
+    }
+
     return <div style={styles.container}>
       <div style={styles.searchContainer}>
         <TextField
@@ -93,31 +100,40 @@ class ImageSearch extends Component {
           style={styles.button}
           onClick={this.onSearchClick}>FIND IMAGE</RaisedButton>
       </div>
-      {
-        (this.state.images.length > 0 || this.state.loading) &&
-        <div style={styles.imagesContainer}>
-          {this.state.images.map((image, i) => {
+      <div style={styles.imagesContainer}>
+        <Card
+          style={{ ...styles.thumbnailContainer, ...styles.imageUpload}}>
+              <IconButton
+              style={styles.imageUploadButton}
+              iconStyle={styles.imageUploadIcon}
+              iconClassName="material-icons"
+              ref="chooseAndUpload">
+                cloud_upload
+              </IconButton>
+        </Card>
+        {
+          this.state.images.map((image, i) => {
             return <Card
               style={styles.thumbnailContainer}
               key ={i}
               onClick={() => this.props.updateRoom('image', image.link)}>
               <img src={image.thumbnail} style={styles.thumbnail}/>
               </Card>
-          })}
-          {
-            this.state.loading &&
-            <div style={styles.spinnerDiv}>
-              <CircularProgress />
-            </div>
-          }
-          {
-            this.state.searched &&
-            this.state.images.length === 0 &&
-            <div style={styles.noResults}>No results found, please try again.</div>
-          }
-          <div id='scrollBottom'/>
-        </div>
-      }
+          })
+        }
+        {
+          this.state.loading &&
+          <div style={styles.spinnerDiv}>
+            <CircularProgress />
+          </div>
+        }
+        {
+          this.state.searched &&
+          this.state.images.length === 0 &&
+          <div style={styles.noResults}>No results found, please try again.</div>
+        }
+        <div id='scrollBottom'/>
+      </div>
     </div>
   }
 }
@@ -178,5 +194,16 @@ const styles = {
     color: '#999',
     textAlign: 'center',
     paddingBottom: 10,
+  },
+  imageUpload: {
+    backgroundColor: grey500,
+  },
+  imageUploadButton: {
+    width: 90,
+    height: 100,
+  },
+  imageUploadIcon: {
+    fontSize: 65,
+    color: '#fff',
   },
 }
