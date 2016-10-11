@@ -44,7 +44,6 @@
       "vars": "local",
       "args": "after-used"
     }],
-    "no-use-before-define": [2, "nofunc"],       // http://eslint.org/docs/rules/no-use-before-define
 
 /**
  * Possible errors
