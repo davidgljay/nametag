@@ -1,0 +1,13 @@
+# Nametag
+#
+# VERSION               0.0.1
+
+FROM node
+MAINTAINER David Jay <davidgljay@gmail.com>
+
+LABEL description="Used to start the Nametag server"
+LABEL updated="10/9/16"
+RUN apt-get update
+WORKDIR usr/server
+RUN npm install
+CMD npm start

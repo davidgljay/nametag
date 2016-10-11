@@ -1,17 +1,22 @@
+horizon: 
+  build: .
+  dockerfile: devDockerfile
+  volumes:
+    - ./dist:/usr/app/dist
+    - ./.keys:/usr/.keys
+    - ./server:/usr/server
+    - ./.hz:/usr/app/.hz
+  links:
+    - rethinkdb
+  ports:
+    - "8181:8181"
 rethinkdb:
   image: rethinkdb
   command: rethinkdb --bind "all" #--no-update-check
   ports:
     - "28015:28015"
     - "8080:8080"
-horizon:
-  image: rethinkdb/horizon
-  command: su -s /bin/sh horizon -c "/usr/app/.hz/starthz.sh"
-  volumes:
-    - ./dist:/usr/app/dist
-    - ./.keys:/usr/.keys
-    - ./.hz:/usr/app/.hz
-  links:
-    - rethinkdb
-  ports:
-    - "8181:8181"
+# horizon:
+#   image: rethinkdb/horizon
+#   command: su -s /bin/sh horizon -c "/usr/app/.hz/starthz.sh"
+

@@ -1,0 +1,16 @@
+{
+  "name": "nametag-server",
+  "version": "0.0.1",
+  "description": "Server for Nametag",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app",
+    "test": "jest"
+  },
+  "author": "David Jay <davidgljay@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0",
+    "horizon": "^2.0.0"
+  }
+}
