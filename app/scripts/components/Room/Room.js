@@ -3,6 +3,8 @@ import FontIcon from 'material-ui/FontIcon'
 import IconButton from 'material-ui/IconButton'
 import CircularProgress from 'material-ui/CircularProgress'
 import {indigo500} from 'material-ui/styles/colors'
+import {mobile} from '../../../styles/sizes'
+import radium from 'radium'
 
 import Norms from './Norms'
 import Nametags from '../../containers/Nametag/NametagsContainer'
@@ -55,6 +57,7 @@ class Room extends Component {
   }
 
   render() {
+    console.log(styles.description)
     // let expanded = this.state.leftBarExpanded ? style.expanded : style.collapsed
     return  <div>
       {
@@ -123,7 +126,7 @@ Room.childContextTypes = {
   norms: PropTypes.array,
 }
 
-export default Room
+export default radium(Room)
 
 const styles = {
   header: {
@@ -155,8 +158,9 @@ const styles = {
   leftBar: {
     minHeight: 400,
     background: indigo500,
-    marginTop: 65,
+    marginTop: 55,
     height: '100%',
+    paddingTop: 15,
     paddingLeft: 15,
     paddingRight: 15,
     paddingBottom: 50,
@@ -174,6 +178,15 @@ const styles = {
     top: '45%',
     left: 255,
     cursor: 'pointer',
+    [mobile]: {
+      display: 'block',
+    },
+  },
+  description: {
+    fontSize: 14,
+    [mobile]: {
+      display: 'none',
+    },
   },
   // @media (mobile): {
   //

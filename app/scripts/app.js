@@ -63,4 +63,3 @@ Nametag.childContextTypes = {
 const DecoratedNametag = Radium(DragDropContext(TouchBackend({ enableMouseEvents: true }))(Nametag))
 
 ReactDOM.render(<DecoratedNametag/>, mountNode)
-
