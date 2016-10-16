@@ -4,7 +4,7 @@ import IconButton from 'material-ui/IconButton'
 import CircularProgress from 'material-ui/CircularProgress'
 import {indigo500} from 'material-ui/styles/colors'
 import {mobile} from '../../../styles/sizes'
-import radium from 'radium'
+import radium, {keyframes} from 'radium'
 
 import Norms from './Norms'
 import Nametags from '../../containers/Nametag/NametagsContainer'
@@ -57,8 +57,8 @@ class Room extends Component {
   }
 
   render() {
-    console.log(styles.description)
-    // let expanded = this.state.leftBarExpanded ? style.expanded : style.collapsed
+    let expanded = this.state.leftBarExpanded ? styles.expanded : styles.collapsed
+    expanded = window.innerWidth < 800 ? expanded : {}
     return  <div>
       {
         this.props.userNametag && this.props.room ?
@@ -79,7 +79,7 @@ class Room extends Component {
                 </div>
             </div>
             <div>
-              <div style={styles.leftBar}>
+              <div style={{...styles.leftBar, ...expanded}}>
                 <div style={styles.leftBarContent}>
                   <div style={styles.norms}>
                     <Norms norms={this.props.room.norms}/>
@@ -88,7 +88,9 @@ class Room extends Component {
                 </div>
                 <div style={styles.leftBarChevron}>
                   <FontIcon
+                    color='#FFF'
                     className="material-icons"
+                    style={this.state.leftBarExpanded ? styles.chevronOut : {}}
                     onClick={this.toggleLeftBar.bind(this)}
                     >chevron_right</FontIcon>
                 </div>
@@ -127,6 +129,27 @@ Room.childContextTypes = {
 }
 
 export default radium(Room)
+
+
+const slideOut = keyframes({
+  '0%': {left: -260},
+  '100%': {left: 0},
+}, 'slideOut')
+
+const slideIn = keyframes({
+  '0%': {left: 0},
+  '100%': {left: -260},
+}, 'slideIn')
+
+const spinIn = keyframes({
+  '0%': { transform: 'rotate(0deg)' },
+  '100%': {rotate: 'rotate(180deg)'},
+}, 'spinIn')
+
+const spinOut = keyframes({
+  '0%': { transform: 'rotate(180deg)' },
+  '100%': { transform: 'rotate(0deg)'},
+}, 'spinOut')
 
 const styles = {
   header: {
@@ -169,11 +192,11 @@ const styles = {
     top: 0,
     left: 0,
     zIndex: 50,
-    overflowY: 'scroll',
+    overflowY: 'hidden',
   },
   leftBarChevron: {
     display: 'none',
-    color: 'white',
+    color: '#FFF',
     position: 'absolute',
     top: '45%',
     left: 255,
@@ -188,40 +211,19 @@ const styles = {
       display: 'none',
     },
   },
-  // @media (mobile): {
-  //
-  //     expanded: {
-  //         animation-name: 'slide-out',
-  //         animation-duration: '1s',
-  //         animation-fill-mode: 'forwards',
-  //     },
-  //
-  //     collapsed: {
-  //         animation-name: 'slide-in',
-  //         animation-duration: '1s',
-  //         animation-fill-mode: 'forwards',
-  //     },
-  //
-  //     #leftBarChevron: {
-  //         display: 'block',
-  //     },
-  //
-  //     collapsed #leftBarChevron: {
-  //         animation-name: 'spin-out',
-  //         animation-duration: '1s',
-  //         animation-fill-mode: 'forwards',
-  //     },
-  //
-  //     expanded #leftBarChevron: {
-  //         animation-name: 'spin-in',
-  //         animation-duration: '1s',
-  //         animation-fill-mode: 'forwards',
-  //     },
-  //
-  //     description: {
-  //         display: 'none',
-  //     },
-  // },
+  expanded: {
+    animationName: slideOut,
+    animationDuration: '500ms',
+    animationFillMode: 'forwards',
+  },
+  collapsed: {
+    animationName: slideIn,
+    animationDuration: '500ms',
+    animationFillMode: 'forwards',
+  },
+  chevronOut: {
+    transform: 'rotate(180deg)',
+  },
   spinner: {
     marginLeft: '45%',
     marginTop: '40vh',
