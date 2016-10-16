@@ -57,8 +57,6 @@ class ModAction extends Component {
   }
 
   remindOfNorms() {
-    // TODO: Allow edits without breaking append-only rule (right now there's one modaction per comment)
-
     if (this.state.normChecks.length === 0) {
       self.setState({alert: 'Please check at least one norm.'})
       return

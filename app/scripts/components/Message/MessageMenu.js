@@ -20,11 +20,12 @@ class MessageMenu extends Component {
     const isMobile = window.innerWidth < 800
     let actionAnim = showActions ? styles.slideOutActions : styles.slideInActions
     let leftChevAnim = showActions ? styles.fadeOut : styles.fadeIn
-    return <div>
+    return <div style={styles.actionsContainer}>
       <Reactions message={id} />
-      <div style={{...styles.actions, ...actionAnim}}>
+      <div style={{...styles.actions, ...actionAnim}} key='actions'>
         {
           isMobile && <FontIcon
+            key='chevronLeft'
             className='material-icons'
             style={{...styles.actionIcon, ...leftChevAnim}}
             onClick={this.toggleActions}>
@@ -32,20 +33,23 @@ class MessageMenu extends Component {
           </FontIcon>
         }
         <FontIcon
+          key='starIcon'
           className='material-icons'
-          style={{...styles.actionIcon}}>
+          style={styles.actionIcon}>
           star
         </FontIcon>
         <FontIcon
+          key='flagIcon'
           className='material-icons'
-          style={{...styles.actionIcon}}
+          style={styles.actionIcon}
           onClick={modAction(true)}>
           flag
         </FontIcon>
         {
           isMobile && <FontIcon
+            key='chevronRight'
             className='material-icons'
-            style={{...styles.actionIcon}}
+            style={styles.actionIcon}
             onClick={this.toggleActions}>
             chevron_right
           </FontIcon>
@@ -74,23 +78,20 @@ const fadeIn = keyframes({
 })
 
 const styles = {
+  actionsContainer: {
+    marginTop: 5,
+  },
   actionIcon: {
     cursor: 'pointer',
     color: 'grey',
     marginRight: 5,
-    opacity: 25,
-    ':hover': {
-      opacity: 1,
-    },
-    [mobile]: {
-      fontSize: 20,
-      marginRight: 15,
-      opacity: 5,
-    },
+    fontSize: 'inherit',
+    opacity: 0.5,
   },
   actions: {
     height: 22,
     display: 'inline-block',
+    fontSize: 14,
     [mobile]: {
       height: 'auto',
       float: 'right',
@@ -101,6 +102,7 @@ const styles = {
       background: 'white',
       borderRadius: 3,
       padding: 5,
+      fontSize: 24,
     },
   },
   fadeOut: {
