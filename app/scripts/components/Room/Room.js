@@ -59,7 +59,7 @@ class Room extends Component {
   render() {
     let expanded = this.state.leftBarExpanded ? styles.expanded : styles.collapsed
     expanded = window.innerWidth < 800 ? expanded : {}
-    return  <div>
+    return  <div style={styles.roomContainer}>
       {
         this.props.userNametag && this.props.room ?
           <div>
@@ -152,6 +152,9 @@ const spinOut = keyframes({
 }, 'spinOut')
 
 const styles = {
+  roomContainer: {
+    overflowX: 'hidden',
+  },
   header: {
     borderBottom: '3px solid ' + indigo500,
     position: 'fixed',

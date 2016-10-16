@@ -4,39 +4,25 @@ import ModAction from '../ModAction/ModAction'
 import Media from './Media'
 import MessageMenu from './MessageMenu'
 import emojis from 'react-emoji'
-import style from '../../../styles/Message/Message.css'
+import {mobile} from '../../../styles/sizes'
+import {grey500} from 'material-ui/styles/colors'
 
 class Message extends Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {modAction: false}
-    this.modAction = this.modAction.bind(this)
-    this.toggleActions = this.toggleActions.bind(this)
-    this.checkYouTube = this.checkYouTube.bind(this)
-    this.checkImage = this.checkImage.bind(this)
-  }
+  state = {modAction: false}
 
-  modAction(open) {
+  modAction = (open) => {
     return (e) => {
       e.preventDefault()
       this.setState({modAction: open})
     }
   }
 
-  toggleActions() {
-    return this.setState({
-      showActions:
-      this.state.showActions === style.slideOutActions ?
-      style.slideInActions : style.slideOutActions,
-    })
-  }
-
-  checkYouTube(message) {
+  checkYouTube = (message) => {
     return /[^ ]+youtube\.com[^ \.\!]+/.exec(message)
   }
 
-  checkImage(message) {
+  checkImage = (message) => {
     return /[^ ]+(\.gif|\.jpg|\.png)/.exec(message)
   }
 
@@ -44,8 +30,6 @@ class Message extends Component {
   render() {
     let below
     let media
-
-    // TODO: Replace heart with Emoji icon and display
 
     if (this.checkYouTube(this.props.text)) {
       media = <Media url={this.checkYouTube(this.props.text)[0]}/>
@@ -61,29 +45,27 @@ class Message extends Component {
           close={this.modAction(false)}
           postMessage={this.props.postMessage}/>
     } else {
-      below = <div className={style.below}>
+      below = <div style={styles.below}>
           <MessageMenu
             modAction={this.modAction}
-            toggleActions={this.toggleActions}
-            showActions={this.state.showActions}
             id = {this.props.id} />
-          <div className={style.date}>
+          <div style={styles.date}>
               {moment(this.props.timestamp).format('h:mm A, ddd MMM DD YYYY')}
           </div>
         </div>
     }
 
     return <tr
-        className={style.message}>
-        <td className={style.icon}>
-          <img className="img-circle" src={this.props.author.icon}/>
+        style={styles.message}>
+        <td style={styles.icon}>
+          <img style={styles.iconImg} src={this.props.author.icon}/>
         </td>
-        <td className={style.messageText}>
-          <div className={style.name}>{this.props.author.name}</div>
-          <div className={style.text}>{emojis.emojify(this.props.text)}</div>
+        <td style={styles.messageText}>
+          <div style={styles.name}>{this.props.author.name}</div>
+          <div style={styles.text}>{emojis.emojify(this.props.text)}</div>
           {media}
           {below}
-          <div className={style.msgPadding}></div>
+          <div style={styles.msgPadding}></div>
         </td>
       </tr>
   }
@@ -98,3 +80,45 @@ Message.propTypes = {
 }
 
 export default Message
+
+const styles = {
+  message: {
+    paddingTop: 10,
+    paddingBottom: 5,
+  },
+  messageText: {
+    width: '100%',
+    fontSize: 14,
+    paddingRight: 20,
+    overflowWrap: 'break-word',
+    wordWrap: 'break-word',
+    wordBreak: 'break-word',
+  },
+  icon: {
+    paddingRight: 10,
+    paddingLeft: 25,
+    paddingTop: 5,
+    minWidth: 50,
+    verticalAlign: 'top',
+  },
+  iconImg: {
+    borderRadius: 25,
+  },
+  name: {
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+  date: {
+    fontSize: 10,
+    fontStyle: 'italic',
+    color: grey500,
+    height: 22,
+    display: 'inline-block',
+  },
+  text: {
+    fontSize: 16,
+  },
+  msgPadding: {
+    height: 15,
+  },
+}
