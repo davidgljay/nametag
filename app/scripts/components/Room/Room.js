@@ -1,11 +1,13 @@
 import React, { Component, PropTypes } from 'react'
-import {watchRoom, unWatchRoom} from '../../actions/RoomActions'
-import {Spinner, Icon} from 'react-mdl'
+import FontIcon from 'material-ui/FontIcon'
+import IconButton from 'material-ui/IconButton'
+import CircularProgress from 'material-ui/CircularProgress'
+import {indigo500} from 'material-ui/styles/colors'
+
 import Norms from './Norms'
 import Nametags from '../../containers/Nametag/NametagsContainer'
 import Messages from '../../containers/Message/MessagesContainer'
 import Compose from '../Message/Compose'
-import style from '../../../styles/Room/Room.css'
 
 class Room extends Component {
   constructor(props) {
@@ -53,33 +55,39 @@ class Room extends Component {
   }
 
   render() {
-    let expanded = this.state.leftBarExpanded ? style.expanded : style.collapsed
+    // let expanded = this.state.leftBarExpanded ? style.expanded : style.collapsed
     return  <div>
       {
         this.props.userNametag && this.props.room ?
           <div>
-      	    <div className={style.header}>
-                   <span
-                    onClick={this.closeRoom}
-                    className={style.close + ' glyphicon glyphicon-remove'}/>
-                  <h3>{this.props.room.title}</h3>
-                <div className={style.description}>
+      	    <div style={styles.header}>
+                  <IconButton
+                    style={styles.close}>
+                    <FontIcon
+                      className="material-icons"
+                      onClick={this.closeRoom}
+                      style={styles.closeIcon}>
+                     close
+                   </FontIcon>
+                  </IconButton>
+                  <h3 style={styles.title}>{this.props.room.title}</h3>
+                <div style={styles.description}>
                   {this.props.room.description}
                 </div>
             </div>
             <div>
-              <div id={style.leftBar} className={expanded}>
-                <div id={style.leftBarContent}>
-                  <div id={style.norms}>
+              <div style={styles.leftBar}>
+                <div style={styles.leftBarContent}>
+                  <div style={styles.norms}>
                     <Norms norms={this.props.room.norms}/>
                   </div>
                    <Nametags room={this.props.params.roomId} mod={this.props.room.mod}/>
                 </div>
-                <div id={style.leftBarChevron}>
-                  <Icon
+                <div style={styles.leftBarChevron}>
+                  <FontIcon
+                    className="material-icons"
                     onClick={this.toggleLeftBar.bind(this)}
-                    name='chevron_right'
-                    />
+                    >chevron_right</FontIcon>
                 </div>
               </div>
               {
@@ -95,8 +103,8 @@ class Room extends Component {
             }
           </div>
           :
-          <div className={style.spinner}>
-            <Spinner />
+          <div style={styles.spinner}>
+            <CircularProgress />
           </div>
         }
       </div>
@@ -116,3 +124,96 @@ Room.childContextTypes = {
 }
 
 export default Room
+
+const styles = {
+  header: {
+    borderBottom: '3px solid ' + indigo500,
+    position: 'fixed',
+    top: 0,
+    zIndex: 100,
+    background: 'white',
+    width: '100%',
+    paddingLeft: 15,
+    paddingBottom: 5,
+    paddingRight: 15,
+    maxHeight: 80,
+  },
+  title: {
+    marginTop: 10,
+    marginBottom: 5,
+  },
+  close: {
+    float: 'right',
+    padding: 0,
+    cursor: 'pointer',
+  },
+  closeIcon: {
+    fontSize: 12,
+    width: 15,
+    height: 15,
+  },
+  leftBar: {
+    minHeight: 400,
+    background: indigo500,
+    marginTop: 65,
+    height: '100%',
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingBottom: 50,
+    width: 275,
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    zIndex: 50,
+    overflowY: 'scroll',
+  },
+  leftBarChevron: {
+    display: 'none',
+    color: 'white',
+    position: 'absolute',
+    top: '45%',
+    left: 255,
+    cursor: 'pointer',
+  },
+  // @media (mobile): {
+  //
+  //     expanded: {
+  //         animation-name: 'slide-out',
+  //         animation-duration: '1s',
+  //         animation-fill-mode: 'forwards',
+  //     },
+  //
+  //     collapsed: {
+  //         animation-name: 'slide-in',
+  //         animation-duration: '1s',
+  //         animation-fill-mode: 'forwards',
+  //     },
+  //
+  //     #leftBarChevron: {
+  //         display: 'block',
+  //     },
+  //
+  //     collapsed #leftBarChevron: {
+  //         animation-name: 'spin-out',
+  //         animation-duration: '1s',
+  //         animation-fill-mode: 'forwards',
+  //     },
+  //
+  //     expanded #leftBarChevron: {
+  //         animation-name: 'spin-in',
+  //         animation-duration: '1s',
+  //         animation-fill-mode: 'forwards',
+  //     },
+  //
+  //     description: {
+  //         display: 'none',
+  //     },
+  // },
+  spinner: {
+    marginLeft: '45%',
+    marginTop: '40vh',
+  },
+  norms: {
+    color: '#FFF',
+  },
+}
