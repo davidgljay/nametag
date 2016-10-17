@@ -35,21 +35,21 @@ class ImageSearch extends Component {
     }
   }
 
-  scrolledToBottom(bottom) {
+  scrolledToBottom = (bottom) => {
     return bottom.getBoundingClientRect().top < window.innerHeight
   }
 
-  loadMore(start) {
+  loadMore = (start) => {
     this.setState({loading: true})
     this.props.searchImage(this.state.imageQuery, start)
       .then(this.prepImages)
   }
 
-  prepImages(searchResults) {
+  prepImages = (searchResults) => {
     this.setState((prevState) => {
       prevState.searched =  true
       prevState.loading = false
-      prevState.totalResults = parseInt(searchResults.total)
+      prevState.totalResults = parseInt(searchResults.total, 10)
       if (prevState.totalResults === 0) {
         return prevState
       }
@@ -81,11 +81,11 @@ class ImageSearch extends Component {
   }
 
   render() {
-    const uploadOptions = {
-      baseUrl: 'https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/nametag_img_upload',
-      chooseAndUpload: true,
-      accept: '.jpg,.jpeg,.png',
-    }
+    // const uploadOptions = {
+    //   baseUrl: 'https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/nametag_img_upload',
+    //   chooseAndUpload: true,
+    //   accept: '.jpg,.jpeg,.png',
+    // }
 
     return <div style={styles.container}>
       <div style={styles.searchContainer}>
