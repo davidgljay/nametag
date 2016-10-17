@@ -1,7 +1,8 @@
 import React, { Component, PropTypes} from 'react'
 import Message from './Message'
+import {mobile} from '../../../styles/sizes'
+import radium from 'radium'
 // import ModActionNotif from '../ModAction/ModActionNotif'
-import style from '../../../styles/Message/Messages.css'
 
 class Messages extends Component {
 
@@ -57,8 +58,8 @@ class Messages extends Component {
   }
 
   render() {
-    return <div id={style.messages}>
-        <table id={style.msgContainer}>
+    return <div style={styles.messages}>
+        <table style={styles.msgContainer}>
           <tbody>
           {
             this.props.messageList &&
@@ -76,4 +77,22 @@ Messages.propTypes = {
   messageList: PropTypes.array,
 }
 
-export default Messages
+export default radium(Messages)
+
+const styles = {
+  messages: {
+    minHeight: '100vh',
+    height: '100%',
+    width: '100%',
+    paddingLeft: 275,
+    paddingTop: 100,
+    scrollBehavior: 'smooth',
+    [mobile]: {
+      paddingLeft: 30,
+    },
+  },
+  msgContainer: {
+  	width: 'inherit',
+    marginBottom: 65,
+  },
+}

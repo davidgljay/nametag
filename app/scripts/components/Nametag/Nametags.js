@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import Nametag from './Nametag'
-import style from '../../../styles/Nametag/Nametags.css'
 import {watchRoomNametags, unWatchRoomNametags} from '../../actions/NametagActions'
-import {Card} from 'react-mdl'
+import {Card} from 'material-ui/Card'
 
 class Nametags extends Component {
 
@@ -34,7 +33,7 @@ class Nametags extends Component {
       // Make nametag.certificates an empty array if it not already assigned.
       nametag.certificates = nametag.certificates || []
 
-      return <Card key={nametag.id} className={style.nametag}>
+      return <Card key={nametag.id} style={styles.nametag}>
         <Nametag
           name={nametag.name}
           bio={nametag.bio}
@@ -45,7 +44,7 @@ class Nametags extends Component {
       </Card>
     }
 
-    return <div className={style.nametags}>
+    return <div style={styles.nametags}>
         {
           nametags.map((nametag) => {
             return createNametag(nametag, this.props.mod)
@@ -58,3 +57,15 @@ class Nametags extends Component {
 Nametags.propTypes = { room: PropTypes.string, mod: PropTypes.string }
 
 export default Nametags
+
+const styles = {
+  nametag: {
+    width: 240,
+    minHeight: 60,
+    marginBottom: 5,
+    paddingBottom: 5,
+  },
+  nametags: {
+  	marginBottom: 40,
+  },
+}

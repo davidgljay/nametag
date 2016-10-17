@@ -1,1 +1,1 @@
-export const mobile = '@mobile (max-width:800px;)'
+export const mobile = '@media (max-width: 800px)'

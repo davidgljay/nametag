@@ -10,7 +10,6 @@ import RoomCards from './containers/Room/RoomCardsContainer'
 import {getUser} from './actions/UserActions'
 
 import { DragDropContext } from 'react-dnd'
-import HTML5Backend from 'react-dnd-html5-backend'
 import TouchBackend from 'react-dnd-touch-backend'
 
 import { Provider } from 'react-redux'
@@ -63,4 +62,3 @@ Nametag.childContextTypes = {
 const DecoratedNametag = Radium(DragDropContext(TouchBackend({ enableMouseEvents: true }))(Nametag))
 
 ReactDOM.render(<DecoratedNametag/>, mountNode)
-
