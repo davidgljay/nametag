@@ -190,12 +190,12 @@ const styles = {
     paddingLeft: 15,
     paddingRight: 15,
     paddingBottom: 50,
-    width: 275,
+    width: 290,
+    overflowY: 'auto',
     position: 'fixed',
     top: 0,
     left: 0,
     zIndex: 50,
-    overflowY: 'hidden',
   },
   leftBarChevron: {
     display: 'none',
@@ -223,6 +223,8 @@ const styles = {
     animationName: slideIn,
     animationDuration: '500ms',
     animationFillMode: 'forwards',
+    overflowY: 'hidden',
+    width: 275,
   },
   chevronOut: {
     transform: 'rotate(180deg)',

@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import EmojiPicker from 'react-simple-emoji'
+import radium from 'radium'
 import {mobile} from '../../../styles/sizes'
 import FontIcon from 'material-ui/FontIcon'
 import IconButton from 'material-ui/IconButton'
@@ -92,7 +93,7 @@ Compose.contextTypes = {
   userNametag: PropTypes.string.isRequired,
 }
 
-export default Compose
+export default radium(Compose)
 
 const styles = {
   compose: {
