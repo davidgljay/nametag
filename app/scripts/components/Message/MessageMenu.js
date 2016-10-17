@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import Reactions from '../../containers/Reaction/ReactionsContainer'
+// import Reactions from '../../containers/Reaction/ReactionsContainer'
 import {mobile} from '../../../styles/sizes'
 import FontIcon from 'material-ui/FontIcon'
 import radium, {keyframes} from 'radium'
@@ -21,7 +21,6 @@ class MessageMenu extends Component {
     let actionAnim = showActions ? styles.slideOutActions : styles.slideInActions
     let leftChevAnim = showActions ? styles.fadeOut : styles.fadeIn
     return <div style={styles.actionsContainer}>
-      <Reactions message={id} />
       <div style={{...styles.actions, ...actionAnim}} key='actions'>
         {
           isMobile && <FontIcon
