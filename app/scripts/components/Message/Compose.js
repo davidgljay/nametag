@@ -105,7 +105,7 @@ const styles = {
     paddingTop: 10,
     background: '#FFF',
     width: '100%',
-    paddingLeft: 250,
+    paddingLeft: 290,
     paddingRight: 15,
     zIndex: 40,
     [mobile]: {
