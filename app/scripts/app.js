@@ -20,8 +20,6 @@ import mainReducer from './reducers'
 
 import { Router, Route, Link, hashHistory } from 'react-router'
 
-import '../styles/animations.css'
-import '../styles/mdl-tweaks.css'
 injectTapEventPlugin()
 
 const mountNode = document.getElementById('app')
