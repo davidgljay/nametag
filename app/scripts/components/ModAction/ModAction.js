@@ -7,7 +7,7 @@ import { Card } from 'material-ui/Card'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
 import {List, ListItem} from 'material-ui/List'
-import CheckBox from 'material-ui/CheckBox'
+import Checkbox from 'material-ui/Checkbox'
 import TextField from 'material-ui/TextField'
 
 class ModAction extends Component {
@@ -29,7 +29,7 @@ class ModAction extends Component {
 
   showNorm(norm, i) {
     return <ListItem
-        leftCheckbox={<CheckBox checked={this.state.normChecks[i]}/>}
+        leftCheckbox={<Checkbox checked={this.state.normChecks[i]}/>}
         primaryText={norm}
         key={i}
         onClick={this.checkNorm(i)}>
