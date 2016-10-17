@@ -209,26 +209,23 @@ class CreateRoom extends Component {
             {
               this.state.stepIndex > 0 &&
               <RaisedButton
-                style={styles.button}
+                labelStyle={styles.button}
                 backgroundColor={indigo500}
-                onClick={this.handlePrev}>
-                BACK
-              </RaisedButton>
+                onClick={this.handlePrev}
+                label='BACK'/>
             }
             {
               this.state.stepIndex >= 4 ?
               <RaisedButton
-                style={styles.button}
+                labelStyle={styles.button}
                 backgroundColor={indigo500}
-                onClick={this.postRoom}>
-                PUBLISH
-              </RaisedButton>
+                onClick={this.postRoom}
+                label='PUBLISH'/>
               : <RaisedButton
-                style={styles.button}
+                labelStyle={styles.button}
                 backgroundColor={indigo500}
-                onClick={this.handleNext}>
-                NEXT
-              </RaisedButton>
+                onClick={this.handleNext}
+                label='NEXT'/>
             }
 
         </div>

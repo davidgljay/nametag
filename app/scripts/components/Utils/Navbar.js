@@ -2,16 +2,18 @@ import React from 'react'
 import AppBar from 'material-ui/AppBar'
 import FlatButton from 'material-ui/FlatButton'
 import {indigo500} from 'material-ui/styles/colors'
+import radium from 'radium'
+import {mobile} from '../../../styles/sizes'
 
 const onCreateRoomClick = () => {
   window.location = '/#/rooms/create'
 }
 
 const Navbar = (props) => {
-  const auth = <div>
+  const auth = <div style={styles.buttons}>
       <FlatButton
         style={styles.button}
-        onClick={onCreateRoomClick}>CREATE ROOM</FlatButton>
+        onClick={onCreateRoomClick} label='CREATE ROOM'/>
       {
       props.user && props.user.id ?
         <FlatButton
@@ -27,7 +29,7 @@ const Navbar = (props) => {
     iconElementRight={auth}/>
 }
 
-export default Navbar
+export default radium(Navbar)
 
 const styles = {
   appBar: {
@@ -37,5 +39,11 @@ const styles = {
   button: {
     color: '#fff',
     marginTop: 6,
+
+  },
+  buttons: {
+    [mobile]: {
+      display: 'none',
+    },
   },
 }
