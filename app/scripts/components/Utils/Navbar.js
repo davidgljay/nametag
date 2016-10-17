@@ -1,11 +1,17 @@
 import React from 'react'
-import {logout} from '../../actions/UserActions'
 import AppBar from 'material-ui/AppBar'
 import FlatButton from 'material-ui/FlatButton'
-import { indigo500 } from 'material-ui/styles/colors'
+import {indigo500} from 'material-ui/styles/colors'
+
+const onCreateRoomClick = () => {
+  window.location = '/#/rooms/create'
+}
 
 const Navbar = (props) => {
   const auth = <div>
+      <FlatButton
+        style={styles.button}
+        onClick={onCreateRoomClick}>CREATE ROOM</FlatButton>
       {
       props.user && props.user.id ?
         <FlatButton

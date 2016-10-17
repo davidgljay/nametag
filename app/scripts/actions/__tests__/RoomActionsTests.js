@@ -145,5 +145,39 @@ describe('RoomActions', () => {
       })
     })
   })
+
+  describe('postRoom', () => {
+    it('should post a room', () => {
+      let room = {
+        name: 'A Room',
+      }
+      hz.mockReturnValue(mockHz({id: '123'}, calls)())
+      return actions.postRoom(room)(store.dispatch).then((res) => {
+        expect(calls[1]).toEqual({type: 'insert', req: room})
+        expect(res).toEqual('123')
+        expect(store.getActions()[0]).toEqual({
+          type: 'ADD_ROOM',
+          room: { ...room, id: '123'},
+          id: '123',
+        })
+      })
+    })
+  })
+
+  describe('upateRoom', () => {
+    it('should update a room on the server', () => {
+      hz.mockReturnValue(mockHz({updated: 1}, calls)())
+      return actions.updateRoom('123', 'name', 'A new name')(store.dispatch).then((res) => {
+        expect(calls[1]).toEqual({type: 'update', req: {id: '123', name: 'A new name'}})
+        expect(res).toEqual({updated: 1})
+        expect(store.getActions()[0]).toEqual({
+          type: 'SET_ROOM_PROP',
+          room: '123',
+          property: 'name',
+          value: 'A new name',
+        })
+      })
+    })
+  })
 })
 

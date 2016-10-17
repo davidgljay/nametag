@@ -7,6 +7,7 @@ import Radium, {StyleRoot} from 'radium'
 
 import Room from './containers/Room/RoomContainer'
 import RoomCards from './containers/Room/RoomCardsContainer'
+import CreateRoom from './containers/Room/CreateRoomContainer'
 import {getUser} from './actions/UserActions'
 
 import { DragDropContext } from 'react-dnd'
@@ -19,6 +20,8 @@ import mainReducer from './reducers'
 
 import { Router, Route, Link, hashHistory } from 'react-router'
 
+import '../styles/animations.css'
+import '../styles/mdl-tweaks.css'
 injectTapEventPlugin()
 
 const mountNode = document.getElementById('app')
@@ -47,6 +50,7 @@ class Nametag extends Component {
           <Router history={hashHistory}>
             <Route path="/" component={RoomCards} />
             <Route path="/rooms" component={RoomCards}/>
+            <Route path="/rooms/create" component={CreateRoom}/>
             <Route path="/rooms/:roomId" component={Room}/>
           </Router>
         </MuiThemeProvider>

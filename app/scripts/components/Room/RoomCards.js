@@ -2,6 +2,7 @@
 
 import React, {Component, PropTypes} from 'react'
 import RoomCard from './RoomCard'
+import CreateRoom from './CreateRoom'
 import Navbar from '../Utils/Navbar'
 import {subscribe, unsubscribe} from '../../actions/RoomActions'
 import {lightBlue200} from 'material-ui/styles/colors'
@@ -17,7 +18,6 @@ const styles = {
     flexWrap: 'wrap',
   },
   roomCard: {
-    flex: 1,
   },
 }
 
@@ -58,7 +58,7 @@ class RoomCards extends Component {
 
   render() {
     return <div>
-        <Navbar user={this.props.user} dispatch={this.context.dispatch}/>
+        <Navbar user={this.props.user} logout={this.props.logout}/>
         <div style={styles.roomCards}>
           {Object.keys(this.props.rooms).map(this.mapRoomCards)}
         </div>
