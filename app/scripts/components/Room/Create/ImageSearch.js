@@ -98,16 +98,18 @@ class ImageSearch extends Component {
         <RaisedButton
           backgroundColor={indigo500}
           style={styles.button}
-          onClick={this.onSearchClick}>FIND IMAGE</RaisedButton>
+          labelStyle={styles.labelStyle}
+          label='FIND IMAGE'
+          onClick={this.onSearchClick}/>
       </div>
       <div style={styles.imagesContainer}>
         <Card
           style={{ ...styles.thumbnailContainer, ...styles.imageUpload}}>
               <IconButton
-              style={styles.imageUploadButton}
-              iconStyle={styles.imageUploadIcon}
-              iconClassName="material-icons"
-              ref="chooseAndUpload">
+                style={styles.imageUploadButton}
+                iconStyle={styles.imageUploadIcon}
+                iconClassName="material-icons"
+                ref="chooseAndUpload">
                 cloud_upload
               </IconButton>
         </Card>
@@ -142,8 +144,11 @@ export default ImageSearch
 
 const styles = {
   button: {
-    color: '#fff',
     margin: 20,
+  },
+  labelStyle: {
+    padding: '0px 10px',
+    color: '#fff',
   },
   container: {
     marginTop: 10,
