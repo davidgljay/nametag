@@ -18,7 +18,7 @@ let browserSync = require('browser-sync')
 let reload = browserSync.reload
 
 // Styles
-gulp.task('styles', ['css-modules'])
+gulp.task('styles', ['moveCss'])
 
 gulp.task('moveCss',['clean'], function() {
   // the base option sets the relative root for the set of files,
@@ -48,15 +48,15 @@ gulp.task('moveIcons', ['clean'], function() {
 //         .pipe($.size())
 // })
 
-gulp.task('css-modules', function() {
-  let b = browserify()
-  b.add(sourceFile)
-  b.plugin(['css-modulesify', {
-    output: './dist/styles/main.css',
-  }])
-
-  return b.bundle()
-})
+// gulp.task('css-modules', function() {
+//   let b = browserify()
+//   b.add(sourceFile)
+//   b.plugin(['css-modulesify', {
+//     output: './dist/styles/main.css',
+//   }])
+//
+//   return b.bundle()
+// })
 
 let bundler = watchify(browserify({
   entries: [sourceFile],
@@ -78,7 +78,7 @@ function rebundle() {
     .pipe(source(destFileName))
     .pipe(gulp.dest(destFolder))
     .on('end', function() {
-      reload() 
+      reload()
     })
 }
 
@@ -91,9 +91,6 @@ gulp.task('buildScripts', function() {
         .pipe(source(destFileName))
         .pipe(gulp.dest('dist/scripts'))
 })
-
-
-
 
 // HTML
 gulp.task('html', function() {
@@ -117,12 +114,12 @@ gulp.task('images', function() {
 
 // Fonts
 gulp.task('fonts', function() {
-    
-    return gulp.src(require('main-bower-files')({
-            filter: '**/*.{eot,svg,ttf,woff,woff2}'
-        }).concat('app/fonts/**/*'))
-        .pipe(gulp.dest('dist/fonts'))
-    
+
+  return gulp.src(require('main-bower-files')({
+          filter: '**/*.{eot,svg,ttf,woff,woff2}'
+      }).concat('app/fonts/**/*'))
+      .pipe(gulp.dest('dist/fonts'))
+
 })
 
 // Clean
@@ -140,7 +137,7 @@ gulp.task('bundle', ['styles', 'scripts', 'bower'], function() {
     .pipe(gulp.dest('dist'))
 })
 
-gulp.task('buildBundle', ['styles', 'buildScripts', 'moveLibraries', 'bower'], function() {
+gulp.task('buildBundle', ['styles', 'buildScripts'], function() {
   return gulp.src('./app/*.html')
     .pipe($.useref.assets())
     .pipe($.useref.restore())
@@ -201,7 +198,7 @@ gulp.task('watch', ['html', 'fonts', 'styles', 'images', 'bundle'], function() {
 
     gulp.watch(['app/styles/**/*.scss', 'app/styles/**/*.css'], ['styles', 'scripts', reload])
 
-    
+
 
     // Watch image files
     gulp.watch('app/images/**/*', ['images', reload])
