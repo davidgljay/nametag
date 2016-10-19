@@ -190,7 +190,7 @@ const styles = {
     paddingLeft: 15,
     paddingRight: 15,
     paddingBottom: 50,
-    width: 290,
+    width: 265,
     overflowY: 'auto',
     position: 'fixed',
     top: 0,
@@ -224,7 +224,7 @@ const styles = {
     animationDuration: '500ms',
     animationFillMode: 'forwards',
     overflowY: 'hidden',
-    width: 275,
+    width: 250,
   },
   chevronOut: {
     transform: 'rotate(180deg)',

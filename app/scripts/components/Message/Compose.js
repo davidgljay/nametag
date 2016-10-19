@@ -55,6 +55,7 @@ class Compose extends Component {
   render() {
     // TODO: Add GIFs, image upload, emoticons
     return <div style={styles.compose}>
+      <div style={styles.spacer}/>
       <EmojiPicker
         show={this.state.showEmoji}
         selectorStyle={styles.selectorStyle}
@@ -67,20 +68,22 @@ class Compose extends Component {
           insert_emoticon
         </FontIcon>
       </IconButton>
-      <TextField
-        name='compose'
-        style={styles.textfield}
-        onChange={this.onChange}
-        value={this.state.message}/>
-      <FlatButton
-        style={styles.sendButton}
-        icon={
-          <FontIcon
-            className='material-icons'
-            onClick={this.post}>
-            send
-          </FontIcon>
-          }/>
+      <form onSubmit={this.post} style={styles.form}>
+        <TextField
+          name='compose'
+          style={styles.textfield}
+          onChange={this.onChange}
+          value={this.state.message}/>
+        <FlatButton
+          style={styles.sendButton}
+          type='submit'
+          icon={
+            <FontIcon
+              className='material-icons'>
+              send
+            </FontIcon>
+            }/>
+      </form>
     </div>
   }
 }
@@ -105,11 +108,13 @@ const styles = {
     paddingTop: 10,
     background: '#FFF',
     width: '100%',
-    paddingLeft: 290,
     paddingRight: 15,
     zIndex: 40,
+  },
+  spacer: {
+    width: 290,
     [mobile]: {
-      paddingLeft: 30,
+      width: 20,
     },
   },
   showEmoji: {
@@ -134,5 +139,9 @@ const styles = {
   },
   sendButton: {
     minWidth: 45,
+  },
+  form: {
+    flex: 1,
+    display: 'flex',
   },
 }

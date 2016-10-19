@@ -78,10 +78,9 @@ class Join extends Component {
           <br/>
           <RaisedButton
             backgroundColor={indigo500}
-            style={styles.button}
-            onClick={this.onJoinClick.bind(this)}>
-              Join
-          </RaisedButton>
+            labelStyle={styles.button}
+            onClick={this.onJoinClick.bind(this)}
+            label='JOIN'/>
         </div>
     } else {
       join = <Login providerAuth={this.props.providerAuth}/>
