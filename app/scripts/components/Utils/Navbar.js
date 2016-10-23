@@ -40,7 +40,9 @@ class Navbar extends Component {
         docked={false}
         width={200}
         open={this.state.open}
+        style={styles.drawer}
         onRequestChange={(open) => this.setState({open})}>
+        <div style={styles.drawerTitle}><h2>Nametag</h2></div>
         <MenuItem onTouchTap={onCreateRoomClick}>Create Room</MenuItem>
           {
           this.props.user && this.props.user.id ?
@@ -69,5 +71,8 @@ const styles = {
     [mobile]: {
       display: 'none',
     },
+  },
+  drawerTitle: {
+    marginLeft: 15,
   },
 }

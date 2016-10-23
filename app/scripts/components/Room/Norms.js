@@ -16,7 +16,7 @@ const styles = {
   },
   normText: {
     lineHeight: 1.4,
-    padding: '7px 7px 7px 72px',
+    padding: '7px 7px 7px 60px',
   },
   check: {
     height: 25,
