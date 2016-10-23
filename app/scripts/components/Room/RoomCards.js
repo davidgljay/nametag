@@ -4,6 +4,7 @@ import React, {Component, PropTypes} from 'react'
 import RoomCard from './RoomCard'
 import CreateRoom from './CreateRoom'
 import Navbar from '../Utils/Navbar'
+import LoginDialog from '../User/LoginDialog'
 import {subscribe, unsubscribe} from '../../actions/RoomActions'
 import {lightBlue200} from 'material-ui/styles/colors'
 
@@ -57,11 +58,19 @@ class RoomCards extends Component {
   }
 
   render() {
+    const {user, logout, setting, rooms, providerAuth} = this.props
     return <div>
-        <Navbar user={this.props.user} logout={this.props.logout}/>
+        <Navbar
+          user={user}
+          logout={logout}
+          setting={setting}/>
         <div style={styles.roomCards}>
-          {Object.keys(this.props.rooms).map(this.mapRoomCards)}
+          {Object.keys(rooms).map(this.mapRoomCards)}
         </div>
+        <LoginDialog
+          showLogin={user.showLogin}
+          setting={setting}
+          providerAuth={providerAuth}/>
       </div>
   }
 }

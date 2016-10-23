@@ -5,7 +5,9 @@ const user = (state = {}, action) => {
   case constants.ADD_USER:
     return Object.assign({}, {id: action.id, data: action.data})
   case constants.LOGOUT_USER:
-    return false
+    return {loggedIn: false}
+  case constants.USER_SETTING:
+    return Object.assign({}, state, {[action.option]: action.value})
   default:
     return state
   }

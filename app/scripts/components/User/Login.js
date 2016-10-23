@@ -21,7 +21,7 @@ const styles = {
 
 const Login = (props) => {
   // TODO: Add e-mail (This will probably involve adding state, oh well.)
-  
+
   return <div style={styles.login}>
       <h4>Log in to join</h4>
       <img

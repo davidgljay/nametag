@@ -56,7 +56,7 @@ class Join extends Component {
 
   render() {
     let join
-    if (this.context.user && this.context.user.id) {
+    if (this.context.user.id) {
       join =
         <div style={styles.join}>
           <h4>Write Your Nametag For This Conversation</h4>
