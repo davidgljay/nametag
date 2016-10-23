@@ -25,6 +25,7 @@ export function mockHz(res, calls, type) {
       fetch: mockHz(res, calls, 'fetch'),
       find: mockHz(res, calls, 'find'),
       upsert: mockHz(res, calls, 'upsert'),
+      update: mockHz(res, calls, 'update'),
       insert: mockHz(res, calls, 'insert'),
       findAll: mockHz(res, calls, 'findAll'),
       delete: mockHz(res, calls, 'delete'),

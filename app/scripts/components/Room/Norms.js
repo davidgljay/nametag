@@ -1,25 +1,51 @@
 import React from 'react'
-import style from '../../../styles/Room/Norms.css'
+import {green500} from 'material-ui/styles/colors'
+import {List, ListItem} from 'material-ui/List'
+import Check from 'material-ui/svg-icons/navigation/check'
+
+const styles = {
+  norms: {
+    textAlign: 'center',
+    padding: 0,
+    listStyle: 'none',
+  },
+
+  norm: {
+    color: 'inherit',
+    textAlign: 'left',
+  },
+  normText: {
+    lineHeight: 1.4,
+    padding: '7px 7px 7px 60px',
+  },
+  check: {
+    height: 25,
+    marginRight: 10,
+    fill: green500,
+  },
+
+}
+
 
 const Norms = (props) =>
   <div>
     {
       props.norms &&
-		  <ul className={style.norms + ' list-group'}>
+		  <List style={styles.norms}>
         {
           props.norms.map((norm, i) =>
-            <li key={i} className="list-group-item">
-              {
-                props.showChecks &&
-                <span
-                  className={style.check + ' glyphicon glyphicon-ok'}/>
+            <ListItem
+              key={i}
+              primaryText={norm}
+              innerDivStyle={
+                props.showChecks ? styles.normText
+                : {...styles.normText, padding: 7}
               }
-
-              {norm}
-            </li>
+              leftIcon={props.showChecks ? <Check style={styles.check}/> : <div/>}
+              style={styles.norm}/>
           )
         }
-      </ul>
+      </List>
     }
   </div>
 

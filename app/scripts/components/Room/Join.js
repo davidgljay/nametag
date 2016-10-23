@@ -2,15 +2,53 @@ import React, { Component, PropTypes } from 'react'
 import Login  from '../User/Login'
 import EditNametag  from '../Nametag/EditNametag'
 import UserCertificates  from '../Certificate/UserCertificates'
-import Alert  from '../Utils/Alert'
-import {joinRoom} from '../../actions/RoomActions'
-import style from '../../../styles/RoomCard/Join.css'
+import {grey400, indigo500} from 'material-ui/styles/colors'
+import RaisedButton from 'material-ui/RaisedButton'
 
+const styles = {
+  join: {
+    textAlign: 'center',
+  },
+  userCertificates: {
+    width: 270,
+    display: 'flex',
+    flexWrap: 'wrap',
+    minHeight: 100,
+    verticalAlign: 'top',
+    padding: 5,
+    margin: 5,
+  },
+  userCertificateText: {
+    fontStyle: 'italic',
+    fontSize: 12,
+    color: grey400,
+  },
+  button: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+}
 
 class Join extends Component {
 
+  static propTypes = {
+    room: PropTypes.string.isRequired,
+    normsChecked: PropTypes.bool.isRequired,
+    userNametag: PropTypes.object,
+    addUserNametagCert: PropTypes.func.isRequired,
+    removeUserNametagCert: PropTypes.func.isRequired,
+    updateUserNametag: PropTypes.func.isRequired,
+    providerAuth: PropTypes.func.isRequired,
+    fetchCertificate: PropTypes.func.isRequired,
+    joinRoom: PropTypes.func.isRequired,
+  }
+
+  static contextTypes = {
+    user: PropTypes.object,
+  }
+
   onJoinClick() {
-    this.context.dispatch(joinRoom(this.props.room, this.props.userNametag, this.context.user.id))
+    this.props.joinRoom(this.props.room, this.props.userNametag, this.context.user.id)
       .then(() => {
         window.location = '/#/rooms/' + this.props.room
       })
@@ -20,44 +58,35 @@ class Join extends Component {
     let join
     if (this.context.user && this.context.user.id) {
       join =
-        <div id={style.join}>
-          <Alert alertType='danger' alert={this.props.alert}/>
+        <div style={styles.join}>
           <h4>Write Your Nametag For This Conversation</h4>
           <EditNametag
             userNametag={this.props.userNametag}
-            dispatch={this.context.dispatch}
+            addUserNametagCert={this.props.addUserNametagCert}
+            removeUserNametagCert={this.props.removeUserNametagCert}
+            updateUserNametag={this.props.updateUserNametag}
             room={this.props.room}/>
-          <div id={style.userCertificates}>
-            <p className={style.userCertificateText}>
+          <div style={styles.userCertificates}>
+            <p style={styles.userCertificateText}>
               Click to view your certificates.<br/>
               Drag them over to show them in this conversation.
             </p>
             <UserCertificates
-              selectedCerts = {this.props.userNametag.certificates}/>
+              fetchCertificate={this.props.fetchCertificate}
+              selectedCerts={this.props.userNametag.certificates}/>
           </div>
           <br/>
-          <button
-            className={style.btnPrimary}
-            onClick={this.onJoinClick.bind(this)}>
-              Join
-          </button>
+          <RaisedButton
+            backgroundColor={indigo500}
+            labelStyle={styles.button}
+            onClick={this.onJoinClick.bind(this)}
+            label='JOIN'/>
         </div>
     } else {
-      join = <Login dispatch={this.props.dispatch}/>
+      join = <Login providerAuth={this.props.providerAuth}/>
     }
     return join
   }
-}
-
-Join.propTypes = {
-  room: PropTypes.string.isRequired,
-  normsChecked: PropTypes.bool.isRequired,
-  userNametag: PropTypes.object,
-}
-
-Join.contextTypes = {
-  user: PropTypes.object,
-  dispatch: PropTypes.func,
 }
 
 export default Join

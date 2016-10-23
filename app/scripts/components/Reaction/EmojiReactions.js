@@ -104,7 +104,7 @@ export default class EmojiReact extends Component {
 	}
 
 	onClick({ target }) {
-		if (!this.node.contains(target) && this.state.showSelector) {
+		if (this.node && !this.node.contains(target) && this.state.showSelector) {
 			this.closeSelector()
 		}
 	}

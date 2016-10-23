@@ -59,37 +59,7 @@ auto_create_index = true
 #------------------------------------------------------------------------------
 debug = true
 
-
-###############################################################################
-# Authentication Options
-# Each auth subsection will add an endpoint for authenticating through the
-# specified provider.
-# 'token_secret' is the key used to sign jwts
-# 'allow_anonymous' issues new accounts to users without an auth provider
-# 'allow_unauthenticated' allows connections that are not tied to a user id
-# 'auth_redirect' specifies where users will be redirected to after login
-#------------------------------------------------------------------------------
-token_secret = "T71qj3CaBfgHSi5CjBus/ydMzAgkykcXqNonJSrVtdI7ys4C9fp33V9n+6JZZLRBubV49Mw9ysEFQnonMWkIbw=="
-# allow_anonymous = false
+allow_anonymous = false
 allow_unauthenticated = true
 auth_redirect = "/"
-#
-[auth.facebook]
-id = "672526412895563"
-secret = "201bf8be8293ad2cac270c1023f902d9"
-#
-# [auth.google]
-# id = "55926413889-pijvqu2n7j4olcep1b2hmjne4poai6gk.apps.googleusercontent.com"
-# secret = "IcAWB7D9_JBrsD-SaYurF1jJ"
-#
-[auth.twitter]
-id = "btT0RFpyQKKC26JJgvY8QLZyL"
-secret = "fPDLgfpd4rLtmLyTW1ebeICj1iDby5w9kBZP3jmg5JD2cgDkqQ"
-#
-# [auth.github]
-# id = "00000000000000000000"
-# secret = "0000000000000000000000000000000000000000"
-#
-# [auth.twitch]
-# id = "0000000000000000000000000000000"
-# secret = "0000000000000000000000000000000"
+

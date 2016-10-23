@@ -1,10 +1,14 @@
 import React, { Component, PropTypes } from 'react'
 import errorLog from '../../utils/errorLog'
-import style from '../../../styles/ModAction/ModAction.css'
 import VisOptions from './VisibilityOptions'
 import ModActionButtons from './ModActionButtons'
 import Alert from '../Utils/Alert'
-import { Card, CardMenu, Grid, Cell, IconButton } from 'react-mdl'
+import { Card } from 'material-ui/Card'
+import IconButton from 'material-ui/IconButton'
+import FontIcon from 'material-ui/FontIcon'
+import {List, ListItem} from 'material-ui/List'
+import Checkbox from 'material-ui/Checkbox'
+import TextField from 'material-ui/TextField'
 
 class ModAction extends Component {
   constructor(props) {
@@ -24,17 +28,12 @@ class ModAction extends Component {
   }
 
   showNorm(norm, i) {
-    return <li
-      className={style.chooseNorm}
-      key={i}
-      onClick={this.checkNorm(i)}>
-        <label className="c-input c-checkbox" >
-          <input type="checkbox" checked={this.state.normChecks[i]}/>
-          <span className={style.norm}>
-           {norm}
-          </span>
-        </label>
-      </li>
+    return <ListItem
+        leftCheckbox={<Checkbox checked={this.state.normChecks[i]}/>}
+        primaryText={norm}
+        key={i}
+        onClick={this.checkNorm(i)}>
+      </ListItem>
   }
 
   checkNorm(normIndex) {
@@ -57,8 +56,6 @@ class ModAction extends Component {
   }
 
   remindOfNorms() {
-    // TODO: Allow edits without breaking append-only rule (right now there's one modaction per comment)
-
     if (this.state.normChecks.length === 0) {
       self.setState({alert: 'Please check at least one norm.'})
       return
@@ -120,40 +117,37 @@ class ModAction extends Component {
       alert = <Alert msg={this.state.alert} alertType="danger"/>
     }
 
-    return <Grid>
-      <Cell col={8}>
-        <Card className={style.modAction} shadow={1}>
-          {alert}
-          <CardMenu>
-            <IconButton
-              name='close'
-              onClick={this.props.close}/>
-          </CardMenu>
-          <h4>Remind {this.props.author.name} of Conversation Norms</h4>
-          <ul className={style.norms}>
-          {this.context.norms.map(this.showNorm)}
-          </ul>
-          <input
-            type="text"
-            className="form-control"
-            onChange={this.addNote}
-            placeholder="Add an optional note."
-            value={this.state.message}/>
-          <VisOptions
-            isPublic = {this.state.isPublic}
-            setPublic = {this.setPublic}/>
-          <ModActionButtons
-            escalate = {this.escalate}
-            escalated = {this.state.escalated}
-            remindOfNorms = {this.remindOfNorms}
-            removeUser = {this.removeUser}
-            notifyBadge = {this.notifyBadge}
-            authorName = {this.props.author.name}
-            censorMessage = {this.censorMessage}
-            />
-        </Card>
-      </Cell>
-    </Grid>
+    return <Card style={styles.modAction}>
+      <IconButton
+        style={styles.closeButton}
+        onClick={this.props.close}>
+        <FontIcon
+          className='material-icons'>
+          close
+        </FontIcon>
+      </IconButton>
+      <h4 style={styles.title}>Remind {this.props.author.name} of Conversation Norms</h4>
+      <List>
+        {this.context.norms.map(this.showNorm)}
+      </List>
+      <TextField
+        style={styles.addNote}
+        onChange={this.addNote}
+        hintText="Add an optional note."
+        value={this.state.message}/>
+      <VisOptions
+        isPublic = {this.state.isPublic}
+        setPublic = {this.setPublic}/>
+      <ModActionButtons
+        escalate = {this.escalate}
+        escalated = {this.state.escalated}
+        remindOfNorms = {this.remindOfNorms}
+        removeUser = {this.removeUser}
+        notifyBadge = {this.notifyBadge}
+        authorName = {this.props.author.name}
+        censorMessage = {this.censorMessage}
+        />
+    </Card>
   }
 }
 
@@ -170,3 +164,24 @@ ModAction.contextTypes = {
 }
 
 export default ModAction
+
+const styles = {
+  title: {
+    marginLeft: 20,
+  },
+  addNote: {
+    width: 'inherit',
+    display: 'block',
+  },
+  modAction: {
+    maxWidth: 500,
+    borderRadius: 6,
+    padding: 10,
+    marginTop: 20,
+  },
+  closeButton: {
+    float: 'right',
+    padding: 0,
+    height: 'auto',
+  },
+}
