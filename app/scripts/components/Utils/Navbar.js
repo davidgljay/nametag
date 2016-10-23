@@ -42,12 +42,14 @@ class Navbar extends Component {
         open={this.state.open}
         style={styles.drawer}
         onRequestChange={(open) => this.setState({open})}>
-        <div style={styles.drawerTitle}><h2>Nametag</h2></div>
-        <MenuItem onTouchTap={onCreateRoomClick}>Create Room</MenuItem>
+        <div style={styles.drawerTitle}><h2>Nametag</h2></div> 
           {
-          this.props.user && this.props.user.id ?
-            <MenuItem
-              onTouchTap={() => this.props.logout()}>Log Out</MenuItem>
+          this.props.user.id ?
+            <div>
+              <MenuItem onTouchTap={onCreateRoomClick}>Create Room</MenuItem>
+              <MenuItem
+                onTouchTap={() => this.props.logout()}>Log Out</MenuItem>
+            </div>
             : <MenuItem>Log In</MenuItem>
           }
       </Drawer>

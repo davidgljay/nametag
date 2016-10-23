@@ -38,7 +38,7 @@ class RoomCards extends Component {
 
   getChildContext() {
     return {
-      user: this.props.user,
+      user: this.props.user ? {...this.props.user, loggedIn: true} : {loggedIn: false},
     }
   }
 

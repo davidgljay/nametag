@@ -33,6 +33,12 @@ class Nametag extends Component {
 
   componentWillMount() {
     store.dispatch(getUser())
+
+    // Handle funky FB login hash
+    if (window.location.hash === '#_=_') {
+      window.location.hash = ''
+      history.pushState('', document.title, window.location.pathname)
+    }
   }
 
   getChildContext() {
