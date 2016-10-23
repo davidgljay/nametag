@@ -3,6 +3,7 @@ import errorLog from '../utils/errorLog'
 import constants from '../constants'
 import {addNametag, putNametag} from './NametagActions'
 import {putUserNametag} from './UserNametagActions'
+import {fetchUrl} from 'fetch'
 
 let roomWatches = {}
 let roomSubscription
@@ -114,7 +115,7 @@ export function unsubscribe() {
 export function getNametagCount(room) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      nametagSubscriptions.push(hz('nametags').findAll({room: room}).watch().subscribe(
+      nametagSubscriptions.push(hz('nametags').findAll({room}).watch().subscribe(
           (nametags) => {
             resolve(dispatch(setRoomNametagCount(room, nametags.length)))
           }, reject)
@@ -160,9 +161,7 @@ export function joinRoom(roomId, nametag, userId) {
 export function watchRoom(id) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      console.log("Watching room")
       roomWatches[id] = hz('rooms').find(id).watch().subscribe((room) => {
-        console.log("Got room response")
         dispatch(addRoom(room, room.id))
         resolve(room)
       }, reject)
@@ -181,6 +180,79 @@ export function watchRoom(id) {
 export function unWatchRoom(id) {
   return () => {
     roomWatches[id].unsubscribe()
+  }
+}
+
+/*
+* Search Images
+* @params
+*   searchString
+*
+* @returns
+*   Promise resolving to search string queries
+*/
+export function searchImage(query, startAt) {
+  return () => {
+    return new Promise((resolve, reject) => {
+      const start = startAt ? '&start=' + startAt : ''
+      fetchUrl('https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/image_search?query=' + query + start
+        , (err, meta, body) => {
+          if (err) {
+            reject(err)
+            return
+          }
+          if (meta.status !== 200) {
+            reject(meta.status)
+          }
+          try {
+            resolve(JSON.parse(JSON.parse(body)))
+        } catch (error) {
+            reject('Error parsing JSON for ' + query + ',' + startAt)
+          }
+        })
+    }).catch(errorLog('Searching for image'))
+  }
+}
+
+/*
+* Posts a room to the server
+*
+* @params
+*   room -The complete room object to be posted
+*
+* @returns
+*   Promise resolving to room id
+*/
+export function postRoom(room) {
+  return (dispatch) => {
+    return new Promise((resolve, reject) => {
+      hz('rooms').insert(room).subscribe((res) => {
+        dispatch(addRoom({ ...room, id: res.id }, res.id))
+        resolve(res.id)
+      }, reject)
+    }).catch(errorLog('Posting room'))
+  }
+}
+
+/*
+* Updates a room on the server
+*
+* @params
+*   room -The id of the room to be updated
+*   property - The property to be updated
+*   value -The new value to be set
+*
+* @returns
+*   Promise resolving to a response from horizon
+*/
+export function updateRoom(room, property, value) {
+  return (dispatch) => {
+    return new Promise((resolve, reject) => {
+      hz('rooms').update({id: room, [property]: value}).subscribe((res) => {
+        dispatch(setRoomProp(room, property, value))
+        resolve(res)
+      }, reject)
+    }).catch(errorLog('Updating room'))
   }
 }
 

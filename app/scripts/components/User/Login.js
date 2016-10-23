@@ -1,5 +1,4 @@
-import React, { Component, PropTypes } from 'react'
-import {providerAuth} from '../../actions/UserActions'
+import React from 'react'
 
 /* Function to Log in users via an auth provider or e-mail.
 
@@ -20,31 +19,24 @@ const styles = {
   },
 }
 
-class Login extends Component {
-
-  render() {
+const Login = (props) => {
   // TODO: Add e-mail (This will probably involve adding state, oh well.)
 
-    return <div style={styles.login}>
-        <h4>Log in to join</h4>
-        <img
-          style={styles.loginImg}
-          src="./images/twitter.jpg"
-          onClick={() => this.context.dispatch(providerAuth('twitter'))}/>
-        <img
-          style={styles.loginImg}
-          src="./images/fb.jpg"
-          onClick={() => this.context.dispatch(providerAuth('facebook'))}/>
-        <img
-          style={styles.loginImg}
-          src="./images/google.png"
-          onClick={() => this.context.dispatch(providerAuth('google'))}/>
-      </div>
-  }
-}
-
-Login.contextTypes = {
-  dispatch: PropTypes.func.isRequired,
+  return <div style={styles.login}>
+      <h4>Log in to join</h4>
+      <img
+        style={styles.loginImg}
+        src="./images/twitter.jpg"
+        onClick={() => props.providerAuth('twitter')}/>
+      <img
+        style={styles.loginImg}
+        src="./images/fb.jpg"
+        onClick={() => props.providerAuth('facebook')}/>
+      <img
+        style={styles.loginImg}
+        src="./images/google.png"
+        onClick={() => props.providerAuth('google')}/>
+    </div>
 }
 
 export default Login

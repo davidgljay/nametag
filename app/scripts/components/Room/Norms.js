@@ -11,11 +11,12 @@ const styles = {
   },
 
   norm: {
+    color: 'inherit',
     textAlign: 'left',
   },
   normText: {
     lineHeight: 1.4,
-    padding: '7px 7px 7px 72px',
+    padding: '7px 7px 7px 60px',
   },
   check: {
     height: 25,
@@ -36,7 +37,10 @@ const Norms = (props) =>
             <ListItem
               key={i}
               primaryText={norm}
-              innerDivStyle={styles.normText}
+              innerDivStyle={
+                props.showChecks ? styles.normText
+                : {...styles.normText, padding: 7}
+              }
               leftIcon={props.showChecks ? <Check style={styles.check}/> : <div/>}
               style={styles.norm}/>
           )

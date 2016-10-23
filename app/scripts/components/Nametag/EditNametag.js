@@ -3,7 +3,6 @@ import Alert from '../Utils/Alert'
 import Certificate from '../Certificate/Certificate'
 import { DropTarget } from 'react-dnd'
 import { dragTypes } from '../../constants'
-import {addUserNametagCert, removeUserNametagCert, updateUserNametag} from '../../actions/UserNametagActions'
 import {Card} from 'material-ui/Card'
 import TextField from 'material-ui/TextField'
 
@@ -28,7 +27,7 @@ const styles = {
 
 const nametagTarget = {
   drop(props, monitor) {
-    props.dispatch(addUserNametagCert(monitor.getItem(), props.room))
+    props.addUserNametagCert(monitor.getItem(), props.room)
   },
 }
 
@@ -51,27 +50,25 @@ class EditNametag extends Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(updateUserNametag(
+    this.props.updateUserNametag(
         this.props.room,
         'room',
         this.props.room
         )
-      )
   }
 
   updateNametagProperty(property) {
     return (e) => {
-      this.props.dispatch(updateUserNametag(
+      this.props.updateUserNametag(
         this.props.room,
         property,
         e.target.value
         )
-      )
     }
   }
 
   removeCert(cert) {
-    this.props.dispatch(removeUserNametagCert(cert, this.props.room))
+    this.props.removeUserNametagCert(cert, this.props.room)
   }
 
   render() {
@@ -89,6 +86,7 @@ class EditNametag extends Component {
                     inputStyle={{height: 50, margin: 0}}
                     floatingLabelStyle={{top: 20}}
                     underlineShow={false}
+                    errorText={this.props.error && this.props.error.nameError}
                     onChange={this.updateNametagProperty('name')}
                     value={nametag.name}
                     hintText='Name'/>
@@ -97,6 +95,7 @@ class EditNametag extends Component {
                     rows={2}
                     multiLine={true}
                     fullWidth={true}
+                    errorText={this.props.error && this.props.error.bioError}
                     underlineShow={false}
                     onChange={this.updateNametagProperty('bio')}
                     value={nametag.bio}

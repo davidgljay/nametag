@@ -5,7 +5,7 @@ import {getUserNametag} from '../../actions/UserNametagActions'
 import {postMessage, addMessage} from '../../actions/MessageActions'
 
 const mapStateToProps = (state, props) => {
-  let userNametag = state.userNametags[props.params.roomId] ? state.userNametags[props.params.roomId].id : null 
+  let userNametag = state.userNametags[props.params.roomId] ? state.userNametags[props.params.roomId].id : null
   return {
     room: state.rooms[props.params.roomId],
     user: state.user,
