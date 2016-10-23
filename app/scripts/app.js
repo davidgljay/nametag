@@ -39,6 +39,7 @@ class Nametag extends Component {
       window.location.hash = ''
       history.pushState('', document.title, window.location.pathname)
     }
+
   }
 
   getChildContext() {

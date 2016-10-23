@@ -28,7 +28,18 @@ describe('User reducer', () => {
       }, {
         type: constants.LOGOUT_USER,
       })
-      expect(newState).toEqual(false)
+      expect(newState).toEqual({loggedIn: false})
+    })
+  })
+
+  describe('USER_SETTING', () => {
+    it('should set a generic user setting', () => {
+      let newState = userReducer({}, {
+        type: constants.USER_SETTING,
+        setting: 'stuff',
+        value: 'things',
+      })
+      expect(newState).toEqual({stuff: 'things'})
     })
   })
 })

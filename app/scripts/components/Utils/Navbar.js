@@ -27,7 +27,10 @@ class Navbar extends Component {
             style={styles.button}
             onTouchTap={() => this.props.logout()}
             label='LOG OUT'/>
-          : <FlatButton style={styles.button} label='LOG IN'/>
+          : <FlatButton
+            style={styles.button}
+            onTouchTap={() => this.props.setting('showLogin', true)}
+            label='LOG IN'/>
         }
       </div>
     return  <div>
@@ -42,7 +45,7 @@ class Navbar extends Component {
         open={this.state.open}
         style={styles.drawer}
         onRequestChange={(open) => this.setState({open})}>
-        <div style={styles.drawerTitle}><h2>Nametag</h2></div> 
+        <div style={styles.drawerTitle}><h2>Nametag</h2></div>
           {
           this.props.user.id ?
             <div>
@@ -50,7 +53,7 @@ class Navbar extends Component {
               <MenuItem
                 onTouchTap={() => this.props.logout()}>Log Out</MenuItem>
             </div>
-            : <MenuItem>Log In</MenuItem>
+            : <MenuItem onTouchTap={() => this.props.setting('showLogin', true)}>Log In</MenuItem>
           }
       </Drawer>
     </div>
