@@ -15,4 +15,4 @@ COPY $PWD/server  /usr/server
 
 WORKDIR usr/server
 RUN npm install
-CMD npm start
+CMD bash

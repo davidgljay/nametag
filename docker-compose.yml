@@ -1,11 +1,12 @@
-horizon: 
+horizon:
   build: .
   dockerfile: devDockerfile
   volumes:
     - ./dist:/usr/app/dist
     - ./.keys:/usr/.keys
-    - ./server:/usr/server
     - ./.hz:/usr/app/.hz
+    - ./server/app.js:/usr/server/app.js
+    - ./server/secrets.json:/usr/server/secrets.json
   links:
     - rethinkdb
   ports:
@@ -19,4 +20,3 @@ rethinkdb:
 # horizon:
 #   image: rethinkdb/horizon
 #   command: su -s /bin/sh horizon -c "/usr/app/.hz/starthz.sh"
-
