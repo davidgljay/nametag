@@ -17,7 +17,7 @@ const httpsServer = https.createServer({
 }, app).listen(8181)
 
 const options = {
-  project_name: 'Nametag',
+  project_name: 'nametag',
   rdb_host: 'rethinkdb',
   // secure: 'yes',
   // key_file: '/usr/.keys/horizon-key.pem',

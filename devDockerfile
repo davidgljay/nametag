@@ -11,4 +11,5 @@ RUN apt-get update
 COPY $PWD/server/package.json /usr/server/package.json
 WORKDIR usr/server
 RUN npm install
+RUN npm install -g horizon
 CMD npm start
