@@ -40,7 +40,7 @@ const mapDispatchToProps = (dispatch) => {
       return dispatch(setting(option, value))
     },
     providerAuth(provider) {
-      return dispatch(provider)
+      return dispatch(providerAuth(provider))
     },
   }
 }
