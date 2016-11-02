@@ -15,4 +15,5 @@ COPY $PWD/server  /usr/server
 
 WORKDIR usr/server
 RUN npm install
+RUN npm install -g horizon
 CMD bash
