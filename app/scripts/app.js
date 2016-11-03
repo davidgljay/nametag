@@ -23,6 +23,7 @@ import { Router, Route, Link, hashHistory } from 'react-router'
 injectTapEventPlugin()
 
 const mountNode = document.getElementById('app')
+
 let store = createStore(mainReducer, compose(
     applyMiddleware(thunk),
     window.devToolsExtension ? window.devToolsExtension() : f => f

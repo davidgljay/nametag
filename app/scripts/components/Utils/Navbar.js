@@ -18,15 +18,17 @@ class Navbar extends Component {
 
   render() {
     const auth = <div style={styles.buttons}>
-        <FlatButton
-          style={styles.button}
-          onTouchTap={onCreateRoomClick} label='CREATE ROOM'/>
         {
         this.props.user && this.props.user.id ?
+        <div>
+          <FlatButton
+            style={styles.button}
+            onTouchTap={onCreateRoomClick} label='CREATE ROOM'/>
           <FlatButton
             style={styles.button}
             onTouchTap={() => this.props.logout()}
             label='LOG OUT'/>
+        </div>
           : <FlatButton
             style={styles.button}
             onTouchTap={() => this.props.setting('showLogin', true)}

@@ -81,11 +81,11 @@ class ImageSearch extends Component {
   }
 
   render() {
-    // const uploadOptions = {
-    //   baseUrl: 'https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/nametag_img_upload',
-    //   chooseAndUpload: true,
-    //   accept: '.jpg,.jpeg,.png',
-    // }
+    const uploadOptions = {
+      baseUrl: 'https://' + document.location.host + '/api/images',
+      chooseAndUpload: true,
+      accept: '.jpg,.jpeg,.png',
+    }
 
     return <div style={styles.container}>
       <div style={styles.searchContainer}>
@@ -105,6 +105,8 @@ class ImageSearch extends Component {
       <div style={styles.imagesContainer}>
         <Card
           style={{ ...styles.thumbnailContainer, ...styles.imageUpload}}>
+            <FileUpload
+              options={uploadOptions}>
               <IconButton
                 style={styles.imageUploadButton}
                 iconStyle={styles.imageUploadIcon}
@@ -112,6 +114,8 @@ class ImageSearch extends Component {
                 ref="chooseAndUpload">
                 cloud_upload
               </IconButton>
+            </FileUpload>
+
         </Card>
         {
           this.state.images.map((image, i) => {

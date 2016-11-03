@@ -1,0 +1,19 @@
+{
+  "name": "nametag-server",
+  "version": "0.0.1",
+  "description": "Server for Nametag",
+  "main": "./src/app.js",
+  "scripts": {
+    "start": "node ./src/app",
+    "test": "jest"
+  },
+  "author": "David Jay <davidgljay@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.6.12",
+    "express": "^4.14.0",
+    "horizon": "^2.0.0",
+    "multer": "^1.2.0",
+    "multer-storage-s3": "^1.1.1"
+  }
+}
