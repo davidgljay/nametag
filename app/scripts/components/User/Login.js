@@ -27,7 +27,7 @@ const Login = (props) => {
       <img
         style={styles.loginImg}
         src="./images/twitter.jpg"
-        onClick={() => props.providerAuth('twitter')}/>
+        onClick={() => props.providerAuth('auth0')}/>
       <img
         style={styles.loginImg}
         src="./images/fb.jpg"

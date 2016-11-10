@@ -47,5 +47,6 @@ const horizonServer = horizon(httpsServer, options)
 horizonServer.add_auth_provider(horizon.auth.twitter, config.twitter)
 horizonServer.add_auth_provider(horizon.auth.facebook, config.facebook)
 horizonServer.add_auth_provider(horizon.auth.google, config.google)
+horizonServer.add_auth_provider(horizon.auth.auth0, config.auth0)
 
 console.log('Listening on port 8181.')
