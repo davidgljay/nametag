@@ -1,0 +1,13 @@
+client/dist/
+client/lib/
+rethinkdb_data_test
+rethinkdb_data/
+**/*.log
+.#*
+**/*-key.pem
+**/*-cert.pem
+node_modules/
+**/.DS_Store
+.hz/
+config.toml
+**/.vscode

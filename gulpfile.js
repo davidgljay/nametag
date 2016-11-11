@@ -197,9 +197,7 @@ gulp.task('watch', ['html', 'fonts', 'styles', 'images', 'bundle'], function() {
     gulp.watch('app/*.html', ['html'])
 
     gulp.watch(['app/styles/**/*.scss', 'app/styles/**/*.css'], ['styles', 'scripts', reload])
-
-
-
+    
     // Watch image files
     gulp.watch('app/images/**/*', ['images', reload])
 })
