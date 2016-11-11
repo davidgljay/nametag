@@ -47,6 +47,7 @@ function auth0(horizon, raw_options) {
 
   const extract_id = (user_info) => user_info && user_info.user_id;
 
+  const extract_data = (user_info) => user_info;
 
   auth_utils.oauth2({
     horizon,
@@ -55,6 +56,7 @@ function auth0(horizon, raw_options) {
     make_token_request,
     make_inspect_request,
     extract_id,
+    extract_data,
   });
 }
 

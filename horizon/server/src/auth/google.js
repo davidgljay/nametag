@@ -44,6 +44,8 @@ function google(horizon, raw_options) {
 
   oauth_options.extract_id = (user_info) => user_info && user_info.id;
 
+  oauth_options.extract_data = (user_info) => user_info;
+  
   auth_utils.oauth2(oauth_options);
 }
 

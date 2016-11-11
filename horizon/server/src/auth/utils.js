@@ -93,6 +93,7 @@ const options_schema = Joi.object({
   make_token_request: Joi.func().arity(2).required(), // take `code` and `return_url`, return request
   make_inspect_request: Joi.func().arity(1).required(), // take `access_token`, return request
   extract_id: Joi.func().arity(1).required(), // take `user_info`, return value
+  extract_data: Joi.func().arity(1).required(), // take `user_info`, return value
 }).unknown(false);
 
 // Attaches an endpoint to the horizon server, providing an oauth2 redirect flow
