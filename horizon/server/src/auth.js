@@ -99,6 +99,7 @@ class Auth {
 
   // TODO: maybe we should write something into the user data to track open sessions/tokens
   generate(provider, info, data) {
+    console.log(data);
     return Promise.resolve().then(() => {
       const key = this.auth_key(provider, info);
       const db = r.db(this._parent._name);
@@ -113,8 +114,10 @@ class Auth {
                     .default(r.error('User not found and new user creation is disabled.'));
 
       if (this._create_new_users) {
+        const user_data = data;
+        user_data.provider = provider;
         query = insert('hz_users_auth', { id: key, user_id: r.uuid() })
-          .do((auth_user) => insert('users', this.new_user_row(auth_user('user_id'), data)));
+          .do((auth_user) => insert('users', this.new_user_row(auth_user('user_id'), user_data)));
       }
 
       return query.run(this._parent._reql_conn.connection()).catch((err) => {
