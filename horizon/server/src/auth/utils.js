@@ -92,6 +92,7 @@ const options_schema = Joi.object({
   make_acquire_url: Joi.func().arity(2).required(), // take `state` and `return_url`, return string
   make_token_request: Joi.func().arity(2).required(), // take `code` and `return_url`, return request
   make_inspect_request: Joi.func().arity(1).required(), // take `access_token`, return request
+  make_userdata_request: Joi.func().arity(2), // take `access_tokin` and `user_id`, return request
   extract_id: Joi.func().arity(1).required(), // take `user_info`, return value
   extract_data: Joi.func().arity(1).required(), // take `user_info`, return value
 }).unknown(false);
@@ -105,6 +106,7 @@ const oauth2 = (raw_options) => {
   const make_acquire_url = options.make_acquire_url;
   const make_token_request = options.make_token_request;
   const make_inspect_request = options.make_inspect_request;
+  const make_userdata_request = options.make_userdata_request;
   const extract_id = options.extract_id;
   const extract_data = options.extract_data;
 
@@ -116,6 +118,15 @@ const oauth2 = (raw_options) => {
 
   const make_failure_url = (horizon_error) =>
     url.format(extend_url_query(horizon._auth._failure_redirect, { horizon_error }));
+
+  const generate_user = (user_id, user_data, res) =>
+    horizon._auth.generate(provider, user_id, user_data).nodeify((err4, jwt) => {
+      // Clear the nonce just so we aren't polluting clients' cookies
+      clear_nonce(res, horizon._name);
+      do_redirect(res, err4 ?
+        make_failure_url('invalid user') :
+        make_success_url(jwt.token));
+    });
 
   horizon.add_http_handler(provider, (req, res) => {
     const request_url = url.parse(req.url, true);
@@ -167,6 +178,7 @@ const oauth2 = (raw_options) => {
               const user_info = try_json_parse(inner_body);
               const user_id = user_info && extract_id(user_info);
               const user_data = user_info && extract_data(user_info);
+              logger.log('Making request', provider);
 
               if (err2) {
                 logger.error(`Error contacting oauth API: ${err2}`);
@@ -176,14 +188,17 @@ const oauth2 = (raw_options) => {
                 logger.error(`Bad JSON data from oauth API: ${inner_body}`);
                 res.statusCode = 500;
                 res.end('unparseable inspect response');
+              // } else if (provider === 'facebook') {
+              //   logger.log('FB Auth');
+              //   run_request(make_userdata_request(access_token, user_id), (err3, user_data_body) => {
+              //     logger.log('FB data', try_json_parse(user_data_body));
+              //     return generate_user(user_id, try_json_parse(user_data_body), res);
+              //   }
+              //
+              //   );
               } else {
-                horizon._auth.generate(provider, user_id, user_data).nodeify((err3, jwt) => {
-                  // Clear the nonce just so we aren't polluting clients' cookies
-                  clear_nonce(res, horizon._name);
-                  do_redirect(res, err3 ?
-                    make_failure_url('invalid user') :
-                    make_success_url(jwt.token));
-                });
+                logger.log('Generating user', user_data);
+                generate_user(user_id, user_data, res);
               }
             });
           }

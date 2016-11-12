@@ -33,8 +33,6 @@ function facebook(horizon, raw_options) {
   auth_utils.run_request(make_app_token_request(), (err, body) => {
     const parsed = body && querystring.parse(body);
     app_token = parsed && parsed.access_token;
-    console.log(body);
-    console.log(parsed);
 
     if (err) {
       logger.error(`Failed to obtain "${provider}" app token: ${err}`);
@@ -59,18 +57,24 @@ function facebook(horizon, raw_options) {
     return req;
   };
 
-  oauth_options.make_inspect_request = (input_token) =>
+  oauth_options.make_inspect_request = (access_token) =>
     https.request(
       url.format({ protocol: 'https',
                    host: 'graph.facebook.com',
-                   pathname: '/debug_token',
-                   query: { access_token: app_token, input_token } }));
+                   pathname: '/me',
+                   query: { access_token, fields: 'id, name, picture' } }));
+
+  // oauth_options.make_userdata_request = (input_token, user_id) =>
+  //    https.request(
+  //      url.format({ protocol: 'https',
+  //                   host: 'graph.facebook.com',
+  //                   pathname: `/v2.8/${user_id}`,
+  //                   query: { access_token: app_token, input_token } }));
 
   oauth_options.extract_id = (user_info) =>
-    user_info && user_info.data && user_info.data.user_id;
+    user_info && user_info.id;
 
-  oauth_options.extract_data = (user_info) =>
-    user_info && user_info.data;
+  oauth_options.extract_data = (user_info) => user_info;
 
   auth_utils.oauth2(oauth_options);
 }
