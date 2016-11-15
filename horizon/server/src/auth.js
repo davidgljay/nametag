@@ -114,10 +114,11 @@ class Auth {
                     .default(r.error('User not found and new user creation is disabled.'));
 
       if (this._create_new_users) {
-        const user_data = data;
-        user_data.provider = provider;
         query = insert('hz_users_auth', { id: key, user_id: r.uuid() })
-          .do((auth_user) => insert('users', this.new_user_row(auth_user('user_id'), user_data)));
+          .do((auth_user) => insert('users', this.new_user_row(auth_user('user_id'), {
+            provider,
+            auth_data: data,
+          })));
       }
 
       return query.run(this._parent._reql_conn.connection()).catch((err) => {
