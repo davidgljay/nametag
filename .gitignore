@@ -10,3 +10,4 @@
 /server/src/secrets.json
 /server/node_modules/
 /server/npm-debug.log
+/server/secrets.json
