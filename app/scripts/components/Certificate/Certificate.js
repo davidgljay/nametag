@@ -23,6 +23,8 @@ function collect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging(),
+    initialOffset: monitor.getInitialSourceClientOffset(),
+    currentOffset: monitor.getSourceClientOffset(),
     connectDragPreview: connect.dragPreview(),
   }
 }
@@ -89,21 +91,21 @@ class Certificate extends Component {
         chipStyle = Object.assign({}, styles.certificateChip,
           {
             position: 'relative',
-            top: this.props.currentOffset.y - this.props.initialOffset.y,
+            top: this.props.currentOffset.y - this.props.initialOffset.y - 10,
             left: this.props.currentOffset.x - this.props.initialOffset.x,
           })
       }
       certificate = <div
-        style={chipStyle}
-        className="mdl-shadow--2dp"
-        onClick={this.toggleExpanded}>
-        {
-          this.props.certificate.icon_array ?
-           <div style={Object.assign({}, styles.miniIcon, {background: 'url(' + this.props.certificate.icon_array[0] + ') 0 0 / cover'})}/>
-           : <div style={styles.spacer}/>
-        }
-         <div style={styles.chipText}>{this.props.certificate.name}</div>
-      </div>
+          style={chipStyle}
+          className="mdl-shadow--2dp"
+          onClick={this.toggleExpanded}>
+          {
+            this.props.certificate.icon_array ?
+             <div style={Object.assign({}, styles.miniIcon, {background: 'url(' + this.props.certificate.icon_array[0] + ') 0 0 / cover'})}/>
+             : <div style={styles.spacer}/>
+          }
+           <div style={styles.chipText}>{this.props.certificate.name}</div>
+        </div>
     }
 
     // Make some certificates draggable
@@ -122,7 +124,7 @@ Certificate.propTypes = {
   removeFromSource: PropTypes.func,
 }
 
-export default DragSource(dragTypes.certificate, certSource, collect)(DragLayer(dragLayerCollect)(Certificate))
+export default DragSource(dragTypes.certificate, certSource, collect)(Certificate)
 
 const styles = {
   certificateChip: {

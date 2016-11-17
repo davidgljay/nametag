@@ -34,7 +34,7 @@ const nametagTarget = {
 function collect(connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver({shallow: true}),
+    isOver: monitor.isOver(),
   }
 }
 
