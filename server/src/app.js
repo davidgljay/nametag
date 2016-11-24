@@ -7,7 +7,7 @@ const imageUpload = require('./imageUpload')
 const horizon = require('../../horizon/server/src/horizon.js')
 const config = require('./secrets.json')
 const path = require('path')
-const reql = require('./reql')
+const listeners = require('./listeners')
 
 process.env.AWS_ACCESS_KEY_ID = config.s3.accessKeyId
 process.env.AWS_SECRET_ACCESS_KEY = config.s3.secretAccessKey
@@ -45,13 +45,7 @@ horizonServer.add_auth_provider(horizon.auth.twitter, config.twitter)
 horizonServer.add_auth_provider(horizon.auth.facebook, config.facebook)
 horizonServer.add_auth_provider(horizon.auth.google, config.google)
 
-// Get reql connection
-const r = horizon.r
-r.connect(horizonServer._reql_conn._rdb_options).then((conn) => {
-  return r.db('nametag').table('users').changes().run(conn)
-})
-.then((feed) => feed.each(console.log))
-.catch((err) => console.error(err))
-// console.log('r', r.db('nametag').table('rooms').run(horizonServer._reql_conn))
+// Activate db listeners
+listeners(horizonServer._reql_conn._rdb_options)
 
 console.log('Listening on port 8181.')
