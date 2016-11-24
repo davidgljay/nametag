@@ -57,6 +57,7 @@
     "gulp-webserver": "latest",
     "jest-cli": "latest",
     "jest-css-modules": "^1.0.2",
+    "joi": "^10.0.1",
     "main-bower-files": "~2.6.2",
     "react-storybook": "^1.0.0",
     "react-test-renderer": "^15.3.1",

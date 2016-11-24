@@ -7,6 +7,7 @@ const imageUpload = require('./imageUpload')
 const horizon = require('../../horizon/server/src/horizon.js')
 const config = require('./secrets.json')
 const path = require('path')
+// const reql = require('./reql')
 
 process.env.AWS_ACCESS_KEY_ID = config.s3.accessKeyId
 process.env.AWS_SECRET_ACCESS_KEY = config.s3.secretAccessKey
@@ -26,10 +27,6 @@ const httpsServer = https.createServer({
 const options = {
   project_name: 'nametag',
   rdb_host: 'rethinkdb',
-  // secure: 'yes',
-  // key_file: '/usr/.keys/horizon-key.pem',
-  // cert_file: '/usr/.keys/horizon-cert.pem',
-  // serve_static: 'usr/app/dist',
   auto_create_collection: 'true',
   auto_create_index: 'true',
   auth: {
@@ -47,5 +44,10 @@ const horizonServer = horizon(httpsServer, options)
 horizonServer.add_auth_provider(horizon.auth.twitter, config.twitter)
 horizonServer.add_auth_provider(horizon.auth.facebook, config.facebook)
 horizonServer.add_auth_provider(horizon.auth.google, config.google)
+
+// Get reql connection
+// horizonServer._reql_conn.read().then((reqlConn) => {
+//   reql(reqlConn.connection())
+// })
 
 console.log('Listening on port 8181.')
