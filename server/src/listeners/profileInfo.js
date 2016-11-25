@@ -27,21 +27,32 @@ const onUserUpdate = (conn) => (err, user) => {
   /* Post img URL to AWS. This should allow the roundtrip on images to be faster,
   which I want to optimize for. */
 
-  // const options = {
-  //   method: 'POST',
-  //   headers: {},
-  //   body: JSON.stringify({
-  //     url: profile.iconUrl,
-  //     width: 50,
-  //     height: 50,
-  //   }),
-  // }
-  //
-  // https.post('AWS_image_url', options, (err) => {
-  //   if (err) {
-  //     console.log(err) //TODO: set up error logging.
-  //   }
-  // })
+  const options = {
+    method: 'POST',
+    hostname: 'cl3z6j4irk.execute-api.us-east-1.amazonaws.com',
+    path: '/prod/image',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      url: userProfile.picture,
+      sizes: [
+        {
+          width: 50,
+          height: 50,
+        },
+      ],
+    }),
+  }
+
+  console.log('Making request', options)
+  https.request(options,
+  (e, res) => {
+    if (e) {
+      console.log(e) //TODO: set up error logging.
+    }
+    console.log('Lambda response', res.body)
+  })
 }
 
 module.exports = (conn) => {
