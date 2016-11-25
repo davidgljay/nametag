@@ -1,8 +1,7 @@
-const horizon = require('../../horizon/server/src/horizon.js')
+const r = require('../../../horizon/server/src/horizon.js').r
 
 module.exports = (reqlOptions) => {
-  const r = horizon.r
-  r.connection(reqlOptions).then((conn) => {
+  r.connect(reqlOptions).then((conn) => {
     require('./profileInfo')(conn)
   })
 }
