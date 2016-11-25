@@ -36,7 +36,7 @@ describe('User reducer', () => {
     it('should set a generic user setting', () => {
       let newState = userReducer({}, {
         type: constants.USER_SETTING,
-        setting: 'stuff',
+        option: 'stuff',
         value: 'things',
       })
       expect(newState).toEqual({stuff: 'things'})
