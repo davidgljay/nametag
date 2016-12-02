@@ -13,7 +13,7 @@ const onCreateRoomClick = () => {
 
 class Navbar extends Component {
   state = {
-    open: false
+    open: false,
   }
 
   render() {
@@ -23,15 +23,15 @@ class Navbar extends Component {
         <div>
           <FlatButton
             style={styles.button}
-            onTouchTap={onCreateRoomClick} label='CREATE ROOM'/>
+            onClick={onCreateRoomClick} label='CREATE ROOM'/>
           <FlatButton
             style={styles.button}
-            onTouchTap={() => this.props.logout()}
+            onClick={() => this.props.logout()}
             label='LOG OUT'/>
         </div>
           : <FlatButton
             style={styles.button}
-            onTouchTap={() => this.props.setting('showLogin', true)}
+            onClick={() => this.props.setting('showLogin', true)}
             label='LOG IN'/>
         }
       </div>
@@ -51,11 +51,11 @@ class Navbar extends Component {
           {
           this.props.user.id ?
             <div>
-              <MenuItem onTouchTap={onCreateRoomClick}>Create Room</MenuItem>
+              <MenuItem onClick={onCreateRoomClick}>Create Room</MenuItem>
               <MenuItem
-                onTouchTap={() => this.props.logout()}>Log Out</MenuItem>
+                onClick={() => this.props.logout()}>Log Out</MenuItem>
             </div>
-            : <MenuItem onTouchTap={() => this.props.setting('showLogin', true)}>Log In</MenuItem>
+            : <MenuItem onClick={() => this.props.setting('showLogin', true)}>Log In</MenuItem>
           }
       </Drawer>
     </div>

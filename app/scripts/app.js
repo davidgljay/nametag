@@ -1,7 +1,6 @@
 
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import injectTapEventPlugin from 'react-tap-event-plugin'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Radium, {StyleRoot} from 'radium'
 
@@ -19,8 +18,6 @@ import thunk from 'redux-thunk'
 import mainReducer from './reducers'
 
 import { Router, Route, Link, hashHistory } from 'react-router'
-
-injectTapEventPlugin()
 
 const mountNode = document.getElementById('app')
 
