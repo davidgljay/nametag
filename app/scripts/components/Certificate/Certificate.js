@@ -87,7 +87,7 @@ class Certificate extends Component {
         </div>
     } else {
       let chipStyle = styles.certificateChip
-      if (this.props.isDragging) {
+      if (this.props.isDragging && this.props.currentOffset) {
         chipStyle = Object.assign({}, styles.certificateChip,
           {
             position: 'relative',
