@@ -23,10 +23,10 @@ class Navbar extends Component {
         <div>
           <FlatButton
             style={styles.button}
-            onTouchTap={onCreateRoomClick} label='CREATE ROOM'/>
+            onClick={onCreateRoomClick} label='CREATE ROOM'/>
           <FlatButton
             style={styles.button}
-            onTouchTap={() => this.props.logout()}
+            onClick={() => this.props.logout()}
             label='LOG OUT'/>
         </div>
           : <FlatButton
