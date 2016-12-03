@@ -21,7 +21,6 @@
     "@horizon/client": "2.0.0",
     "bluebird": "^3.4.0",
     "cookie": "^0.2.3",
-    "joi": "^8.0.4",
     "jsonwebtoken": "^5.5.4",
     "mime-types": "^2.0.4",
     "oauth": "^0.9.14",

@@ -1,4 +1,4 @@
-const r = require('../../../horizon/server/src/horizon.js').r
+const r = require('../../horizon/server/src/horizon.js').r
 
 module.exports = (reqlOptions) => {
   r.connect(reqlOptions).then((conn) => {

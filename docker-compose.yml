@@ -6,7 +6,8 @@ horizon:
     - ./.keys:/usr/.keys
     - ./.hz:/usr/app/.hz
     - ./server/src:/usr/server/src
-    - ./horizon:/usr/horizon
+    - ./server/starthz.sh:/usr/server/starthz.sh
+    - ./horizon:/usr/server/horizon
   links:
     - rethinkdb
   ports:
