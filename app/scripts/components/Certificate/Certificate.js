@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import moment from '../../../bower_components/moment/moment'
 import { dragTypes } from '../../constants'
-import { DragSource } from 'react-dnd'
+import { DragSource, DragLayer } from 'react-dnd'
 import { Card, CardActions } from 'material-ui/Card'
 import FontIcon from 'material-ui/FontIcon'
 
@@ -23,7 +23,18 @@ function collect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging(),
+    initialOffset: monitor.getInitialSourceClientOffset(),
+    currentOffset: monitor.getSourceClientOffset(),
     connectDragPreview: connect.dragPreview(),
+  }
+}
+
+function dragLayerCollect(monitor) {
+  return {
+    item: monitor.getItem(),
+    initialOffset: monitor.getInitialSourceClientOffset(),
+    currentOffset: monitor.getSourceClientOffset(),
+    isDragging: monitor.isDragging(),
   }
 }
 
@@ -47,7 +58,7 @@ class Certificate extends Component {
     let certificate
     if (this.state.expanded) {
       certificate = <div>
-        <Card shadow={1} style={styles.certificateExpanded}>
+        <Card style={styles.certificateExpanded}>
               <FontIcon style={styles.close} className='material-icons' onClick={this.toggleExpanded}>
                 close
               </FontIcon>
@@ -76,23 +87,28 @@ class Certificate extends Component {
         </div>
     } else {
       let chipStyle = styles.certificateChip
-      if (this.props.isDragging) {
-        chipStyle = Object.assign({}, styles.certificateChip, {display: 'none'})
+      if (this.props.isDragging && this.props.currentOffset) {
+        chipStyle = Object.assign({}, styles.certificateChip,
+          {
+            position: 'relative',
+            top: this.props.currentOffset.y - this.props.initialOffset.y - 10,
+            left: this.props.currentOffset.x - this.props.initialOffset.x,
+          })
       }
       certificate = <div
-        style={chipStyle}
-        className="mdl-shadow--2dp"
-        onClick={this.toggleExpanded}>
-        {
-          this.props.certificate.icon_array ?
-           <div style={Object.assign({}, styles.miniIcon, {background: 'url(' + this.props.certificate.icon_array[0] + ') 0 0 / cover'})}/>
-           : <div style={styles.spacer}/>
-        }
-         <div style={styles.chipText}>{this.props.certificate.name}</div>
-      </div>
+          style={chipStyle}
+          className="mdl-shadow--2dp"
+          onClick={this.toggleExpanded}>
+          {
+            this.props.certificate.icon_array ?
+             <div style={Object.assign({}, styles.miniIcon, {background: 'url(' + this.props.certificate.icon_array[0] + ') 0 0 / cover'})}/>
+             : <div style={styles.spacer}/>
+          }
+           <div style={styles.chipText}>{this.props.certificate.name}</div>
+        </div>
     }
 
-    //Make some certificates draggable
+    // Make some certificates draggable
     if (this.props.draggable) {
       certificate = this.props.connectDragSource(certificate)
     }

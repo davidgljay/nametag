@@ -7,7 +7,10 @@ class Certificates extends Component {
     let certificates = this.props.certificates || []
     return <div id="certificates">
            {certificates.map(function mapCertificates(certificate) {
-             return <Certificate certificate={certificate} key={certificate.id} draggable={false}/>
+             return <Certificate
+              certificate={certificate}
+              key={certificate.id}
+              draggable={false}/>
            })}
         </div>
   }

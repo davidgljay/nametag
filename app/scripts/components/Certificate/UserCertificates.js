@@ -39,10 +39,11 @@ class UserCertificates extends Component {
               return !selected
             })
             .map((certificateId) => {
-              return <Certificate
-                id={certificateId}
-                key={certificateId}
-                draggable={true}/>
+              return <div key={certificateId}>
+                <Certificate
+                  id={certificateId}
+                  draggable={true}/>
+              </div>
             })
           }
         </div>
