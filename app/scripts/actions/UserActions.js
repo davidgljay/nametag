@@ -29,7 +29,7 @@ export function providerAuth(provider) {
 * Get currently authenticated user if one exists
 *
 * @params
-*   provider- The provider to auth with, one of 'facebook', 'twitter'
+*   none
 *
 * @returns
 *   Promise
@@ -39,6 +39,13 @@ export function getUser() {
     return getAuth().then((user) => {
       if (user) {
         dispatch(addUser(user.id, user.data))
+
+        // Horizon.watch isn't working for currentUser, so I need a workaround to
+        // check for changes to profile images.
+
+        if (user.data.loadingIcons) {
+          setTimeout(() => dispatch(getUser()), 500)
+        }
       }
     })
     .catch(errorLog('Error getting user info'))

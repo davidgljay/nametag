@@ -16,6 +16,7 @@ const onUserUpdate = (conn) => (err, user) => {
   const userProfile = parseInfo(prevData)
   let newData = {
     displayNames: userProfile.names,
+    loadingIcons: true,
   }
   newData.auth_data = prevData.auth_data
   newData.provider = prevData.provider
@@ -46,11 +47,15 @@ const onUserUpdate = (conn) => (err, user) => {
   fetch('https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/image', options)
     .then((res) => {
       return res.ok ? res.json()
-        : Promise.reject(`Error ${res.statusCode}`)
+        : Promise.reject(res.statusCode)
     })
     .then((json) => {
+      console.log("Load Icon Response:", json)
       return json.filename && r.db('nametag').table('users').get(user.new_val.id).update({
-        data: { icon_urls: [ json.filename ]},
+        data: {
+          iconUrls: [ json.filename ],
+          loadingIcons: false
+        },
       }).run(conn)
     })
     .catch(err => console.log('Error updating user icon', err))
