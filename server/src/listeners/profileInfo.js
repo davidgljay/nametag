@@ -49,11 +49,11 @@ const onUserUpdate = (conn) => (err, user) => {
         : Promise.reject(`Error ${res.statusCode}`)
     })
     .then((json) => {
-      return r.db('nametag').table('users').get(user.new_val.id).update({
+      return json.filename && r.db('nametag').table('users').get(user.new_val.id).update({
         data: { icon_urls: [ json.filename ]},
       }).run(conn)
     })
-    .catch(err => console.log('Error', err))
+    .catch(err => console.log('Error updating user icon', err))
 }
 
 module.exports = (conn) => {
