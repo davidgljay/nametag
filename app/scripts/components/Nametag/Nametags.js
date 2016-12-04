@@ -66,6 +66,6 @@ const styles = {
     paddingBottom: 5,
   },
   nametags: {
-  	marginBottom: 40,
+    marginBottom: 40,
   },
 }

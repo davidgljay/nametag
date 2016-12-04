@@ -1,5 +1,5 @@
-const https = require('https')
-const r = require('../../../horizon/server/src/horizon.js').r
+const fetch = require('node-fetch')
+const r = require('../../horizon/server/src/horizon.js').r
 
 const onUserUpdate = (conn) => (err, user) => {
 
@@ -29,8 +29,6 @@ const onUserUpdate = (conn) => (err, user) => {
 
   const options = {
     method: 'POST',
-    hostname: 'cl3z6j4irk.execute-api.us-east-1.amazonaws.com',
-    path: '/prod/image',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -45,14 +43,17 @@ const onUserUpdate = (conn) => (err, user) => {
     }),
   }
 
-  console.log('Making request', options)
-  https.request(options,
-  (e, res) => {
-    if (e) {
-      console.log(e) //TODO: set up error logging.
-    }
-    console.log('Lambda response', res.body)
-  })
+  fetch('https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/image', options)
+    .then((res) => {
+      return res.ok ? res.json()
+        : Promise.reject(`Error ${res.statusCode}`)
+    })
+    .then((json) => {
+      return r.db('nametag').table('users').get(user.new_val.id).update({
+        data: { icon_urls: [ json.filename ]},
+      }).run(conn)
+    })
+    .catch(err => console.log('Error', err))
 }
 
 module.exports = (conn) => {
