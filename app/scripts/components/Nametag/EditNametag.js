@@ -98,6 +98,11 @@ class EditNametag extends Component {
       && userDefaults.displayNames.length >= 1) {
       updateUserNametag(room, 'name', userDefaults.displayNames[0])
     }
+    if (!userNametag.icon
+      && userDefaults.iconUrls
+      && userDefaults.iconUrls.length >= 1) {
+      updateUserNametag(room, 'icon', userDefaults.iconUrls[0])
+    }
   }
 
   updateNametagProperty(property) {
@@ -115,7 +120,8 @@ class EditNametag extends Component {
   }
 
   render() {
-    const {error, userDefaults, updateUserNametag, room} = this.props
+    const {error, userDefaults, updateUserNametag, room, userNametag} = this.props
+
     const {
       menuStyle,
       menuItemStyle,
@@ -127,19 +133,28 @@ class EditNametag extends Component {
       nameTextfieldStyle,
       floatingLabelStyle,
     } = styles
-    let nametag = this.props.userNametag || {
+
+    let nametag = userNametag || {
       name: '',
       bio: '',
       icon: '',
     }
-    const defaultIcon = userDefaults.iconUrls && userDefaults.iconUrls[0]
-      || ''
+
+    const uploadFontIcon = <FontIcon
+        className="material-icons"
+        style={uploadIcon}>
+        add_to_photos
+      </FontIcon>
     return this.props.connectDropTarget(<div>
           <Card style={styles.editNametag} className="profile">
             <div style={styles.cardInfo}>
               <IconMenu
-              iconButtonElement={
-                <img src={constants.USER_ICON_URL + defaultIcon} style={styles.icon}/>
+              iconButtonElement= {
+                nametag.icon ?
+                  <img src={constants.USER_ICON_URL + nametag.icon} style={styles.icon}/>
+                : <div style={uploadMenuItemInnerDivStyle}>
+                    {uploadFontIcon}
+                  </div>
               }
               anchorOrigin={{horizontal: 'left', vertical: 'top'}}
               targetOrigin={{horizontal: 'left', vertical: 'top'}}
@@ -148,6 +163,7 @@ class EditNametag extends Component {
               {
                   userDefaults.iconUrls.map((url) =>
                     <MenuItem
+                      key={url}
                       style={menuItemStyle}
                       innerDivStyle={menuItemInnerDivStyle}>
                       <img src={constants.USER_ICON_URL + url} style={styles.icon}/>
@@ -158,7 +174,7 @@ class EditNametag extends Component {
                 style={menuItemStyle}
                 innerDivStyle={uploadMenuItemInnerDivStyle}>
                   <div style={uploadMenuItem}>
-                    <FontIcon className="material-icons" style={uploadIcon}>add_to_photos</FontIcon>
+                    {uploadFontIcon}
                   </div>
               </MenuItem>
             </IconMenu>
