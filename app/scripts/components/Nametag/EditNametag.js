@@ -5,6 +5,9 @@ import { DropTarget } from 'react-dnd'
 import { dragTypes } from '../../constants'
 import {Card} from 'material-ui/Card'
 import TextField from 'material-ui/TextField'
+import IconMenu from 'material-ui/IconMenu'
+import FontIcon from 'material-ui/FontIcon'
+import MenuItem from 'material-ui/MenuItem'
 import AutoComplete from 'material-ui/AutoComplete'
 import constants from '../../constants'
 
@@ -28,14 +31,38 @@ const styles = {
   nameStyle: {
     width: 150,
     height: 40,
-    marginLeft: 10
+    marginLeft: 10,
   },
   nameTextfieldStyle: {
     width: 150,
     height: 40,
   },
   floatingLabelStyle: {
-    top: 20
+    top: 20,
+  },
+  menuItemStyle: {
+    lineHeight: 'inherit',
+  },
+  menuItemInnerDivStyle: {
+    padding: 6,
+    textAlign: 'center',
+  },
+  uploadMenuItemInnerDivStyle: {
+    padding: 6,
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  uploadMenuItem: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    textAlign: 'center',
+    verticalAlign: 'middle',
+    background: '#999',
+  },
+  uploadIcon: {
+    color: '#FFF',
+    marginTop: 13,
   },
 }
 
@@ -89,19 +116,52 @@ class EditNametag extends Component {
 
   render() {
     const {error, userDefaults, updateUserNametag, room} = this.props
+    const {
+      menuStyle,
+      menuItemStyle,
+      menuItemInnerDivStyle,
+      uploadIcon,
+      uploadMenuItem,
+      uploadMenuItemInnerDivStyle,
+      nameStyle,
+      nameTextfieldStyle,
+      floatingLabelStyle,
+    } = styles
     let nametag = this.props.userNametag || {
       name: '',
       bio: '',
-      icon: ''
+      icon: '',
     }
-    const defaultIcon = (userDefaults.iconUrls && userDefaults.iconUrls[0])
+    const defaultIcon = userDefaults.iconUrls && userDefaults.iconUrls[0]
       || ''
     return this.props.connectDropTarget(<div>
           <Card style={styles.editNametag} className="profile">
             <div style={styles.cardInfo}>
-              <img
-                src={constants.USER_ICON_URL + defaultIcon}
-                style={styles.icon}/>
+              <IconMenu
+              iconButtonElement={
+                <img src={constants.USER_ICON_URL + defaultIcon} style={styles.icon}/>
+              }
+              anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+              targetOrigin={{horizontal: 'left', vertical: 'top'}}
+              style={styles.icon}
+              menuStyle={menuStyle}>
+              {
+                  userDefaults.iconUrls.map((url) =>
+                    <MenuItem
+                      style={menuItemStyle}
+                      innerDivStyle={menuItemInnerDivStyle}>
+                      <img src={constants.USER_ICON_URL + url} style={styles.icon}/>
+                    </MenuItem>
+                  )
+              }
+              <MenuItem
+                style={menuItemStyle}
+                innerDivStyle={uploadMenuItemInnerDivStyle}>
+                  <div style={uploadMenuItem}>
+                    <FontIcon className="material-icons" style={uploadIcon}>add_to_photos</FontIcon>
+                  </div>
+              </MenuItem>
+            </IconMenu>
               <div style={{width: 190, flex: 1}}>
                   <AutoComplete
                     floatingLabelText="Name"
@@ -112,10 +172,10 @@ class EditNametag extends Component {
                     errorText={error && error.nameError}
                     onUpdateInput={(name) => updateUserNametag(room, 'name', name)}
                     animated={true}
-                    style={styles.nameStyle}
-                    textFieldStyle={styles.nameTextfieldStyle}
+                    style={nameStyle}
+                    textFieldStyle={nameTextfieldStyle}
                     fullWidth={false}
-                    floatingLabelStyle={styles.floatingLabelStyle}
+                    floatingLabelStyle={floatingLabelStyle}
                     underlineShow={false}
                     searchText={nametag.name}/>
                   <TextField
