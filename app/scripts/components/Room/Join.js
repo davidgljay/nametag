@@ -62,6 +62,7 @@ class Join extends Component {
           <h4>Write Your Nametag For This Conversation</h4>
           <EditNametag
             userNametag={this.props.userNametag}
+            userDefaults={this.context.user.data}
             addUserNametagCert={this.props.addUserNametagCert}
             removeUserNametagCert={this.props.removeUserNametagCert}
             updateUserNametag={this.props.updateUserNametag}

@@ -5,6 +5,7 @@ import { DropTarget } from 'react-dnd'
 import { dragTypes } from '../../constants'
 import {Card} from 'material-ui/Card'
 import TextField from 'material-ui/TextField'
+import AutoComplete from 'material-ui/AutoComplete'
 
 const styles = {
   editNametag: {
@@ -22,6 +23,18 @@ const styles = {
     width: 50,
     height: 50,
     margin: 5,
+  },
+  nameStyle: {
+    width: 150,
+    height: 40,
+    marginLeft: 10
+  },
+  nameTextfieldStyle: {
+    width: 150,
+    height: 40,
+  },
+  floatingLabelStyle: {
+    top: 20
   },
 }
 
@@ -50,11 +63,13 @@ class EditNametag extends Component {
   }
 
   componentDidMount() {
-    this.props.updateUserNametag(
-        this.props.room,
-        'room',
-        this.props.room
-        )
+    const {userNametag, updateUserNametag, userDefaults, room} = this.props
+    updateUserNametag(room, 'room', room)
+    if (!userNametag.name
+      && userDefaults.displayNames
+      && userDefaults.displayNames.length >= 1) {
+      updateUserNametag(room, 'name', userDefaults.displayNames[0])
+    }
   }
 
   updateNametagProperty(property) {
@@ -72,30 +87,36 @@ class EditNametag extends Component {
   }
 
   render() {
+    const {error, userDefaults, updateUserNametag, room} = this.props
     let nametag = this.props.userNametag || {name: '', bio: ''}
-    // TODO: Figure out image caching
     return this.props.connectDropTarget(<div>
           <Card style={styles.editNametag} className="profile">
             <div style={styles.cardInfo}>
               <img
                 src="https://s3.amazonaws.com/badgeproject_icons/users/dj_cropped.jpg"
                 style={styles.icon}/>
-              <div style={{width: 190, flex:1}}>
-                  <TextField
-                    style={{marginLeft: 10, width: 160, height: 50}}
-                    inputStyle={{height: 50, margin: 0}}
-                    floatingLabelStyle={{top: 20}}
+              <div style={{width: 190, flex: 1}}>
+                  <AutoComplete
+                    floatingLabelText="Name"
+                    filter={AutoComplete.noFilter}
+                    openOnFocus={true}
+                    disableFocusRipple={false}
+                    dataSource={userDefaults.displayNames}
+                    errorText={error && error.nameError}
+                    onUpdateInput={(name) => updateUserNametag(room, 'name', name)}
+                    animated={true}
+                    style={styles.nameStyle}
+                    textFieldStyle={styles.nameTextfieldStyle}
+                    fullWidth={false}
+                    floatingLabelStyle={styles.floatingLabelStyle}
                     underlineShow={false}
-                    errorText={this.props.error && this.props.error.nameError}
-                    onChange={this.updateNametagProperty('name')}
-                    value={nametag.name}
-                    hintText='Name'/>
+                    searchText={nametag.name}/>
                   <TextField
                     style={{width: 160}}
                     rows={2}
                     multiLine={true}
                     fullWidth={true}
-                    errorText={this.props.error && this.props.error.bioError}
+                    errorText={error && error.bioError}
                     underlineShow={false}
                     onChange={this.updateNametagProperty('bio')}
                     value={nametag.bio}
