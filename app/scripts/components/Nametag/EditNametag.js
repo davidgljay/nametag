@@ -161,12 +161,13 @@ class EditNametag extends Component {
               style={styles.icon}
               menuStyle={menuStyle}>
               {
-                  userDefaults.iconUrls.map((url) =>
+                  userDefaults.iconUrls.map((filename) =>
                     <MenuItem
-                      key={url}
+                      key={filename}
                       style={menuItemStyle}
-                      innerDivStyle={menuItemInnerDivStyle}>
-                      <img src={constants.USER_ICON_URL + url} style={styles.icon}/>
+                      innerDivStyle={menuItemInnerDivStyle}
+                      onTouchTap={() => updateUserNametag(room, 'icon', filename)}>
+                      <img src={constants.USER_ICON_URL + filename} style={styles.icon}/>
                     </MenuItem>
                   )
               }
