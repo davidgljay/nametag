@@ -24,4 +24,6 @@ export default {
   // Timers
   ANIMATION_LONG: 400,
 
+  // URLs
+  USER_ICON_URL: 'https://s3.amazonaws.com/nametag_images/user_icons/50X50/',
 }

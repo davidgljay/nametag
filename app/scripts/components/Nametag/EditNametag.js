@@ -6,6 +6,7 @@ import { dragTypes } from '../../constants'
 import {Card} from 'material-ui/Card'
 import TextField from 'material-ui/TextField'
 import AutoComplete from 'material-ui/AutoComplete'
+import constants from '../../constants'
 
 const styles = {
   editNametag: {
@@ -88,12 +89,18 @@ class EditNametag extends Component {
 
   render() {
     const {error, userDefaults, updateUserNametag, room} = this.props
-    let nametag = this.props.userNametag || {name: '', bio: ''}
+    let nametag = this.props.userNametag || {
+      name: '',
+      bio: '',
+      icon: ''
+    }
+    const defaultIcon = (userDefaults.iconUrls && userDefaults.iconUrls[0])
+      || ''
     return this.props.connectDropTarget(<div>
           <Card style={styles.editNametag} className="profile">
             <div style={styles.cardInfo}>
               <img
-                src="https://s3.amazonaws.com/badgeproject_icons/users/dj_cropped.jpg"
+                src={constants.USER_ICON_URL + defaultIcon}
                 style={styles.icon}/>
               <div style={{width: 190, flex: 1}}>
                   <AutoComplete
