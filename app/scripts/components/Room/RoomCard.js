@@ -77,6 +77,18 @@ class RoomCard extends Component {
   }
 
   render() {
+    const {
+      room,
+      hostNametag,
+      creating,
+      style,
+      userNametag,
+      addUserNametagCert,
+      updateUserNametag,
+      providerAuth,
+      removeUserNametagCert,
+      id,
+    } = this.props
     let card
     let flipping = {}
 
@@ -87,7 +99,7 @@ class RoomCard extends Component {
               onClick={this.flip}>
               <img
               style={styles.roomImage}
-              src={this.props.room.image}/>
+              src={constants.ROOM_IMAGE_URL + room.image}/>
             </CardMedia>
           }
           <div style={styles.roomInfo}>
@@ -95,37 +107,37 @@ class RoomCard extends Component {
               <b>Started</b> 2 days ago | <b>Ends</b> in 1 week
             </div>
             <CardTitle
-              title={this.props.room.title}
+              title={room.title}
               style={styles.roomName}
               onClick={this.flip.bind(this)}/>
-              {this.props.room.description}<br/>
+              {room.description}<br/>
               {
-                this.props.room.nametagCount &&
+                room.nametagCount &&
                 <p style={styles.greyText}>
-                  {this.props.room.nametagCount} participant
-                  {this.props.room.nametagCount === 1 ? '' : 's'}
+                  {room.nametagCount} participant
+                  {room.nametagCount === 1 ? '' : 's'}
                 </p>
               }
 
             </div>
             {
-              this.props.room.mod &&
+              room.mod &&
               <NametagContainer
                 style={styles.mod}
-                room={this.props.id}
-                id={this.props.room.mod}
-                mod={this.props.room.mod} />
+                room={id}
+                id={room.mod}
+                mod={room.mod} />
             }
             {
-              this.props.creating &&
-              (this.props.hostNametag.name || this.props.hostNametag.bio) &&
+              creating &&
+              (hostNametag.name || hostNametag.bio) &&
               <Nametag
                 style={styles.mod}
                 id='1'
                 mod='1'
                 watchNametag={()=>{}}
                 unWatchNametag={()=>{}}
-                {...this.props.hostNametag}/>
+                {...hostNametag}/>
             }
         </Card>
 
@@ -134,25 +146,25 @@ class RoomCard extends Component {
           <CardTitle
             style={styles.roomName}
             onClick={this.flip.bind(this)}
-            title={this.props.room.title}/>
+            title={room.title}/>
           <div style={styles.norms}>
             <h4>Conversation Norms</h4>
-            <Norms norms={this.props.room.norms} showChecks={true}/>
+            <Norms norms={room.norms} showChecks={true}/>
             <Checkbox
               style={styles.checkbox}
               label="I agree to these norms"
               onClick={this.onNormsCheck}/>
           </div>
           {
-            !this.props.creating &&
+            !creating &&
             <Join
-              room={this.props.id}
-              userNametag={this.props.userNametag}
+              room={id}
+              userNametag={userNametag}
               normsChecked={this.state.normsChecked}
-              addUserNametagCert={this.props.addUserNametagCert}
-              removeUserNametagCert={this.props.removeUserNametagCert}
-              updateUserNametag={this.props.updateUserNametag}
-              providerAuth={this.props.providerAuth}/>
+              addUserNametagCert={addUserNametagCert}
+              removeUserNametagCert={removeUserNametagCert}
+              updateUserNametag={updateUserNametag}
+              providerAuth={providerAuth}/>
           }
         </Card>
 
@@ -169,7 +181,7 @@ class RoomCard extends Component {
       card = this.state.flipped ? back : front
     }
 
-    return <div style={{...styles.roomCard, ...flipping, ...this.props.style}}>
+    return <div style={{...styles.roomCard, ...flipping, ...style}}>
         {card}
       </div>
   }

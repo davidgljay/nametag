@@ -15,7 +15,7 @@ process.env.AWS_SECRET_ACCESS_KEY = config.s3.secretAccessKey
 const app = express()
 
 app.post('/api/images', imageUpload.any(), (req, res) => {
-  res.send(req.files[0].filename)
+  res.send(JSON.stringify({filename: req.files[0].filename}))
 })
 app.use(express.static('/usr/app/dist/'))
 

@@ -11,6 +11,6 @@ module.exports = multer({
     mimetype: (req, file, cb) => {cb(null, file.mimetype)},
     filename: (req, file, cb) => {
       cb( null, Date.now() + '-' + file.fieldname )
-    }
-  })
+    },
+  }),
 })

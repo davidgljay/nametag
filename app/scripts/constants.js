@@ -26,4 +26,5 @@ export default {
 
   // URLs
   USER_ICON_URL: 'https://s3.amazonaws.com/nametag_images/user_icons/50X50/',
+  ROOM_IMAGE_URL: 'https://s3.amazonaws.com/nametag_images/room_icons/300/',
 }

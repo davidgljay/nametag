@@ -7,6 +7,7 @@ import CircularProgress from 'material-ui/CircularProgress'
 import {indigo500, grey500} from 'material-ui/styles/colors'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
+import errorLog from '../../../utils/errorLog'
 
 class ImageSearch extends Component {
 
@@ -75,9 +76,7 @@ class ImageSearch extends Component {
   }
 
   onUpload = (res) => {
-    if (res.url) {
-      this.props.updateRoom('image', image.link)
-    }
+    this.props.updateRoom('image', res.filename)
   }
 
   render() {
@@ -85,6 +84,9 @@ class ImageSearch extends Component {
       baseUrl: 'https://' + document.location.host + '/api/images',
       chooseAndUpload: true,
       accept: '.jpg,.jpeg,.png',
+      dataType: 'json',
+      uploadSuccess: this.onUpload,
+      uploadError: errorLog('Uploading Room Image'),
     }
 
     return <div style={styles.container}>
