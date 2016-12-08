@@ -25,6 +25,6 @@ export default {
   ANIMATION_LONG: 400,
 
   // URLs
-  USER_ICON_URL: 'https://s3.amazonaws.com/nametag_images/user_icons/50X50/',
-  ROOM_IMAGE_URL: 'https://s3.amazonaws.com/nametag_images/room_icons/300/',
+  RESIZE_LAMBDA: 'https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/image_resize',
+  IMAGE_URL_LAMBDA: 'https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/image',
 }

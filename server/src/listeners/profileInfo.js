@@ -35,12 +35,8 @@ const onUserUpdate = (conn) => (err, user) => {
     },
     body: JSON.stringify({
       url: userProfile.picture,
-      sizes: [
-        {
-          width: 50,
-          height: 50,
-        },
-      ],
+      width: 50,
+      height: 50,
     }),
   }
 
@@ -51,9 +47,9 @@ const onUserUpdate = (conn) => (err, user) => {
     })
     .then((json) => {
       console.log("Load Icon Response:", json)
-      return json.filename && r.db('nametag').table('users').get(user.new_val.id).update({
+      return json.url && r.db('nametag').table('users').get(user.new_val.id).update({
         data: {
-          iconUrls: [ json.filename ],
+          iconUrls: [ json.url ],
           loadingIcons: false
         },
       }).run(conn)

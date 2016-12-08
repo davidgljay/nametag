@@ -14,9 +14,8 @@ process.env.AWS_SECRET_ACCESS_KEY = config.s3.secretAccessKey
 
 const app = express()
 
-app.post('/api/images', imageUpload.any(), (req, res) => {
-  res.send(JSON.stringify({filename: req.files[0].filename}))
-})
+app.post('/api/:dest/images', imageUpload.multer.any(), imageUpload.lambda(params))
+app.post('/api/:dest/image_url', imageUpload.fromUrl(params))
 app.use(express.static('/usr/app/dist/'))
 
 const httpsServer = https.createServer({

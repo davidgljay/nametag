@@ -76,7 +76,7 @@ class ImageSearch extends Component {
   }
 
   onUpload = (res) => {
-    this.props.updateRoom('image', res.filename)
+    setTimeout(() => this.props.updateRoom('image', res.url), 1000)
   }
 
   render() {

@@ -99,7 +99,7 @@ class RoomCard extends Component {
               onClick={this.flip}>
               <img
               style={styles.roomImage}
-              src={constants.ROOM_IMAGE_URL + room.image}/>
+              src={room.image}/>
             </CardMedia>
           }
           <div style={styles.roomInfo}>
