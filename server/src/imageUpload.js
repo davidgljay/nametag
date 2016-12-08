@@ -3,6 +3,7 @@ const multerS3 =  require('multer-storage-s3')
 const AWS = require('aws-sdk')
 const s3 = new AWS.S3()
 const fetch = require('node-fetch')
+const {LAMBDA_UPLOAD_URL, LAMBDA_RESIZE_URL} = require('./constants')
 
 module.exports.multer = multer({
   storage: multerS3({
@@ -16,33 +17,43 @@ module.exports.multer = multer({
   }),
 })
 
-module.exports.lambda = (req, res, next) => {
-  const {width, height} = req.params
-  let body = {
-    bucket: 'nametag_images',
-    filename: req.files[0].filename,
-    width,
-  }
-  if (height) {
-    body.height = height
-  }
-
+module.exports.resize = (width, height, filename) => {
   const options = {
     method: POST,
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify({
+      bucket: 'nametag_images',
+      filename: filename,
+      width,
+      height,
+    }),
   }
 
-  fetch('https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/image_resize', options)
+  return fetch(LAMBDA_RESIZE_URL, options)
     .then((res2) => {
       return res2.ok ? res2.json()
         : Promise.reject(next('Error resizing image'))
     })
-    .then((json) => {
-      res.send(JSON.stringify(json))
-    })
 }
 
-module.exports.fromUrl = (params)
+module.exports.fromUrl = (width, height, url) => {
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      url,
+      width,
+      height,
+    }),
+  }
+
+  return fetch(LAMBDA_UPLOAD_URL, options)
+    .then((res) => {
+      return res.ok ? res.json()
+        : Promise.reject(res.statusCode)
+    })
+}

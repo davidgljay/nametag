@@ -6,7 +6,7 @@ FROM node
 MAINTAINER David Jay <davidgljay@gmail.com>
 
 LABEL description="Used to start the Nametag server"
-LABEL updated="11/1/16"
+LABEL updated="12/8/16"
 RUN apt-get update
 COPY $PWD/server/package.json /usr/server/package.json
 WORKDIR usr/server
