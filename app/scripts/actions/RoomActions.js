@@ -3,7 +3,6 @@ import errorLog from '../utils/errorLog'
 import constants from '../constants'
 import {addNametag, putNametag} from './NametagActions'
 import {putUserNametag} from './UserNametagActions'
-import {fetchUrl} from 'fetch'
 
 let roomWatches = {}
 let roomSubscription
@@ -193,24 +192,36 @@ export function unWatchRoom(id) {
 */
 export function searchImage(query, startAt) {
   return () => {
-    return new Promise((resolve, reject) => {
-      const start = startAt ? '&start=' + startAt : ''
-      fetchUrl('https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/image_search?query=' + query + start
-        , (err, meta, body) => {
-          if (err) {
-            reject(err)
-            return
-          }
-          if (meta.status !== 200) {
-            reject(meta.status)
-          }
-          try {
-            resolve(JSON.parse(JSON.parse(body)))
-        } catch (error) {
-            reject('Error parsing JSON for ' + query + ',' + startAt)
-          }
-        })
-    }).catch(errorLog('Searching for image'))
+    const start = startAt ? '&start=' + startAt : ''
+    const url = 'https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/image_search?query=' + query + start
+    return fetch(url)
+      .then(res => {
+        return res.ok ? res.json() :
+          Promise.reject(`Error searching images for ${query}`)
+      }).catch(errorLog('Searching for image'))
+  }
+}
+
+/*
+* Upload an image
+* @params
+*   url - The url of the image to be loaded
+*
+* @returns
+*   Promise resolving to uploaded image
+*/
+export function setImageFromUrl(width, height, url) {
+  return () => {
+    const options = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({width, height, url}),
+    }
+    return fetch('/api/image_url', options)
+      .then(res => {
+        return res.ok ? res.json() :
+          Promise.reject(`Error searching images for ${query}`)
+      }).catch(errorLog('Searching for image'))
   }
 }
 
@@ -255,4 +266,3 @@ export function updateRoom(room, property, value) {
     }).catch(errorLog('Updating room'))
   }
 }
-

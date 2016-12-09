@@ -23,6 +23,7 @@ const getForm = (props) => {
       <ImageSearch
         error={props.error}
         style={styles.imageSearch}
+        setImageFromUrl={props.setImageFromUrl}
         searchImage={props.searchImage}
         updateRoom={props.updateRoom}/>
     </div>

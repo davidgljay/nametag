@@ -197,6 +197,7 @@ class CreateRoom extends Component {
             hostNametag={this.state.hostNametag}
             updateRoom={this.updateRoom}
             searchImage={this.props.searchImage}
+            setImageFromUrl={this.props.setImageFromUrl}
             addNametagCert={this.addNametagCert}
             removeNametagCert={this.removeNametagCert}
             updateNametag={this.updateNametag}

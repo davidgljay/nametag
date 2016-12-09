@@ -75,6 +75,13 @@ class ImageSearch extends Component {
     this.setState({imageQuery: e.target.value})
   }
 
+  onImageClick = (url) => () => {
+    this.props.setImageFromUrl(300, null, url)
+      .then((res) => {
+        this.props.updateRoom('image', res.url)
+      })
+  }
+
   onUpload = (res) => {
     setTimeout(() => this.props.updateRoom('image', res.url), 1000)
   }
@@ -124,7 +131,7 @@ class ImageSearch extends Component {
             return <Card
               style={styles.thumbnailContainer}
               key ={i}
-              onClick={() => this.props.updateRoom('image', image.link)}>
+              onClick={this.onImageClick(image.link)}>
               <img src={image.thumbnail} style={styles.thumbnail}/>
               </Card>
           })
