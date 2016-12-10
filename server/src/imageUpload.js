@@ -19,7 +19,7 @@ module.exports.multer = multer({
 
 module.exports.resize = (width, height, filename) => {
   const options = {
-    method: POST,
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },

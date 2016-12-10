@@ -24,7 +24,7 @@ app.use(bodyParser.json())
 app.post('/api/images',
   imageUpload.multer.any(),
   (req, res) => {
-    imageUpload.resize(req.body.width, req.body.height, req.files[0].filename)
+    imageUpload.resize(req.query.width, req.query.height, req.files[0].filename)
       .then(data => res.json(data))
       .catch(err => console.error('Uploading image', err))
   }

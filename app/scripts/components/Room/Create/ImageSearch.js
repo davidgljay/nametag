@@ -83,12 +83,12 @@ class ImageSearch extends Component {
   }
 
   onUpload = (res) => {
-    setTimeout(() => this.props.updateRoom('image', res.url), 1000)
+    this.props.updateRoom('image', res.url)
   }
 
   render() {
     const uploadOptions = {
-      baseUrl: 'https://' + document.location.host + '/api/images',
+      baseUrl: 'https://' + document.location.host + '/api/images?width=300',
       chooseAndUpload: true,
       accept: '.jpg,.jpeg,.png',
       dataType: 'json',
