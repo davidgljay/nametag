@@ -2,8 +2,8 @@ import React, {Component, PropTypes} from 'react'
 import FileUpload from 'react-fileupload'
 import TextField from 'material-ui/TextField'
 import {Card} from 'material-ui/Card'
-import RaisedButton from 'material-ui/RaisedButton'
 import CircularProgress from 'material-ui/CircularProgress'
+import RaisedButton from 'material-ui/RaisedButton'
 import {indigo500, grey500} from 'material-ui/styles/colors'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
@@ -13,6 +13,8 @@ class ImageSearch extends Component {
 
   state = {
     images: [],
+    loading: false,
+    loadingImage: false,
   }
 
   static propTypes = {
@@ -76,14 +78,17 @@ class ImageSearch extends Component {
   }
 
   onImageClick = (url) => () => {
+    this.setState({loadingImage: true})
     this.props.setImageFromUrl(300, null, url)
       .then((res) => {
         this.props.updateRoom('image', res.url)
+        this.setState({loadingImage: false})
       })
   }
 
   onUpload = (res) => {
     this.props.updateRoom('image', res.url)
+    this.setState({loadingImage: false})
   }
 
   render() {
@@ -111,44 +116,48 @@ class ImageSearch extends Component {
           label='FIND IMAGE'
           onClick={this.onSearchClick}/>
       </div>
-      <div style={styles.imagesContainer}>
-        <Card
-          style={{ ...styles.thumbnailContainer, ...styles.imageUpload}}>
-            <FileUpload
-              options={uploadOptions}>
-              <IconButton
-                style={styles.imageUploadButton}
-                iconStyle={styles.imageUploadIcon}
-                iconClassName="material-icons"
-                ref="chooseAndUpload">
-                cloud_upload
-              </IconButton>
-            </FileUpload>
-
-        </Card>
-        {
-          this.state.images.map((image, i) => {
-            return <Card
-              style={styles.thumbnailContainer}
-              key ={i}
-              onClick={this.onImageClick(image.link)}>
-              <img src={image.thumbnail} style={styles.thumbnail}/>
-              </Card>
-          })
-        }
-        {
-          this.state.loading &&
-          <div style={styles.spinnerDiv}>
-            <CircularProgress />
-          </div>
-        }
-        {
-          this.state.searched &&
-          this.state.images.length === 0 &&
-          <div style={styles.noResults}>No results found, please try again.</div>
-        }
-        <div id='scrollBottom'/>
-      </div>
+      {
+        this.state.loadingImage ?
+        <CircularProgress />
+        : <div style={styles.imagesContainer}>
+          <Card
+            style={{ ...styles.thumbnailContainer, ...styles.imageUpload}}>
+              <FileUpload
+                onClick={() => this.setState({loadingImage: true})}
+                options={uploadOptions}>
+                <IconButton
+                  style={styles.imageUploadButton}
+                  iconStyle={styles.imageUploadIcon}
+                  iconClassName="material-icons"
+                  ref="chooseAndUpload">
+                  cloud_upload
+                </IconButton>
+              </FileUpload>
+          </Card>
+          {
+            this.state.images.map((image, i) => {
+              return <Card
+                style={styles.thumbnailContainer}
+                key ={i}
+                onClick={this.onImageClick(image.link)}>
+                <img src={image.thumbnail} style={styles.thumbnail}/>
+                </Card>
+            })
+          }
+          {
+            this.state.loading &&
+            <div style={styles.spinnerDiv}>
+              <CircularProgress />
+            </div>
+          }
+          {
+            this.state.searched &&
+            this.state.images.length === 0 &&
+            <div style={styles.noResults}>No results found, please try again.</div>
+          }
+          <div id='scrollBottom'/>
+        </div>
+      }
     </div>
   }
 }
