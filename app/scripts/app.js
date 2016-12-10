@@ -11,7 +11,7 @@ import {getUser} from './actions/UserActions'
 
 import { DragDropContext } from 'react-dnd'
 import TouchBackend from 'react-dnd-touch-backend'
-import injectTapEventPlugin from 'react-tap-event-plugin'
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
@@ -39,7 +39,6 @@ class Nametag extends Component {
       window.location.hash = ''
       history.pushState('', document.title, window.location.pathname)
     }
-
   }
 
   getChildContext() {

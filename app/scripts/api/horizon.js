@@ -5,17 +5,14 @@ export const hz = Horizon()
 export function hzAuth(provider) {
   //   hz({authType: 'token'})
   let promise
-  console.log(hz.users)
   if (!hz.hasAuthToken()) {
     promise = new Promise((resolve, reject) => {
       hz.authEndpoint(provider).subscribe((endpoint) => {
-        console.log(endpoint)
         window.location = endpoint
         resolve()
       }, reject)
     }).catch(errorLog('Error authenticating'))
   } else {
-    console.log('Already Authed!')
     promise = Promise.resolve()
     // We have a token already, do authenticated Horizon stuff here
   }
