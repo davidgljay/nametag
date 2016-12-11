@@ -42,4 +42,20 @@ describe('User reducer', () => {
       expect(newState).toEqual({stuff: 'things'})
     })
   })
+
+  describe('UPDATE_USER_ARRAY', () => {
+    it('should update an array in the user data object', () => {
+      let newState = userReducer({
+        id: '123',
+        data: {
+          stuff: ['morestuff'],
+        },
+      }, {
+        type: constants.UPDATE_USER_ARRAY,
+        property: 'stuff',
+        value: 'things',
+      })
+      expect(newState.data).toEqual({stuff: ['morestuff', 'things']})
+    })
+  })
 })

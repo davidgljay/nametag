@@ -16,8 +16,11 @@ const mockStore = configureStore(middlewares)
 
 describe('User Actions', () => {
   let store
+  let calls
   beforeEach(() => {
     store = mockStore({})
+    calls = []
+    hz.mockClear()
   })
   describe('addUser', () => {
     it('should add a user', () => {
@@ -78,5 +81,36 @@ describe('User Actions', () => {
     })
   })
 
-})
+  describe('updateUserArray', () => {
+    it('should append to an array that already exists', () => {
+      const mockResponses = [{
+        data: {
+          stuff: ['things'],
+        },
+      }, {
+        updated: 1,
+      }]
+      let calls2 = []
+      hz.currentUser = () => hz()
+      hz.mockReturnValueOnce(mockHz(mockResponses[0], calls)())
+      hz.mockReturnValueOnce(mockHz(mockResponses[1], calls2)())
 
+      return actions.updateUserArray('stuff', 'morethings')(store.dispatch)
+        .then((res) => {
+          expect(res.updated).toEqual(1)
+          expect(store.getActions()[0]).toEqual({
+            type: constants.UPDATE_USER_ARRAY,
+            property: 'stuff',
+            value: 'morethings',
+          })
+          expect(calls[1].type).toEqual('fetch')
+          expect(calls2[1].type).toEqual('update')
+          expect(calls2[1].req).toEqual({
+            data: {
+              stuff: ['things', 'morethings'],
+            },
+          })
+        })
+    })
+  })
+})

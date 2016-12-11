@@ -71,7 +71,7 @@ export function logout() {
 /*
 * Set a generic option for the user (e.g. Toggle login dialog)
 * @params
-*  setting
+*  option
 *  value
 *
 * @returns
@@ -82,5 +82,33 @@ export function setting(option, value) {
     type: constants.USER_SETTING,
     option,
     value,
+  }
+}
+
+/*
+* Update an array in the user's data object (e.g. adding an iconurl)
+* @params
+*  option
+*  value
+*
+* @returns
+*   null
+*/
+export function updateUserArray(property, value) {
+  return (dispatch) => {
+    dispatch({
+      type: constants.UPDATE_USER_ARRAY,
+      property,
+      value,
+    })
+    return new Promise((resolve, reject) => {
+      hz.currentUser().fetch().subscribe((user) => {
+        let data = user.data
+        data[property].push(value)
+        hz.currentUser().update({data}).subscribe((res) => {
+          resolve(res)
+        }, reject)
+      }, reject)
+    }).catch(errorLog('Updating user array'))
   }
 }

@@ -1,27 +1,9 @@
-let i = 0
-
-export function hzMock(results) {
-  let mockHz = () => {
-    return {
-      watch: mockHz,
-      fetch: mockHz,
-      find: mockHz,
-      subscribe: (complete) => {
-        complete(results[i])
-        i = i + 1 % results.length
-      },
-    }
-  }
-  window.Horizon = () => {
-    return mockHz
-  }
-}
 
 export function mockHz(res, calls, type) {
   return (req) => {
     calls.push({type, req})
     return {
-      watch: mockHz( res, calls, 'watch'),
+      watch: mockHz(res, calls, 'watch'),
       fetch: mockHz(res, calls, 'fetch'),
       find: mockHz(res, calls, 'find'),
       upsert: mockHz(res, calls, 'upsert'),
