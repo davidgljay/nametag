@@ -94,10 +94,10 @@ export function setting(option, value) {
 * @returns
 *   null
 */
-export function updateUserArray(property, value) {
+export function appendUserArray(property, value) {
   return (dispatch) => {
     dispatch({
-      type: constants.UPDATE_USER_ARRAY,
+      type: constants.APPEND_USER_ARRAY,
       property,
       value,
     })
@@ -105,7 +105,7 @@ export function updateUserArray(property, value) {
       hz.currentUser().fetch().subscribe((user) => {
         let data = user.data
         data[property].push(value)
-        hz.currentUser().update({data}).subscribe((res) => {
+        hz('users').update({id: user.id, data}).subscribe((res) => {
           resolve(res)
         }, reject)
       }, reject)

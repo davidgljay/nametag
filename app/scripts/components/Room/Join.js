@@ -63,6 +63,7 @@ class Join extends Component {
           <EditNametag
             userNametag={this.props.userNametag}
             userDefaults={this.context.user.data}
+            appendUserArray={this.props.appendUserArray}
             addUserNametagCert={this.props.addUserNametagCert}
             removeUserNametagCert={this.props.removeUserNametagCert}
             updateUserNametag={this.props.updateUserNametag}

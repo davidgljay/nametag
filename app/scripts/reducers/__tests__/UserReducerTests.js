@@ -43,7 +43,7 @@ describe('User reducer', () => {
     })
   })
 
-  describe('UPDATE_USER_ARRAY', () => {
+  describe('APPEND_USER_ARRAY', () => {
     it('should update an array in the user data object', () => {
       let newState = userReducer({
         id: '123',
@@ -51,7 +51,7 @@ describe('User reducer', () => {
           stuff: ['morestuff'],
         },
       }, {
-        type: constants.UPDATE_USER_ARRAY,
+        type: constants.APPEND_USER_ARRAY,
         property: 'stuff',
         value: 'things',
       })

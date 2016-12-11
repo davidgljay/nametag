@@ -8,7 +8,7 @@ const user = (state = {}, action) => {
     return {loggedIn: false}
   case constants.USER_SETTING:
     return Object.assign({}, state, {[action.option]: action.value})
-  case constants.UPDATE_USER_ARRAY:
+  case constants.APPEND_USER_ARRAY:
     const data = Object.assign({}, state.data,
       {[action.property]: state.data[action.property].concat(action.value)})
     return Object.assign({}, state, {data})

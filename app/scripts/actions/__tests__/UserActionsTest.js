@@ -81,7 +81,7 @@ describe('User Actions', () => {
     })
   })
 
-  describe('updateUserArray', () => {
+  describe('appendUserArray', () => {
     it('should append to an array that already exists', () => {
       const mockResponses = [{
         data: {
@@ -95,11 +95,11 @@ describe('User Actions', () => {
       hz.mockReturnValueOnce(mockHz(mockResponses[0], calls)())
       hz.mockReturnValueOnce(mockHz(mockResponses[1], calls2)())
 
-      return actions.updateUserArray('stuff', 'morethings')(store.dispatch)
+      return actions.appendUserArray('stuff', 'morethings')(store.dispatch)
         .then((res) => {
           expect(res.updated).toEqual(1)
           expect(store.getActions()[0]).toEqual({
-            type: constants.UPDATE_USER_ARRAY,
+            type: constants.APPEND_USER_ARRAY,
             property: 'stuff',
             value: 'morethings',
           })

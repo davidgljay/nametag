@@ -8,7 +8,7 @@
     "dialog-polyfill": "^0.4.4",
     "fetch": "^1.1.0",
     "jsonwebtoken": "^5.5.4",
-    "material-ui": "^0.16.4",
+    "material-ui": "^0.16.5",
     "mime-types": "^2.0.4",
     "oauth": "^0.9.14",
     "pem": "^1.8.1",

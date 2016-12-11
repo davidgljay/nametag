@@ -33,6 +33,7 @@ class EditNametag extends Component {
     alert: null,
     alertType: null,
     loading: false,
+    showMenu: false,
   }
 
   componentDidMount() {
@@ -65,8 +66,9 @@ class EditNametag extends Component {
   }
 
   onUpload = (res) => {
-    this.updateUserNametag(this.props.room, 'icon', res.url)
-    this.appendUserArray()
+    console.log('User icon upload successful', res)
+    this.props.updateUserNametag(this.props.room, 'icon', res.url)
+    this.props.appendUserArray('iconUrls', res.url)
     this.setState({loadingImage: false})
   }
 
@@ -96,6 +98,7 @@ class EditNametag extends Component {
       chooseAndUpload: true,
       accept: '.jpg,.jpeg,.png',
       dataType: 'json',
+      onChooseFile: () => this.setState({showMenu: false}),
       uploadSuccess: this.onUpload,
       uploadError: errorLog('Uploading Room Image'),
     }
@@ -122,6 +125,8 @@ class EditNametag extends Component {
                 anchorOrigin={{horizontal: 'left', vertical: 'top'}}
                 targetOrigin={{horizontal: 'left', vertical: 'top'}}
                 style={styles.icon}
+                open={this.state.showMenu}
+                onTouchTap={()=>this.setState({showMenu: !this.state.showMenu})}
                 menuStyle={menuStyle}>
                 {
                     userDefaults.iconUrls.map((url) =>
@@ -134,16 +139,13 @@ class EditNametag extends Component {
                       </MenuItem>
                     )
                 }
-                <MenuItem
-                  style={menuItemStyle}
-                  innerDivStyle={uploadMenuItemInnerDivStyle}>
-                    <FileUpload
-                      options={uploadOptions}>
-                        <div style={uploadMenuItem} ref="chooseAndUpload">
-                          {uploadFontIcon}
-                        </div>
-                      </FileUpload>
-                  </MenuItem>
+                  <FileUpload
+                    style={{textAlign: 'center'}}
+                    options={uploadOptions}>
+                    <div style={uploadMenuItem} ref="chooseAndUpload">
+                      {uploadFontIcon}
+                    </div>
+                  </FileUpload>
               </IconMenu>
             }
               <div style={{width: 190, flex: 1}}>
@@ -234,15 +236,13 @@ const styles = {
     padding: 6,
     textAlign: 'center',
   },
-  uploadMenuItemInnerDivStyle: {
-    padding: 6,
+  uploadMenuItem: {
     display: 'flex',
     justifyContent: 'center',
-  },
-  uploadMenuItem: {
     width: 50,
     height: 50,
     borderRadius: 25,
+    cursor: 'pointer',
     textAlign: 'center',
     verticalAlign: 'middle',
     background: '#999',
