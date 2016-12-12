@@ -48,6 +48,7 @@ class Join extends Component {
   }
 
   onJoinClick() {
+    // TODO: Add new user name to displayNames list.
     this.props.joinRoom(this.props.room, this.props.userNametag, this.context.user.id)
       .then(() => {
         window.location = '/#/rooms/' + this.props.room

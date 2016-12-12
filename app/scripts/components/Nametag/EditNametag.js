@@ -66,7 +66,6 @@ class EditNametag extends Component {
   }
 
   onUpload = (res) => {
-    console.log('User icon upload successful', res)
     this.props.updateUserNametag(this.props.room, 'icon', res.url)
     this.props.appendUserArray('iconUrls', res.url)
     this.setState({loadingImage: false})
