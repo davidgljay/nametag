@@ -26,15 +26,15 @@ const Login = (props) => {
       <h4>Log in to join</h4>
       <img
         style={styles.loginImg}
-        src="./images/twitter.jpg"
+        src="/public/images/twitter.jpg"
         onClick={() => props.providerAuth('twitter')}/>
       <img
         style={styles.loginImg}
-        src="./images/fb.jpg"
+        src="/public/images/fb.jpg"
         onClick={() => props.providerAuth('facebook')}/>
       <img
         style={styles.loginImg}
-        src="./images/google.png"
+        src="/public/images/google.png"
         onClick={() => props.providerAuth('google')}/>
     </div>
 }
