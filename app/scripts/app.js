@@ -17,7 +17,7 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import mainReducer from './reducers'
 
-import { Router, Route, Link, hashHistory } from 'react-router'
+import { Router, Route, Link, browserHistory } from 'react-router'
 
 injectTapEventPlugin()
 
@@ -51,7 +51,7 @@ class Nametag extends Component {
     return <Provider store={store}>
       <StyleRoot>
         <MuiThemeProvider>
-          <Router history={hashHistory}>
+          <Router history={browserHistory}>
             <Route path="/" component={RoomCards} />
             <Route path="/rooms" component={RoomCards}/>
             <Route path="/rooms/create" component={CreateRoom}/>

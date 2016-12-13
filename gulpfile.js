@@ -12,7 +12,7 @@ let browserify = require('browserify')
 let watchify = require('watchify')
 let source = require('vinyl-source-stream')
 let sourceFile = './app/scripts/app.js'
-let destFolder = './dist/scripts'
+let destFolder = './dist/public/scripts'
 let destFileName = 'app.js'
 let browserSync = require('browser-sync')
 let reload = browserSync.reload
@@ -25,7 +25,7 @@ gulp.task('moveCss',['clean'], function() {
   // preserving the folder structure
 
   gulp.src(['./app/styles/**/*.css'], { base: './app/styles/' })
-  .pipe(gulp.dest('dist/styles'))
+  .pipe(gulp.dest('dist/public/styles'))
 })
 
 gulp.task('moveIcons', ['clean'], function() {
@@ -34,7 +34,7 @@ gulp.task('moveIcons', ['clean'], function() {
   gulp.src(['./app/icons/**/*.svg'], { base: './app/icons/' })
   .pipe(gulp.dest('dist/icons'))
   gulp.src(['./app/favicon.ico'])
-  .pipe(gulp.dest('dist/'))
+  .pipe(gulp.dest('dist/public'))
 })
 
 // gulp.task('sass', function() {
@@ -108,7 +108,7 @@ gulp.task('images', function() {
       progressive: true,
       interlaced: true,
     })))
-    .pipe(gulp.dest('dist/images'))
+    .pipe(gulp.dest('dist/public/images'))
     .pipe($.size())
 })
 
@@ -118,31 +118,31 @@ gulp.task('fonts', function() {
   return gulp.src(require('main-bower-files')({
           filter: '**/*.{eot,svg,ttf,woff,woff2}'
       }).concat('app/fonts/**/*'))
-      .pipe(gulp.dest('dist/fonts'))
+      .pipe(gulp.dest('dist/public/fonts'))
 
 })
 
 // Clean
 gulp.task('clean', function(cb) {
     $.cache.clearAll()
-    cb(del.sync(['dist/styles/*', 'dist/scripts/*', 'dist/images/*', 'dist/icons/*']))
+    cb(del.sync(['dist/public/*']))
 })
 
 // Bundle
 gulp.task('bundle', ['styles', 'scripts', 'bower'], function() {
-  return gulp.src('./app/*.html')
+  return gulp.src('./app/index.html')
     .pipe($.useref.assets())
     .pipe($.useref.restore())
     .pipe($.useref())
-    .pipe(gulp.dest('dist'))
+    .pipe(gulp.dest('dist/public'))
 })
 
 gulp.task('buildBundle', ['styles', 'buildScripts'], function() {
-  return gulp.src('./app/*.html')
+  return gulp.src('./app/index.html')
     .pipe($.useref.assets())
     .pipe($.useref.restore())
     .pipe($.useref())
-    .pipe(gulp.dest('dist'))
+    .pipe(gulp.dest('dist/public'))
 })
 
 // Move JS Files and Libraries
@@ -150,7 +150,7 @@ gulp.task('moveLibraries', ['clean'], function() {
   // the base option sets the relative root for the set of files,
   // preserving the folder structure
   gulp.src(['./app/scripts/**/*.js'], { base: './app/scripts/' })
-  .pipe(gulp.dest('dist/scripts'))
+  .pipe(gulp.dest('dist/public/scripts'))
 })
 
 
@@ -159,7 +159,7 @@ gulp.task('bower', function() {
     gulp.src('app/bower_components/**/*', {
             base: 'app/bower_components',
         })
-        .pipe(gulp.dest('dist/bower_components/'))
+        .pipe(gulp.dest('dist/public/bower_components/'))
 
 })
 
@@ -167,13 +167,13 @@ gulp.task('json', function() {
     gulp.src('app/scripts/json/**/*.json', {
             base: 'app/scripts',
         })
-        .pipe(gulp.dest('dist/scripts/'))
+        .pipe(gulp.dest('dist/public/scripts/'))
 })
 
 // Robots.txt and favicon.ico
 gulp.task('extras', function() {
     return gulp.src(['app/*.txt', 'app/*.ico'])
-        .pipe(gulp.dest('dist/'))
+        .pipe(gulp.dest('dist/public/'))
         .pipe($.size())
 })
 
@@ -197,7 +197,7 @@ gulp.task('watch', ['html', 'fonts', 'styles', 'images', 'bundle'], function() {
     gulp.watch('app/*.html', ['html'])
 
     gulp.watch(['app/styles/**/*.scss', 'app/styles/**/*.css'], ['styles', 'scripts', reload])
-    
+
     // Watch image files
     gulp.watch('app/images/**/*', ['images', reload])
 })
@@ -207,7 +207,7 @@ gulp.task('build', ['html', 'buildBundle', 'images', 'fonts', 'extras'], functio
     gulp.src('dist/scripts/app.js')
         .pipe($.uglify())
         .pipe($.stripDebug())
-        .pipe(gulp.dest('dist/scripts'))
+        .pipe(gulp.dest('dist/public/scripts'))
 })
 
 // Default task

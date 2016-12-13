@@ -7,6 +7,7 @@ const imageUpload = require('./imageUpload')
 const horizon = require('../horizon/server/src/horizon.js')
 const config = require('./secrets.json')
 const path = require('path')
+const os = require('os')
 const bodyParser = require('body-parser')
 const listeners = require('./listeners')
 
@@ -16,9 +17,15 @@ process.env.AWS_SECRET_ACCESS_KEY = config.s3.secretAccessKey
 const app = express()
 
 /* Serve static files */
-app.use(express.static('/usr/app/dist/'))
+app.use('/public', express.static(path.join('/usr', 'app', 'public')))
 
 app.use(bodyParser.json())
+
+/* Serve index.html */
+app.get('*', (req, res) => {
+  res.sendFile(path.join('/usr', 'app', 'public', 'index.html'))
+})
+
 
 /* Upload an image and return the url of that image on S3 */
 app.post('/api/images',

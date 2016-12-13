@@ -8,7 +8,7 @@ import radium from 'radium'
 import {mobile} from '../../../styles/sizes'
 
 const onCreateRoomClick = () => {
-  window.location = '/#/rooms/create'
+  window.location = '/rooms/create'
 }
 
 class Navbar extends Component {
