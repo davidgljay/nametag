@@ -5,12 +5,14 @@ let del = require('del')
 let fs = require('fs')
 
 let path = require('path')
+let pump = require('pump')
 
 // Load plugins
 let $ = require('gulp-load-plugins')()
 let browserify = require('browserify')
 let watchify = require('watchify')
 let source = require('vinyl-source-stream')
+let uglify = require('gulp-uglify')
 let sourceFile = './app/scripts/app.js'
 let destFolder = './dist/public/scripts'
 let destFileName = 'app.js'
@@ -20,7 +22,7 @@ let reload = browserSync.reload
 // Styles
 gulp.task('styles', ['moveCss'])
 
-gulp.task('moveCss',['clean'], function() {
+gulp.task('moveCss', ['clean'], function() {
   // the base option sets the relative root for the set of files,
   // preserving the folder structure
 
@@ -37,31 +39,10 @@ gulp.task('moveIcons', ['clean'], function() {
   .pipe(gulp.dest('dist/public'))
 })
 
-// gulp.task('sass', function() {
-//     return $.rubySass('./app/styles', {
-//             style: 'expanded',
-//             precision: 10,
-//             loadPath: ['app/bower_components']
-//         })
-//         .pipe($.autoprefixer('last 1 version'))
-//         .pipe(gulp.dest('dist/styles'))
-//         .pipe($.size())
-// })
-
-// gulp.task('css-modules', function() {
-//   let b = browserify()
-//   b.add(sourceFile)
-//   b.plugin(['css-modulesify', {
-//     output: './dist/styles/main.css',
-//   }])
-//
-//   return b.bundle()
-// })
-
 let bundler = watchify(browserify({
   entries: [sourceFile],
   debug: true,
-  plugin:['css-modulesify'],
+  plugin: ['css-modulesify'],
   insertGlobals: true,
   cache: {},
   packageCache: {},
@@ -89,14 +70,14 @@ gulp.task('buildScripts', function() {
     return browserify(sourceFile)
         .bundle()
         .pipe(source(destFileName))
-        .pipe(gulp.dest('dist/scripts'))
+        .pipe(gulp.dest('dist/public/scripts'))
 })
 
 // HTML
 gulp.task('html', function() {
     return gulp.src('app/*.html')
         .pipe($.useref())
-        .pipe(gulp.dest('dist'))
+        .pipe(gulp.dest('dist/public'))
         .pipe($.size())
 })
 
@@ -167,47 +148,50 @@ gulp.task('json', function() {
     gulp.src('app/scripts/json/**/*.json', {
             base: 'app/scripts',
         })
-        .pipe(gulp.dest('dist/public/scripts/'))
+        .pipe(gulp.dest('dist/public/scripts'))
 })
 
 // Robots.txt and favicon.ico
 gulp.task('extras', function() {
     return gulp.src(['app/*.txt', 'app/*.ico'])
-        .pipe(gulp.dest('dist/public/'))
+        .pipe(gulp.dest('dist/public'))
         .pipe($.size())
 })
 
 // Watch
 gulp.task('watch', ['html', 'fonts', 'styles', 'images', 'bundle'], function() {
 
-    browserSync({
-        notify: false,
-        logPrefix: 'BS',
-        // Run as an https by uncommenting 'https: true'
-        // Note: this uses an unsigned certificate which on first access
-        //       will present a certificate warning in the browser.
-        // https: true,
-        server: ['dist', 'app'],
-    })
+  browserSync({
+    notify: false,
+    logPrefix: 'BS',
+    // Run as an https by uncommenting 'https: true'
+    // Note: this uses an unsigned certificate which on first access
+    //       will present a certificate warning in the browser.
+    // https: true,
+    server: ['dist', 'app'],
+  })
 
-    // Watch .json files
-    gulp.watch('app/scripts/**/*.json', ['json'])
+  // Watch .json files
+  gulp.watch('app/scripts/**/*.json', ['json'])
 
-    // Watch .html files
-    gulp.watch('app/*.html', ['html'])
+  // Watch .html files
+  gulp.watch('app/*.html', ['html'])
 
-    gulp.watch(['app/styles/**/*.scss', 'app/styles/**/*.css'], ['styles', 'scripts', reload])
+  gulp.watch(['app/styles/**/*.scss', 'app/styles/**/*.css'], ['styles', 'scripts', reload])
 
-    // Watch image files
-    gulp.watch('app/images/**/*', ['images', reload])
+  // Watch image files
+  gulp.watch('app/images/**/*', ['images', reload])
 })
 
 // Build
-gulp.task('build', ['html', 'buildBundle', 'images', 'fonts', 'extras'], function() {
-    gulp.src('dist/scripts/app.js')
-        .pipe($.uglify())
-        .pipe($.stripDebug())
-        .pipe(gulp.dest('dist/public/scripts'))
+gulp.task('build', ['clean', 'html', 'buildBundle', 'images', 'fonts', 'extras', 'compress'])
+
+gulp.task('compress', ['buildBundle'], function() {
+  return pump([
+    gulp.src('dist/public/scripts/app.js'),
+    uglify(),
+    gulp.dest('dist/public/scripts'),
+  ])
 })
 
 // Default task
