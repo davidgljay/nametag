@@ -18,6 +18,8 @@ const app = express()
 
 /* Serve static files */
 app.use('/public', express.static(path.join('/usr', 'app', 'public')))
+app.use('/.well-known', express.static(path.join('/usr', 'app', 'public', '.well-known')))
+
 
 app.use(bodyParser.json())
 
