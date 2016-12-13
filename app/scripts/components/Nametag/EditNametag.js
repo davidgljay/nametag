@@ -71,6 +71,11 @@ class EditNametag extends Component {
     this.setState({loadingImage: false})
   }
 
+  onUpdateIcon = (url) => () => {
+    this.setState({showMenu: false})
+    this.props.updateUserNametag(this.props.room, 'icon', url)
+  }
+
   render() {
     const {error, userDefaults, updateUserNametag, room, userNametag} = this.props
 
@@ -133,7 +138,7 @@ class EditNametag extends Component {
                         key={url}
                         style={menuItemStyle}
                         innerDivStyle={menuItemInnerDivStyle}
-                        onTouchTap={() => updateUserNametag(room, 'icon', url)}>
+                        onTouchTap={this.onUpdateIcon(url)}>
                         <img src={url} style={styles.icon}/>
                       </MenuItem>
                     )
