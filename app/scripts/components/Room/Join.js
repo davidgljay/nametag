@@ -4,24 +4,31 @@ import EditNametag  from '../Nametag/EditNametag'
 import UserCertificates  from '../Certificate/UserCertificates'
 import {grey400, indigo500} from 'material-ui/styles/colors'
 import RaisedButton from 'material-ui/RaisedButton'
+import FontIcon from 'material-ui/FontIcon'
 
 const styles = {
   join: {
     textAlign: 'center',
   },
   userCertificates: {
-    width: 270,
+    width: 240,
     display: 'flex',
     flexWrap: 'wrap',
     minHeight: 100,
     verticalAlign: 'top',
+    justifyContent: 'center',
     padding: 5,
     margin: 5,
   },
   userCertificateText: {
     fontStyle: 'italic',
-    fontSize: 12,
+    fontSize: 16,
     color: grey400,
+  },
+  userCertificateIcon: {
+    color: grey400,
+    fontSize: 18,
+    verticalAlign: 'middle',
   },
   button: {
     color: '#fff',
@@ -60,7 +67,7 @@ class Join extends Component {
     if (this.context.user.id) {
       join =
         <div style={styles.join}>
-          <h4>Write Your Nametag For This Conversation</h4>
+          <h4>Edit Your Nametag For This Conversation</h4>
           <EditNametag
             userNametag={this.props.userNametag}
             userDefaults={this.context.user.data}
@@ -71,8 +78,13 @@ class Join extends Component {
             room={this.props.room}/>
           <div style={styles.userCertificates}>
             <p style={styles.userCertificateText}>
-              Click to view your certificates.<br/>
-              Drag them over to show them in this conversation.
+              <FontIcon
+                style={styles.userCertificateIcon}
+                className="material-icons">arrow_upward</FontIcon>
+              Drag to Share
+              <FontIcon
+                style={styles.userCertificateIcon}
+                className="material-icons">arrow_upward</FontIcon>
             </p>
             <UserCertificates
               fetchCertificate={this.props.fetchCertificate}

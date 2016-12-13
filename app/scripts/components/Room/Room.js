@@ -49,7 +49,7 @@ class Room extends Component {
   }
 
   closeRoom() {
-    window.location = '/#/rooms/'
+    window.location = '/rooms/'
   }
 
   toggleLeftBar() {
