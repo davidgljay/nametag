@@ -7,7 +7,6 @@ const imageUpload = require('./imageUpload')
 const horizon = require('../horizon/server/src/horizon.js')
 const config = require('./secrets.json')
 const path = require('path')
-const os = require('os')
 const bodyParser = require('body-parser')
 const listeners = require('./listeners')
 
@@ -18,7 +17,6 @@ const app = express()
 
 /* Serve static files */
 app.use('/public', express.static(path.join('/usr', 'app', 'public')))
-app.use('/.well-known', express.static(path.join('/usr', 'app', 'public', '.well-known')))
 
 
 app.use(bodyParser.json())
@@ -49,8 +47,8 @@ app.post('/api/image_url',
 
 /* Create HTTP server */
 const httpsServer = https.createServer({
-  key: fs.readFileSync(path.join(__dirname, '..', '..', '.keys', 'horizon-key.pem')),
-  cert: fs.readFileSync(path.join(__dirname, '..', '..', '.keys', 'horizon-cert.pem')),
+  key: fs.readFileSync(path.join('/etc', 'letsencrypt', 'live', 'nametag.chat', 'privkey.pem')),
+  cert: fs.readFileSync(path.join('/etc', 'letsencrypt', 'live', 'nametag.chat', 'cert.pem')),
 }, app).listen(8181)
 
 /* Connect to Horizon */

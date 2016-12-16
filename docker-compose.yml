@@ -3,7 +3,7 @@ horizon:
   dockerfile: devDockerfile
   volumes:
     - ./dist:/usr/app/
-    - ./.keys:/usr/.keys
+    - ./.keys:/etc/letsencrypt/live/nametag.chat/
     - ./.hz:/usr/app/.hz
     - ./server/src:/usr/server/src
     - ./server/schema.toml:/usr/server/schema.toml
