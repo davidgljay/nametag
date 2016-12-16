@@ -49,6 +49,7 @@ app.post('/api/image_url',
 const httpsServer = https.createServer({
   key: fs.readFileSync(path.join(__dirname, '..', '..', '.keys', 'privkey.pem')),
   cert: fs.readFileSync(path.join(__dirname, '..', '..', '.keys', 'cert.pem')),
+  ca: fs.readFileSync(path.join(__dirname, '..', '..', '.keys', 'chain.pem')),
 }, app).listen(8181)
 
 /* Connect to Horizon */
