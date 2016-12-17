@@ -2,13 +2,14 @@ const multer =  require('multer')
 const multerS3 =  require('multer-storage-s3')
 const AWS = require('aws-sdk')
 const s3 = new AWS.S3()
+const config = require('./secrets.json')
 const fetch = require('node-fetch')
 const {LAMBDA_UPLOAD_URL, LAMBDA_RESIZE_URL} = require('./constants')
 
 module.exports.multer = multer({
   storage: multerS3({
     s3: s3,
-    bucket: 'nametag_images',
+    bucket: config.s3.bucket,
     destination: 'raw',
     mimetype: (req, file, cb) => {cb(null, file.mimetype)},
     filename: (req, file, cb) => {
@@ -24,7 +25,7 @@ module.exports.resize = (width, height, filename) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      bucket: 'nametag_images',
+      bucket: config.s3.bucket,
       filename: filename,
       width,
       height,

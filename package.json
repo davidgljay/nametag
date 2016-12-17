@@ -90,7 +90,7 @@
   "scripts": {
     "test": "jest",
     "test-watch": "jest --watch",
-    "start": "gulp watch",
+    "start": "docker-compose up -d && gulp watch",
     "build": "gulp build",
     "storybook": "start-storybook -p 9001 -c .storybook"
   },
