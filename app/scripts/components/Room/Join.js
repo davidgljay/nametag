@@ -5,6 +5,7 @@ import UserCertificates  from '../Certificate/UserCertificates'
 import {grey400, indigo500} from 'material-ui/styles/colors'
 import RaisedButton from 'material-ui/RaisedButton'
 import FontIcon from 'material-ui/FontIcon'
+import trackEvent from '../../utils/analytics'
 
 const styles = {
   join: {
@@ -54,7 +55,8 @@ class Join extends Component {
     user: PropTypes.object,
   }
 
-  onJoinClick() {
+  onJoinClick = () => {
+    trackEvent('JOINING_ROOM')
     // TODO: Add new user name to displayNames list.
     this.props.joinRoom(this.props.room, this.props.userNametag, this.context.user.id)
       .then(() => {
@@ -94,7 +96,7 @@ class Join extends Component {
           <RaisedButton
             backgroundColor={indigo500}
             labelStyle={styles.button}
-            onClick={this.onJoinClick.bind(this)}
+            onClick={this.onJoinClick}
             label='JOIN'/>
         </div>
     } else {

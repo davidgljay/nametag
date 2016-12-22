@@ -4,8 +4,7 @@ import { dragTypes } from '../../constants'
 import { DragSource, DragLayer } from 'react-dnd'
 import { Card, CardActions } from 'material-ui/Card'
 import FontIcon from 'material-ui/FontIcon'
-
-// TODO: This currently displays all user certificates, as opposed to only the participant certificates. A major violation of trust!
+import trackEvent from '../../utils/analytics'
 
 const certSource = {
   beginDrag(props) {
@@ -48,6 +47,7 @@ class Certificate extends Component {
   }
 
   toggleExpanded() {
+    trackEvent('TOGGLE_CERT')
     this.setState({expanded: !this.state.expanded})
   }
 

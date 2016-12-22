@@ -7,6 +7,7 @@ import Navbar from '../Utils/Navbar'
 import LoginDialog from '../User/LoginDialog'
 import {subscribe, unsubscribe} from '../../actions/RoomActions'
 import {lightBlue200} from 'material-ui/styles/colors'
+import trackEvent from '../../utils/analytics'
 
 const styles = {
   roomCards: {
@@ -30,6 +31,7 @@ class RoomCards extends Component {
   }
 
   componentDidMount() {
+    trackEvent('ROOMS_PAGE_LOAD')
     this.props.subscribe()
   }
 

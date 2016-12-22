@@ -6,6 +6,7 @@ import FontIcon from 'material-ui/FontIcon'
 import IconButton from 'material-ui/IconButton'
 import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
+import trackEvent from '../../utils/analytics'
 
 class Compose extends Component {
   constructor(props) {
@@ -33,6 +34,7 @@ class Compose extends Component {
   }
 
   post(e) {
+    trackEvent('POST_MESSAGE')
     e.preventDefault()
     if (this.state.message.length > 0) {
       let message = {

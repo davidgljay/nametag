@@ -13,9 +13,11 @@ import CircularProgress from 'material-ui/CircularProgress'
 import AutoComplete from 'material-ui/AutoComplete'
 import constants from '../../constants'
 import errorLog from '../../utils/errorLog'
+import trackEvent from '../../utils/analytics'
 
 const nametagTarget = {
   drop(props, monitor) {
+    trackEvent('ADD_NT_CERT')
     props.addUserNametagCert(monitor.getItem(), props.room)
   },
 }
@@ -62,6 +64,7 @@ class EditNametag extends Component {
   }
 
   removeCert = (cert) => {
+    trackEvent('REMOVE_NT_CERT')
     this.props.removeUserNametagCert(cert, this.props.room)
   }
 
@@ -102,7 +105,10 @@ class EditNametag extends Component {
       chooseAndUpload: true,
       accept: '.jpg,.jpeg,.png',
       dataType: 'json',
-      onChooseFile: () => this.setState({showMenu: false}),
+      onChooseFile: () => {
+        trackEvent('UPLOAD_CUSTOM_ICON')
+        this.setState({showMenu: false})
+      },
       uploadSuccess: this.onUpload,
       uploadError: errorLog('Uploading Room Image'),
     }
@@ -130,7 +136,10 @@ class EditNametag extends Component {
                 targetOrigin={{horizontal: 'left', vertical: 'top'}}
                 style={styles.icon}
                 open={this.state.showMenu}
-                onTouchTap={()=>this.setState({showMenu: !this.state.showMenu})}
+                onTouchTap={()=>{
+                  trackEvent('SHOW_ICON_MENU')
+                  this.setState({showMenu: !this.state.showMenu})
+                }}
                 menuStyle={menuStyle}>
                 {
                     userDefaults.iconUrls.map((url) =>
