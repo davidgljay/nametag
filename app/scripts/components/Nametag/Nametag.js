@@ -27,6 +27,7 @@ const styles = {
   },
   nametag: {
     padding: 5,
+    minHeight: 55,
   },
 }
 

@@ -11,7 +11,6 @@ const certSource = {
     return props.certificate
   },
   endDrag(props) {
-    // TODO: fix drag animation to intuitively communicate badge removal
     if (props.removeFromSource) {
       props.removeFromSource(props.certificate.id)
     }

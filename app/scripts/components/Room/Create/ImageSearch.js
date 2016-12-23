@@ -95,7 +95,7 @@ class ImageSearch extends Component {
     const uploadOptions = {
       baseUrl: 'https://' + document.location.host + '/api/images?width=300',
       chooseAndUpload: true,
-      accept: '.jpg,.jpeg,.png',
+      accept: '.jpg,.jpeg,.png,.gif',
       dataType: 'json',
       uploadSuccess: this.onUpload,
       uploadError: errorLog('Uploading Room Image'),

@@ -38,6 +38,7 @@ const getForm = (props) => {
             addUserNametagCert={props.addNametagCert}
             removeUserNametagCert={props.removeNametagCert}
             updateUserNametag={props.updateNametag}
+            userDefaults={props.user.data}
             room=''/>
           <div style={styles.userCertificates}>
             <p style={styles.userCertificateText}>

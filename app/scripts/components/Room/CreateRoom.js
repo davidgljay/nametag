@@ -205,6 +205,7 @@ class CreateRoom extends Component {
             addNorm={this.addNorm}
             norms={this.state.norms}
             removeNorm={this.removeNorm}
+            user={this.props.user}
             error={this.state.error}/>
           <div>
             {
