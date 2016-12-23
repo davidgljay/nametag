@@ -211,7 +211,8 @@ class CreateRoom extends Component {
             {
               this.state.stepIndex > 0 &&
               <RaisedButton
-                labelStyle={styles.button}
+                style={styles.button}
+                labelStyle={styles.buttonLabel}
                 backgroundColor={indigo500}
                 onClick={this.handlePrev}
                 label='BACK'/>
@@ -219,12 +220,14 @@ class CreateRoom extends Component {
             {
               this.state.stepIndex >= 4 ?
               <RaisedButton
-                labelStyle={styles.button}
+                style={styles.button}
+                labelStyle={styles.buttonLabel}
                 backgroundColor={indigo500}
                 onClick={this.postRoom}
                 label='PUBLISH'/>
               : <RaisedButton
-                labelStyle={styles.button}
+                style={styles.button}
+                labelStyle={styles.buttonLabel}
                 backgroundColor={indigo500}
                 onClick={this.handleNext}
                 label='NEXT'/>
@@ -254,9 +257,12 @@ const styles = {
   previewCard: {
     margin: 0,
   },
-  button: {
+  buttonLabel: {
     color: '#fff',
     margin: 20,
   },
+  button: {
+    margin: 20,
+  }
 
 }
