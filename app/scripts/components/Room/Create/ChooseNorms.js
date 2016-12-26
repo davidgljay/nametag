@@ -44,7 +44,7 @@ class ChooseNorms extends Component {
     return () => {
       if (this.normChecked(i)) {
         this.props.removeNorm(i)
-      } else {
+      } else if (norm.length > 0) {
         this.props.addNorm(norm, i)
       }
     }
