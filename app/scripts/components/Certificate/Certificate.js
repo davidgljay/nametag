@@ -18,21 +18,19 @@ const certSource = {
 }
 
 function collect(connect, monitor) {
+  const currentOffset = monitor.getSourceClientOffset()
+  console.log('Offset', currentOffset)
+  if (currentOffset) {
+    const droppedOn = document.elementFromPoint(currentOffset.x, currentOffset.y)
+    console.log('Over', droppedOn)
+  }
+  //            let childMatch = node.contains(droppedOn);
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging(),
     initialOffset: monitor.getInitialSourceClientOffset(),
     currentOffset: monitor.getSourceClientOffset(),
     connectDragPreview: connect.dragPreview(),
-  }
-}
-
-function dragLayerCollect(monitor) {
-  return {
-    item: monitor.getItem(),
-    initialOffset: monitor.getInitialSourceClientOffset(),
-    currentOffset: monitor.getSourceClientOffset(),
-    isDragging: monitor.isDragging(),
   }
 }
 
@@ -90,7 +88,7 @@ class Certificate extends Component {
         chipStyle = Object.assign({}, styles.certificateChip,
           {
             position: 'relative',
-            top: this.props.currentOffset.y - this.props.initialOffset.y - 10,
+            top: this.props.currentOffset.y - this.props.initialOffset.y - 20,
             left: this.props.currentOffset.x - this.props.initialOffset.x,
           })
       }
