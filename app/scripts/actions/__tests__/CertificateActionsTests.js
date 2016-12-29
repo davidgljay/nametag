@@ -15,6 +15,14 @@ const middlewares = [thunk]
 const mockStore = configureStore(middlewares)
 
 describe('Certificate Actions', () => {
+
+  let store
+  let calls
+  beforeEach(() => {
+    store = mockStore({})
+    calls = []
+  })
+
   describe('addCertificate', () => {
     it('should add a certificate', () => {
       expect(actions.addCertificate({name: 'cert'}, '123'))
@@ -27,13 +35,6 @@ describe('Certificate Actions', () => {
   })
 
   describe('fetchCertificate', () => {
-    let store
-    let calls
-    beforeEach(() => {
-      store = mockStore({})
-      calls = []
-    })
-
     it('should fetch a certificate', (done) => {
       hz.mockReturnValue(mockHz({name: 'cert', id: 1}, calls)())
       actions.fetchCertificate(1)(store.dispatch, store.getState).then(
@@ -48,5 +49,31 @@ describe('Certificate Actions', () => {
         })
     })
   })
-})
 
+  describe('createCertificate', () => {
+    it('should create a certifiate', () => {
+      const cert = {
+        creator: 'abc',
+        name: 'Is a dinosuar',
+        granter: 'Jurassic Park',
+        description_array: ['This is a dino, we checked.'],
+        icon_array: ['http://dino.img'],
+      }
+      hz.mockReturnValue(mockHz({...cert, id: '123'}, calls)())
+      return actions.createCertificate.apply(...cert)(store.dispatch, store.getState)
+        .then(
+          (c) => {
+            expect(c.id).toEqual('123')
+            expect(c.creator).toEqual('abc')
+            expect(store.getActions()[0]).toEqual(
+              {
+                type: constants.ADD_CERTIFICATE,
+                certificate: c,
+                id: '123',
+              }
+            )
+          }
+        )
+    })
+  })
+})

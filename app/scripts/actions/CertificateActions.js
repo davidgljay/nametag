@@ -13,13 +13,13 @@ export const addCertificate = (certificate, id) => {
 }
 
 /*
-* Subscribe to a certificates
+* Fetches to a certificates
 *
 * @params
 *    none
 *
 * @returns
-*    Promise
+*    Promise resolving to certificate
 */
 export function fetchCertificate(certificateId) {
   return function(dispatch) {
@@ -38,5 +38,31 @@ export function fetchCertificate(certificateId) {
           })
     })
     .catch(errorLog('Error subscribing to certificate ' + certificateId + ': '))
+  }
+}
+
+/*
+* Creates a certificate
+*
+* @params
+*    creator: User id of the person creating this certificate. This violates the
+*        no-user-ids principle, and will be replaced with an organization id in the future.
+*    decription: A description of the certificate.
+*    granter: The name of the granting organization.
+*    icon: The (optional) icon for this certificate.
+*    name: The name appearing on this certificate.
+*    note: An initial note for this certificate
+*
+* @returns
+*    Promise
+*/
+export function createCertificate(...args) {
+  return (dispatch) => {
+    return new Promise((resolve, reject) => {
+      hz('certificates').insert({...args}).subscribe((cert) => {
+        dispatch(addCertificate(cert, cert.id))
+        resolve(cert)
+      }, reject)
+    })
   }
 }
