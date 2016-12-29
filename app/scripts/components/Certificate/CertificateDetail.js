@@ -25,7 +25,12 @@ class CertificateDetail extends Component {
   }
 
   onEmailClick = () => {
-
+    const path = window.location.href
+    window.location = 'mailto:?'
+             + '&subject='
+             + encodeURIComponent('You\'ve been granted a certificate on Nametag!')
+             + '&body='
+             + encodeURIComponent(`To claim your certificate just visit this URL.\n\n${path}`)
   }
 
   onClipboardClick = () => {
@@ -56,15 +61,15 @@ class CertificateDetail extends Component {
           <div style={styles.shareButtons}>
             <FlatButton
               style={styles.button}
-              onClick={this.onEmailClick(user, certificate)}
-              label='E-MAIL IT'/>
+              onClick={this.onEmailClick}
+              label='E-MAIL'/>
             <FlatButton
               style={styles.button}
-              onClick={this.onClipboardClick(user, certificate)}
+              onClick={this.onClipboardClick}
               label='COPY TO CLIPBOARD'/>
             <FlatButton
               style={styles.button}
-              onClick={this.onQRClick(user, certificate)}
+              onClick={this.onQRClick}
               label='SHOW A QR CODE'/>
             </div>
           </div>
