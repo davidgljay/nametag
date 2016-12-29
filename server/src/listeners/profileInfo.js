@@ -1,5 +1,5 @@
 const r = require('../../horizon/server/src/horizon.js').r
-const imageUpload = require('../imageUpload')
+const imageUpload = require('../routes/images/imageUpload')
 
 const onUserUpdate = (conn) => (err, user) => {
   if (err) {
@@ -29,7 +29,6 @@ const onUserUpdate = (conn) => (err, user) => {
 
   imageUpload.fromUrl(50, 50, userProfile.picture)
     .then((json) => {
-      console.log('Load Icon Response:', json)
       return json.url && r.db('nametag').table('users').get(user.new_val.id).update({
         data: {
           iconUrls: [ json.url ],

@@ -2,9 +2,9 @@ const multer =  require('multer')
 const multerS3 =  require('multer-storage-s3')
 const AWS = require('aws-sdk')
 const s3 = new AWS.S3()
-const config = require('./secrets.json')
+const config = require('../../secrets.json')
 const fetch = require('node-fetch')
-const {LAMBDA_UPLOAD_URL, LAMBDA_RESIZE_URL} = require('./constants')
+const {LAMBDA_UPLOAD_URL, LAMBDA_RESIZE_URL} = require('../../constants')
 
 module.exports.multer = multer({
   storage: multerS3({
