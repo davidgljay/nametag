@@ -54,7 +54,7 @@ export function fetchCertificate(certificateId) {
 *    note: An initial note for this certificate
 *
 * @returns
-*    Promise
+*    Promise resolving to the newly created certificate
 */
 export function createCertificate(...args) {
   return (dispatch) => {

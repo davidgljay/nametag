@@ -18,13 +18,6 @@ const certSource = {
 }
 
 function collect(connect, monitor) {
-  const currentOffset = monitor.getSourceClientOffset()
-  console.log('Offset', currentOffset)
-  if (currentOffset) {
-    const droppedOn = document.elementFromPoint(currentOffset.x, currentOffset.y)
-    console.log('Over', droppedOn)
-  }
-  //            let childMatch = node.contains(droppedOn);
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging(),
@@ -46,6 +39,10 @@ class Certificate extends Component {
   toggleExpanded() {
     trackEvent('TOGGLE_CERT')
     this.setState({expanded: !this.state.expanded})
+  }
+
+  componentDidMount() {
+    this.setState({expanded: this.props.expanded ? true : false})
   }
 
   render() {

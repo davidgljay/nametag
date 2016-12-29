@@ -11,6 +11,10 @@ const onCreateRoomClick = () => {
   window.location = '/rooms/create'
 }
 
+const onHomeClick = () => {
+  window.location = '/rooms'
+}
+
 class Navbar extends Component {
   state = {
     open: false,
@@ -21,6 +25,9 @@ class Navbar extends Component {
         {
         this.props.user && this.props.user.id ?
         <div>
+          <FlatButton
+            style={styles.button}
+            onClick={onHomeClick} label='HOME'/>
           <FlatButton
             style={styles.button}
             onClick={onCreateRoomClick} label='CREATE ROOM'/>
