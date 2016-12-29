@@ -34,7 +34,14 @@ class CertificateDetail extends Component {
   }
 
   onClipboardClick = () => {
-
+    document.querySelector('#hiddenPath').select()
+    try {
+      const successful = document.execCommand('copy')
+      const msg = successful ? 'successful' : 'unsuccessful'
+      console.log('Copying text command was ' + msg)
+    } catch (err) {
+      console.log('Oops, unable to copy')
+    }
   }
 
   onQRClick = () => {
@@ -58,6 +65,11 @@ class CertificateDetail extends Component {
             It can be claimed by the first person to visit this URL, please
             securly share it with the intended recipient of this certificate.
           </div>
+          <input
+            type='text'
+            style={styles.hiddenPath}
+            id='hiddenPath'
+            value={window.location.href}/>
           <div style={styles.shareButtons}>
             <FlatButton
               style={styles.button}
@@ -137,5 +149,12 @@ const styles =  {
   shareButtons: {
     display: 'flex',
     justifyContent: 'space-between',
+  },
+  hiddenPath: {
+    color: 'white',
+    border: 'none',
+    width: 1,
+    height: 1,
+    outline: 'none',
   },
 }
