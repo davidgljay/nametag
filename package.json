@@ -12,6 +12,7 @@
     "mime-types": "^2.0.4",
     "oauth": "^0.9.14",
     "pem": "^1.8.1",
+    "qrcode.react": "^0.6.1",
     "radium": "^0.18.1",
     "react": "^15.4.0",
     "react-addons-css-transition-group": "^15.3.2",

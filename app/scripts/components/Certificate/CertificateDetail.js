@@ -4,6 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import {indigo500} from 'material-ui/styles/colors'
 import Navbar from '../Utils/Navbar'
+import QRcode from 'qrcode.react'
 
 class CertificateDetail extends Component {
   static propTypes = {
@@ -13,6 +14,10 @@ class CertificateDetail extends Component {
     setting: PropTypes.func.isRequired,
     certificate: PropTypes.object,
     fetchCertificate: PropTypes.func.isRequired,
+  }
+
+  state = {
+    showQR: false,
   }
 
   componentDidMount() {
@@ -38,14 +43,14 @@ class CertificateDetail extends Component {
     try {
       const successful = document.execCommand('copy')
       const msg = successful ? 'successful' : 'unsuccessful'
-      console.log('Copying text command was ' + msg)
+      this.setState({copySuccess: true})
     } catch (err) {
-      console.log('Oops, unable to copy')
+      console.error('Oops, unable to copy')
     }
   }
 
   onQRClick = () => {
-
+    this.setState({showQR: !this.state.showQR})
   }
 
   render() {
@@ -58,7 +63,7 @@ class CertificateDetail extends Component {
           <h3>This certificate has been claimed.</h3>
         </div>
       } else {
-        headerText = certificate.creator !== user.id ?
+        headerText = certificate.creator === user.id ?
         <div>
           <div style={styles.header}>
             <h3>Your certificate has been created.</h3>
@@ -82,7 +87,7 @@ class CertificateDetail extends Component {
             <FlatButton
               style={styles.button}
               onClick={this.onQRClick}
-              label='SHOW A QR CODE'/>
+              label='SHOW QR CODE'/>
             </div>
           </div>
           : <div style={styles.header}>
@@ -99,6 +104,16 @@ class CertificateDetail extends Component {
       <div style={styles.certDetailContainer}>
         {
           headerText
+        }
+        {
+          this.state.copySuccess &&
+          <div style={styles.copySuccess}>
+            Copied!
+          </div>
+        }
+        {
+          this.state.showQR &&
+          <QRcode value={window.location.href} size={256} style={styles.QRcode}/>
         }
         <div style={styles.certDetail}>
           <Certificate
@@ -156,5 +171,12 @@ const styles =  {
     width: 1,
     height: 1,
     outline: 'none',
+  },
+  QRcode: {
+    margin: 20,
+  },
+  copySuccess: {
+    color: 'green',
+    fontSize: 12,
   },
 }
