@@ -19,7 +19,7 @@ const Media = (props) => {
     media = <img src={props.url} style={styles.mediaImage}/>
   }
 
-  return <div className={style.media}>
+  return <div className={styles.media}>
 			{media}
 		</div>
 }
