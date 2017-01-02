@@ -2,6 +2,9 @@ import React, {Component, PropTypes} from 'react'
 import Certificate from './Certificate'
 import TextField from 'material-ui/TextField'
 import Navbar from '../Utils/Navbar'
+import ImageUpload from '../Utils/ImageUpload'
+import trackEvent from '../../utils/analytics'
+import CircularProgress from 'material-ui/CircularProgress'
 
 class CreateCertificate extends Component {
 
@@ -16,6 +19,7 @@ class CreateCertificate extends Component {
     description: '',
     note: 'Certificate granted.',
     granter: 'Nametag',
+    uploading: false,
   }
 
   updateCert = (property, value) => {
@@ -26,9 +30,20 @@ class CreateCertificate extends Component {
     }
   }
 
+  onChooseImage = () => {
+    trackEvent('CHOOSE_CERT_IMAGE')
+    this.setState({uploading: true})
+  }
+
+  onUploadImage = ({url}) => {
+    this.updateCert('icon', [url])
+    this.setState({uploading: false})
+  }
+
   render() {
     const {name, icon, description, note, granter} = this.state
     const {user, logout, setting} = this.props
+
     return <div id='createCertificate'>
       <Navbar
         user={user}
@@ -66,6 +81,17 @@ class CreateCertificate extends Component {
         <div style={styles.counter}>{25 - this.state.name.length}</div><br/>
         <div style={styles.description}>
           An identity that can be shared with others, such as "Lawyer" or "Dog Lover".
+        </div>
+        {
+          this.state.uploading ?
+          <CircularProgress/>
+          : <ImageUpload
+              width={50}
+              onChooseFile={this.onChooseImage}
+              onUploadFile={this.onUploadImage}/>
+        }
+        <div style={styles.description}>
+          Optional: Upload an icon for your certificate.
         </div>
         <TextField
           style={styles.textfield}
