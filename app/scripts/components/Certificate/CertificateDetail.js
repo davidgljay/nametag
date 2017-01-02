@@ -27,8 +27,12 @@ class CertificateDetail extends Component {
     fetchCertificate(certificateId)
   }
 
-  onClaimClick = (user, certificate) => {
-
+  onClaimClick = (certificateId) => () => {
+    const {appendUserArray, grantCertificate} = this.props
+    appendUserArray('certificates', certificateId)
+      .then(() => {
+        return grantCertificate(certificateId)
+      })
   }
 
   onEmailClick = () => {
@@ -44,8 +48,7 @@ class CertificateDetail extends Component {
     document.querySelector('#hiddenPath').select()
     try {
       const successful = document.execCommand('copy')
-      const msg = successful ? 'successful' : 'unsuccessful'
-      this.setState({copySuccess: true})
+      this.setState({copySuccess: successful})
     } catch (err) {
       console.error('Oops, unable to copy')
     }
@@ -132,7 +135,7 @@ class CertificateDetail extends Component {
               style={styles.button}
               labelStyle={styles.buttonLabel}
               backgroundColor={indigo500}
-              onClick={this.onClaimClick(user, certificate)}
+              onClick={this.onClaimClick(certificate.id)}
               label='CLAIM THIS CERTIFICATE'/>
           </div>
         }

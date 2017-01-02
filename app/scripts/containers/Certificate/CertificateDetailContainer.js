@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import component from '../../components/Certificate/CertificateDetail'
 import {logout, setting, providerAuth, appendUserArray} from '../../actions/UserActions'
-import {fetchCertificate} from '../../actions/CertificateActions'
+import {fetchCertificate, grantCertificate} from '../../actions/CertificateActions'
 
 const mapStateToProps = (state, ownProps) => {
   return Object.assign(

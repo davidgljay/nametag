@@ -7,7 +7,7 @@ import Radium, {StyleRoot} from 'radium'
 import Room from './containers/Room/RoomContainer'
 import RoomCards from './containers/Room/RoomCardsContainer'
 import CreateRoom from './containers/Room/CreateRoomContainer'
-import CertificateDetail from './containers/Certificate/CertificateDetail'
+import CertificateDetail from './containers/Certificate/CertificateDetailContainer'
 import {getUser} from './actions/UserActions'
 
 import { DragDropContext } from 'react-dnd'
