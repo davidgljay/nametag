@@ -20,7 +20,7 @@ class CreateCertificate extends Component {
 
   updateCert = (property, value) => {
     if (property === 'name') {
-      this.setState({[property]: value.slice(0, 20)})
+      this.setState({[property]: value.slice(0, 25)})
     } else {
       this.setState({[property]: value})
     }
@@ -34,41 +34,60 @@ class CreateCertificate extends Component {
         user={user}
         logout={logout}
         setting={setting}/>
-      <Certificate
-        certificate={{
-          name,
-          icon_array: icon,
-          description_array: [description],
-          notes: [
-            {
-              date: Date.now(),
-              msg: note,
-            },
-          ],
-          granter,
-        }}
-        draggable={false}
-        expanded={true}
-        />
-      <TextField
-        style={styles.textfield}
-        value={this.state.name}
-        onChange={(e) => this.updateCert('name', e.target.value)}
-        floatingLabelText="Title"
-        /><br/>
-      {20 - this.state.name.length}<br/>
-      <TextField
-        style={styles.textfield}
-        value={this.state.description}
-        onChange={(e) => this.updateCert('description', e.target.value)}
-        floatingLabelText="Description"
-        /><br/>
-      <TextField
-        style={styles.textfield}
-        value={this.state.note}
-        onChange={(e) => this.updateCert('note', e.target.value)}
-        floatingLabelText="Note"
-        />
+      <div style={styles.container}>
+        <h2>Create a Certificate</h2>
+        <div style={styles.description}>
+          Certificates can be used to verify things about someone, such as their
+          membership in a group. You can also create certificates for yourself
+          to express your identity.
+        </div>
+        <div style={styles.certPreview}>
+          <Certificate
+            certificate={{
+              name,
+              icon_array: icon,
+              description_array: [description],
+              notes: [{
+                date: Date.now(),
+                msg: note,
+              }],
+              granter,
+            }}
+            draggable={false}
+            expanded={true}
+            />
+        </div>
+        <TextField
+          style={styles.textfield}
+          value={this.state.name}
+          onChange={(e) => this.updateCert('name', e.target.value)}
+          floatingLabelText="Title"
+          />
+        <div style={styles.counter}>{25 - this.state.name.length}</div><br/>
+        <div style={styles.description}>
+          An identity that can be shared with others, such as "Lawyer" or "Dog Lover".
+        </div>
+        <TextField
+          style={styles.textfield}
+          value={this.state.description}
+          onChange={(e) => this.updateCert('description', e.target.value)}
+          floatingLabelText="Description"
+          />
+        <div style={styles.description}>
+          A more detailed explanation, such as
+          "Member in good standing of the House of Hufflepuff."
+          Should not include personally identifiable information.
+        </div>
+        <TextField
+          style={styles.textfield}
+          value={this.state.note}
+          onChange={(e) => this.updateCert('note', e.target.value)}
+          floatingLabelText="Note"
+          />
+        <div style={styles.description}>
+          An optional note about why this certificate was granted.
+        </div>
+      </div>
     </div>
   }
 }
@@ -76,5 +95,27 @@ class CreateCertificate extends Component {
 export default CreateCertificate
 
 const styles = {
-  textfield: {},
+  certPreview: {
+    fontSize: 16,
+    lineHeight: '20px',
+    width: 250,
+  },
+  container: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+  },
+  counter: {
+    marginLeft: 300,
+    fontSize: 12,
+    color: '#008000',
+  },
+  description: {
+    maxWidth: 310,
+    color: '#999',
+    marginBottom: 20,
+  },
+  textfield: {
+    width: 310,
+  },
 }
