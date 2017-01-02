@@ -15,7 +15,6 @@ const middlewares = [thunk]
 const mockStore = configureStore(middlewares)
 
 describe('Certificate Actions', () => {
-
   let store
   let calls
   beforeEach(() => {
@@ -72,6 +71,38 @@ describe('Certificate Actions', () => {
                 id: '123',
               }
             )
+          }
+        )
+    })
+  })
+
+  describe('grantCertificate', () => {
+    it('should create a certifiate', () => {
+      const cert = {
+        creator: 'abc',
+        name: 'Is a dinosuar',
+        granter: 'Jurassic Park',
+        description_array: ['This is a dino, we checked.'],
+        icon_array: ['http://dino.img'],
+        granted: false,
+      }
+      store = mockStore({'123': cert})
+      hz.mockReturnValue(mockHz({updated: 1}, calls)())
+      return actions.grantCertificate('123')(store.dispatch, store.getState)
+        .then(
+          () => {
+            expect(store.getActions()[0]).toEqual(
+              {
+                type: constants.UPDATE_CERTIFICATE,
+                id: '123',
+                property: 'granted',
+                value: true,
+              }
+            )
+            expect(calls[1]).toEqual({
+              type: 'update',
+              req: { id: '123', granted: true },
+            })
           }
         )
     })

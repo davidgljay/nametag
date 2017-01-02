@@ -14,6 +14,8 @@ class CertificateDetail extends Component {
     setting: PropTypes.func.isRequired,
     certificate: PropTypes.object,
     fetchCertificate: PropTypes.func.isRequired,
+    appendUserArray: PropTypes.func.isRequired,
+    grantCertificate: PropTypes.func.isRequired,
   }
 
   state = {
@@ -26,7 +28,7 @@ class CertificateDetail extends Component {
   }
 
   onClaimClick = (user, certificate) => {
-    //stuff
+
   }
 
   onEmailClick = () => {

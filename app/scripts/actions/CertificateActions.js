@@ -12,6 +12,15 @@ export const addCertificate = (certificate, id) => {
   }
 }
 
+export const updateCertificate = (id, property, value) => {
+  return {
+    type: constants.UPDATE_CERTIFICATE,
+    id,
+    property,
+    value,
+  }
+}
+
 /*
 * Fetches to a certificates
 *
@@ -62,6 +71,30 @@ export function createCertificate(...args) {
       hz('certificates').insert({...args}).subscribe((cert) => {
         dispatch(addCertificate(cert, cert.id))
         resolve(cert)
+      }, reject)
+    })
+  }
+}
+
+/*
+* Marks a certificate as granted
+*
+* Note: This is faking an action which will later be handled with cryptography,
+* certificates should not be mutable!
+*
+* @params
+*    id: The id of the certificate being granted.
+*
+* @returns
+*    Promise resolving to the response from the certificate creation process.
+*/
+
+export function grantCertificate(id) {
+  return (dispatch) => {
+    return new Promise((resolve, reject) => {
+      hz('certificates').update({id, granted: true}).subscribe((result) => {
+        dispatch(updateCertificate(id, 'granted', true))
+        resolve(result)
       }, reject)
     })
   }

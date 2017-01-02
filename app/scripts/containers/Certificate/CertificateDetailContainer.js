@@ -30,6 +30,9 @@ const mapDispatchToProps = (dispatch) => {
     fetchCertificate(...args) {
       return dispatch(fetchCertificate.apply(this, args))
     },
+    grantCertificate(...args) {
+      return dispatch(grantCertificate.apply(this, args))
+    },
   }
 }
 
