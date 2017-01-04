@@ -11,6 +11,14 @@ const onCreateRoomClick = () => {
   window.location = '/rooms/create'
 }
 
+const onCreateCertClick = () => {
+  window.location = '/certificates/create'
+}
+
+const onHomeClick = () => {
+  window.location = '/rooms'
+}
+
 class Navbar extends Component {
   state = {
     open: false,
@@ -23,7 +31,13 @@ class Navbar extends Component {
         <div>
           <FlatButton
             style={styles.button}
+            onClick={onHomeClick} label='HOME'/>
+          <FlatButton
+            style={styles.button}
             onClick={onCreateRoomClick} label='CREATE ROOM'/>
+          <FlatButton
+            style={styles.button}
+            onClick={onCreateCertClick} label='CREATE CERTIFICATE'/>
           <FlatButton
             style={styles.button}
             onClick={() => this.props.logout()}
@@ -39,6 +53,7 @@ class Navbar extends Component {
       <AppBar
         title="Nametag"
         style = {styles.appBar}
+        onTitleTouchTap={onHomeClick}
         iconElementRight={auth}
         onLeftIconButtonTouchTap={() => this.setState({open: true})}/>
       <Drawer
@@ -52,6 +67,7 @@ class Navbar extends Component {
           this.props.user.id ?
             <div>
               <MenuItem onClick={onCreateRoomClick}>Create Room</MenuItem>
+              <MenuItem onClick={onCreateCertClick}>Create Certificate</MenuItem>
               <MenuItem
                 onClick={() => this.props.logout()}>Log Out</MenuItem>
             </div>
@@ -68,6 +84,7 @@ const styles = {
   appBar: {
     fontWeight: 'bold',
     background: indigo500,
+    cursor: 'pointer',
   },
   button: {
     color: '#fff',

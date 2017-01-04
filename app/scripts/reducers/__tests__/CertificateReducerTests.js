@@ -21,4 +21,26 @@ describe('Certificate reducer', () => {
       })
     })
   })
+
+  describe('UPDATE_CERTIFICATE', () => {
+    it('should update a certificate', () => {
+      let newState = certificateReducer(
+        {
+          1: {
+            granted: false,
+          },
+        },
+        {
+          type: constants.UPDATE_CERTIFICATE,
+          id: 1,
+          property: 'granted',
+          value: true,
+        })
+      expect(newState).toEqual({
+        1: {
+          granted: true,
+        },
+      })
+    })
+  })
 })

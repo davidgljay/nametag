@@ -7,11 +7,13 @@
     "cookie": "^0.2.3",
     "dialog-polyfill": "^0.4.4",
     "fetch": "^1.1.0",
+    "jest-cli": "^18.1.0",
     "jsonwebtoken": "^5.5.4",
     "material-ui": "^0.16.5",
     "mime-types": "^2.0.4",
     "oauth": "^0.9.14",
     "pem": "^1.8.1",
+    "qrcode.react": "^0.6.1",
     "radium": "^0.18.1",
     "react": "^15.4.0",
     "react-addons-css-transition-group": "^15.3.2",
@@ -67,8 +69,6 @@
     "gulp-util": "~3.0.1",
     "gulp-webserver": "latest",
     "istanbul": "^0.4.3",
-    "jest-cli": "latest",
-    "jest-css-modules": "^1.0.2",
     "joi": "^10.0.1",
     "main-bower-files": "~2.6.2",
     "mocha": "^2.3.3",
@@ -95,7 +95,6 @@
     "storybook": "start-storybook -p 9001 -c .storybook"
   },
   "jest": {
-    "scriptPreprocessor": "<rootDir>/node_modules/jest-css-modules",
     "unmockedModulePathPatterns": [
       "<rootDir>/node_modules/react"
     ],
@@ -103,7 +102,8 @@
       "/app/bower_components/",
       "/dist/bower_components",
       "/node_modules/",
-      "/dist/"
+      "/dist/",
+      "/horizon/"
     ],
     "setupTestFrameworkScriptFile": "<rootDir>/app/scripts/tests/mockGlobals.js",
     "automock": true

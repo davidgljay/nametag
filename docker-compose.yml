@@ -15,7 +15,7 @@ horizon:
     - "8181:8181"
 rethinkdb:
   image: rethinkdb
-  command: rethinkdb --bind "all" #--no-update-check
+  command: rethinkdb --bind "all" --no-update-check
   volumes:
     - ./rethinkdb_data/:/var/lib/rethinkdb/instances.d
   ports:

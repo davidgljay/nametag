@@ -3,7 +3,7 @@
 const https = require('https')
 const fs = require('fs')
 const express = require('express')
-const imageUpload = require('./imageUpload')
+const imageUpload = require('./routes/images/imageUpload')
 const horizon = require('../horizon/server/src/horizon.js')
 const config = require('./secrets.json')
 const path = require('path')
@@ -14,36 +14,6 @@ process.env.AWS_ACCESS_KEY_ID = config.s3.accessKeyId
 process.env.AWS_SECRET_ACCESS_KEY = config.s3.secretAccessKey
 
 const app = express()
-
-/* Serve static files */
-app.use('/public', express.static(path.join('/usr', 'app', 'public')))
-
-
-app.use(bodyParser.json())
-
-/* Serve index.html */
-app.get('*', (req, res) => {
-  res.sendFile(path.join('/usr', 'app', 'public', 'index.html'))
-})
-
-
-/* Upload an image and return the url of that image on S3 */
-app.post('/api/images',
-  imageUpload.multer.any(),
-  (req, res) => {
-    imageUpload.resize(req.query.width, req.query.height, req.files[0].filename)
-      .then(data => res.json(data))
-      .catch(err => console.error('Uploading image', err))
-  }
-)
-
-/* Upload an image from a url and return the location of that image on S3 */
-app.post('/api/image_url',
-  (req, res) => {
-    imageUpload.fromUrl(req.body.width, req.body.height, req.body.url)
-      .then(data => res.json(data))
-      .catch(err => console.error('Uploading image from URL', err))
-  })
 
 /* Create HTTP server */
 const httpsServer = https.createServer({
@@ -77,5 +47,34 @@ horizonServer.add_auth_provider(horizon.auth.google, config.google)
 
 /* Activate db listeners */
 listeners(horizonServer._reql_conn._rdb_options)
+
+app.use(bodyParser.json())
+
+/* Serve static files */
+app.use('/public', express.static(path.join('/usr', 'app', 'public')))
+
+/* Serve index.html */
+app.get('*', (req, res) => {
+  res.sendFile(path.join('/usr', 'app', 'public', 'index.html'))
+})
+
+
+/* Upload an image and return the url of that image on S3 */
+app.post('/api/images',
+  imageUpload.multer.any(),
+  (req, res) => {
+    imageUpload.resize(req.query.width, req.query.height, req.files[0].filename)
+      .then(data => res.json(data))
+      .catch(err => console.error('Uploading image', err))
+  }
+)
+
+/* Upload an image from a url and return the location of that image on S3 */
+app.post('/api/image_url',
+  (req, res) => {
+    imageUpload.fromUrl(req.body.width, req.body.height, req.body.url)
+      .then(data => res.json(data))
+      .catch(err => console.error('Uploading image from URL', err))
+  })
 
 console.log('Listening on port 8181.')

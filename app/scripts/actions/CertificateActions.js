@@ -12,14 +12,23 @@ export const addCertificate = (certificate, id) => {
   }
 }
 
+export const updateCertificate = (id, property, value) => {
+  return {
+    type: constants.UPDATE_CERTIFICATE,
+    id,
+    property,
+    value,
+  }
+}
+
 /*
-* Subscribe to a certificates
+* Fetches to a certificates
 *
 * @params
 *    none
 *
 * @returns
-*    Promise
+*    Promise resolving to certificate
 */
 export function fetchCertificate(certificateId) {
   return function(dispatch) {
@@ -38,5 +47,72 @@ export function fetchCertificate(certificateId) {
           })
     })
     .catch(errorLog('Error subscribing to certificate ' + certificateId + ': '))
+  }
+}
+
+/*
+* Creates a certificate
+*
+* @params
+*    creator: User id of the person creating this certificate. This violates the
+*        no-user-ids principle, and will be replaced with an organization id in the future.
+*    decription: A description of the certificate.
+*    granter: The name of the granting organization.
+*    icon: The (optional) icon for this certificate.
+*    name: The name appearing on this certificate.
+*    note: An initial note for this certificate
+*    granted: Optional, denotes whether the certificate has been granted
+*
+* @returns
+*    Promise resolving to the newly created certificate
+*/
+export function createCertificate(
+  creator,
+  description_array,
+  granter,
+  icon_array,
+  name,
+  notes,
+  granted) {
+  return (dispatch) => {
+    const certificate = {
+      creator,
+      description_array,
+      granter,
+      icon_array,
+      name,
+      notes,
+      granted,
+    }
+    return new Promise((resolve, reject) => {
+      hz('certificates').insert(certificate).subscribe((cert) => {
+        dispatch(addCertificate(Object.assign({}, certificate, {id: cert.id}), cert.id))
+        resolve(cert)
+      }, reject)
+    })
+  }
+}
+
+/*
+* Marks a certificate as granted
+*
+* Note: This is faking an action which will later be handled with cryptography,
+* certificates should not be mutable!
+*
+* @params
+*    id: The id of the certificate being granted.
+*
+* @returns
+*    Promise resolving to the response from the certificate creation process.
+*/
+
+export function grantCertificate(id) {
+  return (dispatch) => {
+    return new Promise((resolve, reject) => {
+      hz('certificates').update({id, granted: true}).subscribe((result) => {
+        dispatch(updateCertificate(id, 'granted', true))
+        resolve(result)
+      }, reject)
+    })
   }
 }

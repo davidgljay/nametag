@@ -5,6 +5,8 @@ import { DragSource, DragLayer } from 'react-dnd'
 import { Card, CardActions } from 'material-ui/Card'
 import FontIcon from 'material-ui/FontIcon'
 import trackEvent from '../../utils/analytics'
+import ImageUpload from '../Utils/ImageUpload'
+import CircularProgress from 'material-ui/CircularProgress'
 
 const certSource = {
   beginDrag(props) {
@@ -18,13 +20,6 @@ const certSource = {
 }
 
 function collect(connect, monitor) {
-  const currentOffset = monitor.getSourceClientOffset()
-  console.log('Offset', currentOffset)
-  if (currentOffset) {
-    const droppedOn = document.elementFromPoint(currentOffset.x, currentOffset.y)
-    console.log('Over', droppedOn)
-  }
-  //            let childMatch = node.contains(droppedOn);
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging(),
@@ -48,33 +43,54 @@ class Certificate extends Component {
     this.setState({expanded: !this.state.expanded})
   }
 
+  componentDidMount() {
+    this.setState({expanded: this.props.expanded ? true : false})
+  }
+
   render() {
     if (!this.props.certificate) {
       return null
     }
+
+    // Show an icon if one exists, or a manu to upload an icon if showIconUpload is enabled
+    let icon
+    if (this.props.certificate.icon_array) {
+      icon = <img style={styles.icon} alt="icon" src={this.props.certificate.icon_array[0]}/>
+    } else if (this.props.showIconUpload) {
+      icon = this.state.uploading ?
+        <CircularProgress/>
+        : <ImageUpload
+            width={50}
+            onChooseFile={() => this.setState({uploading: true})}
+            onUploadFile={this.props.onUploadImage}/>
+    }
+
+    // Show expanded or collapsed certificate
     let certificate
     if (this.state.expanded) {
       certificate = <div>
         <Card style={styles.certificateExpanded}>
-              <FontIcon style={styles.close} className='material-icons' onClick={this.toggleExpanded}>
+              <FontIcon
+                style={styles.close}
+                className='material-icons'
+                onClick={this.toggleExpanded}>
                 close
               </FontIcon>
             <div style={styles.cardHeader}>
               <div>
-                {
-                  this.props.certificate.icon_array &&
-                  <img style={styles.icon} alt="icon" src={this.props.certificate.icon_array[0]}/>
-                }
+                {icon}
               </div>
               <div>
                 <div style={styles.name}>{this.props.certificate.name}</div>
-                <div style={styles.granter}><em>Verified by: </em><br/>{this.props.certificate.granter}</div>
+                <div style={styles.granter}>
+                  <em>Verified by: </em><br/>{this.props.certificate.granter}
+                </div>
               </div>
             </div>
             <div style={styles.description}>{this.props.certificate.description_array[0]}</div>
             <div style={styles.notes}>
-              {this.props.certificate.notes.map(function mapNotes(note) {
-                 return <div style={styles.note} key={note.date}>
+              {this.props.certificate.notes.map((note) => {
+                return <div style={styles.note} key={note.date}>
                     <div style={styles.date}>{moment(note.date).format('MMMM Do, YYYY')}</div>
                     <div style={styles.msg}>{': ' + note.msg}</div>
                   </div>
@@ -119,6 +135,8 @@ Certificate.propTypes = {
   certificate: PropTypes.object,
   isDragging: PropTypes.bool.isRequired,
   removeFromSource: PropTypes.func,
+  showIconUpload: PropTypes.bool,
+  onUploadImage: PropTypes.func,
 }
 
 export default DragSource(dragTypes.certificate, certSource, collect)(Certificate)
@@ -178,6 +196,7 @@ const styles = {
     width: 50,
     height: 50,
     marginRight: 20,
+    borderRadius: 3,
   },
   name: {
     fontSize: 16,
