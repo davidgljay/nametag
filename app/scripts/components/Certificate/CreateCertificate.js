@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react'
 import Certificate from './Certificate'
 import TextField from 'material-ui/TextField'
 import Navbar from '../Utils/Navbar'
-import ImageUpload from '../Utils/ImageUpload'
 import trackEvent from '../../utils/analytics'
 import CircularProgress from 'material-ui/CircularProgress'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -12,6 +11,7 @@ class CreateCertificate extends Component {
   static propTypes = {
     user: PropTypes.object.isRequired,
     createCertificate: PropTypes.func.isRequired,
+    appendUserArray: PropTypes.func.isRequired,
   }
 
   state = {
@@ -45,60 +45,85 @@ class CreateCertificate extends Component {
     this.setState({certFor: val})
   }
 
-  createCert = () => {
-    const {user, createCertificate} = this.props
+  createSelfCert = () => {
+    const {appendUserArray, toggleCreateCert} = this.props
+    this.certPromise(true)
+      .then(cert => {
+        return appendUserArray('certificates', cert.id)
+      })
+      .then(() => {
+        toggleCreateCert()
+      })
+  }
+
+  certPromise = (markGranted) => {
+    const {user, createCertificate, mini} = this.props
     const {name, icon, description, note} = this.state
-    createCertificate(
+    const granter = this.props.mini ? 'Self' : this.props.user.data.displayNames[0]
+    return createCertificate(
       user.id,
       [description],
-      user.data.displayNames[0],
-      [icon],
+      granter,
+      icon && [icon],
       name,
-      [{
+      mini ? [] : [{
         date: Date.now(),
         msg: note,
       }],
-      false)
-      .then((cert) => {
+      markGranted)
+  }
+
+  createCert = () => {
+    this.certPromise(false)
+      .then(cert => {
         window.location = `/certificates/${cert.id}`
       })
   }
 
   render() {
     const {name, icon, description, note} = this.state
-    const {user, logout, setting} = this.props
+    const {user, logout, setting, mini} = this.props
 
     if (!user.id) {
       return <CircularProgress/>
     }
 
     return <div id='createCertificate'>
-      <Navbar
-        user={user}
-        logout={logout}
-        setting={setting}/>
+      {
+        !mini &&
+        <Navbar
+          user={user}
+          logout={logout}
+          setting={setting}/>
+      }
       <div style={styles.container}>
-        <h2>Create a Certificate</h2>
-        <div style={styles.description}>
-          Certificates can be used to verify things about someone, such as their
-          membership in a group. You can also create certificates for yourself
-          to express your identity.
-        </div>
+        {
+          !mini &&
+          <div>
+            <h2>Create a Certificate</h2>
+            <div style={styles.description}>
+              Certificates can be used to verify things about someone, such as their
+              membership in a group. You can also create certificates for yourself
+              to express your identity.
+            </div>
+          </div>
+        }
         <div style={styles.certPreview}>
           <Certificate
             certificate={{
               name,
               icon_array: icon,
               description_array: [description],
-              notes: [{
+              notes: mini ? [] : [{
                 date: Date.now(),
                 msg: note,
               }],
-              granter: user.data.displayNames[0],
+              granter: this.props.mini ? 'Self' : this.props.user.data.displayNames[0],
             }}
             draggable={false}
             expanded={true}
-            />
+            showIconUpload={true}
+            onUploadImage={this.onUploadImage}/>
         </div>
         <TextField
           style={styles.textfield}
@@ -109,17 +134,6 @@ class CreateCertificate extends Component {
         <div style={styles.counter}>{25 - this.state.name.length}</div><br/>
         <div style={styles.description}>
           An identity that can be shared with others, such as "Lawyer" or "Dog Lover".
-        </div>
-        {
-          this.state.uploading ?
-          <CircularProgress/>
-          : <ImageUpload
-              width={50}
-              onChooseFile={this.onChooseImage}
-              onUploadFile={this.onUploadImage}/>
-        }
-        <div style={styles.description}>
-          Optional: Upload an icon for your certificate.
         </div>
         <TextField
           style={styles.textfield}
@@ -132,21 +146,26 @@ class CreateCertificate extends Component {
           "Member in good standing of the House of Hufflepuff."
           Should not include personally identifiable information.
         </div>
-        <TextField
-          style={styles.textfield}
-          value={this.state.note}
-          onChange={(e) => this.updateCert('note', e.target.value)}
-          floatingLabelText="Note"
-          />
-        <div style={styles.description}>
-          An optional note about why this certificate was granted.
-        </div>
+        {
+          !mini &&
+          <div>
+            <TextField
+              style={styles.textfield}
+              value={this.state.note}
+              onChange={(e) => this.updateCert('note', e.target.value)}
+              floatingLabelText="Note"
+              />
+            <div style={styles.description}>
+              An optional note about why this certificate was granted.
+            </div>
+          </div>
+        }
         <div style={styles.createButton}>
           <RaisedButton
             labelStyle={styles.buttonLabel}
             backgroundColor={indigo500}
             label={'CREATE CERTIFICATE'}
-            onClick={this.createCert}/>
+            onClick={mini ? this.createSelfCert : this.createCert}/>
         </div>
       </div>
     </div>
@@ -157,7 +176,6 @@ export default CreateCertificate
 
 const styles = {
   certPreview: {
-    fontSize: 16,
     lineHeight: '20px',
     width: 250,
   },
@@ -167,17 +185,18 @@ const styles = {
     flexDirection: 'column',
   },
   counter: {
-    marginLeft: 300,
+    marginLeft: 280,
     fontSize: 12,
     color: '#008000',
   },
   description: {
-    maxWidth: 310,
+    maxWidth: 290,
     color: '#999',
-    marginBottom: 20,
+    fontSize: 14,
+    fontStyle: 'italic',
   },
   textfield: {
-    width: 310,
+    width: 290,
   },
   createButton: {
     margin: 30,

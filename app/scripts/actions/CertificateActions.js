@@ -66,14 +66,29 @@ export function fetchCertificate(certificateId) {
 * @returns
 *    Promise resolving to the newly created certificate
 */
-export function createCertificate(creator, description_array, granter, icon_array, name, notes, granted) {
+export function createCertificate(
+  creator,
+  description_array,
+  granter,
+  icon_array,
+  name,
+  notes,
+  granted) {
   return (dispatch) => {
+    const certificate = {
+      creator,
+      description_array,
+      granter,
+      icon_array,
+      name,
+      notes,
+      granted,
+    }
     return new Promise((resolve, reject) => {
-      hz('certificates').insert({creator, description_array, granter, icon_array, name, notes, granted})
-        .subscribe((cert) => {
-          dispatch(addCertificate(cert, cert.id))
-          resolve(cert)
-        }, reject)
+      hz('certificates').insert(certificate).subscribe((cert) => {
+        dispatch(addCertificate(Object.assign({}, certificate, {id: cert.id}), cert.id))
+        resolve(cert)
+      }, reject)
     })
   }
 }

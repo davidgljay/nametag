@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import component from '../../components/Certificate/CreateCertificate'
-import {logout, setting, providerAuth} from '../../actions/UserActions'
+import {logout, setting, providerAuth, appendUserArray} from '../../actions/UserActions'
 import {createCertificate} from '../../actions/CertificateActions'
 
 const mapStateToProps = (state, ownProps) => {
@@ -25,6 +25,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     createCertificate(...args) {
       return dispatch(createCertificate.apply(this, args))
+    },
+    appendUserArray(...args) {
+      return dispatch(appendUserArray.apply(this, args))
     },
   }
 }

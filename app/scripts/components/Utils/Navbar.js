@@ -84,7 +84,7 @@ const styles = {
   appBar: {
     fontWeight: 'bold',
     background: indigo500,
-    cursor: pointer,
+    cursor: 'pointer',
   },
   button: {
     color: '#fff',

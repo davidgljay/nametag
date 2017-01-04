@@ -51,6 +51,7 @@ const styles =
       width: 50,
       height: 50,
       borderRadius: 25,
+      margin: 10,
       cursor: 'pointer',
       textAlign: 'center',
       verticalAlign: 'middle',
