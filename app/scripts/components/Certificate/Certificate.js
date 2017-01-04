@@ -70,8 +70,8 @@ class Certificate extends Component {
             </div>
             <div style={styles.description}>{this.props.certificate.description_array[0]}</div>
             <div style={styles.notes}>
-              {this.props.certificate.notes.map(function mapNotes(note) {
-                 return <div style={styles.note} key={note.date}>
+              {this.props.certificate.notes.map((note) => {
+                return <div style={styles.note} key={note.date}>
                     <div style={styles.date}>{moment(note.date).format('MMMM Do, YYYY')}</div>
                     <div style={styles.msg}>{': ' + note.msg}</div>
                   </div>
@@ -175,6 +175,7 @@ const styles = {
     width: 50,
     height: 50,
     marginRight: 20,
+    borderRadius: 3,
   },
   name: {
     fontSize: 16,

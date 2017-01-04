@@ -61,17 +61,19 @@ export function fetchCertificate(certificateId) {
 *    icon: The (optional) icon for this certificate.
 *    name: The name appearing on this certificate.
 *    note: An initial note for this certificate
+*    granted: Optional, denotes whether the certificate has been granted
 *
 * @returns
 *    Promise resolving to the newly created certificate
 */
-export function createCertificate(...args) {
+export function createCertificate(creator, description_array, granter, icon_array, name, notes, granted) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      hz('certificates').insert({...args}).subscribe((cert) => {
-        dispatch(addCertificate(cert, cert.id))
-        resolve(cert)
-      }, reject)
+      hz('certificates').insert({creator, description_array, granter, icon_array, name, notes, granted})
+        .subscribe((cert) => {
+          dispatch(addCertificate(cert, cert.id))
+          resolve(cert)
+        }, reject)
     })
   }
 }

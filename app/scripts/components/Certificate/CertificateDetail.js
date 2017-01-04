@@ -118,7 +118,9 @@ class CertificateDetail extends Component {
         }
         {
           this.state.showQR &&
-          <QRcode value={window.location.href} size={256} style={styles.QRcode}/>
+          <div style={styles.QRcode}>
+            <QRcode value={window.location.href} size={256}/>
+          </div>
         }
         <div style={styles.certDetail}>
           <Certificate
@@ -148,8 +150,8 @@ export default CertificateDetail
 
 const styles =  {
   header: {
-    width: 450,
     textAlign: 'center',
+    maxWidth: 450,
   },
   certDetailContainer: {
     display: 'flex',
@@ -159,6 +161,7 @@ const styles =  {
   certDetail: {
     fontSize: 16,
     lineHeight: '20px',
+    maxWidth: 350,
   },
   claimButton: {
     margin: 30,

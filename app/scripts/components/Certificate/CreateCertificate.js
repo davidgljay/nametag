@@ -5,7 +5,8 @@ import Navbar from '../Utils/Navbar'
 import ImageUpload from '../Utils/ImageUpload'
 import trackEvent from '../../utils/analytics'
 import CircularProgress from 'material-ui/CircularProgress'
-
+import RaisedButton from 'material-ui/RaisedButton'
+import {indigo500} from 'material-ui/styles/colors'
 class CreateCertificate extends Component {
 
   static propTypes = {
@@ -18,8 +19,8 @@ class CreateCertificate extends Component {
     icon: null,
     description: '',
     note: 'Certificate granted.',
-    granter: 'Nametag',
     uploading: false,
+    certFor: 'me',
   }
 
   updateCert = (property, value) => {
@@ -40,9 +41,36 @@ class CreateCertificate extends Component {
     this.setState({uploading: false})
   }
 
+  onCertForChange = (val) => {
+    this.setState({certFor: val})
+  }
+
+  createCert = () => {
+    const {user, createCertificate} = this.props
+    const {name, icon, description, note} = this.state
+    createCertificate(
+      user.id,
+      [description],
+      user.data.displayNames[0],
+      [icon],
+      name,
+      [{
+        date: Date.now(),
+        msg: note,
+      }],
+      false)
+      .then((cert) => {
+        window.location = `/certificates/${cert.id}`
+      })
+  }
+
   render() {
-    const {name, icon, description, note, granter} = this.state
+    const {name, icon, description, note} = this.state
     const {user, logout, setting} = this.props
+
+    if (!user.id) {
+      return <CircularProgress/>
+    }
 
     return <div id='createCertificate'>
       <Navbar
@@ -66,7 +94,7 @@ class CreateCertificate extends Component {
                 date: Date.now(),
                 msg: note,
               }],
-              granter,
+              granter: user.data.displayNames[0],
             }}
             draggable={false}
             expanded={true}
@@ -113,6 +141,13 @@ class CreateCertificate extends Component {
         <div style={styles.description}>
           An optional note about why this certificate was granted.
         </div>
+        <div style={styles.createButton}>
+          <RaisedButton
+            labelStyle={styles.buttonLabel}
+            backgroundColor={indigo500}
+            label={'CREATE CERTIFICATE'}
+            onClick={this.createCert}/>
+        </div>
       </div>
     </div>
   }
@@ -143,5 +178,11 @@ const styles = {
   },
   textfield: {
     width: 310,
+  },
+  createButton: {
+    margin: 30,
+  },
+  buttonLabel: {
+    color: '#fff',
   },
 }
