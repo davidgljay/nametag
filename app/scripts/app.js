@@ -41,6 +41,12 @@ class Nametag extends Component {
       window.location.hash = ''
       history.pushState('', document.title, window.location.pathname)
     }
+
+    const postAuth = window.localStorage.getItem('postAuth')
+    if (postAuth) {
+      window.location = postAuth
+      window.localStorage.removeItem('postAuth')
+    }
   }
 
   getChildContext() {

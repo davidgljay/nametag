@@ -3,8 +3,8 @@ import errorLog from '../utils/errorLog'
 export const hz = Horizon()
 
 export function hzAuth(provider) {
-  //   hz({authType: 'token'})
   let promise
+  window.localStorage.setItem('postAuth', window.location)
   if (!hz.hasAuthToken()) {
     promise = new Promise((resolve, reject) => {
       hz.authEndpoint(provider).subscribe((endpoint) => {

@@ -4,6 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import {indigo500} from 'material-ui/styles/colors'
 import Navbar from '../Utils/Navbar'
+import Login from '../User/Login'
 import QRcode from 'qrcode.react'
 
 class CertificateDetail extends Component {
@@ -58,48 +59,82 @@ class CertificateDetail extends Component {
     this.setState({showQR: !this.state.showQR})
   }
 
+  onHomeClick = () => {
+    window.location = '/rooms'
+  }
+
   render() {
-    const {user, logout, setting, certificate} = this.props
+    const {user, logout, setting, certificate, providerAuth} = this.props
 
     let headerText
-    if (certificate) {
-      if (certificate.granted) {
-        headerText = <div style={styles.header}>
-          <h3>This certificate has been claimed.</h3>
-        </div>
-      } else {
-        headerText = certificate.creator === user.id ?
-        <div>
-          <div style={styles.header}>
-            <h3>Your certificate has been created.</h3>
-            It can be claimed by the first person to visit this URL, please
-            securly share it with the intended recipient of this certificate.
-          </div>
-          <input
-            type='text'
-            style={styles.hiddenPath}
-            id='hiddenPath'
-            value={window.location.href}/>
-          <div style={styles.shareButtons}>
-            <FlatButton
-              style={styles.button}
-              onClick={this.onEmailClick}
-              label='E-MAIL'/>
-            <FlatButton
-              style={styles.button}
-              onClick={this.onClipboardClick}
-              label='COPY TO CLIPBOARD'/>
-            <FlatButton
-              style={styles.button}
-              onClick={this.onQRClick}
-              label='SHOW QR CODE'/>
-            </div>
-          </div>
-          : <div style={styles.header}>
-            <h3>You have been granted the following certificate.</h3>
-          </div>
-      }
+    let claimButton
+
+    if (!certificate) {
+      return null
     }
+
+    if (certificate.granted) {
+      headerText = <div style={styles.header}>
+        <h3>This certificate has been claimed.</h3>
+      </div>
+    } else {
+      headerText = certificate.creator === user.id ?
+      <div>
+        <div style={styles.header}>
+          <h3>Your certificate has been created.</h3>
+          It can be claimed by the first person to visit this URL, please
+          securly share it with the intended recipient of this certificate.
+        </div>
+        <input
+          type='text'
+          style={styles.hiddenPath}
+          id='hiddenPath'
+          value={window.location.href}/>
+        <div style={styles.shareButtons}>
+          <FlatButton
+            style={styles.button}
+            onClick={this.onEmailClick}
+            label='E-MAIL'/>
+          <FlatButton
+            style={styles.button}
+            onClick={this.onClipboardClick}
+            label='COPY TO CLIPBOARD'/>
+          <FlatButton
+            style={styles.button}
+            onClick={this.onQRClick}
+            label='SHOW QR CODE'/>
+          </div>
+        </div>
+        : <div style={styles.header}>
+          <h3>You have been granted a certificate!</h3>
+          Claim it so that you can show it off! Certificates
+          let others know why you are worthy of trust and respect.
+          They can also give you access to exclusive communities.
+        </div>
+    }
+
+    if (certificate.granted) {
+      claimButton = <div style={styles.claimButton}>
+        <RaisedButton
+          style={styles.button}
+          labelStyle={styles.buttonLabel}
+          backgroundColor={indigo500}
+          label='BACK TO HOMEPAGE'
+          onClick={this.onHomeClick}/>
+      </div>
+    } else if (!user || !user.id) {
+      claimButton = <Login message={'Log in to claim'} providerAuth={providerAuth}/>
+    } else if (certificate.creator !== user.id ) {
+      claimButton = <div style={styles.claimButton}>
+        <RaisedButton
+          style={styles.button}
+          labelStyle={styles.buttonLabel}
+          backgroundColor={indigo500}
+          onClick={this.onClaimClick(certificate.id)}
+          label='CLAIM THIS CERTIFICATE'/>
+      </div>
+    }
+
 
     return <div>
       <Navbar
@@ -128,19 +163,7 @@ class CertificateDetail extends Component {
             draggable={false}
             expanded={true}/>
         </div>
-        {
-          certificate &&
-          !certificate.granted &&
-          certificate.creator !== user.id &&
-          <div style={styles.claimButton}>
-            <RaisedButton
-              style={styles.button}
-              labelStyle={styles.buttonLabel}
-              backgroundColor={indigo500}
-              onClick={this.onClaimClick(certificate.id)}
-              label='CLAIM THIS CERTIFICATE'/>
-          </div>
-        }
+        {claimButton}
       </div>
     </div>
   }
