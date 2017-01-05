@@ -86,7 +86,7 @@ export function createCertificate(
     }
     return new Promise((resolve, reject) => {
       hz('certificates').insert(certificate).subscribe((cert) => {
-        dispatch(addCertificate(Object.assign({}, certificate, {id: cert.id}), cert.id))
+        dispatch(addCertificate({...certificate, id: cert.id}, cert.id))
         resolve(cert)
       }, reject)
     })

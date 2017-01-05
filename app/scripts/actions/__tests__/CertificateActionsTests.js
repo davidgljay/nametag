@@ -57,9 +57,19 @@ describe('Certificate Actions', () => {
         granter: 'Jurassic Park',
         description_array: ['This is a dino, we checked.'],
         icon_array: ['http://dino.img'],
+        notes: ['Verified'],
+        granted: false,
       }
       hz.mockReturnValue(mockHz({...cert, id: '123'}, calls)())
-      return actions.createCertificate.apply(...cert)(store.dispatch, store.getState)
+      return actions.createCertificate(
+        cert.creator,
+        cert.description_array,
+        cert.granter,
+        cert.icon_array,
+        cert.name,
+        cert.notes,
+        cert.granted,
+      )(store.dispatch, store.getState)
         .then(
           (c) => {
             expect(c.id).toEqual('123')

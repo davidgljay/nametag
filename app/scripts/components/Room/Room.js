@@ -31,21 +31,23 @@ class Room extends Component {
 
   componentDidMount() {
     this.props.watchRoom(this.props.params.roomId)
-    this.getUserNametag(this.props)
+    this.getUserNametags(this.props)
   }
 
   getUserNametag(props) {
     if (!props.userNametag && props.user.id) {
       props.getUserNametag(props.params.roomId, props.user.id)
+      props.watchNotifications(props.user.id)
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    this.getUserNametag(nextProps)
+    this.getUserNametags(nextProps)
   }
 
   componentWillUnmount() {
     this.props.unWatchRoom(this.props.params.roomId)
+    this.props.unWatchNotifications()
   }
 
   closeRoom() {
