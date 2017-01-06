@@ -19,6 +19,7 @@ class Messages extends Component {
   componentWillUpdate(nextProps) {
     if (this.props.messageList &&
       nextProps.messageList &&
+      nextProps.messageList.length > 1 &&
       nextProps.messageList.length > this.props.messageList.length) {
       let counter = 0
       let timer = setInterval(() => {
@@ -92,7 +93,7 @@ const styles = {
     },
   },
   msgContainer: {
-  	width: 'inherit',
+    width: 'inherit',
     marginBottom: 65,
   },
 }
