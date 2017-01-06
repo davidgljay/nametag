@@ -158,7 +158,6 @@ ModAction.propTypes = {
   postMessage: PropTypes.func.isRequired,
 }
 ModAction.contextTypes = {
-  userNametag: PropTypes.string,
   room: PropTypes.string,
   norms: PropTypes.array,
 }

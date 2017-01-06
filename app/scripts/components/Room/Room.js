@@ -17,7 +17,7 @@ class Room extends Component {
     this.state = {
       leftBarExpanded: false,
     }
-    this.getUserNametag = this.getUserNametag.bind(this)
+    this.watchUserNametags = this.watchUserNametags.bind(this)
   }
 
   getChildContext() {
@@ -31,23 +31,22 @@ class Room extends Component {
 
   componentDidMount() {
     this.props.watchRoom(this.props.params.roomId)
-    this.getUserNametags(this.props)
+    this.watchUserNametags(this.props)
   }
 
-  getUserNametag(props) {
+  watchUserNametags(props) {
     if (!props.userNametag && props.user.id) {
-      props.getUserNametag(props.params.roomId, props.user.id)
-      props.watchNotifications(props.user.id)
+      props.watchUserNametags(props.user.id)
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    this.getUserNametags(nextProps)
+    this.watchUserNametags(nextProps)
   }
 
   componentWillUnmount() {
     this.props.unWatchRoom(this.props.params.roomId)
-    this.props.unWatchNotifications()
+    this.props.unWatchUserNametags()
   }
 
   closeRoom() {
@@ -120,12 +119,12 @@ class Room extends Component {
 
 Room.propTypes = {
   postMessage: PropTypes.func.isRequired,
-  userNametag: PropTypes.string,
+  userNametag: PropTypes.object,
   room: PropTypes.object,
 }
 
 Room.childContextTypes = {
-  userNametag: PropTypes.string,
+  userNametag: PropTypes.object,
   room: PropTypes.string,
   norms: PropTypes.array,
 }

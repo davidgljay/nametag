@@ -41,7 +41,7 @@ class RoomCard extends Component {
       !this.props.userNametag &&
       !this.state.checkingForNametag) {
       this.setState({checkingForNametag: true})
-      this.props.getUserNametag(this.props.id, this.context.user.id)
+      this.props.watchUserNametags(this.props.id, this.context.user.id)
         .then((userNametag) => {
           this.setState({checkingForNametag: false})
           if (!userNametag) {

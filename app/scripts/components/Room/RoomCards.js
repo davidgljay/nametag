@@ -54,7 +54,7 @@ class RoomCards extends Component {
       style={styles.roomCard}
       userNametag={this.props.userNametags[roomId]}
       addUserNametag={this.props.addUserNametag}
-      getUserNametag={this.props.getUserNametag}
+      watchUserNametags={this.props.watchUserNametags}
       watchNametag={this.props.watchNametag}
       unWatchNametag={this.props.unWatchNametag}/>
   }

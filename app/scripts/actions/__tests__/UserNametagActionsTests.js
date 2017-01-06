@@ -57,10 +57,10 @@ describe('UserNametagActions', () => {
     })
   })
 
-  describe('getUserNametag', () => {
+  describe('watchUserNametags', () => {
     it('should get an entry for a room in the user_nametags table', () => {
       hz.mockReturnValue(mockHz([{user: 'me', nametag: '456', room: 'abc'}], calls)())
-      return actions.getUserNametag('abc', 'me')(store.dispatch).then((userNametag) => {
+      return actions.watchUserNametags('abc', 'me')(store.dispatch).then((userNametag) => {
         expect(userNametag).toEqual('456')
         expect(calls[1]).toEqual({
           type: 'findAll',
@@ -78,7 +78,7 @@ describe('UserNametagActions', () => {
 
     it('should set the nametag value for the room to null if no user nametag is found', () => {
       hz.mockReturnValue(mockHz([], calls)())
-      return actions.getUserNametag('def', 'me')(store.dispatch).then((userNametag) => {
+      return actions.watchUserNametags('def', 'me')(store.dispatch).then((userNametag) => {
         expect(userNametag).toEqual(null)
       })
     })
@@ -101,21 +101,21 @@ describe('UserNametagActions', () => {
     })
   })
 
-  describe('watchNotifications', () => {
-    it('should watch for new messages from rooms that the user has entered.', () => {
-      let calls2 = []
-      hz.mockReturnValueOnce(mockHz(['123', '456'], calls)())
-      hz.mockReturnValueOnce(mockHz([{room: 'abc', timestamp: 1234567}], calls2)())
-      return actions.watchNotifications('user')(store.dispatch).then(() => {
-        expect(calls[1]).toEqual({ type: 'findAll', req: { user: 'user' } })
-        expect(calls2[1]).toEqual({ type: 'findAll', req: [ '123', '456' ] })
-        expect(store.getActions()[0]).toEqual({
-          type: 'UPDATE_USER_NAMETAG',
-          room: 'abc',
-          property: 'latestMessage',
-          value: 1234567,
-        })
-      })
-    })
-  })
+  // describe('watchNotifications', () => {
+  //   it('should watch for new messages from rooms that the user has entered.', () => {
+  //     let calls2 = []
+  //     hz.mockReturnValueOnce(mockHz(['123', '456'], calls)())
+  //     hz.mockReturnValueOnce(mockHz([{room: 'abc', timestamp: 1234567}], calls2)())
+  //     return actions.watchNotifications('user')(store.dispatch).then(() => {
+  //       expect(calls[1]).toEqual({ type: 'findAll', req: { user: 'user' } })
+  //       expect(calls2[1]).toEqual({ type: 'findAll', req: [ '123', '456' ] })
+  //       expect(store.getActions()[0]).toEqual({
+  //         type: 'UPDATE_USER_NAMETAG',
+  //         room: 'abc',
+  //         property: 'latestMessage',
+  //         value: 1234567,
+  //       })
+  //     })
+  //   })
+  // })
 })

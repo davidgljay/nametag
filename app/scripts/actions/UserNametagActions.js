@@ -51,20 +51,24 @@ export function putUserNametag(room, user, nametag) {
 * @returns
 *   none
 */
-export function getUserNametag(room, user) {
+let userNametagsSubscr
+export function watchUserNametags(user) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      hz('user_nametags').findAll({user}).fetch().subscribe((userNametags) => {
-        let userNametag = null
+      userNametagsSubscr = hz('user_nametags').findAll({user}).watch()
+      .subscribe((userNametags) => {
         for (let i = 0; i < userNametags.length; i++) {
-          dispatch(addUserNametag(userNametags[i].room, userNametags[i].nametag))
-          if (userNametags[i].room === room) {
-            userNametag = userNametags[i].nametag
-          }
+          dispatch(addUserNametag(userNametags[i].room, userNametags[i]))
         }
-        resolve(userNametag)
+        resolve()
       }, reject)
-    }).catch(errorLog('Getting user nametag'))
+    }).catch(errorLog('Watching user nametags'))
+  }
+}
+
+export function unWatchUserNametags() {
+  return () => {
+    userNametagsSubscr.unsubscribe()
   }
 }
 
@@ -102,26 +106,26 @@ export function updateUserNametag(room, property, value) {
 * @returns
 *   none
 */
-let watchNotifSubscription
-export function watchNotifications(user) {
-  return dispatch =>
-    new Promise((resolve, reject) => {
-      hz('user_nametags').findAll({user}).fetch()
-        .subscribe((nametags) => resolve(nametags), reject)
-    }).then((nametags) => {
-      watchNotifSubscription = hz('messages')
-        .findAll(nametags).watch().subscribe((messages) => {
-          for (let i = 0; i < messages.length; i++ ) {
-            dispatch(
-              updateUserNametag(messages[i].room, 'latestMessage', messages[i].timestamp)
-            )
-          }
-        })
-    })
-}
-
-export function unWatchNotifications() {
-  return () => {
-    watchNotifSubscription.unsubscribe()
-  }
-}
+// let watchNotifSubscription
+// export function watchNotifications(user) {
+//   return dispatch =>
+//     new Promise((resolve, reject) => {
+//       hz('user_nametags').findAll({user}).fetch()
+//         .subscribe((nametags) => resolve(nametags), reject)
+//     }).then((nametags) => {
+//       watchNotifSubscription = hz('messages')
+//         .findAll(nametags).watch().subscribe((messages) => {
+//           for (let i = 0; i < messages.length; i++ ) {
+//             dispatch(
+//               updateUserNametag(messages[i].room, 'latestMessage', messages[i].timestamp)
+//             )
+//           }
+//         })
+//     })
+// }
+//
+// export function unWatchNotifications() {
+//   return () => {
+//     watchNotifSubscription.unsubscribe()
+//   }
+// }

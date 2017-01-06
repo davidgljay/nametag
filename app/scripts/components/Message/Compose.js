@@ -38,7 +38,7 @@ class Compose extends Component {
       let message = {
         text: this.state.message,
         timestamp: Date.now(),
-        author: this.context.userNametag,
+        author: this.context.userNametag.nametag,
         room: this.context.room,
         type: 'message',
       }
@@ -93,7 +93,7 @@ Compose.propTypes = {
 }
 Compose.contextTypes = {
   room: PropTypes.string.isRequired,
-  userNametag: PropTypes.string.isRequired,
+  userNametag: PropTypes.object.isRequired,
 }
 
 export default radium(Compose)
