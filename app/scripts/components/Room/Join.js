@@ -42,7 +42,7 @@ class Join extends Component {
   static propTypes = {
     room: PropTypes.string.isRequired,
     normsChecked: PropTypes.bool.isRequired,
-    userNametag: PropTypes.object,
+    nametag: PropTypes.object,
     addUserNametagCert: PropTypes.func.isRequired,
     removeUserNametagCert: PropTypes.func.isRequired,
     updateUserNametag: PropTypes.func.isRequired,
@@ -57,27 +57,38 @@ class Join extends Component {
 
   onJoinClick = () => {
     trackEvent('JOINING_ROOM')
+    const {room, nametag, joinRoom} = this.props
     // TODO: Add new user name to displayNames list.
-    this.props.joinRoom(this.props.room, this.props.userNametag, this.context.user.id)
+    joinRoom(room, nametag, this.context.user.id)
       .then(() => {
-        window.location = `/rooms/${this.props.room}`
+        window.location = `/rooms/${room}`
       })
   }
 
   render() {
     let join
+    const {
+      nametag,
+      appendUserArray,
+      removeUserNametagCert,
+      addUserNametagCert,
+      updateUserNametag,
+      room,
+      fetchCertificate,
+      providerAuth,
+    } = this.props
     if (this.context.user.id) {
       join =
         <div style={styles.join}>
           <h4>Edit Your Nametag For This Conversation</h4>
           <EditNametag
-            userNametag={this.props.userNametag}
+            nametag={nametag}
             userDefaults={this.context.user.data}
-            appendUserArray={this.props.appendUserArray}
-            addUserNametagCert={this.props.addUserNametagCert}
-            removeUserNametagCert={this.props.removeUserNametagCert}
-            updateUserNametag={this.props.updateUserNametag}
-            room={this.props.room}/>
+            appendUserArray={appendUserArray}
+            addUserNametagCert={addUserNametagCert}
+            removeUserNametagCert={removeUserNametagCert}
+            updateUserNametag={updateUserNametag}
+            room={room}/>
           <div style={styles.userCertificates}>
             <p style={styles.userCertificateText}>
               <FontIcon
@@ -89,8 +100,8 @@ class Join extends Component {
                 className="material-icons">arrow_upward</FontIcon>
             </p>
             <UserCertificates
-              fetchCertificate={this.props.fetchCertificate}
-              selectedCerts={this.props.userNametag.certificates}/>
+              fetchCertificate={fetchCertificate}
+              selectedCerts={nametag && nametag.certificates}/>
           </div>
           <br/>
           <RaisedButton
@@ -100,7 +111,7 @@ class Join extends Component {
             label='JOIN'/>
         </div>
     } else {
-      join = <Login providerAuth={this.props.providerAuth}/>
+      join = <Login providerAuth={providerAuth}/>
     }
     return join
   }

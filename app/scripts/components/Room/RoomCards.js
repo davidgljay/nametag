@@ -32,11 +32,20 @@ class RoomCards extends Component {
 
   componentDidMount() {
     trackEvent('ROOMS_PAGE_LOAD')
+    const {getAuth, watchUserNametags, watchNametag} = this.props
     this.props.subscribe()
+    getAuth().then((user) => {
+      return watchUserNametags(user.id)
+    }).then((userNametags) => {
+      for (let i = 0; i < userNametags.length; i++ ) {
+        watchNametag(userNametags[i].nametag)
+      }
+    })
   }
 
   componentWillUnmount() {
     this.props.unsubscribe()
+    this.props.unWatchUserNametags()
   }
 
   getChildContext() {
@@ -46,17 +55,19 @@ class RoomCards extends Component {
   }
 
   mapRoomCards(roomId) {
-    let room = this.props.rooms[roomId]
+    const {rooms, nametags, userNametags, addUserNametag} = this.props
+
+    // If a nametag has already been saved for this room then merge it in
+    const nametag = userNametags[roomId] && userNametags[roomId].nametag ?
+      {...nametags[userNametags[roomId].nametag], ...userNametags[roomId]}
+      : userNametags[roomId]
     return <RoomCard
-      room={room}
+      room={rooms[roomId]}
       id={roomId}
       key={roomId}
       style={styles.roomCard}
-      userNametag={this.props.userNametags[roomId]}
-      addUserNametag={this.props.addUserNametag}
-      watchUserNametags={this.props.watchUserNametags}
-      watchNametag={this.props.watchNametag}
-      unWatchNametag={this.props.unWatchNametag}/>
+      nametag={nametag}
+      addUserNametag={addUserNametag}/>
   }
 
   render() {

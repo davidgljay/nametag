@@ -16,43 +16,12 @@ class RoomCard extends Component {
     flipped: false,
     flipping: false,
     normsChecked: false,
-    checkingForNametag: false,
-  }
-
-  componentDidMount() {
-    if (!this.props.creating) {
-      this.checkForNametag()
-    }
   }
 
   componentWillUpdate(nextProps) {
-    if (!this.props.creating) {
-      this.checkForNametag()
-    }
     if (nextProps.flipped !== this.props.flipped &&
       nextProps.flipped !== this.state.flipped) {
       this.flip()
-    }
-  }
-
-  checkForNametag = () => {
-    if ( this.context.user &&
-      this.context.user.id &&
-      !this.props.userNametag &&
-      !this.state.checkingForNametag) {
-      this.setState({checkingForNametag: true})
-      this.props.watchUserNametags(this.props.id, this.context.user.id)
-        .then((userNametag) => {
-          this.setState({checkingForNametag: false})
-          if (!userNametag) {
-            return {room: this.props.id}
-          }
-          return this.props.watchNametag(userNametag)
-        })
-        .then((nametag) => {
-          return this.props.addUserNametag(this.props.id, nametag)
-        })
-        .catch((err) => {console.log('Error checking for nametag: ' + err)})
     }
   }
 
@@ -84,7 +53,7 @@ class RoomCard extends Component {
       hostNametag,
       creating,
       style,
-      userNametag,
+      nametag,
       addUserNametagCert,
       updateUserNametag,
       providerAuth,
@@ -100,8 +69,8 @@ class RoomCard extends Component {
             <CardMedia
               onClick={this.flip}>
               <img
-              style={styles.roomImage}
-              src={room.image}/>
+                style={styles.roomImage}
+                src={room.image}/>
             </CardMedia>
           }
           <div style={styles.roomInfo}>
@@ -161,7 +130,7 @@ class RoomCard extends Component {
             !creating &&
             <Join
               room={id}
-              userNametag={userNametag}
+              nametag={nametag}
               normsChecked={this.state.normsChecked}
               addUserNametagCert={addUserNametagCert}
               removeUserNametagCert={removeUserNametagCert}

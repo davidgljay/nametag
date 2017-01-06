@@ -60,7 +60,7 @@ export function watchUserNametags(user) {
         for (let i = 0; i < userNametags.length; i++) {
           dispatch(addUserNametag(userNametags[i].room, userNametags[i]))
         }
-        resolve()
+        resolve(userNametags)
       }, reject)
     }).catch(errorLog('Watching user nametags'))
   }

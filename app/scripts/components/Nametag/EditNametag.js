@@ -39,14 +39,17 @@ class EditNametag extends Component {
   }
 
   componentDidMount() {
-    const {userNametag, updateUserNametag, userDefaults, room} = this.props
+    const {nametag, updateUserNametag, userDefaults, room} = this.props
     updateUserNametag(room, 'room', room)
-    if (!userNametag.name
+    if (!nametag) {
+      return
+    }
+    if (!nametag.name
       && userDefaults.displayNames
       && userDefaults.displayNames.length >= 1) {
       updateUserNametag(room, 'name', userDefaults.displayNames[0])
     }
-    if (!userNametag.icon
+    if (!nametag.icon
       && userDefaults.iconUrls
       && userDefaults.iconUrls.length >= 1) {
       updateUserNametag(room, 'icon', userDefaults.iconUrls[0])
@@ -80,7 +83,7 @@ class EditNametag extends Component {
   }
 
   render() {
-    const {error, userDefaults, updateUserNametag, room, userNametag} = this.props
+    const {error, userDefaults, updateUserNametag, room} = this.props
 
     const {
       menuStyle,
@@ -94,7 +97,7 @@ class EditNametag extends Component {
       floatingLabelStyle,
     } = styles
 
-    let nametag = userNametag || {
+    const nametag = this.props.nametag || {
       name: '',
       bio: '',
       icon: '',
@@ -206,7 +209,7 @@ class EditNametag extends Component {
 
 EditNametag.propTyes = {
   dispatch: PropTypes.func.isRequired,
-  userNametag: PropTypes.object,
+  nametag: PropTypes.object,
   room: PropTypes.string.isRequired,
   isOver: PropTypes.bool.isRequired,
 }
