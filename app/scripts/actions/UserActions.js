@@ -107,7 +107,11 @@ export function appendUserArray(property, value) {
     return new Promise((resolve, reject) => {
       hz.currentUser().fetch().subscribe((user) => {
         let data = user.data
-        data[property].push(value)
+        if (data[property]) {
+          data[property].push(value)
+        } else {
+          data[property] = [value]
+        }
         hz('users').update({id: user.id, data}).subscribe((res) => {
           resolve(res)
         }, reject)

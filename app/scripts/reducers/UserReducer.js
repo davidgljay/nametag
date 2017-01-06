@@ -9,8 +9,14 @@ const user = (state = {}, action) => {
   case constants.USER_SETTING:
     return Object.assign({}, state, {[action.option]: action.value})
   case constants.APPEND_USER_ARRAY:
-    const data = Object.assign({}, state.data,
-      {[action.property]: state.data[action.property].concat(action.value)})
+    let data
+    if (state.data[action.property]) {
+      data = Object.assign({}, state.data,
+        {[action.property]: state.data[action.property].concat(action.value)})
+    } else {
+      data = Object.assign({}, state.data,
+        {[action.property]: [action.value]})
+    }
     return Object.assign({}, state, {data})
   default:
     return state

@@ -46,7 +46,7 @@ template = "collection('user_nametags').anyRead()"
 [groups.default.rules.write_certificates]
 template = "collection('certificates').anyWrite()"
 [groups.authenticated.rules.store_message]
-template = "collection('messages').store({author: userId(), text: any(), room: any(), timestamp: any(), type: any()})"
+template = "collection('messages').store({author: any(), text: any(), room: any(), timestamp: any(), type: any()})"
 [groups.default.rules.write_current_user]
 template = "collection('users').update({id: userId(), data: any()})"
 [groups.default.rules.write_nametags]

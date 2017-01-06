@@ -6,9 +6,8 @@ const onMessage = (conn) => (err, message) => {
     console.err(err)
     return
   }
-
-  r.db('nametag').table('user_nametags').filter({room: message.room})
-    .update({latestMessage: message.timestamp}).run(conn)
+  r.db('nametag').table('user_nametags').filter({room: message.new_val.room})
+    .update({latestMessage: message.new_val.timestamp}).run(conn)
 }
 
 module.exports = (conn) => {
