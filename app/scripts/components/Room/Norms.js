@@ -39,7 +39,7 @@ const Norms = (props) =>
               primaryText={norm}
               innerDivStyle={
                 props.showChecks ? styles.normText
-                : {...styles.normText, padding: 7}
+                : {...styles.normText, padding: 7, fontSize: 14}
               }
               leftIcon={props.showChecks ? <Check style={styles.check}/> : <div/>}
               style={styles.norm}/>

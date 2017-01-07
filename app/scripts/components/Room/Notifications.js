@@ -1,23 +1,26 @@
 import React from 'react'
+import {List, ListItem} from 'material-ui/List'
 
 const Notifications = ({userNametags, rooms}) =>
   <div>
   <div style={styles.header}>Rooms</div>
+    <List>
     {Object.keys(userNametags).map((roomId) => {
       const room = rooms[roomId]
       const userNametag = userNametags[roomId]
 
       const newMessages = userNametag.latestMessage > userNametag.latestVisit ?
         styles.newMessages : styles.noNew
-      return room && <div style={styles.notification} key={roomId}>
-        <a href={`/rooms/${roomId}`} style={styles.link}>
-          <div>
-            <img src={room.image} style={{...styles.roomImage, ...newMessages}}/>
-          </div>
-          <div style={newMessages}>{room.title}</div>
-        </a>
-        </div>
+      return room && <ListItem innerDivStyle={styles.notification} key={roomId}>
+          <a href={`/rooms/${roomId}`} style={styles.link}>
+            <div>
+              <img src={room.image} style={{...styles.roomImage, ...newMessages}}/>
+            </div>
+            <div style={newMessages}>{room.title}</div>
+          </a>
+        </ListItem>
     })}
+    </List>
   </div>
 
 export default Notifications
@@ -36,6 +39,7 @@ const styles = {
   },
   notification: {
     margin: 5,
+    padding: 5,
   },
   roomImage: {
     width: 30,
