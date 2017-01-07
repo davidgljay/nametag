@@ -11,6 +11,7 @@ import Notifications from './Notifications'
 import Nametags from '../../containers/Nametag/NametagsContainer'
 import Messages from '../../containers/Message/MessagesContainer'
 import Compose from '../Message/Compose'
+import NavDrawer from '../Utils/NavDrawer'
 
 class Room extends Component {
 
@@ -90,20 +91,36 @@ class Room extends Component {
         userNametag && room ?
           <div>
       	    <div style={styles.header}>
-                  <IconButton
-                    style={styles.close}>
-                    <FontIcon
-                      className="material-icons"
-                      onClick={this.closeRoom}
-                      style={styles.closeIcon}>
-                     close
-                   </FontIcon>
-                  </IconButton>
-                  <h3 style={styles.title}>{room.title}</h3>
-                <div style={styles.description}>
-                  {room.description}
-                </div>
+              <IconButton
+                style={styles.drawer}>
+                <FontIcon
+                  className="material-icons"
+                  onClick={()=>this.setState({showDrawer: true})}
+                  style={styles.closeIcon}>
+                 menu
+               </FontIcon>
+              </IconButton>
+              <IconButton
+                style={styles.close}>
+                <FontIcon
+                  className="material-icons"
+                  onClick={this.closeRoom}
+                  style={styles.closeIcon}>
+                 close
+               </FontIcon>
+              </IconButton>
+              <h3 style={styles.title}>{room.title}</h3>
+              <div style={styles.description}>
+                {room.description}
+              </div>
             </div>
+            <NavDrawer
+              open={this.state.showDrawer}
+              logout={this.props.logout}
+              setting={this.props.setting}
+              user={this.props.user}
+              setOpen={(showDrawer)=>this.setState({showDrawer})}/>
+              />
             <div>
               <div style={{...styles.leftBar, ...expanded}}>
                 <div style={styles.leftBarContent}>
@@ -251,6 +268,11 @@ const styles = {
     fontSize: 12,
     width: 15,
     height: 15,
+  },
+  drawer: {
+    float: 'left',
+    padding: 0,
+    cursor: 'pointer',
   },
   leftBar: {
     minHeight: 400,

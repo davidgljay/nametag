@@ -7,6 +7,7 @@ import {
   postUpdateUserNametag,
 } from '../../actions/UserNametagActions'
 import {postMessage, addMessage} from '../../actions/MessageActions'
+import {logout, setting} from '../../actions/UserActions'
 
 const mapStateToProps = (state) => {
   return {
@@ -26,6 +27,8 @@ const mapDispatchToProps = (dispatch) => {
     postUpdateUserNametag,
     postMessage,
     addMessage,
+    logout,
+    setting,
   ]
   return actions.reduce((props, action) => {
     props[action.name] = (...args) => dispatch(action.apply(this, args))

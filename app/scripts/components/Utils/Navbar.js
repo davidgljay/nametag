@@ -1,11 +1,10 @@
 import React, {Component, PropTypes} from 'react'
 import AppBar from 'material-ui/AppBar'
 import FlatButton from 'material-ui/FlatButton'
-import Drawer from 'material-ui/Drawer'
-import MenuItem from 'material-ui/MenuItem'
 import {indigo500} from 'material-ui/styles/colors'
 import radium from 'radium'
 import {mobile} from '../../../styles/sizes'
+import NavDrawer from './NavDrawer'
 
 const onCreateRoomClick = () => {
   window.location = '/rooms/create'
@@ -56,24 +55,12 @@ class Navbar extends Component {
         onTitleTouchTap={onHomeClick}
         iconElementRight={auth}
         onLeftIconButtonTouchTap={() => this.setState({open: true})}/>
-      <Drawer
-        docked={false}
-        width={200}
+      <NavDrawer
         open={this.state.open}
-        style={styles.drawer}
-        onRequestChange={(open) => this.setState({open})}>
-        <div style={styles.drawerTitle}><h2>Nametag</h2></div>
-          {
-          this.props.user.id ?
-            <div>
-              <MenuItem onClick={onCreateRoomClick}>Create Room</MenuItem>
-              <MenuItem onClick={onCreateCertClick}>Create Certificate</MenuItem>
-              <MenuItem
-                onClick={() => this.props.logout()}>Log Out</MenuItem>
-            </div>
-            : <MenuItem onClick={() => this.props.setting('showLogin', true)}>Log In</MenuItem>
-          }
-      </Drawer>
+        logout={this.props.logout}
+        setting={this.props.setting}
+        user={this.props.user}
+        setOpen={(open)=>this.setState({open})}/>
     </div>
   }
 }
