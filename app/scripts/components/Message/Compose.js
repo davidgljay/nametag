@@ -53,12 +53,16 @@ class Compose extends Component {
 
 
   render() {
-    // TODO: Add GIFs, image upload, emoticons
+    // TODO: Add GIFs, image upload
+
+    // Workaround for mobile sizing since Radium doesn't appear to work.
+    const selectorStyle = window.innerWidth < 800 ?
+      {...styles.selectorStyle, ...styles.mobileSelector} : styles.selectorStyle
     return <div style={styles.compose}>
       <div style={styles.spacer}/>
       <EmojiPicker
         show={this.state.showEmoji}
-        selectorStyle={styles.selectorStyle}
+        selectorStyle={selectorStyle}
         selector={()=>null}
         handleEmoji={this.handleEmoji}/>
       <IconButton
@@ -136,6 +140,10 @@ const styles = {
     padding: 5,
     border: '1px solid #ccc',
     borderRadius: 3,
+  },
+  mobileSelector: {
+    left: 20,
+    width: 'inherit',
   },
   sendButton: {
     minWidth: 45,
