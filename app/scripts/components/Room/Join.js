@@ -59,7 +59,6 @@ class Join extends Component {
   state = {alert: null}
 
   onJoinClick = () => {
-    trackEvent('JOINING_ROOM')
     const {room, nametag, joinRoom, normsChecked} = this.props
     // TODO: Add new user name to displayNames list.
     if (normsChecked) {
