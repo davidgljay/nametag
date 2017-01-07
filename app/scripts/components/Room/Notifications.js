@@ -9,9 +9,8 @@ const Notifications = ({userNametags, rooms, roomId}) =>
       const userNametag = userNametags[id]
 
       const newMessages = userNametag.latestMessage > userNametag.latestVisit ?
-        styles.newMessages : styles.noNew
-      return room && room.id !== id &&
-      <ListItem innerDivStyle={styles.notification} key={id}>
+        styles.newMessages : styles.noNewMessages
+      return room && roomId !== id && <ListItem innerDivStyle={styles.notification} key={id}>
           <a href={`/rooms/${roomId}`} style={styles.link}>
             <div>
               <img src={room.image} style={{...styles.roomImage, ...newMessages}}/>
@@ -29,7 +28,7 @@ const styles = {
   newMessages: {
     color: '#FFF',
   },
-  noNew: {
+  noNewMessages: {
     opacity: 0.5,
   },
   notification: {
