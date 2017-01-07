@@ -31,6 +31,13 @@ function collect(connect, monitor) {
 
 class EditNametag extends Component {
 
+  static propTyes = {
+    dispatch: PropTypes.func.isRequired,
+    userNametag: PropTypes.object.isRequired,
+    room: PropTypes.string.isRequired,
+    isOver: PropTypes.bool.isRequired,
+  }
+
   state = {
     alert: null,
     alertType: null,
@@ -39,17 +46,14 @@ class EditNametag extends Component {
   }
 
   componentDidMount() {
-    const {nametag, updateUserNametag, userDefaults, room} = this.props
+    const {userNametag, updateUserNametag, userDefaults, room} = this.props
     updateUserNametag(room, 'room', room)
-    if (!nametag) {
-      return
-    }
-    if (!nametag.name
+    if (!userNametag.name
       && userDefaults.displayNames
       && userDefaults.displayNames.length >= 1) {
       updateUserNametag(room, 'name', userDefaults.displayNames[0])
     }
-    if (!nametag.icon
+    if ( !userNametag.icon
       && userDefaults.iconUrls
       && userDefaults.iconUrls.length >= 1) {
       updateUserNametag(room, 'icon', userDefaults.iconUrls[0])
@@ -83,7 +87,7 @@ class EditNametag extends Component {
   }
 
   render() {
-    const {error, userDefaults, updateUserNametag, room} = this.props
+    const {error, userDefaults, updateUserNametag, room, userNametag} = this.props
 
     const {
       menuStyle,
@@ -97,7 +101,7 @@ class EditNametag extends Component {
       floatingLabelStyle,
     } = styles
 
-    const nametag = this.props.nametag || {
+    let nametag = userNametag || {
       name: '',
       bio: '',
       icon: '',
@@ -108,9 +112,9 @@ class EditNametag extends Component {
       chooseAndUpload: true,
       accept: '.jpg,.jpeg,.png',
       dataType: 'json',
-      onChooseFile: () => {
+      chooseFile: () => {
         trackEvent('UPLOAD_CUSTOM_ICON')
-        this.setState({showMenu: false})
+        this.setState({showMenu: false, loadingImage: true})
       },
       uploadSuccess: this.onUpload,
       uploadError: errorLog('Uploading Room Image'),
@@ -125,7 +129,7 @@ class EditNametag extends Component {
           <Card style={styles.editNametag} className="profile">
             <div style={styles.cardInfo}>
               {
-                this.state.loading ?
+                this.state.loadingImage ?
                 <CircularProgress />
                 :  <IconMenu
                 iconButtonElement= {
@@ -207,12 +211,7 @@ class EditNametag extends Component {
   }
 }
 
-EditNametag.propTyes = {
-  dispatch: PropTypes.func.isRequired,
-  nametag: PropTypes.object,
-  room: PropTypes.string.isRequired,
-  isOver: PropTypes.bool.isRequired,
-}
+EditNametag
 
 export default DropTarget(dragTypes.certificate, nametagTarget, collect)(EditNametag)
 
