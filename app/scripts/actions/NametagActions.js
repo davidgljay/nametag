@@ -114,4 +114,3 @@ export function putNametag(nametag) {
     }).catch(errorLog('Adding user nametag'))
   }
 }
-

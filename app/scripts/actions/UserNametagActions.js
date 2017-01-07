@@ -97,35 +97,10 @@ export function updateUserNametag(room, property, value) {
   }
 }
 
-/*
-* Watches all rooms that the user has entered for new messages
-*
-*@params
-*    none
-*
-* @returns
-*   none
-*/
-// let watchNotifSubscription
-// export function watchNotifications(user) {
-//   return dispatch =>
-//     new Promise((resolve, reject) => {
-//       hz('user_nametags').findAll({user}).fetch()
-//         .subscribe((nametags) => resolve(nametags), reject)
-//     }).then((nametags) => {
-//       watchNotifSubscription = hz('messages')
-//         .findAll(nametags).watch().subscribe((messages) => {
-//           for (let i = 0; i < messages.length; i++ ) {
-//             dispatch(
-//               updateUserNametag(messages[i].room, 'latestMessage', messages[i].timestamp)
-//             )
-//           }
-//         })
-//     })
-// }
-//
-// export function unWatchNotifications() {
-//   return () => {
-//     watchNotifSubscription.unsubscribe()
-//   }
-// }
+export function postUpdateUserNametag(id, property, value) {
+  return () => new Promise((resolve, reject) => {
+    hz('user_nametags').update({id, [property]: value}).subscribe(() => {
+      resolve()
+    }, reject)
+  }).catch(errorLog('Updating user_nametag'))
+}

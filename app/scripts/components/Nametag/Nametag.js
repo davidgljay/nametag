@@ -33,7 +33,7 @@ const styles = {
 
 
 class Nametag extends Component {
-  componentWillMount() {
+  componentDidMount() {
     if (!this.props.name) {
       this.props.watchNametag(this.props.id)
     }

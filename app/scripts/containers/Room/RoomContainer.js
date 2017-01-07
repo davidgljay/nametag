@@ -1,28 +1,29 @@
 import { connect } from 'react-redux'
 import component from '../../components/Room/Room'
-import {watchRoom, unWatchRoom, addRoomMessage} from '../../actions/RoomActions'
+import {fetchRooms, watchRoom, unWatchRoom, addRoomMessage} from '../../actions/RoomActions'
 import {
   watchUserNametags,
   unWatchUserNametags,
-  updateUserNametag,
+  postUpdateUserNametag,
 } from '../../actions/UserNametagActions'
 import {postMessage, addMessage} from '../../actions/MessageActions'
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = (state) => {
   return {
-    room: state.rooms[props.params.roomId],
+    rooms: state.rooms,
     user: state.user,
-    userNametag: state.userNametags[props.params.roomId],
+    userNametags: state.userNametags,
   }
 }
 const mapDispatchToProps = (dispatch) => {
   const actions = [
+    fetchRooms,
     watchRoom,
     unWatchRoom,
     addRoomMessage,
     watchUserNametags,
     unWatchUserNametags,
-    updateUserNametag,
+    postUpdateUserNametag,
     postMessage,
     addMessage,
   ]

@@ -3,6 +3,7 @@ import errorLog from '../utils/errorLog'
 import constants from '../constants'
 import {addNametag, putNametag} from './NametagActions'
 import {putUserNametag} from './UserNametagActions'
+import _ from 'lodash'
 
 let roomWatches = {}
 let roomSubscription
@@ -146,6 +147,28 @@ export function joinRoom(roomId, nametag, userId) {
       .then(() => {
         return nametagId
       }).catch(errorLog('Error joining room'))
+  }
+}
+
+/*
+* Fetch rooms
+* @params
+*   ids - An array of room Ids to be fetched
+*
+* @returns
+*   Promise
+*/
+export function fetchRooms(ids) {
+  return (dispatch) => {
+    return new Promise((resolve, reject) => {
+      hz('rooms').findAll(..._.uniq(ids).map((id) => {return {id}})).fetch()
+      .subscribe((rooms) => {
+        for (let i = 0; i < rooms.length; i++ ) {
+          dispatch(addRoom(rooms[i], rooms[i].id))
+        }
+        resolve(rooms)
+      }, reject)
+    }).catch(errorLog('Error fetching rooms'))
   }
 }
 

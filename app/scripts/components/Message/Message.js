@@ -103,6 +103,8 @@ const styles = {
   },
   iconImg: {
     borderRadius: 25,
+    width: 50,
+    height: 50,
   },
   name: {
     fontWeight: 'bold',

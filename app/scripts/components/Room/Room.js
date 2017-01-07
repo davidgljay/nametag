@@ -7,6 +7,7 @@ import {mobile} from '../../../styles/sizes'
 import radium, {keyframes} from 'radium'
 
 import Norms from './Norms'
+import Notifications from './Notifications'
 import Nametags from '../../containers/Nametag/NametagsContainer'
 import Messages from '../../containers/Message/MessagesContainer'
 import Compose from '../Message/Compose'
@@ -21,22 +22,34 @@ class Room extends Component {
   }
 
   getChildContext() {
-    let norms = this.props.room ? this.props.room.norms : []
+    const {room, params, userNametags} = this.props
+    let norms = room ? room.norms : []
     return {
-      userNametag: this.props.userNametag,
-      room: this.props.params.roomId,
+      userNametag: userNametags[params.roomId],
+      room: params.roomId,
       norms,
     }
   }
 
   componentDidMount() {
-    this.props.watchRoom(this.props.params.roomId)
+    const roomId = this.props.params.roomId
+    this.props.watchRoom(roomId)
     this.watchUserNametags(this.props)
   }
 
   watchUserNametags(props) {
-    if (!props.userNametag && props.user.id) {
+    // Get all of the users' nametags and all of the rooms for those nametags
+    // so that the user can be notified if there is activity in another room.
+    if (!props.userNametags || !props.userNametags[props.params.roomId] && props.user.id) {
       props.watchUserNametags(props.user.id)
+        .then((userNametags) => {
+          props.fetchRooms(userNametags.map((n) => n.room))
+          for (let i = 0; i < userNametags.length; i++ ) {
+            if (userNametags[i].room === props.params.roomId) {
+              this.props.postUpdateUserNametag(userNametags[i].id, 'latestVisit', Date.now())
+            }
+          }
+        })
     }
   }
 
@@ -45,7 +58,8 @@ class Room extends Component {
   }
 
   componentWillUnmount() {
-    this.props.unWatchRoom(this.props.params.roomId)
+    const roomId = this.props.params.roomId
+    this.props.unWatchRoom(roomId)
     this.props.unWatchUserNametags()
   }
 
@@ -58,11 +72,16 @@ class Room extends Component {
   }
 
   render() {
+    const {rooms, params, postMessage, addMessage, addRoomMessage, userNametags} = this.props
+
+    const room = rooms[params.roomId]
+    const userNametag = userNametags[params.roomId]
+
     let expanded = this.state.leftBarExpanded ? styles.expanded : styles.collapsed
     expanded = window.innerWidth < 800 ? expanded : {}
     return  <div style={styles.roomContainer}>
       {
-        this.props.userNametag && this.props.room ?
+        userNametag && room ?
           <div>
       	    <div style={styles.header}>
                   <IconButton
@@ -74,18 +93,22 @@ class Room extends Component {
                      close
                    </FontIcon>
                   </IconButton>
-                  <h3 style={styles.title}>{this.props.room.title}</h3>
+                  <h3 style={styles.title}>{room.title}</h3>
                 <div style={styles.description}>
-                  {this.props.room.description}
+                  {room.description}
                 </div>
             </div>
             <div>
               <div style={{...styles.leftBar, ...expanded}}>
                 <div style={styles.leftBarContent}>
                   <div style={styles.norms}>
-                    <Norms norms={this.props.room.norms}/>
+                    <Norms norms={room.norms}/>
                   </div>
-                   <Nametags room={this.props.params.roomId} mod={this.props.room.mod}/>
+                  <Notifications
+                    userNametags={userNametags}
+                    rooms={rooms}
+                    roomId={params.roomId}/>
+                  <Nametags room={params.roomId} mod={room.mod}/>
                 </div>
                 <div style={styles.leftBarChevron}>
                   <FontIcon
@@ -98,14 +121,14 @@ class Room extends Component {
               </div>
               {
                 <Messages
-                  room={this.props.params.roomId}/>
+                  room={params.roomId}/>
               }
             </div>
             {
               <Compose
-                postMessage={this.props.postMessage}
-                addMessage={this.props.addMessage}
-                addRoomMessage={this.props.addRoomMessage}/>
+                postMessage={postMessage}
+                addMessage={addMessage}
+                addRoomMessage={addRoomMessage}/>
             }
           </div>
           :
