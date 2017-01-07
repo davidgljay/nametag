@@ -119,8 +119,7 @@ class Room extends Component {
               logout={this.props.logout}
               setting={this.props.setting}
               user={this.props.user}
-              setOpen={(showDrawer)=>this.setState({showDrawer})}/>
-              />
+              setOpen={(showDrawer)=>{this.setState({showDrawer})}}/>/>
             <div>
               <div style={{...styles.leftBar, ...expanded}}>
                 <div style={styles.leftBarContent}>
@@ -138,14 +137,17 @@ class Room extends Component {
                       <Norms norms={room.norms}/>
                     </div>
                   }
-                  <div
-                    style={styles.leftNavHeader}
-                    onClick={this.toggleLeftBarSection('rooms')}>
-                    {
-                      this.state.toggles.rooms ? '- ' : '+ '
-                    }
-                    Rooms
-                  </div>
+                  {
+                    userNametags && Object.keys(userNametags).length > 1 &&
+                    <div
+                      style={styles.leftNavHeader}
+                      onClick={this.toggleLeftBarSection('rooms')}>
+                      {
+                        this.state.toggles.rooms ? '- ' : '+ '
+                      }
+                      Rooms
+                    </div>
+                  }
                   {
                       this.state.toggles.rooms &&
                       <Notifications

@@ -1,16 +1,17 @@
 import React from 'react'
 import {List, ListItem} from 'material-ui/List'
 
-const Notifications = ({userNametags, rooms}) =>
+const Notifications = ({userNametags, rooms, roomId}) =>
   <div>
     <List>
-    {Object.keys(userNametags).map((roomId) => {
-      const room = rooms[roomId]
-      const userNametag = userNametags[roomId]
+    {Object.keys(userNametags).map((id) => {
+      const room = rooms[id]
+      const userNametag = userNametags[id]
 
       const newMessages = userNametag.latestMessage > userNametag.latestVisit ?
         styles.newMessages : styles.noNew
-      return room && <ListItem innerDivStyle={styles.notification} key={roomId}>
+      return room && room.id !== id &&
+      <ListItem innerDivStyle={styles.notification} key={id}>
           <a href={`/rooms/${roomId}`} style={styles.link}>
             <div>
               <img src={room.image} style={{...styles.roomImage, ...newMessages}}/>
