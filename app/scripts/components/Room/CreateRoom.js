@@ -15,6 +15,8 @@ class CreateRoom extends Component {
       description: '',
     },
     hostNametag: {
+      name: '',
+      bio: '',
       certificates: [],
     },
     image: '',
