@@ -53,11 +53,11 @@ class EditNametag extends Component {
       && userDefaults.displayNames.length >= 1) {
       updateUserNametag(room, 'name', userDefaults.displayNames[0])
     }
-    if (!userNametag || !userNametag.icon
-      && userDefaults.iconUrls
-      && userDefaults.iconUrls.length >= 1) {
-      updateUserNametag(room, 'icon', userDefaults.iconUrls[0])
-    }
+    // if (!userNametag || !userNametag.icon
+    //   && userDefaults.iconUrls
+    //   && userDefaults.iconUrls.length > 0) {
+    //   updateUserNametag(room, 'icon', userDefaults.iconUrls[0])
+    // }
   }
 
   updateNametagProperty = (property) => {
