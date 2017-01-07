@@ -17,23 +17,20 @@ const mapStateToProps = (state) => {
   }
 }
 const mapDispatchToProps = (dispatch) => {
-  const actions = [
-    fetchRooms,
-    watchRoom,
-    unWatchRoom,
-    addRoomMessage,
-    watchUserNametags,
-    unWatchUserNametags,
-    postUpdateUserNametag,
-    postMessage,
-    addMessage,
-    logout,
-    setting,
-  ]
-  return actions.reduce((props, action) => {
-    props[action.name] = (...args) => dispatch(action.apply(this, args))
-    return props
-  }, {})
+  const disp = (func) => (...args) => dispatch(func.apply(this, args))
+  return {
+    fetchRooms: disp(fetchRooms),
+    watchRoom: disp(watchRoom),
+    unWatchRoom: disp(unWatchRoom),
+    addRoomMessage: disp(addRoomMessage),
+    watchUserNametags: disp(watchUserNametags),
+    unWatchUserNametags: disp(unWatchUserNametags),
+    postUpdateUserNametag: disp(postUpdateUserNametag),
+    postMessage: disp(postMessage),
+    addMessage: disp(addMessage),
+    logout: disp(logout),
+    setting: disp(setting),
+  }
 }
 
 const Room = connect(
