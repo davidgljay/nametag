@@ -13,6 +13,8 @@ import Messages from '../../containers/Message/MessagesContainer'
 import Compose from '../Message/Compose'
 import NavDrawer from '../Utils/NavDrawer'
 
+let loadingNametags = false
+
 class Room extends Component {
 
   state = {
@@ -44,7 +46,6 @@ class Room extends Component {
   showPresence(nametagId) {
     this.props.updateNametag(nametagId, 'lastPresent', Date.now())
     this.setState({presenceTimer: setInterval(() => {
-      console.log('Updating nametag presence')
       this.props.updateNametag(nametagId, 'lastPresent', Date.now())
     }, 15000),
   })
@@ -53,7 +54,9 @@ class Room extends Component {
   watchUserNametags = (props) => {
     // Get all of the users' nametags and all of the rooms for those nametags
     // so that the user can be notified if there is activity in another room.
-    if (!props.userNametags || !props.userNametags[props.params.roomId] && props.user.id) {
+    if (!props.userNametags || !props.userNametags[props.params.roomId]
+      && props.user.id && !loadingNametags) {
+      loadingNametags = true
       props.watchUserNametags(props.user.id)
         .then((userNametags) => {
           props.fetchRooms(userNametags.map((n) => n.room))
@@ -151,8 +154,6 @@ class Room extends Component {
                       <Norms norms={room.norms}/>
                     </div>
                   }
-                  {
-                    userNametags && Object.keys(userNametags).length > 1 &&
                     <div
                       style={styles.leftNavHeader}
                       onClick={this.toggleLeftBarSection('rooms')}>
@@ -161,7 +162,6 @@ class Room extends Component {
                       }
                       Rooms
                     </div>
-                  }
                   {
                       this.state.toggles.rooms &&
                       <Notifications
