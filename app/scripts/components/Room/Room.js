@@ -13,12 +13,14 @@ import Messages from '../../containers/Message/MessagesContainer'
 import Compose from '../Message/Compose'
 
 class Room extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      leftBarExpanded: false,
-    }
-    this.watchUserNametags = this.watchUserNametags.bind(this)
+
+  state = {
+    leftBarExpanded: false,
+    toggles: {
+      norms: true,
+      rooms: true,
+      nametags: true,
+    },
   }
 
   getChildContext() {
@@ -37,7 +39,7 @@ class Room extends Component {
     this.watchUserNametags(this.props)
   }
 
-  watchUserNametags(props) {
+  watchUserNametags = (props) => {
     // Get all of the users' nametags and all of the rooms for those nametags
     // so that the user can be notified if there is activity in another room.
     if (!props.userNametags || !props.userNametags[props.params.roomId] && props.user.id) {
@@ -63,12 +65,16 @@ class Room extends Component {
     this.props.unWatchUserNametags()
   }
 
-  closeRoom() {
+  closeRoom = () => {
     window.location = '/rooms/'
   }
 
-  toggleLeftBar() {
+  toggleLeftBar = () => {
     this.setState({leftBarExpanded: !this.state.leftBarExpanded})
+  }
+
+  toggleLeftBarSection = (section) => () => {
+    this.setState({toggles: {...this.state.toggles, [section]: !this.state.toggles[section]}})
   }
 
   render() {
@@ -101,14 +107,47 @@ class Room extends Component {
             <div>
               <div style={{...styles.leftBar, ...expanded}}>
                 <div style={styles.leftBarContent}>
-                  <div style={styles.norms}>
-                    <Norms norms={room.norms}/>
+                  <div
+                    style={styles.leftNavHeader}
+                    onClick={this.toggleLeftBarSection('norms')}>
+                    {
+                      this.state.toggles.norms ? '- ' : '+ '
+                    }
+                    Norms
                   </div>
-                  <Notifications
-                    userNametags={userNametags}
-                    rooms={rooms}
-                    roomId={params.roomId}/>
-                  <Nametags room={params.roomId} mod={room.mod}/>
+                  {
+                    this.state.toggles.norms &&
+                    <div style={styles.norms}>
+                      <Norms norms={room.norms}/>
+                    </div>
+                  }
+                  <div
+                    style={styles.leftNavHeader}
+                    onClick={this.toggleLeftBarSection('rooms')}>
+                    {
+                      this.state.toggles.rooms ? '- ' : '+ '
+                    }
+                    Rooms
+                  </div>
+                  {
+                      this.state.toggles.rooms &&
+                      <Notifications
+                        userNametags={userNametags}
+                        rooms={rooms}
+                        roomId={params.roomId}/>
+                  }
+                  <div
+                    style={styles.leftNavHeader}
+                    onClick={this.toggleLeftBarSection('nametags')}>
+                    {
+                      this.state.toggles.nametags ? '- ' : '+ '
+                    }
+                    Nametags
+                  </div>
+                  {
+                    this.state.toggles.nametags &&
+                    <Nametags room={params.roomId} mod={room.mod}/>
+                  }
                 </div>
                 <div style={styles.leftBarChevron}>
                   <FontIcon
@@ -178,6 +217,14 @@ const spinOut = keyframes({
 const styles = {
   roomContainer: {
     overflowX: 'hidden',
+  },
+  leftNavHeader: {
+    fontWeight: 800,
+    fontSize: 16,
+    color: '#FFF',
+    marginTop: 15,
+    marginBottom: 5,
+    cursor: 'pointer',
   },
   header: {
     borderBottom: '3px solid ' + indigo500,

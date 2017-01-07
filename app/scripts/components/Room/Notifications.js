@@ -3,7 +3,6 @@ import {List, ListItem} from 'material-ui/List'
 
 const Notifications = ({userNametags, rooms}) =>
   <div>
-  <div style={styles.header}>Rooms</div>
     <List>
     {Object.keys(userNametags).map((roomId) => {
       const room = rooms[roomId]
@@ -26,11 +25,6 @@ const Notifications = ({userNametags, rooms}) =>
 export default Notifications
 
 const styles = {
-  header: {
-    fontWeight: 800,
-    fontSize: 14,
-    color: '#FFF',
-  },
   newMessages: {
     color: '#FFF',
   },
