@@ -48,12 +48,12 @@ class EditNametag extends Component {
   componentDidMount() {
     const {userNametag, updateUserNametag, userDefaults, room} = this.props
     updateUserNametag(room, 'room', room)
-    if (!userNametag.name
+    if (!userNametag || !userNametag.name
       && userDefaults.displayNames
       && userDefaults.displayNames.length >= 1) {
       updateUserNametag(room, 'name', userDefaults.displayNames[0])
     }
-    if ( !userNametag.icon
+    if (!userNametag ||  !userNametag.icon
       && userDefaults.iconUrls
       && userDefaults.iconUrls.length >= 1) {
       updateUserNametag(room, 'icon', userDefaults.iconUrls[0])
