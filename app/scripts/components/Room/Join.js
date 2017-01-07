@@ -89,7 +89,7 @@ class Join extends Component {
           <h4>Edit Your Nametag For This Conversation</h4>
           <EditNametag
             userNametag={nametag}
-            userDefaults={this.context.user.data}
+            userDefaults={this.context.user.data || {}}
             appendUserArray={appendUserArray}
             addUserNametagCert={addUserNametagCert}
             removeUserNametagCert={removeUserNametagCert}

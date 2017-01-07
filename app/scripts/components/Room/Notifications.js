@@ -11,7 +11,7 @@ const Notifications = ({userNametags, rooms, roomId}) =>
       const newMessages = userNametag.latestMessage > userNametag.latestVisit ?
         styles.newMessages : styles.noNewMessages
       return room && roomId !== id && <ListItem innerDivStyle={styles.notification} key={id}>
-          <a href={`/rooms/${roomId}`} style={styles.link}>
+          <a href={`/rooms/${id}`} style={styles.link}>
             <div>
               <img src={room.image} style={{...styles.roomImage, ...newMessages}}/>
             </div>

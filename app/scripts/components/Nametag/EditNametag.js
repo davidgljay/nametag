@@ -53,7 +53,7 @@ class EditNametag extends Component {
       && userDefaults.displayNames.length >= 1) {
       updateUserNametag(room, 'name', userDefaults.displayNames[0])
     }
-    if (!userNametag ||  !userNametag.icon
+    if (!userNametag || !userNametag.icon
       && userDefaults.iconUrls
       && userDefaults.iconUrls.length >= 1) {
       updateUserNametag(room, 'icon', userDefaults.iconUrls[0])
@@ -149,7 +149,7 @@ class EditNametag extends Component {
                 }}
                 menuStyle={menuStyle}>
                 {
-                    userDefaults.iconUrls.map((url) =>
+                    userDefaults.iconUrls && userDefaults.iconUrls.map((url) =>
                       <MenuItem
                         key={url}
                         style={menuItemStyle}
@@ -174,7 +174,7 @@ class EditNametag extends Component {
                     filter={AutoComplete.noFilter}
                     openOnFocus={true}
                     disableFocusRipple={false}
-                    dataSource={userDefaults.displayNames}
+                    dataSource={userDefaults.displayNames || []}
                     errorText={error && error.nameError}
                     onUpdateInput={(name) => updateUserNametag(room, 'name', name)}
                     animated={true}
