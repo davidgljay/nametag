@@ -10,7 +10,10 @@ import {indigo500} from 'material-ui/styles/colors'
 class CreateRoom extends Component {
 
   state = {
-    room: {},
+    room: {
+      title: '',
+      description: '',
+    },
     hostNametag: {
       certificates: [],
     },

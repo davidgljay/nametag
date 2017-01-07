@@ -7,9 +7,9 @@ const TitleForm = (props) =>
       style={styles.textfield}
       value={props.title}
       errorText={props.error && props.error.titleError}
-      onChange={(e) => props.updateRoom('title', e.target.value)}
-      floatingLabelText="Title"
-      /><br/>
+      onChange={(e) => props.updateRoom('title', e.target.value.slice(0, 40))}
+      floatingLabelText="Title" />
+    <div style={styles.counter}>{40 - props.title.length}</div><br/>
     <TextField
       style={styles.textfield}
       value={props.desc}
@@ -34,5 +34,10 @@ const styles = {
   },
   descriptionField: {
     fontSize: 16,
+  },
+  counter: {
+    marginLeft: 240,
+    fontSize: 12,
+    color: '#008000',
   },
 }
