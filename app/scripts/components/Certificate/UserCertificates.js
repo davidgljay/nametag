@@ -31,7 +31,7 @@ class UserCertificates extends Component {
 
 
   render() {
-    return <div id="certificates">
+    return <div id="certificates" style={styles.container}>
           {
             this.context.user &&
             this.context.user.data &&
@@ -89,5 +89,8 @@ export default UserCertificates
 const styles = {
   noCerts: {
     color: grey500,
+  },
+  container: {
+    width: '100%',
   },
 }

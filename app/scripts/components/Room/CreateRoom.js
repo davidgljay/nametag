@@ -118,13 +118,17 @@ class CreateRoom extends Component {
     this.props.postRoom(this.state. room)
       .then((roomId) => {
         id = roomId
-        return this.props.joinRoom(roomId, {...this.state.hostNametag, room: roomId}, this.props.user.id)
+        return this.props.joinRoom(
+          roomId,
+          {...this.state.hostNametag, room: roomId},
+          this.props.user.id
+        )
       })
       .then((nametagId) => {
         return this.props.updateRoom(id, 'mod', nametagId)
       })
       .then(() => {
-        window.location = '/#/'
+        window.location = '/rooms'
       })
   }
 
@@ -161,7 +165,8 @@ class CreateRoom extends Component {
     case 3:
       return {
         valid: this.state.room.norms && this.state.room.norms.length > 0 ? true : false,
-      error: this.state.room.norms && this.state.room.norms.length > 0 ? '' : 'Please select at least one norm',
+        error: this.state.room.norms && this.state.room.norms.length > 0 ? '' :
+          'Please select at least one norm',
       }
     default:
       return {
