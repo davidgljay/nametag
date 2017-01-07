@@ -82,14 +82,10 @@ class RoomCard extends Component {
               style={styles.roomName}
               onClick={this.flip.bind(this)}/>
               {room.description}<br/>
-              {
-                room.nametagCount &&
-                <p style={styles.greyText}>
-                  {room.nametagCount} participant
-                  {room.nametagCount === 1 ? '' : 's'}
-                </p>
-              }
-
+              <p style={styles.greyText}>
+                {room.nametagCount || 0} participant
+                {room.nametagCount === 1 ? '' : 's'}
+              </p>
             </div>
             {
               room.mod &&
@@ -112,7 +108,8 @@ class RoomCard extends Component {
             }
         </Card>
 
-    let backStyle = this.state.flipping ? { ...styles.back, ...styles.backWhileFlipping} : styles.back
+    let backStyle = this.state.flipping ?
+      { ...styles.back, ...styles.backWhileFlipping} : styles.back
     let back = <Card key='back' style={backStyle}>
           <CardTitle
             style={styles.roomName}

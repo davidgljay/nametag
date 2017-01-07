@@ -33,6 +33,17 @@ const styles = {
 
 
 class Nametag extends Component {
+
+  static propTypes = {
+    id: PropTypes.string,
+    mod: PropTypes.string,
+    name: PropTypes.string,
+    icon: PropTypes.string,
+    bio: PropTypes.string,
+    present: PropTypes.bool,
+    certificates: PropTypes.array,
+  }
+
   componentDidMount() {
     if (!this.props.name) {
       this.props.watchNametag(this.props.id)
@@ -51,7 +62,9 @@ class Nametag extends Component {
       star = <FontIcon style={styles.ismod} className='material-icons'>star</FontIcon>
     }
 
-    return <div key={this.props.name} style={styles.nametag}>
+    return <div
+      key={this.props.name}
+      style={styles.nametag}>
         {star}
         <img src={this.props.icon} alt={this.props.name} style={styles.icon}/>
         <div style={styles.name}>{this.props.name}</div>
@@ -59,15 +72,6 @@ class Nametag extends Component {
         <Certificates certificates={this.props.certificates} />
       </div>
   }
-}
-
-Nametag.propTypes = {
-  id: PropTypes.string,
-  mod: PropTypes.string,
-  name: PropTypes.string,
-  icon: PropTypes.string,
-  bio: PropTypes.string,
-  certificates: PropTypes.array,
 }
 
 export default Nametag

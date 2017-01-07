@@ -35,9 +35,19 @@ class Room extends Component {
   }
 
   componentDidMount() {
-    const roomId = this.props.params.roomId
-    this.props.watchRoom(roomId)
+    const {params, watchRoom} = this.props
+    const roomId = params.roomId
+    watchRoom(roomId)
     this.watchUserNametags(this.props)
+  }
+
+  showPresence(nametagId) {
+    this.props.updateNametag(nametagId, 'lastPresent', Date.now())
+    this.setState({presenceTimer: setInterval(() => {
+      console.log('Updating nametag presence')
+      this.props.updateNametag(nametagId, 'lastPresent', Date.now())
+    }, 15000),
+  })
   }
 
   watchUserNametags = (props) => {
@@ -50,6 +60,7 @@ class Room extends Component {
           for (let i = 0; i < userNametags.length; i++ ) {
             if (userNametags[i].room === props.params.roomId) {
               this.props.postUpdateUserNametag(userNametags[i].id, 'latestVisit', Date.now())
+              this.showPresence(userNametags[i].nametag)
             }
           }
         })
@@ -64,6 +75,9 @@ class Room extends Component {
     const roomId = this.props.params.roomId
     this.props.unWatchRoom(roomId)
     this.props.unWatchUserNametags()
+    if (this.state.presenceTimer) {
+      clearInterval(this.state.presenceTimer)
+    }
   }
 
   closeRoom = () => {
@@ -119,7 +133,7 @@ class Room extends Component {
               logout={this.props.logout}
               setting={this.props.setting}
               user={this.props.user}
-              setOpen={(showDrawer)=>{this.setState({showDrawer})}}/>/>
+              setOpen={(showDrawer)=>{this.setState({showDrawer})}}/>
             <div>
               <div style={{...styles.leftBar, ...expanded}}>
                 <div style={styles.leftBarContent}>
@@ -330,5 +344,8 @@ const styles = {
   },
   norms: {
     color: '#FFF',
+  },
+  leftBarContent: {
+    marginBottom: 100,
   },
 }

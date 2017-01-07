@@ -117,7 +117,10 @@ export function getNametagCount(room) {
     return new Promise((resolve, reject) => {
       nametagSubscriptions.push(hz('nametags').findAll({room}).watch().subscribe(
           (nametags) => {
-            resolve(dispatch(setRoomNametagCount(room, nametags.length)))
+            const present = nametags.filter(
+              ({lastPresent}) => lastPresent > Date.now() - 30000
+            )
+            resolve(dispatch(setRoomNametagCount(room, present.length)))
           }, reject)
         )
     }).catch(errorLog('Error joining room'))

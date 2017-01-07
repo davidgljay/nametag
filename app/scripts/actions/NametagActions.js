@@ -114,3 +114,25 @@ export function putNametag(nametag) {
     }).catch(errorLog('Adding user nametag'))
   }
 }
+
+/*
+* Updates a nametag in the database
+*
+*@params
+*   nametagId - The id of the nametag
+*   property - The property to update
+*   value - The value to be updated
+*
+* @returns
+*   none
+*/
+
+export function updateNametag(nametagId, property, value) {
+  return () => {
+    return new Promise((resolve, reject) => {
+      hz('nametags').update({id: nametagId, [property]: value}).subscribe(() => {
+        resolve()
+      }, reject)
+    }).catch(errorLog('Updating nametag'))
+  }
+}

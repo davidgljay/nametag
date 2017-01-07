@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import Nametag from './Nametag'
 import {watchRoomNametags, unWatchRoomNametags} from '../../actions/NametagActions'
 import {Card} from 'material-ui/Card'
+import _ from 'lodash'
 
 class Nametags extends Component {
 
@@ -13,6 +14,29 @@ class Nametags extends Component {
     this.props.dispatch(unWatchRoomNametags(this.props.room))
   }
 
+  checkPresent = (nametag) => {
+    return nametag.lastPresent > Date.now() - 30000
+  }
+
+  createNametag = (nametag, mod) => {
+    // Make nametag.certificates an empty array if it not already assigned.
+    nametag.certificates = nametag.certificates || []
+
+    // Show whether the user is present.
+    const cardStyle = this.checkPresent(nametag) ?
+      styles.nametag : {...styles.nametag, ...styles.absent}
+
+    return <Card key={nametag.id} style={cardStyle}>
+      <Nametag
+        name={nametag.name}
+        bio={nametag.bio}
+        icon={nametag.icon}
+        id={nametag.id}
+        certificates={nametag.certificates}
+        mod={mod}/>
+    </Card>
+  }
+
   render() {
     let nametags = []
     for (let id in this.props.nametags) {
@@ -21,34 +45,12 @@ class Nametags extends Component {
       }
     }
 
-    nametags.sort(function sortnametags(a) {
-      let score = -1
-      if (a.mod) {
-        score = 1
-      }
-      return score
-    })
-
-    function createNametag(nametag, mod) {
-      // Make nametag.certificates an empty array if it not already assigned.
-      nametag.certificates = nametag.certificates || []
-
-      return <Card key={nametag.id} style={styles.nametag}>
-        <Nametag
-          name={nametag.name}
-          bio={nametag.bio}
-          icon={nametag.icon}
-          id={nametag.id}
-          certificates={nametag.certificates}
-          mod={mod}/>
-      </Card>
-    }
-
     return <div style={styles.nametags}>
         {
-          nametags.map((nametag) => {
-            return createNametag(nametag, this.props.mod)
-          })
+          nametags.sort((a, b) =>
+            this.checkPresent(a) &&
+            !this.checkPresent(b) ? 0 : 1
+          ).map((nametag) => this.createNametag(nametag, this.props.mod))
         }
       </div>
   }
@@ -64,6 +66,9 @@ const styles = {
     minHeight: 60,
     marginBottom: 5,
     paddingBottom: 5,
+  },
+  absent: {
+    opacity: 0.4,
   },
   nametags: {
     marginBottom: 40,
