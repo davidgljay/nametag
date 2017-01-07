@@ -6,6 +6,7 @@ import {grey400, indigo500} from 'material-ui/styles/colors'
 import RaisedButton from 'material-ui/RaisedButton'
 import FontIcon from 'material-ui/FontIcon'
 import trackEvent from '../../utils/analytics'
+import Alert from '../Utils/Alert'
 
 const styles = {
   join: {
@@ -55,14 +56,20 @@ class Join extends Component {
     user: PropTypes.object,
   }
 
+  state = {alert: null}
+
   onJoinClick = () => {
     trackEvent('JOINING_ROOM')
-    const {room, nametag, joinRoom} = this.props
+    const {room, nametag, joinRoom, normsChecked} = this.props
     // TODO: Add new user name to displayNames list.
-    joinRoom(room, nametag, this.context.user.id)
-      .then(() => {
-        window.location = `/rooms/${room}`
-      })
+    if (normsChecked) {
+      joinRoom(room, nametag, this.context.user.id)
+        .then(() => {
+          window.location = `/rooms/${room}`
+        })
+    } else {
+      this.setState({alert: 'You must agree to this room\'s norms.'})
+    }
   }
 
   render() {
@@ -104,6 +111,7 @@ class Join extends Component {
               selectedCerts={nametag && nametag.certificates}/>
           </div>
           <br/>
+          <Alert alert={this.state.alert}/>
           <RaisedButton
             backgroundColor={indigo500}
             labelStyle={styles.button}
