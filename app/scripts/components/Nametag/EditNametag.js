@@ -32,10 +32,11 @@ function collect(connect, monitor) {
 class EditNametag extends Component {
 
   static propTyes = {
-    dispatch: PropTypes.func.isRequired,
-    userNametag: PropTypes.object.isRequired,
+    userNametag: PropTypes.object,
+    userDefaults: PropTypes.object,
     room: PropTypes.string.isRequired,
     isOver: PropTypes.bool.isRequired,
+    updateUserNametag: PropTypes.func.isRequired,
   }
 
   state = {
@@ -46,18 +47,18 @@ class EditNametag extends Component {
   }
 
   componentDidMount() {
-    const {userNametag, updateUserNametag, userDefaults, room} = this.props
+    const {userNametag = {}, updateUserNametag, userDefaults = {}, room} = this.props
     updateUserNametag(room, 'room', room)
-    if (!userNametag || !userNametag.name
+    if (!userNametag.name
       && userDefaults.displayNames
       && userDefaults.displayNames.length >= 1) {
       updateUserNametag(room, 'name', userDefaults.displayNames[0])
     }
-    // if (!userNametag || !userNametag.icon
-    //   && userDefaults.iconUrls
-    //   && userDefaults.iconUrls.length > 0) {
-    //   updateUserNametag(room, 'icon', userDefaults.iconUrls[0])
-    // }
+    if (!userNametag.icon
+      && userDefaults.iconUrls
+      && userDefaults.iconUrls.length > 0) {
+      updateUserNametag(room, 'icon', userDefaults.iconUrls[0])
+    }
   }
 
   updateNametagProperty = (property) => {
@@ -87,7 +88,7 @@ class EditNametag extends Component {
   }
 
   render() {
-    const {error, userDefaults, updateUserNametag, room, userNametag} = this.props
+    const {error, userDefaults = {}, updateUserNametag, room, userNametag} = this.props
 
     const {
       menuStyle,
