@@ -11,6 +11,7 @@ const mapStateToProps = (state) => {
     user: state.user ? state.user : {loggedIn: false},
     nametags: state.nametags,
     userNametags: state.userNametags,
+    nametagEdits: state.nametagEdits,
   }
 }
 

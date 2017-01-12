@@ -46,7 +46,7 @@ class Join extends Component {
     nametag: PropTypes.object,
     addUserNametagCert: PropTypes.func.isRequired,
     removeUserNametagCert: PropTypes.func.isRequired,
-    updateUserNametag: PropTypes.func.isRequired,
+    updateNametagEdit: PropTypes.func.isRequired,
     providerAuth: PropTypes.func.isRequired,
     fetchCertificate: PropTypes.func.isRequired,
     joinRoom: PropTypes.func.isRequired,
@@ -78,7 +78,7 @@ class Join extends Component {
       appendUserArray,
       removeUserNametagCert,
       addUserNametagCert,
-      updateUserNametag,
+      updateNametagEdit,
       room,
       fetchCertificate,
       providerAuth,
@@ -89,11 +89,11 @@ class Join extends Component {
           <h4>Edit Your Nametag For This Conversation</h4>
           <EditNametag
             userNametag={nametag}
-            userDefaults={this.context.user.data || {}}
+            userDefaults={this.context.user.data}
             appendUserArray={appendUserArray}
             addUserNametagCert={addUserNametagCert}
             removeUserNametagCert={removeUserNametagCert}
-            updateUserNametag={updateUserNametag}
+            updateNametagEdit={updateNametagEdit}
             room={room}/>
           <div style={styles.userCertificates}>
             <p style={styles.userCertificateText}>

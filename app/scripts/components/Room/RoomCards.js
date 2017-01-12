@@ -55,11 +55,12 @@ class RoomCards extends Component {
   }
 
   mapRoomCards(roomId) {
-    const {rooms, nametags, userNametags, addUserNametag} = this.props
+    const {rooms, nametags, userNametags, addUserNametag, nametagEdits} = this.props
 
     // If a nametag has already been saved for this room then merge it in
-    const nametag = userNametags[roomId] && userNametags[roomId].nametag
-    && nametags[userNametags[roomId].nametag]
+    const nametag = userNametags[roomId]
+    ? {...nametags[userNametags[roomId].nametag], ...nametagEdits[roomId]}
+    : nametagEdits[roomId]
     return <RoomCard
       room={rooms[roomId]}
       id={roomId}

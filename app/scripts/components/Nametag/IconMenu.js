@@ -12,7 +12,7 @@ class NTIconMenu extends Component {
   static propTypes = {
     iconUrls: PropTypes.array.isRequired,
     icon: PropTypes.string,
-    updateUserNametag: PropTypes.func.isRequired,
+    updateNametagEdit: PropTypes.func.isRequired,
     appendUserArray: PropTypes.func.isRequired,
   }
 
@@ -22,14 +22,14 @@ class NTIconMenu extends Component {
   }
 
   onUpload = (res) => {
-    this.props.updateUserNametag(this.props.room, 'icon', res.url)
+    this.props.updateNametagEdit(this.props.room, 'icon', res.url)
     this.props.appendUserArray('iconUrls', res.url)
     this.setState({loadingImage: false})
   }
 
   onUpdateIcon = (url) => () => {
     this.setState({showMenu: false})
-    this.props.updateUserNametag(this.props.room, 'icon', url)
+    this.props.updateNametagEdit(this.props.room, 'icon', url)
   }
 
   render() {

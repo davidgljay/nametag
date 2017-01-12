@@ -32,7 +32,7 @@ class EditNametag extends Component {
     userDefaults: PropTypes.object,
     room: PropTypes.string.isRequired,
     isOver: PropTypes.bool.isRequired,
-    updateUserNametag: PropTypes.func.isRequired,
+    updateNametagEdit: PropTypes.func.isRequired,
   }
 
   state = {
@@ -43,23 +43,23 @@ class EditNametag extends Component {
   }
 
   componentDidMount() {
-    const {userNametag = {}, updateUserNametag, userDefaults = {}, room} = this.props
-    updateUserNametag(room, 'room', room)
+    const {userNametag = {}, updateNametagEdit, userDefaults = {}, room} = this.props
+    updateNametagEdit(room, 'room', room)
     if (!userNametag.name
       && userDefaults.displayNames
       && userDefaults.displayNames.length >= 1) {
-      updateUserNametag(room, 'name', userDefaults.displayNames[0])
+      updateNametagEdit(room, 'name', userDefaults.displayNames[0])
     }
     if (!userNametag.icon
       && userDefaults.iconUrls
       && userDefaults.iconUrls.length > 0) {
-      updateUserNametag(room, 'icon', userDefaults.iconUrls[0])
+      updateNametagEdit(room, 'icon', userDefaults.iconUrls[0])
     }
   }
 
   updateNametagProperty = (property) => {
     return (e) => {
-      this.props.updateUserNametag(
+      this.props.updateNametagEdit(
         this.props.room,
         property,
         e.target.value
@@ -76,7 +76,7 @@ class EditNametag extends Component {
     const {
       error,
       userDefaults = {},
-      updateUserNametag,
+      updateNametagEdit,
       room,
       userNametag,
       appendUserArray} = this.props
@@ -100,7 +100,7 @@ class EditNametag extends Component {
                 iconUrls = {userDefaults.iconUrls || []}
                 icon = {nametag.icon}
                 room = {room}
-                updateUserNametag = {updateUserNametag}
+                updateNametagEdit = {updateNametagEdit}
                 appendUserArray = {appendUserArray}
                 />
               <div style={{width: 190, flex: 1}}>
@@ -111,7 +111,7 @@ class EditNametag extends Component {
                     disableFocusRipple={false}
                     dataSource={userDefaults.displayNames || []}
                     errorText={error && error.nameError}
-                    onUpdateInput={(name) => updateUserNametag(room, 'name', name)}
+                    onUpdateInput={(name) => updateNametagEdit(room, 'name', name)}
                     animated={true}
                     style={nameStyle}
                     textFieldStyle={nameTextfieldStyle}
