@@ -60,8 +60,8 @@ describe('UserNametagActions', () => {
   describe('watchUserNametags', () => {
     it('should get an entry for a room in the user_nametags table', () => {
       hz.mockReturnValue(mockHz([{user: 'me', nametag: '456', room: 'abc'}], calls)())
-      return actions.watchUserNametags('abc', 'me')(store.dispatch).then((userNametag) => {
-        expect(userNametag).toEqual('456')
+      return actions.watchUserNametags('me')(store.dispatch).then((userNametags) => {
+        expect(userNametags).toEqual([{'nametag': '456', 'room': 'abc', 'user': 'me'}])
         expect(calls[1]).toEqual({
           type: 'findAll',
           req: {
@@ -69,17 +69,17 @@ describe('UserNametagActions', () => {
           },
         })
         expect(store.getActions()[0]).toEqual({
-          nametag: '456',
+          nametag: {'nametag': '456', 'room': 'abc', 'user': 'me'},
           room: 'abc',
           type: 'ADD_USER_NAMETAG',
         })
       })
     })
 
-    it('should set the nametag value for the room to null if no user nametag is found', () => {
+    it('should set the nametag value for the rooms to be an empty array if no user nametag is found', () => {
       hz.mockReturnValue(mockHz([], calls)())
       return actions.watchUserNametags('def', 'me')(store.dispatch).then((userNametag) => {
-        expect(userNametag).toEqual(null)
+        expect(userNametag).toEqual([])
       })
     })
   })
