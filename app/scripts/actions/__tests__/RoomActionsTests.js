@@ -37,17 +37,6 @@ describe('RoomActions', () => {
     })
   })
 
-  describe('setRoomNametagCount', () => {
-    it('should set the room nametag count', () => {
-      expect(actions.setRoomNametagCount('123', 10))
-        .toEqual({
-          type: constants.SET_ROOM_NT_COUNT,
-          room: '123',
-          nametagCount: 10,
-        })
-    })
-  })
-
   describe('subscribe', () => {
     it('should subscribe to a room', function() {
       const lastPresent = Date.now()
@@ -61,25 +50,21 @@ describe('RoomActions', () => {
       hz.mockReturnValueOnce(mockHz(mockResponses[2], calls)())
       return actions.subscribe()(store.dispatch, store.getState)
       .then(() => {
-        expect(store.getActions()[0]).toEqual({
-          type: constants.ADD_ROOM,
-          room: {id: 2},
-          id: 2,
+        expect(store.getActions()[0]).toEqual( {
+          property: 'nametagCount',
+          room: 2,
+          type: 'SET_ROOM_PROP',
+          value: 1,
         })
         expect(store.getActions()[1]).toEqual({
-          type: constants.SET_ROOM_NT_COUNT,
-          room: 2,
-          nametagCount: 1,
+          type: constants.SET_ROOM_PROP,
+          room: 1,
+          property: 'nametagCount',
+          value: 3,
         })
         expect(store.getActions()[2]).toEqual({
-          type: constants.ADD_ROOM,
-          room: {id: 1},
-          id: 1,
-        })
-        expect(store.getActions()[3]).toEqual({
-          type: constants.SET_ROOM_NT_COUNT,
-          room: 1,
-          nametagCount: 3,
+          type: constants.ADD_ROOM_ARRAY,
+          rooms: [{id: 1}, {id: 2}],
         })
       })
     })

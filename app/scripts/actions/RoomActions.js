@@ -19,16 +19,8 @@ export function addRoom(room, id) {
 
 export function addRoomArray(rooms) {
   return {
-    type: constants.ADD_ROOM_ARAY,
+    type: constants.ADD_ROOM_ARRAY,
     rooms,
-  }
-}
-
-export function setRoomNametagCount(room, nametagCount) {
-  return {
-    type: constants.SET_ROOM_NT_COUNT,
-    room,
-    nametagCount,
   }
 }
 
@@ -129,7 +121,7 @@ export function getNametagCount(room) {
                 return lastPresent > Date.now() - 30000
               }
             )
-            resolve(dispatch(setRoomNametagCount(room, present.length)))
+            resolve(dispatch(setRoomProp(room, 'nametagCount', present.length)))
           }, reject)
         )
     }).catch(errorLog('Error joining room'))

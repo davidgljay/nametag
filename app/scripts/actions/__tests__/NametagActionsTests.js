@@ -64,14 +64,8 @@ describe('Nametag Actions', () => {
           expect(calls[1]).toEqual({type: 'findAll', req: {room: 'abc'}})
           expect(calls[2]).toEqual({type: 'watch', req: undefined})
           expect(store.getActions()[0]).toEqual({
-            type: constants.ADD_NAMETAG,
-            id: '123',
-            nametag: results[0],
-          })
-          expect(store.getActions()[1]).toEqual({
-            type: constants.ADD_NAMETAG,
-            id: '456',
-            nametag: results[1],
+            type: constants.ADD_NAMETAG_ARRAY,
+            nametags: results,
           })
         })
     })
@@ -93,4 +87,3 @@ describe('putNametag', () => {
     })
   })
 })
-

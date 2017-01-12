@@ -35,14 +35,8 @@ describe('Message Actions', () => {
           expect(calls[1]).toEqual({type: 'findAll', req: {room: 'abc'}})
           expect(calls[2]).toEqual({type: 'watch', req: undefined})
           expect(store.getActions()[0]).toEqual({
-            type: constants.ADD_MESSAGE,
-            id: '123',
-            message: results[0],
-          })
-          expect(store.getActions()[1]).toEqual({
-            type: constants.ADD_MESSAGE,
-            id: '456',
-            message: results[1],
+            type: constants.ADD_MESSAGE_ARRAY,
+            messages: results,
           })
         })
     })
@@ -54,7 +48,7 @@ describe('Message Actions', () => {
       hz.mockReturnValue(mockHz(results, calls)())
       return actions.watchRoomMessages('abc')(store.dispatch).then(
         () => {
-          expect(store.getActions()[2]).toEqual({
+          expect(store.getActions()[1]).toEqual({
             type: constants.SET_ROOM_PROP,
             room: 'abc',
             property: 'messages',
