@@ -70,7 +70,7 @@ export function unWatchRoomMessages(room) {
 export function postMessage(message) {
   return function() {
     return new Promise((resolve, reject) => {
-      hz('messages').insert(message).subscribe(
+      hz('messages').upsert(message).subscribe(
         (id) => {
           resolve(id)
         }, reject)
