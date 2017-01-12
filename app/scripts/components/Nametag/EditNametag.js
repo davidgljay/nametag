@@ -1,19 +1,15 @@
 import React, { Component, PropTypes } from 'react'
 import Alert from '../Utils/Alert'
 import Certificate from '../Certificate/Certificate'
-import FileUpload from 'react-fileupload'
 import { DropTarget } from 'react-dnd'
 import { dragTypes } from '../../constants'
 import {Card} from 'material-ui/Card'
 import TextField from 'material-ui/TextField'
-import IconMenu from 'material-ui/IconMenu'
-import FontIcon from 'material-ui/FontIcon'
-import MenuItem from 'material-ui/MenuItem'
-import CircularProgress from 'material-ui/CircularProgress'
 import AutoComplete from 'material-ui/AutoComplete'
 import constants from '../../constants'
 import errorLog from '../../utils/errorLog'
 import trackEvent from '../../utils/analytics'
+import NTIconMenu from './IconMenu'
 
 const nametagTarget = {
   drop(props, monitor) {
@@ -76,27 +72,16 @@ class EditNametag extends Component {
     this.props.removeUserNametagCert(cert, this.props.room)
   }
 
-  onUpload = (res) => {
-    this.props.updateUserNametag(this.props.room, 'icon', res.url)
-    this.props.appendUserArray('iconUrls', res.url)
-    this.setState({loadingImage: false})
-  }
-
-  onUpdateIcon = (url) => () => {
-    this.setState({showMenu: false})
-    this.props.updateUserNametag(this.props.room, 'icon', url)
-  }
-
   render() {
-    const {error, userDefaults = {}, updateUserNametag, room, userNametag} = this.props
+    const {
+      error,
+      userDefaults = {},
+      updateUserNametag,
+      room,
+      userNametag,
+      appendUserArray} = this.props
 
     const {
-      menuStyle,
-      menuItemStyle,
-      menuItemInnerDivStyle,
-      uploadIcon,
-      uploadMenuItem,
-      uploadMenuItemInnerDivStyle,
       nameStyle,
       nameTextfieldStyle,
       floatingLabelStyle,
@@ -108,67 +93,15 @@ class EditNametag extends Component {
       icon: '',
     }
 
-    const uploadOptions = {
-      baseUrl: 'https://' + document.location.host + '/api/images?width=50',
-      chooseAndUpload: true,
-      accept: '.jpg,.jpeg,.png',
-      dataType: 'json',
-      chooseFile: () => {
-        trackEvent('UPLOAD_CUSTOM_ICON')
-        this.setState({showMenu: false, loadingImage: true})
-      },
-      uploadSuccess: this.onUpload,
-      uploadError: errorLog('Uploading Room Image'),
-    }
-
-    const uploadFontIcon = <FontIcon
-        className="material-icons"
-        style={uploadIcon}>
-        add_to_photos
-      </FontIcon>
     return this.props.connectDropTarget(<div>
           <Card style={styles.editNametag} className="profile">
             <div style={styles.cardInfo}>
-              {
-                this.state.loadingImage ?
-                <CircularProgress />
-                :  <IconMenu
-                iconButtonElement= {
-                  nametag.icon ?
-                    <img src={nametag.icon} style={styles.icon}/>
-                  : <div style={uploadMenuItemInnerDivStyle}>
-                      {uploadFontIcon}
-                    </div>
-                }
-                anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-                targetOrigin={{horizontal: 'left', vertical: 'top'}}
-                style={styles.icon}
-                open={this.state.showMenu}
-                onTouchTap={()=>{
-                  trackEvent('SHOW_ICON_MENU')
-                  this.setState({showMenu: !this.state.showMenu})
-                }}
-                menuStyle={menuStyle}>
-                {
-                    userDefaults.iconUrls && userDefaults.iconUrls.map((url) =>
-                      <MenuItem
-                        key={url}
-                        style={menuItemStyle}
-                        innerDivStyle={menuItemInnerDivStyle}
-                        onTouchTap={this.onUpdateIcon(url)}>
-                        <img src={url} style={styles.icon}/>
-                      </MenuItem>
-                    )
-                }
-                  <FileUpload
-                    style={{textAlign: 'center'}}
-                    options={uploadOptions}>
-                    <div style={uploadMenuItem} ref="chooseAndUpload">
-                      {uploadFontIcon}
-                    </div>
-                  </FileUpload>
-              </IconMenu>
-            }
+              <NTIconMenu
+                iconUrls = {userDefaults.iconUrls || []}
+                icon = {nametag.icon}
+                updateUserNametag = {updateUserNametag}
+                appendUserArray = {appendUserArray}
+                />
               <div style={{width: 190, flex: 1}}>
                   <AutoComplete
                     floatingLabelText="Name"
@@ -245,26 +178,5 @@ const styles = {
   floatingLabelStyle: {
     top: 20,
   },
-  menuItemStyle: {
-    lineHeight: 'inherit',
-  },
-  menuItemInnerDivStyle: {
-    padding: 6,
-    textAlign: 'center',
-  },
-  uploadMenuItem: {
-    display: 'flex',
-    justifyContent: 'center',
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    cursor: 'pointer',
-    textAlign: 'center',
-    verticalAlign: 'middle',
-    background: '#999',
-  },
-  uploadIcon: {
-    color: '#FFF',
-    marginTop: 13,
-  },
+
 }

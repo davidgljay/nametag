@@ -30,7 +30,7 @@ class ImageUpload extends Component {
           <FontIcon
               className="material-icons"
               style={styles.uploadIcon}>
-              add_to_photos
+              photo
             </FontIcon>
         </div>
       </FileUpload>
