@@ -99,6 +99,7 @@ class EditNametag extends Component {
               <NTIconMenu
                 iconUrls = {userDefaults.iconUrls || []}
                 icon = {nametag.icon}
+                room = {room}
                 updateUserNametag = {updateUserNametag}
                 appendUserArray = {appendUserArray}
                 />
@@ -159,12 +160,6 @@ const styles = {
   },
   cardInfo: {
     display: 'flex',
-  },
-  icon: {
-    borderRadius: 25,
-    width: 50,
-    height: 50,
-    margin: 5,
   },
   nameStyle: {
     width: 150,

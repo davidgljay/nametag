@@ -3,7 +3,6 @@ import FileUpload from 'react-fileupload'
 import IconMenu from 'material-ui/IconMenu'
 import FontIcon from 'material-ui/FontIcon'
 import MenuItem from 'material-ui/MenuItem'
-import onClickOutside from 'react-onclickoutside'
 import CircularProgress from 'material-ui/CircularProgress'
 import errorLog from '../../utils/errorLog'
 import ImageUpload from '../Utils/ImageUpload'
@@ -26,10 +25,6 @@ class NTIconMenu extends Component {
     this.props.updateUserNametag(this.props.room, 'icon', res.url)
     this.props.appendUserArray('iconUrls', res.url)
     this.setState({loadingImage: false})
-  }
-
-  handleClickOutside() {
-    this.setState({showMenu: false})
   }
 
   onUpdateIcon = (url) => () => {
@@ -58,29 +53,31 @@ class NTIconMenu extends Component {
       targetOrigin={{horizontal: 'left', vertical: 'top'}}
       style={styles.icon}
       open={showMenu}
-      onTouchTap={()=>{
-        this.setState({showMenu: !showMenu})
-      }}
+      onTouchTap={() => {this.setState({showMenu: true})}}
       menuStyle={styles.menuStyle}>
       {
           iconUrls.map((url) =>
             <MenuItem
               key={url}
               style={styles.menuItemStyle}
-              innerDivStyle={menuItemInnerDivStyle}
+              innerDivStyle={styles.menuItemInnerDivStyle}
               onTouchTap={this.onUpdateIcon(url)}>
               <img src={url} style={styles.icon}/>
             </MenuItem>
           )
       }
+      <MenuItem
+        style={styles.menuItemStyle}
+        innerDivStyle={styles.menuItemInnerDivStyle}>
         {uploadIcon}
+      </MenuItem>
       </IconMenu>
     }
     return render
   }
 }
 
-export default onClickOutside(NTIconMenu)
+export default NTIconMenu
 
 const styles = {
   menuItemStyle: {
@@ -90,19 +87,10 @@ const styles = {
     padding: 6,
     textAlign: 'center',
   },
-  uploadMenuItem: {
-    display: 'flex',
-    justifyContent: 'center',
+  icon: {
+    borderRadius: 25,
     width: 50,
     height: 50,
-    borderRadius: 25,
-    cursor: 'pointer',
-    textAlign: 'center',
-    verticalAlign: 'middle',
-    background: '#999',
-  },
-  uploadIcon: {
-    color: '#FFF',
-    marginTop: 13,
+    margin: 5,
   },
 }
