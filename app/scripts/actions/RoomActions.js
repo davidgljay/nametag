@@ -118,7 +118,9 @@ export function getNametagCount(room) {
       nametagSubscriptions.push(hz('nametags').findAll({room}).watch().subscribe(
           (nametags) => {
             const present = nametags.filter(
-              ({lastPresent}) => lastPresent > Date.now() - 30000
+              ({lastPresent}) => {
+                return lastPresent > Date.now() - 30000
+              }
             )
             resolve(dispatch(setRoomNametagCount(room, present.length)))
           }, reject)

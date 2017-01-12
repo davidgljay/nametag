@@ -49,17 +49,18 @@ describe('RoomActions', () => {
   })
 
   describe('subscribe', () => {
-    it('should subscribe to a room', function(done) {
+    it('should subscribe to a room', function() {
+      const lastPresent = Date.now()
       let mockResponses = [
         [{id: 1}, {id: 2}],
-        [{}],
-        [{}, {}, {}],
+        [{lastPresent}],
+        [{lastPresent}, {lastPresent}, {lastPresent}],
       ]
       hz.mockReturnValueOnce(mockHz(mockResponses[0], calls)())
       hz.mockReturnValueOnce(mockHz(mockResponses[1], calls)())
       hz.mockReturnValueOnce(mockHz(mockResponses[2], calls)())
-      actions.subscribe()(store.dispatch, store.getState)
-      .then(function() {
+      return actions.subscribe()(store.dispatch, store.getState)
+      .then(() => {
         expect(store.getActions()[0]).toEqual({
           type: constants.ADD_ROOM,
           room: {id: 2},
@@ -80,7 +81,6 @@ describe('RoomActions', () => {
           room: 1,
           nametagCount: 3,
         })
-        done()
       })
     })
   })
