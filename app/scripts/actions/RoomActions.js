@@ -71,9 +71,9 @@ export function subscribe() {
       roomSubscription = hz('rooms').watch().subscribe(
         (rooms) => {
           for (let i = rooms.length - 1; i >= 0; i--) {
-            dispatch(addRoom(rooms[i], rooms[i].id))
             getNametagCount(rooms[i].id)(dispatch)
           }
+          dispatch(addRoomArray(rooms))
           resolve(rooms)
         },
         (err) => {

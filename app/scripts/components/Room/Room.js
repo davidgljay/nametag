@@ -57,6 +57,7 @@ class Room extends Component {
     if (!props.userNametags || !props.userNametags[props.params.roomId]
       && props.user.id && !loadingNametags) {
       loadingNametags = true
+      console.log('Loading nametags')
       props.watchUserNametags(props.user.id)
         .then((userNametags) => {
           props.fetchRooms(userNametags.map((n) => n.room))

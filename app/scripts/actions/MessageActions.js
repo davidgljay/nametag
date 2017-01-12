@@ -39,9 +39,9 @@ export function watchRoomMessages(room) {
             return a.timestamp - b.timestamp
           })
           for (let i = 0; i < messages.length; i++) {
-            dispatch(addMessage(messages[i], messages[i].id))
             messageIds.push(messages[i].id)
           }
+          dispatch(addMessageArray(messages))
           dispatch(setRoomProp(room, 'messages', messageIds))
           resolve()
         }, reject)

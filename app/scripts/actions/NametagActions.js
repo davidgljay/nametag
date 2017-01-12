@@ -77,9 +77,7 @@ export function watchRoomNametags(room) {
     return new Promise((resolve, reject) => {
       nametagSubscriptions[room] = hz('nametags').findAll({room: room}).watch().subscribe(
         (nametags) => {
-          for (let i = 0; i < nametags.length; i++) {
-            dispatch(addNametag(nametags[i], nametags[i].id))
-          }
+          dispatch(addNametagArray(nametags))
           resolve(nametags)
         }, reject)
     })
