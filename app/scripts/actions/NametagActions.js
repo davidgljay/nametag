@@ -12,6 +12,13 @@ export const addNametag = (nametag, id) => {
   }
 }
 
+export const addNametagArray = (nametags) => {
+  return {
+    type: constants.ADD_NAMETAG_ARRAY,
+    nametags,
+  }
+}
+
 /*
 * Watch a Nametags
 *

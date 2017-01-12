@@ -17,6 +17,13 @@ export function addRoom(room, id) {
   }
 }
 
+export function addRoomArray(rooms) {
+  return {
+    type: constants.ADD_ROOM_ARAY,
+    rooms,
+  }
+}
+
 export function setRoomNametagCount(room, nametagCount) {
   return {
     type: constants.SET_ROOM_NT_COUNT,

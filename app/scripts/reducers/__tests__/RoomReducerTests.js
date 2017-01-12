@@ -58,6 +58,35 @@ describe('Room reducer', () => {
     })
   })
 
+  describe('ADD_ROOM_ARRAY', () => {
+    it('should assign an array of rooms', () => {
+      let newState = roomReducer({},
+        {
+          type: constants.ADD_ROOM_ARRAY,
+          rooms: [
+            {
+              id: 1,
+              title: 'Test Room',
+            },
+            {
+              id: 2,
+              title: 'Another Test Room',
+            },
+          ],
+        })
+      expect(newState).toEqual({
+        1: {
+          id: 1,
+          title: 'Test Room',
+        },
+        2: {
+          id: 2,
+          title: 'Another Test Room',
+        },
+      })
+    })
+  })
+
   describe('SET_ROOM_NT_COUNT', () => {
     it('should set the room nametag count', () => {
       let newState = roomReducer(

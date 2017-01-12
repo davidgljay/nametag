@@ -1,14 +1,22 @@
 import constants from '../constants'
 
 const addRoom = (state, action) => {
-  let newRoom = Object.assign({}, state[action.id], action.room)
-  return Object.assign({}, state, {[action.id]: newRoom})
+  let newRoom = {...state[action.id], ...action.room}
+  return {...state, [action.id]: newRoom}
+}
+
+const addRoomArray = (state, action) => {
+  return {...state, ...action.rooms.reduce(
+    (p, n) => {
+      p[n.id] = n
+      return p
+    }, {}
+  )}
 }
 
 const setRoomProp = (state, action) => {
-  let room = state[action.room]
-  let newRoom = Object.assign({}, room, {[action.property]: action.value})
-  return Object.assign({}, state, {[action.room]: newRoom})
+  let newRoom = {...state[action.room], [action.property]: action.value}
+  return {...state, [action.room]: newRoom}
 }
 
 const addRoomMessage = (state, action) => {
@@ -23,6 +31,8 @@ const rooms = (state = {}, action) => {
   switch (action.type) {
   case constants.ADD_ROOM:
     return addRoom(state, action)
+  case constants.ADD_ROOM_ARRAY:
+    return addRoomArray(state, action)
   case constants.SET_ROOM_NT_COUNT:
     let newRoom = Object.assign({}, state[action.room], {nametagCount: action.nametagCount})
     return Object.assign({}, state, {[action.room]: newRoom})

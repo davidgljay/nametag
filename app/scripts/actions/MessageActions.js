@@ -13,6 +13,13 @@ export const addMessage = (message, id) => {
   }
 }
 
+export const addMessageArray = (messages) => {
+  return {
+    type: constants.ADD_MESSAGE_ARRAY,
+    messages,
+  }
+}
+
 /*
 * Watch all messages for a room
 *
