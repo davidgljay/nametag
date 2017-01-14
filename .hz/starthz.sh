@@ -1,4 +1,4 @@
-sleep 7
+sleep 4
 
 echo 'Syncing schema'
 hz schema apply /usr/app/.hz/schema.toml --connect rethinkdb
