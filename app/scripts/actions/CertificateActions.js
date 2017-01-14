@@ -90,6 +90,7 @@ export function createCertificate(
         resolve(cert)
       }, reject)
     })
+    .catch(errorLog('Error creating a certificate: '))
   }
 }
 
@@ -114,5 +115,6 @@ export function grantCertificate(id) {
         resolve(result)
       }, reject)
     })
+    .catch(errorLog('Error granting certificate ' + certificateId + ': '))
   }
 }
