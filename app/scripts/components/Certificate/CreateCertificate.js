@@ -59,14 +59,14 @@ class CreateCertificate extends Component {
   certPromise = (markGranted) => {
     const {user, createCertificate, mini} = this.props
     const {name, icon, description, note} = this.state
-    const granter = this.props.mini ? 'Self' : this.props.user.data.displayNames[0]
+    const granter = mini ? 'Self' : this.props.user.data.displayNames[0]
     return createCertificate(
       user.id,
       [description],
       granter,
       icon && [icon],
       name,
-      mini ? [] : [{
+      [{
         date: Date.now(),
         msg: note,
       }],
@@ -114,11 +114,11 @@ class CreateCertificate extends Component {
               name,
               icon_array: icon,
               description_array: [description],
-              notes: mini ? [] : [{
+              notes: [{
                 date: Date.now(),
                 msg: note,
               }],
-              granter: this.props.mini ? 'Self' : this.props.user.data.displayNames[0],
+              granter: mini ? 'Self' : this.props.user.data.displayNames[0],
             }}
             draggable={false}
             expanded={true}
