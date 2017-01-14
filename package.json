@@ -93,7 +93,7 @@
     "test": "jest",
     "test-watch": "jest --watch",
     "start": "docker-compose up -d && gulp watch",
-    "build": "gulp build",
+    "build": "NODE_ENV=production gulp build",
     "storybook": "start-storybook -p 9001 -c .storybook"
   },
   "jest": {

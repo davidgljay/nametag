@@ -13,7 +13,6 @@ import NTIconMenu from './IconMenu'
 
 const nametagTarget = {
   drop(props, monitor) {
-    trackEvent('ADD_NT_CERT')
     props.addUserNametagCert(monitor.getItem(), props.room)
   },
 }
