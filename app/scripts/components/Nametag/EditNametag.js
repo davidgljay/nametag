@@ -13,7 +13,7 @@ import NTIconMenu from './IconMenu'
 
 const nametagTarget = {
   drop(props, monitor) {
-    props.addUserNametagCert(monitor.getItem(), props.room)
+    props.addNametagEditCert(monitor.getItem(), props.room)
   },
 }
 
@@ -68,7 +68,7 @@ class EditNametag extends Component {
 
   removeCert = (cert) => {
     trackEvent('REMOVE_NT_CERT')
-    this.props.removeUserNametagCert(cert, this.props.room)
+    this.props.removeNametagEditCert(cert, this.props.room)
   }
 
   render() {

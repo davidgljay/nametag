@@ -54,10 +54,10 @@ class RoomCard extends Component {
       creating,
       style,
       nametag,
-      addUserNametagCert,
+      addNametagEditCert,
       updateUserNametag,
       providerAuth,
-      removeUserNametagCert,
+      removeNametagEditCert,
       id,
     } = this.props
     let card
@@ -129,8 +129,8 @@ class RoomCard extends Component {
               room={id}
               nametag={nametag}
               normsChecked={this.state.normsChecked}
-              addUserNametagCert={addUserNametagCert}
-              removeUserNametagCert={removeUserNametagCert}
+              addNametagEditCert={addNametagEditCert}
+              removeNametagEditCert={removeNametagEditCert}
               updateUserNametag={updateUserNametag}
               providerAuth={providerAuth}/>
           }

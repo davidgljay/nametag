@@ -72,22 +72,6 @@ export function unWatchUserNametags() {
   }
 }
 
-export function addUserNametagCert(cert, room) {
-  return {
-    type: constants.ADD_USER_NT_CERT,
-    cert,
-    room,
-  }
-}
-
-export function removeUserNametagCert(certId, room) {
-  return {
-    type: constants.REMOVE_USER_NT_CERT,
-    certId,
-    room,
-  }
-}
-
 export function updateUserNametag(room, property, value) {
   return {
     type: constants.UPDATE_USER_NAMETAG,

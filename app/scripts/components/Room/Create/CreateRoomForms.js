@@ -35,8 +35,8 @@ const getForm = (props) => {
           <EditNametag
             error={props.error}
             userNametag={props.hostNametag}
-            addUserNametagCert={props.addNametagCert}
-            removeUserNametagCert={props.removeNametagCert}
+            addNametagEditCert={props.addNametagCert}
+            removeNametagEditCert={props.removeNametagCert}
             updateUserNametag={props.updateNametag}
             userDefaults={props.user.data}
             room=''/>

@@ -23,28 +23,6 @@ describe('UserNametagActions', () => {
     hz.mockClear()
   })
 
-  describe('addUserNametagCert', () => {
-    it('should add a certificate to the user nametag for this room', () => {
-      expect(actions.addUserNametagCert({name: 'Test Certificate', id: '123' }, 'abc'))
-        .toEqual({
-          type: constants.ADD_USER_NT_CERT,
-          cert: {name: 'Test Certificate', id: '123' },
-          room: 'abc',
-        })
-    })
-  })
-
-  describe('removeUserNametagCert', () => {
-    it('should remove a certificate from the user nametag for this room', () => {
-      expect(actions.removeUserNametagCert('123', 'abc'))
-        .toEqual({
-          type: constants.REMOVE_USER_NT_CERT,
-          certId: '123',
-          room: 'abc',
-        })
-    })
-  })
-
   describe('updateUserNametag', () => {
     it('should update the user nametag', () => {
       expect(actions.updateUserNametag('abc', 'name', 'Allosaur'))
