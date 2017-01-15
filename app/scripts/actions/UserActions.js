@@ -105,17 +105,15 @@ export function appendUserArray(property, value) {
       value,
     })
     return new Promise((resolve, reject) => {
-      hz.currentUser().fetch().subscribe((user) => {
-        let data = user.data
-        if (data[property]) {
-          data[property].push(value)
-        } else {
-          data[property] = [value]
-        }
+      hz.currentUser().fetch().subscribe((user) => resolve(user), reject)
+    })
+    .then((user) => {
+      return new Promise((resolve, reject) => {
+        const data = user.data[property] ? [value].concat(data[property]) : [value]
         hz('users').update({id: user.id, data}).subscribe((res) => {
           resolve(res)
         }, reject)
-      }, reject)
+      })
     }).catch(errorLog('Updating user array'))
   }
 }
