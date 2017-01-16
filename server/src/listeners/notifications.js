@@ -5,33 +5,42 @@ const onMessage = (conn) => (err, message) => {
     console.error(err)
     return Promise.reject(err)
   }
+
   return r.db('nametag').table('user_nametags').filter({room: message.new_val.room})
     .update({latestMessage: message.new_val.timestamp}).run(conn)
-    .then(() => checkMentions(message))
+    .then(() => checkMentions(message, conn))
 }
 
 // Check for mentions of a @username
-const checkMentions = (message) => {
-  if (message.indexOf('@') === -1) {return null}
+const checkMentions = (message, conn) => {
+  if (message.new_val.text.indexOf('@') === -1) {return null}
 
   const room = message.new_val.room
 
   return r.db('nametag').table('nametags').filter({room}).run(conn)
   .then((roomNametags) => {
-    const splitMsg = message.split('@')
-    for (let i = 0; i < splitMsg.length; i++ ) {
-      // For every mention, check every nametag in the room to see if it matches the name.
-      for (let j = 0; j < roomNametags.length; j++ ) {
-        const {name, nametagId} = roomNametags[j]
-        if (splitMsg[i].slice(0, name.length).toLowerCase() === name.toLowerCase()) {
-          addMention(nametagId, room)
+    const splitMsg = message.new_val.text.split('@')
+    let promises = []
+    // For every mention, check every nametag in the room to see if it matches the name.
+    roomNametags.toArray((err, nametags) => {
+      if (err) { return false}
+      for (let i = 0; i < splitMsg.length; i++ ) {
+        const text = splitMsg[i]
+        for (let j = 0; j < nametags.length; j++ ) {
+          const {name, id} = nametags[j]
+          if (text.slice(0, name.length).toLowerCase() === name.toLowerCase()) {
+            promises.push(addMention(id, room, conn))
+          }
         }
       }
-    }
+      return true
+    })
+
+    return Promise.all(promises)
   })
 }
 
-const addMention = (nametag, room) => {
+const addMention = (nametag, room, conn) => {
   return r.db('nametag').table('user_nametags').filter({room, nametag})
     .update({mentions: r.row('mentions').prepend(Date.now())}).run(conn)
 }
