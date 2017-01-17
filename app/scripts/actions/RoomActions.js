@@ -3,6 +3,7 @@ import errorLog from '../utils/errorLog'
 import constants from '../constants'
 import {addNametag, putNametag} from './NametagActions'
 import {putUserNametag} from './UserNametagActions'
+import {appendUserArray} from './UserActions'
 import _ from 'lodash'
 
 let roomWatches = {}
@@ -147,6 +148,9 @@ export function joinRoom(roomId, nametag, userId) {
         nametagId = id
         dispatch(addNametag(nametag, id, nametag.room))
         return dispatch(putUserNametag(roomId, userId, id))
+      })
+      .then(() => {
+        return dispatch(appendUserArray('nametags', nametagId))
       })
       .then(() => {
         return nametagId
