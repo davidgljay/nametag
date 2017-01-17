@@ -37,34 +37,32 @@ class Messages extends Component {
   }
 
   mapMessage(id) {
-    if (!this.props.messages || !this.props.nametags) {return null}
+    const {messages, nametags, room, postMessage} = this.props
+    if (!messages || !nametags) {return null}
     let component = null
-    let message = this.props.messages[id]
-    let author = this.props.nametags[message.author]
+    let message = messages[id]
+    let author = nametags[message.author]
     if (message.type === 'message') {
       component = <Message
           {...message}
           author={author}
-          roomId={this.props.room}
+          roomId={room}
           key={message.id}
-          postMessage={this.props.postMessage}/>
-    } else if (message.type === 'modAction') {
-      // component = <ModActionNotif
-      //       id={'ma' + message.id}
-      //       modAction={message}
-      //       roomId={this.props.room}
-      //       key={'ma' + message.id}/>
+          postMessage={postMessage}/>
     }
     return component
   }
 
   render() {
+    const {messageList, messages} = this.props
     return <div style={styles.messages}>
         <table style={styles.msgContainer}>
           <tbody>
           {
-            this.props.messageList &&
-            this.props.messageList.map(this.mapMessage)
+            messageList &&
+            messageList
+              .sort((a, b) => messages[a].timestamp - messages[b].timestamp)
+              .map(this.mapMessage)
           }
           </tbody>
         </table>

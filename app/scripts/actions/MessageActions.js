@@ -2,6 +2,7 @@ import errorLog from '../utils/errorLog'
 import constants from '../constants'
 import {hz} from '../api/horizon'
 import {setRoomProp} from './RoomActions'
+import _ from 'lodash'
 
 let messageSubscriptions = {}
 
@@ -30,18 +31,14 @@ export const addMessageArray = (messages) => {
 *    promise
 */
 export function watchRoomMessages(room) {
-  return function(dispatch) {
+  return function(dispatch, getState) {
     return new Promise((resolve, reject) => {
       messageSubscriptions[room] = hz('messages').findAll({room: room}).watch().subscribe(
         (messages) => {
-          let messageIds = []
-          messages.sort((a, b) => {
-            return a.timestamp - b.timestamp
-          })
-          for (let i = 0; i < messages.length; i++) {
-            messageIds.push(messages[i].id)
-          }
           dispatch(addMessageArray(messages))
+          const messageIds = _.uniq(
+            messages.map((m) => m.id).concat(getState().rooms[room].messages)
+          )
           dispatch(setRoomProp(room, 'messages', messageIds))
           resolve()
         }, reject)

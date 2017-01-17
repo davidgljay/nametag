@@ -1,6 +1,7 @@
 jest.unmock('../MessageActions')
 jest.unmock('../../tests/mockGlobals')
 jest.unmock('../RoomActions')
+jest.unmock('lodash')
 
 jest.unmock('redux-mock-store')
 jest.unmock('redux-thunk')
@@ -19,7 +20,13 @@ describe('Message Actions', () => {
   let store
   let calls
   beforeEach(() => {
-    store = mockStore({})
+    store = mockStore({
+      rooms: {
+        abc: {
+          name: 'stuff',
+        },
+      },
+    })
     calls = []
   })
 
@@ -30,29 +37,13 @@ describe('Message Actions', () => {
         {msg: 'well hello', room: 'abc', id: '456'},
       ]
       hz.mockReturnValue(mockHz(results, calls)())
-      return actions.watchRoomMessages('abc')(store.dispatch).then(
+      return actions.watchRoomMessages('abc')(store.dispatch, store.getState).then(
         () => {
           expect(calls[1]).toEqual({type: 'findAll', req: {room: 'abc'}})
           expect(calls[2]).toEqual({type: 'watch', req: undefined})
           expect(store.getActions()[0]).toEqual({
             type: constants.ADD_MESSAGE_ARRAY,
             messages: results,
-          })
-        })
-    })
-    it('should properly sort the messages by date', () => {
-      let results = [
-        {msg: 'hi there', room: 'abc', id: '123', timestamp: '999'},
-        {msg: 'well hello', room: 'abc', id: '456', timestamp: '001'},
-      ]
-      hz.mockReturnValue(mockHz(results, calls)())
-      return actions.watchRoomMessages('abc')(store.dispatch).then(
-        () => {
-          expect(store.getActions()[1]).toEqual({
-            type: constants.SET_ROOM_PROP,
-            room: 'abc',
-            property: 'messages',
-            value: ['456', '123'],
           })
         })
     })
