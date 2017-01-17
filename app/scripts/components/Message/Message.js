@@ -6,6 +6,7 @@ import MessageMenu from './MessageMenu'
 import emojis from 'react-emoji'
 import {mobile} from '../../../styles/sizes'
 import {grey500} from 'material-ui/styles/colors'
+import ReactMarkdown from 'react-markdown'
 
 class Message extends Component {
 
@@ -25,7 +26,6 @@ class Message extends Component {
   checkImage = (message) => {
     return /[^ ]+(\.gif|\.jpg|\.png)/.exec(message)
   }
-
 
   render() {
     let below
@@ -62,7 +62,17 @@ class Message extends Component {
         </td>
         <td style={styles.messageText}>
           <div style={styles.name}>{this.props.author.name}</div>
-          <div style={styles.text}>{emojis.emojify(this.props.text)}</div>
+          <div style={styles.text}>
+            {
+              emojis.emojify(this.props.text).map((text, i) => {
+                return text.props ? text : <ReactMarkdown
+                  key={i}
+                  style={styles.text}
+                  source={text}
+                  escapeHtml={true}/>
+              })
+            }
+          </div>
           {media}
           {below}
           <div style={styles.msgPadding}></div>

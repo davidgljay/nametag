@@ -75,13 +75,35 @@ export function unWatchRoomMessages(room) {
 *    promise
 */
 export function postMessage(message) {
-  return function() {
+  return function(dispatch, getState) {
+    console.log(getState())
+    const updatedMessage =  {
+      ...message,
+      text: message.text.indexOf('@') === -1 ?
+        message.text : highlightMentions(message, getState().nametags)
+    }
     return new Promise((resolve, reject) => {
-      hz('messages').upsert(message).subscribe(
+      hz('messages').upsert(updatedMessage).subscribe(
         (id) => {
           resolve(id)
         }, reject)
     })
     .catch(errorLog('Error posting a message ' + JSON.stringify(message) + ': '))
   }
+}
+
+const highlightMentions = (message, nametags) => {
+  const roomNametags = Object.keys(nametags).map((id) => nametags[id])
+    .filter(nametag => nametag.room === message.room)
+  let splitMsg = message.text.split('@')
+  for (let i = 0; i < splitMsg.length; i++ ) {
+    for (let j = 0; j < roomNametags.length; j++ ) {
+      const text = splitMsg[i]
+      const {name} = roomNametags[i]
+      if (text.slice(0, name.length).toLowerCase() === name.toLowerCase()) {
+        splitMsg[i] = `*@${text.slice(0, name.length)}*${text.slice(name.length)}`
+      }
+    }
+  }
+  return splitMsg.join('')
 }

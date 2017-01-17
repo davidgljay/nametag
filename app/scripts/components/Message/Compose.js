@@ -43,8 +43,7 @@ class Compose extends Component {
         type: 'message',
       }
       let tempId = new Date().getTime() + '_tempId'
-      this.setState({message: ''})
-      this.setState({showEmoji: false})
+      this.setState({message: '', showEmoji: false})
       this.props.addMessage(Object.assign({}, message, {id: tempId}), tempId)
       this.props.addRoomMessage(message.room, tempId)
       this.props.postMessage(message)
