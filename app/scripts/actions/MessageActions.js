@@ -76,11 +76,10 @@ export function unWatchRoomMessages(room) {
 */
 export function postMessage(message) {
   return function(dispatch, getState) {
-    console.log(getState())
     const updatedMessage =  {
       ...message,
       text: message.text.indexOf('@') === -1 ?
-        message.text : highlightMentions(message, getState().nametags)
+        message.text : highlightMentions(message, getState().nametags),
     }
     return new Promise((resolve, reject) => {
       hz('messages').upsert(updatedMessage).subscribe(resolve, reject)

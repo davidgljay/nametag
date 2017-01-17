@@ -113,9 +113,7 @@ export function unWatchRoomNametags(room) {
 export function putNametag(nametag) {
   return () => {
     return new Promise((resolve, reject) => {
-      hz('nametags').upsert(nametag).subscribe((id) => {
-        resolve(id.id)
-      }, reject)
+      hz('nametags').upsert(nametag).subscribe((res) => resolve(res.id), reject)
     }).catch(errorLog('Adding user nametag'))
   }
 }

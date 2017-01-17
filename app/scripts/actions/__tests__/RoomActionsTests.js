@@ -45,6 +45,7 @@ describe('RoomActions', () => {
         [{lastPresent}],
         [{lastPresent}, {lastPresent}, {lastPresent}],
       ]
+
       hz.mockReturnValueOnce(mockHz(mockResponses[0], calls)())
       hz.mockReturnValueOnce(mockHz(mockResponses[1], calls)())
       hz.mockReturnValueOnce(mockHz(mockResponses[2], calls)())
@@ -73,8 +74,13 @@ describe('RoomActions', () => {
   describe('joinRoom', () => {
     it('should join a room', () => {
       let calls2 = []
+      let calls3 = []
+      let calls4 = []
       hz.mockReturnValueOnce(mockHz({id: '456'}, calls)())
       hz.mockReturnValueOnce(mockHz({id: 'def'}, calls2)())
+      hz.currentUser = jest.fn()
+        .mockReturnValue(mockHz({id: 'a', data: {nametags: []}}, calls3)())
+      hz.mockReturnValueOnce(mockHz({updated: true}, calls4)())
       return actions.joinRoom('1234', {name: 'tag', room: '1234'}, 'me')(store.dispatch)
         .then((nametagId) => {
           // Expect the promise to return the nametag value
@@ -94,6 +100,7 @@ describe('RoomActions', () => {
             req: {
               room: '1234',
               user: 'me',
+              mentions: [],
               nametag: '456',
             },
           })

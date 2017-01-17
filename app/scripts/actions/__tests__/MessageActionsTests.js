@@ -67,7 +67,7 @@ describe('Message Actions', () => {
         date: 'tuesday',
       }
       hz.mockReturnValue(mockHz(result, calls)())
-      return actions.postMessage(message)(store.dispatch).then(
+      return actions.postMessage(message)(store.dispatch, store.getState).then(
         (id) => {
           expect(id).toEqual({'id': '123'})
           expect(calls[1]).toEqual({type: 'upsert', req: message})

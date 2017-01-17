@@ -115,6 +115,6 @@ export function grantCertificate(id) {
         resolve(result)
       }, reject)
     })
-    .catch(errorLog('Error granting certificate ' + certificateId + ': '))
+    .catch(errorLog('Error granting certificate ' + id + ': '))
   }
 }

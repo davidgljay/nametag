@@ -71,6 +71,7 @@ describe('UserNametagActions', () => {
           type: 'insert',
           req: {
             user: 'me',
+            mentions: [],
             nametag: '456',
             room: 'abc',
           },
@@ -79,21 +80,4 @@ describe('UserNametagActions', () => {
     })
   })
 
-  // describe('watchNotifications', () => {
-  //   it('should watch for new messages from rooms that the user has entered.', () => {
-  //     let calls2 = []
-  //     hz.mockReturnValueOnce(mockHz(['123', '456'], calls)())
-  //     hz.mockReturnValueOnce(mockHz([{room: 'abc', timestamp: 1234567}], calls2)())
-  //     return actions.watchNotifications('user')(store.dispatch).then(() => {
-  //       expect(calls[1]).toEqual({ type: 'findAll', req: { user: 'user' } })
-  //       expect(calls2[1]).toEqual({ type: 'findAll', req: [ '123', '456' ] })
-  //       expect(store.getActions()[0]).toEqual({
-  //         type: 'UPDATE_USER_NAMETAG',
-  //         room: 'abc',
-  //         property: 'latestMessage',
-  //         value: 1234567,
-  //       })
-  //     })
-  //   })
-  // })
 })
