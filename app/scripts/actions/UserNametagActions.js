@@ -34,7 +34,7 @@ export function addUserNametag(room, nametag) {
 export function putUserNametag(room, user, nametag) {
   return () => {
     return new Promise((resolve, reject) => {
-      hz('user_nametags').insert({room, user, nametag}).subscribe((id) => {
+      hz('user_nametags').insert({room, user, nametag, mentions: []}).subscribe((id) => {
         resolve(id)
       }, reject)
     }).catch(errorLog('Putting user nametag'))

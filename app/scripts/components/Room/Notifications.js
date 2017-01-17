@@ -1,5 +1,6 @@
 import React from 'react'
 import {List, ListItem} from 'material-ui/List'
+import Badge from 'material-ui/Badge';
 
 const Notifications = ({userNametags, rooms, roomId}) =>
   <div>
@@ -7,11 +8,22 @@ const Notifications = ({userNametags, rooms, roomId}) =>
     {Object.keys(userNametags).map((id) => {
       const room = rooms[id]
       const userNametag = userNametags[id]
+      const mentions = userNametag.mentions.filter((time) => time > userNametag.latestVisit)
+        .length
 
       const newMessages = userNametag.latestMessage > userNametag.latestVisit ?
         styles.newMessages : styles.noNewMessages
       return room && roomId !== id && <ListItem innerDivStyle={styles.notification} key={id}>
           <a href={`/rooms/${id}`} style={styles.link}>
+            {
+              mentions > 0 &&
+              <Badge
+                badgeContent={mentions}
+                secondary={true}
+                style={styles.badgeStyle}
+                badgeStyle={styles.innerBadgeStyle}/>
+            }
+
             <div>
               <img src={room.image} style={{...styles.roomImage, ...newMessages}}/>
             </div>
@@ -48,5 +60,17 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     fontSize: 13,
+  },
+  badgeStyle: {
+    position: 'fixed',
+    top: 0,
+    left: 20,
+    zIndex: 20,
+    padding: 0,
+  },
+  innerBadgeStyle: {
+    fontSize: 10,
+    width: 15,
+    height: 15,
   },
 }
