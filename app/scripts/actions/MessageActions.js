@@ -83,10 +83,7 @@ export function postMessage(message) {
         message.text : highlightMentions(message, getState().nametags)
     }
     return new Promise((resolve, reject) => {
-      hz('messages').upsert(updatedMessage).subscribe(
-        (id) => {
-          resolve(id)
-        }, reject)
+      hz('messages').upsert(updatedMessage).subscribe(resolve, reject)
     })
     .catch(errorLog('Error posting a message ' + JSON.stringify(message) + ': '))
   }
