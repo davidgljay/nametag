@@ -8,8 +8,9 @@ const Notifications = ({userNametags, rooms, roomId}) =>
     {Object.keys(userNametags).map((id) => {
       const room = rooms[id]
       const userNametag = userNametags[id]
-      const mentions = userNametag.mentions.filter((time) => time > userNametag.latestVisit)
-        .length
+      const mentions = userNametag.mentions ? userNametag.mentions.filter(
+        (time) => time > userNametag.latestVisit
+      ).length : 0
 
       const newMessages = userNametag.latestMessage > userNametag.latestVisit ?
         styles.newMessages : styles.noNewMessages
