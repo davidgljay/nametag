@@ -13,8 +13,6 @@ horizon:
     - rethinkdb
   ports:
     - "8181:8181"
-  restart_policy:
-    condition: "any"
 rethinkdb:
   image: rethinkdb
   command: rethinkdb --bind "all" --no-update-check
