@@ -273,6 +273,5 @@ const styles = {
   },
   button: {
     margin: 20,
-  }
-
+  },
 }
