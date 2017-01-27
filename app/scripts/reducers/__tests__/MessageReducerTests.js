@@ -48,5 +48,45 @@ describe('Message reducer', () => {
         },
       })
     })
+
+    it('should add to the existing array of messages, updating duplicates', () => {
+      let newState = messageReducer({
+        1: {
+          id: 1,
+          text: 'An old message',
+        },
+        3: {
+          id: 3,
+          text: 'I shouldn\'t change',
+        },
+      },
+        {
+          type: constants.ADD_MESSAGE_ARRAY,
+          messages: [
+            {
+              id: 1,
+              text: 'Test Message',
+            },
+            {
+              id: 2,
+              text: 'Another Test Message',
+            },
+          ],
+        })
+      expect(newState).toEqual({
+        1: {
+          id: 1,
+          text: 'Test Message',
+        },
+        2: {
+          id: 2,
+          text: 'Another Test Message',
+        },
+        3: {
+          id: 3,
+          text: 'I shouldn\'t change',
+        },
+      })
+    })
   })
 })

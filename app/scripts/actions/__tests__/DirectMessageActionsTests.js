@@ -71,7 +71,7 @@ describe('Message Actions', () => {
           expect(calls[2]).toEqual({type: 'watch', req: undefined})
           expect(store.getActions()[0]).toEqual({
             type: constants.ADD_MESSAGE_ARRAY,
-            messages: results,
+            messages: results.map((m) => { return {...m, type: 'direct_message'}}),
           })
         })
     })

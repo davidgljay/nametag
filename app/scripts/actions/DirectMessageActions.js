@@ -31,7 +31,9 @@ export const watchDirectMessages = (room) => {
       new Promise((resolve, reject) => {
         dmSubscriptions[room] = hz('direct_messages')
           .findAll({user: getState().user.id, room}).watch().subscribe((dms) => {
-            dispatch(addMessageArray(dms))
+            dispatch(addMessageArray(dms.map((dm) => {
+              return {...dm, type: 'direct_message'}
+            })))
             const messageIds = _.uniq(
               dms.map((m) => m.id).concat(getState().rooms[room].messages)
             )
