@@ -27,6 +27,13 @@ describe('Message Actions', () => {
           name: 'stuff',
         },
       },
+      nametags: {
+        def: {
+          id: 'def',
+          name: 'cornelius',
+          room: 'abc',
+        },
+      },
       user: {
         id: '123',
       },
@@ -35,19 +42,18 @@ describe('Message Actions', () => {
   })
 
   describe('postDirectMessage', () => {
-    it('should post a message', () => {
+    it('should post a message with the proper recipient', () => {
       let result = {id: '123'}
       let message = {
-        type: 'direct_message',
-        to: '456',
-        text: 'This is a message',
+        room: 'abc',
+        text: 'd cornelius This is a message',
         date: 'tuesday',
       }
       hz.mockReturnValue(mockHz(result, calls)())
       return actions.postDirectMessage(message)(store.dispatch, store.getState).then(
         (id) => {
           expect(id).toEqual({'id': '123'})
-          expect(calls[1]).toEqual({type: 'upsert', req: message})
+          expect(calls[1]).toEqual({type: 'upsert', req: {...message, recipient: 'def'}})
         })
     })
   })

@@ -7,11 +7,23 @@ import _ from 'lodash'
 let dmSubscriptions = {}
 
 export const postDirectMessage = (message) => {
-  return () =>
-    new Promise((resolve, reject) => {
-      hz('direct_messages').upsert(message).subscribe(resolve, reject)
+  return (dispatch, getState) => {
+    let recipient
+    const nametags = getState().nametags
+    const roomNametags = Object.keys(nametags).map((id) => nametags[id])
+      .filter(nametag => nametag.room === message.room)
+    for (let i = 0; i < roomNametags.length; i++ ) {
+      const nametag = roomNametags[i]
+      if (message.text.slice(2, nametag.name.length + 2).toLowerCase() ===
+        nametag.name.toLowerCase()) {
+        recipient = nametag.id
+      }
+    }
+    return recipient ? new Promise((resolve, reject) => {
+      hz('direct_messages').upsert({...message, recipient}).subscribe(resolve, reject)
       .catch(errorLog('Error posting a direct message ' + JSON.stringify(message) + ': '))
-    })
+    }) : Promise.reject('Cannot send direct message, no one of that name is in this room.')
+  }
 }
 
 export const watchDirectMessages = (room) => {

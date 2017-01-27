@@ -2,6 +2,7 @@ import errorLog from '../utils/errorLog'
 import constants from '../constants'
 import {hz} from '../api/horizon'
 import {setRoomProp} from './RoomActions'
+import {postDirectMessage} from './DirectMessageActions'
 import _ from 'lodash'
 
 let messageSubscriptions = {}
@@ -63,7 +64,8 @@ export function unWatchRoomMessages(room) {
 }
 
 /*
-* Post a message
+* Post a message, highlighting any @mentions. If the message
+* starts with d or D, treat it as a DM.
 *
 * @params
 *    message - The message to be posted
@@ -78,7 +80,8 @@ export function postMessage(message) {
       text: message.text.indexOf('@') === -1 ?
         message.text : highlightMentions(message, getState().nametags),
     }
-    return new Promise((resolve, reject) => {
+    const dm = message.text.slice(0, 1).toLowerCase() === 'd'
+    return dm ? postDirectMessage(message) : new Promise((resolve, reject) => {
       hz('messages').upsert(updatedMessage).subscribe(resolve, reject)
     })
     .catch(errorLog('Error posting a message ' + JSON.stringify(message) + ': '))
@@ -92,7 +95,7 @@ const highlightMentions = (message, nametags) => {
   for (let i = 0; i < splitMsg.length; i++ ) {
     for (let j = 0; j < roomNametags.length; j++ ) {
       const text = splitMsg[i]
-      const {name} = roomNametags[i]
+      const {name} = roomNametags[j]
       if (text.slice(0, name.length).toLowerCase() === name.toLowerCase()) {
         splitMsg[i] = `*@${text.slice(0, name.length)}*${text.slice(name.length)}`
       }
