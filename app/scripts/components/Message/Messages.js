@@ -41,11 +41,10 @@ class Messages extends Component {
     if (!messages || !nametags) {return null}
     let component = null
     let message = messages[id]
-    let author = nametags[message.author]
-    if (message.type === 'message') {
+    if (message && message.type === 'message') {
       component = <Message
           {...message}
-          author={author}
+          author={nametags[message.author]}
           roomId={room}
           key={message.id}
           postMessage={postMessage}/>
