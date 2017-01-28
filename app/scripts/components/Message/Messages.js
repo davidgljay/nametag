@@ -43,17 +43,13 @@ class Messages extends Component {
   mapMessage(id) {
     const {messages, nametags, room, postMessage} = this.props
     if (!messages || !nametags) {return null}
-    let component = null
     let message = messages[id]
-    if (message && message.type === 'message') {
-      component = <Message
-          {...message}
-          author={nametags[message.author]}
-          roomId={room}
-          key={message.id}
-          postMessage={postMessage}/>
-    }
-    return component
+    return message && <Message
+        {...message}
+        author={nametags[message.author]}
+        roomId={room}
+        key={message.id}
+        postMessage={postMessage}/>
   }
 
   render() {

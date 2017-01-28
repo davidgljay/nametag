@@ -95,7 +95,7 @@
     "test-watch": "jest --watch",
     "start": "docker-compose up -d && gulp watch",
     "build": "NODE_ENV=production gulp build",
-    "update": "git pull origin master && npm install && npm run build && docker-compose build horizon && docker-compose stop && docker-compose up -d",
+    "update": "git pull origin master && npm install && npm run build && docker-compose build horizon --no-cache && docker-compose stop && docker-compose up -d",
     "storybook": "start-storybook -p 9001 -c .storybook"
   },
   "jest": {

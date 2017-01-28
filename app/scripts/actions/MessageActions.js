@@ -81,9 +81,15 @@ export function postMessage(message) {
         message.text : highlightMentions(message, getState().nametags),
     }
     const dm = message.text.slice(0, 1).toLowerCase() === 'd'
-    return dm ? postDirectMessage(message) : new Promise((resolve, reject) => {
+    const promise = dm ? dispatch(postDirectMessage({...message, type: 'direct_message'})) :
+    new Promise((resolve, reject) => {
       hz('messages').upsert(updatedMessage).subscribe(resolve, reject)
     })
+
+    // let tempId = new Date().getTime() + '_tempId'
+    // addMessage(Object.assign({}, message, {id: tempId}), tempId)
+    // addRoomMessage(message.room, tempId)
+    return promise
     .catch(errorLog('Error posting a message ' + JSON.stringify(message) + ': '))
   }
 }

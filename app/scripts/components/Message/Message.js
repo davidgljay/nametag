@@ -5,7 +5,7 @@ import Media from './Media'
 import MessageMenu from './MessageMenu'
 import emojis from 'react-emoji'
 import {mobile} from '../../../styles/sizes'
-import {grey500} from 'material-ui/styles/colors'
+import {grey500, grey200} from 'material-ui/styles/colors'
 import ReactMarkdown from 'react-markdown'
 
 class Message extends Component {
@@ -30,45 +30,51 @@ class Message extends Component {
   render() {
     let below
     let media
+    const {text, author, id, timestamp, postMessage, type} = this.props
 
-    if (this.checkYouTube(this.props.text)) {
-      media = <Media url={this.checkYouTube(this.props.text)[0]}/>
-    } else if (this.checkImage(this.props.text)) {
-      media = <Media url={this.checkImage(this.props.text)[0]}/>
+    if (this.checkYouTube(text)) {
+      media = <Media url={this.checkYouTube(text)[0]}/>
+    } else if (this.checkImage(text)) {
+      media = <Media url={this.checkImage(text)[0]}/>
     }
 
     if (this.state.modAction) {
       below =
         <ModAction
-          msgId={this.props.id}
-          author={this.props.author}
+          msgId={id}
+          author={author}
           close={this.modAction(false)}
-          postMessage={this.props.postMessage}/>
+          postMessage={postMessage}/>
     } else {
       below = <div style={styles.below}>
           <MessageMenu
             modAction={this.modAction}
-            id = {this.props.id} />
+            id = {id} />
           <div style={styles.date}>
-              {moment(this.props.timestamp).format('h:mm A, ddd MMM DD YYYY')}
+              {moment(timestamp).format('h:mm A, ddd MMM DD YYYY')}
           </div>
         </div>
     }
 
     return <tr
-        style={styles.message}>
+        style={type === 'direct_message' ?
+          {...styles.message, ...styles.direct_message} : styles.message}>
         <td style={styles.icon}>
-          <img style={styles.iconImg} src={this.props.author.icon}/>
+          <img style={styles.iconImg} src={author.icon}/>
         </td>
         <td style={styles.messageText}>
-          <div style={styles.name}>{this.props.author.name}</div>
+          <div style={styles.name}>{author.name}</div>
+          {
+            type === 'direct_message' &&
+            <div style={styles.dmCallout}>Direct Message</div>
+          }
           <div style={styles.text}>
             {
-              emojis.emojify(this.props.text).map((text, i) => {
-                return text.props ? text : <ReactMarkdown
+              emojis.emojify(text).map((emojiText, i) => {
+                return emojiText.props ? emojiText : <ReactMarkdown
                   key={i}
                   style={styles.text}
-                  source={text}
+                  source={emojiText}
                   escapeHtml={true}/>
               })
             }
@@ -95,6 +101,13 @@ const styles = {
   message: {
     paddingTop: 10,
     paddingBottom: 5,
+  },
+  directMessage: {
+    backgroundColor: grey200,
+  },
+  dmCallout: {
+    color: grey500,
+    fontStyle: 'italic',
   },
   messageText: {
     width: '100%',

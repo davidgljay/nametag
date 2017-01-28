@@ -1,7 +1,7 @@
-sleep 7
+sleep 4
 
 echo 'Syncing schema'
-hz schema apply /usr/app/.hz/schema.toml --connect rethinkdb
+hz schema apply schema.toml --project-name nametag --connect rethinkdb
 
 echo 'Starting horizon'
-npm start
+node ./src/app

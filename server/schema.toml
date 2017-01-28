@@ -8,15 +8,13 @@
 [[collections.messages.indexes]]
 fields = [["room"]]
 
-[collections.reactions]
-[[collections.reactions.indexes]]
-fields = [["message"]]
+[collections.direct_messages]
+[[collections.direct_messages.indexes]]
+fields = [["room","to"]]
 
 [collections.users]
 
 [collections.user_nametags]
-[[collections.user_nametags.indexes]]
-fields = [["room"]]
 [[collections.user_nametags.indexes]]
 fields = [["user"]]
 
@@ -37,21 +35,38 @@ template = "collection('users').find({id: userId()})"
 template = "collection('messages').anyRead()"
 [groups.default.rules.read_nametags]
 template = "collection('nametags').anyRead()"
-[groups.default.rules.read_reactions]
-template = "collection('reactions').anyRead()"
 [groups.default.rules.read_rooms]
 template = "collection('rooms').anyRead()"
 [groups.default.rules.read_user_nametags]
-template = "collection('user_nametags').anyRead()"
+template = "collection('user_nametags').findAll({user: userId()})"
+[groups.default.rules.read_direct_messages]
+template = "collection('direct_messages').anyRead()"
+validator = """
+  (context, value) => {
+    return context.data.nametags.indexOf(value.recipient) > -1
+  }
+"""
 [groups.default.rules.write_certificates]
 template = "collection('certificates').anyWrite()"
-[groups.default.rules.write_messages]
-template = "collection('messages').anyWrite()"
+[groups.authenticated.rules.store_message]
+template = "collection('messages').upsert({author: any(), text: any(), room: any(), timestamp: any(), type: any()})"
+validator = """
+  (context, oldValue, newValue) => {
+    return context.data.nametags.indexOf(newValue.author) > -1
+  }
+"""
+[groups.default.rules.write_current_user]
+template = "collection('users').update({id: userId(), data: any()})"
 [groups.default.rules.write_nametags]
 template = "collection('nametags').anyWrite()"
-[groups.default.rules.write_reactions]
-template = "collection('reactions').anyWrite()"
 [groups.default.rules.write_rooms]
 template = "collection('rooms').anyWrite()"
-[groups.default.rules.write_user_nametags]
-template = "collection('user_nametags').anyWrite()"
+[groups.default.rules.store_user_nametags]
+template = "collection('user_nametags').upsert({user: userId(), room: any(), nametag: any(), mentions:any()})"
+[groups.default.rules.write_direct_messages]
+template = "collection('direct_messages').upsert({recipient:any(), author: any(), text: any(), room: any(), timestamp: any(), type: any()})"
+validator = """
+  (context, oldValue, newValue) => {
+    return context.data.nametags.indexOf(newValue.author) > -1
+  }
+"""

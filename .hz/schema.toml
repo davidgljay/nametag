@@ -43,7 +43,7 @@ template = "collection('user_nametags').find({user: userId()})"
 template = "collection('direct_messages').anyRead()"
 validator = """
   (context, value) => {
-    return context.data.nametags && context.data.nametags.indexOf(value.to) > -1
+    return context.data.nametags.indexOf(value.recipient) > -1
   }
 """
 [groups.default.rules.write_certificates]
@@ -51,8 +51,8 @@ template = "collection('certificates').anyWrite()"
 [groups.authenticated.rules.store_message]
 template = "collection('messages').store({author: any(), text: any(), room: any(), timestamp: any(), type: any()})"
 validator = """
-  (context, value) => {
-    return context.data.nametags && context.data.nametags.indexOf(value.author) > -1
+  (context, oldValue, newValue) => {
+    return context.data.nametags.indexOf(newValue.author) > -1
   }
 """
 [groups.default.rules.write_current_user]
@@ -62,11 +62,11 @@ template = "collection('nametags').anyWrite()"
 [groups.default.rules.write_rooms]
 template = "collection('rooms').anyWrite()"
 [groups.default.rules.write_user_nametags]
-template = "collection('user_nametags').store({user: userId()}).update({user: userId()})"
+template = "collection('user_nametags').store({user: userId()})"
 [groups.default.rules.write_direct_messages]
-template = "collection('direct_messages').{to:any(), author: any(), text: any(), room: any(), timestamp: any(), type: any()}"
+template = "collection('direct_messages').store({recipient:any(), author: any(), text: any(), room: any(), timestamp: any(), type: any()})"
 validator = """
-  (context, value) => {
-    return context.data.nametags && context.data.nametags.indexOf(value.author) > -1
+  (context, oldValue, newValue) => {
+    return context.data.nametags.indexOf(newValue.author) > -1
   }
 """
