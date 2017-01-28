@@ -8,7 +8,7 @@ let dmSubscriptions = {}
 
 export const postDirectMessage = (message) => {
   return (dispatch, getState) => {
-    let recipient
+    let newMessage
     const nametags = getState().nametags
     const roomNametags = Object.keys(nametags).map((id) => nametags[id])
       .filter(nametag => nametag.room === message.room)
@@ -16,11 +16,15 @@ export const postDirectMessage = (message) => {
       const nametag = roomNametags[i]
       if (message.text.slice(2, nametag.name.length + 2).toLowerCase() ===
         nametag.name.toLowerCase()) {
-        recipient = nametag.id
+        newMessage = {
+          ...message,
+          recipient: nametag.id,
+          text: message.text.slice(nametag.name.length + 2),
+        }
       }
     }
-    return recipient ? new Promise((resolve, reject) => {
-      hz('direct_messages').upsert({...message, recipient}).subscribe(resolve, reject)
+    return newMessage ? new Promise((resolve, reject) => {
+      hz('direct_messages').upsert(newMessage).subscribe(resolve, reject)
     }).catch(errorLog('Error posting a direct message ' + JSON.stringify(message) + ': '))
     : Promise.reject('Cannot send direct message, no one of that name is in this room.')
   }
