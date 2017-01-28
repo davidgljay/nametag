@@ -5,7 +5,7 @@ import Media from './Media'
 import MessageMenu from './MessageMenu'
 import emojis from 'react-emoji'
 import {mobile} from '../../../styles/sizes'
-import {grey500, grey200} from 'material-ui/styles/colors'
+import {grey500, grey800, lightBlue100} from 'material-ui/styles/colors'
 import ReactMarkdown from 'react-markdown'
 
 class Message extends Component {
@@ -57,16 +57,16 @@ class Message extends Component {
     }
 
     return <tr
-        style={type === 'direct_message' ?
-          {...styles.message, ...styles.direct_message} : styles.message}>
+        style={styles.message}>
         <td style={styles.icon}>
           <img style={styles.iconImg} src={author.icon}/>
         </td>
-        <td style={styles.messageText}>
+        <td style={type === 'direct_message' ?
+          {...styles.messageText, ...styles.directMessage} : styles.messageText}>
           <div style={styles.name}>{author.name}</div>
           {
             type === 'direct_message' &&
-            <div style={styles.dmCallout}>Direct Message</div>
+            <div style={styles.dmCallout}>Private Message</div>
           }
           <div style={styles.text}>
             {
@@ -81,7 +81,6 @@ class Message extends Component {
           </div>
           {media}
           {below}
-          <div style={styles.msgPadding}></div>
         </td>
       </tr>
   }
@@ -101,18 +100,23 @@ const styles = {
   message: {
     paddingTop: 10,
     paddingBottom: 5,
+    marginTop: 10,
+    marginBottom: 10,
   },
   directMessage: {
-    backgroundColor: grey200,
+    backgroundColor: lightBlue100,
   },
   dmCallout: {
-    color: grey500,
+    color: grey800,
     fontStyle: 'italic',
   },
   messageText: {
     width: '100%',
     fontSize: 14,
-    paddingRight: 20,
+    paddingRight: 40,
+    paddingTop: 10,
+    paddingLeft: 10,
+    borderRadius: 5,
     overflowWrap: 'break-word',
     wordWrap: 'break-word',
     wordBreak: 'break-word',
@@ -142,8 +146,5 @@ const styles = {
   },
   text: {
     fontSize: 16,
-  },
-  msgPadding: {
-    height: 15,
   },
 }

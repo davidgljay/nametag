@@ -13,9 +13,8 @@ class Messages extends Component {
   }
 
   componentDidMount() {
-    const {watchRoomMessages, watchDirectMessages, room} = this.props
+    const {watchRoomMessages, room} = this.props
     watchRoomMessages(room)
-    watchDirectMessages(room)
   }
 
   componentWillUpdate(nextProps) {
@@ -35,9 +34,8 @@ class Messages extends Component {
   }
 
   componentWillUnmount() {
-    const {unWatchRoomMessages, unWatchDirectMessages, room} = this.props
+    const {unWatchRoomMessages, room} = this.props
     unWatchRoomMessages(room)
-    unWatchDirectMessages(room)
   }
 
   mapMessage(id) {

@@ -8,6 +8,7 @@ import {
   postUpdateUserNametag,
 } from '../../actions/UserNametagActions'
 import {postMessage, addMessage} from '../../actions/MessageActions'
+import {watchDirectMessages, unWatchDirectMessages} from '../../actions/DirectMessageActions'
 import {logout, setting} from '../../actions/UserActions'
 
 const mapStateToProps = (state) => {
@@ -24,6 +25,8 @@ const mapDispatchToProps = (dispatch) => {
     watchRoom: disp(watchRoom),
     unWatchRoom: disp(unWatchRoom),
     addRoomMessage: disp(addRoomMessage),
+    watchDirectMessages: disp(watchDirectMessages),
+    unWatchDirectMessages: disp(unWatchDirectMessages),
     watchUserNametags: disp(watchUserNametags),
     unWatchUserNametags: disp(unWatchUserNametags),
     postUpdateUserNametag: disp(postUpdateUserNametag),

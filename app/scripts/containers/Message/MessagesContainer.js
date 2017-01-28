@@ -5,7 +5,6 @@ import {
   unWatchRoomMessages,
   postMessage,
 } from '../../actions/MessageActions'
-import {watchDirectMessages, unWatchDirectMessages} from '../../actions/DirectMessageActions'
 
 const mapStateToProps = (state, ownProps) => {
   return Object.assign({}, {
@@ -25,12 +24,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     postMessage(message) {
       dispatch(postMessage(message))
-    },
-    watchDirectMessages(room) {
-      dispatch(watchDirectMessages(room))
-    },
-    unWatchDirectMessages(room) {
-      dispatch(unWatchDirectMessages(room))
     },
   }
 }

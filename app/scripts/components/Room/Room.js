@@ -54,16 +54,27 @@ class Room extends Component {
   watchUserNametags = (props) => {
     // Get all of the users' nametags and all of the rooms for those nametags
     // so that the user can be notified if there is activity in another room.
-    if (!props.userNametags || !props.userNametags[props.params.roomId]
-      && props.user.id && !loadingNametags) {
+    const {
+      userNametags,
+      params,
+      user,
+      fetchRooms,
+      watchUserNametags,
+      watchDirectMessages,
+      postUpdateUserNametag,
+    } = props
+
+    if (!userNametags || !userNametags[params.roomId]
+      && user.id && !loadingNametags) {
       loadingNametags = true
-      props.watchUserNametags(props.user.id)
-        .then((userNametags) => {
-          props.fetchRooms(userNametags.map((n) => n.room))
-          for (let i = 0; i < userNametags.length; i++ ) {
-            if (userNametags[i].room === props.params.roomId) {
-              this.props.postUpdateUserNametag(userNametags[i].id, 'latestVisit', Date.now())
-              this.showPresence(userNametags[i].nametag)
+      watchUserNametags(user.id)
+        .then((userNts) => {
+          fetchRooms(userNts.map((n) => n.room))
+          for (let i = 0; i < userNts.length; i++ ) {
+            if (userNts[i].room === params.roomId) {
+              watchDirectMessages(params.roomId)
+              postUpdateUserNametag(userNts[i].id, 'latestVisit', Date.now())
+              this.showPresence(userNts[i].nametag)
             }
           }
         })
@@ -78,6 +89,7 @@ class Room extends Component {
     const roomId = this.props.params.roomId
     this.props.unWatchRoom(roomId)
     this.props.unWatchUserNametags()
+    this.props.unWatchDirectMessages()
     if (this.state.presenceTimer) {
       clearInterval(this.state.presenceTimer)
     }

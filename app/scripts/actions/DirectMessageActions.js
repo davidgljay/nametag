@@ -8,7 +8,6 @@ let dmSubscriptions = {}
 
 export const postDirectMessage = (message) => {
   return (dispatch, getState) => {
-    console.log('Posting direct message', message)
     let recipient
     const nametags = getState().nametags
     const roomNametags = Object.keys(nametags).map((id) => nametags[id])
@@ -20,7 +19,6 @@ export const postDirectMessage = (message) => {
         recipient = nametag.id
       }
     }
-    console.log('Recipient', recipient)
     return recipient ? new Promise((resolve, reject) => {
       hz('direct_messages').upsert({...message, recipient}).subscribe(resolve, reject)
     }).catch(errorLog('Error posting a direct message ' + JSON.stringify(message) + ': '))
@@ -32,7 +30,8 @@ export const watchDirectMessages = (room) => {
   return (dispatch, getState) =>
       new Promise((resolve, reject) => {
         dmSubscriptions[room] = hz('direct_messages')
-          .findAll({user: getState().user.id, room}).watch().subscribe((dms) => {
+          .findAll({recipient: getState().userNametags[room].nametag, room})
+          .watch().subscribe((dms) => {
             dispatch(addMessageArray(dms.map((dm) => {
               return {...dm, type: 'direct_message'}
             })))
