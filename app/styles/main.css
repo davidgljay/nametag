@@ -7,3 +7,7 @@ body {
 #emojiButton {
   display: none;
 }
+
+.messageText p {
+  display: inline;
+}

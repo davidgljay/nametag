@@ -73,6 +73,8 @@ class Message extends Component {
               emojis.emojify(text).map((emojiText, i) => {
                 return emojiText.props ? emojiText : <ReactMarkdown
                   key={i}
+                  containerTagName={'span'}
+                  className={'messageText'}
                   style={styles.text}
                   source={emojiText}
                   escapeHtml={true}/>
@@ -109,6 +111,8 @@ const styles = {
   dmCallout: {
     color: grey800,
     fontStyle: 'italic',
+    display: 'inline-block',
+    marginLeft: 10,
   },
   messageText: {
     width: '100%',
@@ -124,7 +128,7 @@ const styles = {
   icon: {
     paddingRight: 10,
     paddingLeft: 25,
-    paddingTop: 5,
+    paddingTop: 10,
     minWidth: 50,
     verticalAlign: 'top',
   },
@@ -136,6 +140,8 @@ const styles = {
   name: {
     fontWeight: 'bold',
     fontSize: 14,
+    marginBottom: 5,
+    display: 'inline-block',
   },
   date: {
     fontSize: 10,

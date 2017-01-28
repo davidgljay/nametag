@@ -79,6 +79,8 @@ const fadeIn = keyframes({
 const styles = {
   actionsContainer: {
     marginTop: 5,
+    display: 'inline-block',
+    verticalAlign: 'middle',
   },
   actionIcon: {
     cursor: 'pointer',
