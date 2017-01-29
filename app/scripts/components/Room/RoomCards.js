@@ -5,6 +5,7 @@ import RoomCard from './RoomCard'
 import CreateRoom from './CreateRoom'
 import Navbar from '../Utils/Navbar'
 import LoginDialog from '../User/LoginDialog'
+import Notifications from '../Room/Notifications'
 import {subscribe, unsubscribe} from '../../actions/RoomActions'
 import {lightBlue200} from 'material-ui/styles/colors'
 import trackEvent from '../../utils/analytics'
@@ -24,11 +25,6 @@ const styles = {
 }
 
 class RoomCards extends Component {
-
-  constructor(props) {
-    super(props)
-    this.mapRoomCards = this.mapRoomCards.bind(this)
-  }
 
   componentDidMount() {
     trackEvent('ROOMS_PAGE_LOAD')
@@ -54,7 +50,7 @@ class RoomCards extends Component {
     }
   }
 
-  mapRoomCards(roomId) {
+  mapRoomCards = (roomId) => {
     const {rooms, nametags, userNametags, addUserNametag, nametagEdits} = this.props
 
     // If a nametag has already been saved for this room then merge it in
@@ -71,14 +67,21 @@ class RoomCards extends Component {
   }
 
   render() {
-    const {user, logout, setting, rooms, providerAuth} = this.props
+    const {user, logout, setting, rooms, providerAuth, userNametags} = this.props
     return <div>
         <Navbar
           user={user}
           logout={logout}
           setting={setting}/>
         <div style={styles.roomCards}>
-          {Object.keys(rooms).map(this.mapRoomCards)}
+          {
+            userNametags && <div>
+              <Notifications userNametags={userNametags} rooms={rooms} homepage={true}/>
+            </div>
+          }
+          {Object.keys(rooms)
+            .filter((r) => !userNametags[r])
+            .map(this.mapRoomCards)}
         </div>
         <LoginDialog
           showLogin={user.showLogin}
