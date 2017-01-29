@@ -64,7 +64,7 @@ class ModAction extends Component {
     let modAction = {
       type: 'modAction',
       action: 'warn',
-      norms: this.context.norms.filter((item) => item.checked),
+      norms: this.context.room.norms.filter((item) => item.checked),
       text: this.state.text,
       timestamp: new Date().getTime(),
       modId: this.context.nametagId,
@@ -117,36 +117,46 @@ class ModAction extends Component {
       alert = <Alert msg={this.state.alert} alertType="danger"/>
     }
 
+    const {close, author} = this.props
+    const {room, userNametag} = this.context
+    const isMod = room.mod !== userNametag.nametag
+
     return <Card style={styles.modAction}>
       <IconButton
         style={styles.closeButton}
-        onClick={this.props.close}>
+        onClick={close}>
         <FontIcon
           className='material-icons'>
           close
         </FontIcon>
       </IconButton>
-      <h4 style={styles.title}>Remind {this.props.author.name} of Conversation Norms</h4>
+      {
+        isMod ? <h4 style={styles.title}>Remind {author.name} of Conversation Norms</h4>
+      : <h4 style={styles.title}>Report This Post to the Moderator</h4>
+      }
       <List>
-        {this.context.norms.map(this.showNorm)}
+        {room.norms.map(this.showNorm)}
       </List>
       <TextField
         style={styles.addNote}
         onChange={this.addNote}
         hintText="Add an optional note."
         value={this.state.message}/>
-      <VisOptions
-        isPublic = {this.state.isPublic}
-        setPublic = {this.setPublic}/>
+      {
+        isMod && <VisOptions
+          isPublic = {this.state.isPublic}
+          setPublic = {this.setPublic}/>
+      }
       <ModActionButtons
-        escalate = {this.escalate}
-        escalated = {this.state.escalated}
-        remindOfNorms = {this.remindOfNorms}
-        removeUser = {this.removeUser}
-        notifyBadge = {this.notifyBadge}
-        authorName = {this.props.author.name}
-        censorMessage = {this.censorMessage}
-        />
+          isMod = {isMod}
+          escalate = {this.escalate}
+          escalated = {this.state.escalated}
+          remindOfNorms = {this.remindOfNorms}
+          removeUser = {this.removeUser}
+          notifyBadge = {this.notifyBadge}
+          authorName = {author.name}
+          censorMessage = {this.censorMessage}
+          />
     </Card>
   }
 }
@@ -157,9 +167,10 @@ ModAction.propTypes = {
   author: PropTypes.object,
   postMessage: PropTypes.func.isRequired,
 }
+
 ModAction.contextTypes = {
-  room: PropTypes.string,
-  norms: PropTypes.array,
+  room: PropTypes.object,
+  userNametag: PropTypes.object,
 }
 
 export default ModAction
@@ -177,6 +188,7 @@ const styles = {
     borderRadius: 6,
     padding: 10,
     marginTop: 20,
+    marginBottom: 20,
   },
   closeButton: {
     float: 'right',

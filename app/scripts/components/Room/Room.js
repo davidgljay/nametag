@@ -27,12 +27,10 @@ class Room extends Component {
   }
 
   getChildContext() {
-    const {room, params, userNametags} = this.props
-    let norms = room ? room.norms : []
+    const {rooms, params, userNametags} = this.props
     return {
       userNametag: userNametags[params.roomId],
-      room: params.roomId,
-      norms,
+      room: rooms[params.roomId],
     }
   }
 
@@ -205,7 +203,8 @@ class Room extends Component {
               </div>
               {
                 <Messages
-                  room={params.roomId}/>
+                  room={params.roomId}
+                  norms={room.norms}/>
               }
             </div>
             {
@@ -232,8 +231,7 @@ Room.propTypes = {
 
 Room.childContextTypes = {
   userNametag: PropTypes.object,
-  room: PropTypes.string,
-  norms: PropTypes.array,
+  room: PropTypes.object,
 }
 
 export default radium(Room)

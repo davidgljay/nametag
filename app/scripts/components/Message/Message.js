@@ -30,7 +30,7 @@ class Message extends Component {
   render() {
     let below
     let media
-    const {text, author, id, timestamp, postMessage, type} = this.props
+    const {text, author, id, timestamp, postMessage, type, norms} = this.props
 
     if (this.checkYouTube(text)) {
       media = <Media url={this.checkYouTube(text)[0]}/>
@@ -43,6 +43,7 @@ class Message extends Component {
         <ModAction
           msgId={id}
           author={author}
+          norms={norms}
           close={this.modAction(false)}
           postMessage={postMessage}/>
     } else {

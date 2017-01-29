@@ -11,18 +11,23 @@ const ModActionButtons = (props) => <CardActions>
       labelStyle={styles.primary}
       onClick={props.remindOfNorms}
       label='SEND MESSAGE'/>
-    <FlatButton
-      style={styles.severe}
-      onClick={props.removeMessage}
-      label='REMOVE MESSAGE'/>
-    <FlatButton
-      style={styles.severe}
-      onClick={props.removeUser}
-      label='BAN USER'/>
-    <FlatButton
-      style={styles.severe}
-      onClick={props.notifyBadge}
-      label='REPORT USER'/>
+    {
+      props.isMod &&
+      <div>
+        <FlatButton
+          style={styles.severe}
+          onClick={props.removeMessage}
+          label='REMOVE MESSAGE'/>
+        <FlatButton
+          style={styles.severe}
+          onClick={props.removeUser}
+          label='BAN USER'/>
+        <FlatButton
+          style={styles.severe}
+          onClick={props.notifyBadge}
+          label='REPORT USER'/>
+      </div>
+    }
   </CardActions>
 
 ModActionButtons.propTypes = {

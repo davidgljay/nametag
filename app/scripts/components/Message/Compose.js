@@ -39,7 +39,7 @@ class Compose extends Component {
         text: this.state.message,
         timestamp: Date.now(),
         author: this.context.userNametag.nametag,
-        room: this.context.room,
+        room: this.context.room.id,
         type: 'message',
       }
       this.setState({message: '', showEmoji: false})
@@ -92,7 +92,7 @@ Compose.propTypes = {
   postMessage: PropTypes.func.isRequired,
 }
 Compose.contextTypes = {
-  room: PropTypes.string.isRequired,
+  room: PropTypes.object.isRequired,
   userNametag: PropTypes.object.isRequired,
 }
 
