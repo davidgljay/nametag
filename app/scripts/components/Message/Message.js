@@ -10,7 +10,7 @@ import ReactMarkdown from 'react-markdown'
 
 class Message extends Component {
 
-  state = {modAction: false}
+  state = {modAction: false, showActions: false}
 
   modAction = (open) => {
     return (e) => {
@@ -49,7 +49,9 @@ class Message extends Component {
       below = <div style={styles.below}>
           <MessageMenu
             modAction={this.modAction}
-            id = {id} />
+            showActions={this.state.showActions}
+            type={type}
+            id={id} />
           <div style={styles.date}>
               {moment(timestamp).format('h:mm A, ddd MMM DD YYYY')}
           </div>
@@ -70,7 +72,8 @@ class Message extends Component {
     }
 
     return <tr
-        style={styles.message}>
+        style={styles.message}
+        onClick={() => this.setState({showActions: !this.state.showActions})}>
         <td style={styles.icon}>
           <img style={styles.iconImg} src={author.icon}/>
         </td>

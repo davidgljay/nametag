@@ -79,7 +79,7 @@ const styles = {
   messages: {
     minHeight: '100vh',
     height: '100%',
-    width: '100%',
+    display: 'flex',
     paddingLeft: 275,
     paddingTop: 100,
     scrollBehavior: 'smooth',

@@ -10,13 +10,17 @@ fields = [["room"]]
 
 [collections.direct_messages]
 [[collections.direct_messages.indexes]]
-fields = [["room","recipient"],["room","author"]]
+fields = [["recipient"], ["room"]]
+[[collections.direct_messages.indexes]]
+fields = [["author"], ["room"]]
 
 [collections.users]
 
 [collections.user_nametags]
 [[collections.user_nametags.indexes]]
-fields = [["user", "room"],["user"]]
+fields = [["user"],["room"]]
+[[collections.direct_messages.indexes]]
+fields = [["user"]]
 
 [collections.nametags]
 [[collections.nametags.indexes]]
