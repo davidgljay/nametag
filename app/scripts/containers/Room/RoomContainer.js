@@ -16,6 +16,7 @@ const mapStateToProps = (state) => {
     rooms: state.rooms,
     user: state.user,
     userNametags: state.userNametags,
+    nametags: state.nametags,
   }
 }
 const mapDispatchToProps = (dispatch) => {

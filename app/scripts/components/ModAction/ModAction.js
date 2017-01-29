@@ -45,7 +45,8 @@ class ModAction extends Component {
   remindOfNorms = () => {
     const {author, text, close, postMessage} = this.props
     const {normChecks, isPublic, note} = this.state
-    const {room, userNametag} = this.context
+    const {room, userNametag, mod} = this.context
+    const isMod = room.mod === userNametag.nametag
 
     if (normChecks.length === 0) {
       this.setState({alert: 'Please check at least one norm.'})
@@ -54,8 +55,14 @@ class ModAction extends Component {
 
     const norms = room.norms.filter((norm, i) => normChecks[i])
 
-    let message = isPublic ? `@${author.name} \n` : `d ${author.name} \n`
-    message += '### Note from the Moderator\n\n'
+    let message
+    if (isMod) {
+      message = isPublic ? `@${author.name} \n` : `d ${author.name} \n`
+    } else {
+      message = `d ${mod.name} \n`
+    }
+    message += isMod ? '### Note from the Moderator\n\n'
+      : `### Message Report\n\n`
     message += `\n> ${text}\n`
     message += `${norms.reduce((msg, norm) => `${msg}* **${norm}** \n`, '')}\n`
     message += `*${note}*`
@@ -156,6 +163,7 @@ ModAction.propTypes = {
 ModAction.contextTypes = {
   room: PropTypes.object,
   userNametag: PropTypes.object,
+  mod: PropTypes.object,
 }
 
 export default ModAction

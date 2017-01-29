@@ -27,10 +27,12 @@ class Room extends Component {
   }
 
   getChildContext() {
-    const {rooms, params, userNametags} = this.props
+    const {rooms, params, userNametags, nametags} = this.props
+    const room = rooms[params.roomId]
     return {
       userNametag: userNametags[params.roomId],
-      room: rooms[params.roomId],
+      room,
+      mod: room ? nametags[room.mod] : null,
     }
   }
 
@@ -232,6 +234,7 @@ Room.propTypes = {
 Room.childContextTypes = {
   userNametag: PropTypes.object,
   room: PropTypes.object,
+  mod: PropTypes.object,
 }
 
 export default radium(Room)
@@ -247,15 +250,15 @@ const slideIn = keyframes({
   '100%': {left: -260},
 }, 'slideIn')
 
-const spinIn = keyframes({
-  '0%': { transform: 'rotate(0deg)' },
-  '100%': {rotate: 'rotate(180deg)'},
-}, 'spinIn')
-
-const spinOut = keyframes({
-  '0%': { transform: 'rotate(180deg)' },
-  '100%': { transform: 'rotate(0deg)'},
-}, 'spinOut')
+// const spinIn = keyframes({
+//   '0%': { transform: 'rotate(0deg)' },
+//   '100%': {rotate: 'rotate(180deg)'},
+// }, 'spinIn')
+//
+// const spinOut = keyframes({
+//   '0%': { transform: 'rotate(180deg)' },
+//   '100%': { transform: 'rotate(0deg)'},
+// }, 'spinOut')
 
 const styles = {
   roomContainer: {
