@@ -89,6 +89,6 @@ const styles = {
   },
   msgContainer: {
     width: 'inherit',
-    marginBottom: 65,
+    marginBottom: 75,
   },
 }

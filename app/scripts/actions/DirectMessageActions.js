@@ -35,10 +35,10 @@ export const watchDirectMessages = (room) => {
     dispatch(addMessageArray(dms.map((dm) => {
       let type
       const currentUserNametag = getState().userNametags[room].nametag
-      if (dm.author === currentUserNametag) {
-        type = 'direct_message_from'
-      } else if (dm.recipeint === currentUserNametag) {
+      if (dm.recipient === currentUserNametag) {
         type = 'direct_message_to'
+      } else if (dm.author === currentUserNametag) {
+        type = 'direct_message_from'
       }
       return {...dm, type}
     })))
@@ -48,6 +48,7 @@ export const watchDirectMessages = (room) => {
     dispatch(setRoomProp(room, 'messages', messageIds))
     resolve()
   }
+  dmSubscriptions[room] = []
   return (dispatch, getState) =>
       Promise.all([
         // Get DMs to the current user

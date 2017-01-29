@@ -10,13 +10,13 @@ fields = [["room"]]
 
 [collections.direct_messages]
 [[collections.direct_messages.indexes]]
-fields = [["room","to"]]
+fields = [["room","recipient"],["room","author"]]
 
 [collections.users]
 
 [collections.user_nametags]
 [[collections.user_nametags.indexes]]
-fields = [["user"]]
+fields = [["user", "room"],["user"]]
 
 [collections.nametags]
 [[collections.nametags.indexes]]
@@ -43,7 +43,8 @@ template = "collection('user_nametags').findAll({user: userId()})"
 template = "collection('direct_messages').anyRead()"
 validator = """
   (context, value) => {
-    return context.data.nametags.indexOf(value.recipient) > -1
+    return context.data.nametags.indexOf(value.recipient) > -1 ||
+    context.data.nametags.indexOf(value.author) > -1
   }
 """
 [groups.default.rules.write_certificates]
@@ -64,8 +65,8 @@ template = "collection('rooms').anyWrite()"
 [groups.default.rules.store_user_nametags]
 template = "collection('user_nametags').anyWrite()"
 validator = """
-  (context, value) => {
-    return context.id === value.user
+  (context, oldValue, newValue) => {
+    return context.id === newValue.user
   }
 """
 [groups.default.rules.write_direct_messages]

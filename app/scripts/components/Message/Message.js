@@ -59,11 +59,11 @@ class Message extends Component {
     // Get proper style if the this is a direct message
     let messageStyle
     switch (type) {
-    case 'direct_message_to':
-      messageStyle = {...styles.messageText, ...styles.directMessageTo}
-      break
     case 'direct_message_from':
       messageStyle = {...styles.messageText, ...styles.directMessageFrom}
+      break
+    case 'direct_message_to':
+      messageStyle = {...styles.messageText, ...styles.directMessageTo}
       break
     default:
       messageStyle = styles.messageText
