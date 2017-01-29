@@ -62,7 +62,12 @@ template = "collection('nametags').anyWrite()"
 [groups.default.rules.write_rooms]
 template = "collection('rooms').anyWrite()"
 [groups.default.rules.store_user_nametags]
-template = "collection('user_nametags').upsert({user: userId(), room: any(), nametag: any(), mentions:any()})"
+template = "collection('user_nametags').anyWrite()"
+validator = """
+  (context, value) => {
+    return context.id === value.user
+  }
+"""
 [groups.default.rules.write_direct_messages]
 template = "collection('direct_messages').upsert({recipient:any(), author: any(), text: any(), room: any(), timestamp: any(), type: any()})"
 validator = """
