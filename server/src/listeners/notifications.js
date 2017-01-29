@@ -40,12 +40,18 @@ const checkMentions = (message, conn) => {
   })
 }
 
-const addMention = (nametag, room, conn) => {
-  return r.db('nametag').table('user_nametags').filter({room, nametag})
-    .update({mentions: r.row('mentions').prepend(Date.now())}).run(conn)
-}
+const addMention = (nametag, room, conn) => r.db('nametag').table('user_nametags')
+.filter({room, nametag}).update({mentions: r.row('mentions').prepend(Date.now())}).run(conn)
 
-module.exports = (conn) => {
-  return r.db('nametag').table('messages').changes().run(conn)
-    .then((feed) => feed.each(onMessage(conn)))
+module.exports = {
+  messageNotifs: (conn) => r.db('nametag').table('messages').changes().run(conn)
+      .then((feed) => feed.each(onMessage(conn))),
+  dmNotifs: (conn) => r.db('nametag').table('direct_messages').changes().run(conn)
+      .then((feed) => feed.each((err, dm) => {
+        if (err) {
+          console.error(err)
+          return Promise.reject(err)
+        }
+        return addMention(dm.new_val.recipient, dm.new_val.room, conn)
+      })),
 }
