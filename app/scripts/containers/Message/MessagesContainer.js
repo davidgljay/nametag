@@ -16,15 +16,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    watchRoomMessages(room) {
-      dispatch(watchRoomMessages(room))
-    },
-    unWatchRoomMessages(room) {
-      dispatch(unWatchRoomMessages(room))
-    },
-    postMessage(message) {
-      dispatch(postMessage(message))
-    },
+    watchRoomMessages: (room) => dispatch(watchRoomMessages(room)),
+    unWatchRoomMessages: (room) => dispatch(unWatchRoomMessages(room)),
+    postMessage: (message) => dispatch(postMessage(message)),
   }
 }
 

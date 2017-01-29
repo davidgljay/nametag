@@ -76,6 +76,7 @@ export function unWatchRoomMessages(room) {
 export function postMessage(message) {
   return function(dispatch, getState) {
     const updatedMessage =  {
+      type: 'message',
       ...message,
       text: message.text.indexOf('@') === -1 ?
         message.text : highlightMentions(message, getState().nametags),

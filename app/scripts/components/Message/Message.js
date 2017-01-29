@@ -12,11 +12,9 @@ class Message extends Component {
 
   state = {modAction: false, showActions: false}
 
-  modAction = (open) => {
-    return (e) => {
-      e.preventDefault()
-      this.setState({modAction: open})
-    }
+  modAction = (open) => (e) => {
+    if (e) {e.preventDefault()}
+    this.setState({modAction: open})
   }
 
   checkYouTube = (message) => {
@@ -44,6 +42,7 @@ class Message extends Component {
           msgId={id}
           author={author}
           norms={norms}
+          text={text}
           close={this.modAction(false)}
           postMessage={postMessage}/>
     } else {

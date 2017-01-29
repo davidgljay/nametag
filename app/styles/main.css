@@ -11,3 +11,9 @@ body {
 .messageText p {
   display: inline;
 }
+
+.messageText blockquote {
+  padding: 10px;
+  background-color: #eee;
+  border-radius: 5px;
+}

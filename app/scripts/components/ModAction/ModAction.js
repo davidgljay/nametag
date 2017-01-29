@@ -11,23 +11,14 @@ import Checkbox from 'material-ui/Checkbox'
 import TextField from 'material-ui/TextField'
 
 class ModAction extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      normChecks: [],
-      isPublic: false,
-      text: '',
-      escalated: false,
-    }
-    this.showNorm = this.showNorm.bind(this)
-    this.checkNorm = this.checkNorm.bind(this)
-    this.addNote = this.addNote.bind(this)
-    this.remindOfNorms = this.remindOfNorms.bind(this)
-    this.setPublic = this.setPublic.bind(this)
-    this.escalate = this.escalate.bind(this)
+  state = {
+    normChecks: [],
+    isPublic: false,
+    note: '',
+    escalated: false,
   }
 
-  showNorm(norm, i) {
+  showNorm = (norm, i) => {
     return <ListItem
         leftCheckbox={<Checkbox checked={this.state.normChecks[i]}/>}
         primaryText={norm}
@@ -36,7 +27,7 @@ class ModAction extends Component {
       </ListItem>
   }
 
-  checkNorm(normIndex) {
+  checkNorm = (normIndex) => {
     let self = this
     return (e) => {
       e.preventDefault()
@@ -51,75 +42,70 @@ class ModAction extends Component {
     }
   }
 
-  preventDefault(e) {
-    e.preventDefault()
-  }
+  remindOfNorms = () => {
+    const {author, text, close, postMessage} = this.props
+    const {normChecks, isPublic, note} = this.state
+    const {room, userNametag} = this.context
 
-  remindOfNorms() {
-    if (this.state.normChecks.length === 0) {
-      self.setState({alert: 'Please check at least one norm.'})
+    if (normChecks.length === 0) {
+      this.setState({alert: 'Please check at least one norm.'})
       return
     }
 
-    let modAction = {
-      type: 'modAction',
-      action: 'warn',
-      norms: this.context.room.norms.filter((item) => item.checked),
-      text: this.state.text,
-      timestamp: new Date().getTime(),
-      modId: this.context.nametagId,
-      author: this.props.author.id,
-    }
+    const norms = room.norms.filter((norm, i) => normChecks[i])
 
-    this.props.postMessage(modAction)
-      .then(() => {
-        self.props.close()
-      },
-      (err) => {
-        this.setState({alert: 'Error posting reminder'})
-        errorLog('Error putting mod Action')(err)
-      })
+    let message = isPublic ? `@${author.name} \n` : `d ${author.name} \n`
+    message += '### Note from the Moderator\n\n'
+    message += `\n> ${text}\n`
+    message += `${norms.reduce((msg, norm) => `${msg}* **${norm}** \n`, '')}\n`
+    message += `*${note}*`
+    let modAction = {
+      type: 'mod_action',
+      text: message,
+      timestamp: Date.now(),
+      author: userNametag.nametag,
+      room: room.id,
+    }
+    postMessage(modAction)
+    .catch((err) => {
+      this.setState({alert: 'Error posting reminder'})
+      errorLog('Error putting mod Action')(err)
+    })
+    close()
   }
 
-  setPublic(isPublic) {
+  setPublic = (isPublic) => {
     return (e) => {
       e.preventDefault()
       this.setState({isPublic})
     }
   }
 
-  escalate() {
-    this.setState({escalated: true})
-  }
-
-  removeUser() {
+  removeUser = () => {
     // TODO: Add functionality to remove user.
   }
 
-  censorMessage() {
+  censorMessage = () => {
     // TODO: Add functionality to censor a message
   }
 
-  addNote(e) {
-    e.preventDefault
-    this.setState({text: e.target.value})
+  addNote = (e)  => {
+    e.preventDefault()
+    this.setState({note: e.target.value})
   }
 
-  notifyBadge() {
+  notifyBadge = () => {
     // TODO:Notify badge granters
   }
 
   render() {
     // TODO: I could add complexity here, cite multiple posts, etc.
     // TODO: Create a system for notifying badgeholders.
-    let alert
-    if (this.state.alert) {
-      alert = <Alert msg={this.state.alert} alertType="danger"/>
-    }
 
     const {close, author} = this.props
     const {room, userNametag} = this.context
-    const isMod = room.mod !== userNametag.nametag
+    const {alert, note, isPublic} = this.state
+    const isMod = room.mod === userNametag.nametag
 
     return <Card style={styles.modAction}>
       <IconButton
@@ -141,16 +127,15 @@ class ModAction extends Component {
         style={styles.addNote}
         onChange={this.addNote}
         hintText="Add an optional note."
-        value={this.state.message}/>
+        value={note}/>
       {
         isMod && <VisOptions
-          isPublic = {this.state.isPublic}
+          isPublic = {isPublic}
           setPublic = {this.setPublic}/>
       }
+      <Alert alert={alert} alertType="danger"/>
       <ModActionButtons
           isMod = {isMod}
-          escalate = {this.escalate}
-          escalated = {this.state.escalated}
           remindOfNorms = {this.remindOfNorms}
           removeUser = {this.removeUser}
           notifyBadge = {this.notifyBadge}

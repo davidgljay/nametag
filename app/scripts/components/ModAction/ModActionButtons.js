@@ -32,8 +32,6 @@ const ModActionButtons = (props) => <CardActions>
 
 ModActionButtons.propTypes = {
   remindOfNorms: PropTypes.func.isRequired,
-  escalated: PropTypes.bool.isRequired,
-  escalate: PropTypes.func.isRequired,
   removeUser: PropTypes.func.isRequired,
   authorName: PropTypes.string.isRequired,
   notifyBadge: PropTypes.func.isRequired,

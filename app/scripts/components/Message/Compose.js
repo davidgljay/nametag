@@ -40,7 +40,6 @@ class Compose extends Component {
         timestamp: Date.now(),
         author: this.context.userNametag.nametag,
         room: this.context.room.id,
-        type: 'message',
       }
       this.setState({message: '', showEmoji: false})
       this.props.postMessage(message)
