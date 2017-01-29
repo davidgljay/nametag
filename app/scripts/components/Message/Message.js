@@ -5,7 +5,7 @@ import Media from './Media'
 import MessageMenu from './MessageMenu'
 import emojis from 'react-emoji'
 import {mobile} from '../../../styles/sizes'
-import {grey500, grey800, lightBlue100} from 'material-ui/styles/colors'
+import {grey500, grey800, lightBlue100, yellow100} from 'material-ui/styles/colors'
 import ReactMarkdown from 'react-markdown'
 
 class Message extends Component {
@@ -56,16 +56,28 @@ class Message extends Component {
         </div>
     }
 
+    // Get proper style if the this is a direct message
+    let messageStyle
+    switch (type) {
+    case 'direct_message_to':
+      messageStyle = {...styles.messageText, ...styles.directMessageTo}
+      break
+    case 'direct_message_from':
+      messageStyle = {...styles.messageText, ...styles.directMessageFrom}
+      break
+    default:
+      messageStyle = styles.messageText
+    }
+
     return <tr
         style={styles.message}>
         <td style={styles.icon}>
           <img style={styles.iconImg} src={author.icon}/>
         </td>
-        <td style={type === 'direct_message' ?
-          {...styles.messageText, ...styles.directMessage} : styles.messageText}>
+        <td style={messageStyle}>
           <div style={styles.name}>{author.name}</div>
           {
-            type === 'direct_message' &&
+            type.slice(0, 14) === 'direct_message' &&
             <div style={styles.dmCallout}>Private Message</div>
           }
           <div style={styles.text}>
@@ -105,8 +117,11 @@ const styles = {
     marginTop: 10,
     marginBottom: 10,
   },
-  directMessage: {
+  directMessageTo: {
     backgroundColor: lightBlue100,
+  },
+  directMessageFrom: {
+    backgroundColor: yellow100,
   },
   dmCallout: {
     color: grey800,

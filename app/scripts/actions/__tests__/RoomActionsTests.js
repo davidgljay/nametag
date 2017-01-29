@@ -96,7 +96,7 @@ describe('RoomActions', () => {
           // Expect the nametag id to be inserted into the user_nametags table
           expect(hz.mock.calls[1]).toEqual(['user_nametags'])
           expect(calls2[1]).toEqual({
-            type: 'insert',
+            type: 'upsert',
             req: {
               room: '1234',
               user: 'me',

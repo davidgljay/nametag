@@ -34,6 +34,11 @@ describe('Message Actions', () => {
           room: 'abc',
         },
       },
+      userNametags: {
+        abc: {
+          nametag: 'def',
+        },
+      },
       user: {
         id: '123',
       },
@@ -53,22 +58,30 @@ describe('Message Actions', () => {
       return actions.postDirectMessage(message)(store.dispatch, store.getState).then(
         (id) => {
           expect(id).toEqual({'id': '123'})
-          expect(calls[1]).toEqual({type: 'upsert', req: {...message, recipient: 'def'}})
-        })
+          expect(calls[1]).toEqual({
+            type: 'upsert',
+            req: {...message, recipient: 'def', text: 'This is a message'},
+          })
+        }
+      )
     })
   })
 
   describe('watchDirectMessages', () => {
     it('should fetch a list of direct messages from a room', () => {
+      let calls2 = []
       let results = [
         {msg: 'hi there', room: 'abc', id: '123'},
         {msg: 'well hello', room: 'abc', id: '456'},
       ]
-      hz.mockReturnValue(mockHz(results, calls)())
+      hz.mockReturnValueOnce(mockHz(results, calls)())
+      hz.mockReturnValueOnce(mockHz(results, calls2)())
       return actions.watchDirectMessages('abc')(store.dispatch, store.getState).then(
         () => {
-          expect(calls[1]).toEqual({type: 'findAll', req: {room: 'abc', user: '123'}})
+          expect(calls[1]).toEqual({type: 'findAll', req: {room: 'abc', recipient: 'def'}})
           expect(calls[2]).toEqual({type: 'watch', req: undefined})
+          expect(calls2[1]).toEqual({type: 'findAll', req: {room: 'abc', author: 'def'}})
+          expect(calls2[2]).toEqual({type: 'watch', req: undefined})
           expect(store.getActions()[0]).toEqual({
             type: constants.ADD_MESSAGE_ARRAY,
             messages: results.map((m) => { return {...m, type: 'direct_message'}}),

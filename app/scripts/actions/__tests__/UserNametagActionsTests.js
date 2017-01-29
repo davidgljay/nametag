@@ -68,7 +68,7 @@ describe('UserNametagActions', () => {
       return actions.putUserNametag('abc', 'me', '456')().then((id) => {
         expect(id).toEqual({id: '123'})
         expect(calls[1]).toEqual({
-          type: 'insert',
+          type: 'upsert',
           req: {
             user: 'me',
             mentions: [],
