@@ -71,8 +71,8 @@ describe('Message Actions', () => {
     it('should fetch a list of direct messages from a room', () => {
       let calls2 = []
       let results = [
-        {msg: 'hi there', room: 'abc', id: '123'},
-        {msg: 'well hello', room: 'abc', id: '456'},
+        {msg: 'hi there', room: 'abc', id: '123', author: 'auser'},
+        {msg: 'well hello', room: 'abc', id: '456', author: 'buser'},
       ]
       hz.mockReturnValueOnce(mockHz(results, calls)())
       hz.mockReturnValueOnce(mockHz(results, calls2)())
@@ -82,10 +82,8 @@ describe('Message Actions', () => {
           expect(calls[2]).toEqual({type: 'watch', req: undefined})
           expect(calls2[1]).toEqual({type: 'findAll', req: {room: 'abc', author: 'def'}})
           expect(calls2[2]).toEqual({type: 'watch', req: undefined})
-          expect(store.getActions()[0]).toEqual({
-            type: constants.ADD_MESSAGE_ARRAY,
-            messages: results.map((m) => { return {...m, type: 'direct_message'}}),
-          })
+          expect(store.getActions()[0].type).toEqual(constants.ADD_MESSAGE_ARRAY)
+          expect(store.getActions()[0].messages.length).toEqual(2)
         })
     })
   })

@@ -26,6 +26,8 @@ fields = [["user"]]
 [[collections.nametags.indexes]]
 fields = [["room"]]
 
+[collections.nametag_presence]
+
 [groups.admin]
 [groups.admin.rules.carte_blanche]
 template = "any()"
@@ -78,5 +80,12 @@ template = "collection('direct_messages').upsert({recipient:any(), author: any()
 validator = """
   (context, oldValue, newValue) => {
     return context.data.nametags.indexOf(newValue.author) > -1
+  }
+"""
+[groups.default.rules.write_nametag_presence]
+template = "collection('nametag_presence').anyWrite()"
+validator = """
+  (context, oldValue, newValue) => {
+    return context.data.nametags.indexOf(newValue.id) > -1
   }
 """

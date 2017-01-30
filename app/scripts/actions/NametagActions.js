@@ -139,3 +139,24 @@ export function updateNametag(nametagId, property, value) {
     }).catch(errorLog('Updating nametag'))
   }
 }
+
+/*
+* Demonstrates that a particular nametag is present in the its room.
+*
+*@params
+*   nametagId - The id of the nametag
+*   property - The property to update
+*   value - The value to be updated
+*
+* @returns
+*   none
+*/
+
+export function showPresence(nametagId) {
+  return () => {
+    return new Promise((resolve, reject) => {
+      hz('nametag_presence').upsert({id: nametagId, present: Date.now()})
+      .subscribe(resolve, reject)
+    }).catch(errorLog('Updating nametag presence'))
+  }
+}

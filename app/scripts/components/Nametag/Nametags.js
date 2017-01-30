@@ -14,16 +14,12 @@ class Nametags extends Component {
     this.props.dispatch(unWatchRoomNametags(this.props.room))
   }
 
-  checkPresent = (nametag) => {
-    return nametag.lastPresent > Date.now() - 30000
-  }
-
   createNametag = (nametag, mod) => {
     // Make nametag.certificates an empty array if it not already assigned.
     nametag.certificates = nametag.certificates || []
 
     // Show whether the user is present.
-    const cardStyle = this.checkPresent(nametag) ?
+    const cardStyle = nametag.present ?
       styles.nametag : {...styles.nametag, ...styles.absent}
 
     return <Card key={nametag.id} style={cardStyle}>
@@ -48,8 +44,8 @@ class Nametags extends Component {
     return <div style={styles.nametags}>
         {
           nametags.sort((a, b) =>
-            this.checkPresent(a) &&
-            !this.checkPresent(b) ? 0 : 1
+            a.present &&
+            !b.present ? 0 : 1
           ).map((nametag) => this.createNametag(nametag, this.props.mod))
         }
       </div>

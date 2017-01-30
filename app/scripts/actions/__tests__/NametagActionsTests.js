@@ -87,3 +87,16 @@ describe('putNametag', () => {
     })
   })
 })
+
+describe('showPresence', () => {
+  it('should upsert an entry to the nametag_presence table', () => {
+    let calls = []
+    hz.mockReturnValue(mockHz(201, calls)())
+    return actions.showPresence('123')().then(() => {
+      expect(calls[1]).toEqual({
+        type: 'upsert',
+        req: {id: '123', present: Date.now()},
+      })
+    })
+  })
+})

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import component from '../../components/Room/Room'
 import {fetchRooms, watchRoom, unWatchRoom, addRoomMessage} from '../../actions/RoomActions'
-import {updateNametag} from '../../actions/NametagActions'
+import {updateNametag, showPresence} from '../../actions/NametagActions'
 import {
   watchUserNametags,
   unWatchUserNametags,
@@ -32,10 +32,10 @@ const mapDispatchToProps = (dispatch) => {
     unWatchUserNametags: disp(unWatchUserNametags),
     postUpdateUserNametag: disp(postUpdateUserNametag),
     postMessage: disp(postMessage),
+    showPresence: disp(showPresence),
     addMessage: disp(addMessage),
     logout: disp(logout),
     setting: disp(setting),
-    updateNametag: disp(updateNametag),
   }
 }
 

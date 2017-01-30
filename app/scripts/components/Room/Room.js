@@ -44,10 +44,11 @@ class Room extends Component {
   }
 
   showPresence(nametagId) {
-    this.props.updateNametag(nametagId, 'lastPresent', Date.now())
+    const {showPresence} = this.props
+    showPresence(nametagId)
     this.setState({presenceTimer: setInterval(() => {
-      this.props.updateNametag(nametagId, 'lastPresent', Date.now())
-    }, 15000),
+      showPresence(nametagId)
+    }, 10000),
   })
   }
 
