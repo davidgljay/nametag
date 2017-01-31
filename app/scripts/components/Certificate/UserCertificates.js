@@ -63,11 +63,11 @@ class UserCertificates extends Component {
             this.context.user.data.certificates &&
             this.context.user.data.certificates.length === 0 &&
             <div style={styles.noCerts}>
-              You do not currently have any certificates, want to add some?
+              You do not currently have any badges, want to add some?
             </div>
           }
           <FlatButton
-            label='ADD CERTIFICATE'
+            label='ADD BADGE'
             onClick={this.onCreateCertClick}/>
           {
             this.state.showCreateCert &&

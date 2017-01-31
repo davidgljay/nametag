@@ -26,7 +26,7 @@ const NavDrawer = (props) => <Drawer
         <div>
           <MenuItem onClick={onHomeClick}>Home</MenuItem>
           <MenuItem onClick={onCreateRoomClick}>Create Room</MenuItem>
-          <MenuItem onClick={onCreateCertClick}>Create Certificate</MenuItem>
+          <MenuItem onClick={onCreateCertClick}>Create Badge</MenuItem>
           <MenuItem
             onClick={() => props.logout()}>Log Out</MenuItem>
         </div>

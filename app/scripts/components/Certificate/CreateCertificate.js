@@ -18,7 +18,7 @@ class CreateCertificate extends Component {
     name: '',
     icon: null,
     description: '',
-    note: 'Certificate granted.',
+    note: 'Badge granted.',
     uploading: false,
     certFor: 'me',
   }
@@ -100,10 +100,10 @@ class CreateCertificate extends Component {
         {
           !mini &&
           <div>
-            <h2>Create a Certificate</h2>
+            <h2>Create a Badge</h2>
             <div style={styles.description}>
-              Certificates can be used to verify things about someone, such as their
-              membership in a group. You can also create certificates for yourself
+              Badges can be used to verify things about someone, such as their
+              membership in a group. You can also create badges for yourself
               to express your identity.
             </div>
           </div>
@@ -156,7 +156,7 @@ class CreateCertificate extends Component {
               floatingLabelText="Note"
               />
             <div style={styles.description}>
-              An optional note about why this certificate was granted.
+              An optional note about why this badge was granted.
             </div>
           </div>
         }
@@ -164,7 +164,7 @@ class CreateCertificate extends Component {
           <RaisedButton
             labelStyle={styles.buttonLabel}
             backgroundColor={indigo500}
-            label={'CREATE CERTIFICATE'}
+            label={'CREATE BADGE'}
             onClick={mini ? this.createSelfCert : this.createCert}/>
         </div>
       </div>

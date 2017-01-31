@@ -36,7 +36,7 @@ class Navbar extends Component {
             onClick={onCreateRoomClick} label='CREATE ROOM'/>
           <FlatButton
             style={styles.button}
-            onClick={onCreateCertClick} label='CREATE CERTIFICATE'/>
+            onClick={onCreateCertClick} label='CREATE BADGE'/>
           <FlatButton
             style={styles.button}
             onClick={() => this.props.logout()}
