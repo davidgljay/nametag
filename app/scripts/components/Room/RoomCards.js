@@ -75,9 +75,8 @@ class RoomCards extends Component {
           setting={setting}/>
         <div style={styles.roomCards}>
           {
-            userNametags && <div>
-              <Notifications userNametags={userNametags} rooms={rooms} homepage={true}/>
-            </div>
+            userNametags &&
+            <Notifications userNametags={userNametags} rooms={rooms} homepage={true}/>
           }
           {Object.keys(rooms)
             .filter((r) => !userNametags[r])

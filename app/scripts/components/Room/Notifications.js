@@ -1,79 +1,98 @@
 import React from 'react'
 import {List, ListItem} from 'material-ui/List'
 import Badge from 'material-ui/Badge'
+import {mobile} from '../../../styles/sizes'
 import {lightBlue600} from 'material-ui/styles/colors'
+import radium from 'radium'
 
-const Notifications = ({userNametags, rooms, roomId, homepage}) =>
-  <div style={homepage ? styles.container : {}}>
-    <List style={homepage ? styles.flexDisplay : {}}>
-    {Object.keys(userNametags).sort((a, b) => {
-      if (!rooms[a] || !rooms[b]) return 0
-      if (rooms[a].title < rooms[b].title) return -1
-      if (rooms[a].title > rooms[b].title) return 1
-      return 0
-    })
-    .map((id) => {
-      const room = rooms[id]
-      const userNametag = userNametags[id]
-      const mentions = userNametag.mentions ? userNametag.mentions.filter(
-        (time) => time > userNametag.latestVisit
-      ).length : 0
+const Notifications = ({userNametags, rooms, roomId, homepage}) => {
+  const flexDisplay = window.innerWidth > 800 ? styles.flexDisplay
+    : {...styles.flexDisplay, ...styles.flexDisplayMobile}
 
-      const newMessages = userNametag.latestMessage > userNametag.latestVisit
-      const notificationStyle =  newMessages ? styles.notification
-      : {...styles.notification, ...styles.noNewMessages}
-      const homepageNotif = homepage ? {...notificationStyle, ...styles.homepageNotif}
-      : notificationStyle
-      return room && roomId !== id && <ListItem innerDivStyle={homepageNotif} key={id}>
-          <a href={`/rooms/${id}`} style={styles.link}>
-            {
-              mentions > 0 &&
-              <Badge
-                badgeContent={mentions}
-                secondary={true}
-                style={styles.badgeStyle}
-                badgeStyle={styles.innerBadgeStyle}/>
-            }
+  const visitedRooms = Object.keys(userNametags).sort((a, b) => {
+    if (!rooms[a] || !rooms[b]) return 0
+    if (rooms[a].title < rooms[b].title) return -1
+    if (rooms[a].title > rooms[b].title) return 1
+    return 0
+  })
 
-            <div>
-              <img
-                src={room.image}
-                style={
-                  homepage ? {...styles.roomImage, ...styles.homepageRoomImage}
-                  : styles.roomImage
-                }/>
-            </div>
-            <div>{room.title}</div>
-          </a>
-        </ListItem>
-    })}
-    </List>
+  const listItems = visitedRooms.map((id) => {
+    const room = rooms[id]
+    const userNametag = userNametags[id]
+    const mentions = userNametag.mentions ? userNametag.mentions.filter(
+      (time) => time > userNametag.latestVisit
+    ).length : 0
+
+    const newMessages = userNametag.latestMessage > userNametag.latestVisit
+    const notificationStyle =  newMessages ? styles.notification
+    : {...styles.notification, ...styles.noNewMessages}
+    const homepageNotif = homepage ? {...notificationStyle, ...styles.homepageNotif}
+    : notificationStyle
+    return room && roomId !== id &&
+      <ListItem innerDivStyle={homepageNotif} key={id}>
+        <a href={`/rooms/${id}`} style={styles.link}>
+          {
+            mentions > 0 &&
+            <Badge
+              badgeContent={mentions}
+              secondary={true}
+              style={styles.badgeStyle}
+              badgeStyle={styles.innerBadgeStyle}/>
+          }
+
+          <div>
+            <img
+              src={room.image}
+              style={
+                homepage ? {...styles.roomImage, ...styles.homepageRoomImage}
+                : styles.roomImage
+              }/>
+          </div>
+          <div>{room.title}</div>
+        </a>
+      </ListItem>
+  })
+
+  return <div style={homepage ? styles.container : {}}>
+    <List style={homepage ? flexDisplay : {}}
+      children={listItems}/>
   </div>
+}
 
-export default Notifications
+export default radium(Notifications)
 
 const styles = {
   container: {
     width: '100%',
     padding: '0px 30px 0px 30px',
   },
+  listStyle: {
+    width: '100%',
+  },
   flexDisplay: {
     display: 'flex',
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
+  },
+  flexDisplayMobile: { // Necessary b/c Radium can't act on custom components
+    flexDirection: 'column',
+    alignItems: 'stretch',
   },
   noNewMessages: {
     opacity: 0.5,
   },
   notification: {
     margin: 5,
+    color: '#FFF',
     padding: '8px 8px 4px 8px',
     borderRadius: 2,
     fontSize: 13,
   },
   homepageNotif: {
-    backgroundColor: lightBlue600,
+    backgroundColor: '#FFF',
+    color: '#000',
     fontSize: 18,
+    lineHeight: '22px',
   },
   roomImage: {
     width: 30,
@@ -88,7 +107,7 @@ const styles = {
     borderRadius: 20,
   },
   link: {
-    color: '#FFF',
+    color: 'inherit',
     textDecoration: 'none',
     display: 'flex',
     alignItems: 'center',

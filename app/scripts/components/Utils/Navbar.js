@@ -24,6 +24,7 @@ class Navbar extends Component {
   }
 
   render() {
+    const mobile = window.innerWidth <= 800
     const auth = <div style={styles.buttons}>
         {
         this.props.user && this.props.user.id ?
@@ -53,7 +54,7 @@ class Navbar extends Component {
         title="Nametag"
         style = {styles.appBar}
         onTitleTouchTap={onHomeClick}
-        iconElementRight={auth}
+        iconElementRight={mobile ? null : auth}
         onLeftIconButtonTouchTap={() => this.setState({open: true})}/>
       <NavDrawer
         open={this.state.open}
