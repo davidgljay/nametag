@@ -22,6 +22,14 @@ export const addMessageArray = (messages) => {
   }
 }
 
+export const saveMessageAction = (id, saved) => {
+  return {
+    type: constants.SAVE_MESSAGE,
+    id,
+    saved,
+  }
+}
+
 /*
 * Watch all messages for a room
 *
@@ -87,9 +95,6 @@ export function postMessage(message) {
       hz('messages').upsert(updatedMessage).subscribe(resolve, reject)
     })
 
-    // let tempId = new Date().getTime() + '_tempId'
-    // addMessage(Object.assign({}, message, {id: tempId}), tempId)
-    // addRoomMessage(message.room, tempId)
     return promise
     .catch(errorLog('Error posting a message ' + JSON.stringify(message) + ': '))
   }
@@ -109,4 +114,22 @@ const highlightMentions = (message, nametags) => {
     }
   }
   return splitMsg.join('')
+}
+
+/*
+* Toggle whether a message is saved. Starred messages will be archived once the room is closed.
+*
+* @params {string} id - The is of the message to be starred
+* @params {boolean} saved - Whether or not the message should be saved
+*
+* @returns
+*    promise
+*/
+
+export function saveMessage(id, saved) {
+  return (dispatch) => new Promise((resolve, reject) => {
+    dispatch(saveMessageAction(id, saved))
+    hz('messages').update({id, saved}).subscribe(resolve, reject)
+  })
+  .catch(errorLog('Error saving message'))
 }

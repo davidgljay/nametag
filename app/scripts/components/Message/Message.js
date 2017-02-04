@@ -28,7 +28,17 @@ class Message extends Component {
   render() {
     let below
     let media
-    const {text, author, id, timestamp, postMessage, type, norms} = this.props
+    const {
+      text,
+      author,
+      id,
+      timestamp,
+      postMessage,
+      saveMessage,
+      type,
+      norms,
+      saved
+    } = this.props
 
     if (this.checkYouTube(text)) {
       media = <Media url={this.checkYouTube(text)[0]}/>
@@ -51,6 +61,8 @@ class Message extends Component {
             modAction={this.modAction}
             showActions={this.state.showActions}
             type={type}
+            saveMessage={saveMessage}
+            saved={saved}
             id={id} />
           <div style={styles.date}>
               {moment(timestamp).format('h:mm A, ddd MMM DD YYYY')}

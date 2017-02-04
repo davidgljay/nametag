@@ -89,4 +89,25 @@ describe('Message reducer', () => {
       })
     })
   })
+
+  describe('SAVE_MESSAGE', () => {
+    it('should save a message', () => {
+      let newState = messageReducer({
+        1: {
+          saved: false,
+        },
+      },
+        {
+          type: constants.SAVE_MESSAGE,
+          id: 1,
+          saved: true,
+        })
+      console.log(newState)
+      expect(newState).toEqual({
+        1: {
+          saved: true,
+        },
+      })
+    })
+  })
 })

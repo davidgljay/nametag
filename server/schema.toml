@@ -56,7 +56,7 @@ validator = """
 [groups.default.rules.write_certificates]
 template = "collection('certificates').anyWrite()"
 [groups.authenticated.rules.store_message]
-template = "collection('messages').upsert({author: any(), text: any(), room: any(), timestamp: any(), type: any()})"
+template = "collection('messages').anyWrite({author: any(), text: any(), room: any(), timestamp: any(), type: any(), saved: any()})"
 validator = """
   (context, oldValue, newValue) => {
     return context.data.nametags.indexOf(newValue.author) > -1

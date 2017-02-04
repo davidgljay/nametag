@@ -39,7 +39,7 @@ class Messages extends Component {
   }
 
   mapMessage(id) {
-    const {messages, nametags, room, norms, postMessage} = this.props
+    const {messages, nametags, room, norms, postMessage, saveMessage} = this.props
     if (!messages || !nametags) {return null}
     let message = messages[id]
     return message && <Message
@@ -48,7 +48,8 @@ class Messages extends Component {
         roomId={room}
         key={message.id}
         norms={norms}
-        postMessage={postMessage}/>
+        postMessage={postMessage}
+        saveMessage={saveMessage}/>
   }
 
   render() {

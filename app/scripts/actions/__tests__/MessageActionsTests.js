@@ -65,4 +65,19 @@ describe('Message Actions', () => {
         })
     })
   })
+
+  describe('saveMessage', () => {
+    it('should save a message', () => {
+      let result = true
+      let action = {
+        id: '123',
+        saved: true,
+      }
+      hz.mockReturnValue(mockHz(result, calls)())
+      return actions.saveMessage(action.id, action.saved)(store.dispatch, store.getState).then(
+        () => {
+          expect(calls[1]).toEqual({type: 'update', req: action})
+        })
+    })
+  })
 })

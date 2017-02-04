@@ -1,4 +1,5 @@
 import constants from '../constants'
+import update from 'react-addons-update'
 
 const messages = (state = {}, action) => {
   switch (action.type) {
@@ -11,6 +12,8 @@ const messages = (state = {}, action) => {
         return p
       }, {}
     )}
+  case constants.SAVE_MESSAGE:
+    return update(state, {[action.id]: { saved: { $set: action.saved } } })
   default:
     return state
   }

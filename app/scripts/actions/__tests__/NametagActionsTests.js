@@ -95,7 +95,7 @@ describe('showPresence', () => {
     return actions.showPresence('123')().then(() => {
       expect(calls[1]).toEqual({
         type: 'upsert',
-        req: {id: '123', present: Date.now()},
+        req: {id: '123', present: calls[1].req.present},
       })
     })
   })

@@ -1,8 +1,8 @@
 import React, {Component, PropTypes} from 'react'
-// import Reactions from '../../containers/Reaction/ReactionsContainer'
 import {mobile} from '../../../styles/sizes'
 import FontIcon from 'material-ui/FontIcon'
 import radium, {keyframes} from 'radium'
+import {grey500, yellow800} from 'material-ui/styles/colors'
 
 class MessageMenu extends Component {
   static propTypes = {
@@ -15,8 +15,9 @@ class MessageMenu extends Component {
   }
 
   render() {
-    const { modAction, showActions, type} = this.props
+    const { id, saved, modAction, showActions, saveMessage, type} = this.props
     const isMobile = window.innerWidth < 800
+    const starStyle = saved ? {...styles.actionIcon, ...styles.savedIcon} : styles.actionIcon
     return <div style={styles.actionsContainer}>
       {
         !isMobile || showActions ?
@@ -26,7 +27,8 @@ class MessageMenu extends Component {
             <FontIcon
               key='starIcon'
               className='material-icons'
-              style={styles.actionIcon}>
+              onClick={()=>saveMessage(id, !saved)}
+              style={starStyle}>
               star
             </FontIcon>
           }
@@ -66,13 +68,16 @@ const styles = {
   },
   actionIcon: {
     cursor: 'pointer',
-    color: 'grey',
+    color: grey500,
     marginRight: 5,
     fontSize: 'inherit',
     opacity: 0.5,
     [mobile]: {
       marginLeft: 10,
     },
+  },
+  savedIcon: {
+    color: yellow800,
   },
   actions: {
     height: 22,
