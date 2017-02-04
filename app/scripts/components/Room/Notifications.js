@@ -3,7 +3,6 @@ import {List, ListItem} from 'material-ui/List'
 import Badge from 'material-ui/Badge'
 import {mobile} from '../../../styles/sizes'
 import {lightBlue600} from 'material-ui/styles/colors'
-import radium from 'radium'
 
 const Notifications = ({userNametags, rooms, roomId, homepage}) => {
   const flexDisplay = window.innerWidth > 800 ? styles.flexDisplay
@@ -59,7 +58,7 @@ const Notifications = ({userNametags, rooms, roomId, homepage}) => {
   </div>
 }
 
-export default radium(Notifications)
+export default Notifications
 
 const styles = {
   container: {
