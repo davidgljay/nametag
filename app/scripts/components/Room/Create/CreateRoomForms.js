@@ -14,6 +14,8 @@ const getForm = (props) => {
       <TitleForm
         error={props.error}
         updateRoom={props.updateRoom}
+        setClosed={props.setClosed}
+        closedIn={props.closedIn}
         title={props.room.title}
         desc={props.room.description}/>
     </div>

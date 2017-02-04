@@ -68,6 +68,11 @@ template = "collection('users').update({id: userId(), data: any()})"
 template = "collection('nametags').anyWrite()"
 [groups.default.rules.write_rooms]
 template = "collection('rooms').anyWrite()"
+validator = """
+  (context, oldValue, newValue) => {
+    return context.id === newValue.mod
+  }
+"""
 [groups.default.rules.store_user_nametags]
 template = "collection('user_nametags').anyWrite()"
 validator = """

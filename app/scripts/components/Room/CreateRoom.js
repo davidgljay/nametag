@@ -19,6 +19,10 @@ class CreateRoom extends Component {
       bio: '',
       certificates: [],
     },
+    closedIn: {
+      unit: 'Days',
+      quantity: 2,
+    },
     image: '',
     norms: {},
     newRoom: false,
@@ -79,6 +83,15 @@ class CreateRoom extends Component {
   updateNametag = (room, prop, val) => {
     this.setState((prevState) => {
       prevState.hostNametag[prop] = val
+      return prevState
+    })
+  }
+
+  setClosed = (type, unit) => {
+    console.log('Type', type)
+    console.log('Unit', unit)
+    this.setState((prevState) => {
+      prevState.closedIn[type] = unit
       return prevState
     })
   }
@@ -214,6 +227,8 @@ class CreateRoom extends Component {
             fetchCertificate={this.props.fetchCertificate}
             addNorm={this.addNorm}
             norms={this.state.norms}
+            setClosed={this.setClosed}
+            closedIn={this.state.closedIn}
             removeNorm={this.removeNorm}
             user={this.props.user}
             error={this.state.error}/>
