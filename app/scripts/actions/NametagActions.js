@@ -28,21 +28,16 @@ export const addNametagArray = (nametags) => {
 * @returns
 *    Promise
 */
-export function watchNametag(nametagId) {
+export function watchNametags(nametagIds) {
   return function(dispatch) {
     return new Promise((resolve, reject) => {
-      nametagSubscriptions[nametagId] = hz('nametags').find(nametagId).watch().subscribe(
-        (nametag) => {
-          if (nametag) {
-            dispatch(addNametag(nametag, nametag.id))
-            resolve(nametag)
-          } else {
-            reject('Nametag not found')
-          }
+      nametagSubscriptions[nametagId] = hz('nametags').findAll(nametagIds).watch().subscribe(
+        (nametags) => {
+          if (!nametags) {reject('Not Found')}
+          dispatch(addNametagArray(nametags))
+          resolve(nametags)
         },
-        (err) => {
-          reject(err)
-        })
+        reject)
     })
     .catch(errorLog('Error subscribing to Nametag ' + nametagId + ': '))
   }

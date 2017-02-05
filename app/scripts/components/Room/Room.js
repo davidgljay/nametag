@@ -70,7 +70,7 @@ class Room extends Component {
       loadingNametags = true
       watchUserNametags(user.id)
         .then((userNts) => {
-          fetchRooms(userNts.map((n) => n.room))
+          fetchRooms(userNts.map((n) => n.room), true)
           for (let i = 0; i < userNts.length; i++ ) {
             if (userNts[i].room === params.roomId) {
               watchDirectMessages(params.roomId)

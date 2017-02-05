@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import component from '../../components/Room/RoomCards'
 import {getAuth} from '../../api/horizon'
 import {addUserNametag, watchUserNametags} from '../../actions/UserNametagActions'
-import {watchNametag, unWatchNametag} from '../../actions/NametagActions'
+import {watchNametags, unWatchNametag} from '../../actions/NametagActions'
 import {logout, setting, providerAuth} from '../../actions/UserActions'
 import {subscribe, unsubscribe} from '../../actions/RoomActions'
 const mapStateToProps = (state) => {
@@ -29,8 +29,8 @@ const mapDispatchToProps = (dispatch) => {
     addUserNametag(roomId, nametagId) {
       return dispatch(addUserNametag(roomId, nametagId))
     },
-    watchNametag(nametagId) {
-      return dispatch(watchNametag(nametagId))
+    watchNametags(nametagId) {
+      return dispatch(watchNametags(nametagId))
     },
     unWatchNametag(nametagId) {
       return dispatch(unWatchNametag(nametagId))

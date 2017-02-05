@@ -162,18 +162,21 @@ export function joinRoom(roomId, nametag, userId) {
 * Fetch rooms
 * @params
 *   ids - An array of room Ids to be fetched
+*   open - If true, include only currenlty open rooms
 *
 * @returns
 *   Promise
 */
-export function fetchRooms(ids) {
+export function fetchRooms(ids, open) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      hz('rooms').findAll(..._.uniq(ids).map((id) => {return {id}})).fetch()
+      let query = hz('rooms').findAll(..._.uniq(ids).map((id) => ({id})))
+      if (open) {
+        query = query.above({closedAt: Date.now()})
+      }
+      query.fetch()
       .subscribe((rooms) => {
-        for (let i = 0; i < rooms.length; i++ ) {
-          dispatch(addRoom(rooms[i], rooms[i].id))
-        }
+        dispatch(addRoomArray(rooms))
         resolve(rooms)
       }, reject)
     }).catch(errorLog('Error fetching rooms'))

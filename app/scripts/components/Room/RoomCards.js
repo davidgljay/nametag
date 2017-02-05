@@ -28,14 +28,11 @@ class RoomCards extends Component {
 
   componentDidMount() {
     trackEvent('ROOMS_PAGE_LOAD')
-    const {getAuth, watchUserNametags, watchNametag} = this.props
+    const {getAuth, watchUserNametags, watchNametags} = this.props
     this.props.subscribe()
-    getAuth().then((user) => {
-      return watchUserNametags(user.id)
-    }).then((userNametags) => {
-      for (let i = 0; i < userNametags.length; i++ ) {
-        watchNametag(userNametags[i].nametag)
-      }
+    getAuth().then((user) => watchUserNametags(user.id))
+    .then((userNametags) => {
+      watchNametags(userNametags.map((nt) => nt.nametag))
     })
   }
 
