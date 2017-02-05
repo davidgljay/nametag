@@ -61,8 +61,8 @@ export function addRoomMessage(room, messageId) {
 export function subscribe() {
   return function(dispatch) {
     return new Promise((resolve, reject) => {
-      roomSubscription = hz('rooms').watch().subscribe(
-        (rooms) => {
+      roomSubscription = hz('rooms').above({closedAt: Date.now()})
+        .watch().subscribe((rooms) => {
           for (let i = rooms.length - 1; i >= 0; i--) {
             getNametagCount(rooms[i].id)(dispatch)
           }
