@@ -9,6 +9,7 @@ import {Card, CardTitle, CardMedia} from 'material-ui/Card'
 import Checkbox from 'material-ui/Checkbox'
 import {grey400} from 'material-ui/styles/colors'
 import trackEvent from '../../utils/analytics'
+import TimeAgo from 'react-timeago'
 
 class RoomCard extends Component {
 
@@ -75,7 +76,7 @@ class RoomCard extends Component {
           }
           <div style={styles.roomInfo}>
             <div style={styles.greyText}>
-              <b>Started</b> 2 days ago | <b>Ends</b> in 1 week
+              Ends <TimeAgo date={new Date(room.closedAt)}/>
             </div>
             <CardTitle
               title={room.title}

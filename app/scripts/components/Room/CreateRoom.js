@@ -13,6 +13,7 @@ class CreateRoom extends Component {
     room: {
       title: '',
       description: '',
+      closedAt: 86400000 * 2 + Date.now(),
     },
     hostNametag: {
       name: '',
@@ -88,10 +89,21 @@ class CreateRoom extends Component {
   }
 
   setClosed = (type, unit) => {
-    console.log('Type', type)
-    console.log('Unit', unit)
     this.setState((prevState) => {
       prevState.closedIn[type] = unit
+      let unitTime
+      switch (prevState.closedIn.unit) {
+      case 'Hours':
+        unitTime = 3600000
+        break
+      case 'Days':
+        unitTime = 86400000
+        break
+      default:
+        unitTime = 0
+      }
+      const closedAt = Date.now() + prevState.closedIn.quantity * unitTime
+      prevState.room.closedAt = closedAt
       return prevState
     })
   }
@@ -133,12 +145,13 @@ class CreateRoom extends Component {
 
   postRoom = () => {
     let id
-    this.props.postRoom(this.state. room)
+    const {room, hostNametag} = this.state
+    this.props.postRoom(room)
       .then((roomId) => {
         id = roomId
         return this.props.joinRoom(
           roomId,
-          {...this.state.hostNametag, room: roomId},
+          {...hostNametag, room: roomId},
           this.props.user.id
         )
       })

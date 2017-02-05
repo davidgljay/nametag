@@ -2,6 +2,7 @@ import React from 'react'
 import TextField from 'material-ui/TextField'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
+import {grey500} from 'material-ui/styles/colors'
 import _ from 'lodash'
 
 const TitleForm = (props) =>
@@ -23,6 +24,7 @@ const TitleForm = (props) =>
       floatingLabelText="Description"/>
     <div
       style={styles.textfield}>
+      <div style={styles.closedAtHeader}>Keep conversation active for</div>
       <SelectField
             value={props.closedIn.quantity}
             autoWidth={true}
@@ -71,5 +73,9 @@ const styles = {
     marginLeft: 240,
     fontSize: 12,
     color: '#008000',
+  },
+  closedAtHeader: {
+    color: grey500,
+    fontSize: 14,
   },
 }
