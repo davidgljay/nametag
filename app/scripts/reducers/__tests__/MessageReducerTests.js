@@ -102,7 +102,6 @@ describe('Message reducer', () => {
           id: 1,
           saved: true,
         })
-      console.log(newState)
       expect(newState).toEqual({
         1: {
           saved: true,

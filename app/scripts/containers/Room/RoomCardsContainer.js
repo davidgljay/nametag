@@ -29,10 +29,10 @@ const mapDispatchToProps = (dispatch) => {
     addUserNametag(roomId, nametagId) {
       return dispatch(addUserNametag(roomId, nametagId))
     },
-    watchNametags(nametagId) {
-      return dispatch(watchNametags(nametagId))
+    watchNametags(nametagIds) {
+      return dispatch(watchNametags(nametagIds))
     },
-    unWatchNametag(nametagId) {
+    unWatchNametags() {
       return dispatch(unWatchNametag(nametagId))
     },
     logout() {

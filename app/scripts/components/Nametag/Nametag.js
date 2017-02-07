@@ -44,16 +44,6 @@ class Nametag extends Component {
     certificates: PropTypes.array,
   }
 
-  componentDidMount() {
-    if (!this.props.name) {
-      this.props.watchNametag(this.props.id)
-    }
-  }
-
-  componentDidUnMount() {
-    this.props.unWatchNametag(this.props.id)
-  }
-
   render() {
     let star = ''
 

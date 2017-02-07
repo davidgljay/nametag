@@ -6,7 +6,6 @@ import CreateRoom from './CreateRoom'
 import Navbar from '../Utils/Navbar'
 import LoginDialog from '../User/LoginDialog'
 import Notifications from '../Room/Notifications'
-import {subscribe, unsubscribe} from '../../actions/RoomActions'
 import {lightBlue200} from 'material-ui/styles/colors'
 import trackEvent from '../../utils/analytics'
 
@@ -28,8 +27,8 @@ class RoomCards extends Component {
 
   componentDidMount() {
     trackEvent('ROOMS_PAGE_LOAD')
-    const {getAuth, watchUserNametags, watchNametags} = this.props
-    this.props.subscribe()
+    const {getAuth, watchUserNametags, watchNametags, subscribe} = this.props
+    subscribe()
     getAuth().then((user) => watchUserNametags(user.id))
     .then((userNametags) => {
       watchNametags(userNametags.map((nt) => nt.nametag))
@@ -37,8 +36,10 @@ class RoomCards extends Component {
   }
 
   componentWillUnmount() {
-    this.props.unsubscribe()
-    this.props.unWatchUserNametags()
+    const {unsubscribe, unWatchNametags, unWatchUserNametags} = this.props
+    unsubscribe()
+    unWatchUserNametags()
+    unWatchNametags()
   }
 
   getChildContext() {
@@ -49,7 +50,6 @@ class RoomCards extends Component {
 
   mapRoomCards = (roomId) => {
     const {rooms, nametags, userNametags, addUserNametag, nametagEdits} = this.props
-
     // If a nametag has already been saved for this room then merge it in
     const nametag = userNametags[roomId]
     ? {...nametags[userNametags[roomId].nametag], ...nametagEdits[roomId]}

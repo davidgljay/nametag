@@ -13,7 +13,7 @@ const Notifications = ({userNametags, rooms, roomId, homepage}) => {
     if (rooms[a].title < rooms[b].title) return -1
     if (rooms[a].title > rooms[b].title) return 1
     return 0
-  }).filter((r) => r.closedAt > Date.now())
+  }).filter((r) => rooms[r].closedAt > Date.now())
 
   const listItems = visitedRooms.map((id) => {
     const room = rooms[id]

@@ -1,8 +1,9 @@
 import errorLog from '../utils/errorLog'
 import constants from '../constants'
 import {hz} from '../api/horizon'
+import _ from 'lodash'
 
-let nametagSubscriptions = {}
+let nametagsSubscription
 
 export const addNametag = (nametag, id) => {
   return {
@@ -29,9 +30,9 @@ export const addNametagArray = (nametags) => {
 *    Promise
 */
 export function watchNametags(nametagIds) {
-  return function(dispatch) {
-    return new Promise((resolve, reject) => {
-      nametagSubscriptions[nametagId] = hz('nametags').findAll(nametagIds).watch().subscribe(
+  return (dispatch) => new Promise((resolve, reject) => {
+      const nametagSearch = _.uniq(nametagIds.map(id=>({id})))
+      nametagsSubscription = hz('nametags').findAll(...nametagSearch).watch().subscribe(
         (nametags) => {
           if (!nametags) {reject('Not Found')}
           dispatch(addNametagArray(nametags))
@@ -39,9 +40,8 @@ export function watchNametags(nametagIds) {
         },
         reject)
     })
-    .catch(errorLog('Error subscribing to Nametag ' + nametagId + ': '))
+    .catch(errorLog('Error subscribing to Nametags:'))
   }
-}
 
 /*
 * Unsubscribe from a Nametag
@@ -52,9 +52,9 @@ export function watchNametags(nametagIds) {
 * @returns
 *    none
 */
-export function unWatchNametag(nametagId) {
+export function unWatchNametags() {
   return function() {
-    nametagSubscriptions[nametagId].unsubscribe()
+    nametagsSubscriptions.unsubscribe()
   }
 }
 
@@ -70,7 +70,7 @@ export function unWatchNametag(nametagId) {
 export function watchRoomNametags(room) {
   return function(dispatch) {
     return new Promise((resolve, reject) => {
-      nametagSubscriptions[room] = hz('nametags').findAll({room: room}).watch().subscribe(
+      nametagSubscriptions[room] = hz('nametags').findAll({room}).watch().subscribe(
         (nametags) => {
           dispatch(addNametagArray(nametags))
           resolve(nametags)

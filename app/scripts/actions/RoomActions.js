@@ -1,7 +1,7 @@
 import {hz} from '../api/horizon'
 import errorLog from '../utils/errorLog'
 import constants from '../constants'
-import {addNametag, putNametag} from './NametagActions'
+import {addNametag, putNametag, watchNametags, unWatchNametags} from './NametagActions'
 import {putUserNametag} from './UserNametagActions'
 import {appendUserArray} from './UserActions'
 import _ from 'lodash'
@@ -59,22 +59,21 @@ export function addRoomMessage(room, messageId) {
 *    Promise resolving to list of rooms
 */
 export function subscribe() {
-  return function(dispatch) {
-    return new Promise((resolve, reject) => {
-      roomSubscription = hz('rooms').above({closedAt: Date.now()})
-        .watch().subscribe((rooms) => {
-          for (let i = rooms.length - 1; i >= 0; i--) {
-            getNametagCount(rooms[i].id)(dispatch)
-          }
-          dispatch(addRoomArray(rooms))
-          resolve(rooms)
-        },
-        (err) => {
-          errorLog('Subscribing to rooms: ')(err)
-          reject(err)
-        })
-    })
-  }
+  return (dispatch) =>
+  new Promise((resolve, reject) => {
+    roomSubscription = hz('rooms').above({closedAt: Date.now()})
+      .watch().subscribe((rooms) => {
+        for (let i = rooms.length - 1; i >= 0; i--) {
+          getNametagCount(rooms[i].id)(dispatch)
+        }
+        dispatch(addRoomArray(rooms))
+        resolve(rooms)
+      },
+      (err) => {
+        errorLog('Subscribing to rooms: ')(err)
+        reject(err)
+      })
+  }).then((rooms) => dispatch(watchNametags(rooms.map((r) => r.mod))))
 }
 
 /*
@@ -87,18 +86,9 @@ export function subscribe() {
 *    none
 */
 export function unsubscribe() {
-  return function() {
-    if (roomSubscription) {
-      roomSubscription.unsubscribe()
-      for (let id in nametagSubscriptions) {
-        if (!Object.hasOwnProperty()) {
-          continue
-        }
-        nametagSubscriptions[id].unsubscribe()
-      }
-    } else {
-      errorLog('Tried to unsubscribe from rooms before subscribing')
-    }
+  () => {
+    unWatchNametags()
+    roomSubscription.unsubscribe()
   }
 }
 

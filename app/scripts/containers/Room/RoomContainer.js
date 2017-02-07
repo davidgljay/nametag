@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import component from '../../components/Room/Room'
 import {fetchRooms, watchRoom, unWatchRoom, addRoomMessage} from '../../actions/RoomActions'
-import {updateNametag, showPresence} from '../../actions/NametagActions'
+import {showPresence} from '../../actions/NametagActions'
 import {
   watchUserNametags,
   unWatchUserNametags,
