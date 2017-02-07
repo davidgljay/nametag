@@ -5,6 +5,8 @@ import _ from 'lodash'
 
 let nametagsSubscription
 
+let nametagRoomSubscriptions = {}
+
 export const addNametag = (nametag, id) => {
   return {
     type: constants.ADD_NAMETAG,
@@ -68,16 +70,14 @@ export function unWatchNametags() {
 *    promise
 */
 export function watchRoomNametags(room) {
-  return function(dispatch) {
-    return new Promise((resolve, reject) => {
-      nametagSubscriptions[room] = hz('nametags').findAll({room}).watch().subscribe(
-        (nametags) => {
-          dispatch(addNametagArray(nametags))
-          resolve(nametags)
-        }, reject)
-    })
-    .catch(errorLog('Error subscribing to Nametags for room ' + room + ': '))
-  }
+  return (dispatch) => new Promise((resolve, reject) => {
+    nametagRoomSubscriptions[room] = hz('nametags').findAll({room}).watch().subscribe(
+      (nametags) => {
+        dispatch(addNametagArray(nametags))
+        resolve(nametags)
+      }, reject)
+  })
+  .catch(errorLog('Error subscribing to Nametags for room ' + room + ': '))
 }
 
 /*
@@ -91,7 +91,7 @@ export function watchRoomNametags(room) {
 */
 export function unWatchRoomNametags(room) {
   return function() {
-    nametagSubscriptions[room].unsubscribe()
+    nametagRoomSubscriptions[room].unsubscribe()
   }
 }
 

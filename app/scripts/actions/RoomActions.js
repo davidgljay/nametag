@@ -157,14 +157,10 @@ export function joinRoom(roomId, nametag, userId) {
 * @returns
 *   Promise
 */
-export function fetchRooms(ids, open) {
+export function fetchRooms(ids) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      let query = hz('rooms').findAll(..._.uniq(ids).map((id) => ({id})))
-      if (open) {
-        query = query.above({closedAt: Date.now()})
-      }
-      query.fetch()
+      hz('rooms').findAll(..._.uniq(ids).map((id) => ({id}))).fetch()
       .subscribe((rooms) => {
         dispatch(addRoomArray(rooms))
         resolve(rooms)
