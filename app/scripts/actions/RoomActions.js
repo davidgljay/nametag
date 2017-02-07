@@ -255,10 +255,9 @@ export function setImageFromUrl(width, height, url) {
 *   Promise resolving to room id
 */
 export function postRoom(room) {
-  return (dispatch, getState) => new Promise((resolve, reject) => {
-    const updatedRoom = {...room, mod: getState().user.id}
-    hz('rooms').insert(updatedRoom).subscribe((res) => {
-      dispatch(addRoom({ ...updatedRoom, id: res.id }, res.id))
+  return (dispatch) => new Promise((resolve, reject) => {
+    hz('rooms').upsert(room).subscribe((res) => {
+      dispatch(addRoom({ ...room, id: res.id }, res.id))
       resolve(res.id)
     }, reject)
   }).catch(errorLog('Posting room'))
