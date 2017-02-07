@@ -8,9 +8,11 @@ import {
 } from '../../actions/MessageActions'
 
 const mapStateToProps = (state, ownProps) => {
+  const messageList = Object.keys(state.messages)
+    .filter((m) => state.messages[m].room === ownProps.room)
   return Object.assign({}, {
     messages: state.messages,
-    messageList: state.rooms[ownProps.room].messages,
+    messageList,
     nametags: state.nametags,
   }, ownProps)
 }
