@@ -89,7 +89,7 @@ export function postMessage(message) {
       text: message.text.indexOf('@') === -1 ?
         message.text : highlightMentions(message, getState().nametags),
     }
-    const dm = message.text.slice(0, 1).toLowerCase() === 'd'
+    const dm = message.text.slice(0, 2).toLowerCase() === 'd '
     const promise = dm ? dispatch(postDirectMessage({...message, type: 'direct_message'})) :
     new Promise((resolve, reject) => {
       hz('messages').upsert(updatedMessage).subscribe(resolve, reject)
