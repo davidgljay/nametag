@@ -122,15 +122,6 @@ class Room extends Component {
           <div>
       	    <div style={styles.header}>
               <IconButton
-                style={styles.drawer}>
-                <FontIcon
-                  className="material-icons"
-                  onClick={()=>this.setState({showDrawer: true})}
-                  style={styles.closeIcon}>
-                 menu
-               </FontIcon>
-              </IconButton>
-              <IconButton
                 style={styles.close}>
                 <FontIcon
                   className="material-icons"
@@ -144,12 +135,6 @@ class Room extends Component {
                 {room.description}
               </div>
             </div>
-            <NavDrawer
-              open={this.state.showDrawer}
-              logout={this.props.logout}
-              setting={this.props.setting}
-              user={this.props.user}
-              setOpen={(showDrawer)=>{this.setState({showDrawer})}}/>
             <div>
               <div style={{...styles.leftBar, ...expanded}}>
                 <div style={styles.leftBarContent}>
@@ -293,6 +278,7 @@ const styles = {
     float: 'right',
     padding: 0,
     cursor: 'pointer',
+    marginRight: 15,
   },
   closeIcon: {
     fontSize: 12,
