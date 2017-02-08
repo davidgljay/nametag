@@ -36,9 +36,9 @@ export const watchDirectMessages = (room) => {
       let type
       const currentUserNametag = getState().userNametags[room].nametag
       if (dm.recipient === currentUserNametag) {
-        type = 'direct_message_to'
+        type = 'direct_message_incoming'
       } else if (dm.author === currentUserNametag) {
-        type = 'direct_message_from'
+        type = 'direct_message_outgoing'
       }
       return {...dm, type}
     })))

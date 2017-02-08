@@ -37,7 +37,8 @@ class Message extends Component {
       saveMessage,
       type,
       norms,
-      saved
+      recipient,
+      saved,
     } = this.props
 
     if (this.checkYouTube(text)) {
@@ -72,12 +73,18 @@ class Message extends Component {
 
     // Get proper style if the this is a direct message
     let messageStyle
+    let callout
     switch (type) {
-    case 'direct_message_from':
-      messageStyle = {...styles.messageText, ...styles.directMessageFrom}
+    case 'direct_message_outgoing':
+      messageStyle = {...styles.messageText, ...styles.directMessageOutgoing}
+      callout = <div style={styles.dmCallout}>
+        Private Message to {recipient.name}
+        <img style={styles.tinyIconImg} src={recipient.icon}/>
+      </div>
       break
-    case 'direct_message_to':
-      messageStyle = {...styles.messageText, ...styles.directMessageTo}
+    case 'direct_message_incoming':
+      messageStyle = {...styles.messageText, ...styles.directMessageIncoming}
+      callout = <div style={styles.dmCallout}>Private Message</div>
       break
     default:
       messageStyle = styles.messageText
@@ -92,8 +99,7 @@ class Message extends Component {
         <td style={messageStyle}>
           <div style={styles.name}>{author.name}</div>
           {
-            type.slice(0, 14) === 'direct_message' &&
-            <div style={styles.dmCallout}>Private Message</div>
+            callout
           }
           <div style={styles.text}>
             {
@@ -132,10 +138,10 @@ const styles = {
     marginTop: 10,
     marginBottom: 10,
   },
-  directMessageTo: {
+  directMessageIncoming: {
     backgroundColor: lightBlue100,
   },
-  directMessageFrom: {
+  directMessageOutgoing: {
     backgroundColor: yellow100,
   },
   dmCallout: {
@@ -166,6 +172,13 @@ const styles = {
     borderRadius: 25,
     width: 50,
     height: 50,
+  },
+  tinyIconImg: {
+    verticalAlign: 'middle',
+    borderRadius: 10,
+    width: 20,
+    height: 20,
+    marginLeft: 5,
   },
   name: {
     fontWeight: 'bold',

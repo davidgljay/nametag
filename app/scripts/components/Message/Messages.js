@@ -46,6 +46,7 @@ class Messages extends Component {
         {...message}
         author={nametags[message.author]}
         roomId={room}
+        recipient={nametags[message.recipient]}
         key={message.id}
         norms={norms}
         postMessage={postMessage}
