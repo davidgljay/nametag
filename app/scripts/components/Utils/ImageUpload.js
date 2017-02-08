@@ -17,7 +17,7 @@ class ImageUpload extends Component {
     const uploadOptions = {
       baseUrl: `https://${document.location.host}/api/images?width=${width}`,
       chooseAndUpload: true,
-      accept: '.jpg,.jpeg,.png',
+      accept: 'image/*',
       dataType: 'json',
       chooseFile: onChooseFile,
       uploadSuccess: onUploadFile,
