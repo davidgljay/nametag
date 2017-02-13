@@ -1,6 +1,6 @@
 import { TokenStorage, FakeStorage } from '../../src/auth'
 
-export default function unitAuthSuite() {
+export default function unitAuthSuite () {
   describe('TokenStorage', () => {
     let fakeStorage
     let tokenStore
@@ -9,7 +9,7 @@ export default function unitAuthSuite() {
       tokenStore = new TokenStorage({
         authType: 'token',
         storage: fakeStorage,
-        path: 'testHorizon',
+        path: 'testHorizon'
       })
     })
     it('sets a token and retrieves it back', done => {
@@ -32,7 +32,7 @@ export default function unitAuthSuite() {
       const otherTokens = new TokenStorage({
         authType: 'token',
         path: 'secondHorizon',
-        storage: fakeStorage,
+        storage: fakeStorage
       })
       tokenStore.set('A')
       otherTokens.set('B')
@@ -52,7 +52,7 @@ export default function unitAuthSuite() {
       const otherToken = new TokenStorage({
         authType: 'token',
         path: 'anotherPath',
-        storage: fakeStorage,
+        storage: fakeStorage
       })
       tokenStore.set('A')
       otherToken.set('B')

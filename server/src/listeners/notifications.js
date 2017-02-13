@@ -13,7 +13,7 @@ const onMessage = (conn) => (err, message) => {
 
 // Check for mentions of a @username
 const checkMentions = (message, conn) => {
-  if (message.new_val.text.indexOf('@') === -1) {return null}
+  if (message.new_val.text.indexOf('@') === -1) { return null }
 
   const room = message.new_val.room
 
@@ -23,10 +23,10 @@ const checkMentions = (message, conn) => {
     let promises = []
     // For every mention, check every nametag in the room to see if it matches the name.
     roomNametags.toArray((err, nametags) => {
-      if (err) { return false}
-      for (let i = 0; i < splitMsg.length; i++ ) {
+      if (err) { return false }
+      for (let i = 0; i < splitMsg.length; i++) {
         const text = splitMsg[i]
-        for (let j = 0; j < nametags.length; j++ ) {
+        for (let j = 0; j < nametags.length; j++) {
           const {name, id} = nametags[j]
           if (text.slice(0, name.length).toLowerCase() === name.toLowerCase()) {
             promises.push(addMention(id, room, conn))
@@ -53,5 +53,5 @@ module.exports = {
           return Promise.reject(err)
         }
         return addMention(dm.new_val.recipient, dm.new_val.room, conn)
-      })),
+      }))
 }

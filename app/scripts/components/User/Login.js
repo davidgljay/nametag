@@ -12,31 +12,31 @@ TODO: create e-mail lookup archive and handle account merges
 
 const styles = {
   login: {
-    textAlign: 'center',
+    textAlign: 'center'
   },
   loginImg: {
-    cursor: 'pointer',
-  },
+    cursor: 'pointer'
+  }
 }
 
 const Login = (props) => {
   // TODO: Add e-mail (This will probably involve adding state, oh well.)
 
   return <div style={styles.login}>
-      <h4>{props.message || 'Log in to join'}</h4>
-      <img
-        style={styles.loginImg}
-        src="/public/images/twitter.jpg"
-        onClick={() => props.providerAuth('twitter')}/>
-      <img
-        style={styles.loginImg}
-        src="/public/images/fb.jpg"
-        onClick={() => props.providerAuth('facebook')}/>
-      <img
-        style={styles.loginImg}
-        src="/public/images/google.png"
-        onClick={() => props.providerAuth('google')}/>
-    </div>
+    <h4>{props.message || 'Log in to join'}</h4>
+    <img
+      style={styles.loginImg}
+      src='/public/images/twitter.jpg'
+      onClick={() => props.providerAuth('twitter')} />
+    <img
+      style={styles.loginImg}
+      src='/public/images/fb.jpg'
+      onClick={() => props.providerAuth('facebook')} />
+    <img
+      style={styles.loginImg}
+      src='/public/images/google.png'
+      onClick={() => props.providerAuth('google')} />
+  </div>
 }
 
 export default Login

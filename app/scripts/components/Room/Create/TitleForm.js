@@ -12,37 +12,37 @@ const TitleForm = (props) =>
       value={props.title}
       errorText={props.error && props.error.titleError}
       onChange={(e) => props.updateRoom('title', e.target.value.slice(0, 40))}
-      floatingLabelText="Title" />
-    <div style={styles.counter}>{40 - props.title.length}</div><br/>
+      floatingLabelText='Title' />
+    <div style={styles.counter}>{40 - props.title.length}</div><br />
     <TextField
       style={styles.textfield}
       value={props.desc}
-      multiLine={true}
+      multiLine
       errorText={props.error && props.error.descriptionError}
       inputStyle={styles.descriptionField}
       onChange={(e) => props.updateRoom('description', e.target.value)}
-      floatingLabelText="Description"/>
+      floatingLabelText='Description' />
     <div
       style={styles.textfield}>
       <div style={styles.closedAtHeader}>Keep conversation active for</div>
       <SelectField
-            value={props.closedIn.quantity}
-            autoWidth={true}
-            style={{width: 36, margin: 10}}
-            maxHeight={200}
-            onChange={(e, i, v) => props.setClosed('quantity', v)}>
-            {
+        value={props.closedIn.quantity}
+        autoWidth
+        style={{width: 36, margin: 10}}
+        maxHeight={200}
+        onChange={(e, i, v) => props.setClosed('quantity', v)}>
+        {
               _.range(12).map((n) =>
-                <MenuItem value={n + 1} primaryText={n + 1} key={n + 1}/>
+                <MenuItem value={n + 1} primaryText={n + 1} key={n + 1} />
               )
             }
       </SelectField>
       <SelectField
-            value={props.closedIn.unit}
-            autoWidth={true}
-            style={{width: 100, margin: 10}}
-            onChange={(e, i, v) => props.setClosed('unit', v)}>
-            {
+        value={props.closedIn.unit}
+        autoWidth
+        style={{width: 100, margin: 10}}
+        onChange={(e, i, v) => props.setClosed('unit', v)}>
+        {
               ['Hours', 'Days'].map((n) =>
                 <MenuItem value={n} primaryText={n} key={n} />
                 )
@@ -58,24 +58,24 @@ const styles = {
     fontSize: 20,
     padding: 0,
     textAlign: 'left',
-    margin: '20px 20px 0px 20px',
+    margin: '20px 20px 0px 20px'
   },
   titleForm: {
     display: 'flex',
     width: '100%',
     alignItems: 'center',
-    flexDirection: 'column',
+    flexDirection: 'column'
   },
   descriptionField: {
-    fontSize: 16,
+    fontSize: 16
   },
   counter: {
     marginLeft: 240,
     fontSize: 12,
-    color: '#008000',
+    color: '#008000'
   },
   closedAtHeader: {
     color: grey500,
-    fontSize: 14,
-  },
+    fontSize: 14
+  }
 }

@@ -5,5 +5,5 @@ import Compose from '../Compose'
 storiesOf('Compose', module)
   .add('basic', () =>
     <Compose
-      postMessage={action('postMessage')}/>
+      postMessage={action('postMessage')} />
 )

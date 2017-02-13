@@ -11,14 +11,14 @@ export const addMessage = (message, id) => {
   return {
     type: constants.ADD_MESSAGE,
     message,
-    id,
+    id
   }
 }
 
 export const addMessageArray = (messages) => {
   return {
     type: constants.ADD_MESSAGE_ARRAY,
-    messages,
+    messages
   }
 }
 
@@ -26,7 +26,7 @@ export const saveMessageAction = (id, saved) => {
   return {
     type: constants.SAVE_MESSAGE,
     id,
-    saved,
+    saved
   }
 }
 
@@ -39,8 +39,8 @@ export const saveMessageAction = (id, saved) => {
 * @returns
 *    promise
 */
-export function watchRoomMessages(room) {
-  return function(dispatch, getState) {
+export function watchRoomMessages (room) {
+  return function (dispatch, getState) {
     return new Promise((resolve, reject) => {
       messageSubscriptions[room] = hz('messages').findAll({room: room}).watch().subscribe(
         (messages) => {
@@ -65,8 +65,8 @@ export function watchRoomMessages(room) {
 * @returns
 *    promise
 */
-export function unWatchRoomMessages(room) {
-  return function() {
+export function unWatchRoomMessages (room) {
+  return function () {
     return messageSubscriptions[room].unsubscribe()
   }
 }
@@ -81,17 +81,17 @@ export function unWatchRoomMessages(room) {
 * @returns
 *    promise
 */
-export function postMessage(message) {
-  return function(dispatch, getState) {
-    const updatedMessage =  {
+export function postMessage (message) {
+  return function (dispatch, getState) {
+    const updatedMessage = {
       type: 'message',
       ...message,
-      text: message.text.indexOf('@') === -1 ?
-        message.text : highlightMentions(message, getState().nametags),
+      text: message.text.indexOf('@') === -1
+      ? message.text : highlightMentions(message, getState().nametags)
     }
     const dm = message.text.slice(0, 2).toLowerCase() === 'd '
-    const promise = dm ? dispatch(postDirectMessage({...message, type: 'direct_message'})) :
-    new Promise((resolve, reject) => {
+    const promise = dm ? dispatch(postDirectMessage({...message, type: 'direct_message'}))
+    : new Promise((resolve, reject) => {
       hz('messages').upsert(updatedMessage).subscribe(resolve, reject)
     })
 
@@ -104,8 +104,8 @@ const highlightMentions = (message, nametags) => {
   const roomNametags = Object.keys(nametags).map((id) => nametags[id])
     .filter(nametag => nametag.room === message.room)
   let splitMsg = message.text.split('@')
-  for (let i = 0; i < splitMsg.length; i++ ) {
-    for (let j = 0; j < roomNametags.length; j++ ) {
+  for (let i = 0; i < splitMsg.length; i++) {
+    for (let j = 0; j < roomNametags.length; j++) {
       const text = splitMsg[i]
       const {name} = roomNametags[j]
       if (text.slice(0, name.length).toLowerCase() === name.toLowerCase()) {
@@ -126,7 +126,7 @@ const highlightMentions = (message, nametags) => {
 *    promise
 */
 
-export function saveMessage(id, saved) {
+export function saveMessage (id, saved) {
   return (dispatch) => new Promise((resolve, reject) => {
     dispatch(saveMessageAction(id, saved))
     hz('messages').update({id, saved}).subscribe(resolve, reject)

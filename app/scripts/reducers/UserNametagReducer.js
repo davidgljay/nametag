@@ -7,12 +7,12 @@ const updateUserNametag = (state, action) => {
 
 const userNametag = (state = {}, action) => {
   switch (action.type) {
-  case constants.ADD_USER_NAMETAG:
-    return Object.assign({}, state, {[action.room]: action.nametag})
-  case constants.UPDATE_USER_NAMETAG:
-    return updateUserNametag(state, action)
-  default:
-    return state
+    case constants.ADD_USER_NAMETAG:
+      return Object.assign({}, state, {[action.room]: action.nametag})
+    case constants.UPDATE_USER_NAMETAG:
+      return updateUserNametag(state, action)
+    default:
+      return state
   }
 }
 

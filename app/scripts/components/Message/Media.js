@@ -7,39 +7,39 @@ const Media = (props) => {
   if (yt) {
     let ytCode = yt[1]
     media = <div style={styles.video}>
-        <iframe
-          style={styles.videoFrame}
-          width='560'
-          height='315'
-          src={'https://www.youtube.com/embed/' + ytCode}
-          frameborder='0'
-          allowfullscreen/>
-      </div>
+      <iframe
+        style={styles.videoFrame}
+        width='560'
+        height='315'
+        src={'https://www.youtube.com/embed/' + ytCode}
+        frameborder='0'
+        allowfullscreen />
+    </div>
   } else if (/.gif|.png|.jpg/.exec(props.url)) {
-    media = <img src={props.url} style={styles.mediaImage}/>
+    media = <img src={props.url} style={styles.mediaImage} />
   }
 
   return <div className={styles.media}>
-			{media}
-		</div>
+    {media}
+  </div>
 }
 
 export default radium(Media)
 
 const styles = {
   media: {
-  	padding: 10,
+    padding: 10
   },
   mediaImage: {
-  	maxWidth: '80%',
+    CmaxWidth: '80%'
   },
   video: {
     '@media (max-width: 975px)': {
       position: 'relative',
       paddingBottom: '56.25%', /* 16:9 */
       paddingTop: '25px',
-      height: 0,
-    },
+      height: 0
+    }
   },
   videoFrame: {
     '@media (max-width: 975px)': {
@@ -47,7 +47,7 @@ const styles = {
       top: 0,
       left: 0,
       maxWidth: '100%',
-      maxHeight: '100%',
-    },
-  },
+      maxHeight: '100%'
+    }
+  }
 }

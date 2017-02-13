@@ -8,39 +8,39 @@ describe('UPDATE_NAMETAG_EDIT', () => {
   it('should add an arbitrary value to a nametag edit', () => {
     let newState = reducer({
       1: {
-        name: 'tag',
-      },
+        name: 'tag'
+      }
     },
       {
         type: constants.UPDATE_NAMETAG_EDIT,
         room: 1,
         property: 'name',
-        value: 'Dinosaur',
+        value: 'Dinosaur'
       })
     expect(newState).toEqual({
       1: {
-        name: 'Dinosaur',
-      },
+        name: 'Dinosaur'
+      }
     })
   })
 
   it('should not overwrite other values in a nametag edit', () => {
     let newState = reducer({
       1: {
-        name: 'Dinosaur',
-      },
+        name: 'Dinosaur'
+      }
     },
       {
         type: constants.UPDATE_NAMETAG_EDIT,
         room: 1,
         property: 'bio',
-        value: 'Rwaaarr!!!',
+        value: 'Rwaaarr!!!'
       })
     expect(newState).toEqual({
       1: {
         name: 'Dinosaur',
-        bio: 'Rwaaarr!!!',
-      },
+        bio: 'Rwaaarr!!!'
+      }
     })
   })
 })
@@ -49,30 +49,30 @@ describe('ADD_NT_EDIT_CERT', () => {
   it('should add a certificate to a nametag for the room', () => {
     let testCert = {
       name: 'test certificate',
-      id: 'wudda',
+      id: 'wudda'
     }
 
     let newState = reducer({
-      1: { name: 'tag', id: 1},
+      1: {name: 'tag', id: 1}
     }, {
       type: constants.ADD_NT_EDIT_CERT,
       room: 1,
-      cert: testCert,
+      cert: testCert
     })
     expect(newState).toEqual(
       {
         1: {
           name: 'tag',
           id: 1,
-          certificates: [testCert],
-        },
+          certificates: [testCert]
+        }
       })
   })
 
   it('should add a second certificate', () => {
     let testCert = {
       name: 'test certificate 2',
-      id: 'womps',
+      id: 'womps'
     }
 
     let newState = reducer({
@@ -81,14 +81,14 @@ describe('ADD_NT_EDIT_CERT', () => {
         certificates: [
           {
             name: 'test certificate',
-            id: 'wudda',
-          },
-        ],
-      },
+            id: 'wudda'
+          }
+        ]
+      }
     }, {
       type: constants.ADD_NT_EDIT_CERT,
       room: 1,
-      cert: testCert,
+      cert: testCert
     })
 
     expect(newState).toEqual({
@@ -98,35 +98,35 @@ describe('ADD_NT_EDIT_CERT', () => {
           testCert,
           {
             name: 'test certificate',
-            id: 'wudda',
-          },
-        ],
-      },
+            id: 'wudda'
+          }
+        ]
+      }
     })
   })
 
   it('should not add a second certificate with the same id', () => {
     let testCert = {
       name: 'test certificate',
-      id: 'wudda',
+      id: 'wudda'
     }
 
     let newState = reducer({
       1: {
         name: 'tag',
-        certificates: [testCert],
-      },
+        certificates: [testCert]
+      }
     }, {
       type: constants.ADD_NT_EDIT_CERT,
       room: 1,
-      cert: testCert,
+      cert: testCert
     })
     expect(newState).toEqual(
       {
         1: {
           name: 'tag',
-          certificates: [testCert],
-        },
+          certificates: [testCert]
+        }
       })
   })
 })
@@ -135,45 +135,45 @@ describe('REMOVE_NT_EDIT_CERT', () => {
   it('should remove a certificate from a nametag for the room', () => {
     let testCert = {
       name: 'test certificate',
-      id: 'wudda',
+      id: 'wudda'
     }
 
     let newState = reducer({
       1: {
         name: 'tag',
-        certificates: [testCert],
-      },
+        certificates: [testCert]
+      }
     },
       {
         type: constants.REMOVE_NT_EDIT_CERT,
         room: 1,
-        certId: 'wudda',
+        certId: 'wudda'
       })
     expect(newState).toEqual(
       {
         1: {
           name: 'tag',
-          certificates: [],
-        },
+          certificates: []
+        }
       })
   })
   it('should have no effect when no certificates are present', () => {
     let newState = reducer({
       1: {
         name: 'tag',
-        certificates: [],
-      },
+        certificates: []
+      }
     },
       {
         type: constants.REMOVE_NT_EDIT_CERT,
         room: 1,
-        certId: 'wudda',
+        certId: 'wudda'
       })
     expect(newState).toEqual({
       1: {
         name: 'tag',
-        certificates: [],
-      },
+        certificates: []
+      }
     })
   })
 })

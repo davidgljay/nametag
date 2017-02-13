@@ -3,16 +3,16 @@ import 'rxjs/add/operator/toArray'
 
 import { assertCompletes, assertThrows, compareWithoutVersion } from './utils'
 
-export default function chainingSuite(getData) {
+export default function chainingSuite (getData) {
   return () => {
-  let data
+    let data
 
-  before(() => {
-    data = getData()
-  })
+    before(() => {
+      data = getData()
+    })
 
   // Let's do a biiig chain
-  it('findAll.order.above.below', assertCompletes(() =>
+    it('findAll.order.above.below', assertCompletes(() =>
     data.findAll({ a: 20 })
       .order('id')
       .above({ id: 2 })
@@ -20,12 +20,12 @@ export default function chainingSuite(getData) {
       .fetch()
       .do(res => compareWithoutVersion(res, [
         { id: 2, a: 20, b: 1 },
-        { id: 3, a: 20, b: 2 },
+        { id: 3, a: 20, b: 2 }
       ]))
   ))
 
   // Let's flip it the other way and change the order
-  it('findAll.below.above.order(desc)', assertCompletes(() =>
+    it('findAll.below.above.order(desc)', assertCompletes(() =>
     data.findAll({ a: 20 })
       .below({ id: 4 })
       .above({ id: 2 })
@@ -33,12 +33,12 @@ export default function chainingSuite(getData) {
       .fetch()
       .do(res => compareWithoutVersion(res, [
         { id: 3, a: 20, b: 2 },
-        { id: 2, a: 20, b: 1 },
+        { id: 2, a: 20, b: 1 }
       ]))
   ))
 
   // Let's throw limit into the mix
-  it('findAll.order.above.below.limit', assertCompletes(() =>
+    it('findAll.order.above.below.limit', assertCompletes(() =>
     data.findAll({ a: 20 })
       .above({ id: 2 })
       .order('id').below({ id: 4 }).limit(1)
@@ -47,7 +47,7 @@ export default function chainingSuite(getData) {
   ))
 
   // Let's do it on the collection
-  it('order.above.below.limit', assertCompletes(() =>
+    it('order.above.below.limit', assertCompletes(() =>
     data.below({ id: 4 })
       .order('id')
       .above({ id: 2 })
@@ -57,7 +57,7 @@ export default function chainingSuite(getData) {
   ))
 
   // Let's try a big compound example
-  it('findAll.order.above.below.limit', assertCompletes(() =>
+    it('findAll.order.above.below.limit', assertCompletes(() =>
     data.findAll({ a: 20 })
       .order('id')
       .above({ id: 2 })
@@ -66,13 +66,14 @@ export default function chainingSuite(getData) {
       .fetch()
       .do(res => compareWithoutVersion(res, [
         { id: 2, a: 20, b: 1 },
-        { id: 3, a: 20, b: 2 },
+        { id: 3, a: 20, b: 2 }
       ]))
   ))
 
   // Can't chain off vararg `findAll`
-  it('throws if order is chained off a multi-arg findAll', assertThrows(
+    it('throws if order is chained off a multi-arg findAll', assertThrows(
     'order cannot be called on the current query',
     () => data.findAll({ a: 20 }, { a: 50 }).order('id').fetch()
   ))
-}}
+  }
+}

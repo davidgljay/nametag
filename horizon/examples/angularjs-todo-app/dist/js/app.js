@@ -1,1 +1,1 @@
-angular.module('todomvc', []);
+angular.module('todomvc', [])

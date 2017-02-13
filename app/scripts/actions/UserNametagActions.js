@@ -12,11 +12,11 @@ import errorLog from '../utils/errorLog'
 * @returns
 *   Action object
 */
-export function addUserNametag(room, nametag) {
+export function addUserNametag (room, nametag) {
   return {
     type: constants.ADD_USER_NAMETAG,
     room,
-    nametag,
+    nametag
   }
 }
 
@@ -31,7 +31,7 @@ export function addUserNametag(room, nametag) {
 * @returns
 *   Promise resolving to nametag id
 */
-export function putUserNametag(room, user, nametag) {
+export function putUserNametag (room, user, nametag) {
   return () => {
     return new Promise((resolve, reject) => {
       hz('user_nametags').upsert({room, user, nametag, mentions: []}).subscribe((id) => {
@@ -52,7 +52,7 @@ export function putUserNametag(room, user, nametag) {
 *   none
 */
 let userNametagsSubscr
-export function watchUserNametags(user) {
+export function watchUserNametags (user) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
       userNametagsSubscr = hz('user_nametags').findAll({user}).watch()
@@ -66,22 +66,22 @@ export function watchUserNametags(user) {
   }
 }
 
-export function unWatchUserNametags() {
+export function unWatchUserNametags () {
   return () => {
     userNametagsSubscr.unsubscribe()
   }
 }
 
-export function updateUserNametag(room, property, value) {
+export function updateUserNametag (room, property, value) {
   return {
     type: constants.UPDATE_USER_NAMETAG,
     room,
     property,
-    value,
+    value
   }
 }
 
-export function postUpdateUserNametag(id, property, value) {
+export function postUpdateUserNametag (id, property, value) {
   return () => new Promise((resolve, reject) => {
     hz('user_nametags').update({id, [property]: value}).subscribe(() => {
       resolve()

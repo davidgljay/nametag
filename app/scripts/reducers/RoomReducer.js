@@ -6,7 +6,9 @@ const addRoom = (state, action) => {
 }
 
 const addRoomArray = (state, action) => {
-  return {...state, ...action.rooms.reduce(
+  return {
+    ...state,
+    ...action.rooms.reduce(
     (p, n) => {
       p[n.id] = n
       return p
@@ -29,19 +31,19 @@ const addRoomMessage = (state, action) => {
 
 const rooms = (state = {}, action) => {
   switch (action.type) {
-  case constants.ADD_ROOM:
-    return addRoom(state, action)
-  case constants.ADD_ROOM_ARRAY:
-    return addRoomArray(state, action)
-  case constants.SET_ROOM_NT_COUNT:
-    let newRoom = Object.assign({}, state[action.room], {nametagCount: action.nametagCount})
-    return Object.assign({}, state, {[action.room]: newRoom})
-  case constants.SET_ROOM_PROP:
-    return setRoomProp(state, action)
-  case constants.ADD_ROOM_MESSAGE:
-    return addRoomMessage(state, action)
-  default:
-    return state
+    case constants.ADD_ROOM:
+      return addRoom(state, action)
+    case constants.ADD_ROOM_ARRAY:
+      return addRoomArray(state, action)
+    case constants.SET_ROOM_NT_COUNT:
+      let newRoom = Object.assign({}, state[action.room], {nametagCount: action.nametagCount})
+      return Object.assign({}, state, {[action.room]: newRoom})
+    case constants.SET_ROOM_PROP:
+      return setRoomProp(state, action)
+    case constants.ADD_ROOM_MESSAGE:
+      return addRoomMessage(state, action)
+    default:
+      return state
   }
 }
 

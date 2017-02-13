@@ -11,14 +11,14 @@ export const addNametag = (nametag, id) => {
   return {
     type: constants.ADD_NAMETAG,
     nametag,
-    id,
+    id
   }
 }
 
 export const addNametagArray = (nametags) => {
   return {
     type: constants.ADD_NAMETAG_ARRAY,
-    nametags,
+    nametags
   }
 }
 
@@ -31,19 +31,19 @@ export const addNametagArray = (nametags) => {
 * @returns
 *    Promise
 */
-export function watchNametags(nametagIds) {
+export function watchNametags (nametagIds) {
   return (dispatch) => new Promise((resolve, reject) => {
-      const nametagSearch = _.uniq(nametagIds.map(id=>({id})))
-      nametagsSubscription = hz('nametags').findAll(...nametagSearch).watch().subscribe(
+    const nametagSearch = _.uniq(nametagIds.map(id => ({id})))
+    nametagsSubscription = hz('nametags').findAll(...nametagSearch).watch().subscribe(
         (nametags) => {
-          if (!nametags) {reject('Not Found')}
+          if (!nametags) { reject('Not Found') }
           dispatch(addNametagArray(nametags))
           resolve(nametags)
         },
         reject)
-    })
+  })
     .catch(errorLog('Error subscribing to Nametags:'))
-  }
+}
 
 /*
 * Unsubscribe from a Nametag
@@ -54,9 +54,9 @@ export function watchNametags(nametagIds) {
 * @returns
 *    none
 */
-export function unWatchNametags() {
-  return function() {
-    nametagsSubscriptions.unsubscribe()
+export function unWatchNametags () {
+  return function () {
+    nametagsSubscription.unsubscribe()
   }
 }
 
@@ -69,7 +69,7 @@ export function unWatchNametags() {
 * @returns
 *    promise
 */
-export function watchRoomNametags(room) {
+export function watchRoomNametags (room) {
   return (dispatch) => new Promise((resolve, reject) => {
     nametagRoomSubscriptions[room] = hz('nametags').findAll({room}).watch().subscribe(
       (nametags) => {
@@ -89,8 +89,8 @@ export function watchRoomNametags(room) {
 * @returns
 *    promise
 */
-export function unWatchRoomNametags(room) {
-  return function() {
+export function unWatchRoomNametags (room) {
+  return function () {
     nametagRoomSubscriptions[room].unsubscribe()
   }
 }
@@ -105,7 +105,7 @@ export function unWatchRoomNametags(room) {
 *   none
 */
 
-export function putNametag(nametag) {
+export function putNametag (nametag) {
   return () => {
     return new Promise((resolve, reject) => {
       hz('nametags').upsert(nametag).subscribe((res) => resolve(res.id), reject)
@@ -125,7 +125,7 @@ export function putNametag(nametag) {
 *   none
 */
 
-export function updateNametag(nametagId, property, value) {
+export function updateNametag (nametagId, property, value) {
   return () => {
     return new Promise((resolve, reject) => {
       hz('nametags').update({id: nametagId, [property]: value}).subscribe(() => {
@@ -147,7 +147,7 @@ export function updateNametag(nametagId, property, value) {
 *   none
 */
 
-export function showPresence(nametagId) {
+export function showPresence (nametagId) {
   return () => {
     return new Promise((resolve, reject) => {
       hz('nametag_presence').upsert({id: nametagId, present: Date.now()})

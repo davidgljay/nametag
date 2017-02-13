@@ -73,7 +73,7 @@ describe('Core API tests', () => {
   // Kill the horizon connection after running these tests.
   after(done => {
     let alreadyDone = false
-    function wrappedDone(...args) {
+    function wrappedDone (...args) {
       if (!alreadyDone) {
         alreadyDone = true
         return done(...args)
@@ -109,7 +109,7 @@ describe('Core API tests', () => {
       { id: 3, a: 20, b: 2 },
       { id: 4, a: 20, b: 3 },
       { id: 5, a: 60 },
-      { id: 6, a: 50 },
+      { id: 6, a: 50 }
     ]
 
     const getTestData = () => {
@@ -143,7 +143,6 @@ describe('Core API tests', () => {
 
   // Test the subscriptions API
   describe('Watch API', () => {
-
     // Drop all the existing data
     beforeEach(done => {
       removeAllData(data, done)

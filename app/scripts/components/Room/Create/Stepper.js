@@ -2,7 +2,7 @@ import React from 'react'
 import {
   Step,
   Stepper,
-  StepLabel,
+  StepLabel
 } from 'material-ui/Stepper'
 
 const orientation = window.innerWidth < 650 ? 'vertical' : 'horizontal'

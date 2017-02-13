@@ -5,13 +5,16 @@ import errorLog from '../../utils/errorLog'
 
 class ImageUpload extends Component {
 
-  static propTypes = {
-    onChooseFile: PropTypes.func.isRequired,
-    onUploadFile: PropTypes.func.isRequired,
-    width: PropTypes.number.isRequired,
+  constructor (props) {
+    super(props)
+    this.propTypes = {
+      onChooseFile: PropTypes.func.isRequired,
+      onUploadFile: PropTypes.func.isRequired,
+      width: PropTypes.number.isRequired
+    }
   }
 
-  render() {
+  render () {
     const {width, onChooseFile, onUploadFile} = this.props
 
     const uploadOptions = {
@@ -21,19 +24,19 @@ class ImageUpload extends Component {
       dataType: 'json',
       chooseFile: onChooseFile,
       uploadSuccess: onUploadFile,
-      uploadError: errorLog('Uploading Image'),
+      uploadError: errorLog('Uploading Image')
     }
 
     return <FileUpload
-        options={uploadOptions}>
-        <div style={styles.uploadMenuItem} ref="chooseAndUpload">
-          <FontIcon
-              className="material-icons"
-              style={styles.uploadIcon}>
-              photo
-            </FontIcon>
-        </div>
-      </FileUpload>
+      options={uploadOptions}>
+      <div style={styles.uploadMenuItem} ref='chooseAndUpload'>
+        <FontIcon
+          className='material-icons'
+          style={styles.uploadIcon}>
+          photo
+          </FontIcon>
+      </div>
+    </FileUpload>
   }
 }
 
@@ -43,7 +46,7 @@ const styles =
   {
     uploadIcon: {
       color: '#FFF',
-      marginTop: 13,
+      marginTop: 13
     },
     uploadMenuItem: {
       display: 'flex',
@@ -55,6 +58,6 @@ const styles =
       cursor: 'pointer',
       textAlign: 'center',
       verticalAlign: 'middle',
-      background: '#999',
-    },
+      background: '#999'
+    }
   }

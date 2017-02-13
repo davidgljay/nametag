@@ -9,17 +9,17 @@ import { assertCompletes,
          compareWithoutVersion,
          compareSetsWithoutVersion } from './utils'
 
-export default function storeSuite(getData) {
+export default function storeSuite (getData) {
   return () => {
-  let data
+    let data
 
-  before(() => {
-    data = getData()
-  })
+    before(() => {
+      data = getData()
+    })
 
   // The `store` command stores documents in the database, and overwrites
   // them if they already exist.
-  it('creates or replaces a document', assertCompletes(() =>
+    it('creates or replaces a document', assertCompletes(() =>
       data.store({ id: 1, a: 1, b: 1 })
       // The promise should return an array with an ID of the inserted
       // document.
@@ -41,10 +41,10 @@ export default function storeSuite(getData) {
   // If we store a document without an ID, the ID is generated for us.
   // Let's run the same test as above (store the document and then
   // overwrite it), but have the ID be generated for us.
-  it('generates ids for documents without them', assertCompletes(() => {
-    let new_id
+    it('generates ids for documents without them', assertCompletes(() => {
+      let new_id
 
-    return data.store({ a: 1, b: 1 }).toArray()
+      return data.store({ a: 1, b: 1 }).toArray()
       .do(res => {
         // The promise should return an array with an ID of the
         // inserted document.
@@ -65,32 +65,32 @@ export default function storeSuite(getData) {
       .mergeMap(() => data.find(new_id).fetch())
       // Check that we get back what we put in.
       .do(res => compareWithoutVersion({ id: new_id, c: 1 }, res))
-  }))
+    }))
 
   // Storing `null` is an error.
-  it('fails if null is passed', assertThrows(
+    it('fails if null is passed', assertThrows(
     'The argument to store must be non-null',
     () => data.store(null))
   )
 
   // Storing `undefined` is also an error.
-  it('fails if undefined is passed', assertThrows(
+    it('fails if undefined is passed', assertThrows(
     'The 1st argument to store must be defined',
     () => data.store(undefined)
   ))
 
   // Storing nothing is an error
-  it('fails if no arguments are passed', assertThrows(
+    it('fails if no arguments are passed', assertThrows(
     'store must receive exactly 1 argument',
     () => data.store()
   ))
 
   // The `store` command allows storing multiple documents in one call.
   // Let's store a few kinds of documents and make sure we get them back.
-  it('allows storing multiple documents in one call', assertCompletes(() => {
-    let new_id_0, new_id_1
+    it('allows storing multiple documents in one call', assertCompletes(() => {
+      let new_id_0, new_id_1
 
-    return data.store([ {}, { a: 1 }, { id: 1, a: 1 } ])
+      return data.store([ {}, { a: 1 }, { id: 1, a: 1 } ])
       .toArray()
       .do(res => {
         // The promise should return an array with the IDs of the documents
@@ -111,20 +111,20 @@ export default function storeSuite(getData) {
       .do(res => compareSetsWithoutVersion(res, [
         { id: new_id_0 },
         { id: new_id_1, a: 1 },
-        { id: 1, a: 1 },
+        { id: 1, a: 1 }
       ]))
-  }))
+    }))
 
   // If any operation in a batch store fails, everything is reported as a
   // failure. Note that we're storing `null` below, which is a failure.
-  it('fails if any operation in a batch fails', assertErrors(() =>
+    it('fails if any operation in a batch fails', assertErrors(() =>
     data.store([ { a: 1 }, null, { id: 1, a: 1 } ]),
     /must be an object/
   ))
 
   // Storing an empty batch of documents is ok, and returns an empty
   // array.
-  it('allows storing empty batches', assertCompletes(() =>
+    it('allows storing empty batches', assertCompletes(() =>
     data.store([]).toArray()
       .do(res => {
         // The promise should return an array with the IDs of the documents
@@ -134,10 +134,11 @@ export default function storeSuite(getData) {
       })
   ))
 
-  it('stores date objects and retrieves them again', assertCompletes(() => {
-    const originalDate = new Date()
-    return data.store({ date: originalDate }).toArray()
+    it('stores date objects and retrieves them again', assertCompletes(() => {
+      const originalDate = new Date()
+      return data.store({ date: originalDate }).toArray()
       .mergeMap(id => data.find(id[0]).fetch())
       .do(result => assert.deepEqual(originalDate, result.date))
-  }))
-}}
+    }))
+  }
+}

@@ -7,28 +7,28 @@ const mapStateToProps = (state, ownProps) => {
   return Object.assign(
     {},
     {
-      user: state.user,
+      user: state.user
     },
     ownProps.params)
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    logout() {
+    logout () {
       return dispatch(logout())
     },
-    setting(option, value) {
+    setting (option, value) {
       return dispatch(setting(option, value))
     },
-    providerAuth(provider) {
+    providerAuth (provider) {
       return dispatch(providerAuth(provider))
     },
-    createCertificate(...args) {
+    createCertificate (...args) {
       return dispatch(createCertificate.apply(this, args))
     },
-    appendUserArray(...args) {
+    appendUserArray (...args) {
       return dispatch(appendUserArray.apply(this, args))
-    },
+    }
   }
 }
 

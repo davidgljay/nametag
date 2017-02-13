@@ -5,7 +5,7 @@ import {showPresence} from '../../actions/NametagActions'
 import {
   watchUserNametags,
   unWatchUserNametags,
-  postUpdateUserNametag,
+  postUpdateUserNametag
 } from '../../actions/UserNametagActions'
 import {postMessage, addMessage} from '../../actions/MessageActions'
 import {watchDirectMessages, unWatchDirectMessages} from '../../actions/DirectMessageActions'
@@ -16,7 +16,7 @@ const mapStateToProps = (state) => {
     rooms: state.rooms,
     user: state.user,
     userNametags: state.userNametags,
-    nametags: state.nametags,
+    nametags: state.nametags
   }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -35,7 +35,7 @@ const mapDispatchToProps = (dispatch) => {
     showPresence: disp(showPresence),
     addMessage: disp(addMessage),
     logout: disp(logout),
-    setting: disp(setting),
+    setting: disp(setting)
   }
 }
 

@@ -1,8 +1,6 @@
 import React from 'react'
 import {List, ListItem} from 'material-ui/List'
 import Badge from 'material-ui/Badge'
-import {mobile} from '../../../styles/sizes'
-import {lightBlue600} from 'material-ui/styles/colors'
 
 const Notifications = ({userNametags, rooms, roomId, homepage}) => {
   const flexDisplay = window.innerWidth > 800 ? styles.flexDisplay
@@ -23,7 +21,7 @@ const Notifications = ({userNametags, rooms, roomId, homepage}) => {
     ).length : 0
 
     const newMessages = userNametag.latestMessage > userNametag.latestVisit
-    const notificationStyle =  newMessages ? styles.notification
+    const notificationStyle = newMessages ? styles.notification
     : {...styles.notification, ...styles.noNewMessages}
     const homepageNotif = homepage ? {...notificationStyle, ...styles.homepageNotif}
     : notificationStyle
@@ -34,9 +32,9 @@ const Notifications = ({userNametags, rooms, roomId, homepage}) => {
             mentions > 0 &&
             <Badge
               badgeContent={mentions}
-              secondary={true}
+              secondary
               style={styles.badgeStyle}
-              badgeStyle={styles.innerBadgeStyle}/>
+              badgeStyle={styles.innerBadgeStyle} />
           }
 
           <div>
@@ -45,7 +43,7 @@ const Notifications = ({userNametags, rooms, roomId, homepage}) => {
               style={
                 homepage ? {...styles.roomImage, ...styles.homepageRoomImage}
                 : styles.roomImage
-              }/>
+              } />
           </div>
           <div>{room.title}</div>
         </a>
@@ -54,7 +52,7 @@ const Notifications = ({userNametags, rooms, roomId, homepage}) => {
 
   return <div style={homepage ? styles.container : {}}>
     <List style={homepage ? flexDisplay : {}}
-      children={listItems}/>
+      children={listItems} />
   </div>
 }
 
@@ -63,53 +61,53 @@ export default Notifications
 const styles = {
   container: {
     width: '100%',
-    padding: '0px 30px 0px 30px',
+    padding: '0px 30px 0px 30px'
   },
   listStyle: {
-    width: '100%',
+    width: '100%'
   },
   flexDisplay: {
     display: 'flex',
     justifyContent: 'flex-start',
-    flexWrap: 'wrap',
+    flexWrap: 'wrap'
   },
   flexDisplayMobile: { // Necessary b/c Radium can't act on custom components
     flexDirection: 'column',
-    alignItems: 'stretch',
+    alignItems: 'stretch'
   },
   noNewMessages: {
-    opacity: 0.5,
+    opacity: 0.5
   },
   notification: {
     margin: 5,
     color: '#FFF',
     padding: '8px 8px 4px 8px',
     borderRadius: 2,
-    fontSize: 13,
+    fontSize: 13
   },
   homepageNotif: {
     backgroundColor: '#FFF',
     color: '#000',
     fontSize: 18,
-    lineHeight: '22px',
+    lineHeight: '22px'
   },
   roomImage: {
     width: 30,
     height: 30,
     marginRight: 10,
     objectFit: 'cover',
-    borderRadius: 15,
+    borderRadius: 15
   },
   homepageRoomImage: {
     width: 40,
     height: 40,
-    borderRadius: 20,
+    borderRadius: 20
   },
   link: {
     color: 'inherit',
     textDecoration: 'none',
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   badgeStyle: {
     position: 'fixed',
@@ -117,11 +115,11 @@ const styles = {
     left: 22,
     zIndex: 20,
     padding: 0,
-    borderRadius: 5,
+    borderRadius: 5
   },
   innerBadgeStyle: {
     fontSize: 10,
     width: 15,
-    height: 15,
-  },
+    height: 15
+  }
 }

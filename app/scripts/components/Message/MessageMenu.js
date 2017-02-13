@@ -1,33 +1,38 @@
 import React, {Component, PropTypes} from 'react'
 import {mobile} from '../../../styles/sizes'
 import FontIcon from 'material-ui/FontIcon'
-import radium, {keyframes} from 'radium'
+import radium from 'radium'
 import {grey500, yellow800} from 'material-ui/styles/colors'
 
 class MessageMenu extends Component {
-  static propTypes = {
-    modAction: PropTypes.func.isRequired,
-    id: PropTypes.string.isRequired,
+
+  constructor (props) {
+    super(props)
+
+    this.propTypes = {
+      modAction: PropTypes.func.isRequired,
+      id: PropTypes.string.isRequired
+    }
+
+    this.toggleActions = () => {
+      this.setState({showActions: !this.state.showActions})
+    }
   }
 
-  toggleActions = () => {
-    this.setState({showActions: !this.state.showActions})
-  }
-
-  render() {
-    const { id, saved, modAction, showActions, saveMessage, type} = this.props
+  render () {
+    const {id, saved, modAction, showActions, saveMessage, type} = this.props
     const isMobile = window.innerWidth < 800
     const starStyle = saved ? {...styles.actionIcon, ...styles.savedIcon} : styles.actionIcon
     return <div style={styles.actionsContainer}>
       {
-        !isMobile || showActions ?
-        <div style={styles.actions} key='actions'>
+        !isMobile || showActions
+        ? <div style={styles.actions} key='actions'>
           {
             type === 'message' &&
             <FontIcon
               key='starIcon'
               className='material-icons'
-              onClick={()=>saveMessage(id, !saved)}
+              onClick={() => saveMessage(id, !saved)}
               style={starStyle}>
               star
             </FontIcon>
@@ -41,13 +46,13 @@ class MessageMenu extends Component {
           </FontIcon>
         </div>
         : <div style={styles.actions} key='actions'>
-            <FontIcon
-                key='moreIcon'
-                className='material-icons'
-                style={styles.actionIcon}>
+          <FontIcon
+            key='moreIcon'
+            className='material-icons'
+            style={styles.actionIcon}>
                 more_horiz
             </FontIcon>
-          </div>
+        </div>
       }
     </div>
   }
@@ -57,14 +62,14 @@ export default radium(MessageMenu)
 
 MessageMenu.propTypes = {
   toggleActions: PropTypes.func.isRequired,
-  modAction: PropTypes.func.isRequired,
+  modAction: PropTypes.func.isRequired
 }
 
 const styles = {
   actionsContainer: {
     marginTop: 5,
     display: 'inline-block',
-    verticalAlign: 'middle',
+    verticalAlign: 'middle'
   },
   actionIcon: {
     cursor: 'pointer',
@@ -73,11 +78,11 @@ const styles = {
     fontSize: 'inherit',
     opacity: 0.5,
     [mobile]: {
-      marginLeft: 10,
-    },
+      marginLeft: 10
+    }
   },
   savedIcon: {
-    color: yellow800,
+    color: yellow800
   },
   actions: {
     height: 22,
@@ -86,7 +91,7 @@ const styles = {
     [mobile]: {
       fontSize: 32,
       display: 'block',
-      height: 36,
-    },
-  },
+      height: 36
+    }
+  }
 }

@@ -1,5 +1,5 @@
 
-export function mockHz(res, calls, type) {
+export function mockHz (res, calls, type) {
   return (req) => {
     calls.push({type, req})
     return {
@@ -15,7 +15,7 @@ export function mockHz(res, calls, type) {
         calls.push({type: 'subscribe'})
         cb(res)
       },
-      unsubscribe: () => {calls.push({type: 'unsubscribe'})},
+      unsubscribe: () => { calls.push({type: 'unsubscribe'}) }
     }
   }
 }
@@ -27,9 +27,9 @@ window.Horizon = () => {
         return {
           subscribe: (complete) => {
             complete()
-          },
+          }
         }
-      },
+      }
     }
   }
 }

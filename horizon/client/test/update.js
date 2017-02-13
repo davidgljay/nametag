@@ -8,16 +8,16 @@ import { assertCompletes,
          compareWithoutVersion,
          compareSetsWithoutVersion } from './utils'
 
-export default function updateSuite(getData) {
+export default function updateSuite (getData) {
   return () => {
-  let data
+    let data
 
-  before(() => {
-    data = getData()
-  })
+    before(() => {
+      data = getData()
+    })
 
   // Let's store a document first, then update it.
-  it('allows updating an existing document', assertCompletes(() =>
+    it('allows updating an existing document', assertCompletes(() =>
     data.store({ id: 1, a: { b: 1, c: 1 }, d: 1 }).toArray()
       // should return an array with an ID of the inserted document.
       .do(res => compareWithoutVersion([ { id: 1 } ], res))
@@ -37,40 +37,40 @@ export default function updateSuite(getData) {
 
   // The `update` command updates documents already in the database. It
   // errors if the document doesn't exist.
-  it(`fails if document doesn't exist`, assertErrors(() =>
+    it(`fails if document doesn't exist`, assertErrors(() =>
     data.update({ id: 1, a: 1, b: 1 }),
     /The document was missing/
   ))
 
   // It means you can't update a document without providing an id.
-  it('fails if document has no id provided', assertErrors(() =>
+    it('fails if document has no id provided', assertErrors(() =>
     data.update({ a: 1, b: 1 }),
     /"id" is required/
   ))
 
   // Calling `update` with `null` is an error.
-  it('fails if null is passed', assertThrows(
+    it('fails if null is passed', assertThrows(
     'The argument to update must be non-null',
     () => data.update(null)
   ))
 
   // Calling `update` with `undefined` is also an error.
-  it('fails if undefined is passed', assertThrows(
+    it('fails if undefined is passed', assertThrows(
     'The 1st argument to update must be defined',
     () => data.update(undefined)
   ))
 
-  it('fails if no arguments are passed', assertThrows(
+    it('fails if no arguments are passed', assertThrows(
     'update must receive exactly 1 argument',
     () => data.update()
   ))
 
   // The `update` command allows storing multiple documents in one call.
   // Let's update a few documents and make sure we get them back.
-  it('allows updating multiple documents in one call', assertCompletes(() =>
+    it('allows updating multiple documents in one call', assertCompletes(() =>
     data.store([
       { id: 1, a: { b: 1, c: 1 }, d: 1 },
-      { id: 2, a: { b: 2, c: 2 }, d: 2 },
+      { id: 2, a: { b: 2, c: 2 }, d: 2 }
     ]).toArray()
       // should return an array with an ID of the inserted document.
       .do(res => compareWithoutVersion([ { id: 1 }, { id: 2 } ], res))
@@ -79,7 +79,7 @@ export default function updateSuite(getData) {
       // Check that we get back what we put in.
       .do(res => compareSetsWithoutVersion(res, [
         { id: 1, a: { b: 1, c: 1 }, d: 1 },
-        { id: 2, a: { b: 2, c: 2 }, d: 2 },
+        { id: 2, a: { b: 2, c: 2 }, d: 2 }
       ]))
       // All right. Let's update the documents now
       .mergeMapTo(data.update([ { id: 1, a: { c: 2 } }, { id: 2, d: 3 } ]))
@@ -91,18 +91,18 @@ export default function updateSuite(getData) {
       // Check that we get back what we put in.
       .do(res => compareSetsWithoutVersion(res, [
         { id: 1, a: { b: 1, c: 2 }, d: 1 },
-        { id: 2, a: { b: 2, c: 2 }, d: 3 },
+        { id: 2, a: { b: 2, c: 2 }, d: 3 }
       ]))
   ))
 
-  it('fails if any document is null', assertErrors(() =>
+    it('fails if any document is null', assertErrors(() =>
     data.update([ { id: 1, a: 1 }, null ]),
     /must be an object/
   ))
 
   // Updating an empty batch of documents is ok, and returns an empty
   // array.
-  it('allows updating an empty batch', assertCompletes(() =>
+    it('allows updating an empty batch', assertCompletes(() =>
     data.update([])
       .do(res => {
         // should return an array with the IDs of the documents in
@@ -111,4 +111,5 @@ export default function updateSuite(getData) {
         assert.lengthOf(res, 0)
       })
   ))
-}}
+  }
+}

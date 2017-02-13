@@ -28,7 +28,7 @@ describe('Certificate Actions', () => {
         .toEqual({
           type: constants.ADD_CERTIFICATE,
           certificate: {name: 'cert'},
-          id: '123',
+          id: '123'
         })
     })
   })
@@ -42,7 +42,7 @@ describe('Certificate Actions', () => {
             {
               type: constants.ADD_CERTIFICATE,
               certificate: {name: 'cert', id: 1},
-              id: 1,
+              id: 1
             })
           done()
         })
@@ -58,7 +58,7 @@ describe('Certificate Actions', () => {
         description_array: ['This is a dino, we checked.'],
         icon_array: ['http://dino.img'],
         notes: ['Verified'],
-        granted: false,
+        granted: false
       }
       hz.mockReturnValue(mockHz({...cert, id: '123'}, calls)())
       return actions.createCertificate(
@@ -78,7 +78,7 @@ describe('Certificate Actions', () => {
               {
                 type: constants.ADD_CERTIFICATE,
                 certificate: c,
-                id: '123',
+                id: '123'
               }
             )
           }
@@ -94,7 +94,7 @@ describe('Certificate Actions', () => {
         granter: 'Jurassic Park',
         description_array: ['This is a dino, we checked.'],
         icon_array: ['http://dino.img'],
-        granted: false,
+        granted: false
       }
       store = mockStore({'123': cert})
       hz.mockReturnValue(mockHz({updated: 1}, calls)())
@@ -106,12 +106,12 @@ describe('Certificate Actions', () => {
                 type: constants.UPDATE_CERTIFICATE,
                 id: '123',
                 property: 'granted',
-                value: true,
+                value: true
               }
             )
             expect(calls[1]).toEqual({
               type: 'update',
-              req: { id: '123', granted: true },
+              req: { id: '123', granted: true }
             })
           }
         )

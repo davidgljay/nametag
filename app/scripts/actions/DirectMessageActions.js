@@ -12,14 +12,14 @@ export const postDirectMessage = (message) => {
     const nametags = getState().nametags
     const roomNametags = Object.keys(nametags).map((id) => nametags[id])
       .filter(nametag => nametag.room === message.room)
-    for (let i = 0; i < roomNametags.length; i++ ) {
+    for (let i = 0; i < roomNametags.length; i++) {
       const nametag = roomNametags[i]
       if (message.text.slice(2, nametag.name.length + 2).toLowerCase() ===
         nametag.name.toLowerCase()) {
         newMessage = {
           ...message,
           recipient: nametag.id,
-          text: message.text.slice(nametag.name.length + 2).trim(),
+          text: message.text.slice(nametag.name.length + 2).trim()
         }
       }
     }
@@ -62,7 +62,7 @@ export const watchDirectMessages = (room) => {
           dmSubscriptions[room][1] = hz('direct_messages')
             .findAll({author: getState().userNametags[room].nametag, room})
             .watch().subscribe(onDms(resolve, dispatch, getState), reject)
-        }),
+        })
 
       ])
 }

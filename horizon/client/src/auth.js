@@ -7,7 +7,7 @@ import 'rxjs/add/observable/dom/ajax'
 const HORIZON_JWT = 'horizon-jwt'
 
 /** @this Horizon **/
-export function authEndpoint(name) {
+export function authEndpoint (name) {
   const endpointForName = methods => {
     if (methods.hasOwnProperty(name)) {
       return this._root + methods[name]
@@ -28,13 +28,13 @@ export function authEndpoint(name) {
 
 // Simple shim to make a Map look like local/session storage
 export class FakeStorage {
-  constructor() { this._storage = new Map() }
-  setItem(a, b) { return this._storage.set(a, b) }
-  getItem(a) { return this._storage.get(a) }
-  removeItem(a) { return this._storage.delete(a) }
+  constructor () { this._storage = new Map() }
+  setItem (a, b) { return this._storage.set(a, b) }
+  getItem (a) { return this._storage.get(a) }
+  removeItem (a) { return this._storage.delete(a) }
 }
 
-function getStorage(storeLocally = true) {
+function getStorage (storeLocally = true) {
   let storage
   try {
     if (!storeLocally ||
@@ -59,7 +59,7 @@ function getStorage(storeLocally = true) {
 }
 
 export class TokenStorage {
-  constructor({ authType = 'token',
+  constructor ({ authType = 'token',
                 storage = getStorage(authType.storeLocally),
                 path = 'horizon' } = {}) {
     this._storage = storage
@@ -72,7 +72,7 @@ export class TokenStorage {
     }
   }
 
-  _getHash() {
+  _getHash () {
     const val = this._storage.getItem(HORIZON_JWT)
     if (val == null) {
       return {}
@@ -81,27 +81,27 @@ export class TokenStorage {
     }
   }
 
-  _setHash(hash) {
+  _setHash (hash) {
     this._storage.setItem(HORIZON_JWT, JSON.stringify(hash))
   }
 
-  set(jwt) {
+  set (jwt) {
     const current = this._getHash()
     current[this._path] = jwt
     this._setHash(current)
   }
 
-  get() {
+  get () {
     return this._getHash()[this._path]
   }
 
-  remove() {
+  remove () {
     const current = this._getHash()
     delete current[this._path]
     this._setHash(current)
   }
 
-  setAuthFromQueryParams() {
+  setAuthFromQueryParams () {
     const parsed = typeof window !== 'undefined' &&
       typeof window.location !== 'undefined' ?
             queryParse(window.location.search) : {}
@@ -112,7 +112,7 @@ export class TokenStorage {
   }
 
   // Handshake types are implemented here
-  handshake() {
+  handshake () {
     // If we have a token, we should send it rather than requesting a
     // new one
     const token = this.get()
@@ -127,7 +127,7 @@ export class TokenStorage {
   }
 
   // Whether there is an auth token for the provided authType
-  hasAuthToken() {
+  hasAuthToken () {
     const token = this.get()
     if (!token) {
       return false
@@ -143,6 +143,6 @@ export class TokenStorage {
   }
 }
 
-export function clearAuthTokens() {
+export function clearAuthTokens () {
   return getStorage().removeItem(HORIZON_JWT)
 }

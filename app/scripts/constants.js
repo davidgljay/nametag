@@ -1,5 +1,5 @@
 export const dragTypes = {
-  certificate: 'certificate',
+  certificate: 'certificate'
 }
 
 export default {
@@ -35,5 +35,5 @@ export default {
 
   // URLs
   RESIZE_LAMBDA: 'https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/image_resize',
-  IMAGE_URL_LAMBDA: 'https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/image',
+  IMAGE_URL_LAMBDA: 'https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/image'
 }

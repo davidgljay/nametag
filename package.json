@@ -84,6 +84,7 @@
     "react-tools": "latest",
     "reactify": "latest",
     "redux-mock-store": "^1.1.2",
+    "standard": "^8.6.0",
     "strip-debug": "^1.0.1",
     "style-loader": "^0.13.1",
     "vinyl-source-stream": "^1.0.0",
@@ -97,6 +98,8 @@
     "test-watch": "jest --watch",
     "start": "docker-compose up -d && gulp watch",
     "build": "NODE_ENV=production gulp build",
+    "lint": "standard",
+    "lint-fix": "standard --fix",
     "update": "git pull origin master && npm install && npm run build && docker-compose build --no-cache horizon && docker-compose stop && docker-compose up -d",
     "storybook": "start-storybook -p 9001 -c .storybook"
   },
@@ -132,5 +135,12 @@
   },
   "browserify-shim": {
     "jquery": "$"
+  },
+  "standard": {
+    "globals": [ "describe", "it", "expect", "amplitude", "mixpanel", "jest", "beforeEach", "Horizon", "fetch", "history" ],
+    "ignore": [
+      "/node_modules",
+      "/horizon"
+    ]
   }
 }

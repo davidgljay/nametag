@@ -8,7 +8,7 @@ export const addCertificate = (certificate, id) => {
   return {
     type: constants.ADD_CERTIFICATE,
     certificate,
-    id,
+    id
   }
 }
 
@@ -17,7 +17,7 @@ export const updateCertificate = (id, property, value) => {
     type: constants.UPDATE_CERTIFICATE,
     id,
     property,
-    value,
+    value
   }
 }
 
@@ -30,8 +30,8 @@ export const updateCertificate = (id, property, value) => {
 * @returns
 *    Promise resolving to certificate
 */
-export function fetchCertificate(certificateId) {
-  return function(dispatch) {
+export function fetchCertificate (certificateId) {
+  return function (dispatch) {
     return new Promise((resolve, reject) => {
       certificateSubscriptions[certificateId] = hz('certificates')
         .find(certificateId).fetch().subscribe(
@@ -66,23 +66,23 @@ export function fetchCertificate(certificateId) {
 * @returns
 *    Promise resolving to the newly created certificate
 */
-export function createCertificate(
+export function createCertificate (
   creator,
-  description_array,
+  descriptionArray,
   granter,
-  icon_array,
+  iconArray,
   name,
   notes,
   granted) {
   return (dispatch) => {
     const certificate = {
       creator,
-      description_array,
+      description_array: descriptionArray,
       granter,
-      icon_array,
+      icon_array: iconArray,
       name,
       notes,
-      granted,
+      granted
     }
     return new Promise((resolve, reject) => {
       hz('certificates').insert(certificate).subscribe((cert) => {
@@ -107,7 +107,7 @@ export function createCertificate(
 *    Promise resolving to the response from the certificate creation process.
 */
 
-export function grantCertificate(id) {
+export function grantCertificate (id) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
       hz('certificates').update({id, granted: true}).subscribe((result) => {

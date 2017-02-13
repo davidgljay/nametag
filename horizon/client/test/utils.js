@@ -7,7 +7,7 @@ import 'rxjs/add/operator/mergeMapTo'
 import 'rxjs/add/operator/take'
 import 'rxjs/add/operator/ignoreElements'
 
-export function removeAllDataObs(collection) {
+export function removeAllDataObs (collection) {
   // Read all elements from the collection
   return collection.fetch() // all documents in the collection
     .do()
@@ -16,24 +16,24 @@ export function removeAllDataObs(collection) {
     .do(remaining => assert.deepEqual([], remaining))
 }
 
-export function removeAllData(collection, done) {
+export function removeAllData (collection, done) {
   removeAllDataObs(collection).subscribe(doneObserver(done))
 }
 
 // Used to subscribe to observables and call done appropriately
-function doneObserver(done) {
+function doneObserver (done) {
   return {
-    next() {},
-    error(err = new Error()) { done(err) },
-    complete() { done() },
+    next () {},
+    error (err = new Error()) { done(err) },
+    complete () { done() }
   }
 }
 
 // Used to subscribe to observables when an error is expected
-function doneErrorObserver(done, regex) {
+function doneErrorObserver (done, regex) {
   return {
-    next() {},
-    error(err) {
+    next () {},
+    error (err) {
       this.finished = true
       if (regex && regex.test(err.message)) {
         done()
@@ -41,17 +41,17 @@ function doneErrorObserver(done, regex) {
         done(err)
       }
     },
-    complete() {
+    complete () {
       if (!this.finished) {
         done(new Error('Unexpectedly completed'))
       }
-    },
+    }
   }
 }
 
 // Used to check for stuff that should throw an exception, rather than
 // erroring the observable stream
-export function assertThrows(message, callback) {
+export function assertThrows (message, callback) {
   const f = done => {
     try {
       callback()
@@ -69,13 +69,13 @@ export function assertThrows(message, callback) {
   return f
 }
 
-export function assertCompletes(observable) {
+export function assertCompletes (observable) {
   const f = done => observable().subscribe(doneObserver(done))
   f.toString = () => `assertCompletes(\n(${observable}\n)`
   return f
 }
 
-export function assertErrors(observable, regex) {
+export function assertErrors (observable, regex) {
   const f = done => observable().subscribe(doneErrorObserver(done, regex))
   f.toString = () => observable.toString()
   return f
@@ -90,7 +90,7 @@ export function assertErrors(observable, regex) {
 // changefeed is automatically limited to the length of the expected
 // array. Accepts a `debug` argument that receives every element in
 // the changefeed
-export function observableInterleave(options) {
+export function observableInterleave (options) {
   const query = options.query
   const operations = options.operations
   const expected = options.expected
@@ -108,10 +108,10 @@ export function observableInterleave(options) {
         return Observable.empty()
       }
     })
-    .do({ complete() { equality(expected, values) } })
+    .do({ complete () { equality(expected, values) } })
 }
 
-const withoutVersion = function withoutVersion(value) {
+const withoutVersion = function withoutVersion (value) {
   if (Array.isArray(value)) {
     const modified = [ ]
     for (const item of value) {
@@ -128,13 +128,13 @@ const withoutVersion = function withoutVersion(value) {
 }
 
 // Compare write results - ignoring the new version field ($hz_v$)
-export function compareWithoutVersion(actual, expected, message) {
+export function compareWithoutVersion (actual, expected, message) {
   return assert.deepEqual(withoutVersion(actual),
                           withoutVersion(expected),
                           message)
 }
 
-export function compareSetsWithoutVersion(actual, expected, message) {
+export function compareSetsWithoutVersion (actual, expected, message) {
   return assert.sameDeepMembers(withoutVersion(actual),
                                 withoutVersion(expected),
                                 message)

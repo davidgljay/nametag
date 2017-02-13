@@ -2,9 +2,7 @@
 
 let gulp = require('gulp')
 let del = require('del')
-let fs = require('fs')
 
-let path = require('path')
 let pump = require('pump')
 
 // Load plugins
@@ -22,7 +20,7 @@ let reload = browserSync.reload
 // Styles
 gulp.task('styles', ['moveCss'])
 
-gulp.task('moveCss', ['clean'], function() {
+gulp.task('moveCss', ['clean'], function () {
   // the base option sets the relative root for the set of files,
   // preserving the folder structure
 
@@ -30,7 +28,7 @@ gulp.task('moveCss', ['clean'], function() {
   .pipe(gulp.dest('dist/public/styles'))
 })
 
-gulp.task('moveIcons', ['clean'], function() {
+gulp.task('moveIcons', ['clean'], function () {
   // the base option sets the relative root for the set of files,
   // preserving the folder structure
   gulp.src(['./app/icons/**/*.svg'], { base: './app/icons/' })
@@ -46,19 +44,19 @@ let bundler = watchify(browserify({
   insertGlobals: true,
   cache: {},
   packageCache: {},
-  fullPaths: true,
+  fullPaths: true
 }))
 
 bundler.on('update', rebundle)
 bundler.on('log', $.util.log)
 
-function rebundle() {
+function rebundle () {
   return bundler.bundle()
     // log errors if they happen
     .on('error', $.util.log.bind($.util, 'Browserify Error'))
     .pipe(source(destFileName))
     .pipe(gulp.dest(destFolder))
-    .on('end', function() {
+    .on('end', function () {
       reload()
     })
 }
@@ -66,51 +64,49 @@ function rebundle() {
 // Scripts
 gulp.task('scripts', rebundle)
 
-gulp.task('buildScripts', function() {
-    return browserify(sourceFile)
+gulp.task('buildScripts', function () {
+  return browserify(sourceFile)
         .bundle()
         .pipe(source(destFileName))
         .pipe(gulp.dest('dist/public/scripts'))
 })
 
 // HTML
-gulp.task('html', function() {
-    return gulp.src('app/*.html')
+gulp.task('html', function () {
+  return gulp.src('app/*.html')
         .pipe($.useref())
         .pipe(gulp.dest('dist/public'))
         .pipe($.size())
 })
 
 // Images
-gulp.task('images', function() {
-  return gulp.src(['app/images/**/*'], { base: './app/images/'})
+gulp.task('images', function () {
+  return gulp.src(['app/images/**/*'], {base: './app/images/'})
     .pipe($.cache($.imagemin({
       optimizationLevel: 3,
       progressive: true,
-      interlaced: true,
+      interlaced: true
     })))
     .pipe(gulp.dest('dist/public/images'))
     .pipe($.size())
 })
 
 // Fonts
-gulp.task('fonts', function() {
-
+gulp.task('fonts', function () {
   return gulp.src(require('main-bower-files')({
-          filter: '**/*.{eot,svg,ttf,woff,woff2}'
-      }).concat('app/fonts/**/*'))
+    filter: '**/*.{eot,svg,ttf,woff,woff2}'
+  }).concat('app/fonts/**/*'))
       .pipe(gulp.dest('dist/public/fonts'))
-
 })
 
 // Clean
-gulp.task('clean', function(cb) {
-    $.cache.clearAll()
-    cb(del.sync(['dist/public/*']))
+gulp.task('clean', function (cb) {
+  $.cache.clearAll()
+  cb(del.sync(['dist/public/*']))
 })
 
 // Bundle
-gulp.task('bundle', ['styles', 'scripts', 'bower'], function() {
+gulp.task('bundle', ['styles', 'scripts', 'bower'], function () {
   return gulp.src('./app/index.html')
     .pipe($.useref.assets())
     .pipe($.useref.restore())
@@ -118,7 +114,7 @@ gulp.task('bundle', ['styles', 'scripts', 'bower'], function() {
     .pipe(gulp.dest('dist/public'))
 })
 
-gulp.task('buildBundle', ['styles', 'buildScripts'], function() {
+gulp.task('buildBundle', ['styles', 'buildScripts'], function () {
   return gulp.src('./app/index.html')
     .pipe($.useref.assets())
     .pipe($.useref.restore())
@@ -127,40 +123,37 @@ gulp.task('buildBundle', ['styles', 'buildScripts'], function() {
 })
 
 // Move JS Files and Libraries
-gulp.task('moveLibraries', ['clean'], function() {
+gulp.task('moveLibraries', ['clean'], function () {
   // the base option sets the relative root for the set of files,
   // preserving the folder structure
   gulp.src(['./app/scripts/**/*.js'], { base: './app/scripts/' })
   .pipe(gulp.dest('dist/public/scripts'))
 })
 
-
 // Bower helper
-gulp.task('bower', function() {
-    gulp.src('app/bower_components/**/*', {
-            base: 'app/bower_components',
-        })
+gulp.task('bower', function () {
+  gulp.src('app/bower_components/**/*', {
+    base: 'app/bower_components'
+  })
         .pipe(gulp.dest('dist/public/bower_components/'))
-
 })
 
-gulp.task('json', function() {
-    gulp.src('app/scripts/json/**/*.json', {
-            base: 'app/scripts',
-        })
+gulp.task('json', function () {
+  gulp.src('app/scripts/json/**/*.json', {
+    base: 'app/scripts'
+  })
         .pipe(gulp.dest('dist/public/scripts'))
 })
 
 // Robots.txt and favicon.ico
-gulp.task('extras', function() {
-    return gulp.src(['app/*.txt', 'app/*.ico'])
+gulp.task('extras', function () {
+  return gulp.src(['app/*.txt', 'app/*.ico'])
         .pipe(gulp.dest('dist/public'))
         .pipe($.size())
 })
 
 // Watch
-gulp.task('watch', ['html', 'fonts', 'styles', 'images', 'bundle'], function() {
-
+gulp.task('watch', ['html', 'fonts', 'styles', 'images', 'bundle'], function () {
   browserSync({
     notify: false,
     logPrefix: 'BS',
@@ -169,7 +162,7 @@ gulp.task('watch', ['html', 'fonts', 'styles', 'images', 'bundle'], function() {
     //       will present a certificate warning in the browser.
     https: true,
     server: ['dist', 'app'],
-    port: 8181,
+    port: 8181
   })
 
   // Watch .json files
@@ -187,13 +180,13 @@ gulp.task('watch', ['html', 'fonts', 'styles', 'images', 'bundle'], function() {
 // Build
 gulp.task('build', ['clean', 'html', 'buildBundle', 'images', 'fonts', 'extras', 'compress'])
 
-gulp.task('compress', ['buildBundle'], function() {
+gulp.task('compress', ['buildBundle'], function () {
   return pump([
     gulp.src('dist/public/scripts/app.js'),
     uglify(),
-    gulp.dest('dist/public/scripts'),
+    gulp.dest('dist/public/scripts')
   ])
 })
 
 // Default task
-gulp.task('default', ['clean', 'build', 'jest'  ])
+gulp.task('default', ['clean', 'build', 'jest'])

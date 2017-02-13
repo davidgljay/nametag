@@ -1,7 +1,7 @@
 import ordinal from './ordinal.js'
 
 // Validation helper
-export default function checkArgs(name, args, {
+export default function checkArgs (name, args, {
                     nullable: nullable = false,
                     minArgs: minArgs = 1,
                     maxArgs: maxArgs = 1 } = {}) {

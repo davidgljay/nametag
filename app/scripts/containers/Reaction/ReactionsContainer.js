@@ -12,21 +12,21 @@ export const mapStateToProps = (state, ownProps) => {
       return res
     }, {})
   return Object.assign({}, {
-    reactions: messageReactions,
+    reactions: messageReactions
   }, ownProps)
 }
 
 export const mapDispatchToProps = (dispatch) => {
   return {
-    addReaction(reaction) {
+    addReaction (reaction) {
       dispatch(addReaction(reaction))
     },
-    watchMessageReactions(message) {
+    watchMessageReactions (message) {
       dispatch(watchMessageReactions(message))
     },
-    unWatchMessageReactions(message) {
+    unWatchMessageReactions (message) {
       dispatch(unWatchMessageReactions(message))
-    },
+    }
   }
 }
 

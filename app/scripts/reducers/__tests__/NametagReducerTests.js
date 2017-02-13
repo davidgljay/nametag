@@ -11,13 +11,13 @@ describe('Nametag reducer', () => {
           type: constants.ADD_NAMETAG,
           id: 1,
           nametag: {
-            name: 'Test Nametag',
-          },
+            name: 'Test Nametag'
+          }
         })
       expect(newState).toEqual({
         1: {
-          name: 'Test Nametag',
-        },
+          name: 'Test Nametag'
+        }
       })
     })
   })
@@ -30,23 +30,23 @@ describe('Nametag reducer', () => {
           nametags: [
             {
               id: 1,
-              name: 'Test Nametag',
+              name: 'Test Nametag'
             },
             {
               id: 2,
-              name: 'Another Test Nametag',
-            },
-          ],
+              name: 'Another Test Nametag'
+            }
+          ]
         })
       expect(newState).toEqual({
         1: {
           id: 1,
-          name: 'Test Nametag',
+          name: 'Test Nametag'
         },
         2: {
           id: 2,
-          name: 'Another Test Nametag',
-        },
+          name: 'Another Test Nametag'
+        }
       })
     })
   })

@@ -7,31 +7,30 @@ const styles = {
   norms: {
     textAlign: 'center',
     padding: 0,
-    listStyle: 'none',
+    listStyle: 'none'
   },
 
   norm: {
     color: 'inherit',
-    textAlign: 'left',
+    textAlign: 'left'
   },
   normText: {
     lineHeight: 1.4,
-    padding: '7px 7px 7px 60px',
+    padding: '7px 7px 7px 60px'
   },
   check: {
     height: 25,
     marginRight: 10,
-    fill: green500,
-  },
+    fill: green500
+  }
 
 }
-
 
 const Norms = (props) =>
   <div>
     {
       props.norms &&
-		  <List style={styles.norms}>
+      <List style={styles.norms}>
         {
           props.norms.map((norm, i) =>
             <ListItem
@@ -41,8 +40,8 @@ const Norms = (props) =>
                 props.showChecks ? styles.normText
                 : {...styles.normText, padding: 7, fontSize: 14}
               }
-              leftIcon={props.showChecks ? <Check style={styles.check}/> : <div/>}
-              style={styles.norm}/>
+              leftIcon={props.showChecks ? <Check style={styles.check} /> : <div />}
+              style={styles.norm} />
           )
         }
       </List>

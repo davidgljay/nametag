@@ -1,53 +1,53 @@
 import React, { Component, PropTypes } from 'react'
 import moment from '../../../bower_components/moment/moment'
 import { dragTypes } from '../../constants'
-import { DragSource, DragLayer } from 'react-dnd'
-import { Card, CardActions } from 'material-ui/Card'
+import { DragSource } from 'react-dnd'
+import { Card } from 'material-ui/Card'
 import FontIcon from 'material-ui/FontIcon'
 import trackEvent from '../../utils/analytics'
 import ImageUpload from '../Utils/ImageUpload'
 import CircularProgress from 'material-ui/CircularProgress'
 
 const certSource = {
-  beginDrag(props) {
+  beginDrag (props) {
     return props.certificate
   },
-  endDrag(props) {
+  endDrag (props) {
     if (props.removeFromSource) {
       props.removeFromSource(props.certificate.id)
     }
-  },
+  }
 }
 
-function collect(connect, monitor) {
+function collect (connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging(),
     initialOffset: monitor.getInitialSourceClientOffset(),
     currentOffset: monitor.getSourceClientOffset(),
-    connectDragPreview: connect.dragPreview(),
+    connectDragPreview: connect.dragPreview()
   }
 }
 
 class Certificate extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
-      expanded: false,
+      expanded: false
     }
     this.toggleExpanded = this.toggleExpanded.bind(this)
   }
 
-  toggleExpanded() {
+  toggleExpanded () {
     trackEvent('TOGGLE_CERT')
     this.setState({expanded: !this.state.expanded})
   }
 
-  componentDidMount() {
-    this.setState({expanded: this.props.expanded ? true : false})
+  componentDidMount () {
+    this.setState({expanded: this.props.expanded})
   }
 
-  render() {
+  render () {
     if (!this.props.certificate) {
       return null
     }
@@ -55,14 +55,14 @@ class Certificate extends Component {
     // Show an icon if one exists, or a manu to upload an icon if showIconUpload is enabled
     let icon
     if (this.props.certificate.icon_array) {
-      icon = <img style={styles.icon} alt="icon" src={this.props.certificate.icon_array[0]}/>
+      icon = <img style={styles.icon} alt='icon' src={this.props.certificate.icon_array[0]} />
     } else if (this.props.showIconUpload) {
-      icon = this.state.uploading ?
-        <CircularProgress/>
+      icon = this.state.uploading
+      ? <CircularProgress />
         : <ImageUpload
-            width={50}
-            onChooseFile={() => this.setState({uploading: true})}
-            onUploadFile={this.props.onUploadImage}/>
+          width={50}
+          onChooseFile={() => this.setState({uploading: true})}
+          onUploadFile={this.props.onUploadImage} />
     }
 
     // Show expanded or collapsed certificate
@@ -70,34 +70,34 @@ class Certificate extends Component {
     if (this.state.expanded) {
       certificate = <div>
         <Card style={styles.certificateExpanded}>
-              <FontIcon
-                style={styles.close}
-                className='material-icons'
-                onClick={this.toggleExpanded}>
+          <FontIcon
+            style={styles.close}
+            className='material-icons'
+            onClick={this.toggleExpanded}>
                 close
               </FontIcon>
-            <div style={styles.cardHeader}>
-              <div>
-                {icon}
-              </div>
-              <div>
-                <div style={styles.name}>{this.props.certificate.name}</div>
-                <div style={styles.granter}>
-                  <em>Verified by: </em><br/>{this.props.certificate.granter}
-                </div>
+          <div style={styles.cardHeader}>
+            <div>
+              {icon}
+            </div>
+            <div>
+              <div style={styles.name}>{this.props.certificate.name}</div>
+              <div style={styles.granter}>
+                <em>Verified by: </em><br />{this.props.certificate.granter}
               </div>
             </div>
-            <div style={styles.description}>{this.props.certificate.description_array[0]}</div>
-            <div style={styles.notes}>
-              {this.props.certificate.notes.map((note) => {
-                return <div style={styles.note} key={note.date}>
-                    <div style={styles.date}>{moment(note.date).format('MMMM Do, YYYY')}</div>
-                    <div style={styles.msg}>{': ' + note.msg}</div>
-                  </div>
-              })}
-            </div>
-          </Card>
-        </div>
+          </div>
+          <div style={styles.description}>{this.props.certificate.description_array[0]}</div>
+          <div style={styles.notes}>
+            {this.props.certificate.notes.map((note) => {
+              return <div style={styles.note} key={note.date}>
+                <div style={styles.date}>{moment(note.date).format('MMMM Do, YYYY')}</div>
+                <div style={styles.msg}>{': ' + note.msg}</div>
+              </div>
+            })}
+          </div>
+        </Card>
+      </div>
     } else {
       let chipStyle = styles.certificateChip
       if (this.props.isDragging && this.props.currentOffset) {
@@ -105,20 +105,20 @@ class Certificate extends Component {
           {
             position: 'relative',
             top: this.props.currentOffset.y - this.props.initialOffset.y - 20,
-            left: this.props.currentOffset.x - this.props.initialOffset.x,
+            left: this.props.currentOffset.x - this.props.initialOffset.x
           })
       }
       certificate = <div
-          style={chipStyle}
-          className="mdl-shadow--2dp"
-          onClick={this.toggleExpanded}>
-          {
-            this.props.certificate.icon_array ?
-             <div style={Object.assign({}, styles.miniIcon, {background: 'url(' + this.props.certificate.icon_array[0] + ') 0 0 / cover'})}/>
-             : <div style={styles.spacer}/>
+        style={chipStyle}
+        className='mdl-shadow--2dp'
+        onClick={this.toggleExpanded}>
+        {
+            this.props.certificate.icon_array
+            ? <div style={Object.assign({}, styles.miniIcon, {background: 'url(' + this.props.certificate.icon_array[0] + ') 0 0 / cover'})} />
+             : <div style={styles.spacer} />
           }
-           <div style={styles.chipText}>{this.props.certificate.name}</div>
-        </div>
+        <div style={styles.chipText}>{this.props.certificate.name}</div>
+      </div>
     }
 
     // Make some certificates draggable
@@ -136,7 +136,7 @@ Certificate.propTypes = {
   isDragging: PropTypes.bool.isRequired,
   removeFromSource: PropTypes.func,
   showIconUpload: PropTypes.bool,
-  onUploadImage: PropTypes.func,
+  onUploadImage: PropTypes.func
 }
 
 export default DragSource(dragTypes.certificate, certSource, collect)(Certificate)
@@ -151,7 +151,7 @@ const styles = {
     fontSize: 12,
     lineHeight: '22px',
     cursor: 'pointer',
-    userSelect: 'none',
+    userSelect: 'none'
   },
   miniIcon: {
     height: 22,
@@ -161,16 +161,16 @@ const styles = {
     fontSize: 12,
     display: 'inline-block',
     lineHeight: '22px',
-    verticalAlign: 'top',
+    verticalAlign: 'top'
   },
   chipText: {
     display: 'inline-block',
-    paddingRight: 10,
+    paddingRight: 10
   },
   spacer: {
     width: 10,
     height: 10,
-    display: 'inline-block',
+    display: 'inline-block'
   },
   certificateExpanded: {
     margin: 5,
@@ -180,39 +180,39 @@ const styles = {
     minHeight: 100,
     borderRadius: 11,
     background: '#dedede',
-    textAlign: 'left',
+    textAlign: 'left'
   },
   cardHeader: {
     display: 'flex',
-    flexBasis: 'auto',
+    flexBasis: 'auto'
   },
   close: {
     fontSize: 18,
     float: 'right',
     padding: 10,
-    cursor: 'pointer',
+    cursor: 'pointer'
   },
   icon: {
     width: 50,
     height: 50,
     marginRight: 20,
-    borderRadius: 3,
+    borderRadius: 3
   },
   name: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   granter: {
-    fontSize: 12,
+    fontSize: 12
   },
   description: {
-    textAlign: 'left',
+    textAlign: 'left'
   },
   note: {
-    fontSize: 12,
+    fontSize: 12
   },
   date: {
     fontStyle: 'italic',
-    float: 'left',
-  },
+    float: 'left'
+  }
 }

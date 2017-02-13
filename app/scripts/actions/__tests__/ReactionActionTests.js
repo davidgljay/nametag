@@ -25,12 +25,12 @@ describe('RoomActions', () => {
 
   describe('addReaction', () => {
     let mockReaction
-    beforeEach(()=>{
+    beforeEach(() => {
       mockReaction = {
         emoji: ':dinosuar:',
         room: 'abc',
         message: 'MSG',
-        nametag: '123',
+        nametag: '123'
       }
     })
     it('should post a reaction', () => {
@@ -46,7 +46,7 @@ describe('RoomActions', () => {
 
   describe('removeReaction', () => {
     let mockReaction
-    beforeEach(()=>{
+    beforeEach(() => {
       mockReaction = 'rctn'
     })
     it('should delete a reaction', () => {
@@ -64,7 +64,7 @@ describe('RoomActions', () => {
     beforeEach(() => {
       result = [
         {emoji: ':100:'},
-        {emoji: ':whale:'},
+        {emoji: ':whale:'}
       ]
     })
     it('should watch a message for reactions', () => {
@@ -77,14 +77,14 @@ describe('RoomActions', () => {
           expect(store.getActions()[0]).toEqual({
             type: constants.ADD_REACTION,
             reaction: {
-              emoji: ':100:',
-            },
+              emoji: ':100:'
+            }
           })
           expect(store.getActions()[1]).toEqual({
             type: constants.ADD_REACTION,
             reaction: {
-              emoji: ':whale:',
-            },
+              emoji: ':whale:'
+            }
           })
         })
     })

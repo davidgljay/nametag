@@ -30,7 +30,7 @@ describe('UserNametagActions', () => {
           type: constants.UPDATE_USER_NAMETAG,
           room: 'abc',
           property: 'name',
-          value: 'Allosaur',
+          value: 'Allosaur'
         })
     })
   })
@@ -43,13 +43,13 @@ describe('UserNametagActions', () => {
         expect(calls[1]).toEqual({
           type: 'findAll',
           req: {
-            user: 'me',
-          },
+            user: 'me'
+          }
         })
         expect(store.getActions()[0]).toEqual({
           nametag: {'nametag': '456', 'room': 'abc', 'user': 'me'},
           room: 'abc',
-          type: 'ADD_USER_NAMETAG',
+          type: 'ADD_USER_NAMETAG'
         })
       })
     })
@@ -73,11 +73,10 @@ describe('UserNametagActions', () => {
             user: 'me',
             mentions: [],
             nametag: '456',
-            room: 'abc',
-          },
+            room: 'abc'
+          }
         })
       })
     })
   })
-
 })

@@ -1,19 +1,19 @@
-'use strict';
+'use strict'
 
-const store = require('../schema/horizon_protocol').store;
-const reql_options = require('./common').reql_options;
-const writes = require('./writes');
-const hz_v = writes.version_field;
+const store = require('../schema/horizon_protocol').store
+const reql_options = require('./common').reql_options
+const writes = require('./writes')
+const hz_v = writes.version_field
 
-const Joi = require('joi');
-const r = require('rethinkdb');
+const Joi = require('joi')
+const r = require('rethinkdb')
 
 const run = (raw_request, context, ruleset, metadata, send, done) => {
-  const parsed = Joi.validate(raw_request.options, store);
-  if (parsed.error !== null) { throw new Error(parsed.error.details[0].message); }
+  const parsed = Joi.validate(raw_request.options, store)
+  if (parsed.error !== null) { throw new Error(parsed.error.details[0].message) }
 
-  const collection = metadata.collection(parsed.value.collection);
-  const conn = metadata.connection();
+  const collection = metadata.collection(parsed.value.collection)
+  const conn = metadata.connection()
 
   writes.retry_loop(parsed.value.data, ruleset, parsed.value.timeout,
     (rows) => // pre-validation, all rows
@@ -51,7 +51,7 @@ const run = (raw_request, context, ruleset, metadata, send, done) => {
                    collection.table.insert(writes.apply_version(new_row, 0),
                                            { returnChanges: 'always' })))
         .run(conn, reql_options)
-  ).then(done).catch(done);
-};
+  ).then(done).catch(done)
+}
 
-module.exports = { run };
+module.exports = { run }

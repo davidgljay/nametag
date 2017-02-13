@@ -26,15 +26,14 @@ const STATUS_ERROR = { type: 'error' }
 const STATUS_DISCONNECTED = { type: 'disconnected' }
 
 class ProtocolError extends Error {
-  constructor(msg, errorCode) {
+  constructor (msg, errorCode) {
     super(msg)
     this.errorCode = errorCode
   }
-  toString() {
+  toString () {
     return `${this.message} (Code: ${this.errorCode})`
   }
 }
-
 
 // Wraps native websockets with a Subject, which is both an Subscriber
 // and an Observable (it is bi-directional after all!). This version
@@ -42,30 +41,30 @@ class ProtocolError extends Error {
 export class HorizonSocket extends WebSocketSubject {
   // Deserializes a message from a string. Overrides the version
   // implemented in WebSocketSubject
-  resultSelector(e) {
+  resultSelector (e) {
     return deserialize(JSON.parse(e.data))
   }
 
   // We're overriding the next defined in AnonymousSubject so we
   // always serialize the value. When this is called a message will be
   // sent over the socket to the server.
-  next(value) {
+  next (value) {
     const request = JSON.stringify(serialize(value))
     super.next(request)
   }
 
-  constructor({
+  constructor ({
     url,              // Full url to connect to
     handshakeMaker, // function that returns handshake to emit
     keepalive = 60,   // seconds between keepalive messages
-    WebSocketCtor = WebSocket,    // optionally provide a WebSocket constructor
+    WebSocketCtor = WebSocket    // optionally provide a WebSocket constructor
   } = {}) {
     super({
       url,
       protocol: PROTOCOL_VERSION,
       WebSocketCtor,
       openObserver: {
-        next: () => this.sendHandshake(),
+        next: () => this.sendHandshake()
       },
       closeObserver: {
         next: () => {
@@ -74,8 +73,8 @@ export class HorizonSocket extends WebSocketSubject {
             this._handshakeSub = null
           }
           this.status.next(STATUS_DISCONNECTED)
-        },
-      },
+        }
+      }
     })
     // Completes or errors based on handshake success. Buffers
     // handshake response for later subscribers (like a Promise)
@@ -100,36 +99,36 @@ export class HorizonSocket extends WebSocketSubject {
     this._output.subscribe({
       // This emits if the entire socket errors (usually due to
       // failure to connect)
-      error: () => this.status.next(STATUS_ERROR),
+      error: () => this.status.next(STATUS_ERROR)
     })
   }
 
-  deactivateRequest(req) {
+  deactivateRequest (req) {
     return () => {
       this.activeRequests.delete(req.request_id)
       return { request_id: req.request_id, type: 'end_subscription' }
     }
   }
 
-  activateRequest(req) {
+  activateRequest (req) {
     return () => {
       this.activeRequests.set(req.request_id, req)
       return req
     }
   }
 
-  filterRequest(req) {
+  filterRequest (req) {
     return resp => resp.request_id === req.request_id
   }
 
-  getRequest(request) {
+  getRequest (request) {
     return Object.assign({ request_id: this.requestCounter++ }, request)
   }
 
   // This is a trimmed-down version of multiplex that only listens for
   // the handshake requestId. It also starts the keepalive observable
   // and cleans up after it when the handshake is cleaned up.
-  sendHandshake() {
+  sendHandshake () {
     if (!this._handshakeSub) {
       this._handshakeSub = this.makeRequest(this._handshakeMaker())
         .subscribe({
@@ -146,7 +145,7 @@ export class HorizonSocket extends WebSocketSubject {
           error: e => {
             this.status.next(STATUS_ERROR)
             this.handshake.error(e)
-          },
+          }
         })
 
       // Start the keepalive and make sure it's
@@ -160,7 +159,7 @@ export class HorizonSocket extends WebSocketSubject {
   // all subsequent requests.
   // * Generates a request id and filters by it
   // * Send `end_subscription` when observable is unsubscribed
-  makeRequest(rawRequest) {
+  makeRequest (rawRequest) {
     const request = this.getRequest(rawRequest)
 
     return super.multiplex(
@@ -178,7 +177,7 @@ export class HorizonSocket extends WebSocketSubject {
   // * Completes when `state: complete` is received
   // * Emits `state: synced` as a separate document for easy filtering
   // * Reference counts subscriptions
-  hzRequest(rawRequest) {
+  hzRequest (rawRequest) {
     return this.sendHandshake().ignoreElements()
       .concat(this.makeRequest(rawRequest))
       .concatMap(resp => {
@@ -191,7 +190,7 @@ export class HorizonSocket extends WebSocketSubject {
           // Create a little dummy object for sync notifications
           data.push({
             type: 'state',
-            state: resp.state,
+            state: resp.state
           })
         }
 

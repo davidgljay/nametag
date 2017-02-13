@@ -9,7 +9,7 @@ const mapStateToProps = (state) => {
   return {
     rooms: state.rooms,
     user: state.user,
-    userNametags: state.userNametags,
+    userNametags: state.userNametags
   }
 }
 

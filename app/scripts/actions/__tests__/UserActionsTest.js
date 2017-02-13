@@ -24,11 +24,11 @@ describe('User Actions', () => {
   })
   describe('addUser', () => {
     it('should add a user', () => {
-      expect(actions.addUser( '123', {data: 'stuff'}))
+      expect(actions.addUser('123', {data: 'stuff'}))
         .toEqual({
           type: constants.ADD_USER,
           data: {data: 'stuff'},
-          id: '123',
+          id: '123'
         })
     })
   })
@@ -47,7 +47,7 @@ describe('User Actions', () => {
             {
               type: constants.ADD_USER,
               data: {stuff: 'things'},
-              id: 1,
+              id: 1
             })
         })
     })
@@ -76,7 +76,7 @@ describe('User Actions', () => {
       actions.logout()(store.dispatch, store.getState)
       expect(unAuth.mock.calls.length).toEqual(1)
       expect(store.getActions()[0]).toEqual({
-        type: constants.LOGOUT_USER,
+        type: constants.LOGOUT_USER
       })
     })
   })
@@ -85,10 +85,10 @@ describe('User Actions', () => {
     it('should append to an array that already exists', () => {
       const mockResponses = [{
         data: {
-          stuff: ['things'],
-        },
+          stuff: ['things']
+        }
       }, {
-        updated: 1,
+        updated: 1
       }]
       let calls2 = []
       hz.currentUser = () => hz()
@@ -101,14 +101,14 @@ describe('User Actions', () => {
           expect(store.getActions()[0]).toEqual({
             type: constants.APPEND_USER_ARRAY,
             property: 'stuff',
-            value: 'morethings',
+            value: 'morethings'
           })
           expect(calls[1].type).toEqual('fetch')
           expect(calls2[1].type).toEqual('update')
           expect(calls2[1].req).toEqual({
             data: {
-              stuff: ['things', 'morethings'],
-            },
+              stuff: ['things', 'morethings']
+            }
           })
         })
     })

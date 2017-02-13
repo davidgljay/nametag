@@ -12,15 +12,15 @@ describe('Rection reducer', () => {
           reaction: {
             id: 1,
             message: 'MSG',
-            room: '456',
-          },
+            room: '456'
+          }
         })
       expect(newState).toEqual({
         1: {
           id: 1,
           message: 'MSG',
-          room: '456',
-        },
+          room: '456'
+        }
       })
     })
   })

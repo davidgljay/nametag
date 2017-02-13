@@ -1,6 +1,6 @@
-'use strict';
+'use strict'
 
-const Joi = require('joi');
+const Joi = require('joi')
 
 const server = Joi.object({
   project_name: Joi.string().default('horizon'),
@@ -20,8 +20,8 @@ const server = Joi.object({
   rdb_user: Joi.string().allow(null),
   rdb_password: Joi.string().allow(null),
   rdb_timeout: Joi.number().allow(null),
-  max_connections: Joi.number().allow(null),
-}).unknown(false);
+  max_connections: Joi.number().allow(null)
+}).unknown(false)
 
 const auth = Joi.object({
   success_redirect: Joi.string().default('/'),
@@ -34,7 +34,7 @@ const auth = Joi.object({
 
   token_secret: Joi.string().allow(null),
   allow_anonymous: Joi.boolean().default(false),
-  allow_unauthenticated: Joi.boolean().default(false),
-}).unknown(false);
+  allow_unauthenticated: Joi.boolean().default(false)
+}).unknown(false)
 
-module.exports = { server, auth };
+module.exports = { server, auth }

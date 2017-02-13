@@ -1,13 +1,13 @@
 /* global require, module */
 
-'use strict';
+'use strict'
 
-const fs = require('fs');
-const crypto = require('crypto');
-const process = require('process');
-const argparse = require('argparse');
-const checkProjectName = require('./utils/check-project-name');
-const rethrow = require('./utils/rethrow');
+const fs = require('fs')
+const crypto = require('crypto')
+const process = require('process')
+const argparse = require('argparse')
+const checkProjectName = require('./utils/check-project-name')
+const rethrow = require('./utils/rethrow')
 
 const makeIndexHTML = (projectName) => `\
 <!doctype html>
@@ -27,7 +27,7 @@ const makeIndexHTML = (projectName) => `\
    <marquee direction="left"><h1></h1></marquee>
   </body>
 </html>
-`;
+`
 
 const makeDefaultConfig = (projectName) => `\
 # This is a TOML file
@@ -109,13 +109,13 @@ project_name = "${projectName}"
 # auth_redirect = "/"
 # access_control_allow_origin = ""
 #
-`;
+`
 
 const makeDefaultSchema = () => `\
 [groups.admin]
 [groups.admin.rules.carte_blanche]
 template = "any()"
-`;
+`
 
 const makeDefaultSecrets = () => `\
 token_secret = "${crypto.randomBytes(64).toString('base64')}"
@@ -156,92 +156,92 @@ token_secret = "${crypto.randomBytes(64).toString('base64')}"
 # [auth.slack]
 # id = "0000000000000000000000000000000"
 # secret = "0000000000000000000000000000000"
-`;
+`
 
 const gitignore = () => `\
 rethinkdb_data
 **/*.log
 .hz/secrets.toml
 node_modules
-`;
+`
 
 const parseArguments = (args) => {
-  const parser = new argparse.ArgumentParser({ prog: 'hz init' });
+  const parser = new argparse.ArgumentParser({ prog: 'hz init' })
   parser.addArgument([ 'projectName' ],
     { action: 'store',
       help: 'Name of directory to create. Defaults to current directory',
-      nargs: '?',
+      nargs: '?'
     }
-  );
-  return parser.parseArgs(args);
-};
+  )
+  return parser.parseArgs(args)
+}
 
 const fileExists = (pathName) => {
   try {
-    fs.statSync(pathName);
-    return true;
+    fs.statSync(pathName)
+    return true
   } catch (e) {
-    return false;
+    return false
   }
-};
+}
 
 const maybeMakeDir = (createDir, dirName) => {
   if (createDir) {
     try {
-      fs.mkdirSync(dirName);
-      console.info(`Created new project directory ${dirName}`);
+      fs.mkdirSync(dirName)
+      console.info(`Created new project directory ${dirName}`)
     } catch (e) {
       throw rethrow(e,
-        `Couldn't make directory ${dirName}: ${e.message}`);
+        `Couldn't make directory ${dirName}: ${e.message}`)
     }
   } else {
-    console.info(`Initializing in existing directory ${dirName}`);
+    console.info(`Initializing in existing directory ${dirName}`)
   }
-};
+}
 
 const maybeChdir = (chdirTo) => {
   if (chdirTo) {
     try {
-      process.chdir(chdirTo);
+      process.chdir(chdirTo)
     } catch (e) {
       if (e.code === 'ENOTDIR') {
-        throw rethrow(e, `${chdirTo} is not a directory`);
+        throw rethrow(e, `${chdirTo} is not a directory`)
       } else {
-        throw rethrow(e, `Couldn't chdir to ${chdirTo}: ${e.message}`);
+        throw rethrow(e, `Couldn't chdir to ${chdirTo}: ${e.message}`)
       }
     }
   }
-};
+}
 
 const populateDir = (projectName, dirWasPopulated, chdirTo, dirName) => {
-  const niceDir = chdirTo ? `${dirName}/` : '';
+  const niceDir = chdirTo ? `${dirName}/` : ''
   if (!dirWasPopulated && !fileExists('src')) {
-    fs.mkdirSync('src');
-    console.info(`Created ${niceDir}src directory`);
+    fs.mkdirSync('src')
+    console.info(`Created ${niceDir}src directory`)
   }
   if (!dirWasPopulated && !fileExists('dist')) {
-    fs.mkdirSync('dist');
-    console.info(`Created ${niceDir}dist directory`);
+    fs.mkdirSync('dist')
+    console.info(`Created ${niceDir}dist directory`)
 
-    fs.appendFileSync('./dist/index.html', makeIndexHTML(projectName));
-    console.info(`Created ${niceDir}dist/index.html example`);
+    fs.appendFileSync('./dist/index.html', makeIndexHTML(projectName))
+    console.info(`Created ${niceDir}dist/index.html example`)
   }
 
   if (!fileExists('.hz')) {
-    fs.mkdirSync('.hz');
-    console.info(`Created ${niceDir}.hz directory`);
+    fs.mkdirSync('.hz')
+    console.info(`Created ${niceDir}.hz directory`)
   }
 
   // Default permissions
   const permissionGeneral = {
     encoding: 'utf8',
-    mode: 0o666,
-  };
+    mode: 0o666
+  }
 
   const permissionSecret = {
     encoding: 'utf8',
-    mode: 0o600, // Secrets are put in this config, so set it user, read/write only
-  };
+    mode: 0o600 // Secrets are put in this config, so set it user, read/write only
+  }
 
   // Create .gitignore if it doesn't exist
   if (!fileExists('.gitignore')) {
@@ -249,10 +249,10 @@ const populateDir = (projectName, dirWasPopulated, chdirTo, dirName) => {
       '.gitignore',
       gitignore(),
       permissionGeneral
-    );
-    console.info(`Created ${niceDir}.gitignore`);
+    )
+    console.info(`Created ${niceDir}.gitignore`)
   } else {
-    console.info('.gitignore already exists, not touching it.');
+    console.info('.gitignore already exists, not touching it.')
   }
 
   // Create .hz/config.toml if it doesn't exist
@@ -261,10 +261,10 @@ const populateDir = (projectName, dirWasPopulated, chdirTo, dirName) => {
       '.hz/config.toml',
       makeDefaultConfig(projectName),
       permissionGeneral
-    );
-    console.info(`Created ${niceDir}.hz/config.toml`);
+    )
+    console.info(`Created ${niceDir}.hz/config.toml`)
   } else {
-    console.info('.hz/config.toml already exists, not touching it.');
+    console.info('.hz/config.toml already exists, not touching it.')
   }
 
   // Create .hz/schema.toml if it doesn't exist
@@ -273,10 +273,10 @@ const populateDir = (projectName, dirWasPopulated, chdirTo, dirName) => {
       '.hz/schema.toml',
       makeDefaultSchema(),
       permissionGeneral
-    );
-    console.info(`Created ${niceDir}.hz/schema.toml`);
+    )
+    console.info(`Created ${niceDir}.hz/schema.toml`)
   } else {
-    console.info('.hz/schema.toml already exists, not touching it.');
+    console.info('.hz/schema.toml already exists, not touching it.')
   }
 
   // Create .hz/secrets.toml if it doesn't exist
@@ -285,12 +285,12 @@ const populateDir = (projectName, dirWasPopulated, chdirTo, dirName) => {
       '.hz/secrets.toml',
       makeDefaultSecrets(),
       permissionSecret
-    );
-    console.info(`Created ${niceDir}.hz/secrets.toml`);
+    )
+    console.info(`Created ${niceDir}.hz/secrets.toml`)
   } else {
-    console.info('.hz/secrets.toml already exists, not touching it.');
+    console.info('.hz/secrets.toml already exists, not touching it.')
   }
-};
+}
 
 const run = (args) =>
   Promise.resolve(args)
@@ -300,20 +300,20 @@ const run = (args) =>
         parsed.projectName,
         process.cwd(),
         fs.readdirSync('.')
-      );
-      const projectName = check.projectName;
-      const dirName = check.dirName;
-      const chdirTo = check.chdirTo;
-      const createDir = check.createDir;
-      maybeMakeDir(createDir, dirName);
-      maybeChdir(chdirTo);
+      )
+      const projectName = check.projectName
+      const dirName = check.dirName
+      const chdirTo = check.chdirTo
+      const createDir = check.createDir
+      maybeMakeDir(createDir, dirName)
+      maybeChdir(chdirTo)
 
       // Before we create things, check if the directory is empty
-      const dirWasPopulated = fs.readdirSync(process.cwd()).length !== 0;
-      populateDir(projectName, dirWasPopulated, chdirTo, dirName);
-    });
+      const dirWasPopulated = fs.readdirSync(process.cwd()).length !== 0
+      populateDir(projectName, dirWasPopulated, chdirTo, dirName)
+    })
 
 module.exports = {
   run,
-  description: 'Initialize a horizon app directory',
-};
+  description: 'Initialize a horizon app directory'
+}

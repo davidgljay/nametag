@@ -1,14 +1,14 @@
 const PRIMITIVES = [
   'string', 'number', 'boolean', 'function', 'symbol' ]
 
-function modifyObject(doc) {
+function modifyObject (doc) {
   Object.keys(doc).forEach(key => {
     doc[key] = deserialize(doc[key])
   })
   return doc
 }
 
-export function deserialize(value) {
+export function deserialize (value) {
   if (value == null) {
     return value
   } else if (PRIMITIVES.indexOf(typeof value) !== -1) {
@@ -24,14 +24,14 @@ export function deserialize(value) {
   }
 }
 
-function jsonifyObject(doc) {
+function jsonifyObject (doc) {
   Object.keys(doc).forEach(key => {
     doc[key] = serialize(doc[key])
   })
   return doc
 }
 
-export function serialize(value) {
+export function serialize (value) {
   if (value == null) {
     return value
   } else if (PRIMITIVES.indexOf(typeof value) !== -1) {
@@ -43,7 +43,7 @@ export function serialize(value) {
       $reql_type$: 'TIME',
       epoch_time: value.getTime() / 1000,
       // Rethink will serialize this as "+00:00", but accepts Z
-      timezone: 'Z',
+      timezone: 'Z'
     }
   } else {
     return jsonifyObject(value)

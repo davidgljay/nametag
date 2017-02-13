@@ -8,62 +8,64 @@ import Login from '../User/Login'
 import QRcode from 'qrcode.react'
 
 class CertificateDetail extends Component {
-  static propTypes = {
-    certificateId: PropTypes.string.isRequired,
-    user: PropTypes.object,
-    logout: PropTypes.func.isRequired,
-    setting: PropTypes.func.isRequired,
-    certificate: PropTypes.object,
-    fetchCertificate: PropTypes.func.isRequired,
-    appendUserArray: PropTypes.func.isRequired,
-    grantCertificate: PropTypes.func.isRequired,
+
+  constructor (props) {
+    super(props)
+
+    this.propTypes = {
+      certificateId: PropTypes.string.isRequired,
+      user: PropTypes.object,
+      logout: PropTypes.func.isRequired,
+      setting: PropTypes.func.isRequired,
+      certificate: PropTypes.object,
+      fetchCertificate: PropTypes.func.isRequired,
+      appendUserArray: PropTypes.func.isRequired,
+      grantCertificate: PropTypes.func.isRequired
+    }
+
+    this.state = {
+      showQR: false
+    }
+
+    this.onClaimClick = (certificateId) => () => {
+      const {appendUserArray, grantCertificate} = this.props
+      appendUserArray('certificates', certificateId)
+        .then(() => {
+          return grantCertificate(certificateId)
+        })
+    }
+
+    this.onEmailClick = () => {
+      const path = window.location.href
+      window.location = `mailto:?&subject=${encodeURIComponent('You\'ve been granted a certificate on Nametag!')}` +
+               `&body=${encodeURIComponent(`To claim your certificate just visit this URL.\n\n${path}`)}`
+    }
+
+    this.onClipboardClick = () => {
+      document.querySelector('#hiddenPath').select()
+      try {
+        const successful = document.execCommand('copy')
+        this.setState({copySuccess: successful})
+      } catch (err) {
+        console.error('Oops, unable to copy')
+      }
+    }
+
+    this.onQRClick = () => {
+      this.setState({showQR: !this.state.showQR})
+    }
+
+    this.onHomeClick = () => {
+      window.location = '/rooms'
+    }
   }
 
-  state = {
-    showQR: false,
-  }
-
-  componentDidMount() {
+  componentDidMount () {
     const {fetchCertificate, certificateId} = this.props
     fetchCertificate(certificateId)
   }
 
-  onClaimClick = (certificateId) => () => {
-    const {appendUserArray, grantCertificate} = this.props
-    appendUserArray('certificates', certificateId)
-      .then(() => {
-        return grantCertificate(certificateId)
-      })
-  }
-
-  onEmailClick = () => {
-    const path = window.location.href
-    window.location = 'mailto:?'
-             + '&subject='
-             + encodeURIComponent('You\'ve been granted a certificate on Nametag!')
-             + '&body='
-             + encodeURIComponent(`To claim your certificate just visit this URL.\n\n${path}`)
-  }
-
-  onClipboardClick = () => {
-    document.querySelector('#hiddenPath').select()
-    try {
-      const successful = document.execCommand('copy')
-      this.setState({copySuccess: successful})
-    } catch (err) {
-      console.error('Oops, unable to copy')
-    }
-  }
-
-  onQRClick = () => {
-    this.setState({showQR: !this.state.showQR})
-  }
-
-  onHomeClick = () => {
-    window.location = '/rooms'
-  }
-
-  render() {
+  render () {
     const {user, logout, setting, certificate, providerAuth} = this.props
 
     let headerText
@@ -78,8 +80,8 @@ class CertificateDetail extends Component {
         <h3>This certificate has been claimed.</h3>
       </div>
     } else {
-      headerText = certificate.creator === user.id ?
-      <div>
+      headerText = certificate.creator === user.id
+      ? <div>
         <div style={styles.header}>
           <h3>Your certificate has been created.</h3>
           It can be claimed by the first person to visit this URL, please
@@ -89,22 +91,22 @@ class CertificateDetail extends Component {
           type='text'
           style={styles.hiddenPath}
           id='hiddenPath'
-          value={window.location.href}/>
+          value={window.location.href} />
         <div style={styles.shareButtons}>
           <FlatButton
             style={styles.button}
             onClick={this.onEmailClick}
-            label='E-MAIL'/>
+            label='E-MAIL' />
           <FlatButton
             style={styles.button}
             onClick={this.onClipboardClick}
-            label='COPY TO CLIPBOARD'/>
+            label='COPY TO CLIPBOARD' />
           <FlatButton
             style={styles.button}
             onClick={this.onQRClick}
-            label='SHOW QR CODE'/>
-          </div>
+            label='SHOW QR CODE' />
         </div>
+      </div>
         : <div style={styles.header}>
           <h3>You have been granted a certificate!</h3>
           Claim it so that you can show it off! Certificates
@@ -120,27 +122,26 @@ class CertificateDetail extends Component {
           labelStyle={styles.buttonLabel}
           backgroundColor={indigo500}
           label='BACK TO HOMEPAGE'
-          onClick={this.onHomeClick}/>
+          onClick={this.onHomeClick} />
       </div>
     } else if (!user || !user.id) {
-      claimButton = <Login message={'Log in to claim'} providerAuth={providerAuth}/>
-    } else if (certificate.creator !== user.id ) {
+      claimButton = <Login message={'Log in to claim'} providerAuth={providerAuth} />
+    } else if (certificate.creator !== user.id) {
       claimButton = <div style={styles.claimButton}>
         <RaisedButton
           style={styles.button}
           labelStyle={styles.buttonLabel}
           backgroundColor={indigo500}
           onClick={this.onClaimClick(certificate.id)}
-          label='CLAIM THIS CERTIFICATE'/>
+          label='CLAIM THIS CERTIFICATE' />
       </div>
     }
-
 
     return <div>
       <Navbar
         user={user}
         logout={logout}
-        setting={setting}/>
+        setting={setting} />
       <div style={styles.certDetailContainer}>
         {
           headerText
@@ -154,14 +155,14 @@ class CertificateDetail extends Component {
         {
           this.state.showQR &&
           <div style={styles.QRcode}>
-            <QRcode value={window.location.href} size={256}/>
+            <QRcode value={window.location.href} size={256} />
           </div>
         }
         <div style={styles.certDetail}>
           <Certificate
             certificate={certificate}
             draggable={false}
-            expanded={true}/>
+            expanded />
         </div>
         {claimButton}
       </div>
@@ -171,43 +172,43 @@ class CertificateDetail extends Component {
 
 export default CertificateDetail
 
-const styles =  {
+const styles = {
   header: {
     textAlign: 'center',
-    maxWidth: 450,
+    maxWidth: 450
   },
   certDetailContainer: {
     display: 'flex',
     alignItems: 'center',
-    flexDirection: 'column',
+    flexDirection: 'column'
   },
   certDetail: {
     fontSize: 16,
     lineHeight: '20px',
-    maxWidth: 350,
+    maxWidth: 350
   },
   claimButton: {
-    margin: 30,
+    margin: 30
   },
   buttonLabel: {
-    color: '#fff',
+    color: '#fff'
   },
   shareButtons: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   hiddenPath: {
     color: 'white',
     border: 'none',
     width: 1,
     height: 1,
-    outline: 'none',
+    outline: 'none'
   },
   QRcode: {
-    margin: 20,
+    margin: 20
   },
   copySuccess: {
     color: 'green',
-    fontSize: 12,
-  },
+    fontSize: 12
+  }
 }

@@ -8,11 +8,11 @@ import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
 
 class Compose extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       message: '',
-      showEmoji: false,
+      showEmoji: false
     }
     this.onChange = this.onChange.bind(this)
     this.post = this.post.bind(this)
@@ -20,46 +20,45 @@ class Compose extends Component {
     this.handleEmoji = this.handleEmoji.bind(this)
   }
 
-  onChange(e) {
+  onChange (e) {
     this.setState({message: e.target.value})
   }
 
-  toggleEmoji() {
+  toggleEmoji () {
     this.setState({showEmoji: !this.state.showEmoji})
   }
 
-  handleEmoji(emoji) {
+  handleEmoji (emoji) {
     this.setState({message: this.state.message + ':' + emoji + ':'})
   }
 
-  post(e) {
+  post (e) {
     e.preventDefault()
     if (this.state.message.length > 0) {
       let message = {
         text: this.state.message,
         timestamp: Date.now(),
         author: this.context.userNametag.nametag,
-        room: this.context.room.id,
+        room: this.context.room.id
       }
       this.setState({message: '', showEmoji: false})
       this.props.postMessage(message)
     }
   }
 
-
-  render() {
+  render () {
     // TODO: Add GIFs, image upload
 
     // Workaround for mobile sizing since Radium doesn't appear to work.
-    const selectorStyle = window.innerWidth < 800 ?
-      {...styles.selectorStyle, ...styles.mobileSelector} : styles.selectorStyle
+    const selectorStyle = window.innerWidth < 800
+    ? {...styles.selectorStyle, ...styles.mobileSelector} : styles.selectorStyle
     return <div style={styles.compose}>
-      <div style={styles.spacer}/>
+      <div style={styles.spacer} />
       <EmojiPicker
         show={this.state.showEmoji}
         selectorStyle={selectorStyle}
-        selector={()=>null}
-        handleEmoji={this.handleEmoji}/>
+        selector={() => null}
+        handleEmoji={this.handleEmoji} />
       <IconButton
         onClick={this.toggleEmoji}>
         <FontIcon
@@ -72,7 +71,7 @@ class Compose extends Component {
           name='compose'
           style={styles.textfield}
           onChange={this.onChange}
-          value={this.state.message}/>
+          value={this.state.message} />
         <FlatButton
           style={styles.sendButton}
           type='submit'
@@ -81,18 +80,18 @@ class Compose extends Component {
               className='material-icons'>
               send
             </FontIcon>
-            }/>
+            } />
       </form>
     </div>
   }
 }
 
 Compose.propTypes = {
-  postMessage: PropTypes.func.isRequired,
+  postMessage: PropTypes.func.isRequired
 }
 Compose.contextTypes = {
   room: PropTypes.object.isRequired,
-  userNametag: PropTypes.object.isRequired,
+  userNametag: PropTypes.object.isRequired
 }
 
 export default radium(Compose)
@@ -108,21 +107,21 @@ const styles = {
     background: '#FFF',
     width: '100%',
     paddingRight: 15,
-    zIndex: 40,
+    zIndex: 40
   },
   spacer: {
     width: 290,
     [mobile]: {
-      width: 20,
-    },
+      width: 20
+    }
   },
   showEmoji: {
     cursor: 'pointer',
-    fontSize: 18,
+    fontSize: 18
   },
   textfield: {
     flex: 1,
-    width: 'inherit',
+    width: 'inherit'
   },
   selectorStyle: {
     bottom: 75,
@@ -134,17 +133,17 @@ const styles = {
     overflow: 'scroll',
     padding: 5,
     border: '1px solid #ccc',
-    borderRadius: 3,
+    borderRadius: 3
   },
   mobileSelector: {
     left: 20,
-    width: 'inherit',
+    width: 'inherit'
   },
   sendButton: {
-    minWidth: 45,
+    minWidth: 45
   },
   form: {
     flex: 1,
-    display: 'flex',
-  },
+    display: 'flex'
+  }
 }

@@ -1,19 +1,19 @@
-'use strict';
+'use strict'
 
-const remove = require('../schema/horizon_protocol').remove;
-const reql_options = require('./common').reql_options;
-const writes = require('./writes');
-const hz_v = writes.version_field;
+const remove = require('../schema/horizon_protocol').remove
+const reql_options = require('./common').reql_options
+const writes = require('./writes')
+const hz_v = writes.version_field
 
-const Joi = require('joi');
-const r = require('rethinkdb');
+const Joi = require('joi')
+const r = require('rethinkdb')
 
 const run = (raw_request, context, ruleset, metadata, send, done) => {
-  const parsed = Joi.validate(raw_request.options, remove);
-  if (parsed.error !== null) { throw new Error(parsed.error.details[0].message); }
+  const parsed = Joi.validate(raw_request.options, remove)
+  if (parsed.error !== null) { throw new Error(parsed.error.details[0].message) }
 
-  const collection = metadata.collection(parsed.value.collection);
-  const conn = metadata.connection();
+  const collection = metadata.collection(parsed.value.collection)
+  const conn = metadata.connection()
 
   writes.retry_loop(parsed.value.data, ruleset, parsed.value.timeout,
     (rows) => // pre-validation, all rows
@@ -44,10 +44,10 @@ const run = (raw_request, context, ruleset, metadata, send, done) => {
               r.range(row_data.count()).map((index) =>
                 r.branch(res('changes')(index)('old_val').eq(null),
                          res('changes')(index).merge({ old_val: { id: row_data(index)('id') } }),
-                         res('changes')(index))).coerceTo('array'),
+                         res('changes')(index))).coerceTo('array')
             })))
         .run(conn, reql_options)
-  ).then(done).catch(done);
-};
+  ).then(done).catch(done)
+}
 
-module.exports = { run };
+module.exports = { run }

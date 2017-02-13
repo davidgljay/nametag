@@ -43,7 +43,7 @@ global.expect = global.chai.expect
 global.assert = global.chai.assert
 
 // Wait until server is ready before proceeding to tests
-describe('Waiting until server ready...', function() {
+describe('Waiting until server ready...', function () {
   this.timeout(60000)
   it('connected', done => {
     const tryConnecting = () => {

@@ -6,18 +6,18 @@ import radium from 'radium'
 
 class Messages extends Component {
 
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.mapMessage = this.mapMessage.bind(this)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const {watchRoomMessages, room} = this.props
     watchRoomMessages(room)
   }
 
-  componentWillUpdate(nextProps) {
+  componentWillUpdate (nextProps) {
     if (!this.props.messageList ||
       !nextProps.messageList ||
       nextProps.messageList.length < 3) {
@@ -36,47 +36,47 @@ class Messages extends Component {
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     const {unWatchRoomMessages, room} = this.props
     unWatchRoomMessages(room)
   }
 
-  mapMessage(id) {
+  mapMessage (id) {
     const {messages, nametags, room, norms, postMessage, saveMessage} = this.props
-    if (!messages || !nametags) {return null}
+    if (!messages || !nametags) { return null }
     let message = messages[id]
     return message && <Message
-        {...message}
-        author={nametags[message.author]}
-        roomId={room}
-        recipient={nametags[message.recipient]}
-        key={message.id}
-        norms={norms}
-        postMessage={postMessage}
-        saveMessage={saveMessage}/>
+      {...message}
+      author={nametags[message.author]}
+      roomId={room}
+      recipient={nametags[message.recipient]}
+      key={message.id}
+      norms={norms}
+      postMessage={postMessage}
+      saveMessage={saveMessage} />
   }
 
-  render() {
+  render () {
     const {messageList, messages} = this.props
     return <div style={styles.messages}>
-        <table style={styles.msgContainer}>
-          <tbody>
+      <table style={styles.msgContainer}>
+        <tbody>
           {
             messageList &&
             messageList
               .sort((a, b) => messages[a].timestamp - messages[b].timestamp)
               .map(this.mapMessage)
           }
-          </tbody>
-        </table>
-      </div>
+        </tbody>
+      </table>
+    </div>
   }
 }
 
 Messages.propTypes = {
   room: PropTypes.string.isRequired,
   messages: PropTypes.object,
-  messageList: PropTypes.array,
+  messageList: PropTypes.array
 }
 
 export default radium(Messages)
@@ -90,11 +90,11 @@ const styles = {
     paddingTop: 100,
     scrollBehavior: 'smooth',
     [mobile]: {
-      paddingLeft: 30,
-    },
+      paddingLeft: 30
+    }
   },
   msgContainer: {
     width: 'inherit',
-    marginBottom: 75,
-  },
+    marginBottom: 75
+  }
 }

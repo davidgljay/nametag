@@ -1,6 +1,6 @@
 'use strict'
 
-;(function() {
+;(function () {
   const makeDOMDriver = CycleDOM.makeDOMDriver
   const div = CycleDOM.div
   const input = CycleDOM.input
@@ -12,7 +12,7 @@
   // Intent grabs things from our sources and pulls out what events
   // we're interested in, as well as mapping to useful data (so
   // streams of strings, instead of observables of text input events)
-  function intent(sources) {
+  function intent (sources) {
     const horizonCollection = sources.horizon(sources.config.collectionName)
     // Every time the enter key is hit in the text box
     const enterHit$ = sources.DOM
@@ -38,7 +38,7 @@
       horizonCollection.store({
         authorId: sources.config.authorId,
         datetime: new Date(),
-        text,
+        text
       })
     )
 
@@ -49,13 +49,13 @@
     return {
       inputValue$,
       writeOps$$,
-      messages$,
+      messages$
     }
   }
 
   // Model takes our action streams and turns them into the stream of
   // app states
-  function model(inputValue$, messages$) {
+  function model (inputValue$, messages$) {
     return Rx.Observable.combineLatest(
       inputValue$.startWith(null),
       messages$.startWith([]),
@@ -65,15 +65,15 @@
 
   // View takes the state and create a stream of virtual-dom trees for
   // the app.
-  function view(state$) {
+  function view (state$) {
     // Displayed for each chat message.
-    function chatMessage(msg) {
+    function chatMessage (msg) {
       return li('.message', { key: msg.id }, [
         img({
           height: '50', width: '50',
-          src: `http://api.adorable.io/avatars/50/${msg.authorId}.png`,
+          src: `http://api.adorable.io/avatars/50/${msg.authorId}.png`
         }),
-        span('.text', msg.text),
+        span('.text', msg.text)
       ])
     }
 
@@ -83,20 +83,20 @@
           div('.row',
               ul(state.messages.map(chatMessage))),
           div('#input.row',
-              input('.u-full-width', { value: state.inputValue, autoFocus: true })),
+              input('.u-full-width', { value: state.inputValue, autoFocus: true }))
         ])
     )
   }
 
   // In main we just wire everything together
-  function main(sources) {
+  function main (sources) {
     const intents = intent(sources)
     const state$ = model(intents.inputValue$, intents.messages$)
     return {
       // Send the virtual tree to the real DOM
       DOM: view(state$),
       // Send our messages to the horizon server
-      horizon: intents.writeOps$$,
+      horizon: intents.writeOps$$
     }
   }
 
@@ -113,8 +113,8 @@
       // RethinkDB table
       collectionName: 'cyclejs_messages',
       // unique-ish id created once when opening the page
-      authorId: new Date().getMilliseconds(),
-    }),
+      authorId: new Date().getMilliseconds()
+    })
   }
 
   // Run the application
@@ -122,8 +122,8 @@
 
   // Little CycleJS driver for horizon. This will probably be a small
   // standalone library at some point
-  function makeHorizonDriver() {
-    return function horizonDriver(writeOps$$) {
+  function makeHorizonDriver () {
+    return function horizonDriver (writeOps$$) {
       // Send outgoing messages
       writeOps$$.switch().subscribe()
       // Return chat observable

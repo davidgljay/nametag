@@ -32,18 +32,18 @@ describe('RoomActions', () => {
       expect(addRoom).toEqual({
         type: constants.ADD_ROOM,
         room: 'test',
-        id: '123',
+        id: '123'
       })
     })
   })
 
   describe('subscribe', () => {
-    it('should subscribe to a room', function() {
+    it('should subscribe to a room', function () {
       const lastPresent = Date.now()
       let mockResponses = [
         [{id: 1}, {id: 2}],
         [{lastPresent}],
-        [{lastPresent}, {lastPresent}, {lastPresent}],
+        [{lastPresent}, {lastPresent}, {lastPresent}]
       ]
 
       hz.mockReturnValueOnce(mockHz(mockResponses[0], calls)())
@@ -51,21 +51,21 @@ describe('RoomActions', () => {
       hz.mockReturnValueOnce(mockHz(mockResponses[2], calls)())
       return actions.subscribe()(store.dispatch, store.getState)
       .then(() => {
-        expect(store.getActions()[0]).toEqual( {
+        expect(store.getActions()[0]).toEqual({
           property: 'nametagCount',
           room: 2,
           type: 'SET_ROOM_PROP',
-          value: 1,
+          value: 1
         })
         expect(store.getActions()[1]).toEqual({
           type: constants.SET_ROOM_PROP,
           room: 1,
           property: 'nametagCount',
-          value: 3,
+          value: 3
         })
         expect(store.getActions()[2]).toEqual({
           type: constants.ADD_ROOM_ARRAY,
-          rooms: [{id: 1}, {id: 2}],
+          rooms: [{id: 1}, {id: 2}]
         })
       })
     })
@@ -90,7 +90,7 @@ describe('RoomActions', () => {
           expect(hz.mock.calls[0]).toEqual(['nametags'])
           expect(calls[1]).toEqual({
             type: 'upsert',
-            req: {name: 'tag', room: '1234'},
+            req: {name: 'tag', room: '1234'}
           })
 
           // Expect the nametag id to be inserted into the user_nametags table
@@ -101,15 +101,15 @@ describe('RoomActions', () => {
               room: '1234',
               user: 'me',
               mentions: [],
-              nametag: '456',
-            },
+              nametag: '456'
+            }
           })
 
           // Expect the nametag to be added to the store
           expect(store.getActions()[0]).toEqual({
             type: 'ADD_NAMETAG',
             nametag: {name: 'tag', room: '1234'},
-            id: '456',
+            id: '456'
           })
         },
         (err) => {
@@ -122,7 +122,7 @@ describe('RoomActions', () => {
     it('should watch a room', () => {
       let room = {
         id: '123',
-        name: 'A Room',
+        name: 'A Room'
       }
       hz.mockReturnValue(mockHz(room, calls)())
       return actions.watchRoom('123')(store.dispatch).then((res) => {
@@ -132,7 +132,7 @@ describe('RoomActions', () => {
         expect(store.getActions()[0]).toEqual({
           type: 'ADD_ROOM',
           room: room,
-          id: room.id,
+          id: room.id
         })
       })
     })
@@ -141,7 +141,7 @@ describe('RoomActions', () => {
   describe('postRoom', () => {
     it('should post a room', () => {
       let room = {
-        name: 'A Room',
+        name: 'A Room'
       }
       hz.mockReturnValue(mockHz({id: '123'}, calls)())
       return actions.postRoom(room)(store.dispatch).then((res) => {
@@ -149,8 +149,8 @@ describe('RoomActions', () => {
         expect(res).toEqual('123')
         expect(store.getActions()[0]).toEqual({
           type: 'ADD_ROOM',
-          room: { ...room, id: '123'},
-          id: '123',
+          room: {...room, id: '123'},
+          id: '123'
         })
       })
     })
@@ -166,7 +166,7 @@ describe('RoomActions', () => {
           type: 'SET_ROOM_PROP',
           room: '123',
           property: 'name',
-          value: 'A new name',
+          value: 'A new name'
         })
       })
     })

@@ -7,20 +7,20 @@ const SOURCEMAPS = !process.env.NO_SOURCEMAPS
 
 module.exports = {
   entry: {
-    test: './test/test.js',
+    test: './test/test.js'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
     pathinfo: DEV_BUILD, // Add module filenames as comments in the bundle
-    devtoolModuleFilenameTemplate: function(file) {
+    devtoolModuleFilenameTemplate: function (file) {
       if (file.resourcePath.indexOf('webpack') >= 0) {
         return `webpack:///${file.resourcePath}`
       } else {
         // Show correct paths in stack traces
         return path.join('..', file.resourcePath).replace(/~/g, 'node_modules')
       }
-    },
+    }
   },
   target: 'web',
   debug: DEV_BUILD,
@@ -31,7 +31,7 @@ module.exports = {
     // in node
     './horizon.js': 'commonjs ./horizon.js',
     ws: 'commonjs ws',
-    'source-map-support': 'commonjs source-map-support',
+    'source-map-support': 'commonjs source-map-support'
   },
   module: {
     noParse: [
@@ -40,7 +40,7 @@ module.exports = {
       /chai\/chai\.js/,
       /lodash\/lodash\.js/,
       /source-map-support/,
-      /rxjs\/bundles\/Rx\.umd\.js/,
+      /rxjs\/bundles\/Rx\.umd\.js/
     ],
     loaders: [
       {
@@ -52,24 +52,24 @@ module.exports = {
           presets: [
             'babel-preset-es2015-loose',
             { plugins: [
-              [ 'babel-plugin-transform-runtime', { polyfill: false } ],
-            ] },
-          ],
-        },
-      },
-    ],
+              [ 'babel-plugin-transform-runtime', { polyfill: false } ]
+            ] }
+          ]
+        }
+      }
+    ]
   },
   node: {
     // Don't include unneeded node libs in package
     process: false,
     fs: false,
     __dirname: false,
-    __filename: false,
+    __filename: false
   },
   plugins: [
     new CopyWebpackPlugin([
       { from: './test/test.html' },
-      { from: './node_modules/mocha/mocha.css' },
-    ]),
-  ],
+      { from: './node_modules/mocha/mocha.css' }
+    ])
+  ]
 }

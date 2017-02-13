@@ -2,12 +2,12 @@ import React from 'react'
 import FontIcon from 'material-ui/FontIcon'
 import {red500} from 'material-ui/styles/colors'
 
-const Alert = (props) => props.alert ?
-  <div style={styles.alert}>
-    <FontIcon className="material-icons" style={styles.alert} color={red500}>
+const Alert = (props) => props.alert
+  ? <div style={styles.alert}>
+    <FontIcon className='material-icons' style={styles.alert} color={red500}>
       warning
     </FontIcon>
-      {props.alert}
+    {props.alert}
   </div>
   : null
 
@@ -17,6 +17,6 @@ const styles = {
   alert: {
     fontSize: 12,
     color: red500,
-    margin: 10,
-  },
+    margin: 10
+  }
 }

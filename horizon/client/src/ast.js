@@ -21,7 +21,6 @@ import { serialize } from './serialization.js'
 
 import watchRewrites from './hacks/watch-rewrites'
 
-
 /**
  @this TermBase
 
@@ -30,7 +29,7 @@ import watchRewrites from './hacks/watch-rewrites'
  to pollute the objects with it (since it isn't useful to api users),
  so it's dynamically bound with .call inside methods that use it.
 */
-function checkIfLegalToChain(key) {
+function checkIfLegalToChain (key) {
   if (this._legalMethods.indexOf(key) === -1) {
     throw new Error(`${key} cannot be called on the current query`)
   }
@@ -41,13 +40,13 @@ function checkIfLegalToChain(key) {
 
 // Abstract base class for terms
 export class TermBase {
-  constructor(sendRequest, query, legalMethods) {
+  constructor (sendRequest, query, legalMethods) {
     this._sendRequest = sendRequest
     this._query = query
     this._legalMethods = legalMethods
   }
 
-  toString() {
+  toString () {
     let string = `Collection('${this._query.collection}')`
     if (this._query.find) {
       string += `.find(${JSON.stringify(this._query.find)})`
@@ -77,7 +76,7 @@ export class TermBase {
   // needed, pass the option 'rawChanges: true'. An observable is
   // returned which will lazily emit the query when it is subscribed
   // to
-  watch({ rawChanges = false } = {}) {
+  watch ({ rawChanges = false } = {}) {
     const query = watchRewrites(this, this._query)
     const raw = this._sendRequest('subscribe', query)
     if (rawChanges) {
@@ -89,7 +88,7 @@ export class TermBase {
   // Grab a snapshot of the current query (non-changefeed). Emits an
   // array with all results. An observable is returned which will
   // lazily emit the query when subscribed to
-  fetch() {
+  fetch () {
     const raw = this._sendRequest('query', this._query).map(val => {
       delete val.$hz_v$
       return val
@@ -100,32 +99,32 @@ export class TermBase {
       return raw.toArray()
     }
   }
-  findAll(...fieldValues) {
+  findAll (...fieldValues) {
     checkIfLegalToChain.call(this, 'findAll')
     checkArgs('findAll', arguments, { maxArgs: 100 })
     return new FindAll(this._sendRequest, this._query, fieldValues)
   }
-  find(idOrObject) {
+  find (idOrObject) {
     checkIfLegalToChain.call(this, 'find')
     checkArgs('find', arguments)
     return new Find(this._sendRequest, this._query, idOrObject)
   }
-  order(fields, direction = 'ascending') {
+  order (fields, direction = 'ascending') {
     checkIfLegalToChain.call(this, 'order')
     checkArgs('order', arguments, { minArgs: 1, maxArgs: 2 })
     return new Order(this._sendRequest, this._query, fields, direction)
   }
-  above(aboveSpec, bound = 'closed') {
+  above (aboveSpec, bound = 'closed') {
     checkIfLegalToChain.call(this, 'above')
     checkArgs('above', arguments, { minArgs: 1, maxArgs: 2 })
     return new Above(this._sendRequest, this._query, aboveSpec, bound)
   }
-  below(belowSpec, bound = 'open') {
+  below (belowSpec, bound = 'open') {
     checkIfLegalToChain.call(this, 'below')
     checkArgs('below', arguments, { minArgs: 1, maxArgs: 2 })
     return new Below(this._sendRequest, this._query, belowSpec, bound)
   }
-  limit(size) {
+  limit (size) {
     checkIfLegalToChain.call(this, 'limit')
     checkArgs('limit', arguments)
     return new Limit(this._sendRequest, this._query, size)
@@ -137,7 +136,7 @@ export class TermBase {
 // `observable` is the base observable with full responses coming from
 //              the HorizonSocket
 // `query` is the value of `options` in the request
-function makePresentable(observable, query) {
+function makePresentable (observable, query) {
   // Whether the entire data structure is in each change
   const pointQuery = Boolean(query.find)
 
@@ -182,67 +181,67 @@ function makePresentable(observable, query) {
   }
 }
 
-export function applyChange(arr, change) {
+export function applyChange (arr, change) {
   switch (change.type) {
-  case 'remove':
-  case 'uninitial': {
+    case 'remove':
+    case 'uninitial': {
     // Remove old values from the array
-    if (change.old_offset != null) {
-      arr.splice(change.old_offset, 1)
-    } else {
-      const index = arr.findIndex(x => deepEqual(x.id, change.old_val.id))
-      if (index === -1) {
+      if (change.old_offset != null) {
+        arr.splice(change.old_offset, 1)
+      } else {
+        const index = arr.findIndex(x => deepEqual(x.id, change.old_val.id))
+        if (index === -1) {
         // Programming error. This should not happen
-        throw new Error(
+          throw new Error(
           `change couldn't be applied: ${JSON.stringify(change)}`)
+        }
+        arr.splice(index, 1)
       }
-      arr.splice(index, 1)
+      break
     }
-    break
-  }
-  case 'add':
-  case 'initial': {
+    case 'add':
+    case 'initial': {
     // Add new values to the array
-    if (change.new_offset != null) {
+      if (change.new_offset != null) {
       // If we have an offset, put it in the correct location
-      arr.splice(change.new_offset, 0, change.new_val)
-    } else {
+        arr.splice(change.new_offset, 0, change.new_val)
+      } else {
       // otherwise for unordered results, push it on the end
-      arr.push(change.new_val)
+        arr.push(change.new_val)
+      }
+      break
     }
-    break
-  }
-  case 'change': {
+    case 'change': {
     // Modify in place if a change is happening
-    if (change.old_offset != null) {
+      if (change.old_offset != null) {
       // Remove the old document from the results
-      arr.splice(change.old_offset, 1)
-    }
-    if (change.new_offset != null) {
+        arr.splice(change.old_offset, 1)
+      }
+      if (change.new_offset != null) {
       // Splice in the new val if we have an offset
-      arr.splice(change.new_offset, 0, change.new_val)
-    } else {
+        arr.splice(change.new_offset, 0, change.new_val)
+      } else {
       // If we don't have an offset, find the old val and
       // replace it with the new val
-      const index = arr.findIndex(x => deepEqual(x.id, change.old_val.id))
-      if (index === -1) {
+        const index = arr.findIndex(x => deepEqual(x.id, change.old_val.id))
+        if (index === -1) {
         // indicates a programming bug. The server gives us the
         // ordering, so if we don't find the id it means something is
         // buggy.
-        throw new Error(
+          throw new Error(
           `change couldn't be applied: ${JSON.stringify(change)}`)
+        }
+        arr[index] = change.new_val
       }
-      arr[index] = change.new_val
+      break
     }
-    break
-  }
-  case 'state': {
+    case 'state': {
     // This gets hit if we have not emitted yet, and should
     // result in an empty array being output.
-    break
-  }
-  default:
-    throw new Error(
+      break
+    }
+    default:
+      throw new Error(
       `unrecognized 'type' field from server ${JSON.stringify(change)}`)
   }
   return arr
@@ -251,7 +250,7 @@ export function applyChange(arr, change) {
 /** @this Collection
  Implements writeOps for the Collection class
 */
-function writeOp(name, args, documents) {
+function writeOp (name, args, documents) {
   checkArgs(name, args)
   let isBatch = true
   let wrappedDocs = documents
@@ -277,7 +276,7 @@ function writeOp(name, args, documents) {
     const _prevOb = observable
     observable = Observable.create(subscriber => {
       _prevOb.subscribe({
-        next(resp) {
+        next (resp) {
           if (resp.error) {
             // TODO: handle error ids when we get them
             subscriber.error(new Error(resp.error))
@@ -285,8 +284,8 @@ function writeOp(name, args, documents) {
             subscriber.next(resp)
           }
         },
-        error(err) { subscriber.error(err) },
-        complete() { subscriber.complete() },
+        error (err) { subscriber.error(err) },
+        complete () { subscriber.complete() }
       })
     })
   }
@@ -300,34 +299,34 @@ function writeOp(name, args, documents) {
 }
 
 export class Collection extends TermBase {
-  constructor(sendRequest, collectionName, lazyWrites) {
+  constructor (sendRequest, collectionName, lazyWrites) {
     const query = { collection: collectionName }
     const legalMethods = [
       'find', 'findAll', 'order', 'above', 'below', 'limit' ]
     super(sendRequest, query, legalMethods)
     this._lazyWrites = lazyWrites
   }
-  store(documents) {
+  store (documents) {
     return writeOp.call(this, 'store', arguments, documents)
   }
-  upsert(documents) {
+  upsert (documents) {
     return writeOp.call(this, 'upsert', arguments, documents)
   }
-  insert(documents) {
+  insert (documents) {
     return writeOp.call(this, 'insert', arguments, documents)
   }
-  replace(documents) {
+  replace (documents) {
     return writeOp.call(this, 'replace', arguments, documents)
   }
-  update(documents) {
+  update (documents) {
     return writeOp.call(this, 'update', arguments, documents)
   }
-  remove(documentOrId) {
+  remove (documentOrId) {
     const wrapped = validIndexValue(documentOrId) ?
           { id: documentOrId } : documentOrId
     return writeOp.call(this, 'remove', arguments, wrapped)
   }
-  removeAll(documentsOrIds) {
+  removeAll (documentsOrIds) {
     if (!Array.isArray(documentsOrIds)) {
       throw new Error('removeAll takes an array as an argument')
     }
@@ -343,7 +342,7 @@ export class Collection extends TermBase {
 }
 
 export class Find extends TermBase {
-  constructor(sendRequest, previousQuery, idOrObject) {
+  constructor (sendRequest, previousQuery, idOrObject) {
     const findObject = validIndexValue(idOrObject) ?
           { id: idOrObject } : idOrObject
     const query = Object.assign({}, previousQuery, { find: findObject })
@@ -352,7 +351,7 @@ export class Find extends TermBase {
 }
 
 export class FindAll extends TermBase {
-  constructor(sendRequest, previousQuery, fieldValues) {
+  constructor (sendRequest, previousQuery, fieldValues) {
     const wrappedFields = fieldValues
           .map(item => validIndexValue(item) ? { id: item } : item)
     const options = { find_all: wrappedFields }
@@ -369,7 +368,7 @@ export class FindAll extends TermBase {
 }
 
 export class Above extends TermBase {
-  constructor(sendRequest, previousQuery, aboveSpec, bound) {
+  constructor (sendRequest, previousQuery, aboveSpec, bound) {
     const option = { above: [ aboveSpec, bound ] }
     const query = Object.assign({}, previousQuery, option)
     const legalMethods = [ 'findAll', 'order', 'below', 'limit' ]
@@ -378,7 +377,7 @@ export class Above extends TermBase {
 }
 
 export class Below extends TermBase {
-  constructor(sendRequest, previousQuery, belowSpec, bound) {
+  constructor (sendRequest, previousQuery, belowSpec, bound) {
     const options = { below: [ belowSpec, bound ] }
     const query = Object.assign({}, previousQuery, options)
     const legalMethods = [ 'findAll', 'order', 'above', 'limit' ]
@@ -387,7 +386,7 @@ export class Below extends TermBase {
 }
 
 export class Order extends TermBase {
-  constructor(sendRequest, previousQuery, fields, direction) {
+  constructor (sendRequest, previousQuery, fields, direction) {
     const wrappedFields = Array.isArray(fields) ? fields : [ fields ]
     const options = { order: [ wrappedFields, direction ] }
     const query = Object.assign({}, previousQuery, options)
@@ -397,36 +396,35 @@ export class Order extends TermBase {
 }
 
 export class Limit extends TermBase {
-  constructor(sendRequest, previousQuery, size) {
+  constructor (sendRequest, previousQuery, size) {
     const query = Object.assign({}, previousQuery, { limit: size })
     // Nothing is legal to chain after .limit
     super(sendRequest, query, [])
   }
 }
 
-
 export class UserDataTerm {
-  constructor(hz, handshake, socket) {
+  constructor (hz, handshake, socket) {
     this._hz = hz
     this._before = socket.ignoreElements().merge(handshake)
   }
 
-  _query(userId) {
+  _query (userId) {
     return this._hz('users').find(userId)
   }
 
-  fetch() {
+  fetch () {
     return this._before.mergeMap(handshake => {
-        if (handshake.id == null) {
-          throw new Error('Unauthenticated users have no user document')
-        } else {
-          return this._query(handshake.id).fetch()
-        }
-      }).take(1) // necessary so that we complete, since _before is
+      if (handshake.id == null) {
+        throw new Error('Unauthenticated users have no user document')
+      } else {
+        return this._query(handshake.id).fetch()
+      }
+    }).take(1) // necessary so that we complete, since _before is
                  // infinite
   }
 
-  watch(...args) {
+  watch (...args) {
     return this._before.mergeMap(handshake => {
       if (handshake.id === null) {
         throw new Error('Unauthenticated users have no user document')

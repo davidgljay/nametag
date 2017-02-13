@@ -11,13 +11,13 @@ describe('Certificate reducer', () => {
           type: constants.ADD_CERTIFICATE,
           id: 1,
           certificate: {
-            cert: 'Test certificate',
-          },
+            cert: 'Test certificate'
+          }
         })
       expect(newState).toEqual({
         1: {
-          cert: 'Test certificate',
-        },
+          cert: 'Test certificate'
+        }
       })
     })
   })
@@ -27,19 +27,19 @@ describe('Certificate reducer', () => {
       let newState = certificateReducer(
         {
           1: {
-            granted: false,
-          },
+            granted: false
+          }
         },
         {
           type: constants.UPDATE_CERTIFICATE,
           id: 1,
           property: 'granted',
-          value: true,
+          value: true
         })
       expect(newState).toEqual({
         1: {
-          granted: true,
-        },
+          granted: true
+        }
       })
     })
   })

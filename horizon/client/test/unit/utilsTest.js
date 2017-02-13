@@ -1,12 +1,12 @@
 import validIndexValue from '../../src/util/valid-index-value'
 
-export default function unitUtilsSuite() {
+export default function unitUtilsSuite () {
   describe('validIndexValue', () => {
-    function assertValid(value) {
+    function assertValid (value) {
       assert.isTrue(validIndexValue(value),
                     `${JSON.stringify(value)} should be valid`)
     }
-    function assertInvalid(value) {
+    function assertInvalid (value) {
       assert.isFalse(validIndexValue(value),
                     `${JSON.stringify(value)} should be invalid`)
     }
@@ -51,7 +51,7 @@ export default function unitUtilsSuite() {
       done()
     })
     it('allows arrays of primitives', done => {
-      const value = [ true, false, 1, "foo", new Date(), new ArrayBuffer(1) ]
+      const value = [ true, false, 1, 'foo', new Date(), new ArrayBuffer(1) ]
       assertValid(value)
       done()
     })

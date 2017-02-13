@@ -1,18 +1,18 @@
-'use strict';
+'use strict'
 
-const Joi = require('joi');
+const Joi = require('joi')
 
 const handshake = Joi.object().keys({
   request_id: Joi.number().required(),
   method: Joi.only('token', 'anonymous', 'unauthenticated').required(),
   token: Joi.string().required()
-    .when('method', { is: Joi.not('token').required(), then: Joi.forbidden() }),
-}).unknown(false);
+    .when('method', { is: Joi.not('token').required(), then: Joi.forbidden() })
+}).unknown(false)
 
 const read = Joi.alternatives().try(
   Joi.object().keys({
     collection: Joi.string().token().required(),
-    find: Joi.object().min(1).unknown(true).required(),
+    find: Joi.object().min(1).unknown(true).required()
   }).unknown(false),
   Joi.object().keys({
     collection: Joi.string().token().required(),
@@ -35,33 +35,33 @@ const read = Joi.alternatives().try(
         Joi.string().valid('open', 'closed').label('bound_type').required()).optional()
       .when('find_all', { is: Joi.array().min(2).required(), then: Joi.forbidden() }),
 
-    find_all: Joi.array().items(Joi.object().min(1).label('item').unknown(true)).min(1).optional(),
+    find_all: Joi.array().items(Joi.object().min(1).label('item').unknown(true)).min(1).optional()
   }).unknown(false)
-);
+)
 
 const write_id_optional = Joi.object({
   timeout: Joi.number().integer().greater(-1).optional().default(null),
   collection: Joi.string().token().required(),
   data: Joi.array().min(1).items(Joi.object({
-    id: Joi.any().optional(),
-  }).unknown(true)).required(),
-}).unknown(false);
+    id: Joi.any().optional()
+  }).unknown(true)).required()
+}).unknown(false)
 
 const write_id_required = Joi.object({
   timeout: Joi.number().integer().greater(-1).optional().default(null),
   collection: Joi.string().token().required(),
   data: Joi.array().min(1).items(Joi.object({
-    id: Joi.any().required(),
-  }).unknown(true)).required(),
-}).unknown(false);
+    id: Joi.any().required()
+  }).unknown(true)).required()
+}).unknown(false)
 
 const request = Joi.object({
   request_id: Joi.number().required(),
   type: Joi.string().required(),
   options: Joi.object().required()
     .when('type', { is: Joi.string().only('end_subscription'), then: Joi.forbidden() })
-    .when('type', { is: Joi.string().only('keepalive'), then: Joi.forbidden() }),
-}).unknown(false);
+    .when('type', { is: Joi.string().only('keepalive'), then: Joi.forbidden() })
+}).unknown(false)
 
 module.exports = {
   handshake,
@@ -73,5 +73,5 @@ module.exports = {
   upsert: write_id_optional,
   update: write_id_required,
   replace: write_id_required,
-  remove: write_id_required,
-};
+  remove: write_id_required
+}

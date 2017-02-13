@@ -17,10 +17,10 @@ const onUserUpdate = (conn) => (err, user) => {
     displayNames: userProfile.names,
     loadingIcons: true,
     auth_data: prevData.auth_data,
-    provider: prevData.provider,
+    provider: prevData.provider
   }
   r.db('nametag').table('users').get(user.new_val.id).update({
-    data: newData,
+    data: newData
   }).run(conn)
     .catch((err2) => console.error('Posting displayNames to user', err2))
 
@@ -32,8 +32,8 @@ const onUserUpdate = (conn) => (err, user) => {
       return json.url && r.db('nametag').table('users').get(user.new_val.id).update({
         data: {
           iconUrls: [ json.url ],
-          loadingIcons: false,
-        },
+          loadingIcons: false
+        }
       }).run(conn)
     })
     .catch(err3 => console.log('Error updating user icon', err3))
@@ -46,25 +46,25 @@ module.exports = (conn) => {
 
 const parseInfo = (userdata) => {
   switch (userdata.provider) {
-  case 'facebook':
-    return {
-      names: [userdata.auth_data.facebook.name],
-      picture: userdata.auth_data.facebook.picture.data.url,
-    }
-  case 'google':
-    return {
-      names: [userdata.auth_data.google.name],
-      picture: userdata.auth_data.google.picture,
-    }
-  case 'twitter':
-    return {
-      names: [
-        userdata.auth_data.twitter.name,
-        userdata.auth_data.twitter.screen_name,
-      ],
-      picture: userdata.auth_data.twitter.profile_image_url,
-    }
-  default:
-    return {}
+    case 'facebook':
+      return {
+        names: [userdata.auth_data.facebook.name],
+        picture: userdata.auth_data.facebook.picture.data.url
+      }
+    case 'google':
+      return {
+        names: [userdata.auth_data.google.name],
+        picture: userdata.auth_data.google.picture
+      }
+    case 'twitter':
+      return {
+        names: [
+          userdata.auth_data.twitter.name,
+          userdata.auth_data.twitter.screen_name
+        ],
+        picture: userdata.auth_data.twitter.profile_image_url
+      }
+    default:
+      return {}
   }
 }

@@ -10,41 +10,40 @@ let roomWatches = {}
 let roomSubscription
 let nametagSubscriptions = []
 
-export function addRoom(room, id) {
+export function addRoom (room, id) {
   return {
     type: constants.ADD_ROOM,
     room,
-    id,
+    id
   }
 }
 
-export function addRoomArray(rooms) {
+export function addRoomArray (rooms) {
   return {
     type: constants.ADD_ROOM_ARRAY,
-    rooms,
+    rooms
   }
 }
 
-export function setRoomProp(room, property, value) {
+export function setRoomProp (room, property, value) {
   return {
     type: constants.SET_ROOM_PROP,
     room,
     property,
-    value,
+    value
   }
 }
-
 
 /*
 * Optimistically add a messageId to a room.
 * The action of this message will be overwritten once the message has been
 * posted to the server
 */
-export function addRoomMessage(room, messageId) {
+export function addRoomMessage (room, messageId) {
   return {
     type: constants.ADD_ROOM_MESSAGE,
     room,
-    messageId,
+    messageId
   }
 }
 
@@ -58,7 +57,7 @@ export function addRoomMessage(room, messageId) {
 * @returns
 *    Promise resolving to list of rooms
 */
-export function subscribe() {
+export function subscribe () {
   return (dispatch) =>
   new Promise((resolve, reject) => {
     roomSubscription = hz('rooms').above({closedAt: Date.now()})
@@ -85,7 +84,7 @@ export function subscribe() {
 * @returns
 *    none
 */
-export function unsubscribe() {
+export function unsubscribe () {
   () => {
     unWatchNametags()
     roomSubscription.unsubscribe()
@@ -102,7 +101,7 @@ export function unsubscribe() {
 * @returns
 *    Promise
 */
-export function getNametagCount(room) {
+export function getNametagCount (room) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
       nametagSubscriptions.push(hz('nametags').findAll({room}).watch().subscribe(
@@ -130,7 +129,7 @@ export function getNametagCount(room) {
 * @returns
 *   Promise resolving to the ID of the newly created nametag
 */
-export function joinRoom(roomId, nametag, userId) {
+export function joinRoom (roomId, nametag, userId) {
   let nametagId
   return (dispatch) => {
     return dispatch(putNametag(nametag))
@@ -157,7 +156,7 @@ export function joinRoom(roomId, nametag, userId) {
 * @returns
 *   Promise
 */
-export function fetchRooms(ids) {
+export function fetchRooms (ids) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
       hz('rooms').findAll(..._.uniq(ids).map((id) => ({id}))).fetch()
@@ -177,7 +176,7 @@ export function fetchRooms(ids) {
 * @returns
 *   Promise
 */
-export function watchRoom(id) {
+export function watchRoom (id) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
       roomWatches[id] = hz('rooms').find(id).watch().subscribe((room) => {
@@ -196,7 +195,7 @@ export function watchRoom(id) {
 * @returns
 *   Promise
 */
-export function unWatchRoom(id) {
+export function unWatchRoom (id) {
   return () => {
     roomWatches[id].unsubscribe()
   }
@@ -210,14 +209,14 @@ export function unWatchRoom(id) {
 * @returns
 *   Promise resolving to search string queries
 */
-export function searchImage(query, startAt) {
+export function searchImage (query, startAt) {
   return () => {
     const start = startAt ? '&start=' + startAt : ''
     const url = 'https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/image_search?query=' + query + start
     return fetch(url)
       .then(res => {
-        return res.ok ? res.json() :
-          Promise.reject(`Error searching images for ${query}`)
+        return res.ok ? res.json()
+        : Promise.reject(`Error searching images for ${query}`)
       }).catch(errorLog('Searching for image'))
   }
 }
@@ -230,17 +229,17 @@ export function searchImage(query, startAt) {
 * @returns
 *   Promise resolving to uploaded image
 */
-export function setImageFromUrl(width, height, url) {
+export function setImageFromUrl (width, height, url) {
   return () => {
     const options = {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({width, height, url}),
+      body: JSON.stringify({width, height, url})
     }
     return fetch('/api/image_url', options)
       .then(res => {
-        return res.ok ? res.json() :
-          Promise.reject(`Error searching images for ${query}`)
+        return res.ok ? res.json()
+          : Promise.reject(`Error setting image from ${url}`)
       }).catch(errorLog('Searching for image'))
   }
 }
@@ -254,7 +253,7 @@ export function setImageFromUrl(width, height, url) {
 * @returns
 *   Promise resolving to room id
 */
-export function postRoom(room) {
+export function postRoom (room) {
   return (dispatch) => new Promise((resolve, reject) => {
     hz('rooms').upsert(room).subscribe((res) => {
       dispatch(addRoom({ ...room, id: res.id }, res.id))
@@ -274,7 +273,7 @@ export function postRoom(room) {
 * @returns
 *   Promise resolving to a response from horizon
 */
-export function updateRoom(room, property, value) {
+export function updateRoom (room, property, value) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
       hz('rooms').update({id: room, [property]: value}).subscribe((res) => {

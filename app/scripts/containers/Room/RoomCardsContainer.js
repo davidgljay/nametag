@@ -11,40 +11,40 @@ const mapStateToProps = (state) => {
     user: state.user ? state.user : {loggedIn: false},
     nametags: state.nametags,
     userNametags: state.userNametags,
-    nametagEdits: state.nametagEdits,
+    nametagEdits: state.nametagEdits
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    watchUserNametags(userId) {
+    watchUserNametags (userId) {
       return dispatch(watchUserNametags(userId))
     },
-    subscribe(roomId) {
+    subscribe (roomId) {
       return dispatch(subscribe(roomId))
     },
-    unsubscribe(roomId) {
+    unsubscribe (roomId) {
       return dispatch(unsubscribe(roomId))
     },
-    addUserNametag(roomId, nametagId) {
+    addUserNametag (roomId, nametagId) {
       return dispatch(addUserNametag(roomId, nametagId))
     },
-    watchNametags(nametagIds) {
+    watchNametags (nametagIds) {
       return dispatch(watchNametags(nametagIds))
     },
-    unWatchNametags() {
-      return dispatch(unWatchNametag(nametagId))
+    unWatchNametags () {
+      return dispatch(unWatchNametag())
     },
-    logout() {
+    logout () {
       return dispatch(logout())
     },
-    setting(option, value) {
+    setting (option, value) {
       return dispatch(setting(option, value))
     },
-    providerAuth(provider) {
+    providerAuth (provider) {
       return dispatch(providerAuth(provider))
     },
-    getAuth,
+    getAuth
   }
 }
 

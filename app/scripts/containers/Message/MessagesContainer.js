@@ -4,7 +4,7 @@ import {
   watchRoomMessages,
   unWatchRoomMessages,
   postMessage,
-  saveMessage,
+  saveMessage
 } from '../../actions/MessageActions'
 
 const mapStateToProps = (state, ownProps) => {
@@ -13,7 +13,7 @@ const mapStateToProps = (state, ownProps) => {
   return Object.assign({}, {
     messages: state.messages,
     messageList,
-    nametags: state.nametags,
+    nametags: state.nametags
   }, ownProps)
 }
 
@@ -22,7 +22,7 @@ const mapDispatchToProps = (dispatch) => {
     watchRoomMessages: (room) => dispatch(watchRoomMessages(room)),
     unWatchRoomMessages: (room) => dispatch(unWatchRoomMessages(room)),
     postMessage: (message) => dispatch(postMessage(message)),
-    saveMessage: (id, saved) => dispatch(saveMessage(id, saved)),
+    saveMessage: (id, saved) => dispatch(saveMessage(id, saved))
   }
 }
 

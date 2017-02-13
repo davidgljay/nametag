@@ -1,5 +1,5 @@
-'use strict';
+'use strict'
 
-const winston = require('winston');
+const winston = require('winston')
 
-module.exports = winston;
+module.exports = winston

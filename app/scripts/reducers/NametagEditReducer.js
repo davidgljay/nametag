@@ -6,10 +6,9 @@ const updateNametagEdit = (state, action) => {
   return {...state, [action.room]: newNametag}
 }
 
-
 const addCertificate = (state, action) => {
-  const certs = state[action.room].certificates ?
-    _.uniqBy([action.cert].concat(state[action.room].certificates), (c) => c.id)
+  const certs = state[action.room].certificates
+  ? _.uniqBy([action.cert].concat(state[action.room].certificates), (c) => c.id)
     : [action.cert]
   const newEditNametag = {...state[action.room], certificates: certs}
   return {...state, [action.room]: newEditNametag}
@@ -24,14 +23,14 @@ const removeCertificate = (state, action) => {
 
 const nametagEdit = (state = {}, action) => {
   switch (action.type) {
-  case constants.UPDATE_NAMETAG_EDIT:
-    return updateNametagEdit(state, action)
-  case constants.ADD_NT_EDIT_CERT:
-    return addCertificate(state, action)
-  case constants.REMOVE_NT_EDIT_CERT:
-    return removeCertificate(state, action)
-  default:
-    return state
+    case constants.UPDATE_NAMETAG_EDIT:
+      return updateNametagEdit(state, action)
+    case constants.ADD_NT_EDIT_CERT:
+      return addCertificate(state, action)
+    case constants.REMOVE_NT_EDIT_CERT:
+      return removeCertificate(state, action)
+    default:
+      return state
   }
 }
 

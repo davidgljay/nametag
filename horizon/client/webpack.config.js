@@ -8,24 +8,24 @@ if (BUILD_ALL) {
     build({
       FILENAME: 'horizon-dev.js',
       DEV_BUILD: true,
-      POLYFILL: true,
+      POLYFILL: true
     }),
     build({
       FILENAME: 'horizon.js',
       DEV_BUILD: false,
-      POLYFILL: true,
+      POLYFILL: true
     }),
     build({
       FILENAME: 'horizon-core-dev.js',
       DEV_BUILD: true,
-      POLYFILL: false,
+      POLYFILL: false
     }),
     build({
       FILENAME: 'horizon-core.js',
       DEV_BUILD: false,
-      POLYFILL: false,
+      POLYFILL: false
     }),
-    test,
+    test
   ]
 } else {
   module.exports = [
@@ -33,8 +33,8 @@ if (BUILD_ALL) {
       // same filename as prod build to simplify switching
       FILENAME: 'horizon.js',
       DEV_BUILD: true,
-      POLYFILL: true,
+      POLYFILL: true
     }),
-    test,
+    test
   ]
 }

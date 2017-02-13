@@ -8,31 +8,31 @@ const mapStateToProps = (state, ownProps) => {
     {},
     {
       certificate: state.certificates[ownProps.params.certificateId],
-      user: state.user,
+      user: state.user
     },
     ownProps.params)
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    logout() {
+    logout () {
       return dispatch(logout())
     },
-    setting(option, value) {
+    setting (option, value) {
       return dispatch(setting(option, value))
     },
-    providerAuth(provider) {
+    providerAuth (provider) {
       return dispatch(providerAuth(provider))
     },
-    appendUserArray(...args) {
+    appendUserArray (...args) {
       return dispatch(appendUserArray.apply(this, args))
     },
-    fetchCertificate(...args) {
+    fetchCertificate (...args) {
       return dispatch(fetchCertificate.apply(this, args))
     },
-    grantCertificate(...args) {
+    grantCertificate (...args) {
       return dispatch(grantCertificate.apply(this, args))
-    },
+    }
   }
 }
 

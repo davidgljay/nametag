@@ -28,7 +28,7 @@ describe('Nametag Actions', () => {
         .toEqual({
           type: constants.ADD_NAMETAG,
           nametag: {name: 'tag'},
-          id: '123',
+          id: '123'
         })
     })
   })
@@ -46,7 +46,7 @@ describe('Nametag Actions', () => {
             {
               type: constants.ADD_NAMETAG,
               nametag: {id: 1, room: 'abc'},
-              id: 1,
+              id: 1
             })
         })
     })
@@ -56,7 +56,7 @@ describe('Nametag Actions', () => {
     it('should fetch a list of nametags from a room', () => {
       let results = [
         {name: 'tag', room: 'abc', id: '123'},
-        {name: 'tag2', room: 'abc', id: '456'},
+        {name: 'tag2', room: 'abc', id: '456'}
       ]
       hz.mockReturnValue(mockHz(results, calls)())
       return actions.watchRoomNametags('abc')(store.dispatch).then(
@@ -65,7 +65,7 @@ describe('Nametag Actions', () => {
           expect(calls[2]).toEqual({type: 'watch', req: undefined})
           expect(store.getActions()[0]).toEqual({
             type: constants.ADD_NAMETAG_ARRAY,
-            nametags: results,
+            nametags: results
           })
         })
     })
@@ -81,8 +81,8 @@ describe('putNametag', () => {
       expect(calls[1]).toEqual({
         type: 'upsert',
         req: {
-          name: 'tag',
-        },
+          name: 'tag'
+        }
       })
     })
   })
@@ -95,7 +95,7 @@ describe('showPresence', () => {
     return actions.showPresence('123')().then(() => {
       expect(calls[1]).toEqual({
         type: 'upsert',
-        req: {id: '123', present: calls[1].req.present},
+        req: {id: '123', present: calls[1].req.present}
       })
     })
   })

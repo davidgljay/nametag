@@ -11,12 +11,12 @@ describe('User reducer', () => {
           type: constants.ADD_USER,
           id: 1,
           data: {
-            stuff: 'things',
-          },
+            stuff: 'things'
+          }
         })
       expect(newState).toEqual({
         id: 1,
-        data: {stuff: 'things'},
+        data: {stuff: 'things'}
       })
     })
   })
@@ -24,9 +24,9 @@ describe('User reducer', () => {
   describe('LOGOUT_USER', () => {
     it('should set the user state to false', () => {
       let newState = userReducer({
-        id: '123',
+        id: '123'
       }, {
-        type: constants.LOGOUT_USER,
+        type: constants.LOGOUT_USER
       })
       expect(newState).toEqual({loggedIn: false})
     })
@@ -37,7 +37,7 @@ describe('User reducer', () => {
       let newState = userReducer({}, {
         type: constants.USER_SETTING,
         option: 'stuff',
-        value: 'things',
+        value: 'things'
       })
       expect(newState).toEqual({stuff: 'things'})
     })
@@ -48,12 +48,12 @@ describe('User reducer', () => {
       let newState = userReducer({
         id: '123',
         data: {
-          stuff: ['morestuff'],
-        },
+          stuff: ['morestuff']
+        }
       }, {
         type: constants.APPEND_USER_ARRAY,
         property: 'stuff',
-        value: 'things',
+        value: 'things'
       })
       expect(newState.data).toEqual({stuff: ['morestuff', 'things']})
     })

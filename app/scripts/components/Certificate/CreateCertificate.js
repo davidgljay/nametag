@@ -6,86 +6,91 @@ import trackEvent from '../../utils/analytics'
 import CircularProgress from 'material-ui/CircularProgress'
 import RaisedButton from 'material-ui/RaisedButton'
 import {indigo500} from 'material-ui/styles/colors'
+
 class CreateCertificate extends Component {
 
-  static propTypes = {
-    user: PropTypes.object.isRequired,
-    createCertificate: PropTypes.func.isRequired,
-    appendUserArray: PropTypes.func.isRequired,
-  }
+  constructor (props) {
+    super(props)
 
-  state = {
-    name: '',
-    icon: null,
-    description: '',
-    note: 'Badge granted.',
-    uploading: false,
-    certFor: 'me',
-  }
+    this.propTypes = {
+      user: PropTypes.object.isRequired,
+      createCertificate: PropTypes.func.isRequired,
+      appendUserArray: PropTypes.func.isRequired
+    }
 
-  updateCert = (property, value) => {
-    if (property === 'name') {
-      this.setState({[property]: value.slice(0, 25)})
-    } else {
-      this.setState({[property]: value})
+    this.state = {
+      name: '',
+      icon: null,
+      description: '',
+      note: 'Badge granted.',
+      uploading: false,
+      certFor: 'me'
+    }
+
+    this.updateCert = (property, value) => {
+      if (property === 'name') {
+        this.setState({[property]: value.slice(0, 25)})
+      } else {
+        this.setState({[property]: value})
+      }
+    }
+
+    this.onChooseImage = () => {
+      trackEvent('CHOOSE_CERT_IMAGE')
+      this.setState({uploading: true})
+    }
+
+    this.onUploadImage = ({url}) => {
+      this.updateCert('icon', [url])
+      this.setState({uploading: false})
+    }
+
+    this.onCertForChange = (val) => {
+      this.setState({certFor: val})
+    }
+
+    this.createSelfCert = () => {
+      const {appendUserArray, toggleCreateCert} = this.props
+      this.certPromise(true)
+        .then(cert => {
+          return appendUserArray('certificates', cert.id)
+        })
+        .then(() => {
+          toggleCreateCert()
+        })
+    }
+
+    this.certPromise = (markGranted) => {
+      const {user, createCertificate, mini} = this.props
+      const {name, icon, description, note} = this.state
+      const granter = mini ? 'Self' : this.props.user.data.displayNames[0]
+      return createCertificate(
+        user.id,
+        [description],
+        granter,
+        icon && [icon],
+        name,
+        [{
+          date: Date.now(),
+          msg: note
+        }],
+        markGranted)
+    }
+
+    this.createCert = () => {
+      this.certPromise(false)
+        .then(cert => {
+          window.location = `/certificates/${cert.id}`
+        })
     }
   }
 
-  onChooseImage = () => {
-    trackEvent('CHOOSE_CERT_IMAGE')
-    this.setState({uploading: true})
-  }
-
-  onUploadImage = ({url}) => {
-    this.updateCert('icon', [url])
-    this.setState({uploading: false})
-  }
-
-  onCertForChange = (val) => {
-    this.setState({certFor: val})
-  }
-
-  createSelfCert = () => {
-    const {appendUserArray, toggleCreateCert} = this.props
-    this.certPromise(true)
-      .then(cert => {
-        return appendUserArray('certificates', cert.id)
-      })
-      .then(() => {
-        toggleCreateCert()
-      })
-  }
-
-  certPromise = (markGranted) => {
-    const {user, createCertificate, mini} = this.props
-    const {name, icon, description, note} = this.state
-    const granter = mini ? 'Self' : this.props.user.data.displayNames[0]
-    return createCertificate(
-      user.id,
-      [description],
-      granter,
-      icon && [icon],
-      name,
-      [{
-        date: Date.now(),
-        msg: note,
-      }],
-      markGranted)
-  }
-
-  createCert = () => {
-    this.certPromise(false)
-      .then(cert => {
-        window.location = `/certificates/${cert.id}`
-      })
-  }
-
-  render() {
+  render () {
     const {name, icon, description, note} = this.state
     const {user, logout, setting, mini} = this.props
 
     if (!user.id) {
-      return <CircularProgress/>
+      return <CircularProgress />
     }
 
     return <div id='createCertificate'>
@@ -94,7 +99,7 @@ class CreateCertificate extends Component {
         <Navbar
           user={user}
           logout={logout}
-          setting={setting}/>
+          setting={setting} />
       }
       <div style={styles.container}>
         {
@@ -116,22 +121,22 @@ class CreateCertificate extends Component {
               description_array: [description],
               notes: [{
                 date: Date.now(),
-                msg: note,
+                msg: note
               }],
-              granter: mini ? 'Self' : this.props.user.data.displayNames[0],
+              granter: mini ? 'Self' : this.props.user.data.displayNames[0]
             }}
             draggable={false}
-            expanded={true}
-            showIconUpload={true}
-            onUploadImage={this.onUploadImage}/>
+            expanded
+            showIconUpload
+            onUploadImage={this.onUploadImage} />
         </div>
         <TextField
           style={styles.textfield}
           value={this.state.name}
           onChange={(e) => this.updateCert('name', e.target.value)}
-          floatingLabelText="Title"
+          floatingLabelText='Title'
           />
-        <div style={styles.counter}>{25 - this.state.name.length}</div><br/>
+        <div style={styles.counter}>{25 - this.state.name.length}</div><br />
         <div style={styles.description}>
           An identity that can be shared with others, such as "Lawyer" or "Dog Lover".
         </div>
@@ -139,7 +144,7 @@ class CreateCertificate extends Component {
           style={styles.textfield}
           value={this.state.description}
           onChange={(e) => this.updateCert('description', e.target.value)}
-          floatingLabelText="Description"
+          floatingLabelText='Description'
           />
         <div style={styles.description}>
           A more detailed explanation, such as
@@ -153,7 +158,7 @@ class CreateCertificate extends Component {
               style={styles.textfield}
               value={this.state.note}
               onChange={(e) => this.updateCert('note', e.target.value)}
-              floatingLabelText="Note"
+              floatingLabelText='Note'
               />
             <div style={styles.description}>
               An optional note about why this badge was granted.
@@ -165,7 +170,7 @@ class CreateCertificate extends Component {
             labelStyle={styles.buttonLabel}
             backgroundColor={indigo500}
             label={'CREATE BADGE'}
-            onClick={mini ? this.createSelfCert : this.createCert}/>
+            onClick={mini ? this.createSelfCert : this.createCert} />
         </div>
       </div>
     </div>
@@ -177,31 +182,31 @@ export default CreateCertificate
 const styles = {
   certPreview: {
     lineHeight: '20px',
-    width: 250,
+    width: 250
   },
   container: {
     display: 'flex',
     alignItems: 'center',
-    flexDirection: 'column',
+    flexDirection: 'column'
   },
   counter: {
     marginLeft: 280,
     fontSize: 12,
-    color: '#008000',
+    color: '#008000'
   },
   description: {
     maxWidth: 290,
     color: '#999',
     fontSize: 14,
-    fontStyle: 'italic',
+    fontStyle: 'italic'
   },
   textfield: {
-    width: 290,
+    width: 290
   },
   createButton: {
-    margin: 30,
+    margin: 30
   },
   buttonLabel: {
-    color: '#fff',
-  },
+    color: '#fff'
+  }
 }

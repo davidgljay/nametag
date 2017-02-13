@@ -16,7 +16,7 @@ const mainReducer = combineReducers({
   messages,
   reactions,
   userNametags,
-  nametagEdits,
+  nametagEdits
 })
 
 export default mainReducer

@@ -7,15 +7,15 @@ storiesOf('ChooseNorms', module)
     <ChooseNorms
       addNorm={action('addNorm')}
       removeNorm={action('removeNorm')}
-      normsObj={{}}/>
+      normsObj={{}} />
   )
 .add('with predefined norms', () =>
-    <ChooseNorms
-      addNorm={action('addNorm')}
-      removeNorm={action('removeNorm')}
-      normsObj={{
-        1: 'stuff',
-        2: 'things',
-        5: 'I\'m a custom norm.',
-      }}/>
+  <ChooseNorms
+    addNorm={action('addNorm')}
+    removeNorm={action('removeNorm')}
+    normsObj={{
+      1: 'stuff',
+      2: 'things',
+      5: 'I\'m a custom norm.'
+    }} />
   )

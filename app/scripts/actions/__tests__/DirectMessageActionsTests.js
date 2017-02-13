@@ -24,24 +24,24 @@ describe('Message Actions', () => {
     store = mockStore({
       rooms: {
         abc: {
-          name: 'stuff',
-        },
+          name: 'stuff'
+        }
       },
       nametags: {
         def: {
           id: 'def',
           name: 'cornelius',
-          room: 'abc',
-        },
+          room: 'abc'
+        }
       },
       userNametags: {
         abc: {
-          nametag: 'def',
-        },
+          nametag: 'def'
+        }
       },
       user: {
-        id: '123',
-      },
+        id: '123'
+      }
     })
     calls = []
   })
@@ -52,7 +52,7 @@ describe('Message Actions', () => {
       let message = {
         room: 'abc',
         text: 'd cornelius This is a message',
-        date: 'tuesday',
+        date: 'tuesday'
       }
       hz.mockReturnValue(mockHz(result, calls)())
       return actions.postDirectMessage(message)(store.dispatch, store.getState).then(
@@ -60,7 +60,7 @@ describe('Message Actions', () => {
           expect(id).toEqual({'id': '123'})
           expect(calls[1]).toEqual({
             type: 'upsert',
-            req: {...message, recipient: 'def', text: 'This is a message'},
+            req: {...message, recipient: 'def', text: 'This is a message'}
           })
         }
       )
@@ -72,7 +72,7 @@ describe('Message Actions', () => {
       let calls2 = []
       let results = [
         {msg: 'hi there', room: 'abc', id: '123', author: 'auser'},
-        {msg: 'well hello', room: 'abc', id: '456', author: 'buser'},
+        {msg: 'well hello', room: 'abc', id: '456', author: 'buser'}
       ]
       hz.mockReturnValueOnce(mockHz(results, calls)())
       hz.mockReturnValueOnce(mockHz(results, calls2)())

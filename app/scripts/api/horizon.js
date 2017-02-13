@@ -2,7 +2,7 @@ import errorLog from '../utils/errorLog'
 
 export const hz = Horizon()
 
-export function hzAuth(provider) {
+export function hzAuth (provider) {
   let promise
   window.localStorage.setItem('postAuth', window.location)
   if (!hz.hasAuthToken()) {
@@ -19,7 +19,7 @@ export function hzAuth(provider) {
   return promise
 }
 
-export function getAuth() {
+export function getAuth () {
   if (hz.hasAuthToken()) {
     return new Promise((resolve, reject) => {
       hz.currentUser().fetch().subscribe((user) => {
@@ -30,6 +30,6 @@ export function getAuth() {
   return new Promise((resolve) => resolve(false))
 }
 
-export function unAuth() {
+export function unAuth () {
   Horizon.clearAuthTokens()
 }

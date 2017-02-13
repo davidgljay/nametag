@@ -19,7 +19,7 @@ const app = express()
 const httpsServer = https.createServer({
   key: fs.readFileSync(path.join(__dirname, '..', '..', '.keys', 'privkey.pem')),
   cert: fs.readFileSync(path.join(__dirname, '..', '..', '.keys', 'cert.pem')),
-  ca: fs.readFileSync(path.join(__dirname, '..', '..', '.keys', 'chain.pem')),
+  ca: fs.readFileSync(path.join(__dirname, '..', '..', '.keys', 'chain.pem'))
 }, app).listen(8181)
 
 /* Connect to Horizon */
@@ -35,8 +35,8 @@ const options = {
     success_redirect: '/',
     create_new_users: true,
     new_user_group: 'authenticated',
-    token_secret: config.token_secret,
-  },
+    token_secret: config.token_secret
+  }
 }
 const horizonServer = horizon(httpsServer, options)
 
@@ -54,10 +54,9 @@ app.use(bodyParser.json())
 app.use('/public', express.static(path.join('/usr', 'app', 'public')))
 
 /* Serve index.html */
-app.get('*', (req, res) => {
+app.get('*', (req, res, next) => {
   res.sendFile(path.join('/usr', 'app', 'public', 'index.html'))
 })
-
 
 /* Upload an image and return the url of that image on S3 */
 app.post('/api/images',

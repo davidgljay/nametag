@@ -9,17 +9,17 @@ import { assertCompletes,
          compareWithoutVersion,
          compareSetsWithoutVersion } from './utils'
 
-export default function insertSuite(getData) {
+export default function insertSuite (getData) {
   return () => {
-  let data
+    let data
 
-  before(() => {
-    data = getData()
-  })
+    before(() => {
+      data = getData()
+    })
 
   // The `insert` command stores documents in the database, and errors if
   // the documents already exist.
-  it('stores documents in db, errors if documents already exist', assertErrors(() =>
+    it('stores documents in db, errors if documents already exist', assertErrors(() =>
     data.insert({ id: 1, a: 1, b: 1 }).toArray()
       // Should return an array with an ID of the inserted
       // document.
@@ -36,10 +36,10 @@ export default function insertSuite(getData) {
   // If we insert a document without an ID, the ID is generated for us.
   // Let's run the same test as above (insert the document and then
   // attempt to overwrite it), but have the ID be generated for us.
-  it(`generates ids if documents don't already have one`, assertErrors(() => {
-    let new_id
+    it(`generates ids if documents don't already have one`, assertErrors(() => {
+      let new_id
 
-    return data.insert({ a: 1, b: 1 }).toArray()
+      return data.insert({ a: 1, b: 1 }).toArray()
       // should return an array with an ID of the inserted document.
       .do(res => {
         assert.isArray(res)
@@ -56,31 +56,31 @@ export default function insertSuite(getData) {
     }, /The document already exists/
   ))
 
-  it('fails if null is passed', assertThrows(
+    it('fails if null is passed', assertThrows(
     'The argument to insert must be non-null',
     () => data.insert(null)
   ))
 
-  it('fails if undefined is passed', assertThrows(
+    it('fails if undefined is passed', assertThrows(
     'The 1st argument to insert must be defined',
     () => data.insert(undefined)
   ))
 
-  it('fails if given no argument', assertThrows(
+    it('fails if given no argument', assertThrows(
     'insert must receive exactly 1 argument',
     () => data.insert()
   ))
 
   // The `insert` command allows storing multiple documents in one call.
   // Let's insert a few kinds of documents and make sure we get them back.
-  it('can store multiple documents in one call', assertCompletes(() => {
-    let new_id_0, new_id_1
+    it('can store multiple documents in one call', assertCompletes(() => {
+      let new_id_0, new_id_1
 
-    return data.insert([
+      return data.insert([
         {},
         { a: 1 },
-        { id: 1, a: 1 },
-    ]).toArray()
+        { id: 1, a: 1 }
+      ]).toArray()
       .do(res => {
         // should return an array with the IDs of the documents in
         // order, including the generated IDS.
@@ -100,13 +100,13 @@ export default function insertSuite(getData) {
       .do(res => compareSetsWithoutVersion(res, [
         { id: new_id_0 },
         { id: new_id_1, a: 1 },
-        { id: 1, a: 1 },
+        { id: 1, a: 1 }
       ]))
-  }))
+    }))
 
   // If any operation in a batch insert fails, everything is reported as a
   // failure.
-  it('gets an Error object if an operation in a batch fails', assertCompletes(() =>
+    it('gets an Error object if an operation in a batch fails', assertCompletes(() =>
     // Lets insert a document that will trigger a duplicate error when we
     // attempt to reinsert it
     data.insert({ id: 2, a: 2 })
@@ -120,7 +120,7 @@ export default function insertSuite(getData) {
       .mergeMap(() => data.insert([
         { id: 1, a: 1 },
         { id: 2, a: 2 },
-        { id: 3, a: 3 },
+        { id: 3, a: 3 }
       ]))
       .toArray()
       .do(results => {
@@ -132,14 +132,14 @@ export default function insertSuite(getData) {
 
   // Let's trigger a failure in an insert batch again, this time by making
   // one of the documents `null`.
-  it('fails if any member of batch is null', assertErrors(() =>
+    it('fails if any member of batch is null', assertErrors(() =>
     data.insert([ { a: 1 }, null, { id: 1, a: 1 } ]),
     /must be an object/
   ))
 
   // Inserting an empty batch of documents is ok, and returns an empty
   // array.
-  it('can store empty batches', assertCompletes(() =>
+    it('can store empty batches', assertCompletes(() =>
     data.insert([])
       .do(res => {
         // should return an array with the IDs of the documents
@@ -148,4 +148,5 @@ export default function insertSuite(getData) {
         assert.lengthOf(res, 0)
       })
   ))
-}}
+  }
+}

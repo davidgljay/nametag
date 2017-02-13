@@ -5,11 +5,11 @@ import VisibilityOptions from '../VisibilityOptions'
 storiesOf('VisibilityOptions', module)
   .add('public', () =>
     <VisibilityOptions
-      isPublic={true}
+      isPublic
       setPublic={
         (val) =>
           () => action('setPublic')(val)
-      }/>
+      } />
   )
   .add('private', () =>
     <VisibilityOptions
@@ -17,5 +17,5 @@ storiesOf('VisibilityOptions', module)
       setPublic={
         (val) =>
           () => action('setPublic')(val)
-      }/>
+      } />
   )

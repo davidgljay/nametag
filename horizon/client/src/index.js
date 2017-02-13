@@ -15,14 +15,14 @@ const defaultHost = typeof window !== 'undefined' && window.location &&
 const defaultSecure = typeof window !== 'undefined' && window.location &&
         window.location.protocol === 'https:' || false
 
-function Horizon({
+function Horizon ({
   host = defaultHost,
   secure = defaultSecure,
   path = 'horizon',
   lazyWrites = false,
   authType = 'unauthenticated',
   keepalive = 60,
-  WebSocketCtor = WebSocket,
+  WebSocketCtor = WebSocket
 } = {}) {
   // If we're in a redirection from OAuth, store the auth token for
   // this user in localStorage.
@@ -35,29 +35,29 @@ function Horizon({
     url,
     handshakeMaker: tokenStorage.handshake.bind(tokenStorage),
     keepalive,
-    WebSocketCtor,
+    WebSocketCtor
   })
 
   // Store whatever token we get back from the server when we get a
   // handshake response
   socket.handshake.subscribe({
-    next(handshake) {
+    next (handshake) {
       if (authType !== 'unauthenticated') {
         tokenStorage.set(handshake.token)
       }
     },
-    error(err) {
+    error (err) {
       if (/JsonWebTokenError|TokenExpiredError/.test(err.message)) {
         console.error('Horizon: clearing token storage since auth failed')
         tokenStorage.remove()
       }
-    },
+    }
   })
 
   // This is the object returned by the Horizon function. It's a
   // function so we can construct a collection simply by calling it
   // like horizon('my_collection')
-  function horizon(name) {
+  function horizon (name) {
     return new Collection(sendRequest, name, lazyWrites)
   }
 
@@ -100,7 +100,7 @@ function Horizon({
   horizon.utensils = {
     sendRequest,
     tokenStorage,
-    handshake: socket.handshake,
+    handshake: socket.handshake
   }
   Object.freeze(horizon.utensils)
 
@@ -116,7 +116,7 @@ function Horizon({
 
   // Sends a horizon protocol request to the server, and pulls the data
   // portion of the response out.
-  function sendRequest(type, options) {
+  function sendRequest (type, options) {
     // Both remove and removeAll use the type 'remove' in the protocol
     const normalizedType = type === 'removeAll' ? 'remove' : type
     return socket
@@ -125,7 +125,7 @@ function Horizon({
   }
 }
 
-function subscribeOrObservable(observable) {
+function subscribeOrObservable (observable) {
   return (...args) => {
     if (args.length > 0) {
       return observable.subscribe(...args)

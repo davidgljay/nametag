@@ -3,7 +3,7 @@ This is simply to avoid requiring the other methods in the module.
 
 MIT License © Sindre Sorhus
 */
-export default function(str) {
+export default function (str) {
   if (typeof str !== 'string') {
     return {}
   }

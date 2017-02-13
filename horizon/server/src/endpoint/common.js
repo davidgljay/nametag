@@ -1,10 +1,10 @@
-'use strict';
+'use strict'
 
 const reql_options = {
   timeFormat: 'raw',
-  binaryFormat: 'raw',
-};
+  binaryFormat: 'raw'
+}
 
 module.exports = {
-  reql_options,
-};
+  reql_options
+}

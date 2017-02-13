@@ -6,16 +6,14 @@ storiesOf('ModAction', module)
   .add('basic', () =>
     <ModAction
       close={action('close')}
-      author={
-        {
-          name : 'Test Author',
-        }
-      }
+      author={{
+        name: 'Test Author'
+      }}
       msgId='123'
       norms={
         [
           'Norm 1',
-          'Norm 2',
+          'Norm 2'
         ]
       }
       />

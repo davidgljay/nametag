@@ -3,11 +3,11 @@ import constants from '../constants'
 import errorLog from '../utils/errorLog'
 import trackEvent from '../utils/analytics'
 
-export function addUser(id, data) {
+export function addUser (id, data) {
   return {
     type: constants.ADD_USER,
     data,
-    id,
+    id
   }
 }
 
@@ -20,7 +20,7 @@ export function addUser(id, data) {
 * @returns
 *   Promise
 */
-export function providerAuth(provider) {
+export function providerAuth (provider) {
   return () => {
     trackEvent(`AUTH_${provider.toUpperCase()}`)
     return hzAuth(provider)
@@ -36,7 +36,7 @@ export function providerAuth(provider) {
 * @returns
 *   Promise
 */
-export function getUser() {
+export function getUser () {
   return (dispatch) => {
     return getAuth().then((user) => {
       if (user) {
@@ -63,7 +63,7 @@ export function getUser() {
 * @returns
 *   Function which accepts dispatch and logs the user out.
 */
-export function logout() {
+export function logout () {
   return (dispatch) => {
     trackEvent('LOGOUT')
     unAuth()
@@ -80,11 +80,11 @@ export function logout() {
 * @returns
 *   null
 */
-export function setting(option, value) {
+export function setting (option, value) {
   return {
     type: constants.USER_SETTING,
     option,
-    value,
+    value
   }
 }
 
@@ -97,12 +97,12 @@ export function setting(option, value) {
 * @returns
 *   null
 */
-export function appendUserArray(property, value) {
+export function appendUserArray (property, value) {
   return (dispatch) => {
     dispatch({
       type: constants.APPEND_USER_ARRAY,
       property,
-      value,
+      value
     })
     return new Promise((resolve, reject) => {
       hz.currentUser().fetch().subscribe(resolve, reject)
@@ -111,7 +111,7 @@ export function appendUserArray(property, value) {
       return new Promise((resolve, reject) => {
         const data = {
           ...data,
-          [property]: user.data[property] ? user.data[property].concat([value]) : [value],
+          [property]: user.data[property] ? user.data[property].concat([value]) : [value]
         }
         hz('users').update({id: user.id, data}).subscribe(resolve, reject)
       })

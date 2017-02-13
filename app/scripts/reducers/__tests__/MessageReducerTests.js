@@ -11,13 +11,13 @@ describe('Message reducer', () => {
           type: constants.ADD_MESSAGE,
           id: 1,
           message: {
-            msg: 'Test Message',
-          },
+            msg: 'Test Message'
+          }
         })
       expect(newState).toEqual({
         1: {
-          msg: 'Test Message',
-        },
+          msg: 'Test Message'
+        }
       })
     })
   })
@@ -29,23 +29,23 @@ describe('Message reducer', () => {
           messages: [
             {
               id: 1,
-              name: 'Test Message',
+              name: 'Test Message'
             },
             {
               id: 2,
-              name: 'Another Test Message',
-            },
-          ],
+              name: 'Another Test Message'
+            }
+          ]
         })
       expect(newState).toEqual({
         1: {
           id: 1,
-          name: 'Test Message',
+          name: 'Test Message'
         },
         2: {
           id: 2,
-          name: 'Another Test Message',
-        },
+          name: 'Another Test Message'
+        }
       })
     })
 
@@ -53,39 +53,39 @@ describe('Message reducer', () => {
       let newState = messageReducer({
         1: {
           id: 1,
-          text: 'An old message',
+          text: 'An old message'
         },
         3: {
           id: 3,
-          text: 'I shouldn\'t change',
-        },
+          text: 'I shouldn\'t change'
+        }
       },
         {
           type: constants.ADD_MESSAGE_ARRAY,
           messages: [
             {
               id: 1,
-              text: 'Test Message',
+              text: 'Test Message'
             },
             {
               id: 2,
-              text: 'Another Test Message',
-            },
-          ],
+              text: 'Another Test Message'
+            }
+          ]
         })
       expect(newState).toEqual({
         1: {
           id: 1,
-          text: 'Test Message',
+          text: 'Test Message'
         },
         2: {
           id: 2,
-          text: 'Another Test Message',
+          text: 'Another Test Message'
         },
         3: {
           id: 3,
-          text: 'I shouldn\'t change',
-        },
+          text: 'I shouldn\'t change'
+        }
       })
     })
   })
@@ -94,18 +94,18 @@ describe('Message reducer', () => {
     it('should save a message', () => {
       let newState = messageReducer({
         1: {
-          saved: false,
-        },
+          saved: false
+        }
       },
         {
           type: constants.SAVE_MESSAGE,
           id: 1,
-          saved: true,
+          saved: true
         })
       expect(newState).toEqual({
         1: {
-          saved: true,
-        },
+          saved: true
+        }
       })
     })
   })

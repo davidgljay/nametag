@@ -10,29 +10,29 @@ import isPlainObject from 'is-plain-object'
 
 // Unlike normal queries' .watch(), we don't support rawChanges: true
 // for aggregates
-function checkWatchArgs(args) {
+function checkWatchArgs (args) {
   if (args.length > 0) {
     throw new Error(".watch() on aggregates doesn't support arguments!")
   }
 }
 
-function isTerm(term) {
+function isTerm (term) {
   return typeof term.fetch === 'function' &&
          typeof term.watch === 'function'
 }
 
-function isPromise(term) {
+function isPromise (term) {
   return typeof term.then === 'function'
 }
 
-function isObservable(term) {
+function isObservable (term) {
   return typeof term.subscribe === 'function' &&
          typeof term.lift === 'function'
 }
 
 // Whether an object is primitive. We consider functions
 // non-primitives, lump Dates and ArrayBuffers into primitives.
-function isPrimitive(value) {
+function isPrimitive (value) {
   if (value === null) {
     return true
   }
@@ -53,19 +53,19 @@ function isPrimitive(value) {
 
 // Simple wrapper for primitives. Just emits the primitive
 class PrimitiveTerm {
-  constructor(value) {
+  constructor (value) {
     this._value = value
   }
 
-  toString() {
+  toString () {
     return this._value.toString()
   }
 
-  fetch() {
+  fetch () {
     return Observable.of(this._value)
   }
 
-  watch(...watchArgs) {
+  watch (...watchArgs) {
     checkWatchArgs(watchArgs)
     return Observable.of(this._value)
   }
@@ -75,19 +75,19 @@ class PrimitiveTerm {
 // interface. Everything in an aggregate tree should be one of these
 // term-likes
 class ObservableTerm {
-  constructor(value) {
+  constructor (value) {
     this._value = value
   }
 
-  toString() {
+  toString () {
     return this._value.toString()
   }
 
-  fetch() {
+  fetch () {
     return Observable.from(this._value)
   }
 
-  watch(...watchArgs) {
+  watch (...watchArgs) {
     checkWatchArgs(watchArgs)
     return Observable.from(this._value)
   }
@@ -95,24 +95,24 @@ class ObservableTerm {
 
 // Handles aggregate syntax like [ query1, query2 ]
 class ArrayTerm {
-  constructor(value) {
+  constructor (value) {
     // Ensure this._value is an array of Term
     this._value = value.map(x => aggregate(x))
   }
 
-  _reducer(...args) {
+  _reducer (...args) {
     return args
   }
 
-  _query(operation) {
+  _query (operation) {
     return this._value.map(x => x[operation]())
   }
 
-  toString() {
+  toString () {
     return `[ ${this._query('toString').join(', ')} ]`
   }
 
-  fetch() {
+  fetch () {
     if (this._value.length === 0) {
       return Observable.empty()
     }
@@ -121,7 +121,7 @@ class ArrayTerm {
     return Observable.forkJoin(...qs, this._reducer)
   }
 
-  watch(...watchArgs) {
+  watch (...watchArgs) {
     checkWatchArgs(watchArgs)
 
     if (this._value.length === 0) {
@@ -134,29 +134,29 @@ class ArrayTerm {
 }
 
 class AggregateTerm {
-  constructor(value) {
+  constructor (value) {
     // Ensure this._value is an array of [ key, Term ] pairs
     this._value = Object.keys(value).map(k => [ k, aggregate(value[k]) ])
   }
 
-  _reducer(...pairs) {
+  _reducer (...pairs) {
     return pairs.reduce((prev, [ k, x ]) => {
       prev[k] = x
       return prev
     }, {})
   }
 
-  _query(operation) {
+  _query (operation) {
     return this._value.map(
       ([ k, term ]) => term[operation]().map(x => [ k, x ]))
   }
 
-  toString() {
+  toString () {
     const s = this._value.map(([ k, term ]) => `'${k}': ${term}`)
     return `{ ${s.join(', ')} }`
   }
 
-  fetch() {
+  fetch () {
     if (this._value.length === 0) {
       return Observable.of({})
     }
@@ -165,7 +165,7 @@ class AggregateTerm {
     return Observable.forkJoin(...qs, this._reducer)
   }
 
-  watch(...watchArgs) {
+  watch (...watchArgs) {
     checkWatchArgs(watchArgs)
 
     if (this._value.length === 0) {
@@ -177,7 +177,7 @@ class AggregateTerm {
   }
 }
 
-export function aggregate(spec) {
+export function aggregate (spec) {
   if (isTerm(spec)) {
     return spec
   }
@@ -197,6 +197,6 @@ export function aggregate(spec) {
   throw new Error(`Can't make an aggregate with ${spec} in it`)
 }
 
-export function model(constructor) {
+export function model (constructor) {
   return (...args) => aggregate(constructor(...args))
 }

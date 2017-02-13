@@ -19,49 +19,61 @@ const onHomeClick = () => {
 }
 
 class Navbar extends Component {
-  state = {
-    open: false,
+
+  constructor (props) {
+    super(props)
+    this.state = {
+      open: false
+    }
+
+    this.propTypes = {
+      user: PropTypes.shape({
+        id: PropTypes.string
+      }),
+      logout: PropTypes.func.isRequired,
+      setting: PropTypes.func.isRequired
+    }
   }
 
-  render() {
+  render () {
     const mobile = window.innerWidth <= 800
     const auth = <div style={styles.buttons}>
-        {
-        this.props.user && this.props.user.id ?
-        <div>
+      {
+        this.props.user && this.props.user.id
+        ? <div>
           <FlatButton
             style={styles.button}
-            onClick={onHomeClick} label='HOME'/>
+            onClick={onHomeClick} label='HOME' />
           <FlatButton
             style={styles.button}
-            onClick={onCreateRoomClick} label='CREATE ROOM'/>
+            onClick={onCreateRoomClick} label='CREATE ROOM' />
           <FlatButton
             style={styles.button}
-            onClick={onCreateCertClick} label='CREATE BADGE'/>
+            onClick={onCreateCertClick} label='CREATE BADGE' />
           <FlatButton
             style={styles.button}
             onClick={() => this.props.logout()}
-            label='LOG OUT'/>
+            label='LOG OUT' />
         </div>
           : <FlatButton
             style={styles.button}
             onClick={() => this.props.setting('showLogin', true)}
-            label='LOG IN'/>
+            label='LOG IN' />
         }
-      </div>
-    return  <div>
+    </div>
+    return <div>
       <AppBar
-        title="Nametag"
-        style = {styles.appBar}
+        title='Nametag'
+        style={styles.appBar}
         onTitleTouchTap={onHomeClick}
         iconElementRight={mobile ? null : auth}
-        onLeftIconButtonTouchTap={() => this.setState({open: true})}/>
+        onLeftIconButtonTouchTap={() => this.setState({open: true})} />
       <NavDrawer
         open={this.state.open}
         logout={this.props.logout}
         setting={this.props.setting}
         user={this.props.user}
-        setOpen={(open)=>this.setState({open})}/>
+        setOpen={(open) => this.setState({open})} />
     </div>
   }
 }
@@ -72,19 +84,19 @@ const styles = {
   appBar: {
     fontWeight: 'bold',
     background: indigo500,
-    cursor: 'pointer',
+    cursor: 'pointer'
   },
   button: {
     color: '#fff',
-    marginTop: 6,
+    marginTop: 6
 
   },
   buttons: {
     [mobile]: {
-      display: 'none',
-    },
+      display: 'none'
+    }
   },
   drawerTitle: {
-    marginLeft: 15,
-  },
+    marginLeft: 15
+  }
 }

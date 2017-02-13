@@ -3,10 +3,10 @@ import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
 
 const VisibilityOptions = (props) => <div style={styles.chooseVis}>
-    <div style={styles.visText}>
-      {
-        props.isPublic ?
-        <p>
+  <div style={styles.visText}>
+    {
+        props.isPublic
+        ? <p>
           <IconButton onClick={props.setPublic(false)} style={styles.button}>
             <FontIcon
               className='material-icons'>
@@ -15,8 +15,7 @@ const VisibilityOptions = (props) => <div style={styles.chooseVis}>
           </IconButton>
           Visible to everyone in the room.
         </p>
-        :
-        <p>
+        : <p>
           <IconButton onClick={props.setPublic(true)} style={styles.button}>
             <FontIcon
               className='material-icons'>
@@ -26,20 +25,20 @@ const VisibilityOptions = (props) => <div style={styles.chooseVis}>
           Visible only to the author of this message.
         </p>
       }
-    </div>
   </div>
+</div>
 
 export default VisibilityOptions
 
 const styles = {
   chooseVis: {
     marginTop: 10,
-    marginBottom: 20,
+    marginBottom: 20
   },
   visText: {
-    fontStyle: 'italic',
+    fontStyle: 'italic'
   },
   button: {
-    verticalAlign: 'middle',
-  },
+    verticalAlign: 'middle'
+  }
 }

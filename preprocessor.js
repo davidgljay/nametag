@@ -1,8 +1,8 @@
-var ReactTools = require('react-tools');
+const ReactTools = require('react-tools')
 module.exports = {
-    process: function(src) {
-        return ReactTools.transform(src, {
-            harmony: true
-        });
-    }
-};
+  process: function (src) {
+    return ReactTools.transform(src, {
+      harmony: true
+    })
+  }
+}

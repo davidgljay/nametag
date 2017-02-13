@@ -11,7 +11,7 @@
  in production systems. You should add an explicit limit.
 */
 
-export default function watchRewrites(self, query) {
+export default function watchRewrites (self, query) {
   // The only query type at the moment that doesn't get these rewrites
   // is find, since it returns a single document
   if (query.find === undefined &&

@@ -19,7 +19,7 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import mainReducer from './reducers'
 
-import { Router, Route, Link, browserHistory } from 'react-router'
+import { Router, Route, browserHistory } from 'react-router'
 
 injectTapEventPlugin()
 
@@ -33,7 +33,7 @@ let store = createStore(mainReducer, compose(
 
 class Nametag extends Component {
 
-  componentWillMount() {
+  componentWillMount () {
     store.dispatch(getUser())
 
     // Handle funky FB login hash
@@ -49,23 +49,23 @@ class Nametag extends Component {
     }
   }
 
-  getChildContext() {
+  getChildContext () {
     return {
-      dispatch: store.dispatch,
+      dispatch: store.dispatch
     }
   }
 
-  render() {
+  render () {
     return <Provider store={store}>
       <StyleRoot>
         <MuiThemeProvider>
           <Router history={browserHistory}>
-            <Route path="/" component={RoomCards} />
-            <Route path="/rooms" component={RoomCards}/>
-            <Route path="/rooms/create" component={CreateRoom}/>
-            <Route path="/rooms/:roomId" component={Room}/>
-            <Route path="/certificates/create" component={CreateCertificate}/>
-            <Route path="/certificates/:certificateId" component={CertificateDetail}/>
+            <Route path='/' component={RoomCards} />
+            <Route path='/rooms' component={RoomCards} />
+            <Route path='/rooms/create' component={CreateRoom} />
+            <Route path='/rooms/:roomId' component={Room} />
+            <Route path='/certificates/create' component={CreateCertificate} />
+            <Route path='/certificates/:certificateId' component={CertificateDetail} />
           </Router>
         </MuiThemeProvider>
       </StyleRoot>
@@ -74,9 +74,9 @@ class Nametag extends Component {
 }
 
 Nametag.childContextTypes = {
-  dispatch: PropTypes.func,
+  dispatch: PropTypes.func
 }
 
 const DecoratedNametag = Radium(DragDropContext(TouchBackend({ enableMouseEvents: true }))(Nametag))
 
-ReactDOM.render(<DecoratedNametag/>, mountNode)
+ReactDOM.render(<DecoratedNametag />, mountNode)

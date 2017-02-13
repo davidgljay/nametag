@@ -13,8 +13,8 @@ describe('Room reducer', () => {
         type: constants.ADD_ROOM,
         id: 1,
         room: {
-          title: 'Test Room',
-        },
+          title: 'Test Room'
+        }
       }
     })
 
@@ -27,33 +27,33 @@ describe('Room reducer', () => {
       let newState = roomReducer(state, action)
       expect(newState).toEqual({
         1: {
-          title: 'Test Room',
-        },
+          title: 'Test Room'
+        }
       })
     })
 
     it('should update a room rather than creating a new one', () => {
       state = {
-        1: {title: 'Update Me'},
+        1: {title: 'Update Me'}
       }
       let newState = roomReducer(state, action)
       expect(newState).toEqual({
         1: {
-          title: 'Test Room',
-        },
+          title: 'Test Room'
+        }
       })
     })
 
     it('should preserve existing props if they are not overwritten', () => {
       state = {
-        1: {tags: ['dinosaurs']},
+        1: {tags: ['dinosaurs']}
       }
       let newState = roomReducer(state, action)
       expect(newState).toEqual({
         1: {
           title: 'Test Room',
-          tags: ['dinosaurs'],
-        },
+          tags: ['dinosaurs']
+        }
       })
     })
   })
@@ -66,23 +66,23 @@ describe('Room reducer', () => {
           rooms: [
             {
               id: 1,
-              title: 'Test Room',
+              title: 'Test Room'
             },
             {
               id: 2,
-              title: 'Another Test Room',
-            },
-          ],
+              title: 'Another Test Room'
+            }
+          ]
         })
       expect(newState).toEqual({
         1: {
           id: 1,
-          title: 'Test Room',
+          title: 'Test Room'
         },
         2: {
           id: 2,
-          title: 'Another Test Room',
-        },
+          title: 'Another Test Room'
+        }
       })
     })
   })
@@ -91,19 +91,19 @@ describe('Room reducer', () => {
     it('should set the room nametag count', () => {
       let newState = roomReducer(
         {
-          1: { title: 'Test Room'},
+          1: {title: 'Test Room'}
         },
         {
           type: constants.SET_ROOM_NT_COUNT,
           room: 1,
-          nametagCount: 3,
+          nametagCount: 3
         })
       expect(newState).toEqual(
         {
           1: {
             title: 'Test Room',
-            nametagCount: 3,
-          },
+            nametagCount: 3
+          }
         })
     })
   })
@@ -114,14 +114,14 @@ describe('Room reducer', () => {
     beforeEach(() => {
       state = {
         1: {
-          title: 'Test Room',
-        },
+          title: 'Test Room'
+        }
       }
       action = {
         type: constants.SET_ROOM_PROP,
         room: 1,
         property: 'creator',
-        value: 'Dinosaur',
+        value: 'Dinosaur'
       }
     })
 
@@ -129,8 +129,8 @@ describe('Room reducer', () => {
       roomReducer(state, action)
       expect(state).toEqual({
         1: {
-          title: 'Test Room',
-        },
+          title: 'Test Room'
+        }
       })
     })
 
@@ -139,8 +139,8 @@ describe('Room reducer', () => {
       expect(newState).toEqual({
         1: {
           title: 'Test Room',
-          creator: 'Dinosaur',
-        },
+          creator: 'Dinosaur'
+        }
       })
     })
   })
@@ -152,13 +152,13 @@ describe('Room reducer', () => {
       state = {
         1: {
           title: 'Test Room',
-          messages: ['123'],
-        },
+          messages: ['123']
+        }
       }
       action = {
         type: constants.ADD_ROOM_MESSAGE,
         room: 1,
-        messageId: '456',
+        messageId: '456'
       }
     })
 
@@ -167,8 +167,8 @@ describe('Room reducer', () => {
       expect(state).toEqual({
         1: {
           title: 'Test Room',
-          messages: ['123'],
-        },
+          messages: ['123']
+        }
       })
     })
 

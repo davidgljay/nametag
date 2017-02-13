@@ -11,101 +11,105 @@ import Checkbox from 'material-ui/Checkbox'
 import TextField from 'material-ui/TextField'
 
 class ModAction extends Component {
-  state = {
-    normChecks: [],
-    isPublic: false,
-    note: '',
-    escalated: false,
-  }
 
-  showNorm = (norm, i) => {
-    return <ListItem
-        leftCheckbox={<Checkbox checked={this.state.normChecks[i]}/>}
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      normChecks: [],
+      isPublic: false,
+      note: '',
+      escalated: false
+    }
+
+    this.showNorm = (norm, i) => {
+      return <ListItem
+        leftCheckbox={<Checkbox checked={this.state.normChecks[i]} />}
         primaryText={norm}
         key={i}
-        onClick={this.checkNorm(i)}>
-      </ListItem>
-  }
+        onClick={this.checkNorm(i)} />
+    }
 
-  checkNorm = (normIndex) => {
-    let self = this
-    return (e) => {
+    this.checkNorm = (normIndex) => {
+      let self = this
+      return (e) => {
+        e.preventDefault()
+        // Need to setTimeout so that preventDefault doesn't break checkboxes
+        // This is a React-recommended hack.
+        setTimeout(() => {
+          self.setState((previousState) => {
+            previousState.normChecks[normIndex] = !previousState.normChecks[normIndex]
+            return previousState
+          })
+        }, 1)
+      }
+    }
+
+    this.remindOfNorms = () => {
+      const {author, text, close, postMessage} = this.props
+      const {normChecks, isPublic, note} = this.state
+      const {room, userNametag, mod} = this.context
+      const isMod = room.mod === userNametag.nametag
+
+      if (normChecks.length === 0) {
+        this.setState({alert: 'Please check at least one norm.'})
+        return
+      }
+
+      const norms = room.norms.filter((norm, i) => normChecks[i])
+
+      let message
+      if (isMod) {
+        message = isPublic ? `@${author.name} \n` : `d ${author.name} \n`
+      } else {
+        message = `d ${mod.name} \n`
+      }
+      message += isMod ? '### Note from the Moderator\n\n'
+        : `### Message Report\n\n`
+      message += `\n> ${text}\n`
+      message += `${norms.reduce((msg, norm) => `${msg}* **${norm}** \n`, '')}\n`
+      message += `*${note}*`
+      let modAction = {
+        type: 'mod_action',
+        text: message,
+        timestamp: Date.now(),
+        author: userNametag.nametag,
+        room: room.id
+      }
+      postMessage(modAction)
+      .catch((err) => {
+        this.setState({alert: 'Error posting reminder'})
+        errorLog('Error putting mod Action')(err)
+      })
+      close()
+    }
+
+    this.setPublic = (isPublic) => {
+      return (e) => {
+        e.preventDefault()
+        this.setState({isPublic})
+      }
+    }
+
+    this.removeUser = () => {
+      // TODO: Add functionality to remove user.
+    }
+
+    this.censorMessage = () => {
+      // TODO: Add functionality to censor a message
+    }
+
+    this.addNote = (e) => {
       e.preventDefault()
-      // Need to setTimeout so that preventDefault doesn't break checkboxes
-      // This is a React-recommended hack.
-      setTimeout(() => {
-        self.setState((previousState) => {
-          previousState.normChecks[normIndex] = !previousState.normChecks[normIndex]
-          return previousState
-        })
-      }, 1)
+      this.setState({note: e.target.value})
+    }
+
+    this.notifyBadge = () => {
+      // TODO:Notify badge granters
     }
   }
 
-  remindOfNorms = () => {
-    const {author, text, close, postMessage} = this.props
-    const {normChecks, isPublic, note} = this.state
-    const {room, userNametag, mod} = this.context
-    const isMod = room.mod === userNametag.nametag
-
-    if (normChecks.length === 0) {
-      this.setState({alert: 'Please check at least one norm.'})
-      return
-    }
-
-    const norms = room.norms.filter((norm, i) => normChecks[i])
-
-    let message
-    if (isMod) {
-      message = isPublic ? `@${author.name} \n` : `d ${author.name} \n`
-    } else {
-      message = `d ${mod.name} \n`
-    }
-    message += isMod ? '### Note from the Moderator\n\n'
-      : `### Message Report\n\n`
-    message += `\n> ${text}\n`
-    message += `${norms.reduce((msg, norm) => `${msg}* **${norm}** \n`, '')}\n`
-    message += `*${note}*`
-    let modAction = {
-      type: 'mod_action',
-      text: message,
-      timestamp: Date.now(),
-      author: userNametag.nametag,
-      room: room.id,
-    }
-    postMessage(modAction)
-    .catch((err) => {
-      this.setState({alert: 'Error posting reminder'})
-      errorLog('Error putting mod Action')(err)
-    })
-    close()
-  }
-
-  setPublic = (isPublic) => {
-    return (e) => {
-      e.preventDefault()
-      this.setState({isPublic})
-    }
-  }
-
-  removeUser = () => {
-    // TODO: Add functionality to remove user.
-  }
-
-  censorMessage = () => {
-    // TODO: Add functionality to censor a message
-  }
-
-  addNote = (e)  => {
-    e.preventDefault()
-    this.setState({note: e.target.value})
-  }
-
-  notifyBadge = () => {
-    // TODO:Notify badge granters
-  }
-
-  render() {
+  render () {
     // TODO: I could add complexity here, cite multiple posts, etc.
     // TODO: Create a system for notifying badgeholders.
 
@@ -133,21 +137,21 @@ class ModAction extends Component {
       <TextField
         style={styles.addNote}
         onChange={this.addNote}
-        hintText="Add an optional note."
-        value={note}/>
+        hintText='Add an optional note.'
+        value={note} />
       {
         isMod && <VisOptions
-          isPublic = {isPublic}
-          setPublic = {this.setPublic}/>
+          isPublic={isPublic}
+          setPublic={this.setPublic} />
       }
-      <Alert alert={alert} alertType="danger"/>
+      <Alert alert={alert} alertType='danger' />
       <ModActionButtons
-          isMod = {isMod}
-          remindOfNorms = {this.remindOfNorms}
-          removeUser = {this.removeUser}
-          notifyBadge = {this.notifyBadge}
-          authorName = {author.name}
-          censorMessage = {this.censorMessage}
+        isMod={isMod}
+        remindOfNorms={this.remindOfNorms}
+        removeUser={this.removeUser}
+        notifyBadge={this.notifyBadge}
+        authorName={author.name}
+        censorMessage={this.censorMessage}
           />
     </Card>
   }
@@ -157,35 +161,35 @@ ModAction.propTypes = {
   msgId: PropTypes.string,
   close: PropTypes.func,
   author: PropTypes.object,
-  postMessage: PropTypes.func.isRequired,
+  postMessage: PropTypes.func.isRequired
 }
 
 ModAction.contextTypes = {
   room: PropTypes.object,
   userNametag: PropTypes.object,
-  mod: PropTypes.object,
+  mod: PropTypes.object
 }
 
 export default ModAction
 
 const styles = {
   title: {
-    marginLeft: 20,
+    marginLeft: 20
   },
   addNote: {
     width: 'inherit',
-    display: 'block',
+    display: 'block'
   },
   modAction: {
     maxWidth: 500,
     borderRadius: 6,
     padding: 10,
     marginTop: 20,
-    marginBottom: 20,
+    marginBottom: 20
   },
   closeButton: {
     float: 'right',
     padding: 0,
-    height: 'auto',
-  },
+    height: 'auto'
+  }
 }

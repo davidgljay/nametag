@@ -1,7 +1,10 @@
 const r = require('../../horizon/server/src/horizon.js').r
 
-const showPresence = (conn) => (err, nametag_presence) => {
-  const id = nametag_presence.new_val.id
+const showPresence = (conn) => (err, nametagPresence) => {
+  const id = nametagPresence.new_val.id
+  if (err) {
+    return
+  }
   r.db('nametag').table('nametags')
     .get(id)
     .update({present: true})
@@ -17,7 +20,7 @@ const showPresence = (conn) => (err, nametag_presence) => {
       ), 30000)
 }
 
-module.exports = (conn) =>  {
+module.exports = (conn) => {
   r.db('nametag').table('nametag_presence').changes().run(conn)
     .then((feed) => feed.each(showPresence(conn)))
 }

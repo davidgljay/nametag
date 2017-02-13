@@ -1,23 +1,29 @@
 import React, { Component, PropTypes } from 'react'
-import errorLog from '../../utils/errorLog'
 import Certificate from '../../containers/Certificate/CertificateContainer'
 import CreateCertificate from '../../containers/Certificate/CreateCertificateContainer'
-import {fetch} from '../../actions/CertificateActions'
 import FlatButton from 'material-ui/FlatButton'
 import {grey500} from 'material-ui/styles/colors'
 
-
 class UserCertificates extends Component {
 
-  state = {
-    showCreateCert: false,
+  constructor (props) {
+    super(props)
+
+    this.contextTypes = {
+      user: PropTypes.object,
+      dispatch: PropTypes.func
+    }
+
+    this.state = {
+      showCreateCert: false
+    }
+
+    this.onCreateCertClick = () => {
+      this.setState({showCreateCert: !this.state.showCreateCert})
+    }
   }
 
-  onCreateCertClick = () => {
-    this.setState({showCreateCert: !this.state.showCreateCert})
-  }
-
-  componentDidMount() {
+  componentDidMount () {
     if (!this.context.user ||
       !this.context.user.data ||
       !this.context.user.data.certificates) {
@@ -29,10 +35,9 @@ class UserCertificates extends Component {
     }
   }
 
-
-  render() {
-    return <div id="certificates" style={styles.container}>
-          {
+  render () {
+    return <div id='certificates' style={styles.container}>
+      {
             this.context.user &&
             this.context.user.data &&
             this.context.user.data.certificates &&
@@ -53,11 +58,11 @@ class UserCertificates extends Component {
               return <div key={certificateId}>
                 <Certificate
                   id={certificateId}
-                  draggable={true}/>
+                  draggable />
               </div>
             })
           }
-          {
+      {
             this.context.user &&
             this.context.user.data &&
             this.context.user.data.certificates &&
@@ -66,31 +71,26 @@ class UserCertificates extends Component {
               You do not currently have any badges, want to add some?
             </div>
           }
-          <FlatButton
-            label='ADD BADGE'
-            onClick={this.onCreateCertClick}/>
-          {
+      <FlatButton
+        label='ADD BADGE'
+        onClick={this.onCreateCertClick} />
+      {
             this.state.showCreateCert &&
             <CreateCertificate
-              mini={true}
-              toggleCreateCert={this.onCreateCertClick}/>
+              mini
+              toggleCreateCert={this.onCreateCertClick} />
           }
-        </div>
+    </div>
   }
-}
-
-UserCertificates.contextTypes = {
-  user: PropTypes.object,
-  dispatch: PropTypes.func,
 }
 
 export default UserCertificates
 
 const styles = {
   noCerts: {
-    color: grey500,
+    color: grey500
   },
   container: {
-    width: '100%',
-  },
+    width: '100%'
+  }
 }

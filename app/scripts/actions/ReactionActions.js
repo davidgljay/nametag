@@ -4,7 +4,6 @@ import {hz} from '../api/horizon'
 
 let reactionSubscriptions = {}
 
-
 /*
 * Add a reaction to a message
 *
@@ -58,8 +57,8 @@ export const removeReaction = (reactionId) => {
 * @returns
 *    Promise resolving to reactions
 */
-export function watchMessageReactions(message) {
-  return function(dispatch) {
+export function watchMessageReactions (message) {
+  return function (dispatch) {
     return new Promise((resolve, reject) => {
       reactionSubscriptions[message] = hz('reactions')
         .findAll({message: message}).watch().subscribe(
@@ -67,7 +66,7 @@ export function watchMessageReactions(message) {
             for (let i = 0; i < reactions.length; i++) {
               dispatch({
                 type: constants.ADD_REACTION,
-                reaction: reactions[i],
+                reaction: reactions[i]
               })
             }
             resolve(reactions)
@@ -86,7 +85,7 @@ export function watchMessageReactions(message) {
 * @returns
 *    nonre
 */
-export function unWatchMessageReactions(message) {
+export function unWatchMessageReactions (message) {
   return () => {
     return reactionSubscriptions[message].unsubscribe()
   }
