@@ -18,10 +18,13 @@ class Messages extends Component {
   }
 
   componentWillUpdate(nextProps) {
-    if (this.props.messageList &&
-      nextProps.messageList &&
-      nextProps.messageList.length > 1 &&
-      nextProps.messageList.length > this.props.messageList.length) {
+    if (!this.props.messageList ||
+      !nextProps.messageList ||
+      nextProps.messageList.length < 3) {
+      return
+    } else if (nextProps.messageList.length - this.props.messageList.length > 4) {
+      window.scrollBy(0, 100000)
+    } else if (nextProps.messageList.length > this.props.messageList.length) {
       let counter = 0
       let timer = setInterval(() => {
         window.scrollBy(0, 2)
@@ -29,7 +32,7 @@ class Messages extends Component {
           clearInterval(timer)
         }
         counter++
-      }, 2)
+      }, 0)
     }
   }
 
