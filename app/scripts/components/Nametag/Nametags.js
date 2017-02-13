@@ -3,10 +3,6 @@ import Nametag from './Nametag'
 import {watchRoomNametags, unWatchRoomNametags} from '../../actions/NametagActions'
 import {Card} from 'material-ui/Card'
 
-Nametags.propTypes = {
-  room: PropTypes.string, mod: PropTypes.string
-}
-
 class Nametags extends Component {
 
   constructor (props) {
@@ -57,6 +53,10 @@ class Nametags extends Component {
         }
     </div>
   }
+}
+
+Nametags.propTypes = {
+  room: PropTypes.string, mod: PropTypes.string
 }
 
 export default Nametags

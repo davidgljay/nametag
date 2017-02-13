@@ -6,18 +6,6 @@ import Notifications from '../Room/Notifications'
 import {lightBlue200} from 'material-ui/styles/colors'
 import trackEvent from '../../utils/analytics'
 
-RoomCards.propTypes = {
-  rooms: PropTypes.object.isRequired
-}
-
-RoomCards.childContextTypes = {
-  user: PropTypes.object
-}
-
-RoomCards.contextTypes = {
-  dispatch: PropTypes.func
-}
-
 class RoomCards extends Component {
 
   constructor (props) {
@@ -86,6 +74,18 @@ class RoomCards extends Component {
         providerAuth={providerAuth} />
     </div>
   }
+}
+
+RoomCards.propTypes = {
+  rooms: PropTypes.object.isRequired
+}
+
+RoomCards.childContextTypes = {
+  user: PropTypes.object
+}
+
+RoomCards.contextTypes = {
+  dispatch: PropTypes.func
 }
 
 export default RoomCards

@@ -21,14 +21,6 @@ function collect (connect, monitor) {
   }
 }
 
-EditNametag.propTypes = {
-  userNametag: PropTypes.object,
-  userDefaults: PropTypes.object,
-  room: PropTypes.string.isRequired,
-  isOver: PropTypes.bool.isRequired,
-  updateNametagEdit: PropTypes.func.isRequired
-}
-
 class EditNametag extends Component {
 
   constructor (props) {
@@ -145,7 +137,13 @@ class EditNametag extends Component {
   }
 }
 
-EditNametag
+EditNametag.propTypes = {
+  userNametag: PropTypes.object,
+  userDefaults: PropTypes.object,
+  room: PropTypes.string.isRequired,
+  isOver: PropTypes.bool.isRequired,
+  updateNametagEdit: PropTypes.func.isRequired
+}
 
 export default DropTarget(dragTypes.certificate, nametagTarget, collect)(EditNametag)
 

@@ -7,12 +7,6 @@ import CircularProgress from 'material-ui/CircularProgress'
 import RaisedButton from 'material-ui/RaisedButton'
 import {indigo500} from 'material-ui/styles/colors'
 
-CreateCertificate.propTypes = {
-  user: PropTypes.object.isRequired,
-  createCertificate: PropTypes.func.isRequired,
-  appendUserArray: PropTypes.func.isRequired
-}
-
 class CreateCertificate extends Component {
 
   constructor (props) {
@@ -175,6 +169,12 @@ class CreateCertificate extends Component {
       </div>
     </div>
   }
+}
+
+CreateCertificate.propTypes = {
+  user: PropTypes.object.isRequired,
+  createCertificate: PropTypes.func.isRequired,
+  appendUserArray: PropTypes.func.isRequired
 }
 
 export default CreateCertificate

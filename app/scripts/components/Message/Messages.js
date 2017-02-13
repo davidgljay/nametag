@@ -3,12 +3,6 @@ import Message from './Message'
 import {mobile} from '../../../styles/sizes'
 import radium from 'radium'
 
-Messages.propTypes = {
-  room: PropTypes.string.isRequired,
-  messages: PropTypes.object,
-  messageList: PropTypes.array
-}
-
 class Messages extends Component {
 
   constructor (props) {
@@ -76,6 +70,12 @@ class Messages extends Component {
       </table>
     </div>
   }
+}
+
+Messages.propTypes = {
+  room: PropTypes.string.isRequired,
+  messages: PropTypes.object,
+  messageList: PropTypes.array
 }
 
 export default radium(Messages)

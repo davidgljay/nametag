@@ -29,16 +29,6 @@ function collect (connect, monitor) {
   }
 }
 
-Certificate.propTypes = {
-  connectDragSource: PropTypes.func.isRequired,
-  draggable: PropTypes.bool.isRequired,
-  certificate: PropTypes.object,
-  isDragging: PropTypes.bool.isRequired,
-  removeFromSource: PropTypes.func,
-  showIconUpload: PropTypes.bool,
-  onUploadImage: PropTypes.func
-}
-
 class Certificate extends Component {
   constructor (props) {
     super(props)
@@ -137,6 +127,16 @@ class Certificate extends Component {
     }
     return certificate
   }
+}
+
+Certificate.propTypes = {
+  connectDragSource: PropTypes.func.isRequired,
+  draggable: PropTypes.bool.isRequired,
+  certificate: PropTypes.object,
+  isDragging: PropTypes.bool.isRequired,
+  removeFromSource: PropTypes.func,
+  showIconUpload: PropTypes.bool,
+  onUploadImage: PropTypes.func
 }
 
 export default DragSource(dragTypes.certificate, certSource, collect)(Certificate)

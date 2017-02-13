@@ -1,15 +1,8 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
 import { CardActions } from 'material-ui/Card'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import {indigo500, red500} from 'material-ui/styles/colors'
-
-ModActionButtons.propTypes = {
-  remindOfNorms: PropTypes.func.isRequired,
-  removeUser: PropTypes.func.isRequired,
-  authorName: PropTypes.string.isRequired,
-  notifyBadge: PropTypes.func.isRequired
-}
 
 const ModActionButtons = (props) => <CardActions>
   <RaisedButton

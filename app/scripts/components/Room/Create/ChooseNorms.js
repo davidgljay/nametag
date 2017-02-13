@@ -12,12 +12,6 @@ const defaultNorms = [
   'Keep it PG'
 ]
 
-ChooseNorms.propTypes = {
-  addNorm: PropTypes.func.isRequired,
-  removeNorm: PropTypes.func.isRequired,
-  normsObj: PropTypes.object.isRequired
-}
-
 class ChooseNorms extends Component {
   constructor (props) {
     super(props)
@@ -105,6 +99,12 @@ class ChooseNorms extends Component {
       </List>
     </div>
   }
+}
+
+ChooseNorms.propTypes = {
+  addNorm: PropTypes.func.isRequired,
+  removeNorm: PropTypes.func.isRequired,
+  normsObj: PropTypes.object.isRequired
 }
 
 const styles = {
