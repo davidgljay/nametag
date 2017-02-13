@@ -6,21 +6,6 @@ import Stepper from './Create/Stepper'
 import RaisedButton from 'material-ui/RaisedButton'
 import {indigo500} from 'material-ui/styles/colors'
 
-CreateRoom.propTypes = {
-  searchImage: PropTypes.func.isRequired,
-  postRoom: PropTypes.func.isRequired,
-  joinRoom: PropTypes.func.isRequired,
-  watchNametag: PropTypes.func.isRequired,
-  unWatchNametag: PropTypes.func.isRequired,
-  setRoomProp: PropTypes.func.isRequired,
-  logout: PropTypes.func.isRequired,
-  fetchCertificate: PropTypes.func.isRequired
-}
-
-CreateRoom.childContextTypes = {
-  user: PropTypes.object
-}
-
 class CreateRoom extends Component {
 
   constructor (props) {
@@ -278,6 +263,21 @@ class CreateRoom extends Component {
       </div>
     </div>
   }
+}
+
+CreateRoom.propTypes = {
+  searchImage: PropTypes.func.isRequired,
+  postRoom: PropTypes.func.isRequired,
+  joinRoom: PropTypes.func.isRequired,
+  watchNametag: PropTypes.func.isRequired,
+  unWatchNametag: PropTypes.func.isRequired,
+  setRoomProp: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
+  fetchCertificate: PropTypes.func.isRequired
+}
+
+CreateRoom.childContextTypes = {
+  user: PropTypes.object
 }
 
 export default CreateRoom

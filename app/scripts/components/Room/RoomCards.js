@@ -31,7 +31,7 @@ class RoomCards extends Component {
     trackEvent('ROOMS_PAGE_LOAD')
     const {getAuth, watchUserNametags, watchNametags, subscribe} = this.props
     subscribe()
-    getAuth().then((user) => watchUserNametags(user.id))
+    getAuth().then((user) => user && watchUserNametags(user.id))
     .then((userNametags) => {
       if (userNametags) {
         watchNametags(userNametags.map((nt) => nt.nametag))

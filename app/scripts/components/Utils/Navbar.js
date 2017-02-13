@@ -18,14 +18,6 @@ const onHomeClick = () => {
   window.location = '/rooms'
 }
 
-Navbar.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.string
-  }),
-  logout: PropTypes.func.isRequired,
-  setting: PropTypes.func.isRequired
-}
-
 class Navbar extends Component {
 
   constructor (props) {
@@ -76,6 +68,14 @@ class Navbar extends Component {
         setOpen={(open) => this.setState({open})} />
     </div>
   }
+}
+
+Navbar.propTypes = {
+  user: PropTypes.shape({
+    id: PropTypes.string
+  }),
+  logout: PropTypes.func.isRequired,
+  setting: PropTypes.func.isRequired
 }
 
 export default radium(Navbar)

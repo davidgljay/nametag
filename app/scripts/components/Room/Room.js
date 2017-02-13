@@ -14,18 +14,6 @@ import Compose from '../Message/Compose'
 
 let loadingNametags = false
 
-Room.propTypes = {
-  postMessage: PropTypes.func.isRequired,
-  userNametag: PropTypes.object,
-  room: PropTypes.object
-}
-
-Room.childContextTypes = {
-  userNametag: PropTypes.object,
-  room: PropTypes.object,
-  mod: PropTypes.object
-}
-
 class Room extends Component {
 
   constructor (props) {
@@ -225,6 +213,18 @@ class Room extends Component {
   }
 }
 
+Room.propTypes = {
+  postMessage: PropTypes.func.isRequired,
+  userNametag: PropTypes.object,
+  room: PropTypes.object
+}
+
+Room.childContextTypes = {
+  userNametag: PropTypes.object,
+  room: PropTypes.object,
+  mod: PropTypes.object
+}
+
 export default radium(Room)
 
 const slideOut = keyframes({
@@ -236,16 +236,6 @@ const slideIn = keyframes({
   '0%': {left: 0},
   '100%': {left: -260}
 }, 'slideIn')
-
-// const spinIn = keyframes({
-//   '0%': { transform: 'rotate(0deg)' },
-//   '100%': {rotate: 'rotate(180deg)'},
-// }, 'spinIn')
-//
-// const spinOut = keyframes({
-//   '0%': { transform: 'rotate(180deg)' },
-//   '100%': { transform: 'rotate(0deg)'},
-// }, 'spinOut')
 
 const styles = {
   roomContainer: {

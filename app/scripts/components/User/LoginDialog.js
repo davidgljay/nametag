@@ -5,7 +5,7 @@ import Dialog from 'material-ui/Dialog'
 const LoginDialog = ({showLogin, setting, providerAuth}) => <Dialog
   modal={false}
   contentStyle={styles.dialog}
-  open={showLogin}
+  open={showLogin || false}
   onRequestClose={() => setting('showLogin', false)}>
   <Login providerAuth={providerAuth} />
 </Dialog>

@@ -7,22 +7,6 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FontIcon from 'material-ui/FontIcon'
 import Alert from '../Utils/Alert'
 
-Join.propTypes = {
-  room: PropTypes.string.isRequired,
-  normsChecked: PropTypes.bool.isRequired,
-  nametag: PropTypes.object,
-  addNametagEditCert: PropTypes.func.isRequired,
-  removeNametagEditCert: PropTypes.func.isRequired,
-  updateNametagEdit: PropTypes.func.isRequired,
-  providerAuth: PropTypes.func.isRequired,
-  fetchCertificate: PropTypes.func.isRequired,
-  joinRoom: PropTypes.func.isRequired
-}
-
-Join.contextTypes = {
-  user: PropTypes.object
-}
-
 class Join extends Component {
 
   constructor (props) {
@@ -95,6 +79,22 @@ class Join extends Component {
     }
     return join
   }
+}
+
+Join.propTypes = {
+  room: PropTypes.string.isRequired,
+  normsChecked: PropTypes.bool.isRequired,
+  nametag: PropTypes.object,
+  addNametagEditCert: PropTypes.func.isRequired,
+  removeNametagEditCert: PropTypes.func.isRequired,
+  updateNametagEdit: PropTypes.func.isRequired,
+  providerAuth: PropTypes.func.isRequired,
+  fetchCertificate: PropTypes.func.isRequired,
+  joinRoom: PropTypes.func.isRequired
+}
+
+Join.contextTypes = {
+  user: PropTypes.object
 }
 
 export default Join
