@@ -7,6 +7,14 @@ import IconButton from 'material-ui/IconButton'
 import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
 
+Compose.propTypes = {
+  postMessage: PropTypes.func.isRequired
+}
+Compose.contextTypes = {
+  room: PropTypes.object.isRequired,
+  userNametag: PropTypes.object.isRequired
+}
+
 class Compose extends Component {
   constructor (props) {
     super(props)
@@ -84,14 +92,6 @@ class Compose extends Component {
       </form>
     </div>
   }
-}
-
-Compose.propTypes = {
-  postMessage: PropTypes.func.isRequired
-}
-Compose.contextTypes = {
-  room: PropTypes.object.isRequired,
-  userNametag: PropTypes.object.isRequired
 }
 
 export default radium(Compose)

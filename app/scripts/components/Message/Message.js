@@ -7,6 +7,14 @@ import emojis from 'react-emoji'
 import {grey500, grey800, lightBlue100, yellow100} from 'material-ui/styles/colors'
 import ReactMarkdown from 'react-markdown'
 
+Message.propTypes = {
+  id: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
+  timestamp: PropTypes.number.isRequired,
+  author: PropTypes.object.isRequired,
+  type: PropTypes.string.isRequired
+}
+
 class Message extends Component {
 
   constructor (props) {
@@ -121,14 +129,6 @@ class Message extends Component {
       </td>
     </tr>
   }
-}
-
-Message.propTypes = {
-  id: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
-  timestamp: PropTypes.number.isRequired,
-  author: PropTypes.object.isRequired,
-  type: PropTypes.string.isRequired
 }
 
 export default Message

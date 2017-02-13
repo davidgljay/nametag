@@ -6,22 +6,23 @@ import Notifications from '../Room/Notifications'
 import {lightBlue200} from 'material-ui/styles/colors'
 import trackEvent from '../../utils/analytics'
 
-const styles = {
-  roomCards: {
-    background: lightBlue200,
-    paddingBottom: 50,
-    paddingTop: 20,
-    minHeight: '100vh',
-    display: 'flex',
-    justifyContent: 'flex-start',
-    flexWrap: 'wrap'
-  }
+RoomCards.propTypes = {
+  rooms: PropTypes.object.isRequired
+}
+
+RoomCards.childContextTypes = {
+  user: PropTypes.object
+}
+
+RoomCards.contextTypes = {
+  dispatch: PropTypes.func
 }
 
 class RoomCards extends Component {
 
   constructor (props) {
     super(props)
+
     this.mapRoomCards = (roomId) => {
       const {rooms, nametags, userNametags, addUserNametag, nametagEdits} = this.props
       // If a nametag has already been saved for this room then merge it in
@@ -44,7 +45,9 @@ class RoomCards extends Component {
     subscribe()
     getAuth().then((user) => watchUserNametags(user.id))
     .then((userNametags) => {
-      watchNametags(userNametags.map((nt) => nt.nametag))
+      if (userNametags) {
+        watchNametags(userNametags.map((nt) => nt.nametag))
+      }
     })
   }
 
@@ -85,16 +88,16 @@ class RoomCards extends Component {
   }
 }
 
-RoomCards.propTypes = {
-  rooms: PropTypes.object.isRequired
-}
-
-RoomCards.childContextTypes = {
-  user: PropTypes.object
-}
-
-RoomCards.contextTypes = {
-  dispatch: PropTypes.func
-}
-
 export default RoomCards
+
+const styles = {
+  roomCards: {
+    background: lightBlue200,
+    paddingBottom: 50,
+    paddingTop: 20,
+    minHeight: '100vh',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap'
+  }
+}

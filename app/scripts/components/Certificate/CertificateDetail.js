@@ -7,21 +7,21 @@ import Navbar from '../Utils/Navbar'
 import Login from '../User/Login'
 import QRcode from 'qrcode.react'
 
+CertificateDetail.propTypes = {
+  certificateId: PropTypes.string.isRequired,
+  user: PropTypes.object,
+  logout: PropTypes.func.isRequired,
+  setting: PropTypes.func.isRequired,
+  certificate: PropTypes.object,
+  fetchCertificate: PropTypes.func.isRequired,
+  appendUserArray: PropTypes.func.isRequired,
+  grantCertificate: PropTypes.func.isRequired
+}
+
 class CertificateDetail extends Component {
 
   constructor (props) {
     super(props)
-
-    this.propTypes = {
-      certificateId: PropTypes.string.isRequired,
-      user: PropTypes.object,
-      logout: PropTypes.func.isRequired,
-      setting: PropTypes.func.isRequired,
-      certificate: PropTypes.object,
-      fetchCertificate: PropTypes.func.isRequired,
-      appendUserArray: PropTypes.func.isRequired,
-      grantCertificate: PropTypes.func.isRequired
-    }
 
     this.state = {
       showQR: false

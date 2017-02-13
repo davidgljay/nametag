@@ -14,6 +14,18 @@ import Compose from '../Message/Compose'
 
 let loadingNametags = false
 
+Room.propTypes = {
+  postMessage: PropTypes.func.isRequired,
+  userNametag: PropTypes.object,
+  room: PropTypes.object
+}
+
+Room.childContextTypes = {
+  userNametag: PropTypes.object,
+  room: PropTypes.object,
+  mod: PropTypes.object
+}
+
 class Room extends Component {
 
   constructor (props) {
@@ -211,18 +223,6 @@ class Room extends Component {
         }
     </div>
   }
-}
-
-Room.propTypes = {
-  postMessage: PropTypes.func.isRequired,
-  userNametag: PropTypes.object,
-  room: PropTypes.object
-}
-
-Room.childContextTypes = {
-  userNametag: PropTypes.object,
-  room: PropTypes.object,
-  mod: PropTypes.object
 }
 
 export default radium(Room)

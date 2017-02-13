@@ -1,6 +1,27 @@
-import React, { Component, PropTypes } from 'react'
+import React from 'react'
 import Certificates from '../Certificate/Certificates'
 import FontIcon from 'material-ui/FontIcon'
+
+const Nametag = ({id, mod, name, icon, bio, present, certificates}) => {
+  let star = ''
+
+  // Show if user is a mod.
+  if (mod === id) {
+    star = <FontIcon style={styles.ismod} className='material-icons'>star</FontIcon>
+  }
+
+  return <div
+    key={name}
+    style={styles.nametag}>
+    {star}
+    <img src={icon} alt={name} style={styles.icon} />
+    <div style={styles.name}>{name}</div>
+    <div style={styles.bio}>{bio}</div>
+    <Certificates certificates={certificates} />
+  </div>
+}
+
+export default Nametag
 
 const styles = {
   ismod: {
@@ -30,41 +51,3 @@ const styles = {
     minHeight: 55
   }
 }
-
-class Nametag extends Component {
-
-  constructor (props) {
-    super(props)
-
-    this.propTypes = {
-      id: PropTypes.string,
-      mod: PropTypes.string,
-      name: PropTypes.string,
-      icon: PropTypes.string,
-      bio: PropTypes.string,
-      present: PropTypes.bool,
-      certificates: PropTypes.array
-    }
-  }
-
-  render () {
-    let star = ''
-
-    // Show if user is a mod.
-    if (this.props.mod === this.props.id) {
-      star = <FontIcon style={styles.ismod} className='material-icons'>star</FontIcon>
-    }
-
-    return <div
-      key={this.props.name}
-      style={styles.nametag}>
-      {star}
-      <img src={this.props.icon} alt={this.props.name} style={styles.icon} />
-      <div style={styles.name}>{this.props.name}</div>
-      <div style={styles.bio}>{this.props.bio}</div>
-      <Certificates certificates={this.props.certificates} />
-    </div>
-  }
-}
-
-export default Nametag

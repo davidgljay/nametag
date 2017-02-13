@@ -4,15 +4,15 @@ import FontIcon from 'material-ui/FontIcon'
 import radium from 'radium'
 import {grey500, yellow800} from 'material-ui/styles/colors'
 
+MessageMenu.propTypes = {
+  modAction: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired
+}
+
 class MessageMenu extends Component {
 
   constructor (props) {
     super(props)
-
-    this.propTypes = {
-      modAction: PropTypes.func.isRequired,
-      id: PropTypes.string.isRequired
-    }
 
     this.toggleActions = () => {
       this.setState({showActions: !this.state.showActions})

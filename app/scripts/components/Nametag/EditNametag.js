@@ -21,18 +21,18 @@ function collect (connect, monitor) {
   }
 }
 
+EditNametag.propTypes = {
+  userNametag: PropTypes.object,
+  userDefaults: PropTypes.object,
+  room: PropTypes.string.isRequired,
+  isOver: PropTypes.bool.isRequired,
+  updateNametagEdit: PropTypes.func.isRequired
+}
+
 class EditNametag extends Component {
 
   constructor (props) {
     super(props)
-
-    this.propTypes = {
-      userNametag: PropTypes.object,
-      userDefaults: PropTypes.object,
-      room: PropTypes.string.isRequired,
-      isOver: PropTypes.bool.isRequired,
-      updateNametagEdit: PropTypes.func.isRequired
-    }
 
     this.state = {
       alert: null,

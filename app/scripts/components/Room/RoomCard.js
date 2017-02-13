@@ -10,6 +10,17 @@ import {grey400} from 'material-ui/styles/colors'
 import trackEvent from '../../utils/analytics'
 import TimeAgo from 'react-timeago'
 
+RoomCard.propTypes = {
+  room: PropTypes.object.isRequired,
+  id: PropTypes.string.isRequired,
+  creating: PropTypes.bool,
+  userNametag: PropTypes.object
+}
+
+RoomCard.contextTypes = {
+  user: PropTypes.object
+}
+
 class RoomCard extends Component {
 
   constructor (props) {
@@ -157,17 +168,6 @@ class RoomCard extends Component {
       {card}
     </div>
   }
-}
-
-RoomCard.propTypes = {
-  room: PropTypes.object.isRequired,
-  id: PropTypes.string.isRequired,
-  creating: PropTypes.bool,
-  userNametag: PropTypes.object
-}
-
-RoomCard.contextTypes = {
-  user: PropTypes.object
 }
 
 export default RoomCard

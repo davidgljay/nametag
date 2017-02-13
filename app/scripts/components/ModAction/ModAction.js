@@ -10,6 +10,19 @@ import {List, ListItem} from 'material-ui/List'
 import Checkbox from 'material-ui/Checkbox'
 import TextField from 'material-ui/TextField'
 
+ModAction.propTypes = {
+  msgId: PropTypes.string,
+  close: PropTypes.func,
+  author: PropTypes.object,
+  postMessage: PropTypes.func.isRequired
+}
+
+ModAction.contextTypes = {
+  room: PropTypes.object,
+  userNametag: PropTypes.object,
+  mod: PropTypes.object
+}
+
 class ModAction extends Component {
 
   constructor (props) {
@@ -155,19 +168,6 @@ class ModAction extends Component {
           />
     </Card>
   }
-}
-
-ModAction.propTypes = {
-  msgId: PropTypes.string,
-  close: PropTypes.func,
-  author: PropTypes.object,
-  postMessage: PropTypes.func.isRequired
-}
-
-ModAction.contextTypes = {
-  room: PropTypes.object,
-  userNametag: PropTypes.object,
-  mod: PropTypes.object
 }
 
 export default ModAction

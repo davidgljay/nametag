@@ -8,6 +8,10 @@ import {indigo500, grey500} from 'material-ui/styles/colors'
 import IconButton from 'material-ui/IconButton'
 import errorLog from '../../../utils/errorLog'
 
+ImageSearch.propTypes = {
+  searchImage: PropTypes.func.isRequired
+}
+
 class ImageSearch extends Component {
 
   constructor (props) {
@@ -17,10 +21,6 @@ class ImageSearch extends Component {
       images: [],
       loading: false,
       loadingImage: false
-    }
-
-    this.propTypes = {
-      searchImage: PropTypes.func.isRequired
     }
 
     this.handleScroll = () => {

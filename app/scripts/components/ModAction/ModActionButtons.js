@@ -4,6 +4,13 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import {indigo500, red500} from 'material-ui/styles/colors'
 
+ModActionButtons.propTypes = {
+  remindOfNorms: PropTypes.func.isRequired,
+  removeUser: PropTypes.func.isRequired,
+  authorName: PropTypes.string.isRequired,
+  notifyBadge: PropTypes.func.isRequired
+}
+
 const ModActionButtons = (props) => <CardActions>
   <RaisedButton
     fullWidth
@@ -29,13 +36,6 @@ const ModActionButtons = (props) => <CardActions>
       </div>
     }
 </CardActions>
-
-ModActionButtons.propTypes = {
-  remindOfNorms: PropTypes.func.isRequired,
-  removeUser: PropTypes.func.isRequired,
-  authorName: PropTypes.string.isRequired,
-  notifyBadge: PropTypes.func.isRequired
-}
 
 export default ModActionButtons
 

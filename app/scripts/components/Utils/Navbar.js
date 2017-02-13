@@ -18,20 +18,20 @@ const onHomeClick = () => {
   window.location = '/rooms'
 }
 
+Navbar.propTypes = {
+  user: PropTypes.shape({
+    id: PropTypes.string
+  }),
+  logout: PropTypes.func.isRequired,
+  setting: PropTypes.func.isRequired
+}
+
 class Navbar extends Component {
 
   constructor (props) {
     super(props)
     this.state = {
       open: false
-    }
-
-    this.propTypes = {
-      user: PropTypes.shape({
-        id: PropTypes.string
-      }),
-      logout: PropTypes.func.isRequired,
-      setting: PropTypes.func.isRequired
     }
   }
 

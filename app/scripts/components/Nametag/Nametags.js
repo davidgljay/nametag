@@ -3,14 +3,14 @@ import Nametag from './Nametag'
 import {watchRoomNametags, unWatchRoomNametags} from '../../actions/NametagActions'
 import {Card} from 'material-ui/Card'
 
+Nametags.propTypes = {
+  room: PropTypes.string, mod: PropTypes.string
+}
+
 class Nametags extends Component {
 
   constructor (props) {
     super(props)
-
-    this.propTypes = {
-      room: PropTypes.string, mod: PropTypes.string
-    }
 
     this.createNametag = (nametag, mod) => {
       // Make nametag.certificates an empty array if it not already assigned.

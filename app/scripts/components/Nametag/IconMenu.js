@@ -4,17 +4,17 @@ import MenuItem from 'material-ui/MenuItem'
 import CircularProgress from 'material-ui/CircularProgress'
 import ImageUpload from '../Utils/ImageUpload'
 
+NTIconMenu.propTypes = {
+  iconUrls: PropTypes.array.isRequired,
+  icon: PropTypes.string,
+  updateNametagEdit: PropTypes.func.isRequired,
+  appendUserArray: PropTypes.func.isRequired
+}
+
 class NTIconMenu extends Component {
 
   constructor (props) {
     super(props)
-
-    this.propTypes = {
-      iconUrls: PropTypes.array.isRequired,
-      icon: PropTypes.string,
-      updateNametagEdit: PropTypes.func.isRequired,
-      appendUserArray: PropTypes.func.isRequired
-    }
 
     this.state = {
       loadingImage: false,

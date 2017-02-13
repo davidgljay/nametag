@@ -1,43 +1,29 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
 import FontIcon from 'material-ui/FontIcon'
 import FileUpload from 'react-fileupload'
 import errorLog from '../../utils/errorLog'
 
-class ImageUpload extends Component {
-
-  constructor (props) {
-    super(props)
-    this.propTypes = {
-      onChooseFile: PropTypes.func.isRequired,
-      onUploadFile: PropTypes.func.isRequired,
-      width: PropTypes.number.isRequired
-    }
+const ImageUpload = ({width, onChooseFile, onUploadFile}) => {
+  const uploadOptions = {
+    baseUrl: `https://${document.location.host}/api/images?width=${width}`,
+    chooseAndUpload: true,
+    accept: 'image/*',
+    dataType: 'json',
+    chooseFile: onChooseFile,
+    uploadSuccess: onUploadFile,
+    uploadError: errorLog('Uploading Image')
   }
 
-  render () {
-    const {width, onChooseFile, onUploadFile} = this.props
-
-    const uploadOptions = {
-      baseUrl: `https://${document.location.host}/api/images?width=${width}`,
-      chooseAndUpload: true,
-      accept: 'image/*',
-      dataType: 'json',
-      chooseFile: onChooseFile,
-      uploadSuccess: onUploadFile,
-      uploadError: errorLog('Uploading Image')
-    }
-
-    return <FileUpload
-      options={uploadOptions}>
-      <div style={styles.uploadMenuItem} ref='chooseAndUpload'>
-        <FontIcon
-          className='material-icons'
-          style={styles.uploadIcon}>
-          photo
-          </FontIcon>
-      </div>
-    </FileUpload>
-  }
+  return <FileUpload
+    options={uploadOptions}>
+    <div style={styles.uploadMenuItem} ref='chooseAndUpload'>
+      <FontIcon
+        className='material-icons'
+        style={styles.uploadIcon}>
+        photo
+        </FontIcon>
+    </div>
+  </FileUpload>
 }
 
 export default ImageUpload

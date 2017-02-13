@@ -12,17 +12,17 @@ const defaultNorms = [
   'Keep it PG'
 ]
 
+ChooseNorms.propTypes = {
+  addNorm: PropTypes.func.isRequired,
+  removeNorm: PropTypes.func.isRequired,
+  normsObj: PropTypes.object.isRequired
+}
+
 class ChooseNorms extends Component {
   constructor (props) {
     super(props)
     this.state = {
       customNorms: []
-    }
-
-    this.propTypes = {
-      addNorm: PropTypes.func.isRequired,
-      removeNorm: PropTypes.func.isRequired,
-      normsObj: PropTypes.object.isRequired
     }
 
     this.onNormClick = (norm, i) => {
