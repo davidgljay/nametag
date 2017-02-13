@@ -43,12 +43,14 @@ describe('RoomActions', () => {
       let mockResponses = [
         [{id: 1}, {id: 2}],
         [{lastPresent}],
-        [{lastPresent}, {lastPresent}, {lastPresent}]
+        [{lastPresent}, {lastPresent}, {lastPresent}],
+        [{id: 'nametag1'}, {id: 'nametag2'}]
       ]
 
       hz.mockReturnValueOnce(mockHz(mockResponses[0], calls)())
       hz.mockReturnValueOnce(mockHz(mockResponses[1], calls)())
       hz.mockReturnValueOnce(mockHz(mockResponses[2], calls)())
+      hz.mockReturnValueOnce(mockHz(mockResponses[3], calls)())
       return actions.subscribe()(store.dispatch, store.getState)
       .then(() => {
         expect(store.getActions()[0]).toEqual({
@@ -66,6 +68,10 @@ describe('RoomActions', () => {
         expect(store.getActions()[2]).toEqual({
           type: constants.ADD_ROOM_ARRAY,
           rooms: [{id: 1}, {id: 2}]
+        })
+        expect(store.getActions()[3]).toEqual({
+          type: constants.ADD_NAMETAG_ARRAY,
+          nametags: [{id: 'nametag1'}, {id: 'nametag2'}]
         })
       })
     })
@@ -145,7 +151,7 @@ describe('RoomActions', () => {
       }
       hz.mockReturnValue(mockHz({id: '123'}, calls)())
       return actions.postRoom(room)(store.dispatch).then((res) => {
-        expect(calls[1]).toEqual({type: 'insert', req: room})
+        expect(calls[1]).toEqual({type: 'upsert', req: room})
         expect(res).toEqual('123')
         expect(store.getActions()[0]).toEqual({
           type: 'ADD_ROOM',

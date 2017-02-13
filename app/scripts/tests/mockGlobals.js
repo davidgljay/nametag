@@ -6,6 +6,7 @@ export function mockHz (res, calls, type) {
       watch: mockHz(res, calls, 'watch'),
       fetch: mockHz(res, calls, 'fetch'),
       find: mockHz(res, calls, 'find'),
+      above: mockHz(res, calls, 'above'),
       upsert: mockHz(res, calls, 'upsert'),
       update: mockHz(res, calls, 'update'),
       insert: mockHz(res, calls, 'insert'),

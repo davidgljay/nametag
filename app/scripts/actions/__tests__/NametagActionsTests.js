@@ -34,20 +34,18 @@ describe('Nametag Actions', () => {
   })
 
 // Consider renaming to get or fetch, need to define a convention
-  describe('watchNametag', () => {
-    it('should find to a single nametag', () => {
-      hz.mockReturnValue(mockHz({id: 1, room: 'abc'}, calls)())
-      return actions.watchNametag(1)(store.dispatch).then(
-        (nametag) => {
+  describe('watchNametags', () => {
+    it('should find to an array of nametags', () => {
+      hz.mockReturnValue(mockHz([{id: 1, room: 'abc'}], calls)())
+      return actions.watchNametags([1])(store.dispatch).then(
+        ([nametag]) => {
           expect(nametag).toEqual({id: 1, room: 'abc'})
-          expect(calls[1]).toEqual({type: 'find', req: 1})
+          expect(calls[1]).toEqual({type: 'findAll', req: {id: 1}})
           expect(calls[2].type).toEqual('watch')
-          expect(store.getActions()[0]).toEqual(
-            {
-              type: constants.ADD_NAMETAG,
-              nametag: {id: 1, room: 'abc'},
-              id: 1
-            })
+          expect(store.getActions()[0]).toEqual({
+            nametags: [{'id': 1, 'room': 'abc'}],
+            type: 'ADD_NAMETAG_ARRAY'
+          })
         })
     })
   })
