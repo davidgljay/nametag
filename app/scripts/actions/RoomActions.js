@@ -196,7 +196,9 @@ export function watchRoom (id) {
       }),
       dispatch(watchRoomNametags(id)),
       dispatch(watchRoomMessages(id))
-    ]).catch(errorLog('Error getting room'))
+    ])
+    .then(res => res[0])
+    .catch(errorLog('Error getting room'))
   }
 }
 

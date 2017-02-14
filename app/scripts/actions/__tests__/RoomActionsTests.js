@@ -2,6 +2,7 @@ jest.unmock('../RoomActions')
 jest.unmock('../../tests/mockGlobals')
 jest.unmock('../NametagActions')
 jest.unmock('../UserActions')
+jest.unmock('../MessageActions')
 jest.unmock('../UserNametagActions')
 
 jest.unmock('redux-mock-store')
