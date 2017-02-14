@@ -8,8 +8,8 @@ import radium, {keyframes} from 'radium'
 
 import Norms from './Norms'
 import Notifications from './Notifications'
-import Nametags from '../../containers/Nametag/NametagsContainer'
-import Messages from '../../containers/Message/MessagesContainer'
+import Nametags from '../../components/Nametag/Nametags'
+import Messages from '../../components/Message/Messages'
 import Compose from '../Message/Compose'
 
 let loadingNametags = false
@@ -112,7 +112,16 @@ class Room extends Component {
   }
 
   render () {
-    const {rooms, params, postMessage, addMessage, addRoomMessage, userNametags} = this.props
+    const {
+      rooms,
+      nametags,
+      messages,
+      params,
+      postMessage,
+      saveMessage,
+      addRoomMessage,
+      userNametags
+    } = this.props
 
     const room = rooms[params.roomId]
     const userNametag = userNametags[params.roomId]
@@ -180,7 +189,10 @@ class Room extends Component {
                   </div>
                 {
                     this.state.toggles.nametags &&
-                    <Nametags room={params.roomId} mod={room.mod} />
+                    <Nametags
+                      room={params.roomId}
+                      mod={room.mod}
+                      nametags={nametags} />
                   }
               </div>
               <div style={styles.leftBarChevron}>
@@ -192,16 +204,17 @@ class Room extends Component {
                     >chevron_right</FontIcon>
               </div>
             </div>
-            {
-              <Messages
-                room={params.roomId}
-                norms={room.norms} />
-              }
+            <Messages
+              room={params.roomId}
+              norms={room.norms}
+              nametags={nametags}
+              postMessage={postMessage}
+              saveMessage={saveMessage}
+              messages={messages} />
           </div>
           {
             <Compose
               postMessage={postMessage}
-              addMessage={addMessage}
               addRoomMessage={addRoomMessage} />
             }
         </div>

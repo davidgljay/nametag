@@ -1,7 +1,15 @@
 import {hz} from '../api/horizon'
 import errorLog from '../utils/errorLog'
 import constants from '../constants'
-import {addNametag, putNametag, watchNametags, unWatchNametags} from './NametagActions'
+import {
+  addNametag,
+  putNametag,
+  watchNametags,
+  watchRoomNametags,
+  unWatchNametags,
+  unWatchRoomNametags
+} from './NametagActions'
+import {watchRoomMessages, unWatchRoomMessages} from './MessageActions'
 import {putUserNametag} from './UserNametagActions'
 import {appendUserArray} from './UserActions'
 import _ from 'lodash'
@@ -178,12 +186,17 @@ export function fetchRooms (ids) {
 */
 export function watchRoom (id) {
   return (dispatch) => {
-    return new Promise((resolve, reject) => {
-      roomWatches[id] = hz('rooms').find(id).watch().subscribe((room) => {
-        dispatch(addRoom(room, room.id))
-        resolve(room)
-      }, reject)
-    }).catch(errorLog('Error getting room'))
+    return Promise.all([
+      // Watch room
+      new Promise((resolve, reject) => {
+        roomWatches[id] = hz('rooms').find(id).watch().subscribe((room) => {
+          dispatch(addRoom(room, room.id))
+          resolve(room)
+        }, reject)
+      }),
+      dispatch(watchRoomNametags(id)),
+      dispatch(watchRoomMessages(id))
+    ]).catch(errorLog('Error getting room'))
   }
 }
 
@@ -198,6 +211,8 @@ export function watchRoom (id) {
 export function unWatchRoom (id) {
   return () => {
     roomWatches[id].unsubscribe()
+    unWatchRoomNametags(id)
+    unWatchRoomMessages(id)
   }
 }
 

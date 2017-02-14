@@ -55,8 +55,7 @@ class MessageMenu extends Component {
 
 MessageMenu.propTypes = {
   modAction: PropTypes.func.isRequired,
-  id: PropTypes.string.isRequired,
-  toggleActions: PropTypes.func.isRequired
+  id: PropTypes.string.isRequired
 }
 
 export default radium(MessageMenu)

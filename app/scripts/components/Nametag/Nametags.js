@@ -1,62 +1,40 @@
-import React, { Component, PropTypes } from 'react'
+import React from 'react'
 import Nametag from './Nametag'
-import {watchRoomNametags, unWatchRoomNametags} from '../../actions/NametagActions'
 import {Card} from 'material-ui/Card'
 
-class Nametags extends Component {
+const renderNametag = (nametag, mod) => {
+  // Make nametag.certificates an empty array if it not already assigned.
+  nametag.certificates = nametag.certificates || []
 
-  constructor (props) {
-    super(props)
+  // Show whether the user is present.
+  const cardStyle = nametag.present
+  ? styles.nametag : {...styles.nametag, ...styles.absent}
 
-    this.createNametag = (nametag, mod) => {
-      // Make nametag.certificates an empty array if it not already assigned.
-      nametag.certificates = nametag.certificates || []
-
-      // Show whether the user is present.
-      const cardStyle = nametag.present
-      ? styles.nametag : {...styles.nametag, ...styles.absent}
-
-      return <Card key={nametag.id} style={cardStyle}>
-        <Nametag
-          name={nametag.name}
-          bio={nametag.bio}
-          icon={nametag.icon}
-          id={nametag.id}
-          certificates={nametag.certificates}
-          mod={mod} />
-      </Card>
-    }
-  }
-
-  componentDidMount () {
-    this.props.dispatch(watchRoomNametags(this.props.room))
-  }
-
-  componentWillUnmount () {
-    this.props.dispatch(unWatchRoomNametags(this.props.room))
-  }
-
-  render () {
-    let nametags = []
-    for (let id in this.props.nametags) {
-      if (this.props.nametags[id].room === this.props.room) {
-        nametags.push(this.props.nametags[id])
-      }
-    }
-
-    return <div style={styles.nametags}>
-      {
-          nametags.sort((a, b) =>
-            a.present &&
-            !b.present ? 0 : 1
-          ).map((nametag) => this.createNametag(nametag, this.props.mod))
-        }
-    </div>
-  }
+  return <Card key={nametag.id} style={cardStyle}>
+    <Nametag
+      name={nametag.name}
+      bio={nametag.bio}
+      icon={nametag.icon}
+      id={nametag.id}
+      certificates={nametag.certificates}
+      mod={mod} />
+  </Card>
 }
 
-Nametags.propTypes = {
-  room: PropTypes.string, mod: PropTypes.string
+const Nametags = ({nametags = {}, room, mod}) => {
+  const nametagList = Object.keys(nametags)
+    .reduce((p, id) => p.concat(nametags[id]), [])
+    .filter((n) => n.room === room)
+    .sort((a, b) =>
+      a.present &&
+      !b.present ? -1 : 1
+    )
+
+  return <div style={styles.nametags}>
+    {
+        nametagList.map((nametag) => renderNametag(nametag, mod))
+      }
+  </div>
 }
 
 export default Nametags

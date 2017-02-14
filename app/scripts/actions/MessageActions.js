@@ -45,10 +45,10 @@ export function watchRoomMessages (room) {
       messageSubscriptions[room] = hz('messages').findAll({room: room}).watch().subscribe(
         (messages) => {
           dispatch(addMessageArray(messages))
-          const messageIds = _.uniq(
-            messages.map((m) => m.id).concat(getState().rooms[room].messages)
-          )
-          dispatch(setRoomProp(room, 'messages', messageIds))
+          // const messageIds = _.uniq(
+          //   messages.map((m) => m.id).concat(getState().rooms[room].messages)
+          // )
+          // dispatch(setRoomProp(room, 'messages', messageIds))
           resolve()
         }, reject)
     })
