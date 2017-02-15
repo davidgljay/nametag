@@ -28,10 +28,11 @@ class Room extends Component {
 
     this.showPresence = (nametagId) => {
       const {showPresence} = this.props
-      showPresence(nametagId)
-      this.setState({presenceTimer: setInterval(() => {
-        showPresence(nametagId)
-      }, 10000)
+      this.setState((prevState) => {
+        clearInterval(prevState.presenceTimer)
+        prevState.presenceTimer = setInterval(() => {
+          showPresence(nametagId)
+        }, 10000)
       })
     }
 
@@ -45,6 +46,12 @@ class Room extends Component {
 
     this.toggleLeftBarSection = (section) => () => {
       this.setState({toggles: {...this.state.toggles, [section]: !this.state.toggles[section]}})
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.userNametags[nextProps.params.roomId]) {
+      this.showPresence(nextProps.userNametags[nextProps.params.roomId].id)
     }
   }
 

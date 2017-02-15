@@ -7,7 +7,8 @@ import {
   watchNametags,
   watchRoomNametags,
   unWatchNametags,
-  unWatchRoomNametags
+  unWatchRoomNametags,
+  showPresence
 } from './NametagActions'
 import {watchRoomMessages, unWatchRoomMessages} from './MessageActions'
 import {putUserNametag, watchUserNametags, unWatchUserNametags, postUpdateUserNametag} from './UserNametagActions'
@@ -200,12 +201,13 @@ export function watchRoom (id) {
       getAuth()
     ])
     .then(([room, nametags, messages, user]) => dispatch(watchUserNametags(user.id)))
-    .then((userNts) => {
-      let promises = [fetchRooms(userNts.map((n) => n.room), true)]
+    .then(userNts => {
+      let promises = [dispatch(fetchRooms(userNts.map(n => n.room), true))]
       for (let i = 0; i < userNts.length; i++) {
         if (userNts[i].room === id) {
-          promises.push(watchDirectMessages(id))
-          promises.push(postUpdateUserNametag(userNts[i].id, 'latestVisit', Date.now()))
+          promises.push(dispatch(watchDirectMessages(id)))
+          promises.push(dispatch(postUpdateUserNametag(userNts[i].id, 'latestVisit', Date.now())))
+          promises.push(dispatch(showPresence(userNts[i].id)))
           break
         }
       }
