@@ -1,4 +1,4 @@
-import {hz} from '../api/horizon'
+import {hz, getAuth} from '../api/horizon'
 import errorLog from '../utils/errorLog'
 import constants from '../constants'
 import {
@@ -10,8 +10,9 @@ import {
   unWatchRoomNametags
 } from './NametagActions'
 import {watchRoomMessages, unWatchRoomMessages} from './MessageActions'
-import {putUserNametag} from './UserNametagActions'
+import {putUserNametag, watchUserNametags, unWatchUserNametags, postUpdateUserNametag} from './UserNametagActions'
 import {appendUserArray} from './UserActions'
+import {watchDirectMessages, unWatchDirectMessages} from './DirectMessageActions'
 import _ from 'lodash'
 
 let roomWatches = {}
@@ -195,9 +196,21 @@ export function watchRoom (id) {
         }, reject)
       }),
       dispatch(watchRoomNametags(id)),
-      dispatch(watchRoomMessages(id))
+      dispatch(watchRoomMessages(id)),
+      getAuth()
     ])
-    .then(res => res[0])
+    .then(([room, nametags, messages, user]) => dispatch(watchUserNametags(user.id)))
+    .then((userNts) => {
+      let promises = [fetchRooms(userNts.map((n) => n.room), true)]
+      for (let i = 0; i < userNts.length; i++) {
+        if (userNts[i].room === id) {
+          promises.push(watchDirectMessages(id))
+          promises.push(postUpdateUserNametag(userNts[i].id, 'latestVisit', Date.now()))
+          break
+        }
+      }
+      return Promise.all(promises)
+    })
     .catch(errorLog('Error getting room'))
   }
 }
@@ -215,6 +228,8 @@ export function unWatchRoom (id) {
     roomWatches[id].unsubscribe()
     unWatchRoomNametags(id)
     unWatchRoomMessages(id)
+    unWatchUserNametags()
+    unWatchDirectMessages()
   }
 }
 

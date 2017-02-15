@@ -12,11 +12,10 @@ import errorLog from '../utils/errorLog'
 * @returns
 *   Action object
 */
-export function addUserNametag (room, nametag) {
+export function addUserNametagArray (nametags) {
   return {
-    type: constants.ADD_USER_NAMETAG,
-    room,
-    nametag
+    type: constants.ADD_USER_NAMETAG_ARRAY,
+    nametags
   }
 }
 
@@ -57,9 +56,7 @@ export function watchUserNametags (user) {
     return new Promise((resolve, reject) => {
       userNametagsSubscr = hz('user_nametags').findAll({user}).watch()
       .subscribe((userNametags) => {
-        for (let i = 0; i < userNametags.length; i++) {
-          dispatch(addUserNametag(userNametags[i].room, userNametags[i]))
-        }
+        dispatch(addUserNametagArray(userNametags))
         resolve(userNametags)
       }, reject)
     }).catch(errorLog('Watching user nametags'))

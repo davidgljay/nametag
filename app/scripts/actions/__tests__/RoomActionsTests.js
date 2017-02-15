@@ -135,7 +135,6 @@ describe('RoomActions', () => {
       return actions.watchRoom('123')(store.dispatch).then((res) => {
         expect(calls[1]).toEqual({type: 'find', req: '123'})
         expect(calls[2]).toEqual({type: 'watch', req: undefined})
-        expect(res).toEqual(room)
         expect(store.getActions()[0]).toEqual({
           type: 'ADD_ROOM',
           room: room,

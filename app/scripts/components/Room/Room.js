@@ -12,8 +12,6 @@ import Nametags from '../../components/Nametag/Nametags'
 import Messages from '../../components/Message/Messages'
 import Compose from '../Message/Compose'
 
-let loadingNametags = false
-
 class Room extends Component {
 
   constructor (props) {
@@ -37,46 +35,16 @@ class Room extends Component {
       })
     }
 
-    this.watchUserNametags = (props) => {
-      // Get all of the users' nametags and all of the rooms for those nametags
-      // so that the user can be notified if there is activity in another room.
-      const {
-        userNametags,
-        params,
-        user,
-        fetchRooms,
-        watchUserNametags,
-        watchDirectMessages,
-        postUpdateUserNametag
-      } = props
+    this.closeRoom = () => {
+      window.location = '/rooms/'
+    }
 
-      if (!userNametags || !userNametags[params.roomId] &&
-        user.id && !loadingNametags) {
-        loadingNametags = true
-        watchUserNametags(user.id)
-          .then((userNts) => {
-            fetchRooms(userNts.map((n) => n.room), true)
-            for (let i = 0; i < userNts.length; i++) {
-              if (userNts[i].room === params.roomId) {
-                watchDirectMessages(params.roomId)
-                postUpdateUserNametag(userNts[i].id, 'latestVisit', Date.now())
-                this.showPresence(userNts[i].nametag)
-              }
-            }
-          })
-      }
+    this.toggleLeftBar = () => {
+      this.setState({leftBarExpanded: !this.state.leftBarExpanded})
+    }
 
-      this.closeRoom = () => {
-        window.location = '/rooms/'
-      }
-
-      this.toggleLeftBar = () => {
-        this.setState({leftBarExpanded: !this.state.leftBarExpanded})
-      }
-
-      this.toggleLeftBarSection = (section) => () => {
-        this.setState({toggles: {...this.state.toggles, [section]: !this.state.toggles[section]}})
-      }
+    this.toggleLeftBarSection = (section) => () => {
+      this.setState({toggles: {...this.state.toggles, [section]: !this.state.toggles[section]}})
     }
   }
 
@@ -94,18 +62,11 @@ class Room extends Component {
     const {params, watchRoom} = this.props
     const roomId = params.roomId
     watchRoom(roomId)
-    this.watchUserNametags(this.props)
-  }
-
-  componentWillReceiveProps (nextProps) {
-    this.watchUserNametags(nextProps)
   }
 
   componentWillUnmount () {
     const roomId = this.props.params.roomId
     this.props.unWatchRoom(roomId)
-    this.props.unWatchUserNametags()
-    this.props.unWatchDirectMessages()
     if (this.state.presenceTimer) {
       clearInterval(this.state.presenceTimer)
     }

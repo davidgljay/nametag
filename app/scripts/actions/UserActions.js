@@ -49,6 +49,7 @@ export function getUser () {
           setTimeout(() => dispatch(getUser()), 500)
         }
       }
+      return user
     })
     .catch(errorLog('Error getting user info'))
   }
