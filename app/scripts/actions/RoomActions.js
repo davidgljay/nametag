@@ -207,7 +207,7 @@ export function watchRoom (id) {
         if (userNts[i].room === id) {
           promises.push(dispatch(watchDirectMessages(id)))
           promises.push(dispatch(postUpdateUserNametag(userNts[i].id, 'latestVisit', Date.now())))
-          promises.push(dispatch(showPresence(userNts[i].id)))
+          promises.push(dispatch(showPresence(userNts[i].nametag)))
           break
         }
       }

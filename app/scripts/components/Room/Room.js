@@ -49,12 +49,6 @@ class Room extends Component {
     }
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.userNametags[nextProps.params.roomId]) {
-      this.showPresence(nextProps.userNametags[nextProps.params.roomId].id)
-    }
-  }
-
   getChildContext () {
     const {rooms, params, userNametags, nametags} = this.props
     const room = rooms[params.roomId]
@@ -69,6 +63,12 @@ class Room extends Component {
     const {params, watchRoom} = this.props
     const roomId = params.roomId
     watchRoom(roomId)
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.userNametags[nextProps.params.roomId]) {
+      this.showPresence(nextProps.userNametags[nextProps.params.roomId].nametag)
+    }
   }
 
   componentWillUnmount () {
