@@ -1,29 +1,40 @@
-import React from 'react'
+import React, {Component, PropTypes} from 'react'
 import FontIcon from 'material-ui/FontIcon'
 import FileUpload from 'react-fileupload'
 import errorLog from '../../utils/errorLog'
 
-const ImageUpload = ({width, onChooseFile, onUploadFile}) => {
-  const uploadOptions = {
-    baseUrl: `https://${document.location.host}/api/images?width=${width}`,
-    chooseAndUpload: true,
-    accept: 'image/*',
-    dataType: 'json',
-    chooseFile: onChooseFile,
-    uploadSuccess: onUploadFile,
-    uploadError: errorLog('Uploading Image')
-  }
+// Ref used by FileUpload prevents this from being a stateless component.
+class ImageUpload extends Component {
 
-  return <FileUpload
-    options={uploadOptions}>
-    <div style={styles.uploadMenuItem} ref='chooseAndUpload'>
-      <FontIcon
-        className='material-icons'
-        style={styles.uploadIcon}>
-        photo
-        </FontIcon>
-    </div>
-  </FileUpload>
+  render () {
+    const {width, onChooseFile, onUploadFile} = this.props
+    const uploadOptions = {
+      baseUrl: `https://${document.location.host}/api/images?width=${width}`,
+      chooseAndUpload: true,
+      accept: 'image/*',
+      dataType: 'json',
+      chooseFile: onChooseFile,
+      uploadSuccess: onUploadFile,
+      uploadError: errorLog('Uploading Image')
+    }
+
+    return <FileUpload
+      options={uploadOptions}>
+      <div style={styles.uploadMenuItem} ref='chooseAndUpload'>
+        <FontIcon
+          className='material-icons'
+          style={styles.uploadIcon}>
+          photo
+          </FontIcon>
+      </div>
+    </FileUpload>
+  }
+}
+
+ImageUpload.propTypes = {
+  width: PropTypes.number.isRequired,
+  onChooseFile: PropTypes.func.isRequired,
+  onUploadFile: PropTypes.func.isRequired
 }
 
 export default ImageUpload

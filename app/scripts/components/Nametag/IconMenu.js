@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import IconMenu from 'material-ui/IconMenu'
 import MenuItem from 'material-ui/MenuItem'
+import IconButton from 'material-ui/IconButton'
 import CircularProgress from 'material-ui/CircularProgress'
 import ImageUpload from '../Utils/ImageUpload'
 
@@ -42,7 +43,11 @@ class NTIconMenu extends Component {
       render = uploadIcon
     } else {
       render = <IconMenu
-        iconButtonElement={<img src={icon} style={styles.icon} />}
+        iconButtonElement={
+          <IconButton>
+            <img src={icon} style={styles.icon} />
+          </IconButton>
+        }
         anchorOrigin={{horizontal: 'left', vertical: 'top'}}
         targetOrigin={{horizontal: 'left', vertical: 'top'}}
         style={styles.icon}
@@ -56,7 +61,7 @@ class NTIconMenu extends Component {
               style={styles.menuItemStyle}
               innerDivStyle={styles.menuItemInnerDivStyle}
               onTouchTap={this.onUpdateIcon(url)}>
-              <img src={url} style={styles.icon} />
+                <img src={url} style={styles.icon} />
             </MenuItem>
           )
       }
