@@ -84,7 +84,7 @@ class RoomCard extends Component {
         <CardTitle
           title={room.title}
           style={styles.roomName}
-          onClick={this.flip.bind(this)} />
+          onClick={this.flip} />
         {room.description}<br />
         <p style={styles.greyText}>
           {room.nametagCount || 0} participant
@@ -117,7 +117,7 @@ class RoomCard extends Component {
     let back = <Card key='back' style={backStyle}>
       <CardTitle
         style={styles.roomName}
-        onClick={this.flip.bind(this)}
+        onClick={this.flip}
         title={room.title} />
       <div style={styles.norms}>
         <h4>Conversation Norms</h4>
