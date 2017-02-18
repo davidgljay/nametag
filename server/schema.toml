@@ -2,7 +2,7 @@
 
 [collections.rooms]
 
-[collections.certificates]
+[collections.badges]
 
 [collections.messages]
 [[collections.messages.indexes]]
@@ -33,8 +33,8 @@ fields = [["room"]]
 template = "any()"
 
 [groups.default]
-[groups.default.rules.read_certificates]
-template = "collection('certificates').anyRead()"
+[groups.default.rules.read_badges]
+template = "collection('badges').anyRead()"
 [groups.default.rules.read_current_user]
 template = "collection('users').find({id: userId()})"
 [groups.default.rules.read_messages]
@@ -53,8 +53,8 @@ validator = """
     context.data.nametags.indexOf(value.author) > -1
   }
 """
-[groups.default.rules.write_certificates]
-template = "collection('certificates').anyWrite()"
+[groups.default.rules.write_badges]
+template = "collection('badges').anyWrite()"
 [groups.authenticated.rules.store_message]
 template = "collection('messages').anyWrite({author: any(), text: any(), room: any(), timestamp: any(), type: any(), saved: any()})"
 validator = """

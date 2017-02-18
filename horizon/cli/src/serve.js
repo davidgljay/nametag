@@ -254,7 +254,7 @@ const read_cert_file = (file, type) => {
     const suggestions = [
       `If you're running horizon for the first time, we recommend \
 running horizon like ${chalk.white('hz serve --dev')} to get started without \
-having to configure certificates.`
+having to configure badges.`
     ]
     if (wasDefault) {
       suggestions.push(

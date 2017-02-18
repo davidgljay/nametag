@@ -64,7 +64,7 @@ describe('ADD_NT_EDIT_CERT', () => {
         1: {
           name: 'tag',
           id: 1,
-          certificates: [testCert]
+          badges: [testCert]
         }
       })
   })
@@ -78,7 +78,7 @@ describe('ADD_NT_EDIT_CERT', () => {
     let newState = reducer({
       1: {
         name: 'tag',
-        certificates: [
+        badges: [
           {
             name: 'test certificate',
             id: 'wudda'
@@ -94,7 +94,7 @@ describe('ADD_NT_EDIT_CERT', () => {
     expect(newState).toEqual({
       1: {
         name: 'tag',
-        certificates: [
+        badges: [
           testCert,
           {
             name: 'test certificate',
@@ -114,7 +114,7 @@ describe('ADD_NT_EDIT_CERT', () => {
     let newState = reducer({
       1: {
         name: 'tag',
-        certificates: [testCert]
+        badges: [testCert]
       }
     }, {
       type: constants.ADD_NT_EDIT_CERT,
@@ -125,7 +125,7 @@ describe('ADD_NT_EDIT_CERT', () => {
       {
         1: {
           name: 'tag',
-          certificates: [testCert]
+          badges: [testCert]
         }
       })
   })
@@ -141,7 +141,7 @@ describe('REMOVE_NT_EDIT_CERT', () => {
     let newState = reducer({
       1: {
         name: 'tag',
-        certificates: [testCert]
+        badges: [testCert]
       }
     },
       {
@@ -153,15 +153,15 @@ describe('REMOVE_NT_EDIT_CERT', () => {
       {
         1: {
           name: 'tag',
-          certificates: []
+          badges: []
         }
       })
   })
-  it('should have no effect when no certificates are present', () => {
+  it('should have no effect when no badges are present', () => {
     let newState = reducer({
       1: {
         name: 'tag',
-        certificates: []
+        badges: []
       }
     },
       {
@@ -172,7 +172,7 @@ describe('REMOVE_NT_EDIT_CERT', () => {
     expect(newState).toEqual({
       1: {
         name: 'tag',
-        certificates: []
+        badges: []
       }
     })
   })

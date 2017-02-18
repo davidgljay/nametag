@@ -121,7 +121,7 @@ class Badge extends Component {
       </div>
     }
 
-    // Make some certificates draggable
+    // Make some badges draggable
     if (this.props.draggable) {
       certificate = this.props.connectDragSource(certificate)
     }

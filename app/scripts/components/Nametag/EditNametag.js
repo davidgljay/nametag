@@ -122,8 +122,8 @@ class EditNametag extends Component {
               hintText='What brings you to this conversation?' />
           </div>
         </div>
-        <div className='certificates'>
-          {nametag.certificates && nametag.certificates.map(
+        <div className='badges'>
+          {nametag.badges && nametag.badges.map(
                 (cert) =>
                   <Badge
                     certificate={cert}

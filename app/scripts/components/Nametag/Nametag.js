@@ -2,7 +2,7 @@ import React from 'react'
 import Badges from '../Badge/Badges'
 import FontIcon from 'material-ui/FontIcon'
 
-const Nametag = ({id, mod, name, icon, bio, present, certificates}) => {
+const Nametag = ({id, mod, name, icon, bio, present, badges}) => {
   let star = ''
 
   // Show if user is a mod.
@@ -17,7 +17,7 @@ const Nametag = ({id, mod, name, icon, bio, present, certificates}) => {
     <img src={icon} alt={name} style={styles.icon} />
     <div style={styles.name}>{name}</div>
     <div style={styles.bio}>{bio}</div>
-    <Badges certificates={certificates} />
+    <Badges badges={badges} />
   </div>
 }
 

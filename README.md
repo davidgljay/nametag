@@ -9,7 +9,7 @@ In offline spaces it is common to trust someone in one domain because of trust t
 
 To address this problem Nametag is experimenting with a system of private, shareable reputation. If a user earns trust from a particular community (say, the legal community in Denver) she can receive a certificate from that community (to be implemented as a double-signed contract on IPFS.) If she approaches a different community, she can choose to share that certificate to earn trust.
 
-On Nametag this certificate system is implemented in a flexible profiling system. Whenever a user enters a conversation they can choose to drag one or more certificates onto their "nametag", revealing those components of their reputation in that conversation only.
+On Nametag this certificate system is implemented in a flexible profiling system. Whenever a user enters a conversation they can choose to drag one or more badges onto their "nametag", revealing those components of their reputation in that conversation only.
 
 ## Implementation
 The alpha version of Nametag is implemented in React with RethinkDB and Horizon.io as a backend, with the goal of both hosting a central version of the service and making an open source version available to organizations wishing to host their own instance. Assistance and code review is appreciated from anyone with experience in React, blockchain technology, community organizing or digital privacy.

@@ -3,8 +3,8 @@ import Nametag from './Nametag'
 import {Card} from 'material-ui/Card'
 
 const renderNametag = (nametag, mod) => {
-  // Make nametag.certificates an empty array if it not already assigned.
-  nametag.certificates = nametag.certificates || []
+  // Make nametag.badges an empty array if it not already assigned.
+  nametag.badges = nametag.badges || []
 
   // Show whether the user is present.
   const cardStyle = nametag.present
@@ -16,7 +16,7 @@ const renderNametag = (nametag, mod) => {
       bio={nametag.bio}
       icon={nametag.icon}
       id={nametag.id}
-      certificates={nametag.certificates}
+      badges={nametag.badges}
       mod={mod} />
   </Card>
 }

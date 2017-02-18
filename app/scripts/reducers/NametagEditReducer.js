@@ -7,17 +7,17 @@ const updateNametagEdit = (state, action) => {
 }
 
 const addBadge = (state, action) => {
-  const certs = state[action.room].certificates
-  ? _.uniqBy([action.cert].concat(state[action.room].certificates), (c) => c.id)
+  const certs = state[action.room].badges
+  ? _.uniqBy([action.cert].concat(state[action.room].badges), (c) => c.id)
     : [action.cert]
-  const newEditNametag = {...state[action.room], certificates: certs}
+  const newEditNametag = {...state[action.room], badges: certs}
   return {...state, [action.room]: newEditNametag}
 }
 
 const removeBadge = (state, action) => {
   const editNametag = state[action.room]
-  const newCerts = _.remove(editNametag.certificates, (c) => c === action.certId)
-  let newNametag = {...editNametag, certificates: newCerts}
+  const newCerts = _.remove(editNametag.badges, (c) => c === action.certId)
+  let newNametag = {...editNametag, badges: newCerts}
   return {...state, [action.room]: newNametag}
 }
 

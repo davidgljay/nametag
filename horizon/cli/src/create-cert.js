@@ -49,7 +49,7 @@ const run = (args) => {
           reject(new Error(`OpenSSL failed with code ${code}.`))
         } else {
           console.log('Everything seems to be fine. ' +
-                      'Remember to add your shiny new certificates to your Horizon config!')
+                      'Remember to add your shiny new badges to your Horizon config!')
           resolve()
         }
       })

@@ -22,7 +22,7 @@ export const updateBadge = (id, property, value) => {
 }
 
 /*
-* Fetches to a certificates
+* Fetches to a badges
 *
 * @params
 *    none
@@ -33,7 +33,7 @@ export const updateBadge = (id, property, value) => {
 export function fetchBadge (certificateId) {
   return function (dispatch) {
     return new Promise((resolve, reject) => {
-      certificateSubscriptions[certificateId] = hz('certificates')
+      certificateSubscriptions[certificateId] = hz('badges')
         .find(certificateId).fetch().subscribe(
           (certificate) => {
             if (certificate) {
@@ -85,7 +85,7 @@ export function createBadge (
       granted
     }
     return new Promise((resolve, reject) => {
-      hz('certificates').insert(certificate).subscribe((cert) => {
+      hz('badges').insert(certificate).subscribe((cert) => {
         dispatch(addBadge({...certificate, id: cert.id}, cert.id))
         resolve(cert)
       }, reject)
@@ -98,7 +98,7 @@ export function createBadge (
 * Marks a certificate as granted
 *
 * Note: This is faking an action which will later be handled with cryptography,
-* certificates should not be mutable!
+* badges should not be mutable!
 *
 * @params
 *    id: The id of the certificate being granted.
@@ -110,7 +110,7 @@ export function createBadge (
 export function grantBadge (id) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      hz('certificates').update({id, granted: true}).subscribe((result) => {
+      hz('badges').update({id, granted: true}).subscribe((result) => {
         dispatch(updateBadge(id, 'granted', true))
         resolve(result)
       }, reject)

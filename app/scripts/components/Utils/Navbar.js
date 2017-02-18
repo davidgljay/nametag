@@ -11,7 +11,7 @@ const onCreateRoomClick = () => {
 }
 
 const onCreateCertClick = () => {
-  window.location = '/certificates/create'
+  window.location = '/badges/create'
 }
 
 const onHomeClick = () => {

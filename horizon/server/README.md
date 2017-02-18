@@ -11,7 +11,7 @@ The Horizon server requires some tools and libraries to be available before it
 can run:
 
  * `node.js` - interpreter to run the Horizon server
- * `openssl` - generating ssl certificates
+ * `openssl` - generating ssl badges
  * [`rethinkdb`](https://github.com/rethinkdb/rethinkdb) - for running a RethinkDB server
 
 ### OpenSSL

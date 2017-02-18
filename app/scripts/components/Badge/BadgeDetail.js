@@ -18,7 +18,7 @@ class BadgeDetail extends Component {
 
     this.onClaimClick = (certificateId) => () => {
       const {appendUserArray, grantBadge} = this.props
-      appendUserArray('certificates', certificateId)
+      appendUserArray('badges', certificateId)
         .then(() => {
           return grantBadge(certificateId)
         })

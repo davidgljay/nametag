@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import rooms from './RoomReducer'
 import nametags from './NametagReducer'
 import user from './UserReducer'
-import certificates from './BadgeReducer'
+import badges from './BadgeReducer'
 import messages from './MessageReducer'
 import reactions from './ReactionReducer'
 import userNametags from './UserNametagReducer'
@@ -12,7 +12,7 @@ const mainReducer = combineReducers({
   rooms,
   nametags,
   user,
-  certificates,
+  badges,
   messages,
   reactions,
   userNametags,

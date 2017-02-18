@@ -3,7 +3,7 @@
 [collections.nametags]
 [collections.users]
 [collections.rooms]
-[collections.certificates]
+[collections.badges]
 [collections.messages]
 [collections.user_nametags]
 [collections.reactions]
@@ -20,11 +20,11 @@ template = "collection('rooms').anyRead()"
 [groups.default.rules.write_rooms]
 template = "collection('rooms').anyWrite()"
 
-[groups.default.rules.read_certificates]
-template = "collection('certificates').anyRead()"
+[groups.default.rules.read_badges]
+template = "collection('badges').anyRead()"
 
-[groups.default.rules.write_certificates]
-template = "collection('certificates').anyWrite()"
+[groups.default.rules.write_badges]
+template = "collection('badges').anyWrite()"
 
 [groups.default.rules.read_messages]
 template = "collection('messages').anyRead()"

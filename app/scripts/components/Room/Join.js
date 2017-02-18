@@ -64,7 +64,7 @@ class Join extends Component {
             </p>
             <UserBadges
               fetchBadge={fetchBadge}
-              selectedCerts={nametag && nametag.certificates} />
+              selectedCerts={nametag && nametag.badges} />
           </div>
           <br />
           <Alert alert={this.state.alert} />

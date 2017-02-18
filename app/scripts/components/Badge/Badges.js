@@ -1,9 +1,9 @@
 import React from 'react'
 import Badge from './Badge'
 
-const Badges = ({certificates = []}) =>
-  <div id='certificates'>
-    {certificates.map((certificate) => {
+const Badges = ({badges = []}) =>
+  <div id='badges'>
+    {badges.map((certificate) => {
       return <Badge
         certificate={certificate}
         key={certificate.id}

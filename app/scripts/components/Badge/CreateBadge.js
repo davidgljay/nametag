@@ -47,7 +47,7 @@ class CreateBadge extends Component {
       const {appendUserArray, toggleCreateCert} = this.props
       this.certPromise(true)
         .then(cert => {
-          return appendUserArray('certificates', cert.id)
+          return appendUserArray('badges', cert.id)
         })
         .then(() => {
           toggleCreateCert()
@@ -74,7 +74,7 @@ class CreateBadge extends Component {
     this.createCert = () => {
       this.certPromise(false)
         .then(cert => {
-          window.location = `/certificates/${cert.id}`
+          window.location = `/badges/${cert.id}`
         })
     }
   }

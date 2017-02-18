@@ -1,6 +1,6 @@
 import constants from '../constants'
 
-const certificates = (state = {}, action) => {
+const badges = (state = {}, action) => {
   switch (action.type) {
     case constants.ADD_CERTIFICATE:
       return Object.assign({}, state, {[action.id]: action.certificate})
@@ -12,4 +12,4 @@ const certificates = (state = {}, action) => {
   }
 }
 
-export default certificates
+export default badges

@@ -7,7 +7,7 @@ const mapStateToProps = (state, ownProps) => {
   return Object.assign(
     {},
     {
-      certificate: state.certificates[ownProps.params.certificateId],
+      certificate: state.badges[ownProps.params.certificateId],
       user: state.user
     },
     ownProps.params)

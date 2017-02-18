@@ -20,7 +20,7 @@ class CreateRoom extends Component {
       hostNametag: {
         name: '',
         bio: '',
-        certificates: []
+        badges: []
       },
       closedIn: {
         unit: 'Days',
@@ -91,7 +91,7 @@ class CreateRoom extends Component {
 
     this.addNametagCert = (cert) => {
       this.setState((prevState) => {
-        prevState.hostNametag.certificates.push(cert)
+        prevState.hostNametag.badges.push(cert)
         return prevState
       })
     }
@@ -114,7 +114,7 @@ class CreateRoom extends Component {
 
     this.removeNametagCert = (certId) => {
       this.setState((prevState) => {
-        let certs = prevState.hostNametag.certificates
+        let certs = prevState.hostNametag.badges
         for (let i = 0; i < certs.length; i++) {
           if (certs[i].id === certId) {
             certs = certs.slice(0, i).concat(certs.slice(i + 1, certs.length))

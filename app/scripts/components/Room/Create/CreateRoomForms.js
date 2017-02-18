@@ -44,12 +44,12 @@ const getForm = (props) => {
               room='' />
             <div style={styles.userBadges}>
               <p style={styles.userBadgeText}>
-              Click to view your certificates.<br />
+              Click to view your badges.<br />
               Drag them over to show them in this conversation.
             </p>
               <UserBadges
                 fetchBadge={props.fetchBadge}
-                selectedCerts={props.hostNametag.certificates} />
+                selectedCerts={props.hostNametag.badges} />
             </div>
           </div>
         </div>
