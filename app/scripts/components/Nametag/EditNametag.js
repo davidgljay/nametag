@@ -142,7 +142,8 @@ EditNametag.propTypes = {
   userDefaults: PropTypes.object,
   room: PropTypes.string.isRequired,
   isOver: PropTypes.bool.isRequired,
-  updateNametagEdit: PropTypes.func.isRequired
+  updateNametagEdit: PropTypes.func.isRequired,
+  appendUserArray: PropTypes.func.isRequired
 }
 
 export default DropTarget(dragTypes.certificate, nametagTarget, collect)(EditNametag)
