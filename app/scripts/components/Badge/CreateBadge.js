@@ -23,7 +23,7 @@ class CreateBadge extends Component {
 
     this.updateCert = (property, value) => {
       if (property === 'name') {
-        this.setState({[property]: value.slice(0, 25)})
+        this.setState({[property]: value.slice(0, 40)})
       } else {
         this.setState({[property]: value})
       }
@@ -130,7 +130,7 @@ class CreateBadge extends Component {
           onChange={(e) => this.updateCert('name', e.target.value)}
           floatingLabelText='Title'
           />
-        <div style={styles.counter}>{25 - this.state.name.length}</div><br />
+        <div style={styles.counter}>{40 - this.state.name.length}</div><br />
         <div style={styles.description}>
           An identity that can be shared with others, such as "Lawyer" or "Dog Lover".
         </div>

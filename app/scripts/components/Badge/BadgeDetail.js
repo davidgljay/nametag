@@ -26,8 +26,8 @@ class BadgeDetail extends Component {
 
     this.onEmailClick = () => {
       const path = window.location.href
-      window.location = `mailto:?&subject=${encodeURIComponent('You\'ve been granted a certificate on Nametag!')}` +
-               `&body=${encodeURIComponent(`To claim your certificate just visit this URL.\n\n${path}`)}`
+      window.open = (`mailto:?&subject=${encodeURIComponent('You\'ve been granted a certificate on Nametag!')}` +
+               `&body=${encodeURIComponent(`To claim your certificate just visit this URL.\n\n${path}`)}`, '_blank').focus()
     }
 
     this.onClipboardClick = () => {
