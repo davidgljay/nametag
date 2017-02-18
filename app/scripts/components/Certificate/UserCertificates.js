@@ -16,6 +16,32 @@ class UserCertificates extends Component {
     this.onCreateCertClick = () => {
       this.setState({showCreateCert: !this.state.showCreateCert})
     }
+
+    this.mapCertificates = (certificates) => {
+      if (certificates.length === 0) {
+        return <div style={styles.noCerts}>
+          You do not currently have any badges, want to add some?
+        </div>
+      }
+      return certificates
+        .filter((certificateId) => {
+          if (!this.props.selectedCerts) {
+            return true
+          }
+          this.props.selectedCerts.map((cert) => {
+            if (cert.id === certificateId) {
+              return false
+            }
+          })
+          return true
+        })
+        .map((certificateId) =>
+          <div key={certificateId}>
+            <Certificate
+              id={certificateId}
+              draggable />
+          </div>)
+    }
   }
 
   componentDidMount () {
@@ -31,41 +57,15 @@ class UserCertificates extends Component {
   }
 
   render () {
+    if (!this.context.user ||
+      !this.context.user.data ||
+      !this.context.user.data.certificates) {
+      return
+    }
     return <div id='certificates' style={styles.container}>
       {
-            this.context.user &&
-            this.context.user.data &&
-            this.context.user.data.certificates &&
-            this.context.user.data.certificates
-            .filter((certificateId) => {
-              if (!this.props.selectedCerts) {
-                return true
-              }
-              let selected = false
-              this.props.selectedCerts.reduce((prev, cert) => {
-                if (cert.id === certificateId) {
-                  selected = true
-                }
-              }, {})
-              return !selected
-            })
-            .map((certificateId) => {
-              return <div key={certificateId}>
-                <Certificate
-                  id={certificateId}
-                  draggable />
-              </div>
-            })
-          }
-      {
-            this.context.user &&
-            this.context.user.data &&
-            this.context.user.data.certificates &&
-            this.context.user.data.certificates.length === 0 &&
-            <div style={styles.noCerts}>
-              You do not currently have any badges, want to add some?
-            </div>
-          }
+        this.mapCertificates(this.context.user.data.certificates)
+      }
       <FlatButton
         label='ADD BADGE'
         onClick={this.onCreateCertClick} />
