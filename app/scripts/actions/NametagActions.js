@@ -32,6 +32,9 @@ export const addNametagArray = (nametags) => {
 */
 export function watchNametags (nametagIds) {
   return (dispatch) => new Promise((resolve, reject) => {
+    if (nametagIds.length === 0) {
+      resolve([])
+    }
     const nametagSearch = nametagIds.map(id => ({id}))
     nametagsSubscription = hz('nametags').findAll(...nametagSearch).watch().subscribe(
         (nametags) => {
