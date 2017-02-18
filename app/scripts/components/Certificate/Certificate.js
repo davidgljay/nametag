@@ -29,7 +29,7 @@ function collect (connect, monitor) {
   }
 }
 
-class Certificate extends Component {
+class Badge extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -129,7 +129,7 @@ class Certificate extends Component {
   }
 }
 
-Certificate.propTypes = {
+Badge.propTypes = {
   connectDragSource: PropTypes.func.isRequired,
   draggable: PropTypes.bool.isRequired,
   certificate: PropTypes.object,
@@ -139,7 +139,7 @@ Certificate.propTypes = {
   onUploadImage: PropTypes.func
 }
 
-export default DragSource(dragTypes.certificate, certSource, collect)(Certificate)
+export default DragSource(dragTypes.certificate, certSource, collect)(Badge)
 
 const styles = {
   certificateChip: {

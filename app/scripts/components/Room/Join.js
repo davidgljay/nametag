@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import Login from '../User/Login'
 import EditNametag from '../Nametag/EditNametag'
-import UserCertificates from '../Certificate/UserCertificates'
+import UserBadges from '../Badge/UserBadges'
 import {grey400, indigo500} from 'material-ui/styles/colors'
 import RaisedButton from 'material-ui/RaisedButton'
 import FontIcon from 'material-ui/FontIcon'
@@ -37,7 +37,7 @@ class Join extends Component {
       addNametagEditCert,
       updateNametagEdit,
       room,
-      fetchCertificate,
+      fetchBadge,
       providerAuth
     } = this.props
     if (this.context.user.id) {
@@ -52,18 +52,18 @@ class Join extends Component {
             removeNametagEditCert={removeNametagEditCert}
             updateNametagEdit={updateNametagEdit}
             room={room} />
-          <div style={styles.userCertificates}>
-            <p style={styles.userCertificateText}>
+          <div style={styles.userBadges}>
+            <p style={styles.userBadgeText}>
               <FontIcon
-                style={styles.userCertificateIcon}
+                style={styles.userBadgeIcon}
                 className='material-icons'>arrow_upward</FontIcon>
               Drag to Share
               <FontIcon
-                style={styles.userCertificateIcon}
+                style={styles.userBadgeIcon}
                 className='material-icons'>arrow_upward</FontIcon>
             </p>
-            <UserCertificates
-              fetchCertificate={fetchCertificate}
+            <UserBadges
+              fetchBadge={fetchBadge}
               selectedCerts={nametag && nametag.certificates} />
           </div>
           <br />
@@ -89,7 +89,7 @@ Join.propTypes = {
   removeNametagEditCert: PropTypes.func.isRequired,
   updateNametagEdit: PropTypes.func.isRequired,
   providerAuth: PropTypes.func.isRequired,
-  fetchCertificate: PropTypes.func.isRequired,
+  fetchBadge: PropTypes.func.isRequired,
   joinRoom: PropTypes.func.isRequired
 }
 
@@ -103,7 +103,7 @@ const styles = {
   join: {
     textAlign: 'center'
   },
-  userCertificates: {
+  userBadges: {
     width: 240,
     display: 'flex',
     flexWrap: 'wrap',
@@ -113,12 +113,12 @@ const styles = {
     padding: 5,
     margin: 5
   },
-  userCertificateText: {
+  userBadgeText: {
     fontStyle: 'italic',
     fontSize: 16,
     color: grey400
   },
-  userCertificateIcon: {
+  userBadgeIcon: {
     color: grey400,
     fontSize: 18,
     verticalAlign: 'middle'

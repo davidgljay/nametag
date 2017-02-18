@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import Certificate from '../Certificate/Certificate'
+import Badge from '../Badge/Badge'
 import { DropTarget } from 'react-dnd'
 import { dragTypes } from '../../constants'
 import {Card} from 'material-ui/Card'
@@ -125,7 +125,7 @@ class EditNametag extends Component {
         <div className='certificates'>
           {nametag.certificates && nametag.certificates.map(
                 (cert) =>
-                  <Certificate
+                  <Badge
                     certificate={cert}
                     draggable
                     removeFromSource={this.removeCert}

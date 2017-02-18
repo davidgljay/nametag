@@ -1,7 +1,7 @@
 import React from 'react'
 import TitleForm from './TitleForm'
 import EditNametag from '../../Nametag/EditNametag'
-import UserCertificates from '../../Certificate/UserCertificates'
+import UserBadges from '../../Badge/UserBadges'
 import ChooseNorms from './ChooseNorms'
 import ImageSearch from './ImageSearch'
 import {grey400} from 'material-ui/styles/colors'
@@ -42,13 +42,13 @@ const getForm = (props) => {
               updateNametagEdit={props.updateNametag}
               userDefaults={props.user.data}
               room='' />
-            <div style={styles.userCertificates}>
-              <p style={styles.userCertificateText}>
+            <div style={styles.userBadges}>
+              <p style={styles.userBadgeText}>
               Click to view your certificates.<br />
               Drag them over to show them in this conversation.
             </p>
-              <UserCertificates
-                fetchCertificate={props.fetchCertificate}
+              <UserBadges
+                fetchBadge={props.fetchBadge}
                 selectedCerts={props.hostNametag.certificates} />
             </div>
           </div>
@@ -87,7 +87,7 @@ const styles = {
   imageSearch: {
     maxWidth: 600
   },
-  userCertificates: {
+  userBadges: {
     width: 270,
     display: 'flex',
     flexWrap: 'wrap',
@@ -96,7 +96,7 @@ const styles = {
     padding: 5,
     margin: 5
   },
-  userCertificateText: {
+  userBadgeText: {
     fontStyle: 'italic',
     fontSize: 12,
     color: grey400

@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react'
-import Certificate from '../../containers/Certificate/CertificateContainer'
-import CreateCertificate from '../../containers/Certificate/CreateCertificateContainer'
+import Badge from '../../containers/Badge/BadgeContainer'
+import CreateBadge from '../../containers/Badge/CreateBadgeContainer'
 import FlatButton from 'material-ui/FlatButton'
 import {grey500} from 'material-ui/styles/colors'
 
-class UserCertificates extends Component {
+class UserBadges extends Component {
 
   constructor (props) {
     super(props)
@@ -17,7 +17,7 @@ class UserCertificates extends Component {
       this.setState({showCreateCert: !this.state.showCreateCert})
     }
 
-    this.mapCertificates = (certificates) => {
+    this.mapBadges = (certificates) => {
       if (certificates.length === 0) {
         return <div style={styles.noCerts}>
           You do not currently have any badges, want to add some?
@@ -37,7 +37,7 @@ class UserCertificates extends Component {
         })
         .map((certificateId) =>
           <div key={certificateId}>
-            <Certificate
+            <Badge
               id={certificateId}
               draggable />
           </div>)
@@ -52,7 +52,7 @@ class UserCertificates extends Component {
     }
     let certificates = this.context.user.data.certificates
     for (let i = 0; i < certificates.length; i++) {
-      this.props.fetchCertificate(certificates[i])
+      this.props.fetchBadge(certificates[i])
     }
   }
 
@@ -64,14 +64,14 @@ class UserCertificates extends Component {
     }
     return <div id='certificates' style={styles.container}>
       {
-        this.mapCertificates(this.context.user.data.certificates)
+        this.mapBadges(this.context.user.data.certificates)
       }
       <FlatButton
         label='ADD BADGE'
         onClick={this.onCreateCertClick} />
       {
             this.state.showCreateCert &&
-            <CreateCertificate
+            <CreateBadge
               mini
               toggleCreateCert={this.onCreateCertClick} />
           }
@@ -79,9 +79,9 @@ class UserCertificates extends Component {
   }
 }
 
-export default UserCertificates
+export default UserBadges
 
-UserCertificates.contextTypes = {
+UserBadges.contextTypes = {
   user: PropTypes.object
 }
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import Certificates from '../Certificate/Certificates'
+import Badges from '../Badge/Badges'
 import FontIcon from 'material-ui/FontIcon'
 
 const Nametag = ({id, mod, name, icon, bio, present, certificates}) => {
@@ -17,7 +17,7 @@ const Nametag = ({id, mod, name, icon, bio, present, certificates}) => {
     <img src={icon} alt={name} style={styles.icon} />
     <div style={styles.name}>{name}</div>
     <div style={styles.bio}>{bio}</div>
-    <Certificates certificates={certificates} />
+    <Badges certificates={certificates} />
   </div>
 }
 

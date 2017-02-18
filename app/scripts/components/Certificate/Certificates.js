@@ -1,14 +1,14 @@
 import React from 'react'
-import Certificate from './Certificate'
+import Badge from './Badge'
 
-const Certificates = ({certificates = []}) =>
+const Badges = ({certificates = []}) =>
   <div id='certificates'>
     {certificates.map((certificate) => {
-      return <Certificate
+      return <Badge
         certificate={certificate}
         key={certificate.id}
         draggable={false} />
     })}
   </div>
 
-export default Certificates
+export default Badges

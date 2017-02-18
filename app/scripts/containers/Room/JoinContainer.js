@@ -7,7 +7,7 @@ import {
   removeNametagEditCert,
   updateNametagEdit
 } from '../../actions/NametagEditActions'
-import {fetchCertificate} from '../../actions/CertificateActions'
+import {fetchBadge} from '../../actions/BadgeActions'
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -22,7 +22,7 @@ const mapDispatchToProps = (dispatch) => {
     updateNametagEdit: (room, property, value) =>
       dispatch(updateNametagEdit(room, property, value)),
     providerAuth: (provider) => dispatch(providerAuth(provider)),
-    fetchCertificate: (certId) => dispatch(fetchCertificate(certId)),
+    fetchBadge: (certId) => dispatch(fetchBadge(certId)),
     joinRoom: (room, userNametag, userId) => dispatch(joinRoom(room, userNametag, userId)),
     appendUserArray: (property, value) => dispatch(appendUserArray(property, value))
   }

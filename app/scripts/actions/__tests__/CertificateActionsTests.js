@@ -1,10 +1,10 @@
-jest.unmock('../CertificateActions')
+jest.unmock('../BadgeActions')
 jest.unmock('../../tests/mockGlobals')
 
 jest.unmock('redux-mock-store')
 jest.unmock('redux-thunk')
 
-import * as actions from '../CertificateActions'
+import * as actions from '../BadgeActions'
 import constants from '../../constants'
 import {hz} from '../../api/horizon'
 import configureStore from 'redux-mock-store'
@@ -14,7 +14,7 @@ import {mockHz} from '../../tests/mockGlobals'
 const middlewares = [thunk]
 const mockStore = configureStore(middlewares)
 
-describe('Certificate Actions', () => {
+describe('Badge Actions', () => {
   let store
   let calls
   beforeEach(() => {
@@ -22,9 +22,9 @@ describe('Certificate Actions', () => {
     calls = []
   })
 
-  describe('addCertificate', () => {
+  describe('addBadge', () => {
     it('should add a certificate', () => {
-      expect(actions.addCertificate({name: 'cert'}, '123'))
+      expect(actions.addBadge({name: 'cert'}, '123'))
         .toEqual({
           type: constants.ADD_CERTIFICATE,
           certificate: {name: 'cert'},
@@ -33,10 +33,10 @@ describe('Certificate Actions', () => {
     })
   })
 
-  describe('fetchCertificate', () => {
+  describe('fetchBadge', () => {
     it('should fetch a certificate', (done) => {
       hz.mockReturnValue(mockHz({name: 'cert', id: 1}, calls)())
-      actions.fetchCertificate(1)(store.dispatch, store.getState).then(
+      actions.fetchBadge(1)(store.dispatch, store.getState).then(
         () => {
           expect(store.getActions()[0]).toEqual(
             {
@@ -49,7 +49,7 @@ describe('Certificate Actions', () => {
     })
   })
 
-  describe('createCertificate', () => {
+  describe('createBadge', () => {
     it('should create a certifiate', () => {
       const cert = {
         creator: 'abc',
@@ -61,7 +61,7 @@ describe('Certificate Actions', () => {
         granted: false
       }
       hz.mockReturnValue(mockHz({...cert, id: '123'}, calls)())
-      return actions.createCertificate(
+      return actions.createBadge(
         cert.creator,
         cert.description_array,
         cert.granter,
@@ -86,7 +86,7 @@ describe('Certificate Actions', () => {
     })
   })
 
-  describe('grantCertificate', () => {
+  describe('grantBadge', () => {
     it('should create a certifiate', () => {
       const cert = {
         creator: 'abc',
@@ -98,7 +98,7 @@ describe('Certificate Actions', () => {
       }
       store = mockStore({'123': cert})
       hz.mockReturnValue(mockHz({updated: 1}, calls)())
-      return actions.grantCertificate('123')(store.dispatch, store.getState)
+      return actions.grantBadge('123')(store.dispatch, store.getState)
         .then(
           () => {
             expect(store.getActions()[0]).toEqual(

@@ -6,7 +6,7 @@ const updateNametagEdit = (state, action) => {
   return {...state, [action.room]: newNametag}
 }
 
-const addCertificate = (state, action) => {
+const addBadge = (state, action) => {
   const certs = state[action.room].certificates
   ? _.uniqBy([action.cert].concat(state[action.room].certificates), (c) => c.id)
     : [action.cert]
@@ -14,7 +14,7 @@ const addCertificate = (state, action) => {
   return {...state, [action.room]: newEditNametag}
 }
 
-const removeCertificate = (state, action) => {
+const removeBadge = (state, action) => {
   const editNametag = state[action.room]
   const newCerts = _.remove(editNametag.certificates, (c) => c === action.certId)
   let newNametag = {...editNametag, certificates: newCerts}
@@ -26,9 +26,9 @@ const nametagEdit = (state = {}, action) => {
     case constants.UPDATE_NAMETAG_EDIT:
       return updateNametagEdit(state, action)
     case constants.ADD_NT_EDIT_CERT:
-      return addCertificate(state, action)
+      return addBadge(state, action)
     case constants.REMOVE_NT_EDIT_CERT:
-      return removeCertificate(state, action)
+      return removeBadge(state, action)
     default:
       return state
   }

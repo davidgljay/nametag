@@ -4,7 +4,7 @@ import {hz} from '../api/horizon'
 
 let certificateSubscriptions = {}
 
-export const addCertificate = (certificate, id) => {
+export const addBadge = (certificate, id) => {
   return {
     type: constants.ADD_CERTIFICATE,
     certificate,
@@ -12,7 +12,7 @@ export const addCertificate = (certificate, id) => {
   }
 }
 
-export const updateCertificate = (id, property, value) => {
+export const updateBadge = (id, property, value) => {
   return {
     type: constants.UPDATE_CERTIFICATE,
     id,
@@ -30,16 +30,16 @@ export const updateCertificate = (id, property, value) => {
 * @returns
 *    Promise resolving to certificate
 */
-export function fetchCertificate (certificateId) {
+export function fetchBadge (certificateId) {
   return function (dispatch) {
     return new Promise((resolve, reject) => {
       certificateSubscriptions[certificateId] = hz('certificates')
         .find(certificateId).fetch().subscribe(
           (certificate) => {
             if (certificate) {
-              resolve(dispatch(addCertificate(certificate, certificateId)))
+              resolve(dispatch(addBadge(certificate, certificateId)))
             } else {
-              reject('Certificate not found')
+              reject('Badge not found')
             }
           },
           (err) => {
@@ -66,7 +66,7 @@ export function fetchCertificate (certificateId) {
 * @returns
 *    Promise resolving to the newly created certificate
 */
-export function createCertificate (
+export function createBadge (
   creator,
   descriptionArray,
   granter,
@@ -86,7 +86,7 @@ export function createCertificate (
     }
     return new Promise((resolve, reject) => {
       hz('certificates').insert(certificate).subscribe((cert) => {
-        dispatch(addCertificate({...certificate, id: cert.id}, cert.id))
+        dispatch(addBadge({...certificate, id: cert.id}, cert.id))
         resolve(cert)
       }, reject)
     })
@@ -107,11 +107,11 @@ export function createCertificate (
 *    Promise resolving to the response from the certificate creation process.
 */
 
-export function grantCertificate (id) {
+export function grantBadge (id) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
       hz('certificates').update({id, granted: true}).subscribe((result) => {
-        dispatch(updateCertificate(id, 'granted', true))
+        dispatch(updateBadge(id, 'granted', true))
         resolve(result)
       }, reject)
     })

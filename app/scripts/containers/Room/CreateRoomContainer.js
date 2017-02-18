@@ -3,7 +3,7 @@ import component from '../../components/Room/CreateRoom'
 import * as NametagActions from '../../actions/NametagActions'
 import * as RoomActions from '../../actions/RoomActions'
 import * as UserActions from '../../actions/UserActions'
-import * as CertificateActions from '../../actions/CertificateActions'
+import * as BadgeActions from '../../actions/BadgeActions'
 
 const mapStateToProps = (state) => {
   return {
@@ -19,7 +19,7 @@ const mapDispatchToProps = (dispatch) => {
     NametagActions,
     RoomActions,
     UserActions,
-    CertificateActions)
+    BadgeActions)
   return Object.keys(actions).reduce((actionsObj, key) => {
     actionsObj[key] = (...args) => dispatch(actions[key].apply(null, args))
     return actionsObj

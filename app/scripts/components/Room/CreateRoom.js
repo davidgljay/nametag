@@ -224,7 +224,7 @@ class CreateRoom extends Component {
           setImageFromUrl={this.props.setImageFromUrl}
           addNametagCert={this.addNametagCert}
           removeNametagCert={this.removeNametagCert}
-          fetchCertificate={this.props.fetchCertificate}
+          fetchBadge={this.props.fetchBadge}
           addNorm={this.addNorm}
           norms={this.state.norms}
           setClosed={this.setClosed}
@@ -273,7 +273,7 @@ CreateRoom.propTypes = {
   unWatchNametag: PropTypes.func.isRequired,
   setRoomProp: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
-  fetchCertificate: PropTypes.func.isRequired
+  fetchBadge: PropTypes.func.isRequired
 }
 
 CreateRoom.childContextTypes = {

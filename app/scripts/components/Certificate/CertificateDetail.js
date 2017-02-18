@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import Certificate from './Certificate'
+import Badge from './Badge'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import {indigo500} from 'material-ui/styles/colors'
@@ -7,7 +7,7 @@ import Navbar from '../Utils/Navbar'
 import Login from '../User/Login'
 import QRcode from 'qrcode.react'
 
-class CertificateDetail extends Component {
+class BadgeDetail extends Component {
 
   constructor (props) {
     super(props)
@@ -17,10 +17,10 @@ class CertificateDetail extends Component {
     }
 
     this.onClaimClick = (certificateId) => () => {
-      const {appendUserArray, grantCertificate} = this.props
+      const {appendUserArray, grantBadge} = this.props
       appendUserArray('certificates', certificateId)
         .then(() => {
-          return grantCertificate(certificateId)
+          return grantBadge(certificateId)
         })
     }
 
@@ -50,8 +50,8 @@ class CertificateDetail extends Component {
   }
 
   componentDidMount () {
-    const {fetchCertificate, certificateId} = this.props
-    fetchCertificate(certificateId)
+    const {fetchBadge, certificateId} = this.props
+    fetchBadge(certificateId)
   }
 
   render () {
@@ -98,7 +98,7 @@ class CertificateDetail extends Component {
       </div>
         : <div style={styles.header}>
           <h3>You have been granted a certificate!</h3>
-          Claim it so that you can show it off! Certificates
+          Claim it so that you can show it off! Badges
           let others know why you are worthy of trust and respect.
           They can also give you access to exclusive communities.
         </div>
@@ -148,7 +148,7 @@ class CertificateDetail extends Component {
           </div>
         }
         <div style={styles.certDetail}>
-          <Certificate
+          <Badge
             certificate={certificate}
             draggable={false}
             expanded />
@@ -159,18 +159,18 @@ class CertificateDetail extends Component {
   }
 }
 
-CertificateDetail.propTypes = {
+BadgeDetail.propTypes = {
   certificateId: PropTypes.string.isRequired,
   user: PropTypes.object,
   logout: PropTypes.func.isRequired,
   setting: PropTypes.func.isRequired,
   certificate: PropTypes.object,
-  fetchCertificate: PropTypes.func.isRequired,
+  fetchBadge: PropTypes.func.isRequired,
   appendUserArray: PropTypes.func.isRequired,
-  grantCertificate: PropTypes.func.isRequired
+  grantBadge: PropTypes.func.isRequired
 }
 
-export default CertificateDetail
+export default BadgeDetail
 
 const styles = {
   header: {

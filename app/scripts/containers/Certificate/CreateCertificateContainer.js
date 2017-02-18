@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
-import component from '../../components/Certificate/CreateCertificate'
+import component from '../../components/Badge/CreateBadge'
 import {logout, setting, providerAuth, appendUserArray} from '../../actions/UserActions'
-import {createCertificate} from '../../actions/CertificateActions'
+import {createBadge} from '../../actions/BadgeActions'
 
 const mapStateToProps = (state, ownProps) => {
   return Object.assign(
@@ -23,8 +23,8 @@ const mapDispatchToProps = (dispatch) => {
     providerAuth (provider) {
       return dispatch(providerAuth(provider))
     },
-    createCertificate (...args) {
-      return dispatch(createCertificate.apply(this, args))
+    createBadge (...args) {
+      return dispatch(createBadge.apply(this, args))
     },
     appendUserArray (...args) {
       return dispatch(appendUserArray.apply(this, args))
@@ -32,9 +32,9 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const Certificate = connect(
+const Badge = connect(
   mapStateToProps,
   mapDispatchToProps
 )(component)
 
-export default Certificate
+export default Badge

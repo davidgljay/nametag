@@ -7,8 +7,8 @@ import Radium, {StyleRoot} from 'radium'
 import Room from './containers/Room/RoomContainer'
 import RoomCards from './containers/Room/RoomCardsContainer'
 import CreateRoom from './containers/Room/CreateRoomContainer'
-import CreateCertificate from './containers/Certificate/CreateCertificateContainer'
-import CertificateDetail from './containers/Certificate/CertificateDetailContainer'
+import CreateBadge from './containers/Badge/CreateBadgeContainer'
+import BadgeDetail from './containers/Badge/BadgeDetailContainer'
 import {getUser} from './actions/UserActions'
 
 import { DragDropContext } from 'react-dnd'
@@ -64,8 +64,8 @@ class Nametag extends Component {
             <Route path='/rooms' component={RoomCards} />
             <Route path='/rooms/create' component={CreateRoom} />
             <Route path='/rooms/:roomId' component={Room} />
-            <Route path='/certificates/create' component={CreateCertificate} />
-            <Route path='/certificates/:certificateId' component={CertificateDetail} />
+            <Route path='/certificates/create' component={CreateBadge} />
+            <Route path='/certificates/:certificateId' component={BadgeDetail} />
           </Router>
         </MuiThemeProvider>
       </StyleRoot>

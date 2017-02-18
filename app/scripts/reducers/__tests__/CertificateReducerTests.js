@@ -1,9 +1,9 @@
-import certificateReducer from '../CertificateReducer'
+import certificateReducer from '../BadgeReducer'
 import constants from '../../constants'
 
-jest.unmock('../CertificateReducer')
+jest.unmock('../BadgeReducer')
 
-describe('Certificate reducer', () => {
+describe('Badge reducer', () => {
   describe('ADD_CERTIFICATE', () => {
     it('should add a certificate to state', () => {
       let newState = certificateReducer({},

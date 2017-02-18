@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import Certificate from './Certificate'
+import Badge from './Badge'
 import TextField from 'material-ui/TextField'
 import Navbar from '../Utils/Navbar'
 import trackEvent from '../../utils/analytics'
@@ -7,7 +7,7 @@ import CircularProgress from 'material-ui/CircularProgress'
 import RaisedButton from 'material-ui/RaisedButton'
 import {indigo500} from 'material-ui/styles/colors'
 
-class CreateCertificate extends Component {
+class CreateBadge extends Component {
 
   constructor (props) {
     super(props)
@@ -55,10 +55,10 @@ class CreateCertificate extends Component {
     }
 
     this.certPromise = (markGranted) => {
-      const {user, createCertificate, mini} = this.props
+      const {user, createBadge, mini} = this.props
       const {name, icon, description, note} = this.state
       const granter = mini ? 'Self' : this.props.user.data.displayNames[0]
-      return createCertificate(
+      return createBadge(
         user.id,
         [description],
         granter,
@@ -87,7 +87,7 @@ class CreateCertificate extends Component {
       return <CircularProgress />
     }
 
-    return <div id='createCertificate'>
+    return <div id='createBadge'>
       {
         !mini &&
         <Navbar
@@ -108,7 +108,7 @@ class CreateCertificate extends Component {
           </div>
         }
         <div style={styles.certPreview}>
-          <Certificate
+          <Badge
             certificate={{
               name,
               icon_array: icon,
@@ -171,13 +171,13 @@ class CreateCertificate extends Component {
   }
 }
 
-CreateCertificate.propTypes = {
+CreateBadge.propTypes = {
   user: PropTypes.object.isRequired,
-  createCertificate: PropTypes.func.isRequired,
+  createBadge: PropTypes.func.isRequired,
   appendUserArray: PropTypes.func.isRequired
 }
 
-export default CreateCertificate
+export default CreateBadge
 
 const styles = {
   certPreview: {
