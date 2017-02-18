@@ -9,11 +9,6 @@ class UserCertificates extends Component {
   constructor (props) {
     super(props)
 
-    this.contextTypes = {
-      user: PropTypes.object,
-      dispatch: PropTypes.func
-    }
-
     this.state = {
       showCreateCert: false
     }
@@ -85,6 +80,10 @@ class UserCertificates extends Component {
 }
 
 export default UserCertificates
+
+UserCertificates.contextTypes = {
+  user: PropTypes.object
+}
 
 const styles = {
   noCerts: {

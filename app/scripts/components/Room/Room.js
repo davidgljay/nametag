@@ -195,9 +195,16 @@ class Room extends Component {
 }
 
 Room.propTypes = {
+  rooms: PropTypes.object,
+  nametags: PropTypes.object,
+  messages: PropTypes.object,
+  params: PropTypes.shape({
+    roomId: PropTypes.string.isRequired
+  }),
   postMessage: PropTypes.func.isRequired,
-  userNametag: PropTypes.object,
-  room: PropTypes.object
+  saveMessage: PropTypes.func.isRequired,
+  addRoomMessage: PropTypes.func.isRequired,
+  userNametags: PropTypes.object
 }
 
 Room.childContextTypes = {
