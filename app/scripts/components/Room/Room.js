@@ -60,9 +60,9 @@ class Room extends Component {
   }
 
   componentDidMount () {
-    const {params, watchRoom} = this.props
+    const {params, subscribeToRoom} = this.props
     const roomId = params.roomId
-    watchRoom(roomId)
+    subscribeToRoom(roomId)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -73,7 +73,7 @@ class Room extends Component {
 
   componentWillUnmount () {
     const roomId = this.props.params.roomId
-    this.props.unWatchRoom(roomId)
+    this.props.unsubscribeToRoom(roomId)
     if (this.state.presenceTimer) {
       clearInterval(this.state.presenceTimer)
     }
@@ -204,6 +204,8 @@ Room.propTypes = {
   postMessage: PropTypes.func.isRequired,
   saveMessage: PropTypes.func.isRequired,
   addRoomMessage: PropTypes.func.isRequired,
+  subscribeToRoom: PropTypes.func.isRequired,
+  unsubscribeToRoom: PropTypes.func.isRequired,
   userNametags: PropTypes.object
 }
 

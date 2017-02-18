@@ -1,4 +1,4 @@
-import roomReducer from '../UserNametagReducer'
+import UserNametagReducer from '../UserNametagReducer'
 import constants from '../../constants'
 
 jest.unmock('../UserNametagReducer')
@@ -6,19 +6,19 @@ jest.unmock('../UserNametagReducer')
 describe('User Nametag reducer', () => {
   describe('ADD_USER_NAMETAG', () => {
     it('should add a user nametag to state', () => {
-      let newState = roomReducer({
+      let newState = UserNametagReducer({
         1: {
           name: 'tag'
         }
       },
         {
-          type: constants.ADD_USER_NAMETAG,
-          room: 1,
-          nametag: {'name': 'Dinosaur'}
+          type: constants.ADD_USER_NAMETAG_ARRAY,
+          nametags: [{name: 'Dinosaur', room: 1}]
         })
       expect(newState).toEqual({
         1: {
-          name: 'Dinosaur'
+          name: 'Dinosaur',
+          room: 1
         }
       })
     })
@@ -26,7 +26,7 @@ describe('User Nametag reducer', () => {
 
   describe('UPDATE_USER_NAMETAG', () => {
     it('should add an arbitrary value to a user nametag', () => {
-      let newState = roomReducer({
+      let newState = UserNametagReducer({
         1: {
           name: 'tag'
         }
@@ -45,7 +45,7 @@ describe('User Nametag reducer', () => {
     })
 
     it('should not overwrite other values in a user nametag', () => {
-      let newState = roomReducer({
+      let newState = UserNametagReducer({
         1: {
           name: 'Dinosaur'
         }

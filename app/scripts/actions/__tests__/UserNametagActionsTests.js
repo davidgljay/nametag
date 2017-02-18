@@ -47,9 +47,8 @@ describe('UserNametagActions', () => {
           }
         })
         expect(store.getActions()[0]).toEqual({
-          nametag: {'nametag': '456', 'room': 'abc', 'user': 'me'},
-          room: 'abc',
-          type: 'ADD_USER_NAMETAG'
+          nametags: [{nametag: '456', room: 'abc', user: 'me'}],
+          type: 'ADD_USER_NAMETAG_ARRAY'
         })
       })
     })

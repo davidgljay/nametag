@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import component from '../../components/Room/Room'
-import {fetchRooms, watchRoom, unWatchRoom, addRoomMessage} from '../../actions/RoomActions'
+import {fetchRooms, subscribeToRoom, unsubscribeToRoom, addRoomMessage} from '../../actions/RoomActions'
 import {showPresence} from '../../actions/NametagActions'
 import {
   watchUserNametags,
@@ -24,8 +24,8 @@ const mapDispatchToProps = (dispatch) => {
   const disp = (func) => (...args) => dispatch(func.apply(this, args))
   return {
     fetchRooms: disp(fetchRooms),
-    watchRoom: disp(watchRoom),
-    unWatchRoom: disp(unWatchRoom),
+    subscribeToRoom: disp(subscribeToRoom),
+    unsubscribeToRoom: disp(unsubscribeToRoom),
     addRoomMessage: disp(addRoomMessage),
     watchDirectMessages: disp(watchDirectMessages),
     unWatchDirectMessages: disp(unWatchDirectMessages),

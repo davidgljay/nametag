@@ -179,23 +179,17 @@ export function fetchRooms (ids) {
 }
 
 /*
-* Watch room
-* @params
-*   roomId - The room to watch
+* Subscribe to Room
+* Gets all info needed to display a room
+* @params{String} roomId - The id of the room to watch
 *
-* @returns
-*   Promise
+* @returns null
 */
-export function watchRoom (id) {
+
+export function subscribeToRoom (id) {
   return (dispatch) => {
     return Promise.all([
-      // Watch room
-      new Promise((resolve, reject) => {
-        roomWatches[id] = hz('rooms').find(id).watch().subscribe((room) => {
-          dispatch(addRoom(room, room.id))
-          resolve(room)
-        }, reject)
-      }),
+      dispatch(watchRoom(id)),
       dispatch(watchRoomNametags(id)),
       dispatch(watchRoomMessages(id)),
       getAuth()
@@ -213,14 +207,34 @@ export function watchRoom (id) {
       }
       return Promise.all(promises)
     })
-    .catch(errorLog('Error getting room'))
+    .catch(errorLog('Error getting room data'))
+  }
+}
+
+/*
+* Watch room
+* @params
+*   roomId - The room to watch
+*
+* @returns
+*   Promise
+*/
+export function watchRoom (id) {
+  return (dispatch) => {
+    return new Promise((resolve, reject) => {
+      roomWatches[id] = hz('rooms').find(id).watch().subscribe((room) => {
+        dispatch(addRoom(room, room.id))
+        resolve(room)
+      }, reject)
+    })
+    .catch(errorLog('Error watching room'))
   }
 }
 
 /*
 * Unwatch room
 * @params
-*   roomId - The room to watch
+*   id - The room to watch
 *
 * @returns
 *   Promise
@@ -228,12 +242,23 @@ export function watchRoom (id) {
 export function unWatchRoom (id) {
   return () => {
     roomWatches[id].unsubscribe()
+  }
+}
+
+/* Unsubscribe to Room
+* @params
+*   id - The room to watch
+*/
+export function unsubscribeToRoom (id) {
+  return () => {
+    unWatchRoom(id)
     unWatchRoomNametags(id)
     unWatchRoomMessages(id)
     unWatchUserNametags()
     unWatchDirectMessages()
   }
 }
+
 
 /*
 * Search Images
