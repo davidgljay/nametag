@@ -1,0 +1,25 @@
+# Nametag
+#
+# VERSION               0.0.4
+
+FROM node
+MAINTAINER David Jay <davidgljay@gmail.com>
+
+LABEL description="Used to start the Nametag server"
+LABEL updated="2/18/17"
+RUN echo "deb http://download.rethinkdb.com/apt jessie main" >> /etc/apt/sources.list
+RUN echo "deb http://dl.yarnpkg.com/debian/ stable main" >> /etc/apt/sources.list
+RUN wget -qO- https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN wget -qO- https://download.rethinkdb.com/apt/pubkey.gpg | apt-key add -
+RUN apt-get update
+RUN apt-get install yarn -y
+RUN apt-get install rethinkdb -y
+RUN apt-get install python-pip -y
+RUN pip install rethinkdb
+RUN pip install s3cmd
+
+COPY $PWD/server/package.json /usr/server/package.json
+WORKDIR usr/server
+RUN yarn install
+RUN yarn global add horizon
+CMD ./starthz.sh

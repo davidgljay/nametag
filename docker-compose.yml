@@ -1,6 +1,6 @@
 horizon:
   build: .
-  dockerfile: devDockerfile
+  dockerfile: horizonDockerfile
   volumes:
     - ./dist:/usr/app/
     - ./.keys:/usr/.keys
@@ -8,6 +8,8 @@ horizon:
     - ./server/src:/usr/server/src
     - ./server/schema.toml:/usr/server/schema.toml
     - ./server/starthz.sh:/usr/server/starthz.sh
+    - ./server/backup.sh:/usr/server/backup.sh
+    - ./server/backup:/usr/server/backup
     - ./horizon:/usr/server/horizon
   links:
     - rethinkdb
@@ -15,7 +17,7 @@ horizon:
     - "8181:8181"
 rethinkdb:
   image: rethinkdb
-  command: rethinkdb --bind "all" --no-update-check
+  command: rethinkdb --bind "all"
   volumes:
     - ./rethinkdb_data/:/var/lib/rethinkdb/instances.d
   ports:

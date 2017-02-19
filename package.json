@@ -100,6 +100,8 @@
     "build": "NODE_ENV=production gulp build",
     "lint": "standard",
     "lint-fix": "standard --fix",
+    "backup": "docker-compose run horizon sh backup.sh",
+    "syncdb": "docker-compose run horizon hz schema apply schema.toml --project-name nametag --connect rethinkdb",
     "update": "git pull origin master && npm install && npm run build && docker-compose build --no-cache horizon && docker-compose stop && docker-compose up -d",
     "storybook": "start-storybook -p 9001 -c .storybook"
   },
