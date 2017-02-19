@@ -79,6 +79,14 @@ gulp.task('html', function () {
         .pipe($.size())
 })
 
+// JSON
+gulp.task('sw', function () {
+  return gulp.src('app/sw.js')
+        .pipe($.useref())
+        .pipe(gulp.dest('dist/public'))
+        .pipe($.size())
+})
+
 // Images
 gulp.task('images', function () {
   return gulp.src(['app/images/**/*'], {base: './app/images/'})
@@ -139,10 +147,8 @@ gulp.task('bower', function () {
 })
 
 gulp.task('json', function () {
-  gulp.src('app/scripts/json/**/*.json', {
-    base: 'app/scripts'
-  })
-        .pipe(gulp.dest('dist/public/scripts'))
+  gulp.src('app/*.json')
+    .pipe(gulp.dest('dist/public'))
 })
 
 // Robots.txt and favicon.ico
@@ -153,7 +159,7 @@ gulp.task('extras', function () {
 })
 
 // Watch
-gulp.task('watch', ['html', 'fonts', 'styles', 'images', 'bundle'], function () {
+gulp.task('watch', ['html', 'fonts', 'styles', 'images', 'json', 'bundle'], function () {
   browserSync({
     notify: false,
     logPrefix: 'BS',
@@ -178,7 +184,7 @@ gulp.task('watch', ['html', 'fonts', 'styles', 'images', 'bundle'], function () 
 })
 
 // Build
-gulp.task('build', ['clean', 'html', 'buildBundle', 'images', 'fonts', 'extras', 'compress'])
+gulp.task('build', ['clean', 'html', 'buildBundle', 'images', 'fonts', 'extras', 'json', 'compress'])
 
 gulp.task('compress', ['buildBundle'], function () {
   return pump([
