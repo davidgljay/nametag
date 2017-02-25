@@ -122,46 +122,46 @@ class Room extends Component {
                   style={styles.leftNavHeader}
                   onClick={this.toggleLeftBarSection('norms')}>
                   {
-                      this.state.toggles.norms ? '- ' : '+ '
-                    }
-                    Norms
-                  </div>
-                {
-                    this.state.toggles.norms &&
-                    <div style={styles.norms}>
-                      <Norms norms={room.norms} />
-                    </div>
+                    this.state.toggles.norms ? '- ' : '+ '
                   }
+                  Norms
+                </div>
+                {
+                  this.state.toggles.norms &&
+                  <div style={styles.norms}>
+                    <Norms norms={room.norms} />
+                  </div>
+                }
                 <div
                   style={styles.leftNavHeader}
                   onClick={this.toggleLeftBarSection('rooms')}>
                   {
-                        this.state.toggles.rooms ? '- ' : '+ '
-                      }
-                      Rooms
-                    </div>
-                {
-                      this.state.toggles.rooms &&
-                      <Notifications
-                        userNametags={userNametags}
-                        rooms={rooms}
-                        roomId={params.roomId} />
+                    this.state.toggles.rooms ? '- ' : '+ '
                   }
+                  Rooms
+                </div>
+                {
+                  this.state.toggles.rooms &&
+                  <Notifications
+                    userNametags={userNametags}
+                    rooms={rooms}
+                    roomId={params.roomId} />
+                }
                 <div
                   style={styles.leftNavHeader}
                   onClick={this.toggleLeftBarSection('nametags')}>
                   {
-                      this.state.toggles.nametags ? '- ' : '+ '
-                    }
-                    Nametags
-                  </div>
-                {
-                    this.state.toggles.nametags &&
-                    <Nametags
-                      room={params.roomId}
-                      mod={room.mod}
-                      nametags={nametags} />
+                    this.state.toggles.nametags ? '- ' : '+ '
                   }
+                  Nametags
+                </div>
+                {
+                  this.state.toggles.nametags &&
+                  <Nametags
+                    room={params.roomId}
+                    mod={room.mod}
+                    nametags={nametags} />
+                }
               </div>
               <div style={styles.leftBarChevron}>
                 <FontIcon
@@ -184,7 +184,7 @@ class Room extends Component {
             <Compose
               postMessage={postMessage}
               addRoomMessage={addRoomMessage} />
-            }
+          }
         </div>
           : <div style={styles.spinner}>
             <CircularProgress />

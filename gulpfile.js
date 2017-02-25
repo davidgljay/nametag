@@ -159,7 +159,7 @@ gulp.task('extras', function () {
 })
 
 // Watch
-gulp.task('watch', ['html', 'fonts', 'styles', 'images', 'json', 'bundle'], function () {
+gulp.task('watch', ['html', 'fonts', 'styles', 'images', 'json', 'sw', 'bundle'], function () {
   browserSync({
     notify: false,
     logPrefix: 'BS',
@@ -172,7 +172,7 @@ gulp.task('watch', ['html', 'fonts', 'styles', 'images', 'json', 'bundle'], func
   })
 
   // Watch .json files
-  gulp.watch('app/scripts/**/*.json', ['json'])
+  gulp.watch('app/*.json', ['json'])
 
   // Watch .html files
   gulp.watch('app/*.html', ['html'])
@@ -181,10 +181,13 @@ gulp.task('watch', ['html', 'fonts', 'styles', 'images', 'json', 'bundle'], func
 
   // Watch image files
   gulp.watch('app/images/**/*', ['images', reload])
+
+  // Watch the service worker
+  gulp.watch('app/sw.js', ['sw'])
 })
 
 // Build
-gulp.task('build', ['clean', 'html', 'buildBundle', 'images', 'fonts', 'extras', 'json', 'compress'])
+gulp.task('build', ['clean', 'html', 'buildBundle', 'images', 'fonts', 'extras', 'json', 'sw', 'compress'])
 
 gulp.task('compress', ['buildBundle'], function () {
   return pump([

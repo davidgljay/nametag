@@ -139,7 +139,7 @@
     "jquery": "$"
   },
   "standard": {
-    "globals": [ "describe", "it", "expect", "amplitude", "mixpanel", "jest", "beforeEach", "Horizon", "fetch", "history" ],
+    "globals": [ "describe", "it", "expect", "amplitude", "mixpanel", "jest", "beforeEach", "Horizon", "fetch", "history", "self", "caches" ],
     "ignore": [
       "/node_modules",
       "/horizon"
