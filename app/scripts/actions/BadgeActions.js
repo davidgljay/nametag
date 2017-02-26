@@ -2,24 +2,17 @@ import errorLog from '../utils/errorLog'
 import constants from '../constants'
 import {hz} from '../api/horizon'
 
-let certificateSubscriptions = {}
+export const addBadgeArray = (badges) => ({
+  type: constants.ADD_BADGE_ARRAY,
+  badges
+})
 
-export const addBadge = (certificate, id) => {
-  return {
-    type: constants.ADD_CERTIFICATE,
-    certificate,
-    id
-  }
-}
-
-export const updateBadge = (id, property, value) => {
-  return {
-    type: constants.UPDATE_CERTIFICATE,
-    id,
-    property,
-    value
-  }
-}
+export const updateBadge = (id, property, value) => ({
+  type: constants.UPDATE_CERTIFICATE,
+  id,
+  property,
+  value
+})
 
 /*
 * Fetches to a badges
@@ -30,14 +23,19 @@ export const updateBadge = (id, property, value) => {
 * @returns
 *    Promise resolving to certificate
 */
-export function fetchBadge (certificateId) {
+export function fetchBadges (badgeIds) {
   return function (dispatch) {
+    if (!badgeIds || badgeIds.length === 0) {
+      return
+    }
+    const badgeSearch = badgeIds.map(id => ({id}))
     return new Promise((resolve, reject) => {
-      certificateSubscriptions[certificateId] = hz('badges')
-        .find(certificateId).fetch().subscribe(
-          (certificate) => {
-            if (certificate) {
-              resolve(dispatch(addBadge(certificate, certificateId)))
+      hz('badges')
+        .findAll(...badgeSearch).fetch().subscribe(
+          (badges) => {
+            if (badges) {
+              dispatch(addBadgeArray(badges))
+              resolve(badges)
             } else {
               reject('Badge not found')
             }
@@ -46,7 +44,7 @@ export function fetchBadge (certificateId) {
             reject(err)
           })
     })
-    .catch(errorLog('Error subscribing to certificate ' + certificateId + ': '))
+    .catch(errorLog('Error subscribing to certificate ' + badgeId + ': '))
   }
 }
 
@@ -75,7 +73,7 @@ export function createBadge (
   notes,
   granted) {
   return (dispatch) => {
-    const certificate = {
+    const badge = {
       creator,
       description_array: descriptionArray,
       granter,
@@ -85,8 +83,8 @@ export function createBadge (
       granted
     }
     return new Promise((resolve, reject) => {
-      hz('badges').insert(certificate).subscribe((cert) => {
-        dispatch(addBadge({...certificate, id: cert.id}, cert.id))
+      hz('badges').insert(badge).subscribe((cert) => {
+        dispatch(addBadgeArray([{...badge, id: cert.id}]))
         resolve(cert)
       }, reject)
     })

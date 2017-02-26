@@ -10,49 +10,37 @@ class UserBadges extends Component {
     super(props)
 
     this.state = {
-      showCreateCert: false
+      showCreateBadge: false
     }
 
-    this.onCreateCertClick = () => {
-      this.setState({showCreateCert: !this.state.showCreateCert})
+    this.onCreateBadgeClick = () => {
+      this.setState({showCreateBadge: !this.state.showCreateBadge})
     }
 
     this.mapBadges = (badges) => {
       if (badges.length === 0) {
-        return <div style={styles.noCerts}>
+        return <div style={styles.noBadges}>
           You do not currently have any badges, want to add some?
         </div>
       }
       return badges
-        .filter((certificateId) => {
-          if (!this.props.selectedCerts) {
+        .filter((badgeId) => {
+          if (!this.props.selectedBadges) {
             return true
           }
-          this.props.selectedCerts.map((cert) => {
-            if (cert.id === certificateId) {
+          this.props.selectedBadges.map((badge) => {
+            if (badge.id === badgeId) {
               return false
             }
           })
           return true
         })
-        .map((certificateId) =>
-          <div key={certificateId}>
+        .map((badgeId) =>
+          <div key={badgeId}>
             <Badge
-              id={certificateId}
+              id={badgeId}
               draggable />
           </div>)
-    }
-  }
-
-  componentDidMount () {
-    if (!this.context.user ||
-      !this.context.user.data ||
-      !this.context.user.data.badges) {
-      return
-    }
-    let badges = this.context.user.data.badges
-    for (let i = 0; i < badges.length; i++) {
-      this.props.fetchBadge(badges[i])
     }
   }
 
@@ -60,7 +48,7 @@ class UserBadges extends Component {
     if (!this.context.user ||
       !this.context.user.data ||
       !this.context.user.data.badges) {
-      return
+      return null
     }
     return <div id='badges' style={styles.container}>
       {
@@ -68,25 +56,29 @@ class UserBadges extends Component {
       }
       <FlatButton
         label='ADD BADGE'
-        onClick={this.onCreateCertClick} />
+        onClick={this.onCreateBadgeClick} />
       {
-            this.state.showCreateCert &&
-            <CreateBadge
-              mini
-              toggleCreateCert={this.onCreateCertClick} />
-          }
+        this.state.showCreateBadge &&
+        <CreateBadge
+          mini
+          toggleCreateBadge={this.onCreateBadgeClick} />
+      }
     </div>
   }
 }
 
 export default UserBadges
 
+UserBadges.propTypes = {
+  selectedBadges: PropTypes.arrayOf(PropTypes.string)
+}
+
 UserBadges.contextTypes = {
   user: PropTypes.object
 }
 
 const styles = {
-  noCerts: {
+  noBadges: {
     color: grey500
   },
   container: {

@@ -37,7 +37,6 @@ class Join extends Component {
       addNametagEditCert,
       updateNametagEdit,
       room,
-      fetchBadge,
       providerAuth
     } = this.props
     if (this.context.user.id) {
@@ -63,8 +62,7 @@ class Join extends Component {
                 className='material-icons'>arrow_upward</FontIcon>
             </p>
             <UserBadges
-              fetchBadge={fetchBadge}
-              selectedCerts={nametag && nametag.badges} />
+              selectedBadges={nametag && nametag.badges} />
           </div>
           <br />
           <Alert alert={this.state.alert} />
@@ -89,7 +87,6 @@ Join.propTypes = {
   removeNametagEditCert: PropTypes.func.isRequired,
   updateNametagEdit: PropTypes.func.isRequired,
   providerAuth: PropTypes.func.isRequired,
-  fetchBadge: PropTypes.func.isRequired,
   joinRoom: PropTypes.func.isRequired
 }
 

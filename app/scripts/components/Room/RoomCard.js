@@ -85,7 +85,7 @@ class RoomCard extends Component {
           title={room.title}
           style={styles.roomName}
           onClick={this.flip} />
-        {room.description}<br />
+        <div style={styles.roomDescription}>{room.description}</div>
         <p style={styles.greyText}>
           {room.nametagCount || 0} participant
             {room.nametagCount === 1 ? '' : 's'}
@@ -189,7 +189,11 @@ const styles = {
     perspective: 1000
   },
   roomName: {
-    cursor: 'pointer'
+    cursor: 'pointer',
+    minHeight: 72
+  },
+  roomDescription: {
+    minHeight: 64
   },
   flippingFront: {
     backfaceVisibility: 'hidden',
