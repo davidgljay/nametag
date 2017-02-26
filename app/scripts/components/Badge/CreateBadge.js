@@ -18,10 +18,10 @@ class CreateBadge extends Component {
       description: '',
       note: 'Badge granted.',
       uploading: false,
-      certFor: 'me'
+      badgeFor: 'me'
     }
 
-    this.updateCert = (property, value) => {
+    this.updateBadge = (property, value) => {
       if (property === 'name') {
         this.setState({[property]: value.slice(0, 40)})
       } else {
@@ -39,22 +39,22 @@ class CreateBadge extends Component {
       this.setState({uploading: false})
     }
 
-    this.onCertForChange = (val) => {
-      this.setState({certFor: val})
+    this.onBadgeForChange = (val) => {
+      this.setState({badgeFor: val})
     }
 
-    this.createSelfCert = () => {
-      const {appendUserArray, toggleCreateCert} = this.props
-      this.certPromise(true)
-        .then(cert => {
-          return appendUserArray('badges', cert.id)
+    this.createSelfBadge = () => {
+      const {appendUserArray, toggleCreateBadge} = this.props
+      this.badgePromise(true)
+        .then(badge => {
+          return appendUserArray('badges', badge.id)
         })
         .then(() => {
-          toggleCreateCert()
+          toggleCreateBadge()
         })
     }
 
-    this.certPromise = (markGranted) => {
+    this.badgePromise = (markGranted) => {
       const {user, createBadge, mini} = this.props
       const {name, icon, description, note} = this.state
       const granter = mini ? 'Self' : this.props.user.data.displayNames[0]
@@ -71,10 +71,10 @@ class CreateBadge extends Component {
         markGranted)
     }
 
-    this.createCert = () => {
-      this.certPromise(false)
-        .then(cert => {
-          window.location = `/badges/${cert.id}`
+    this.createBadge = () => {
+      this.badgePromise(false)
+        .then(badge => {
+          window.location = `/badges/${badge.id}`
         })
     }
   }
@@ -107,9 +107,9 @@ class CreateBadge extends Component {
             </div>
           </div>
         }
-        <div style={styles.certPreview}>
+        <div style={styles.badgePreview}>
           <Badge
-            certificate={{
+            badge={{
               name,
               icon_array: icon,
               description_array: [description],
@@ -164,7 +164,7 @@ class CreateBadge extends Component {
             labelStyle={styles.buttonLabel}
             backgroundColor={indigo500}
             label={'CREATE BADGE'}
-            onClick={mini ? this.createSelfCert : this.createCert} />
+            onClick={mini ? this.createSelfBadge : this.createBadge} />
         </div>
       </div>
     </div>
@@ -180,7 +180,7 @@ CreateBadge.propTypes = {
 export default CreateBadge
 
 const styles = {
-  certPreview: {
+  badgePreview: {
     lineHeight: '20px',
     width: 250
   },

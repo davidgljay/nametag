@@ -44,7 +44,7 @@ export function fetchBadges (badgeIds) {
             reject(err)
           })
     })
-    .catch(errorLog('Error subscribing to certificate ' + badgeId + ': '))
+    .catch(errorLog('Error subscribing to certificate ' + badgeIds + ': '))
   }
 }
 

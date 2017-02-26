@@ -1,5 +1,5 @@
 export const dragTypes = {
-  certificate: 'certificate'
+  badge: 'badge'
 }
 
 export default {

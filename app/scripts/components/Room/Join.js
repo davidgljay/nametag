@@ -4,7 +4,6 @@ import EditNametag from '../Nametag/EditNametag'
 import UserBadges from '../Badge/UserBadges'
 import {grey400, indigo500} from 'material-ui/styles/colors'
 import RaisedButton from 'material-ui/RaisedButton'
-import FontIcon from 'material-ui/FontIcon'
 import Alert from '../Utils/Alert'
 
 class Join extends Component {
@@ -52,15 +51,6 @@ class Join extends Component {
             updateNametagEdit={updateNametagEdit}
             room={room} />
           <div style={styles.userBadges}>
-            <p style={styles.userBadgeText}>
-              <FontIcon
-                style={styles.userBadgeIcon}
-                className='material-icons'>arrow_upward</FontIcon>
-              Drag to Share
-              <FontIcon
-                style={styles.userBadgeIcon}
-                className='material-icons'>arrow_upward</FontIcon>
-            </p>
             <UserBadges
               selectedBadges={nametag && nametag.badges} />
           </div>

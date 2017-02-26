@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import Badge from '../../containers/Badge/BadgeContainer'
 import CreateBadge from '../../containers/Badge/CreateBadgeContainer'
 import FlatButton from 'material-ui/FlatButton'
+import FontIcon from 'material-ui/FontIcon'
 import {grey500} from 'material-ui/styles/colors'
 
 class UserBadges extends Component {
@@ -18,36 +19,44 @@ class UserBadges extends Component {
     }
 
     this.mapBadges = (badges) => {
-      if (badges.length === 0) {
+      const {selectedBadges} = this.props
+      if (!badges || badges.length === 0) {
         return <div style={styles.noBadges}>
           You do not currently have any badges, want to add some?
         </div>
       }
-      return badges
-        .filter((badgeId) => {
-          if (!this.props.selectedBadges) {
-            return true
-          }
-          this.props.selectedBadges.map((badge) => {
-            if (badge.id === badgeId) {
-              return false
-            }
-          })
-          return true
-        })
-        .map((badgeId) =>
-          <div key={badgeId}>
-            <Badge
-              id={badgeId}
-              draggable />
-          </div>)
+      return <div>
+        <p style={styles.userBadgeText}>
+          <FontIcon
+            style={styles.userBadgeIcon}
+            className='material-icons'>arrow_upward</FontIcon>
+          Drag to Share
+          <FontIcon
+            style={styles.userBadgeIcon}
+            className='material-icons'>arrow_upward</FontIcon>
+        </p>
+        {
+          badges
+            .filter((badgeId) => {
+              if (!selectedBadges) {
+                return true
+              }
+              return selectedBadges.reduce((bool, badge) =>
+                bool && badge.id !== badgeId, true)
+            })
+            .map((badgeId) =>
+              <div key={badgeId}>
+                <Badge
+                  id={badgeId}
+                  draggable />
+              </div>)
+        }
+      </div>
     }
   }
 
   render () {
-    if (!this.context.user ||
-      !this.context.user.data ||
-      !this.context.user.data.badges) {
+    if (!this.context.user) {
       return null
     }
     return <div id='badges' style={styles.container}>
@@ -70,7 +79,9 @@ class UserBadges extends Component {
 export default UserBadges
 
 UserBadges.propTypes = {
-  selectedBadges: PropTypes.arrayOf(PropTypes.string)
+  selectedBadges: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string
+  }))
 }
 
 UserBadges.contextTypes = {

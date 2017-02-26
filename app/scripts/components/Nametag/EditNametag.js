@@ -124,12 +124,12 @@ class EditNametag extends Component {
         </div>
         <div className='badges'>
           {nametag.badges && nametag.badges.map(
-                (cert) =>
+                (badge) =>
                   <Badge
-                    certificate={cert}
+                    badge={badge}
                     draggable
                     removeFromSource={this.removeCert}
-                    key={cert.id} />
+                    key={badge.id} />
                 )}
         </div>
       </Card>
@@ -146,7 +146,7 @@ EditNametag.propTypes = {
   appendUserArray: PropTypes.func.isRequired
 }
 
-export default DropTarget(dragTypes.certificate, nametagTarget, collect)(EditNametag)
+export default DropTarget(dragTypes.badge, nametagTarget, collect)(EditNametag)
 
 const styles = {
   editNametag: {
