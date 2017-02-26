@@ -8,7 +8,7 @@ export const addBadgeArray = (badges) => ({
 })
 
 export const updateBadge = (id, property, value) => ({
-  type: constants.UPDATE_CERTIFICATE,
+  type: constants.UPDATE_BADGE,
   id,
   property,
   value

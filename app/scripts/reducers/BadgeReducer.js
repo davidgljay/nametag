@@ -11,7 +11,7 @@ const badges = (state = {}, action) => {
         return p
       }, {}
     )}
-    case constants.UPDATE_CERTIFICATE:
+    case constants.UPDATE_BADGE:
       const newCert = Object.assign({}, state[action.id], {[action.property]: action.value})
       return Object.assign({}, state, {[action.id]: newCert})
     default:

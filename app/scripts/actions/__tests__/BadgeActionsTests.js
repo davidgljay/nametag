@@ -22,29 +22,26 @@ describe('Badge Actions', () => {
     calls = []
   })
 
-  describe('addBadge', () => {
-    it('should add a certificate', () => {
-      expect(actions.addBadge({name: 'cert'}, '123'))
+  describe('addBadgeArray', () => {
+    it('should add a badge', () => {
+      expect(actions.addBadgeArray([{name: 'badge', id: 123}]))
         .toEqual({
-          type: constants.ADD_CERTIFICATE,
-          certificate: {name: 'cert'},
-          id: '123'
+          type: constants.ADD_BADGE_ARRAY,
+          badges: [{name: 'badge', id: 123}]
         })
     })
   })
 
-  describe('fetchBadge', () => {
-    it('should fetch a certificate', (done) => {
-      hz.mockReturnValue(mockHz({name: 'cert', id: 1}, calls)())
-      actions.fetchBadge(1)(store.dispatch, store.getState).then(
+  describe('fetchBadges', () => {
+    it('should fetch a badge', () => {
+      hz.mockReturnValue(mockHz([{name: 'cert', id: 1}], calls)())
+      return actions.fetchBadges([1])(store.dispatch, store.getState).then(
         () => {
           expect(store.getActions()[0]).toEqual(
             {
-              type: constants.ADD_CERTIFICATE,
-              certificate: {name: 'cert', id: 1},
-              id: 1
+              type: constants.ADD_BADGE_ARRAY,
+              badges: [{name: 'cert', id: 1}]
             })
-          done()
         })
     })
   })
@@ -76,9 +73,8 @@ describe('Badge Actions', () => {
             expect(c.creator).toEqual('abc')
             expect(store.getActions()[0]).toEqual(
               {
-                type: constants.ADD_CERTIFICATE,
-                certificate: c,
-                id: '123'
+                type: constants.ADD_BADGE_ARRAY,
+                badges: [c]
               }
             )
           }
@@ -87,8 +83,8 @@ describe('Badge Actions', () => {
   })
 
   describe('grantBadge', () => {
-    it('should create a certifiate', () => {
-      const cert = {
+    it('should create a badge', () => {
+      const badge = {
         creator: 'abc',
         name: 'Is a dinosuar',
         granter: 'Jurassic Park',
@@ -96,14 +92,14 @@ describe('Badge Actions', () => {
         icon_array: ['http://dino.img'],
         granted: false
       }
-      store = mockStore({'123': cert})
+      store = mockStore({'123': badge})
       hz.mockReturnValue(mockHz({updated: 1}, calls)())
       return actions.grantBadge('123')(store.dispatch, store.getState)
         .then(
           () => {
             expect(store.getActions()[0]).toEqual(
               {
-                type: constants.UPDATE_CERTIFICATE,
+                type: constants.UPDATE_BADGE,
                 id: '123',
                 property: 'granted',
                 value: true
