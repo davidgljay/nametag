@@ -92,6 +92,12 @@ const styles = {
   noBadges: {
     color: grey500
   },
+  userBadgeText: {
+    color: grey500
+  },
+  userBadgeIcon: {
+    color: grey500
+  },
   container: {
     width: '100%'
   }
