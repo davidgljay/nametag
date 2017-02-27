@@ -37,19 +37,16 @@ const getForm = (props) => {
             <EditNametag
               error={props.error}
               userNametag={props.hostNametag}
-              addNametagEditCert={props.addNametagCert}
-              removeNametagEditCert={props.removeNametagCert}
+              addNametagEditBadge={props.addNametagBadge}
+              appendUserArray={props.appendUserArray}
+              removeNametagEditBadge={props.removeNametagBadge}
               updateNametagEdit={props.updateNametag}
               userDefaults={props.user.data}
               room='' />
             <div style={styles.userBadges}>
-              <p style={styles.userBadgeText}>
-              Click to view your badges.<br />
-              Drag them over to show them in this conversation.
-            </p>
               <UserBadges
                 fetchBadge={props.fetchBadge}
-                selectedCerts={props.hostNametag.badges} />
+                selectedBadges={props.hostNametag.badges} />
             </div>
           </div>
         </div>

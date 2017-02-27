@@ -1,9 +1,8 @@
 import { connect } from 'react-redux'
 import component from '../../components/Room/CreateRoom'
-import * as NametagActions from '../../actions/NametagActions'
-import * as RoomActions from '../../actions/RoomActions'
-import * as UserActions from '../../actions/UserActions'
-import * as BadgeActions from '../../actions/BadgeActions'
+import {searchImage, setImageFromUrl, postRoom, joinRoom, setRoomProp} from '../../actions/RoomActions'
+import {getUser, logout, setting, appendUserArray} from '../../actions/UserActions'
+import {fetchBadges} from '../../actions/BadgeActions'
 
 const mapStateToProps = (state) => {
   return {
@@ -14,16 +13,19 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  const actions = Object.assign(
-    {},
-    NametagActions,
-    RoomActions,
-    UserActions,
-    BadgeActions)
-  return Object.keys(actions).reduce((actionsObj, key) => {
-    actionsObj[key] = (...args) => dispatch(actions[key].apply(null, args))
-    return actionsObj
-  }, {})
+  const disp = (func) => (...args) => dispatch(func.apply(this, args))
+  return {
+    searchImage: disp(searchImage),
+    postRoom: disp(postRoom),
+    joinRoom: disp(joinRoom),
+    setting: disp(setting),
+    setImageFromUrl: disp(setImageFromUrl),
+    appendUserArray: disp(appendUserArray),
+    setRoomProp: disp(setRoomProp),
+    getUser: disp(getUser),
+    logout: disp(logout),
+    fetchBadges: disp(fetchBadges)
+  }
 }
 
 const CreateRoom = connect(
