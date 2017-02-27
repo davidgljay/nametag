@@ -83,9 +83,9 @@ export function createBadge (
       granted
     }
     return new Promise((resolve, reject) => {
-      hz('badges').insert(badge).subscribe((cert) => {
-        dispatch(addBadgeArray([{...badge, id: cert.id}]))
-        resolve(cert)
+      hz('badges').insert(badge).subscribe(({id}) => {
+        dispatch(addBadgeArray([{...badge, id}]))
+        resolve(badge)
       }, reject)
     })
     .catch(errorLog('Error creating a certificate: '))

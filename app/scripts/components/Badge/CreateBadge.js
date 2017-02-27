@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react'
 import Badge from './Badge'
 import TextField from 'material-ui/TextField'
 import Navbar from '../Utils/Navbar'
-import trackEvent from '../../utils/analytics'
 import CircularProgress from 'material-ui/CircularProgress'
 import RaisedButton from 'material-ui/RaisedButton'
 import {indigo500} from 'material-ui/styles/colors'
@@ -30,12 +29,11 @@ class CreateBadge extends Component {
     }
 
     this.onChooseImage = () => {
-      trackEvent('CHOOSE_CERT_IMAGE')
       this.setState({uploading: true})
     }
 
     this.onUploadImage = ({url}) => {
-      this.updateCert('icon', [url])
+      this.updateBadge('icon', [url])
       this.setState({uploading: false})
     }
 
@@ -127,7 +125,7 @@ class CreateBadge extends Component {
         <TextField
           style={styles.textfield}
           value={this.state.name}
-          onChange={(e) => this.updateCert('name', e.target.value)}
+          onChange={(e) => this.updateBadge('name', e.target.value)}
           floatingLabelText='Title'
           />
         <div style={styles.counter}>{40 - this.state.name.length}</div><br />
@@ -137,7 +135,7 @@ class CreateBadge extends Component {
         <TextField
           style={styles.textfield}
           value={this.state.description}
-          onChange={(e) => this.updateCert('description', e.target.value)}
+          onChange={(e) => this.updateBadge('description', e.target.value)}
           floatingLabelText='Description'
           />
         <div style={styles.description}>
@@ -151,7 +149,7 @@ class CreateBadge extends Component {
             <TextField
               style={styles.textfield}
               value={this.state.note}
-              onChange={(e) => this.updateCert('note', e.target.value)}
+              onChange={(e) => this.updateBadge('note', e.target.value)}
               floatingLabelText='Note'
               />
             <div style={styles.description}>

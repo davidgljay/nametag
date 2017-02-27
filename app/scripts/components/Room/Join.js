@@ -73,8 +73,8 @@ Join.propTypes = {
   room: PropTypes.string.isRequired,
   normsChecked: PropTypes.bool.isRequired,
   nametag: PropTypes.object,
-  addNametagEditCert: PropTypes.func.isRequired,
-  removeNametagEditCert: PropTypes.func.isRequired,
+  addNametagEditBadge: PropTypes.func.isRequired,
+  removeNametagEditBadge: PropTypes.func.isRequired,
   updateNametagEdit: PropTypes.func.isRequired,
   providerAuth: PropTypes.func.isRequired,
   joinRoom: PropTypes.func.isRequired

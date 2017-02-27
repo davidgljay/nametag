@@ -44,8 +44,8 @@ class NTIconMenu extends Component {
     } else {
       render = <IconMenu
         iconButtonElement={
-          <IconButton>
-            <img src={icon} style={styles.icon} />
+          <IconButton iconStyle={styles.icon}>
+            <img src={icon} />
           </IconButton>
         }
         anchorOrigin={{horizontal: 'left', vertical: 'top'}}
