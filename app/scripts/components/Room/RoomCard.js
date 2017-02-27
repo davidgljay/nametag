@@ -7,7 +7,6 @@ import constants from '../../constants'
 import {Card, CardTitle, CardMedia} from 'material-ui/Card'
 import Checkbox from 'material-ui/Checkbox'
 import {grey400} from 'material-ui/styles/colors'
-import trackEvent from '../../utils/analytics'
 import TimeAgo from 'react-timeago'
 
 class RoomCard extends Component {
@@ -26,7 +25,6 @@ class RoomCard extends Component {
     }
 
     this.flip = () => {
-      trackEvent('CARD_FLIP')
       this.setState({flipped: !this.state.flipped, flipping: 0.01})
 
       // Run the flipping animation. This needs to be done w/ JS b/c Radium doesn't support it.

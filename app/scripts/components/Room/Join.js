@@ -32,8 +32,8 @@ class Join extends Component {
     const {
       nametag,
       appendUserArray,
-      removeNametagEditCert,
-      addNametagEditCert,
+      removeNametagEditBadge,
+      addNametagEditBadge,
       updateNametagEdit,
       room,
       providerAuth
@@ -46,8 +46,8 @@ class Join extends Component {
             userNametag={nametag}
             userDefaults={this.context.user.data}
             appendUserArray={appendUserArray}
-            addNametagEditCert={addNametagEditCert}
-            removeNametagEditCert={removeNametagEditCert}
+            addNametagEditBadge={addNametagEditBadge}
+            removeNametagEditBadge={removeNametagEditBadge}
             updateNametagEdit={updateNametagEdit}
             room={room} />
           <div style={styles.userBadges}>

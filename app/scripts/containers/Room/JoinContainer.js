@@ -3,8 +3,8 @@ import component from '../../components/Room/Join'
 import {providerAuth, appendUserArray} from '../../actions/UserActions'
 import {joinRoom} from '../../actions/RoomActions'
 import {
-  addNametagEditCert,
-  removeNametagEditCert,
+  addNametagEditBadge,
+  removeNametagEditBadge,
   updateNametagEdit
 } from '../../actions/NametagEditActions'
 
@@ -16,8 +16,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addNametagEditCert: (cert, room) => dispatch(addNametagEditCert(cert, room)),
-    removeNametagEditCert: (certId, room) => dispatch(removeNametagEditCert(certId, room)),
+    addNametagEditBadge: (badge, room) => dispatch(addNametagEditBadge(badge, room)),
+    removeNametagEditBadge: (badgeId, room) => dispatch(removeNametagEditBadge(badgeId, room)),
     updateNametagEdit: (room, property, value) =>
       dispatch(updateNametagEdit(room, property, value)),
     providerAuth: (provider) => dispatch(providerAuth(provider)),
