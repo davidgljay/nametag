@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import component from '../../components/Room/CreateRoom'
-import {searchImage, setImageFromUrl, postRoom, joinRoom, setRoomProp} from '../../actions/RoomActions'
+import {searchImage, setImageFromUrl, postRoom, joinRoom, setRoomProp, updateRoom} from '../../actions/RoomActions'
 import {getUser, logout, setting, appendUserArray} from '../../actions/UserActions'
 import {fetchBadges} from '../../actions/BadgeActions'
 
@@ -22,6 +22,7 @@ const mapDispatchToProps = (dispatch) => {
     setImageFromUrl: disp(setImageFromUrl),
     appendUserArray: disp(appendUserArray),
     setRoomProp: disp(setRoomProp),
+    updateRoom: disp(updateRoom),
     getUser: disp(getUser),
     logout: disp(logout),
     fetchBadges: disp(fetchBadges)
