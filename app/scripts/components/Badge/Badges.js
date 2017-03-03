@@ -3,10 +3,10 @@ import Badge from './Badge'
 
 const Badges = ({badges = []}) =>
   <div id='badges'>
-    {badges.map((certificate) => {
+    {badges.map((badge) => {
       return <Badge
-        certificate={certificate}
-        key={certificate.id}
+        badge={badge}
+        key={badge.id}
         draggable={false} />
     })}
   </div>

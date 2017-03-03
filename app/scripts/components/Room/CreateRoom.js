@@ -89,9 +89,9 @@ class CreateRoom extends Component {
       })
     }
 
-    this.addNametagCert = (cert) => {
+    this.addNametagBadge = (badge) => {
       this.setState((prevState) => {
-        prevState.hostNametag.badges.push(cert)
+        prevState.hostNametag.badges.push(badge)
         return prevState
       })
     }
@@ -112,16 +112,15 @@ class CreateRoom extends Component {
       })
     }
 
-    this.removeNametagCert = (certId) => {
-      this.setState((prevState) => {
-        let certs = prevState.hostNametag.badges
-        for (let i = 0; i < certs.length; i++) {
-          if (certs[i].id === certId) {
-            certs = certs.slice(0, i).concat(certs.slice(i + 1, certs.length))
-          }
+    this.removeNametagBadge = (badgeId) => {
+      this.setState((prevState) => ({
+        ...prevState,
+        hostNametag: {
+          ...prevState.hostNametag,
+          badges: prevState.hostNametag.badges.filter((b) => b.id !== badgeId)
         }
-        return prevState
       })
+      )
     }
 
     this.postRoom = () => {
@@ -189,6 +188,11 @@ class CreateRoom extends Component {
     }
   }
 
+  componentDidMount () {
+    const {getUser, fetchBadges} = this.props
+    getUser().then(user => fetchBadges(user.data.badges))
+  }
+
   getChildContext () {
     return {
       user: this.props.user
@@ -196,10 +200,10 @@ class CreateRoom extends Component {
   }
 
   render () {
-    const {user, logout} = this.props
+    const {user, logout, setting} = this.props
     const {room, stepIndex} = this.state
     return <div>
-      <Navbar user={user} logout={logout} />
+      <Navbar user={user} logout={logout} setting={setting} />
       <div style={styles.title}>
         <h1>Start a Conversation</h1>
         <Stepper stepIndex={stepIndex} />
@@ -221,10 +225,10 @@ class CreateRoom extends Component {
           hostNametag={this.state.hostNametag}
           updateRoom={this.updateRoom}
           searchImage={this.props.searchImage}
+          appendUserArray={this.props.appendUserArray}
           setImageFromUrl={this.props.setImageFromUrl}
-          addNametagCert={this.addNametagCert}
-          removeNametagCert={this.removeNametagCert}
-          fetchBadge={this.props.fetchBadge}
+          addNametagBadge={this.addNametagBadge}
+          removeNametagBadge={this.removeNametagBadge}
           addNorm={this.addNorm}
           norms={this.state.norms}
           setClosed={this.setClosed}
@@ -266,14 +270,16 @@ class CreateRoom extends Component {
 }
 
 CreateRoom.propTypes = {
+  getUser: PropTypes.func.isRequired,
+  fetchBadges: PropTypes.func.isRequired,
   searchImage: PropTypes.func.isRequired,
   postRoom: PropTypes.func.isRequired,
   joinRoom: PropTypes.func.isRequired,
-  watchNametag: PropTypes.func.isRequired,
-  unWatchNametag: PropTypes.func.isRequired,
   setRoomProp: PropTypes.func.isRequired,
+  setImageFromUrl: PropTypes.func.isRequired,
+  appendUserArray: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
-  fetchBadge: PropTypes.func.isRequired
+  setting: PropTypes.func.isRequired
 }
 
 CreateRoom.childContextTypes = {

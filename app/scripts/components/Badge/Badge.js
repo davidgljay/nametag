@@ -4,17 +4,16 @@ import { dragTypes } from '../../constants'
 import { DragSource } from 'react-dnd'
 import { Card } from 'material-ui/Card'
 import FontIcon from 'material-ui/FontIcon'
-import trackEvent from '../../utils/analytics'
 import ImageUpload from '../Utils/ImageUpload'
 import CircularProgress from 'material-ui/CircularProgress'
 
-const certSource = {
+const badgeSource = {
   beginDrag (props) {
-    return props.certificate
+    return props.badge
   },
   endDrag (props) {
     if (props.removeFromSource) {
-      props.removeFromSource(props.certificate.id)
+      props.removeFromSource(props.badge.id)
     }
   }
 }
@@ -39,7 +38,6 @@ class Badge extends Component {
   }
 
   toggleExpanded () {
-    trackEvent('TOGGLE_CERT')
     this.setState({expanded: !this.state.expanded})
   }
 
@@ -48,28 +46,39 @@ class Badge extends Component {
   }
 
   render () {
-    if (!this.props.certificate) {
+    const {
+      badge,
+      connectDragSource,
+      showIconUpload,
+      isDragging,
+      onUploadImage,
+      currentOffset,
+      initialOffset,
+      draggable
+    } = this.props
+
+    if (!badge) {
       return null
     }
 
     // Show an icon if one exists, or a manu to upload an icon if showIconUpload is enabled
     let icon
-    if (this.props.certificate.icon_array) {
-      icon = <img style={styles.icon} alt='icon' src={this.props.certificate.icon_array[0]} />
-    } else if (this.props.showIconUpload) {
+    if (badge.icon_array) {
+      icon = <img style={styles.icon} alt='icon' src={badge.icon_array[0]} />
+    } else if (showIconUpload) {
       icon = this.state.uploading
       ? <CircularProgress />
         : <ImageUpload
           width={50}
           onChooseFile={() => this.setState({uploading: true})}
-          onUploadFile={this.props.onUploadImage} />
+          onUploadFile={onUploadImage} />
     }
 
-    // Show expanded or collapsed certificate
-    let certificate
+    // Show expanded or collapsed badge
+    let badgeComponent
     if (this.state.expanded) {
-      certificate = <div>
-        <Card style={styles.certificateExpanded}>
+      badgeComponent = <div>
+        <Card style={styles.badgeExpanded}>
           <FontIcon
             style={styles.close}
             className='material-icons'
@@ -81,15 +90,15 @@ class Badge extends Component {
               {icon}
             </div>
             <div>
-              <div style={styles.name}>{this.props.certificate.name}</div>
+              <div style={styles.name}>{badge.name}</div>
               <div style={styles.granter}>
-                <em>Verified by: </em><br />{this.props.certificate.granter}
+                <em>Verified by: </em><br />{badge.granter}
               </div>
             </div>
           </div>
-          <div style={styles.description}>{this.props.certificate.description_array[0]}</div>
+          <div style={styles.description}>{badge.description_array[0]}</div>
           <div style={styles.notes}>
-            {this.props.certificate.notes.map((note) => {
+            {badge.notes.map((note) => {
               return <div style={styles.note} key={note.date}>
                 <div style={styles.date}>{moment(note.date).format('MMMM Do, YYYY')}</div>
                 <div style={styles.msg}>{': ' + note.msg}</div>
@@ -99,50 +108,50 @@ class Badge extends Component {
         </Card>
       </div>
     } else {
-      let chipStyle = styles.certificateChip
-      if (this.props.isDragging && this.props.currentOffset) {
-        chipStyle = Object.assign({}, styles.certificateChip,
+      let chipStyle = styles.badgeChip
+      if (isDragging && currentOffset) {
+        chipStyle = Object.assign({}, styles.badgeChip,
           {
             position: 'relative',
-            top: this.props.currentOffset.y - this.props.initialOffset.y - 20,
-            left: this.props.currentOffset.x - this.props.initialOffset.x
+            top: currentOffset.y - initialOffset.y - 20,
+            left: currentOffset.x - initialOffset.x
           })
       }
-      certificate = <div
+      badgeComponent = <div
         style={chipStyle}
         className='mdl-shadow--2dp'
         onClick={this.toggleExpanded}>
         {
-            this.props.certificate.icon_array
-            ? <div style={Object.assign({}, styles.miniIcon, {background: 'url(' + this.props.certificate.icon_array[0] + ') 0 0 / cover'})} />
+            badge.icon_array
+            ? <div style={Object.assign({}, styles.miniIcon, {background: 'url(' + badge.icon_array[0] + ') 0 0 / cover'})} />
              : <div style={styles.spacer} />
           }
-        <div style={styles.chipText}>{this.props.certificate.name}</div>
+        <div style={styles.chipText}>{badge.name}</div>
       </div>
     }
 
     // Make some badges draggable
-    if (this.props.draggable) {
-      certificate = this.props.connectDragSource(certificate)
+    if (draggable) {
+      badgeComponent = connectDragSource(badgeComponent)
     }
-    return certificate
+    return badgeComponent
   }
 }
 
 Badge.propTypes = {
   connectDragSource: PropTypes.func.isRequired,
   draggable: PropTypes.bool.isRequired,
-  certificate: PropTypes.object,
+  badge: PropTypes.object,
   isDragging: PropTypes.bool.isRequired,
   removeFromSource: PropTypes.func,
   showIconUpload: PropTypes.bool,
   onUploadImage: PropTypes.func
 }
 
-export default DragSource(dragTypes.certificate, certSource, collect)(Badge)
+export default DragSource(dragTypes.badge, badgeSource, collect)(Badge)
 
 const styles = {
-  certificateChip: {
+  badgeChip: {
     height: 22,
     borderRadius: 11,
     display: 'inline-block',
@@ -172,7 +181,7 @@ const styles = {
     height: 10,
     display: 'inline-block'
   },
-  certificateExpanded: {
+  badgeExpanded: {
     margin: 5,
     marginTop: 30,
     padding: 10,

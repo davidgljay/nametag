@@ -45,9 +45,9 @@ describe('UPDATE_NAMETAG_EDIT', () => {
   })
 })
 
-describe('ADD_NT_EDIT_CERT', () => {
+describe('ADD_NT_EDIT_BADGE', () => {
   it('should add a certificate to a nametag for the room', () => {
-    let testCert = {
+    let testBadge = {
       name: 'test certificate',
       id: 'wudda'
     }
@@ -55,22 +55,22 @@ describe('ADD_NT_EDIT_CERT', () => {
     let newState = reducer({
       1: {name: 'tag', id: 1}
     }, {
-      type: constants.ADD_NT_EDIT_CERT,
+      type: constants.ADD_NT_EDIT_BADGE,
       room: 1,
-      cert: testCert
+      badge: testBadge
     })
     expect(newState).toEqual(
       {
         1: {
           name: 'tag',
           id: 1,
-          badges: [testCert]
+          badges: [testBadge]
         }
       })
   })
 
   it('should add a second certificate', () => {
-    let testCert = {
+    let testBadge = {
       name: 'test certificate 2',
       id: 'womps'
     }
@@ -86,16 +86,16 @@ describe('ADD_NT_EDIT_CERT', () => {
         ]
       }
     }, {
-      type: constants.ADD_NT_EDIT_CERT,
+      type: constants.ADD_NT_EDIT_BADGE,
       room: 1,
-      cert: testCert
+      badge: testBadge
     })
 
     expect(newState).toEqual({
       1: {
         name: 'tag',
         badges: [
-          testCert,
+          testBadge,
           {
             name: 'test certificate',
             id: 'wudda'
@@ -105,8 +105,8 @@ describe('ADD_NT_EDIT_CERT', () => {
     })
   })
 
-  it('should not add a second certificate with the same id', () => {
-    let testCert = {
+  it('should not add a second badge with the same id', () => {
+    let testBadge = {
       name: 'test certificate',
       id: 'wudda'
     }
@@ -114,26 +114,26 @@ describe('ADD_NT_EDIT_CERT', () => {
     let newState = reducer({
       1: {
         name: 'tag',
-        badges: [testCert]
+        badges: [testBadge]
       }
     }, {
-      type: constants.ADD_NT_EDIT_CERT,
+      type: constants.ADD_NT_EDIT_BADGE,
       room: 1,
-      cert: testCert
+      badge: testBadge
     })
     expect(newState).toEqual(
       {
         1: {
           name: 'tag',
-          badges: [testCert]
+          badges: [testBadge]
         }
       })
   })
 })
 
-describe('REMOVE_NT_EDIT_CERT', () => {
-  it('should remove a certificate from a nametag for the room', () => {
-    let testCert = {
+describe('REMOVE_NT_EDIT_BADGE', () => {
+  it('should remove a badge from a nametag for the room', () => {
+    let testBadge = {
       name: 'test certificate',
       id: 'wudda'
     }
@@ -141,11 +141,11 @@ describe('REMOVE_NT_EDIT_CERT', () => {
     let newState = reducer({
       1: {
         name: 'tag',
-        badges: [testCert]
+        badges: [testBadge]
       }
     },
       {
-        type: constants.REMOVE_NT_EDIT_CERT,
+        type: constants.REMOVE_NT_EDIT_BADGE,
         room: 1,
         certId: 'wudda'
       })
@@ -165,7 +165,7 @@ describe('REMOVE_NT_EDIT_CERT', () => {
       }
     },
       {
-        type: constants.REMOVE_NT_EDIT_CERT,
+        type: constants.REMOVE_NT_EDIT_BADGE,
         room: 1,
         certId: 'wudda'
       })

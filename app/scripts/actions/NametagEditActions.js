@@ -9,18 +9,18 @@ export function updateNametagEdit (room, property, value) {
   }
 }
 
-export function addNametagEditCert (cert, room) {
+export function addNametagEditBadge (badge, room) {
   return {
-    type: constants.ADD_NT_EDIT_CERT,
-    cert,
+    type: constants.ADD_NT_EDIT_BADGE,
+    badge,
     room
   }
 }
 
-export function removeNametagEditCert (certId, room) {
+export function removeNametagEditBadge (badgeId, room) {
   return {
-    type: constants.REMOVE_NT_EDIT_CERT,
-    certId,
+    type: constants.REMOVE_NT_EDIT_BADGE,
+    badgeId,
     room
   }
 }

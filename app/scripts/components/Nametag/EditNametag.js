@@ -10,7 +10,7 @@ import NTIconMenu from './IconMenu'
 
 const nametagTarget = {
   drop (props, monitor) {
-    props.addNametagEditCert(monitor.getItem(), props.room)
+    props.addNametagEditBadge(monitor.getItem(), props.room)
   }
 }
 
@@ -43,9 +43,9 @@ class EditNametag extends Component {
       }
     }
 
-    this.removeCert = (cert) => {
+    this.removeCert = (badge) => {
       trackEvent('REMOVE_NT_CERT')
-      this.props.removeNametagEditCert(cert, this.props.room)
+      this.props.removeNametagEditBadge(badge, this.props.room)
     }
   }
 
@@ -124,12 +124,12 @@ class EditNametag extends Component {
         </div>
         <div className='badges'>
           {nametag.badges && nametag.badges.map(
-                (cert) =>
+                (badge) =>
                   <Badge
-                    certificate={cert}
+                    badge={badge}
                     draggable
                     removeFromSource={this.removeCert}
-                    key={cert.id} />
+                    key={badge.id} />
                 )}
         </div>
       </Card>
@@ -146,7 +146,7 @@ EditNametag.propTypes = {
   appendUserArray: PropTypes.func.isRequired
 }
 
-export default DropTarget(dragTypes.certificate, nametagTarget, collect)(EditNametag)
+export default DropTarget(dragTypes.badge, nametagTarget, collect)(EditNametag)
 
 const styles = {
   editNametag: {

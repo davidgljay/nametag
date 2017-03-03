@@ -3,11 +3,10 @@ import component from '../../components/Room/Join'
 import {providerAuth, appendUserArray} from '../../actions/UserActions'
 import {joinRoom} from '../../actions/RoomActions'
 import {
-  addNametagEditCert,
-  removeNametagEditCert,
+  addNametagEditBadge,
+  removeNametagEditBadge,
   updateNametagEdit
 } from '../../actions/NametagEditActions'
-import {fetchBadge} from '../../actions/BadgeActions'
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -17,12 +16,11 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addNametagEditCert: (cert, room) => dispatch(addNametagEditCert(cert, room)),
-    removeNametagEditCert: (certId, room) => dispatch(removeNametagEditCert(certId, room)),
+    addNametagEditBadge: (badge, room) => dispatch(addNametagEditBadge(badge, room)),
+    removeNametagEditBadge: (badgeId, room) => dispatch(removeNametagEditBadge(badgeId, room)),
     updateNametagEdit: (room, property, value) =>
       dispatch(updateNametagEdit(room, property, value)),
     providerAuth: (provider) => dispatch(providerAuth(provider)),
-    fetchBadge: (certId) => dispatch(fetchBadge(certId)),
     joinRoom: (room, userNametag, userId) => dispatch(joinRoom(room, userNametag, userId)),
     appendUserArray: (property, value) => dispatch(appendUserArray(property, value))
   }

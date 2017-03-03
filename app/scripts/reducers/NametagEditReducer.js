@@ -7,17 +7,17 @@ const updateNametagEdit = (state, action) => {
 }
 
 const addBadge = (state, action) => {
-  const certs = state[action.room].badges
-  ? _.uniqBy([action.cert].concat(state[action.room].badges), (c) => c.id)
-    : [action.cert]
-  const newEditNametag = {...state[action.room], badges: certs}
+  const badges = state[action.room].badges
+  ? _.uniqBy([action.badge].concat(state[action.room].badges), (b) => b.id)
+    : [action.badge]
+  const newEditNametag = {...state[action.room], badges: badges}
   return {...state, [action.room]: newEditNametag}
 }
 
 const removeBadge = (state, action) => {
   const editNametag = state[action.room]
-  const newCerts = _.remove(editNametag.badges, (c) => c === action.certId)
-  let newNametag = {...editNametag, badges: newCerts}
+  const newBadges = _.remove(editNametag.badges, (b) => b === action.badgeId)
+  let newNametag = {...editNametag, badges: newBadges}
   return {...state, [action.room]: newNametag}
 }
 
@@ -25,9 +25,9 @@ const nametagEdit = (state = {}, action) => {
   switch (action.type) {
     case constants.UPDATE_NAMETAG_EDIT:
       return updateNametagEdit(state, action)
-    case constants.ADD_NT_EDIT_CERT:
+    case constants.ADD_NT_EDIT_BADGE:
       return addBadge(state, action)
-    case constants.REMOVE_NT_EDIT_CERT:
+    case constants.REMOVE_NT_EDIT_BADGE:
       return removeBadge(state, action)
     default:
       return state

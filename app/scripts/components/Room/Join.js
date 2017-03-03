@@ -4,7 +4,6 @@ import EditNametag from '../Nametag/EditNametag'
 import UserBadges from '../Badge/UserBadges'
 import {grey400, indigo500} from 'material-ui/styles/colors'
 import RaisedButton from 'material-ui/RaisedButton'
-import FontIcon from 'material-ui/FontIcon'
 import Alert from '../Utils/Alert'
 
 class Join extends Component {
@@ -33,11 +32,10 @@ class Join extends Component {
     const {
       nametag,
       appendUserArray,
-      removeNametagEditCert,
-      addNametagEditCert,
+      removeNametagEditBadge,
+      addNametagEditBadge,
       updateNametagEdit,
       room,
-      fetchBadge,
       providerAuth
     } = this.props
     if (this.context.user.id) {
@@ -48,23 +46,13 @@ class Join extends Component {
             userNametag={nametag}
             userDefaults={this.context.user.data}
             appendUserArray={appendUserArray}
-            addNametagEditCert={addNametagEditCert}
-            removeNametagEditCert={removeNametagEditCert}
+            addNametagEditBadge={addNametagEditBadge}
+            removeNametagEditBadge={removeNametagEditBadge}
             updateNametagEdit={updateNametagEdit}
             room={room} />
           <div style={styles.userBadges}>
-            <p style={styles.userBadgeText}>
-              <FontIcon
-                style={styles.userBadgeIcon}
-                className='material-icons'>arrow_upward</FontIcon>
-              Drag to Share
-              <FontIcon
-                style={styles.userBadgeIcon}
-                className='material-icons'>arrow_upward</FontIcon>
-            </p>
             <UserBadges
-              fetchBadge={fetchBadge}
-              selectedCerts={nametag && nametag.badges} />
+              selectedBadges={nametag && nametag.badges} />
           </div>
           <br />
           <Alert alert={this.state.alert} />
@@ -85,11 +73,10 @@ Join.propTypes = {
   room: PropTypes.string.isRequired,
   normsChecked: PropTypes.bool.isRequired,
   nametag: PropTypes.object,
-  addNametagEditCert: PropTypes.func.isRequired,
-  removeNametagEditCert: PropTypes.func.isRequired,
+  addNametagEditBadge: PropTypes.func.isRequired,
+  removeNametagEditBadge: PropTypes.func.isRequired,
   updateNametagEdit: PropTypes.func.isRequired,
   providerAuth: PropTypes.func.isRequired,
-  fetchBadge: PropTypes.func.isRequired,
   joinRoom: PropTypes.func.isRequired
 }
 

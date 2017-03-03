@@ -4,6 +4,7 @@ import {getAuth} from '../../api/horizon'
 import {addUserNametag, watchUserNametags} from '../../actions/UserNametagActions'
 import {watchNametags, unWatchNametag} from '../../actions/NametagActions'
 import {logout, setting, providerAuth} from '../../actions/UserActions'
+import {fetchBadges} from '../../actions/BadgeActions'
 import {subscribe, unsubscribe} from '../../actions/RoomActions'
 const mapStateToProps = (state) => {
   return {
@@ -43,6 +44,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     providerAuth (provider) {
       return dispatch(providerAuth(provider))
+    },
+    fetchBadges (badges) {
+      return dispatch(fetchBadges(badges))
     },
     getAuth
   }
