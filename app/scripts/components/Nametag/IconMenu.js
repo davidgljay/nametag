@@ -61,7 +61,7 @@ class NTIconMenu extends Component {
               style={styles.menuItemStyle}
               innerDivStyle={styles.menuItemInnerDivStyle}
               onTouchTap={this.onUpdateIcon(url)}>
-                <img src={url} style={styles.icon} />
+              <img src={url} style={styles.icon} />
             </MenuItem>
           )
       }

@@ -55,7 +55,11 @@ app.use('/public', express.static(path.join('/usr', 'app', 'public')))
 
 /* Serve index.html */
 app.get('*', (req, res, next) => {
-  res.sendFile(path.join('/usr', 'app', 'public', 'index.html'))
+  if (req.url === '/sw.js') {
+    res.sendFile(path.join('/usr', 'app', 'public', 'sw.js'))
+  } else {
+    res.sendFile(path.join('/usr', 'app', 'public', 'index.html'))
+  }
 })
 
 /* Upload an image and return the url of that image on S3 */

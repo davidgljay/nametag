@@ -259,7 +259,6 @@ export function unsubscribeToRoom (id) {
   }
 }
 
-
 /*
 * Search Images
 * @params

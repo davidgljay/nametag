@@ -31,17 +31,16 @@ let store = createStore(mainReducer, compose(
   )
 )
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js', {scope: './'})
+    .catch(e => console.log('install error', e))
+  fetch('https://localhost:8181/public/scripts/app.js')
+}
+
 class Nametag extends Component {
 
   componentWillMount () {
     store.dispatch(getUser())
-
-    if ('serviceWorker' in navigator) {
-      console.log('Registering service worker')
-      navigator.serviceWorker.register('/public/sw.js')
-        .then(r => console.log('installed', r))
-        .catch(e => console.log('install error', e))
-    }
 
     // Handle funky FB login hash
     if (window.location.hash === '#_=_') {
