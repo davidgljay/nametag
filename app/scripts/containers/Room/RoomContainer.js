@@ -10,6 +10,7 @@ import {
 import {postMessage, saveMessage} from '../../actions/MessageActions'
 import {watchDirectMessages, unWatchDirectMessages} from '../../actions/DirectMessageActions'
 import {logout, setting} from '../../actions/UserActions'
+import {requestNotifPermissions} from '../../actions/NotificationActions'
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -36,7 +37,8 @@ const mapDispatchToProps = (dispatch) => {
     saveMessage: disp(saveMessage),
     showPresence: disp(showPresence),
     logout: disp(logout),
-    setting: disp(setting)
+    setting: disp(setting),
+    requestNotifPermissions: disp(requestNotifPermissions)
   }
 }
 

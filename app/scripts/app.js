@@ -10,6 +10,10 @@ import CreateRoom from './containers/Room/CreateRoomContainer'
 import CreateBadge from './containers/Badge/CreateBadgeContainer'
 import BadgeDetail from './containers/Badge/BadgeDetailContainer'
 import {getUser} from './actions/UserActions'
+import {registerServiceWorker, firebaseInit} from './actions/NotificationActions'
+
+import constants from './constants'
+
 
 import { DragDropContext } from 'react-dnd'
 import TouchBackend from 'react-dnd-touch-backend'
@@ -31,29 +35,12 @@ let store = createStore(mainReducer, compose(
   )
 )
 
-// Initialize Firebase
-firebase.initializeApp({
-  apiKey: 'AIzaSyCkPlC2qRkXchd9AdubS6aAyvhE1TNAPqU',
-  databaseURL: 'https://nametagproject.firebaseio.com',
-  messagingSenderId: '820872076821'
-})
-
-const messaging = firebase.messaging()
-navigator.serviceWorker.getRegistration()
-.then(reg => messaging.useServiceWorker(reg))
-.then(() => messaging.getToken())
-.then(token => console.log('got token', token))
-
-if ('serviceWorker' in navigator) {
-  console.log('Registering')
-  navigator.serviceWorker.register('/sw.js', {scope: './'})
-    .catch(e => console.log('install error', e))
-}
-
 class Nametag extends Component {
 
   componentWillMount () {
     store.dispatch(getUser())
+    store.dispatch(firebaseInit())
+    store.dispatch(registerServiceWorker())
 
     // Handle funky FB login hash
     if (window.location.hash === '#_=_') {
@@ -67,24 +54,6 @@ class Nametag extends Component {
       window.localStorage.removeItem('postAuth')
     }
   }
-
-  // componentDidMount () {
-  //   const messaging = firebase.messaging()
-  //   messaging.requestPermission()
-  //   .then(function () {
-  //     console.log('Notification permission granted.')
-  //     messaging.getToken()
-  //       .then((currentToken) => {
-  //         console.log('Current Token', currentToken)
-  //       })
-  //       .catch((err) => {
-  //         console.log('An error occurred while retrieving token. ', err)
-  //       })
-  //   })
-  //   .catch((err) => {
-  //     console.log('Unable to get permission to notify.', err)
-  //   })
-  // }
 
   getChildContext () {
     return {

@@ -60,9 +60,10 @@ class Room extends Component {
   }
 
   componentDidMount () {
-    const {params, subscribeToRoom} = this.props
+    const {params, subscribeToRoom, requestNotifPermissions} = this.props
     const roomId = params.roomId
     subscribeToRoom(roomId)
+    requestNotifPermissions()
   }
 
   componentWillReceiveProps (nextProps) {

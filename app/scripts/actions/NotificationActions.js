@@ -2,37 +2,30 @@ import errorLog from '../utils/errorLog'
 import constants from '../constants'
 
 // Registers a serviceWorker and registers that worker with firebase
-// Null op is a serviceWorker is already registered
-export const registerServiceWorker = () => () => {
+export const registerServiceWorker = () => (dispatch) => {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js', {scope: './'})
       .then(reg => reg && firebase.messaging().useServiceWorker(reg))
+      .then(res => dispatch(getFcmToken()))
+      .then(() => dispatch(fcmTokenRefresh()))
+      .catch(errorLog('Registering serviceWorker with Firebase'))
       .catch(errorLog('Error registering serviceWorker'))
   }
 }
 
 // Initializes Firebase.
 // Registers a serviceWorker if one is registered on the system.
-export const firebaseInit = () => (dispatch) =>
-  // Initialize Firebase
+export const firebaseInit = () => (dispatch) => {
   firebase.initializeApp({
     apiKey: constants.FIREBASE_WEB_KEY,
     databaseURL: constants.FIREBASE_DB_URL,
     messagingSenderId: constants.FIREBASE_SENDER_ID
   })
-  .then(() => {
-    if ('serviceWorker' in navigator) {
-      return navigator.serviceWorker.getRegistration()
-    }
-  })
-  .then(reg => reg && firebase.messaging().useServiceWorker(reg))
-  .then(() => dispatch(getFcmToken()))
-  .catch(errorLog('Initializing Firebase and registering serviceWorker'))
+}
 
 // Checks for a refreshed Firebase Cloud messaging token
 export const fcmTokenRefresh = () => (dispatch) =>
   firebase.messaging().onTokenRefresh(() => dispatch(getFcmToken()))
-  .catch(errorLog('Refreshing FCM Token'))
 
 // Sends a new FCM token to the server.
 export const getFcmToken = () => () =>
@@ -44,3 +37,5 @@ export const getFcmToken = () => () =>
 export const requestNotifPermissions = () => (dispatch) =>
   firebase.messaging().requestPermission()
     .then(() => dispatch(getFcmToken()))
+    .then(() => dispatch(fcmTokenRefresh()))
+    .catch(() => console.log('Notification permission refused'))
