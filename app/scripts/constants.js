@@ -35,5 +35,10 @@ export default {
 
   // URLs
   RESIZE_LAMBDA: 'https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/image_resize',
-  IMAGE_URL_LAMBDA: 'https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/image'
+  IMAGE_URL_LAMBDA: 'https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/image',
+  FIREBASE_DB_URL: 'https://nametagproject.firebaseio.com',
+
+  // Public keys and tokens
+  FIREBASE_WEB_KEY: 'AIzaSyCkPlC2qRkXchd9AdubS6aAyvhE1TNAPqU',
+  FIREBASE_SENDER_ID: '820872076821'
 }
