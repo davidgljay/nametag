@@ -42,6 +42,15 @@ class Nametag extends Component {
   componentWillMount () {
     store.dispatch(getUser())
 
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.ready
+        .then(sw => sw.pushManager.subscribe({
+          userVisibleOnly: true
+        }))
+        .then(sub => console.log('Sub', sub))
+        .catch(err => console.log('err', err))
+    }
+
     // Handle funky FB login hash
     if (window.location.hash === '#_=_') {
       window.location.hash = ''

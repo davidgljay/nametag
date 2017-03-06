@@ -27,13 +27,10 @@ self.addEventListener('install', function (event) {
 
 // Fired when the Service Worker starts up
 self.addEventListener('activate', function (event) {
-  console.log('Service Worker: Activating....')
-
   event.waitUntil(
         caches.keys().then(function (cacheNames) {
           return Promise.all(cacheNames.map(function (key) {
             if (key !== cacheName) {
-              console.log('Service Worker: Removing Old Cache', key)
               return caches.delete(key)
             }
           }))
@@ -43,10 +40,6 @@ self.addEventListener('activate', function (event) {
 })
 
 self.addEventListener('fetch', function (event) {
-  console.log('Service Worker: Fetch', event.request.url)
-
-  console.log('Url', event.request.url)
-
   event.respondWith(
         caches.match(event.request).then(function (response) {
           return response || fetch(event.request)
