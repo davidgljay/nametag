@@ -45,7 +45,7 @@ const getForm = (props) => {
               room='' />
             <div style={styles.userBadges}>
               <UserBadges
-                fetchBadge={props.fetchBadge}
+                badges={props.user.data.badges}
                 selectedBadges={props.hostNametag.badges} />
             </div>
           </div>
