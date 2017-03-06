@@ -31,25 +31,29 @@ let store = createStore(mainReducer, compose(
   )
 )
 
+// Initialize Firebase
+firebase.initializeApp({
+  apiKey: 'AIzaSyCkPlC2qRkXchd9AdubS6aAyvhE1TNAPqU',
+  databaseURL: 'https://nametagproject.firebaseio.com',
+  messagingSenderId: '820872076821'
+})
+
+const messaging = firebase.messaging()
+navigator.serviceWorker.getRegistration()
+.then(reg => messaging.useServiceWorker(reg))
+.then(() => messaging.getToken())
+.then(token => console.log('got token', token))
+
 if ('serviceWorker' in navigator) {
+  console.log('Registering')
   navigator.serviceWorker.register('/sw.js', {scope: './'})
     .catch(e => console.log('install error', e))
-  fetch('https://localhost:8181/public/scripts/app.js')
 }
 
 class Nametag extends Component {
 
   componentWillMount () {
     store.dispatch(getUser())
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.ready
-        .then(sw => sw.pushManager.subscribe({
-          userVisibleOnly: true
-        }))
-        .then(sub => console.log('Sub', sub))
-        .catch(err => console.log('err', err))
-    }
 
     // Handle funky FB login hash
     if (window.location.hash === '#_=_') {
@@ -63,6 +67,24 @@ class Nametag extends Component {
       window.localStorage.removeItem('postAuth')
     }
   }
+
+  // componentDidMount () {
+  //   const messaging = firebase.messaging()
+  //   messaging.requestPermission()
+  //   .then(function () {
+  //     console.log('Notification permission granted.')
+  //     messaging.getToken()
+  //       .then((currentToken) => {
+  //         console.log('Current Token', currentToken)
+  //       })
+  //       .catch((err) => {
+  //         console.log('An error occurred while retrieving token. ', err)
+  //       })
+  //   })
+  //   .catch((err) => {
+  //     console.log('Unable to get permission to notify.', err)
+  //   })
+  // }
 
   getChildContext () {
     return {

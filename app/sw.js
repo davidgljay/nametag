@@ -1,3 +1,5 @@
+importScripts('https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js')
+importScripts('https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js')
 var cacheName = 'nametag-cache-v1'
 var urlsToCache = [
   '/',
@@ -8,6 +10,10 @@ var urlsToCache = [
   '/images/twitter.jpg',
   '/images/fb.jpg'
 ]
+
+firebase.initializeApp({
+  'messagingSenderId': '820872076821'
+})
 
 // Install Service Worker
 self.addEventListener('install', function (event) {

@@ -165,7 +165,7 @@ RoomCard.propTypes = {
   creating: PropTypes.bool,
   userNametag: PropTypes.object,
   user: PropTypes.shape({
-    id: PropTypes.string.isRequired
+    id: PropTypes.string
   })
 }
 

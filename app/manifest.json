@@ -4,6 +4,7 @@
   "background_color": "#81d4fa",
   "theme_color": "#3f51b5",
   "display": "standalone",
+  "gcm_sender_id": "103953800507",
   "icons": [
     {
       "src": "/public/images/nametaglogo_48.png",
