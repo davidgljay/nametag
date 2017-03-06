@@ -45,6 +45,10 @@ class CreateBadge extends Component {
       const {appendUserArray, toggleCreateBadge} = this.props
       this.badgePromise(true)
         .then(badge => {
+          if (!badge.id) {
+            console.log('Error creating badge', badge)
+            return
+          }
           return appendUserArray('badges', badge.id)
         })
         .then(() => {

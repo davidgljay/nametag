@@ -12,7 +12,7 @@ class RoomCards extends Component {
     super(props)
 
     this.mapRoomCards = (roomId) => {
-      const {rooms, nametags, userNametags, addUserNametag, nametagEdits} = this.props
+      const {rooms, nametags, userNametags, addUserNametag, nametagEdits, user} = this.props
       // If a nametag has already been saved for this room then merge it in
       const nametag = userNametags[roomId]
       ? {...nametags[userNametags[roomId].nametag], ...nametagEdits[roomId]}
@@ -21,6 +21,7 @@ class RoomCards extends Component {
         room={rooms[roomId]}
         id={roomId}
         key={roomId}
+        user={user}
         style={styles.roomCard}
         nametag={nametag}
         addUserNametag={addUserNametag} />
@@ -52,12 +53,6 @@ class RoomCards extends Component {
     unWatchNametags()
   }
 
-  getChildContext () {
-    return {
-      user: this.props.user
-    }
-  }
-
   render () {
     const {user, logout, setting, rooms, providerAuth, userNametags} = this.props
     return <div>
@@ -83,15 +78,17 @@ class RoomCards extends Component {
 }
 
 RoomCards.propTypes = {
-  rooms: PropTypes.object.isRequired
-}
-
-RoomCards.childContextTypes = {
-  user: PropTypes.object
-}
-
-RoomCards.contextTypes = {
-  dispatch: PropTypes.func
+  rooms: PropTypes.object.isRequired,
+  nametags: PropTypes.object.isRequired,
+  userNametags: PropTypes.object.isRequired,
+  addUserNametag: PropTypes.func.isRequired,
+  nametagEdits: PropTypes.object.isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.string,
+    data: PropTypes.shape({
+      badges: PropTypes.arrayOf(PropTypes.string).isRequired
+    })
+  })
 }
 
 export default RoomCards

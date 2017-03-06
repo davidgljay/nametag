@@ -14,10 +14,10 @@ class Join extends Component {
     this.state = {alert: null}
 
     this.onJoinClick = () => {
-      const {room, nametag, joinRoom, normsChecked} = this.props
+      const {room, nametag, joinRoom, normsChecked, user} = this.props
       // TODO: Add new user name to displayNames list.
       if (normsChecked) {
-        joinRoom(room, nametag, this.context.user.id)
+        joinRoom(room, nametag, user.id)
           .then(() => {
             window.location = `/rooms/${room}`
           })
@@ -36,15 +36,16 @@ class Join extends Component {
       addNametagEditBadge,
       updateNametagEdit,
       room,
+      user,
       providerAuth
     } = this.props
-    if (this.context.user.id) {
+    if (user.id) {
       join =
         <div style={styles.join}>
           <h4>Edit Your Nametag For This Conversation</h4>
           <EditNametag
             userNametag={nametag}
-            userDefaults={this.context.user.data}
+            userDefaults={user.data}
             appendUserArray={appendUserArray}
             addNametagEditBadge={addNametagEditBadge}
             removeNametagEditBadge={removeNametagEditBadge}
@@ -52,7 +53,8 @@ class Join extends Component {
             room={room} />
           <div style={styles.userBadges}>
             <UserBadges
-              selectedBadges={nametag && nametag.badges} />
+              selectedBadges={nametag && nametag.badges}
+              badges={user.data.badges} />
           </div>
           <br />
           <Alert alert={this.state.alert} />
@@ -78,10 +80,6 @@ Join.propTypes = {
   updateNametagEdit: PropTypes.func.isRequired,
   providerAuth: PropTypes.func.isRequired,
   joinRoom: PropTypes.func.isRequired
-}
-
-Join.contextTypes = {
-  user: PropTypes.object
 }
 
 export default Join
