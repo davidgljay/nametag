@@ -56,12 +56,13 @@ class UserBadges extends Component {
   }
 
   render () {
-    if (!this.context.user) {
+    const {badges} = this.props
+    if (!badges) {
       return null
     }
     return <div id='badges' style={styles.container}>
       {
-        this.mapBadges(this.context.user.data.badges)
+        this.mapBadges(badges)
       }
       <FlatButton
         label='ADD BADGE'
@@ -81,11 +82,8 @@ export default UserBadges
 UserBadges.propTypes = {
   selectedBadges: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string
-  }))
-}
-
-UserBadges.contextTypes = {
-  user: PropTypes.object
+  })),
+  badges: PropTypes.arrayOf(PropTypes.string)
 }
 
 const styles = {

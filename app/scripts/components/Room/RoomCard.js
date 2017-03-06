@@ -56,6 +56,7 @@ class RoomCard extends Component {
       creating,
       style,
       nametag,
+      user,
       addNametagEditCert,
       updateUserNametag,
       providerAuth,
@@ -114,7 +115,7 @@ class RoomCard extends Component {
     ? {...styles.back, ...styles.backWhileFlipping} : styles.back
     let back = <Card key='back' style={backStyle}>
       <CardTitle
-        style={styles.roomName}
+        style={styles.roomNameBack}
         onClick={this.flip}
         title={room.title} />
       <div style={styles.norms}>
@@ -130,6 +131,7 @@ class RoomCard extends Component {
         <Join
           room={id}
           nametag={nametag}
+          user={user}
           normsChecked={this.state.normsChecked}
           addNametagEditCert={addNametagEditCert}
           removeNametagEditCert={removeNametagEditCert}
@@ -161,11 +163,10 @@ RoomCard.propTypes = {
   room: PropTypes.object.isRequired,
   id: PropTypes.string.isRequired,
   creating: PropTypes.bool,
-  userNametag: PropTypes.object
-}
-
-RoomCard.contextTypes = {
-  user: PropTypes.object
+  userNametag: PropTypes.object,
+  user: PropTypes.shape({
+    id: PropTypes.string.isRequired
+  })
 }
 
 export default RoomCard
@@ -189,6 +190,10 @@ const styles = {
   roomName: {
     cursor: 'pointer',
     minHeight: 72
+  },
+  roomNameBack: {
+    cursor: 'pointer',
+    paddingBottom: 0
   },
   roomDescription: {
     minHeight: 64
