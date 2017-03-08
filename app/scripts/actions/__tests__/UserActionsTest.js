@@ -112,5 +112,38 @@ describe('User Actions', () => {
           })
         })
     })
+
+    describe('addUserData', () => {
+      it('should add a property to the user', () => {
+        const mockResponses = [{
+          data: {
+            stuff: 'things'
+          }
+        }, {
+          updated: 1
+        }]
+        let calls2 = []
+        hz.currentUser = () => hz()
+        hz.mockReturnValueOnce(mockHz(mockResponses[0], calls)())
+        hz.mockReturnValueOnce(mockHz(mockResponses[1], calls2)())
+
+        return actions.addUserData('things', 'stuff')(store.dispatch)
+          .then((res) => {
+            expect(res.updated).toEqual(1)
+            expect(store.getActions()[0]).toEqual({
+              type: constants.ADD_USER_DATA,
+              property: 'things',
+              value: 'stuff'
+            })
+            expect(calls[1].type).toEqual('fetch')
+            expect(calls2[1].type).toEqual('update')
+            expect(calls2[1].req).toEqual({
+              data: {
+                things: 'stuff'
+              }
+            })
+          })
+      })
+    })
   })
 })

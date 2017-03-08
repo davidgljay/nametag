@@ -18,6 +18,8 @@ const user = (state = {}, action) => {
         {[action.property]: [action.value]})
       }
       return Object.assign({}, state, {data})
+    case constants.ADD_USER_DATA:
+      return {...state, data: {...state.data, [action.property]: action.value}}
     default:
       return state
   }

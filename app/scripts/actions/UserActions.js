@@ -96,7 +96,7 @@ export function setting (option, value) {
 *  value
 *
 * @returns
-*   null
+*   Promise resolving to horizon update response
 */
 export function appendUserArray (property, value) {
   return (dispatch) => {
@@ -111,8 +111,37 @@ export function appendUserArray (property, value) {
     .then((user) => {
       return new Promise((resolve, reject) => {
         const data = {
-          ...data,
           [property]: user.data[property] ? user.data[property].concat([value]) : [value]
+        }
+        hz('users').update({id: user.id, data}).subscribe(resolve, reject)
+      })
+    }).catch(errorLog('Updating user array'))
+  }
+}
+
+/*
+* Add generic information to the user's data object
+* @params
+*  option
+*  value
+*
+* @returns
+*   Promise resolving to horizon update reponse
+*/
+export function addUserData (property, value) {
+  return (dispatch) => {
+    dispatch({
+      type: constants.ADD_USER_DATA,
+      property,
+      value
+    })
+    return new Promise((resolve, reject) => {
+      hz.currentUser().fetch().subscribe(resolve, reject)
+    })
+    .then((user) => {
+      return new Promise((resolve, reject) => {
+        const data = {
+          [property]: value
         }
         hz('users').update({id: user.id, data}).subscribe(resolve, reject)
       })

@@ -58,4 +58,20 @@ describe('User reducer', () => {
       expect(newState.data).toEqual({stuff: ['morestuff', 'things']})
     })
   })
+
+  describe('ADD_USER_DATA', () => {
+    it('should add a property to the user data object', () => {
+      let newState = userReducer({
+        id: '123',
+        data: {
+          stuff: 'things'
+        }
+      }, {
+        type: constants.ADD_USER_DATA,
+        property: 'things',
+        value: 'stuff'
+      })
+      expect(newState.data).toEqual({stuff: 'things', things: 'stuff'})
+    })
+  })
 })
