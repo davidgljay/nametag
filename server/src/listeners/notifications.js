@@ -23,7 +23,7 @@ const checkMentions = (message, conn) => {
   return db.table('nametags').filter({room}).run(conn)
   .then((roomNametags) => {
     const splitMsg = message.new_val.text.split('@')
-    const from = message.new_val.author
+    const {author, body} = message.new_val
     let promises = []
     // For every mention, check every nametag in the room to see if it matches the name.
     roomNametags.toArray((err, nametags) => {
@@ -35,7 +35,7 @@ const checkMentions = (message, conn) => {
           if (text.slice(0, name.length).toLowerCase() === name.toLowerCase()) {
             promises.push(
               addMention(id, room, conn)
-              .then(() => postMention(id, from, room, 'MENTION', conn))
+              .then(() => postMention(id, author8, room, body, 'MENTION', conn))
             )
           }
         }
@@ -50,7 +50,7 @@ const checkMentions = (message, conn) => {
 const addMention = (nametag, room, conn) => db.table('user_nametags')
 .filter({room, nametag}).update({mentions: r.row('mentions').prepend(Date.now())}).run(conn)
 
-const postMention = (to, from, room, reason, conn) => Promise.all([
+const postMention = (to, from, room, body, reason, conn) => Promise.all([
   db.table('user_nametags').filter({room, nametag:to}).run(conn)
     .then({user} => rb.table('users').get(user)),
   db.table('rooms').get(room),
@@ -64,6 +64,7 @@ const postMention = (to, from, room, reason, conn) => Promise.all([
       id: room.id,
       image: room.image
     },
+    body,
     from: {
       name: from.name,
       icon: from.icon
@@ -76,13 +77,13 @@ module.exports = {
       .then((feed) => feed.each(onMessage(conn))),
   dmNotifs: (conn) => db.table('direct_messages').changes().run(conn)
       .then((feed) => feed.each((err, dm) => {
-        const {recipient, author, room} = dm.new_val;
+        const {recipient, author, room, body} = dm.new_val;
         if (err) {
           console.error(err)
           return Promise.reject(err)
         }
         return addMention(recipient, room, conn)
-        .then(() => postMention(recipient, author, room, 'DM', conn))
+        .then(() => postMention(recipient, author, room, body, 'DM', conn))
       }))
 }
 

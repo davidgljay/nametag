@@ -47,3 +47,25 @@ self.addEventListener('fetch', function (event) {
         })
     )
 })
+
+// Handle messages while in the background
+firebase.messaging().setBackgroundMessageHandler((payload) => {
+  console.log('Nametag:[sw.js] Received background message ', payload)
+  // Customize notification here
+  let notificationTitle
+  const {room, from, body, reason} = payload.data
+  switch (reason) {
+    case 'MENTION':
+      notificationTitle = `${from.name} has mentioned you in ${room.name}`
+      break
+    case 'DM':
+      notificationTitle = `${from.name} has sent you a direct message in ${room.name}`
+      break
+  }
+  const notificationOptions = {
+    body: body,
+    icon: from.icon
+  }
+
+  return self.registration.showNotification(notificationTitle, notificationOptions)
+})
