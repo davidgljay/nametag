@@ -4,7 +4,6 @@ const {messageNotifs, dmNotifs} = require('./notifications')
 const presence = require('./presence')
 
 module.exports = (reqlOptions) => {
-  console.log('Listeners activated!!')
   r.connect(reqlOptions).then((conn) => {
     profileInfo(conn)
     messageNotifs(conn)
