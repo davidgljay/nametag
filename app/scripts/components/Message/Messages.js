@@ -21,38 +21,46 @@ class Messages extends Component {
         postMessage={postMessage}
         saveMessage={saveMessage} />
     }
+
+    this.scrollIfNeeded = (oldMessages, newMessages) => {
+      const numNewMessages = Object.keys(newMessages).length
+      const numPrevMessages = Object.keys(oldMessages).length
+      if (numNewMessages > numPrevMessages && numPrevMessages === 0) {
+        const lastMessage = this.prepArray(newMessages)[numNewMessages - 1]
+        document.getElementById(lastMessage.id).scrollIntoViewIfNeeded()
+      } else if (numNewMessages > numPrevMessages && numNewMessages > 3) {
+        let counter = 0
+        let timer = setInterval(() => {
+          window.scrollBy(0, 2)
+          if (counter >= 50) {
+            clearInterval(timer)
+          }
+          counter++
+        }, 0)
+      }
+    }
+
+    this.prepArray = (messages) =>
+      Object.keys(messages)
+      .reduce((p, id) => p.concat(messages[id]), [])
+      .sort((a, b) => a.timestamp - b.timestamp)
   }
 
-  componentWillUpdate (nextProps) {
-    const numNewMessages = Object.keys(nextProps.messages).length
-    const numPrevMessages = Object.keys(this.props.messages).length
-    if (!this.props.messages ||
-       numNewMessages < 3) {
-      return
-    } else if (numNewMessages - numPrevMessages > 5) {
-      window.scrollBy(0, 100000)
-    } else if (numNewMessages > numPrevMessages) {
-      let counter = 0
-      let timer = setInterval(() => {
-        window.scrollBy(0, 2)
-        if (counter >= 50) {
-          clearInterval(timer)
-        }
-        counter++
-      }, 0)
-    }
+  componentDidMount () {
+    this.scrollIfNeeded([], this.props.messages)
+  }
+
+  componentDidUpdate (prevProps) {
+    this.scrollIfNeeded(prevProps.messages, this.props.messages)
   }
 
   render () {
     const {messages = {}} = this.props
-    const messageList = Object.keys(messages)
-    .reduce((p, id) => p.concat(messages[id]), [])
-    .sort((a, b) => a.timestamp - b.timestamp)
     return <div style={styles.messages}>
       <table style={styles.msgContainer}>
         <tbody>
           {
-            messageList.map(this.mapMessage)
+            this.prepArray(messages).map(this.mapMessage)
           }
         </tbody>
       </table>

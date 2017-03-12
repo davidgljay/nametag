@@ -94,6 +94,7 @@ class Message extends Component {
 
     return <tr
       style={styles.message}
+      id={id}
       onClick={() => this.setState({showActions: !this.state.showActions})}>
       <td style={styles.icon}>
         <img style={styles.iconImg} src={author.icon} />
