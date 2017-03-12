@@ -50,10 +50,9 @@ self.addEventListener('fetch', function (event) {
 
 // Handle messages while in the background
 firebase.messaging().setBackgroundMessageHandler((payload) => {
-  console.log('Nametag:[sw.js] Received background message ', payload)
   // Customize notification here
   let notificationTitle
-  const {roomTitle, senderName, text, icon, reason} = payload.data
+  const {roomTitle, roomId, senderName, text, icon, reason} = payload.data
   switch (reason) {
     case 'MENTION':
       notificationTitle = `${senderName} has mentioned you in ${roomTitle}`
@@ -64,8 +63,27 @@ firebase.messaging().setBackgroundMessageHandler((payload) => {
   }
   const notificationOptions = {
     body: text,
-    icon
+    icon,
+    data: `/rooms/${roomId}`
   }
 
   return self.registration.showNotification(notificationTitle, notificationOptions)
+})
+
+self.addEventListener('notificationclick', event => {
+  event.notification.close()
+
+  event.waitUntil(clients.matchAll({
+    type: 'window'
+  }).then(clientList => {
+    for (let i = 0; i < clientList.length; i++) {
+      const client = clientList[i]
+      if (client.url === event.notification.data && 'focus' in client) {
+        return client.focus()
+      }
+    }
+    if (clients.openWindow) {
+      return clients.openWindow(event.notification.data)
+    }
+  }))
 })
