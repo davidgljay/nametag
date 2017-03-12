@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import component from '../../components/Badge/BadgeDetail'
 import {logout, setting, providerAuth, appendUserArray} from '../../actions/UserActions'
-import {fetchBadge, grantBadge} from '../../actions/BadgeActions'
+import {fetchBadges, grantBadge} from '../../actions/BadgeActions'
 
 const mapStateToProps = (state, ownProps) => {
   return Object.assign(
@@ -27,8 +27,8 @@ const mapDispatchToProps = (dispatch) => {
     appendUserArray (...args) {
       return dispatch(appendUserArray.apply(this, args))
     },
-    fetchBadge (...args) {
-      return dispatch(fetchBadge.apply(this, args))
+    fetchBadges (...args) {
+      return dispatch(fetchBadges.apply(this, args))
     },
     grantBadge (...args) {
       return dispatch(grantBadge.apply(this, args))

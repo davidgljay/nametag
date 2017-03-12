@@ -1,7 +1,8 @@
 const r = require('../../horizon/server/src/horizon.js').r
 const fetch = require('node-fetch')
 const config = require('../secrets.json')
-const db = db
+const db = r.db('nametag')
+const {GCM_NOTIF_URL} = require('../constants')
 
 const onMessage = (conn) => (err, message) => {
   if (err) {
@@ -23,19 +24,19 @@ const checkMentions = (message, conn) => {
   return db.table('nametags').filter({room}).run(conn)
   .then((roomNametags) => {
     const splitMsg = message.new_val.text.split('@')
-    const {author, body} = message.new_val
+    const {author, text} = message.new_val
     let promises = []
     // For every mention, check every nametag in the room to see if it matches the name.
     roomNametags.toArray((err, nametags) => {
       if (err) { return false }
       for (let i = 0; i < splitMsg.length; i++) {
-        const text = splitMsg[i]
+        const msg = splitMsg[i]
         for (let j = 0; j < nametags.length; j++) {
           const {name, id} = nametags[j]
-          if (text.slice(0, name.length).toLowerCase() === name.toLowerCase()) {
+          if (msg.slice(0, name.length).toLowerCase() === name.toLowerCase()) {
             promises.push(
               addMention(id, room, conn)
-              .then(() => postMention(id, author8, room, body, 'MENTION', conn))
+              .then(() => postMention(id, author, room, text.replace(/\*/g,''), 'MENTION', conn))
             )
           }
         }
@@ -50,40 +51,40 @@ const checkMentions = (message, conn) => {
 const addMention = (nametag, room, conn) => db.table('user_nametags')
 .filter({room, nametag}).update({mentions: r.row('mentions').prepend(Date.now())}).run(conn)
 
-const postMention = (to, from, room, body, reason, conn) => Promise.all([
+const postMention = (to, sender, room, text, reason, conn) => Promise.all([
   db.table('user_nametags').filter({room, nametag:to}).run(conn)
-    .then({user} => rb.table('users').get(user)),
-  db.table('rooms').get(room),
-  db.table('nametags').get(from)
+    .then(cursor => new Promise((res, rej) =>
+      cursor.toArray((err, userNametags) => {
+        if (err) {rej(err)}
+        res(userNametags[0].user)
+      })
+    ))
+    .then(user => db.table('users').get(user).run(conn)),
+  db.table('rooms').get(room).run(conn),
+  db.table('nametags').get(sender).run(conn)
 ])
-.then([user, room, from] => {
-  postFCMNotif({
+.then(([user, room, sender]) => postFCMNotif({
     reason,
-    room: {
-      title: room.title,
-      id: room.id,
-      image: room.image
-    },
-    body,
-    from: {
-      name: from.name,
-      icon: from.icon
-    }
-  }, user.fcmToken)
-})
+    roomTitle: room.title,
+    roomId: room.id,
+    text,
+    senderName: sender.name,
+    icon: sender.icon
+  }, user.data.fcmToken)
+)
 
 module.exports = {
   messageNotifs: (conn) => db.table('messages').changes().run(conn)
       .then((feed) => feed.each(onMessage(conn))),
   dmNotifs: (conn) => db.table('direct_messages').changes().run(conn)
       .then((feed) => feed.each((err, dm) => {
-        const {recipient, author, room, body} = dm.new_val;
+        const {recipient, author, room, text} = dm.new_val;
         if (err) {
           console.error(err)
           return Promise.reject(err)
         }
         return addMention(recipient, room, conn)
-        .then(() => postMention(recipient, author, room, body, 'DM', conn))
+        .then(() => postMention(recipient, author, room, text, 'DM', conn))
       }))
 }
 
@@ -103,12 +104,12 @@ const postFCMNotif = (data, token) => {
   if (!token) {
     return Promise.reject(new Error('Cannot send message, user does not have a fcm token'))
   }
-  console.log('Posting notif', options);
 
   return fetch(GCM_NOTIF_URL, options)
     .then((res) => {
-      console.log('res ok', res.json);
       return res.ok ? res.json()
-        : Promise.reject(new Error(res.statusCode))
+        : Promise.reject(res.statusCode)
     })
+    .catch(err => console.log('Error posting notification', err))
+
 }

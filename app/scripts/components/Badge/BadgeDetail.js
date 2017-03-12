@@ -50,8 +50,8 @@ class BadgeDetail extends Component {
   }
 
   componentDidMount () {
-    const {fetchBadge, certificateId} = this.props
-    fetchBadge(certificateId)
+    const {fetchBadges, certificateId} = this.props
+    fetchBadges([certificateId])
   }
 
   render () {
@@ -165,7 +165,7 @@ BadgeDetail.propTypes = {
   logout: PropTypes.func.isRequired,
   setting: PropTypes.func.isRequired,
   certificate: PropTypes.object,
-  fetchBadge: PropTypes.func.isRequired,
+  fetchBadges: PropTypes.func.isRequired,
   appendUserArray: PropTypes.func.isRequired,
   grantBadge: PropTypes.func.isRequired
 }
