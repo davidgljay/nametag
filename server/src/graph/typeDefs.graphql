@@ -1,0 +1,130 @@
+################################################################################
+## Custom Scalar Types
+################################################################################
+
+# Date represented as an ISO8601 string.
+scalar Date
+
+# A unique account in the system. In the future this information will be encrypted.
+type User {
+
+  # The ID of the user
+  id: ID!
+
+  # Display names utilized by this user
+  displayNames: [String]
+
+  # Icons uploaded by this user
+  icons: [String]
+
+  # Badges owned by this user
+  badges: [ID]
+
+  # Nametags created by this user
+  nametags: [ID]
+
+}
+
+# A room where discussions can take place
+type Room {
+
+  # The ID of the room
+  id: ID!
+
+  # The title of the room
+  title: String!
+
+  # The description of the room
+  description: String!
+
+  # The url of the room's image
+  image: String!
+
+  # The norms of the room
+  norms: [String!]
+
+  # The room's moderator
+  mod: ID!
+
+  # The date when the room was created
+  created_at: Date!
+
+  # The date when the room closes
+  closed_at: Date!
+
+}
+
+# A message in a room
+type Message {
+
+  # The ID of the message
+  id: ID!
+
+  # The text of the message
+  text: String!
+
+  # The nametag ID of the message's author
+  author: ID!
+
+  # The nametag ID of the message's recipient. If this is defined then this is a direct message.
+  recipient: ID
+
+  # The id of the room that where the message was created
+  room: ID!
+
+  # Indicates whether the message has been saved for viewing after the room has closed
+  saved: Boolean!
+
+  # Time when the message was created
+  created_at: Date!
+
+}
+
+# A representation of a user's identity in a particular room
+type Nametag {
+
+  # The ID of the nametag
+  id: ID!
+
+  # The name of the user
+  displayName: String!
+
+  # The url of the user's icon
+  icon: String!
+
+  # Further information about the user
+  bio: String
+
+  # Badges attached to this nametag
+  badges: [ID]
+
+  # Time when the nametag was created
+  created_at: Date!
+
+}
+
+# A verified component of a user's identity
+type Badge {
+  # The ID of the badge
+  id: ID!
+
+  # The name of the badge
+  name: String!
+
+  # The badges description
+  description: String!
+
+  # Notes appended to the badge
+  notes: [Note]
+}
+
+# A note attached to a badge
+type Note {
+
+  # The date when the note was created
+  date: Date!
+
+  # The text of the note
+  text: String!
+
+}
