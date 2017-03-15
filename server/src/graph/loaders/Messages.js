@@ -1,0 +1,36 @@
+const r = require('rethinkdb')
+
+/**
+ * Returns the messages from a particular room to display to a user. Also displays
+ * direct messages to that user.
+ * @param {Object} context     graph context
+ * @param {String} room   the id of the room whose messages will be retrieved
+ * @param {String} nametag the id of the nametag of the currently logged in user for this room
+ */
+
+const getRoomMessages = ({conn}, room, nametag) => {
+  return Promise.all([
+    r.db('nametag').table('messages').filter({room, recipient: null}).run(conn),
+    r.db('nametag').table('messages').filter({room, recipient: nametag}).run(conn)
+  ])
+   .then(([messages, dms]) =>
+      messages.concat(dms).sort((a, b) => b.created_at - a.created_at)
+    )
+}
+
+ /**
+  * Returns the messages from a particular author.
+  * @param {Object} context  graph context
+  * @param {String} nametag  the id of the nametag of the messages' author
+  */
+
+const getNametagMessages = ({conn}, nametag) => {
+  return r.db('nametag').table('messages').filter({author: nametag}).run(conn)
+}
+
+module.exports = (context) => ({
+  Messages: {
+    getRoomMessages: (room, nametag) => getRoomMessages(context, room, nametag),
+    getNametagMessages: (nametag) => getNametagMessages(context, nametag)
+  }
+})

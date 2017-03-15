@@ -1,0 +1,32 @@
+const r = require('rethinkdb')
+
+/**
+ * Returns a particular room.
+ *
+ * @param {Object} context     graph context
+ * @param {Array<String>} ids   an array of ids to be retrieved
+ *
+ */
+
+const get = ({conn}, id) => {
+  return r.db('nametag').table('rooms').get(id).run(conn)
+}
+
+ /**
+  * Returns all active rooms. This will be replaced in the future with a more nuanced room display search.
+  *
+  * @param {Object} context     graph context
+  *
+  */
+
+const getActive = ({conn}) => {
+  return r.db('nametag').table('rooms').run(conn)
+    .then(rooms => rooms.toArray())
+}
+
+module.exports = (context) => ({
+  Rooms: {
+    get: (id) => get(context, id),
+    getActive: () => getActive(context)
+  }
+})

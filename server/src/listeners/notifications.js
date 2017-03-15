@@ -36,7 +36,7 @@ const checkMentions = (message, conn) => {
           if (msg.slice(0, name.length).toLowerCase() === name.toLowerCase()) {
             promises.push(
               addMention(id, room, conn)
-              .then(() => postMention(id, author, room, text.replace(/\*/g,''), 'MENTION', conn))
+              .then(() => postMention(id, author, room, text.replace(/\*/g, ''), 'MENTION', conn))
             )
           }
         }
@@ -52,11 +52,11 @@ const addMention = (nametag, room, conn) => db.table('user_nametags')
 .filter({room, nametag}).update({mentions: r.row('mentions').prepend(Date.now())}).run(conn)
 
 const postMention = (to, sender, room, text, reason, conn) => Promise.all([
-  db.table('user_nametags').filter({room, nametag:to}).run(conn)
-    .then(cursor => new Promise((res, rej) =>
+  db.table('user_nametags').filter({room, nametag: to}).run(conn)
+    .then(cursor => new Promise((resolve, reject) =>
       cursor.toArray((err, userNametags) => {
-        if (err) {rej(err)}
-        res(userNametags[0].user)
+        if (err) { reject(err) }
+        resolve(userNametags[0].user)
       })
     ))
     .then(user => db.table('users').get(user).run(conn)),
@@ -64,13 +64,13 @@ const postMention = (to, sender, room, text, reason, conn) => Promise.all([
   db.table('nametags').get(sender).run(conn)
 ])
 .then(([user, room, sender]) => postFCMNotif({
-    reason,
-    roomTitle: room.title,
-    roomId: room.id,
-    text,
-    senderName: sender.name,
-    icon: sender.icon
-  }, user.data.fcmToken)
+  reason,
+  roomTitle: room.title,
+  roomId: room.id,
+  text,
+  senderName: sender.name,
+  icon: sender.icon
+}, user.data.fcmToken)
 )
 
 module.exports = {
@@ -78,7 +78,7 @@ module.exports = {
       .then((feed) => feed.each(onMessage(conn))),
   dmNotifs: (conn) => db.table('direct_messages').changes().run(conn)
       .then((feed) => feed.each((err, dm) => {
-        const {recipient, author, room, text} = dm.new_val;
+        const {recipient, author, room, text} = dm.new_val
         if (err) {
           console.error(err)
           return Promise.reject(err)
@@ -111,5 +111,4 @@ const postFCMNotif = (data, token) => {
         : Promise.reject(res.statusCode)
     })
     .catch(err => console.log('Error posting notification', err))
-
 }

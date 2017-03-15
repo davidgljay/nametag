@@ -18,10 +18,10 @@ type User {
   icons: [String]
 
   # Badges owned by this user
-  badges: [ID]
+  badges: [Badge]
 
   # Nametags created by this user
-  nametags: [ID]
+  nametags: [Nametag]
 
 }
 
@@ -44,13 +44,19 @@ type Room {
   norms: [String!]
 
   # The room's moderator
-  mod: ID!
+  mod: User
 
   # The date when the room was created
   created_at: Date!
 
   # The date when the room closes
   closed_at: Date!
+
+  # The messages sent in the room
+  messages: [Message]
+
+  # The nametags of the individuals in the room
+  nametags: [Nametag]
 
 }
 
@@ -61,22 +67,22 @@ type Message {
   id: ID!
 
   # The text of the message
-  text: String!
+  text: String
 
   # The nametag ID of the message's author
-  author: ID!
+  author: Nametag
 
   # The nametag ID of the message's recipient. If this is defined then this is a direct message.
-  recipient: ID
+  recipient: Nametag
 
   # The id of the room that where the message was created
-  room: ID!
+  room: Room
 
   # Indicates whether the message has been saved for viewing after the room has closed
-  saved: Boolean!
+  saved: Boolean
 
   # Time when the message was created
-  created_at: Date!
+  created_at: Date
 
 }
 
@@ -87,16 +93,16 @@ type Nametag {
   id: ID!
 
   # The name of the user
-  displayName: String!
+  displayName: String
 
   # The url of the user's icon
-  icon: String!
+  icon: String
 
   # Further information about the user
   bio: String
 
   # Badges attached to this nametag
-  badges: [ID]
+  badges: [Badge]
 
   # Time when the nametag was created
   created_at: Date!
@@ -127,4 +133,22 @@ type Note {
   # The text of the note
   text: String!
 
+}
+
+# The queries available for Nametag
+type RootQuery {
+
+  # Retrieves a single room based on the id
+  room(id:ID!): Room
+
+  # Retrieves all active rooms in the system
+  rooms: [Room]
+
+  # Retrieves the current user
+  me: User
+
+}
+
+schema {
+  query: RootQuery
 }

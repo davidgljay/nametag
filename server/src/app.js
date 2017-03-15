@@ -9,6 +9,9 @@ const config = require('./secrets.json')
 const path = require('path')
 const bodyParser = require('body-parser')
 const listeners = require('./listeners')
+const graph = require('./graph')
+const Connection = require('./connection')
+const apollo = require('graphql-server-express')
 
 process.env.AWS_ACCESS_KEY_ID = config.s3.accessKeyId
 process.env.AWS_SECRET_ACCESS_KEY = config.s3.secretAccessKey
@@ -21,6 +24,9 @@ const httpsServer = https.createServer({
   cert: fs.readFileSync(path.join(__dirname, '..', '..', '.keys', 'cert.pem')),
   ca: fs.readFileSync(path.join(__dirname, '..', '..', '.keys', 'chain.pem'))
 }, app).listen(8181)
+
+/* Use body parser middleware */
+app.use(bodyParser.json());
 
 /* Connect to Horizon */
 const options = {
@@ -48,7 +54,29 @@ horizonServer.add_auth_provider(horizon.auth.google, config.google)
 /* Activate db listeners */
 listeners(horizonServer._reql_conn._rdb_options)
 
-app.use(bodyParser.json())
+// ==============================================================================
+// GraphQL Router
+// ==============================================================================
+
+// Initialize connection for graphQL
+const conn = new Connection()
+conn.init(horizonServer._reql_conn._rdb_options)
+
+// GraphQL endpoint.
+app.use('/api/v1/graph/ql', apollo.graphqlExpress(graph.createGraphOptions(conn)))
+
+// Only include the graphiql tool if we aren't in production mode.
+if (app.get('env') !== 'production') {
+  // Interactive graphiql interface.
+  app.use('/api/v1/graph/iql', apollo.graphiqlExpress({
+    endpointURL: '/api/v1/graph/ql'
+  }))
+
+  // GraphQL documention.
+  // app.get('/admin/docs', (req, res) => {
+  //   res.render('admin/docs');
+  // });
+}
 
 /* Serve static files */
 app.use('/public', express.static(path.join('/usr', 'app', 'public')))

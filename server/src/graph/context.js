@@ -1,24 +1,31 @@
 
-const loaders = require('./loaders');
-const mutators = require('./mutators');
+const loaders = require('./loaders')
+// const mutators = require('./mutators')
 
 /**
  * Stores the request context.
  */
-class Context {
-  constructor({user = null}) {
 
+ // TODO: Add conn
+class Context {
+  constructor ({user = null}, {conn = null}) {
+    console.log('Creating context');
     // Load the current logged in user to `user`, otherwise this'll be null.
     if (user) {
-      this.user = user;
+      this.user = user
+    }
+
+    // Include a connection to rethinkDB
+    if (conn) {
+      this.conn = conn
     }
 
     // Create the loaders.
-    this.loaders = loaders(this);
+    this.loaders = loaders(this)
 
     // Create the mutators.
-    this.mutators = mutators(this);
+    // this.mutators = mutators(this)
   }
 }
 
-module.exports = Context;
+module.exports = Context
