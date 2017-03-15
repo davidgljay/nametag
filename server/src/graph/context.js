@@ -9,7 +9,7 @@ const loaders = require('./loaders')
  // TODO: Add conn
 class Context {
   constructor ({user = null}, {conn = null}) {
-    console.log('Creating context');
+    
     // Load the current logged in user to `user`, otherwise this'll be null.
     if (user) {
       this.user = user

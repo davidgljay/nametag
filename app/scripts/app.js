@@ -12,9 +12,6 @@ import BadgeDetail from './containers/Badge/BadgeDetailContainer'
 import {getUser} from './actions/UserActions'
 import {registerServiceWorker, firebaseInit} from './actions/NotificationActions'
 
-import constants from './constants'
-
-
 import { DragDropContext } from 'react-dnd'
 import TouchBackend from 'react-dnd-touch-backend'
 import injectTapEventPlugin from 'react-tap-event-plugin'

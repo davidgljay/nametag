@@ -192,7 +192,7 @@ class CreateRoom extends Component {
     const {getUser, fetchBadges} = this.props
     getUser().then(user => fetchBadges(user.data.badges))
   }
-  
+
   render () {
     const {user, logout, setting} = this.props
     const {room, stepIndex} = this.state

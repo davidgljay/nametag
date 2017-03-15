@@ -4,7 +4,7 @@ const Nametags = require('./Nametags')
 const Rooms = require('./Rooms')
 
 module.exports = (context) => {
-  console.log('Loading loaders');
+
   // We need to return an object to be accessed.
   return _.merge(...[
     Messages,

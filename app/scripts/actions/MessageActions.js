@@ -1,9 +1,7 @@
 import errorLog from '../utils/errorLog'
 import constants from '../constants'
 import {hz} from '../api/horizon'
-import {setRoomProp} from './RoomActions'
 import {postDirectMessage} from './DirectMessageActions'
-import _ from 'lodash'
 
 let messageSubscriptions = {}
 
