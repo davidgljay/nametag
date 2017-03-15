@@ -8,12 +8,12 @@ const r = require('rethinkdb')
  *
  */
 
-const getRoomNametags = ({conn}, room) => {
-  return r.db('nametag').table('nametags').filter({room}).run(conn)
+const getRoomNametags = ({conn}, room) =>
+  r.db('nametag').table('nametags').filter({room}).run(conn)
+   .then(cursor => cursor.toArray())
    .then(nametags =>
       nametags.sort((a, b) => b.created_at - a.created_at)
     )
-}
 
  /**
   * Returns a nametag from an id.
@@ -23,25 +23,25 @@ const getRoomNametags = ({conn}, room) => {
   *
   */
 
-const get = ({conn}, ids) => {
-  return r.db('nametag').table('nametags').get(ids).run(conn)
-}
+const get = ({conn}, id) => r.db('nametag').table('nametags').get(id).run(conn)
 
-//  /**
-//   * Returns a nametag from an array of ids.
-//   *
-//   * @param {Object} context     graph context
-//   * @param {Array<String>} ids   an array of ids to be retrieved
-//   *
-//   */
-//
-// const getAll = ({conn}, ids) => {
-//   return r.db('nametag').table('nametags').get(ids).run(conn)
-// }
+
+/**
+ * Returns an array of nametags from an array of ids.
+ *
+ * @param {Object} context     graph context
+ * @param {Array<String>} id   the id of the nametag to be retrieved
+ *
+ */
+
+const getAll = ({conn}, ids) => r.db('nametag').table('nametags').get(id).run(conn)
+  .then(cursor => cursor.toArray())
+
 
 module.exports = (context) => ({
   Nametags: {
-    get: (ids) => get(context, ids),
+    get: (id) => get(context, id),
+    getAll: (ids) => getAll(context, ids),
     getRoomNametags: (room) => getRoomNametags(context, room)
   }
 })

@@ -8,15 +8,17 @@ const r = require('rethinkdb')
  * @param {String} nametag the id of the nametag of the currently logged in user for this room
  */
 
-const getRoomMessages = ({conn}, room, nametag) => {
-  return Promise.all([
+const getRoomMessages = ({conn}, room, nametag) => Promise.all([
     r.db('nametag').table('messages').filter({room, recipient: null}).run(conn),
     r.db('nametag').table('messages').filter({room, recipient: nametag}).run(conn)
   ])
+   .then(([messageCursor, dmCursor]) => Promise.all([
+     messageCursor.toArray(),
+     dmCursor.toArray()
+   ]))
    .then(([messages, dms]) =>
       messages.concat(dms).sort((a, b) => b.created_at - a.created_at)
     )
-}
 
  /**
   * Returns the messages from a particular author.
@@ -24,9 +26,8 @@ const getRoomMessages = ({conn}, room, nametag) => {
   * @param {String} nametag  the id of the nametag of the messages' author
   */
 
-const getNametagMessages = ({conn}, nametag) => {
-  return r.db('nametag').table('messages').filter({author: nametag}).run(conn)
-}
+const getNametagMessages = ({conn}, nametag) =>
+  r.db('nametag').table('messages').filter({author: nametag}).run(conn)
 
 module.exports = (context) => ({
   Messages: {

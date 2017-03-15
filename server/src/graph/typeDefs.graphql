@@ -44,7 +44,7 @@ type Room {
   norms: [String!]
 
   # The room's moderator
-  mod: User
+  mod: Nametag
 
   # The date when the room was created
   created_at: Date!
@@ -93,10 +93,10 @@ type Nametag {
   id: ID!
 
   # The name of the user
-  displayName: String
+  name: String!
 
   # The url of the user's icon
-  icon: String
+  icon: String!
 
   # Further information about the user
   bio: String
@@ -118,7 +118,7 @@ type Badge {
   name: String!
 
   # The badges description
-  description: String!
+  description: String
 
   # Notes appended to the badge
   notes: [Note]

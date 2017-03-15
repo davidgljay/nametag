@@ -1,7 +1,6 @@
 const User = {
-  badges: (_, __, context, loaders) => {
-    return loaders.Badges.get(context.user.badges)
-  }
+  badges: (obj, args, {user:{badges}, loaders:{Badges}}) => Badges.get(badges),
+  nametags: (obj, args, {user:{nametags}, loaders:{Nametags}}) => Nametags.get(nametags)
 }
 
 module.exports = User

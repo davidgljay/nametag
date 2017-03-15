@@ -8,9 +8,7 @@ const r = require('rethinkdb')
  *
  */
 
-const get = ({conn}, id) => {
-  return r.db('nametag').table('rooms').get(id).run(conn)
-}
+const get = ({conn}, id) => r.db('nametag').table('rooms').get(id).run(conn)
 
  /**
   * Returns all active rooms. This will be replaced in the future with a more nuanced room display search.
@@ -19,10 +17,8 @@ const get = ({conn}, id) => {
   *
   */
 
-const getActive = ({conn}) => {
-  return r.db('nametag').table('rooms').run(conn)
+const getActive = ({conn}) => r.db('nametag').table('rooms').run(conn)
     .then(rooms => rooms.toArray())
-}
 
 module.exports = (context) => ({
   Rooms: {
