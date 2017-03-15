@@ -9,6 +9,5 @@ module.exports = {
   Message,
   Nametag,
   User,
-  Badge,
   RootQuery
 }

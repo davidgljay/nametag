@@ -88,7 +88,7 @@ export function createBadge (
         resolve({...badge, id})
       }, reject)
     })
-    .catch(errorLog('Error creating a certificate: '))
+    .catch(errorLog('Error creating a badge: '))
   }
 }
 
@@ -113,6 +113,6 @@ export function grantBadge (id) {
         resolve(result)
       }, reject)
     })
-    .catch(errorLog('Error granting certificate ' + id + ': '))
+    .catch(errorLog('Error granting badge ' + id + ': '))
   }
 }

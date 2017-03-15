@@ -1,5 +1,5 @@
 const Message = {
-  nametag: ({author}, args, {loaders: {Nametags}}) => Nametags.get(author),
+  author: ({author}, args, {loaders: {Nametags}}) => Nametags.get(author),
   room: ({room}, args, {loaders: {Room}}) => Room.get(room)
 }
 

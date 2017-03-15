@@ -1,7 +1,10 @@
+const {ErrNotInRoom} = require('../../errors')
+
 const Room = {
   messages: ({id}, _, {user: {nametags}, loaders: {Messages}}) =>
-    Messages.getRoomMessages(id, nametags[id]),
-  nametags: ({id}, _, {loaders: {Nametags}}) => Nametags.getRoomNametags(id),
+    nametags[id] ? Messages.getRoomMessages(id, nametags[id]) : ErrNotInRoom,
+  nametags: ({id}, _, {user: {nametags}, loaders: {Nametags}}) =>
+    nametags[id] ? Nametags.getRoomNametags(id) : ErrNotInRoom,
   mod: ({mod}, _, {loaders: {Nametags}}) => Nametags.get(mod)
 }
 

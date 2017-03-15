@@ -1,7 +1,7 @@
 import {hz, hzAuth, getAuth, unAuth} from '../api/horizon'
 import constants from '../constants'
 import errorLog from '../utils/errorLog'
-import trackEvent from '../utils/analytics'
+// import trackEvent from '../utils/analytics'
 
 export function addUser (id, data) {
   return {
@@ -22,8 +22,8 @@ export function addUser (id, data) {
 */
 export function providerAuth (provider) {
   return () => {
-    trackEvent(`AUTH_${provider.toUpperCase()}`)
-    return hzAuth(provider)
+    // trackEvent(`AUTH_${provider.toUpperCase()}`)
+    window.location = '/auth/facebook'
   }
 }
 
