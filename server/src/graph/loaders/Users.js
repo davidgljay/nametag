@@ -77,6 +77,12 @@ const userFromAuth = (provider, profile) => {
       providerPhotoUrl: profile.photos[0].value,
       id: profile.id
     }
+  case 'google':
+    return {
+      displayNames: [profile.displayName],
+      providerPhotoUrl: profile.photos[0].value,
+      id: profile.id
+    }
   }
 }
 

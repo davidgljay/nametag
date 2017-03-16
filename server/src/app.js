@@ -14,7 +14,7 @@ const listeners = require('./listeners')
 const graph = require('./graph')
 const Connection = require('./connection')
 const apollo = require('graphql-server-express')
-const {local, facebook, twitter} = require('./auth')
+const {local, facebook, twitter, google} = require('./auth')
 const passport = require('passport')
 
 process.env.AWS_ACCESS_KEY_ID = config.s3.accessKeyId
@@ -43,6 +43,7 @@ r.connect( {host: 'rethinkdb'})
     passport.use('local', local(conn))
     passport.use('facebook', facebook(conn))
     passport.use('twitter', twitter(conn))
+    passport.use('google', google(conn))
 
     /* User session serialization */
     passport.serializeUser((user, done) => {
@@ -85,6 +86,14 @@ app.get('/auth/twitter/callback', passport.authenticate('twitter',
   { successRedirect: '/',
     failureRedirect: '/#login' }))
 
+/* Google auth */
+app.get('/auth/google', passport.authenticate('google', {
+  scope: ['https://www.googleapis.com/auth/plus.login']
+}))
+app.get('/auth/google/callback', passport.authenticate('google',
+  { successRedirect: '/',
+    failureRedirect: '/#login' }))
+
 app.post('/login',
   passport.authenticate('local', { successRedirect: '/',
                                    failureRedirect: '/#login',
@@ -109,12 +118,6 @@ app.post('/login',
 //   }
 // }
 // const horizonServer = horizon(httpsServer, options)
-//
-// /* Enable Auth providers */
-// horizonServer.add_auth_provider(horizon.auth.twitter, config.twitter)
-// horizonServer.add_auth_provider(horizon.auth.facebook, config.facebook)
-// horizonServer.add_auth_provider(horizon.auth.google, config.google)
-
 /* Activate db listeners */
 // listeners(horizonServer._reql_conn._rdb_options)
 
