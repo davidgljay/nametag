@@ -44,8 +44,19 @@ r.connect( {host: 'rethinkdb'})
     passport.use('local', local.strategy(conn))
     passport.use('facebook', facebook.strategy(conn))
 
+    /* User session serialization */
+    passport.serializeUser((user, done) => {
+         done(null, user.id)
+     })
+
+     passport.deserializeUser((id, done) => {
+       r.db('nametag').table('users').get(id).run(conn)
+        .then(user => done(null, user))
+        .catch(done)
+     })
+
     // GraphQL endpoint.
-    //app.use('/api/v1/graph/ql', apollo.graphqlExpress(graph.createGraphOptions(conn)))
+    app.use('/api/v1/graph/ql', apollo.graphqlExpress(graph.createGraphOptions(conn)))
 
   })
   .catch(err => console.log(`Error connecting to rethinkdb: ${err}`))

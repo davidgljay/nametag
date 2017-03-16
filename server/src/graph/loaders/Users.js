@@ -39,7 +39,6 @@ const findOrCreateFromAuth = ({conn}, profile, provider) => {
     .then(cursor => cursor.toArray())
     .then(([user]) => {
       if (user) {
-        console.log('Found user', user)
         return user
       }
       return fromUrl(50, 50, authProfile.providerPhotoUrl)
@@ -59,10 +58,6 @@ const findOrCreateFromAuth = ({conn}, profile, provider) => {
             {
               id: rdbRes.generated_keys[0]
             })
-        })
-        .then(user => {
-          console.log('Created user', user)
-          return user
         })
     })
     .catch(err => console.log(`Error finding or creating user: ${err}`))

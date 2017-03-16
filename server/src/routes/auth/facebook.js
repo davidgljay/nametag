@@ -16,13 +16,10 @@ const facebook = passport.authenticate('facebook',
  * Facebook callback endpoint, this will send the user a html page designed to
  * send back the user credentials upon sucesfull login.
  */
-const facebookCallback = (req, res, next) => {
+const facebookCallback = passport.authenticate('facebook',
+  { successRedirect: '/',
+    failureRedirect: '/#login' })
 
-  // Perform the facebook login flow and pass the data back through the opener.
-  passport.authenticate('facebook', (req, res, next) => {
-    console.log('FB callback path', req.user)
-  })(req, res, next)
-}
 
 module.exports = {
   facebook,
