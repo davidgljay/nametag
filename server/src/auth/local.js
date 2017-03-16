@@ -4,7 +4,7 @@ const LocalStrategy = require('passport-local').Strategy
 
 const Users = (conn) => UsersLoader({conn}).Users
 
-const strategy = conn => new LocalStrategy(
+module.exports = conn => new LocalStrategy(
   (email, password, done) => {
     Users(conn).getByEmail(email)
       .then(user => {
@@ -20,9 +20,3 @@ const strategy = conn => new LocalStrategy(
       .catch(done)
   }
 )
-
-
-
-module.exports = {
-  strategy
-}

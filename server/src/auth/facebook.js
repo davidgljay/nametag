@@ -4,7 +4,7 @@ const config = require('../secrets.json')
 
 const Users = (conn) => UsersLoader({conn}).Users
 
-const strategy = conn => new FacebookStrategy({
+module.exports = conn => new FacebookStrategy({
     clientID: config.facebook.id,
     clientSecret: config.facebook.secret,
     callbackURL: "/auth/facebook/callback",
@@ -16,7 +16,3 @@ const strategy = conn => new FacebookStrategy({
       .catch(done)
   }
 )
-
-module.exports = {
-  strategy
-}

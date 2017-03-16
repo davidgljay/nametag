@@ -71,6 +71,12 @@ const userFromAuth = (provider, profile) => {
       providerPhotoUrl: profile.photos[0].value,
       id: profile.id
     }
+  case 'twitter':
+    return {
+      displayNames: [profile.displayName, profile.username],
+      providerPhotoUrl: profile.photos[0].value,
+      id: profile.id
+    }
   }
 }
 

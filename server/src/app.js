@@ -14,9 +14,8 @@ const listeners = require('./listeners')
 const graph = require('./graph')
 const Connection = require('./connection')
 const apollo = require('graphql-server-express')
-const {local, facebook} = require('./auth')
+const {local, facebook, twitter} = require('./auth')
 const passport = require('passport')
-const fbAuth = require('./routes/auth/facebook')
 
 process.env.AWS_ACCESS_KEY_ID = config.s3.accessKeyId
 process.env.AWS_SECRET_ACCESS_KEY = config.s3.secretAccessKey
@@ -41,8 +40,9 @@ r.connect( {host: 'rethinkdb'})
   .then(conn => {
 
     /* Auth Providers */
-    passport.use('local', local.strategy(conn))
-    passport.use('facebook', facebook.strategy(conn))
+    passport.use('local', local(conn))
+    passport.use('facebook', facebook(conn))
+    passport.use('twitter', twitter(conn))
 
     /* User session serialization */
     passport.serializeUser((user, done) => {
@@ -67,12 +67,23 @@ r.connect( {host: 'rethinkdb'})
 app.use('/public', express.static(path.join('/usr', 'app', 'public')))
 
 
-/**
- * Facebook auth endpoint, this will redirect the user immediatly to facebook
- * for authorization.
- */
-app.get('/auth/facebook', fbAuth.facebook)
-app.get('/auth/facebook/callback', fbAuth.facebookCallback)
+/* Facebook auth */
+app.get('/auth/facebook', passport.authenticate('facebook',
+  {
+    display: 'popup',
+    authType: 'rerequest',
+    scope: ['public_profile'],
+    profileFields: ['id', 'displayName', 'email', 'picture']
+  }))
+app.get('/auth/facebook/callback', passport.authenticate('facebook',
+  { successRedirect: '/',
+    failureRedirect: '/#login' }))
+
+/* Twitter auth */
+app.get('/auth/twitter', passport.authenticate('twitter'))
+app.get('/auth/twitter/callback', passport.authenticate('twitter',
+  { successRedirect: '/',
+    failureRedirect: '/#login' }))
 
 app.post('/login',
   passport.authenticate('local', { successRedirect: '/',
