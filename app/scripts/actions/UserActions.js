@@ -1,4 +1,4 @@
-import {hz, hzAuth, getAuth, unAuth} from '../api/horizon'
+import {hz, getAuth, unAuth} from '../api/horizon'
 import constants from '../constants'
 import errorLog from '../utils/errorLog'
 // import trackEvent from '../utils/analytics'
@@ -66,7 +66,6 @@ export function getUser () {
 */
 export function logout () {
   return (dispatch) => {
-    trackEvent('LOGOUT')
     unAuth()
     dispatch({type: constants.LOGOUT_USER})
   }

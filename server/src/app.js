@@ -2,6 +2,7 @@
 
 const https = require('https')
 const fs = require('fs')
+const r = require('rethinkdb')
 const express = require('express')
 const imageUpload = require('./routes/images/imageUpload')
 const horizon = require('../horizon/server/src/horizon.js')
@@ -35,9 +36,21 @@ app.use(session({ secret: config.session.secret }))
 app.use(passport.initialize())
 app.use(passport.session())
 
-/* Auth Providers */
-passport.use('local', local)
-passport.use('facebook', facebook)
+/* Get rethinkdb connection */
+r.connect( {host: 'rethinkdb'})
+  .then(conn => {
+
+    /* Auth Providers */
+    passport.use('local', local.strategy(conn))
+    passport.use('facebook', facebook.strategy(conn))
+
+    // GraphQL endpoint.
+    //app.use('/api/v1/graph/ql', apollo.graphqlExpress(graph.createGraphOptions(conn)))
+
+  })
+  .catch(err => console.log(`Error connecting to rethinkdb: ${err}`))
+
+
 
 /* Serve static files */
 app.use('/public', express.static(path.join('/usr', 'app', 'public')))
@@ -87,19 +100,14 @@ app.post('/login',
 // GraphQL Router
 // ==============================================================================
 
-// Initialize connection for graphQL
-// const conn = new Connection()
-// conn.init(horizonServer._reql_conn._rdb_options)
-//
-// // GraphQL endpoint.
-// app.use('/api/v1/graph/ql', apollo.graphqlExpress(graph.createGraphOptions(conn)))
-//
-// // Only include the graphiql tool if we aren't in production mode.
-// if (app.get('env') !== 'production') {
-//   // Interactive graphiql interface.
-//   app.use('/api/v1/graph/iql', apollo.graphiqlExpress({
-//     endpointURL: '/api/v1/graph/ql'
-//   }))
+
+// Only include the graphiql tool if we aren't in production mode.
+if (app.get('env') !== 'production') {
+  // Interactive graphiql interface.
+  app.use('/api/v1/graph/iql', apollo.graphiqlExpress({
+    endpointURL: '/api/v1/graph/ql'
+  }))
+}
 
   // GraphQL documention.
   // app.get('/admin/docs', (req, res) => {

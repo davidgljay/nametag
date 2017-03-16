@@ -67,22 +67,22 @@ type Message {
   id: ID!
 
   # The text of the message
-  text: String
+  text: String!
 
   # The nametag ID of the message's author
-  author: Nametag
+  author: Nametag!
 
   # The nametag ID of the message's recipient. If this is defined then this is a direct message.
   recipient: Nametag
 
   # The id of the room that where the message was created
-  room: Room
+  room: Room!
 
   # Indicates whether the message has been saved for viewing after the room has closed
   saved: Boolean
 
   # Time when the message was created
-  created_at: Date
+  created_at: Date!
 
 }
 

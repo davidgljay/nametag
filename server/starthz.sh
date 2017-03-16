@@ -1,7 +1,4 @@
-sleep 4
+sleep 5
 
-echo 'Syncing schema'
-hz schema apply schema.toml --project-name nametag --connect rethinkdb
-
-echo 'Starting horizon'
+echo 'Starting backend'
 node ./src/app
