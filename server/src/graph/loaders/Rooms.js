@@ -17,8 +17,9 @@ const get = ({conn}, id) => r.db('nametag').table('rooms').get(id).run(conn)
   *
   */
 
-const getActive = ({conn}) => r.db('nametag').table('rooms').run(conn)
-    .then(rooms => rooms.toArray())
+const getActive = ({conn}) => r.db('nametag').table('rooms')
+  .between(Date.now(), Number.MAX_SAFE_INTEGER).run(conn)
+  .then(rooms => rooms.toArray())
 
 module.exports = (context) => ({
   Rooms: {
