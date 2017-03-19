@@ -25,7 +25,6 @@ const getRoomNametags = ({conn}, room) =>
 
 const get = ({conn}, id) => r.db('nametag').table('nametags').get(id).run(conn)
 
-
 /**
  * Returns an array of nametags from an array of ids.
  *
@@ -34,14 +33,24 @@ const get = ({conn}, id) => r.db('nametag').table('nametags').get(id).run(conn)
  *
  */
 
-const getAll = ({conn}, ids) => r.db('nametag').table('nametags').get(id).run(conn)
+const getAll = ({conn}, ids) => r.db('nametag').table('nametags').get(ids).run(conn)
   .then(cursor => cursor.toArray())
 
+/**
+ * Creates a nametag
+ *
+ * @param {Object} context     graph context
+ * @param {Object} nametag   the nametag to be created
+ *
+ **/
+
+const create = ({conn}, nametag) => r.db('nametag').table('nametags').insert(nametag).run(conn)
 
 module.exports = (context) => ({
   Nametags: {
     get: (id) => get(context, id),
     getAll: (ids) => getAll(context, ids),
-    getRoomNametags: (room) => getRoomNametags(context, room)
+    getRoomNametags: (room) => getRoomNametags(context, room),
+    create: (nametag) => create(context, nametag)
   }
 })

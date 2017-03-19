@@ -27,10 +27,9 @@ describe('User loader', () => {
         .then(user => {
           expect(user.displayNames[0]).toEqual('Stampi')
         })
-
     })
 
-    it('should create a user if one does not exist', ()=> {
+    it('should create a user if one does not exist', () => {
 
     })
   }))

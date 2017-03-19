@@ -44,13 +44,13 @@ type Room {
   norms: [String!]
 
   # The room's moderator
-  mod: Nametag
+  mod: Nametag!
 
   # The date when the room was created
-  created_at: Date!
+  createdAt: Date!
 
   # The date when the room closes
-  closed_at: Date!
+  closedAt: Date!
 
   # The messages sent in the room
   messages: [Message]
@@ -82,7 +82,7 @@ type Message {
   saved: Boolean
 
   # Time when the message was created
-  created_at: Date!
+  createdAt: Date!
 
 }
 
@@ -105,7 +105,7 @@ type Nametag {
   badges: [Badge]
 
   # Time when the nametag was created
-  created_at: Date!
+  createdAt: Date!
 
 }
 
@@ -116,6 +116,9 @@ type Badge {
 
   # The name of the badge
   name: String!
+
+  # The icon for the badge
+  icon: String
 
   # The badges description
   description: String
@@ -149,6 +152,169 @@ type RootQuery {
 
 }
 
+################################################################################
+## Mutations
+################################################################################
+
+# Response defines what can be expected from any response to a mutation action.
+interface Response {
+
+  # An array of errors relating to the mutation that occurred.
+  errors: [UserError]
+}
+
+## Inputs
+
+# Input required in order to create a room
+input CreateRoomInput {
+
+  # The room's title
+  title: String!
+
+  # A description for the room
+  description: String!
+
+  # The image to be displayed on the room's card
+  image: String!
+
+  # The ID of the room's moderator
+  mod: CreateNametagInput!
+
+  # An array of the room's norms
+  norms: [String!]
+
+  # The date when the room will be closed
+  closedAt: Date!
+
+}
+
+# Input required in order to create a message
+input CreateMessageInput {
+
+  # The content of the message
+  text: String!
+
+  # The nametag ID of the message's author
+  author: ID!
+
+  # The optional ID of the message's recipient (if it is a DM)
+  recipient: ID
+
+  # The ID of the room where the message takes place
+  room: ID!
+
+}
+
+# Input required to create a nametag
+input CreateNametagInput {
+
+  # The content of the message
+  name: String!
+
+  # The nametag's icon
+  icon: String!
+
+  # Additional information about the user
+  bio: String!
+
+  # IDs of badges to include in this Nametag
+  badges: [ID]
+
+}
+
+# Input required to create a badge
+input CreateBadgeInput {
+
+  # The name of the badge
+  name: String!
+
+  # The badge's icon
+  icon: String
+
+  # The badge's description
+  description: String!
+
+  # Additional information appended to the badge
+  notes: [String]
+
+}
+
+## Responses
+
+# CreateRoomResponse is returned with the room that was created and any
+# errors that may have occurred in the attempt to create it.
+type CreateRoomResponse implements Response {
+
+  # The comment that was created.
+  room: Room
+
+  # An array of errors relating to the mutation that occurred.
+  errors: [UserError]
+}
+
+# CreateMessageResponse is returned with the message that was created and any
+# errors that may have occurred in the attempt to create it.
+type CreateMessageResponse implements Response {
+
+  # The comment that was created.
+  message: Message
+
+  # An array of errors relating to the mutation that occurred.
+  errors: [UserError]
+}
+
+# CreateNametagResponse is returned with the nametag that was created and any
+# errors that may have occurred in the attempt to create it.
+type CreateNametagResponse implements Response {
+
+  # The comment that was created.
+  nametag: Nametag
+
+  # An array of errors relating to the mutation that occurred.
+  errors: [UserError]
+}
+
+# CreateBadgeResponse is returned with the badge that was created and any
+# errors that may have occurred in the attempt to create it.
+type CreateBadgeResponse implements Response {
+
+  # The comment that was created.
+  badge: Badge
+
+  # An array of errors relating to the mutation that occurred.
+  errors: [UserError]
+}
+
+# The mutations available for Nametag
+type RootMutation {
+
+  # Creates a room
+  createRoom(room: CreateRoomInput!): CreateRoomResponse
+
+  # Creates a message
+  createMessage(message: CreateMessageInput!): CreateMessageResponse
+
+  # Creates a nametag
+  createNametag(nametag: CreateNametagInput!): CreateNametagResponse
+
+  # Creates a badge
+  createBadge(badge: CreateBadgeInput!): CreateBadgeResponse
+
+}
+
+################################################################################
+## Errors
+################################################################################
+
+# Any error rendered due to the user's input.
+interface UserError {
+
+  # Translation key relating to a translatable string containing details to be
+  # displayed to the end user.
+  translation_key: String!
+}
+
 schema {
   query: RootQuery
+  mutation: RootMutation
 }

@@ -9,9 +9,9 @@ const r = require('rethinkdb')
  */
 
 const getRoomMessages = ({conn}, room, nametag) => Promise.all([
-    r.db('nametag').table('messages').filter({room, recipient: null}).run(conn),
-    r.db('nametag').table('messages').filter({room, recipient: nametag}).run(conn)
-  ])
+  r.db('nametag').table('messages').filter({room, recipient: null}).run(conn),
+  r.db('nametag').table('messages').filter({room, recipient: nametag}).run(conn)
+])
    .then(([messageCursor, dmCursor]) => Promise.all([
      messageCursor.toArray(),
      dmCursor.toArray()
@@ -29,9 +29,20 @@ const getRoomMessages = ({conn}, room, nametag) => Promise.all([
 const getNametagMessages = ({conn}, nametag) =>
   r.db('nametag').table('messages').filter({author: nametag}).run(conn)
 
+/**
+ * Creates a message
+ *
+ * @param {Object} context     graph context
+ * @param {Object} message   the message to be created
+ *
+ **/
+
+const create = ({conn}, message) => r.db('nametag').table('messages').insert(message).run(conn)
+
 module.exports = (context) => ({
   Messages: {
     getRoomMessages: (room, nametag) => getRoomMessages(context, room, nametag),
-    getNametagMessages: (nametag) => getNametagMessages(context, nametag)
+    getNametagMessages: (nametag) => getNametagMessages(context, nametag),
+    create: (message) => create(context, message)
   }
 })

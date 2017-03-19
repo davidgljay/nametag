@@ -1,8 +1,8 @@
 const RootQuery = {
-  rooms: (obj, args, {loaders:{Rooms}}) => {
+  rooms: (obj, args, {models: {Rooms}}) => {
     return Rooms.getActive()
   },
-  room: (obj, {id}, {loaders:{Rooms}}) => {
+  room: (obj, {id}, {models: {Rooms}}) => {
     return Rooms.get(id)
   },
   me: (obj, args, {user}) => {

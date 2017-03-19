@@ -6,7 +6,6 @@ const Badges = require('./Badges')
 const Users = require('./Users')
 
 module.exports = (context) => {
-
   // We need to return an object to be accessed.
   return _.merge(...[
     Messages,

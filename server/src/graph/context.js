@@ -1,6 +1,4 @@
-
-const loaders = require('./loaders')
-// const mutators = require('./mutators')
+const models = require('./models')
 
 /**
  * Stores the request context.
@@ -9,7 +7,6 @@ const loaders = require('./loaders')
  // TODO: Add conn
 class Context {
   constructor ({user = null}, conn) {
-
     // Load the current logged in user to `user`, otherwise this'll be null.
     if (user) {
       this.user = user
@@ -20,11 +17,8 @@ class Context {
       this.conn = conn
     }
 
-    // Create the loaders.
-    this.loaders = loaders(this)
-
-    // Create the mutators.
-    // this.mutators = mutators(this)
+    // Create the models.
+    this.models = models(this)
   }
 }
 

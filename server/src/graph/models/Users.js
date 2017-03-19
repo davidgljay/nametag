@@ -19,9 +19,28 @@ const get = ({conn}, id) => r.db('nametag').table('users').get(id).run(conn)
  *
  */
 
-const getByEmail = ({conn}, id) =>
+const getByEmail = ({conn}, email) =>
   r.db('nametag').table('users').getAll(email, {index: 'email'}).run(conn)
     .then(cursor => cursor.getArray())
+
+/**
+ * Append an arbitrary value to an array in the user object.
+ *
+ * @param {Object} context     graph context
+ * @param {String} property   the property with the array to be updated
+ * @param {String} value   the value to be appended
+ *
+ */
+
+const appendUserArray = ({user, conn}, property, value) => user
+  ? r.db('nametag').table('users').get(user.id).update((user) =>
+      r.branch(
+        user.hasFields(property),
+        {[property]: user(property).append(value)},
+        {[property]: [value]}
+      )
+    ).run(conn)
+  : Promise.reject('User not logged in')
 
 /**
  * Finds or creates a user based on an oauth provider.
@@ -64,32 +83,33 @@ const findOrCreateFromAuth = ({conn}, profile, provider) => {
 }
 
 const userFromAuth = (provider, profile) => {
-  switch(provider){
-  case 'facebook':
-    return {
-      displayNames: [profile.displayName],
-      providerPhotoUrl: profile.photos[0].value,
-      id: profile.id
-    }
-  case 'twitter':
-    return {
-      displayNames: [profile.displayName, profile.username],
-      providerPhotoUrl: profile.photos[0].value,
-      id: profile.id
-    }
-  case 'google':
-    return {
-      displayNames: [profile.displayName],
-      providerPhotoUrl: profile.photos[0].value,
-      id: profile.id
-    }
+  switch (provider) {
+    case 'facebook':
+      return {
+        displayNames: [profile.displayName],
+        providerPhotoUrl: profile.photos[0].value,
+        id: profile.id
+      }
+    case 'twitter':
+      return {
+        displayNames: [profile.displayName, profile.username],
+        providerPhotoUrl: profile.photos[0].value,
+        id: profile.id
+      }
+    case 'google':
+      return {
+        displayNames: [profile.displayName],
+        providerPhotoUrl: profile.photos[0].value,
+        id: profile.id
+      }
   }
 }
 
 module.exports = (context) => ({
   Users: {
     get: (id) => get(context, id),
-    getByEmail: (email) => getByEmail(context,email),
-    findOrCreateFromAuth: (profile, provider) => findOrCreateFromAuth(context, profile, provider)
+    getByEmail: (email) => getByEmail(context, email),
+    findOrCreateFromAuth: (profile, provider) => findOrCreateFromAuth(context, profile, provider),
+    appendUserArray: (property, value) => appendUserArray(context, property, value)
   }
 })

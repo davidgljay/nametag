@@ -5,14 +5,11 @@ const fs = require('fs')
 const r = require('rethinkdb')
 const express = require('express')
 const imageUpload = require('./routes/images/imageUpload')
-const horizon = require('../horizon/server/src/horizon.js')
 const config = require('./secrets.json')
 const path = require('path')
 const bodyParser = require('body-parser')
 const session = require('express-session')
-const listeners = require('./listeners')
 const graph = require('./graph')
-const Connection = require('./connection')
 const apollo = require('graphql-server-express')
 const {local, facebook, twitter, google} = require('./auth')
 const passport = require('passport')
@@ -23,7 +20,7 @@ process.env.AWS_SECRET_ACCESS_KEY = config.s3.secretAccessKey
 const app = express()
 
 /* Create HTTP server */
-const httpsServer = https.createServer({
+https.createServer({
   key: fs.readFileSync(path.join(__dirname, '..', '..', '.keys', 'privkey.pem')),
   cert: fs.readFileSync(path.join(__dirname, '..', '..', '.keys', 'cert.pem')),
   ca: fs.readFileSync(path.join(__dirname, '..', '..', '.keys', 'chain.pem'))
@@ -36,9 +33,8 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 /* Get rethinkdb connection */
-r.connect( {host: 'rethinkdb'})
+r.connect({host: 'rethinkdb'})
   .then(conn => {
-
     /* Auth Providers */
     passport.use('local', local(conn))
     passport.use('facebook', facebook(conn))
@@ -47,26 +43,22 @@ r.connect( {host: 'rethinkdb'})
 
     /* User session serialization */
     passport.serializeUser((user, done) => {
-         done(null, user.id)
-     })
+      done(null, user.id)
+    })
 
-     passport.deserializeUser((id, done) => {
-       r.db('nametag').table('users').get(id).run(conn)
+    passport.deserializeUser((id, done) => {
+      r.db('nametag').table('users').get(id).run(conn)
         .then(user => done(null, user))
         .catch(done)
-     })
+    })
 
     // GraphQL endpoint.
     app.use('/api/v1/graph/ql', apollo.graphqlExpress(graph.createGraphOptions(conn)))
-
   })
   .catch(err => console.log(`Error connecting to rethinkdb: ${err}`))
 
-
-
 /* Serve static files */
 app.use('/public', express.static(path.join('/usr', 'app', 'public')))
-
 
 /* Facebook auth */
 app.get('/auth/facebook', passport.authenticate('facebook',
@@ -96,10 +88,10 @@ app.get('/auth/google/callback', passport.authenticate('google',
 
 app.post('/login',
   passport.authenticate('local', { successRedirect: '/',
-                                   failureRedirect: '/#login',
-                                   successFlash: 'Welcome!',
-                                   failureFlash: 'Email or password is invalid.' })
-);
+    failureRedirect: '/#login',
+    successFlash: 'Welcome!',
+    failureFlash: 'Email or password is invalid.' })
+)
 
 /* Connect to Horizon */
 // const options = {
@@ -124,7 +116,6 @@ app.post('/login',
 // ==============================================================================
 // GraphQL Router
 // ==============================================================================
-
 
 // Only include the graphiql tool if we aren't in production mode.
 if (app.get('env') !== 'production') {

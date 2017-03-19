@@ -5,7 +5,7 @@
  */
 const authorization = module.exports = {
   middleware: []
-};
+}
 
 const debug = require('debug')('nametag:middleware:authorization')
 const ErrNotAuthorized = require('../errors').ErrNotAuthorized
@@ -23,7 +23,6 @@ authorization.needed = (...roles) => [
 
   // Insert the actual middleware to check for the required role.
   (req, res, next) => {
-
     // All routes that are wrapepd with this middleware actually require a role.
     if (!req.user) {
       debug(`No user on request, returning with ${ErrNotAuthorized}`)

@@ -21,9 +21,20 @@ const getActive = ({conn}) => r.db('nametag').table('rooms')
   .between(Date.now(), Number.MAX_SAFE_INTEGER).run(conn)
   .then(rooms => rooms.toArray())
 
+/**
+ * Creates a room
+ *
+ * @param {Object} context     graph context
+ * @param {Object} room   the room to be created
+ *
+ **/
+
+const create = ({conn}, room) => r.db('nametag').table('rooms').insert(room).run(conn)
+
 module.exports = (context) => ({
   Rooms: {
     get: (id) => get(context, id),
-    getActive: () => getActive(context)
+    getActive: () => getActive(context),
+    create: (room) => create(context, room)
   }
 })
