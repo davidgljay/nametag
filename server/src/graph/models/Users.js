@@ -43,6 +43,19 @@ const appendUserArray = ({user, conn}, property, value) => user
   : Promise.reject('User not logged in')
 
 /**
+ * Adds a nametag to the user.
+ *
+ * @param {Object} context     graph context
+ * @param {String} property   the property with the array to be updated
+ * @param {String} value   the value to be appended
+ *
+ */
+
+const addNametag = ({user, conn}, nametagId, roomId) => user
+  ? r.db('nametag').table('users').get(user.id).update({nametags: {[roomId]: nametagId}}).run(conn)
+  : Promise.reject('User not logged in')
+
+/**
  * Finds or creates a user based on an oauth provider.
  *
  * @param {Object} context   graph context
@@ -110,6 +123,7 @@ module.exports = (context) => ({
     get: (id) => get(context, id),
     getByEmail: (email) => getByEmail(context, email),
     findOrCreateFromAuth: (profile, provider) => findOrCreateFromAuth(context, profile, provider),
-    appendUserArray: (property, value) => appendUserArray(context, property, value)
+    appendUserArray: (property, value) => appendUserArray(context, property, value),
+    addNametag: (nametagId, roomId) => addNametag(context, nametagId, roomId)
   }
 })

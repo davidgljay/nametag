@@ -46,11 +46,25 @@ const getAll = ({conn}, ids) => r.db('nametag').table('nametags').get(ids).run(c
 
 const create = ({conn}, nametag) => r.db('nametag').table('nametags').insert(nametag).run(conn)
 
+/**
+ * Update Nametag Room
+ * When a mod is created we don't know the room's ID yet. This command updates the room field with the proper id.
+ *
+ * @param {Object} context     graph context
+ * @param {String} nametagId   the id of the nametag to be update
+ * @param {String} roomId      the room id to be inserted
+ *
+ **/
+
+const updateRoom = ({conn}, nametagId, roomId) =>
+  r.db('nametag').table('nametags').get(nametagId).update({room: roomId}).run(conn)
+
 module.exports = (context) => ({
   Nametags: {
     get: (id) => get(context, id),
     getAll: (ids) => getAll(context, ids),
     getRoomNametags: (room) => getRoomNametags(context, room),
-    create: (nametag) => create(context, nametag)
+    create: (nametag) => create(context, nametag),
+    updateRoom: (nametagId, roomId) => updateRoom(context, nametagId, roomId)
   }
 })

@@ -24,38 +24,39 @@ const catchErrors = (err) => {
 const RootMutation = {
   createRoom: (obj, {room}, {models: {Rooms, Nametags, Users}}) => {
     let modId
+    let id
     // Create moderator nametag
     return Nametags.create(room.mod)
 
-    // Append moderator nametag to user array
+    // Create Room
     .then(res => {
       if (res.errors > 0) {
         return new errors.APIError('Error creating nametag')
       }
       modId = res.generated_keys[0]
-      return Users.appendUserArray('nametags', modId)
-    })
-
-    // Create Room
-    .then(res => {
-      if (res.errors > 0) {
-        return new errors.APIError(`Error appending nametag ID to user: ${res.first_error}`)
-      }
       return Rooms.create(Object.assign({}, room, {mod: modId}))
     })
 
-    // Return room with id
+    // Update nametag with room id and add nametag id to user
     .then(res => {
       if (res.errors > 0) {
         return new errors.APIError('Error creating room')
       }
-      const modWithId = Object.assign({}, room.mod, {id: modId})
-      console.log('modWithId', modWithId)
+      id = res.generated_keys[0]
+      return Promise.all([
+        Nametags.updateRoom(modId, id),
+        Users.addNametag(modId, id)
+      ])
+    })
+
+    // Return room
+    .then(res => {
+      if (res.errors > 0) {
+        return new errors.APIError(`Error appending nametag ID to user: ${res.first_error}`)
+      }
       return Object.assign({}, room, {
-        id: res.generated_keys[0],
-        mod: modId,
-        nametags: [modId],
-        badges: []
+        id,
+        mod: modId
       })
     })
     .then(wrapResponse('room'))
