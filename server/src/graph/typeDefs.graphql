@@ -107,6 +107,12 @@ type Nametag {
   # Time when the nametag was created
   createdAt: Date!
 
+  # Indicates whether the nametag is present in the current room
+  present: Boolean
+
+  # Indicates when a user has been mentioned in other rooms
+  mentions: [Date]
+
 }
 
 # A verified component of a user's identity
@@ -303,6 +309,32 @@ type RootMutation {
 }
 
 ################################################################################
+## Subscriptions
+################################################################################
+
+type NametagPresence {
+
+  # The id of the nametag to be updated
+  id: ID!
+
+  # Indicates whether the nametag is present
+  present: Boolean!
+
+}
+
+type RootSubscription {
+
+  # Fired when a message is added to a room
+  messageAdded(room: ID!): Message
+
+  # Fired when a nametag is added to a room
+  nametagAdded(room: ID!): Nametag
+
+  # Fired when a nametag's presence changes in a room
+  nametagPresence(room: ID!): NametagPresence
+}
+
+################################################################################
 ## Errors
 ################################################################################
 
@@ -317,4 +349,5 @@ interface UserError {
 schema {
   query: RootQuery
   mutation: RootMutation
+  subscription: RootSubscription
 }

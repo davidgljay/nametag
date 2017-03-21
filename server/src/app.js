@@ -9,22 +9,26 @@ const config = require('./secrets.json')
 const path = require('path')
 const bodyParser = require('body-parser')
 const session = require('express-session')
+const listeners = require('./listeners')
 const graph = require('./graph')
+const subscriptions = require('./graph/subscriptions')
 const apollo = require('graphql-server-express')
 const {local, facebook, twitter, google} = require('./auth')
 const passport = require('passport')
+const SubscriptionServer = require('./graph/subscriptions/SubscriptionServer')
+const PORT = 8181
 
 process.env.AWS_ACCESS_KEY_ID = config.s3.accessKeyId
 process.env.AWS_SECRET_ACCESS_KEY = config.s3.secretAccessKey
 
 const app = express()
 
-/* Create HTTP server */
-https.createServer({
+/* Create HTTPS server */
+const server = https.createServer({
   key: fs.readFileSync(path.join(__dirname, '..', '..', '.keys', 'privkey.pem')),
   cert: fs.readFileSync(path.join(__dirname, '..', '..', '.keys', 'cert.pem')),
   ca: fs.readFileSync(path.join(__dirname, '..', '..', '.keys', 'chain.pem'))
-}, app).listen(8181)
+}, app).listen(PORT)
 
 /* Use body parser middleware */
 app.use(bodyParser.json())
@@ -54,11 +58,23 @@ r.connect({host: 'rethinkdb'})
 
     // GraphQL endpoint.
     app.use('/api/v1/graph/ql', apollo.graphqlExpress(graph.createGraphOptions(conn)))
+
+    /* Activate db listeners */
+    // TODO: Replace with calls in mutations
+    listeners(conn)
+
+    /* Activate graphql subscriptions */
+    subscriptions.activate(conn)
   })
   .catch(err => console.log(`Error connecting to rethinkdb: ${err}`))
 
 /* Serve static files */
 app.use('/public', express.static(path.join('/usr', 'app', 'public')))
+
+/* Enable WS subscriptions */
+server.listen(PORT, () => {
+  SubscriptionServer(server)
+})
 
 /* Facebook auth */
 app.get('/auth/facebook', passport.authenticate('facebook',
@@ -110,8 +126,6 @@ app.post('/login',
 //   }
 // }
 // const horizonServer = horizon(httpsServer, options)
-/* Activate db listeners */
-// listeners(horizonServer._reql_conn._rdb_options)
 
 // ==============================================================================
 // GraphQL Router

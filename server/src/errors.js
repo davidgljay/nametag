@@ -95,6 +95,10 @@ const ErrNotAuthorized = new APIError('not authorized', {
   status: 401
 })
 
+const errorLog = (err) => {
+  console.log(err)
+}
+
 module.exports = {
   ExtendableError,
   APIError,
@@ -107,5 +111,6 @@ module.exports = {
   ErrEmailTaken,
   ErrNotFound,
   ErrAuthentication,
-  ErrNotAuthorized
+  ErrNotAuthorized,
+  errorLog
 }

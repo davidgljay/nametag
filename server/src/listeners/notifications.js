@@ -10,9 +10,11 @@ const onMessage = (conn) => (err, message) => {
     return Promise.reject(err)
   }
 
-  return db.table('user_nametags').filter({room: message.new_val.room})
-    .update({latestMessage: message.new_val.timestamp}).run(conn)
-    .then(() => checkMentions(message, conn))
+  // return db.table('user_nametags').filter({room: message.new_val.room})
+  //   .update({latestMessage: message.new_val.timestamp}).run(conn)
+  //   .then(() => checkMentions(message, conn))
+
+  return checkMentions(message, conn)
 }
 
 // Check for mentions of a @username
@@ -48,11 +50,11 @@ const checkMentions = (message, conn) => {
   })
 }
 
-const addMention = (nametag, room, conn) => db.table('user_nametags')
-.filter({room, nametag}).update({mentions: r.row('mentions').prepend(Date.now())}).run(conn)
+const addMention = (nametag, conn) => db.table('nametags').get(nametag)
+.update({mentions: r.row('mentions').prepend(Date.now())}).run(conn)
 
 const postMention = (to, sender, room, text, reason, conn) => Promise.all([
-  db.table('user_nametags').filter({room, nametag: to}).run(conn)
+  db.table('nametags').get(to).run(conn)
     .then(cursor => new Promise((resolve, reject) =>
       cursor.toArray((err, userNametags) => {
         if (err) { reject(err) }

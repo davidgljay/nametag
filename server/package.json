@@ -19,6 +19,7 @@
     "graphql": "^0.9.1",
     "graphql-errors": "^2.1.0",
     "graphql-server-express": "^0.6.0",
+    "graphql-subscriptions": "^0.3.1",
     "graphql-tools": "^0.10.1",
     "horizon": "^2.0.0",
     "joi": "^8.0.4",
@@ -30,11 +31,12 @@
     "oauth": "^0.9.14",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
-    "passport-local": "^1.0.0",
     "passport-google-oauth": "^1.0.0",
+    "passport-local": "^1.0.0",
     "passport-twitter": "^1.0.4",
     "pem": "^1.8.1",
     "rethinkdb": "^2.1.1",
+    "subscriptions-transport-ws": "^0.5.5-alpha.0",
     "winston": "^2.1.0",
     "ws": "^1.1.0"
   }
