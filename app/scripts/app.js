@@ -15,7 +15,8 @@ import {registerServiceWorker, firebaseInit} from './actions/NotificationActions
 import { DragDropContext } from 'react-dnd'
 import TouchBackend from 'react-dnd-touch-backend'
 import injectTapEventPlugin from 'react-tap-event-plugin'
-import { Provider } from 'react-redux'
+import {ApolloProvider} from 'react-apollo'
+import {client} from './graph/client'
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import mainReducer from './reducers'
@@ -35,7 +36,7 @@ let store = createStore(mainReducer, compose(
 class Nametag extends Component {
 
   componentWillMount () {
-    store.dispatch(getUser())
+    // store.dispatch(getUser())
     store.dispatch(firebaseInit())
     store.dispatch(registerServiceWorker())
 
@@ -52,14 +53,8 @@ class Nametag extends Component {
     }
   }
 
-  getChildContext () {
-    return {
-      dispatch: store.dispatch
-    }
-  }
-
   render () {
-    return <Provider store={store}>
+    return <ApolloProvider client={client} store={store}>
       <StyleRoot>
         <MuiThemeProvider>
           <Router history={browserHistory}>
@@ -72,12 +67,8 @@ class Nametag extends Component {
           </Router>
         </MuiThemeProvider>
       </StyleRoot>
-    </Provider>
+    </ApolloProvider>
   }
-}
-
-Nametag.childContextTypes = {
-  dispatch: PropTypes.func
 }
 
 const DecoratedNametag = Radium(DragDropContext(TouchBackend({ enableMouseEvents: true }))(Nametag))

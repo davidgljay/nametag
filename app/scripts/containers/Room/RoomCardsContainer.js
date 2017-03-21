@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import {compose} from 'react-apollo'
 import component from '../../components/Room/RoomCards'
 import {getAuth} from '../../api/horizon'
 import {addUserNametag, watchUserNametags} from '../../actions/UserNametagActions'
@@ -6,6 +7,8 @@ import {watchNametags, unWatchNametag} from '../../actions/NametagActions'
 import {logout, setting, providerAuth} from '../../actions/UserActions'
 import {fetchBadges} from '../../actions/BadgeActions'
 import {subscribe, unsubscribe} from '../../actions/RoomActions'
+import {roomsQuery} from '../../graph/queries'
+
 const mapStateToProps = (state) => {
   return {
     rooms: state.rooms,
@@ -52,9 +55,9 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const RoomCards = connect(
-  mapStateToProps,
-  mapDispatchToProps
+const RoomCards = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  roomsQuery
 )(component)
 
 export default RoomCards

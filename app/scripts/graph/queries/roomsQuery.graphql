@@ -1,0 +1,25 @@
+query roomsQuery {
+  rooms{
+    id
+    title
+    description
+    image
+    norms
+    createdAt
+    closedAt
+    mod {
+      name
+      icon
+      bio
+      badges {
+        name
+        description
+        icon
+        notes {
+          date
+          text
+        }
+      }
+    }
+  }
+}

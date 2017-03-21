@@ -18,6 +18,7 @@
     "react": "^15.4.0",
     "react-addons-css-transition-group": "^15.3.2",
     "react-addons-update": "^15.4.2",
+    "react-apollo": "^1.0.0-rc.3",
     "react-dnd": "^2.1.4",
     "react-dnd-touch-backend": "^0.3.3",
     "react-dom": "^15.3.2",
@@ -33,6 +34,7 @@
     "redux": "^3.5.2",
     "redux-thunk": "^2.1.0",
     "rethinkdb": "^2.3.3",
+    "subscriptions-transport-ws": "^0.5.5-alpha.0",
     "winston": "^2.1.0",
     "ws": "^1.1.0"
   },
