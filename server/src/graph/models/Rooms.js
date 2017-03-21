@@ -31,28 +31,24 @@ const getActive = ({conn}) => r.db('nametag').table('rooms')
  **/
 
 const create = ({conn, models: {Nametags, Users}}, rm) => {
-  console.log('rm', rm)
-  return Nametags.create(rm.mod)
-  // Create Room
-  .then(nametag => {
-    const modId = nametag.id
-    const room = Object.assign({}, rm, {createdAt: new Date(), mod: modId})
-    return Promise.all([
-      r.db('nametag').table('rooms').insert(room).run(conn),
-      modId,
-      room
-    ])
-  })
-
-  // Update nametag with room id and add nametag id to user
-  .then(([res, modId, room]) => {
+  const room = Object.assign({}, rm, {createdAt: new Date()})
+  return r.db('nametag').table('rooms').insert(room).run(conn)
+  .then((res) => {
     if (res.errors > 0) {
       return new errors.APIError('Error creating room')
     }
     const id = res.generated_keys[0]
+    const nametag = Object.assign({}, room.mod, {room: id})
     return Promise.all([
-      Nametags.updateRoom(modId, id),
-      Users.addNametag(modId, id),
+      Nametags.create(nametag),
+      id,
+      room
+    ])
+  })
+  .then(([nametag, id, room]) => {
+    const modId = nametag.id
+    return Promise.all([
+      r.db('nametag').table('rooms').get(id).update({mod: modId}),
       id,
       modId,
       room
@@ -60,12 +56,9 @@ const create = ({conn, models: {Nametags, Users}}, rm) => {
   })
 
   // Return room
-  .then(([ntRes, userRes, id, modId, room]) => {
-    if (ntRes.errors > 0) {
-      return new errors.APIError(`Error appending nametag ID to user: ${ntRes.first_error}`)
-    }
-    if (userRes.errors > 0) {
-      return new errors.APIError(`Error appending nametag ID to user: ${userRes.first_error}`)
+  .then(([res, id, modId, room]) => {
+    if (res.errors > 0) {
+      return new errors.APIError(`Error updating room with mod: ${res.first_error}`)
     }
     return Object.assign({}, room, {
       id,

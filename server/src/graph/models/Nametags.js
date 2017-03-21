@@ -34,8 +34,13 @@ const get = ({conn}, id) => r.db('nametag').table('nametags').get(id).run(conn)
  *
  */
 
-const getAll = ({conn}, ids) => r.db('nametag').table('nametags').get(ids).run(conn)
-  .then(cursor => cursor.toArray())
+const getAll = ({conn}, ids) => r.db('nametag').table('nametags').getAll(...ids).run(conn)
+  .then(cursor => {
+    return cursor.toArray()
+  })
+  .then(nametags => {
+    return nametags
+  })
 
 /**
  * Creates a nametag
@@ -55,7 +60,7 @@ const create = ({conn, models: {Users}}, nt) => {
     }
     const id = res.generated_keys[0]
     return Promise.all([
-      Users.addNametag('nametags', id, nametag.room),
+      Users.addNametag(id, nametag.room),
       id
     ])
   })
@@ -66,19 +71,6 @@ const create = ({conn, models: {Users}}, nt) => {
     return Object.assign({}, nametag, {id})
   })
 }
-
-/**
- * Update Nametag Room
- * When a mod is created we don't know the room's ID yet. This command updates the room field with the proper id.
- *
- * @param {Object} context     graph context
- * @param {String} nametagId   the id of the nametag to be update
- * @param {String} roomId      the room id to be inserted
- *
- **/
-
-const updateRoom = ({conn}, nametagId, roomId) =>
-  r.db('nametag').table('nametags').get(nametagId).update({room: roomId}).run(conn)
 
 /**
  * Adds a mention to a nametag
@@ -97,7 +89,6 @@ module.exports = (context) => ({
     getAll: (ids) => getAll(context, ids),
     getRoomNametags: (room) => getRoomNametags(context, room),
     create: (nametag) => create(context, nametag),
-    updateRoom: (nametagId, roomId) => updateRoom(context, nametagId, roomId),
     addMention: (nametag) => addMention(context, nametag)
   }
 })

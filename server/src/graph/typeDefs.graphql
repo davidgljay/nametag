@@ -113,6 +113,9 @@ type Nametag {
   # Indicates when a user has been mentioned in other rooms
   mentions: [Date]
 
+  # The room where the nametag is posted
+  room: Room!
+
 }
 
 # A verified component of a user's identity
