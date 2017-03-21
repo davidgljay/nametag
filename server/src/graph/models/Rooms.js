@@ -19,7 +19,7 @@ const get = ({conn}, id) => r.db('nametag').table('rooms').get(id).run(conn)
   */
 
 const getActive = ({conn}) => r.db('nametag').table('rooms')
-  .between(Date.now(), Number.MAX_SAFE_INTEGER).run(conn)
+  .between(new Date(), new Date(Date.now() * 100), {index: 'closedAt'}).run(conn)
   .then(rooms => rooms.toArray())
 
 /**
@@ -31,12 +31,12 @@ const getActive = ({conn}) => r.db('nametag').table('rooms')
  **/
 
 const create = ({conn, models: {Nametags, Users}}, rm) => {
+  console.log('rm', rm)
   return Nametags.create(rm.mod)
-
   // Create Room
   .then(nametag => {
     const modId = nametag.id
-    const room = Object.assign({}, rm, {createdAt: Date.now(), mod: modId})
+    const room = Object.assign({}, rm, {createdAt: new Date(), mod: modId})
     return Promise.all([
       r.db('nametag').table('rooms').insert(room).run(conn),
       modId,

@@ -41,7 +41,7 @@ const getNametagMessages = ({conn}, nametag) =>
 
 const create = (context, msg) => {
   const {conn, models: {Nametags}} = context
-  const messageObj = Object.assign({}, msg, {createdAt: Date.now()})
+  const messageObj = Object.assign({}, msg, {createdAt: new Date()})
   return r.db('nametag').table('messages').insert(messageObj).run(conn)
   .then((res) => {
     if (res.errors > 0) {

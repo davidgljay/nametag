@@ -46,7 +46,7 @@ const getAll = ({conn}, ids) => r.db('nametag').table('nametags').get(ids).run(c
  **/
 
 const create = ({conn, models: {Users}}, nt) => {
-  const nametag = Object.assign({}, nt, {createdAt: Date.now()})
+  const nametag = Object.assign({}, nt, {createdAt: new Date()})
   return r.db('nametag').table('nametags').insert(nametag).run(conn)
   // Append nametag ID to user object
   .then(res => {

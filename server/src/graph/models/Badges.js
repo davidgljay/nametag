@@ -31,7 +31,7 @@ const getAll = ({conn}, ids) => r.db('nametag').table('badges').getAll(...ids).r
  **/
 
 const create = ({conn, models: {Users}}, b) => {
-  const badge = Object.assign({}, b, {createdAt: Date.now()})
+  const badge = Object.assign({}, b, {createdAt: new Date()})
   r.db('nametag').table('badges').insert(badge).run(conn)
   // Append badge ID to user object
   .then(res => {
