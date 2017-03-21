@@ -44,7 +44,10 @@ const getAll = ({conn}, ids) => r.db('nametag').table('nametags').get(ids).run(c
  *
  **/
 
-const create = ({conn}, nametag) => r.db('nametag').table('nametags').insert(nametag).run(conn)
+const create = ({conn}, nt) => {
+  const nametag = Object.assign({}, nt, {createdAt: Date.now()})
+  return r.db('nametag').table('nametags').insert(nametag).run(conn)
+}
 
 /**
  * Update Nametag Room

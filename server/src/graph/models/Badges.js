@@ -29,7 +29,10 @@ const getAll = ({conn}, ids) => r.db('nametag').table('badges').getAll(...ids).r
  *
  **/
 
-const create = ({conn}, badge) => r.db('nametag').table('badges').insert(badge).run(conn)
+const create = ({conn}, b) => {
+  const badge = Object.assign({}, b, {createdAt: Date.now()})
+  r.db('nametag').table('badges').insert(badge).run(conn)
+}
 
 module.exports = (context) => ({
   Badges: {

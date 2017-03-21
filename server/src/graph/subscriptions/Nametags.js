@@ -10,7 +10,6 @@ const NametagSubscription = conn => r.db('nametag').table('nametags').changes().
         return
       }
       if (!nametag.old_val) {
-        console.log('Publishing nametag added subscription')
         pubsub.publish('nametagAdded', nametag.new_val)
       } else if (nametag.old_val.present !== nametag.new_val.present) {
         pubsub.publish('nametagPresence', {

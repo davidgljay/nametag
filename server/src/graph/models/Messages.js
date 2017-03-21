@@ -37,7 +37,10 @@ const getNametagMessages = ({conn}, nametag) =>
  *
  **/
 
-const create = ({conn}, message) => r.db('nametag').table('messages').insert(message).run(conn)
+const create = ({conn}, msg) => {
+  const message = Object.assign({}, msg, {createdAt: Date.now()})
+  return r.db('nametag').table('messages').insert(message).run(conn)
+}
 
 module.exports = (context) => ({
   Messages: {

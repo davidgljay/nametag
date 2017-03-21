@@ -78,7 +78,8 @@ const findOrCreateFromAuth = ({conn}, profile, provider) => {
           userObj = {
             displayNames: authProfile.displayNames,
             icons: [iconUrl.url],
-            [provider]: authProfile.id
+            [provider]: authProfile.id,
+            createdAt: Date.now()
           }
           return r.db('nametag').table('users').insert(userObj).run(conn)
         })

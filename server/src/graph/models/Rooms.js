@@ -29,7 +29,10 @@ const getActive = ({conn}) => r.db('nametag').table('rooms')
  *
  **/
 
-const create = ({conn}, room) => r.db('nametag').table('rooms').insert(room).run(conn)
+const create = ({conn}, rm) => {
+  const room = Object.assign({}, rm, {createdAt: Date.now()})
+  return r.db('nametag').table('rooms').insert(room).run(conn)
+}
 
 module.exports = (context) => ({
   Rooms: {
