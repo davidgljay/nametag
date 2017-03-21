@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import moment from '../../../bower_components/moment/moment'
+import moment from 'moment'
 import { dragTypes } from '../../constants'
 import { DragSource } from 'react-dnd'
 import { Card } from 'material-ui/Card'
