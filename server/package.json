@@ -5,6 +5,7 @@
   "main": "./src/app.js",
   "scripts": {
     "start": "node ./src/app",
+    "dev-start": "nodemon --config .nodemon.json --exec \"node ./src/app\"",
     "test": "jest"
   },
   "author": "David Jay <davidgljay@gmail.com>",
@@ -28,6 +29,7 @@
     "multer": "^1.2.0",
     "multer-storage-s3": "^1.1.1",
     "node-fetch": "1.6.3",
+    "nodemon": "^1.11.0",
     "oauth": "^0.9.14",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
