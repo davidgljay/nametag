@@ -109,6 +109,14 @@ app.post('/login',
     failureFlash: 'Email or password is invalid.' })
 )
 
+app.get('/logout',
+  (req, res) => {
+    req.session.destroy()
+    req.logout()
+    res.redirect('/')
+  }
+)
+
 /* Connect to Horizon */
 // const options = {
 //   project_name: 'nametag',
