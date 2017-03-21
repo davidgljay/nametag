@@ -6,26 +6,17 @@ const webpack = require('webpack')
 
 // Edit the build targets and embeds below.
 
-const buildTargets = [
-  'coral-admin',
-  'coral-docs'
-]
-
-const buildEmbeds = [
-  'stream'
-]
-
 module.exports = {
   devtool: '#cheap-module-source-map',
   entry: Object.assign({}, {
-    'embed': [
+    'app': [
       'babel-polyfill',
       path.join(__dirname, 'app/scripts/app')
     ]
   }),
   output: {
-    path: path.join(__dirname, 'dist'),
-    publicPath: '/',
+    path: path.join(__dirname, 'dist', 'public', 'scripts'),
+    publicPath: '/public/',
     filename: '[name].js',
     library: 'Nametag'
   },
@@ -73,6 +64,18 @@ module.exports = {
       {
         from: path.join(__dirname, 'app', 'images'),
         to: path.join(__dirname, 'dist', 'public', 'images')
+      },
+      {
+        from: path.join(__dirname, 'app', 'sw.js'),
+        to: path.join(__dirname, 'dist', 'sw.js')
+      },
+      {
+        from: path.join(__dirname, 'app', 'index.html'),
+        to: path.join(__dirname, 'dist', 'public', 'index.html')
+      },
+      {
+        from: path.join(__dirname, 'app', 'styles'),
+        to: path.join(__dirname, 'dist', 'public', 'styles')
       }
     ]),
     autoprefixer,
