@@ -1,4 +1,5 @@
 const r = require('rethinkdb')
+const errors = require('../../errors')
 
 /**
  * Returns the nametags from a particular room.
@@ -44,9 +45,26 @@ const getAll = ({conn}, ids) => r.db('nametag').table('nametags').get(ids).run(c
  *
  **/
 
-const create = ({conn}, nt) => {
+const create = ({conn, models: {Users}}, nt) => {
   const nametag = Object.assign({}, nt, {createdAt: Date.now()})
   return r.db('nametag').table('nametags').insert(nametag).run(conn)
+  // Append nametag ID to user object
+  .then(res => {
+    if (res.errors > 0) {
+      return new errors.APIError('Error creating nametag')
+    }
+    const id = res.generated_keys[0]
+    return Promise.all([
+      Users.appendUserArray('nametags', id),
+      id
+    ])
+  })
+  .then(([res, id]) => {
+    if (res.errors > 0) {
+      return new errors.APIError(`Error appending nametag ID to user: ${res.first_error}`)
+    }
+    return Object.assign({}, nametag, {id})
+  })
 }
 
 /**
@@ -62,12 +80,24 @@ const create = ({conn}, nt) => {
 const updateRoom = ({conn}, nametagId, roomId) =>
   r.db('nametag').table('nametags').get(nametagId).update({room: roomId}).run(conn)
 
+/**
+ * Adds a mention to a nametag
+ *
+ * @param {Object} context     graph context
+ * @param {String} nametag      the id of the nametag to be updated
+ *
+ **/
+
+const addMention = ({conn}, nametag) => r.db('nametag').table('nametags').get(nametag)
+.update({mentions: r.row('mentions').prepend(Date.now())}).run(conn)
+
 module.exports = (context) => ({
   Nametags: {
     get: (id) => get(context, id),
     getAll: (ids) => getAll(context, ids),
     getRoomNametags: (room) => getRoomNametags(context, room),
     create: (nametag) => create(context, nametag),
-    updateRoom: (nametagId, roomId) => updateRoom(context, nametagId, roomId)
+    updateRoom: (nametagId, roomId) => updateRoom(context, nametagId, roomId),
+    addMention: (nametag) => addMention(context, nametag)
   }
 })

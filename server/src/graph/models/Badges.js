@@ -1,4 +1,5 @@
 const r = require('rethinkdb')
+const errors = require('../../errors')
 
 /**
  * Returns a badge from an id.
@@ -29,9 +30,26 @@ const getAll = ({conn}, ids) => r.db('nametag').table('badges').getAll(...ids).r
  *
  **/
 
-const create = ({conn}, b) => {
+const create = ({conn, models: {Users}}, b) => {
   const badge = Object.assign({}, b, {createdAt: Date.now()})
   r.db('nametag').table('badges').insert(badge).run(conn)
+  // Append badge ID to user object
+  .then(res => {
+    if (res.errors > 0) {
+      return new errors.APIError('Error creating nametag')
+    }
+    const id = res.generated_keys[0]
+    return Promise.all([
+      Users.appendUserArray('badges', id),
+      id
+    ])
+  })
+  .then(([res, id]) => {
+    if (res.errors > 0) {
+      return new errors.APIError(`Error appending badge ID to user: ${res.first_error}`)
+    }
+    return Object.assign({}, badge, {id})
+  })
 }
 
 module.exports = (context) => ({
