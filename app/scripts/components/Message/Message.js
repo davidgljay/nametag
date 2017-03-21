@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import moment from '../../../bower_components/moment/moment'
+import moment from 'moment'
 import ModAction from '../ModAction/ModAction'
 import Media from './Media'
 import MessageMenu from './MessageMenu'
