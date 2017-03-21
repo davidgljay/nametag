@@ -59,7 +59,7 @@ const ErrNotInRoom = new APIError('User has not joined this room', {
   status: 400
 })
 
-const ErrNotLoggedIn = new APIError('You must be logged in to view this information', {
+const ErrNotLoggedIn = new APIError('User not logged in', {
   translation_key: 'NOT_LOGGED_IN',
   status: 400
 })

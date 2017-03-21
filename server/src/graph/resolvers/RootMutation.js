@@ -22,23 +22,27 @@ const catchErrors = (err) => {
 }
 
 const RootMutation = {
-  createRoom: (obj, {room}, {models: {Rooms}}) => {
-    return Rooms.create(room.mod)
+  createRoom: (obj, {room}, {user, models: {Rooms}}) => {
+    return !user ? Promise.reject(errors.ErrNotLoggedIn)
+    : Rooms.create(room)
     .then(wrapResponse('room'))
     .catch(catchErrors)
   },
   createMessage: (obj, {message}, {models: {Messages}}) => {
-    return Messages.create(message)
+    return !user ? Promise.reject(errors.ErrNotLoggedIn)
+    : Messages.create(message)
       .then(wrapResponse('message'))
       .catch(catchErrors)
   },
   createNametag: (obj, {nametag}, {models: {Nametags}}) => {
-    return Nametags.create(nametag)
+    return !user ? Promise.reject(errors.ErrNotLoggedIn)
+    : Nametags.create(nametag)
       .then(wrapResponse('nametag'))
       .catch(catchErrors)
   },
   createBadge: (obj, {badge}, {models: {Badges}}) => {
-    return Badges.create(badge)
+    return !user ? Promise.reject(errors.ErrNotLoggedIn)
+    : Badges.create(badge)
       .then(wrapResponse('badge'))
       .catch(catchErrors)
   }

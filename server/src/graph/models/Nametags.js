@@ -55,7 +55,7 @@ const create = ({conn, models: {Users}}, nt) => {
     }
     const id = res.generated_keys[0]
     return Promise.all([
-      Users.appendUserArray('nametags', id),
+      Users.addNametag('nametags', id, nametag.room),
       id
     ])
   })

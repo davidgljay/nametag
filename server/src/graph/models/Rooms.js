@@ -34,11 +34,8 @@ const create = ({conn, models: {Nametags, Users}}, rm) => {
   return Nametags.create(rm.mod)
 
   // Create Room
-  .then(res => {
-    if (res.errors > 0) {
-      return new errors.APIError('Error creating nametag')
-    }
-    const modId = res.generated_keys[0]
+  .then(nametag => {
+    const modId = nametag.id
     const room = Object.assign({}, rm, {createdAt: Date.now(), mod: modId})
     return Promise.all([
       r.db('nametag').table('rooms').insert(room).run(conn),

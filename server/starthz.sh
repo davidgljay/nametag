@@ -1,4 +1,4 @@
-sleep 5
+sleep 7
 
 echo 'Starting backend'
-node ./src/app
+npm run dev-start
