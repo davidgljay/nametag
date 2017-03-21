@@ -67,7 +67,7 @@ module.exports = {
       },
       {
         from: path.join(__dirname, 'app', 'sw.js'),
-        to: path.join(__dirname, 'dist', 'sw.js')
+        to: path.join(__dirname, 'dist', 'public', 'sw.js')
       },
       {
         from: path.join(__dirname, 'app', 'index.html'),
