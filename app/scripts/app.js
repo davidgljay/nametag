@@ -9,7 +9,7 @@ import RoomCards from './containers/Room/RoomCardsContainer'
 import CreateRoom from './containers/Room/CreateRoomContainer'
 import CreateBadge from './containers/Badge/CreateBadgeContainer'
 import BadgeDetail from './containers/Badge/BadgeDetailContainer'
-import {getUser} from './actions/UserActions'
+// import {getUser} from './actions/UserActions'
 import {registerServiceWorker, firebaseInit} from './actions/NotificationActions'
 
 import { DragDropContext } from 'react-dnd'
@@ -17,21 +17,12 @@ import TouchBackend from 'react-dnd-touch-backend'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import {ApolloProvider} from 'react-apollo'
 import {client} from './graph/client'
-import { createStore, applyMiddleware, compose } from 'redux'
-import thunk from 'redux-thunk'
-import mainReducer from './reducers'
-
+import store from './graph/store'
 import { Router, Route, browserHistory } from 'react-router'
 
 injectTapEventPlugin()
 
 const mountNode = document.getElementById('app')
-
-let store = createStore(mainReducer, compose(
-    applyMiddleware(thunk),
-    window.devToolsExtension ? window.devToolsExtension() : f => f
-  )
-)
 
 class Nametag extends Component {
 
