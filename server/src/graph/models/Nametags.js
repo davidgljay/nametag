@@ -89,11 +89,40 @@ const addMention = ({conn}, nametag) => r.db('nametag').table('nametags').get(na
  * Returns the total number of participants in a room
  *
  * @param {Object} context     graph context
- * @param {Array<String>} id   the id of the room whose nametags should be counted
+ * @param {String} id   the id of the room whose nametags should be counted
  *
  */
 
 const getNametagCount = ({conn}, room) => r.db('nametag').table('nametags').filter({room}).count().run(conn)
+
+/**
+ * Updates the presence of a nametag in a room
+ *
+ * @param {Object} context     graph context
+ * @param {String} id   the id of the nametag to be updated
+ * @param {Date} latestVisit the date of the latest visit as an ISO string
+ */
+
+const updateLatestVisit = ({conn}, nametagId) => r.db('nametag').table('nametags')
+  .get(nametagId).update({latestVisit: new Date(), present: true}).run(conn)
+  .then((res) => {
+    if (res.errors > 0) {
+      return new errors.APIError(`Error updating nametag presence: ${res.first_error}`)
+    }
+    //Wait 30 seconds, then check this nametag again
+    setTimeout(() => {
+      r.db('nametag').table('nametags').get(nametagId).run(conn)
+      .then(nametag => {
+        if (Date.now() - new Date(nametag.latestVisit).getTime() > 20000) {
+          r.db('nametag').table('nametags').get(nametagId).update({present: false}).run(conn)
+          .catch(errors.errorLog('Setting nametag presence to false'))
+        }
+      })
+      .catch(errors.errorLog('Checking nametag latestVisit after delay'))
+    }, 30000)
+
+  })
+
 
 module.exports = (context) => ({
   Nametags: {
@@ -102,6 +131,7 @@ module.exports = (context) => ({
     getRoomNametags: (room) => getRoomNametags(context, room),
     create: (nametag) => create(context, nametag),
     addMention: (nametag) => addMention(context, nametag),
-    getNametagCount: (room) => getNametagCount(context, room)
+    getNametagCount: (room) => getNametagCount(context, room),
+    updateLatestVisit: (nametagId) => updateLatestVisit(context, nametagId)
   }
 })
