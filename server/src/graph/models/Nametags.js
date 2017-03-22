@@ -13,7 +13,7 @@ const getRoomNametags = ({conn}, room) =>
   r.db('nametag').table('nametags').filter({room}).run(conn)
    .then(cursor => cursor.toArray())
    .then(nametags =>
-      nametags.sort((a, b) => b.created_at - a.created_at)
+      nametags.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
     )
 
  /**
