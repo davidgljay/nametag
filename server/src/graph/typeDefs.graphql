@@ -341,7 +341,7 @@ type RootMutation {
 type NametagPresence {
 
   # The id of the nametag to be updated
-  id: ID!
+  nametagId: ID!
 
   # Indicates whether the nametag is present
   present: Boolean!
@@ -351,13 +351,13 @@ type NametagPresence {
 type RootSubscription {
 
   # Fired when a message is added to a room
-  messageAdded(room: ID!): Message
+  messageAdded(roomId: ID!): Message
 
   # Fired when a nametag is added to a room
-  nametagAdded(room: ID!): Nametag
+  nametagAdded(roomId: ID!): Nametag
 
   # Fired when a nametag's presence changes in a room
-  nametagPresence(room: ID!): NametagPresence
+  nametagPresence(roomId: ID!): NametagPresence
 }
 
 ################################################################################

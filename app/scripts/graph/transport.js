@@ -1,11 +1,17 @@
 import {createNetworkInterface} from 'apollo-client'
+import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws'
 
-export default function getNetworkInterface (apiUrl = '/api/v1/graph/ql', headers = {}) {
-  return new createNetworkInterface({ //eslint-disable-line
-    uri: apiUrl,
-    opts: {
-      credentials: 'same-origin',
-      headers
-    }
-  })
+export default function getNetworkInterface (headers = {}) {
+  return addGraphQLSubscriptions(
+    new createNetworkInterface({ //eslint-disable-line
+      uri: '/api/v1/graph/ql',
+      opts: {
+        credentials: 'same-origin',
+        headers
+      }
+    }),
+    new SubscriptionClient('/api/v1/subscriptions', {
+      reconnect: true
+    })
+  )
 }

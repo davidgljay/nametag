@@ -13,8 +13,9 @@ const NametagSubscription = conn => r.db('nametag').table('nametags').changes().
         pubsub.publish('nametagAdded', nametag.new_val)
       } else if (nametag.old_val.present !== nametag.new_val.present) {
         pubsub.publish('nametagPresence', {
-          nametag: nametag.new_val.id,
-          present: nametag.new_val.present
+          nametagId: nametag.new_val.id,
+          present: nametag.new_val.present,
+          roomId: nametag.new_val.room
         })
       }
     })
