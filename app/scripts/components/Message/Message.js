@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import moment from 'moment'
-import ModAction from '../ModAction/ModAction'
 import Media from './Media'
 import MessageMenu from './MessageMenu'
 import emojis from 'react-emoji'
@@ -41,6 +40,7 @@ class Message extends Component {
       },
       norms,
       roomId,
+      saveMessage,
       myNametag
     } = this.props
 
@@ -62,13 +62,12 @@ class Message extends Component {
     } else {
       below = <div style={styles.below}>
         {
-        // <MessageMenu
-        //   modAction={this.modAction}
-        //   showActions={this.state.showActions}
-        //   isDM={recipient}
-        //   saveMessage={saveMessage}
-        //   saved={saved}
-        //   id={id} />
+          <MessageMenu
+            showActions={this.state.showActions}
+            isDM={recipient}
+            saveMessage={saveMessage}
+            saved={saved}
+            id={id} />
         }
         <div style={styles.date}>
           {moment(createdAt).format('h:mm A, ddd MMM DD YYYY')}

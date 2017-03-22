@@ -34,6 +34,12 @@ const RootMutation = {
       .then(wrapResponse('message'))
       .catch(catchErrors)
   },
+  toggleSaved: (obj, {messageId, saved}, {user, models: {Messages}}) => {
+    return !user ? Promise.reject(errors.ErrNotLoggedIn)
+    : Messages.toggleSaved(messageId, saved)
+      .then(wrapResponse('toggleSaved'))
+      .catch(catchErrors)
+  },
   createNametag: (obj, {nametag}, {user, models: {Nametags}}) => {
     return !user ? Promise.reject(errors.ErrNotLoggedIn)
     : Nametags.create(nametag)

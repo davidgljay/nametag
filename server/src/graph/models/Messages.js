@@ -32,6 +32,16 @@ const getNametagMessages = ({conn}, nametag) =>
   r.db('nametag').table('messages').filter({author: nametag}).run(conn)
 
 /**
+ * Toggles the save boolean on a message.
+ * @param {Object} context  graph context
+ * @param {String} nametag  the id of the nametag of the messages' author
+ */
+
+const toggleSaved = ({conn}, id, saved) =>
+ r.db('nametag').table('messages').get(id).update({saved}).run(conn)
+
+
+/**
  * Creates a message
  *
  * @param {Object} context     graph context
@@ -175,6 +185,7 @@ module.exports = (context) => ({
   Messages: {
     getRoomMessages: (room, nametag) => getRoomMessages(context, room, nametag),
     getNametagMessages: (nametag) => getNametagMessages(context, nametag),
-    create: (message) => create(context, message)
+    create: (message) => create(context, message),
+    toggleSaved: (id, saved) => toggleSaved(context, id, saved)
   }
 })
