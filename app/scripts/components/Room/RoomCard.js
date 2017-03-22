@@ -57,7 +57,8 @@ class RoomCard extends Component {
       nametagEdits,
       addNametagEditBadge,
       removeNametagEditBadge,
-      updateNametagEdit
+      updateNametagEdit,
+      createNametag
     } = this.props
     let card
     let flipping = {}
@@ -113,6 +114,7 @@ class RoomCard extends Component {
           room={room.id}
           nametag={nametagEdits[room.id]}
           user={user}
+          createNametag={createNametag}
           normsChecked={this.state.normsChecked}
           addNametagEditBadge={addNametagEditBadge}
           removeNametagEditBadge={removeNametagEditBadge}

@@ -1,0 +1,10 @@
+mutation CreateRoom($room: CreateRoomInput!) {
+  createRoom(room: $room) {
+    room {
+      id
+    }
+    errors {
+      translation_key
+    }
+  }
+}

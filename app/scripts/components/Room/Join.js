@@ -14,16 +14,15 @@ class Join extends Component {
     this.state = {alert: null}
 
     this.onJoinClick = () => {
-    //   const {room, nametag, joinRoom, normsChecked, user} = this.props
-    //   // TODO: Add new user name to displayNames list.
-    //   if (normsChecked) {
-    //     joinRoom(room, nametag, user.id)
-    //       .then(() => {
-    //         window.location = `/rooms/${room}`
-    //       })
-    //   } else {
-    //     this.setState({alert: 'You must agree to this room\'s norms.'})
-    //   }
+      const {room, nametag, createNametag, normsChecked} = this.props
+      if (normsChecked) {
+        createNametag(nametag)
+          .then(() => {
+            window.location = `/rooms/${room}`
+          })
+      } else {
+        this.setState({alert: 'You must agree to this room\'s norms.'})
+      }
     }
   }
 

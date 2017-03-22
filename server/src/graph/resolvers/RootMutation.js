@@ -28,19 +28,19 @@ const RootMutation = {
     .then(wrapResponse('room'))
     .catch(catchErrors)
   },
-  createMessage: (obj, {message}, {models: {Messages}}) => {
+  createMessage: (obj, {message}, {user, models: {Messages}}) => {
     return !user ? Promise.reject(errors.ErrNotLoggedIn)
     : Messages.create(message)
       .then(wrapResponse('message'))
       .catch(catchErrors)
   },
-  createNametag: (obj, {nametag}, {models: {Nametags}}) => {
+  createNametag: (obj, {nametag}, {user, models: {Nametags}}) => {
     return !user ? Promise.reject(errors.ErrNotLoggedIn)
     : Nametags.create(nametag)
       .then(wrapResponse('nametag'))
       .catch(catchErrors)
   },
-  createBadge: (obj, {badge}, {models: {Badges}}) => {
+  createBadge: (obj, {badge}, {user, models: {Badges}}) => {
     return !user ? Promise.reject(errors.ErrNotLoggedIn)
     : Badges.create(badge)
       .then(wrapResponse('badge'))

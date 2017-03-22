@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 import {compose} from 'react-apollo'
 import component from '../../components/Room/RoomCards'
 import {roomsQuery} from '../../graph/queries'
+import {createNametag} from '../../graph/mutations'
 import {updateNametagEdit, addNametagEditBadge, removeNametagEditBadge} from '../../actions/NametagEditActions'
 
 const mapStateToProps = (state) => {
@@ -22,6 +23,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const RoomCards = compose(
   connect(mapStateToProps, mapDispatchToProps),
+  createNametag,
   roomsQuery
 )(component)
 

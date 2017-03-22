@@ -1,0 +1,10 @@
+mutation CreateNametag($nametag: CreateNametagInput!) {
+  createNametag(nametag: $nametag) {
+    nametag {
+      id
+    }
+    errors {
+      translation_key
+    }
+  }
+}

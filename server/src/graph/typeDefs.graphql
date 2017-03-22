@@ -232,6 +232,9 @@ input CreateNametagInput {
   # IDs of badges to include in this Nametag
   badges: [ID]
 
+  # The room that this nametag is joining
+  room: ID!
+
 }
 
 # Input required to create a badge

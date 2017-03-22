@@ -49,7 +49,8 @@ class RoomCards extends Component {
     updateNametagEdit,
     addNametagEditBadge,
     removeNametagEditBadge,
-    nametagEdits
+    nametagEdits,
+    createNametag
   } = this.props
     return <div>
       <Navbar
@@ -63,6 +64,7 @@ class RoomCards extends Component {
               room={room}
               user={me}
               nametagEdits={nametagEdits}
+              createNametag={createNametag}
               updateNametagEdit={updateNametagEdit}
               addNametagEditBadge={addNametagEditBadge}
               removeNametagEditBadge={removeNametagEditBadge} />
