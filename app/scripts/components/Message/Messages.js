@@ -21,10 +21,7 @@ class Messages extends Component {
     this.scrollIfNeeded = (oldMessages, newMessages) => {
       const numNewMessages = newMessages.length
       const numPrevMessages = oldMessages.length
-      if (numNewMessages > numPrevMessages && numPrevMessages === 0) {
-        const lastMessage = newMessages[numNewMessages - 1]
-        document.getElementById(lastMessage.id).scrollIntoViewIfNeeded()
-      } else if (numNewMessages > numPrevMessages && numNewMessages > 3) {
+      if (numNewMessages > numPrevMessages && numNewMessages > 3) {
         let counter = 0
         let timer = setInterval(() => {
           window.scrollBy(0, 2)
@@ -38,7 +35,10 @@ class Messages extends Component {
   }
 
   componentDidMount () {
-    this.scrollIfNeeded([], this.props.messages)
+    const {messages} = this.props
+    if (messages.length > 0) {
+      document.getElementById(messages[messages.length - 1].id).scrollIntoViewIfNeeded()
+    }
   }
 
   componentDidUpdate (prevProps) {
