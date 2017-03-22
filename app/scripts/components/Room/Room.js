@@ -23,16 +23,22 @@ class Room extends Component {
         norms: true,
         rooms: true,
         nametags: true
-      }
+      },
+      presenceTime: null
     }
 
     this.showPresence = (nametagId) => {
-      const {showPresence} = this.props
+      if (this.state.presenceTimer) { return }
+      const {updateLatestVisit} = this.props
       this.setState((prevState) => {
         clearInterval(prevState.presenceTimer)
-        prevState.presenceTimer = setInterval(() => {
-          showPresence(nametagId)
+        const presenceTimer = setInterval(() => {
+          updateLatestVisit(this.getMyNametag().id)
         }, 10000)
+        return {
+          ...prevState,
+          presenceTimer
+        }
       })
     }
 
@@ -47,6 +53,14 @@ class Room extends Component {
     this.toggleLeftBarSection = (section) => () => {
       this.setState({toggles: {...this.state.toggles, [section]: !this.state.toggles[section]}})
     }
+
+    this.getMyNametag = () => {
+      const {me, room} = this.props.data
+      const myNtId = me.nametags.reduce(
+        (val, nametag) => nametag.room.id === room.id ? nametag.id : val, null
+      )
+      return room.nametags.filter((nt) => nt.id === myNtId)[0]
+    }
   }
 
   componentDidMount () {
@@ -55,9 +69,9 @@ class Room extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    // if (nextProps.userNametags[nextProps.params.roomId]) {
-    //   this.showPresence(nextProps.userNametags[nextProps.params.roomId].nametag)
-    // }
+    if (!nextProps.data.loading) {
+      this.showPresence()
+    }
   }
 
   componentWillUnmount () {
@@ -79,10 +93,7 @@ class Room extends Component {
 
     let myNametag
     if (!loading) {
-      const myNtId = me.nametags.reduce(
-        (val, nametag) => nametag.room.id === room.id ? nametag.id : val, null
-      )
-      myNametag = room.nametags.filter((nt) => nt.id === myNtId)[0]
+      myNametag = this.getMyNametag()
     }
 
     let expanded = this.state.leftBarExpanded ? styles.expanded : styles.collapsed

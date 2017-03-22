@@ -2,6 +2,7 @@ import {graphql} from 'react-apollo'
 import CREATE_NAMETAG from './createNametag.graphql'
 import CREATE_MESSAGE from './createMessage.graphql'
 import TOGGLE_SAVED from './toggleSaved.graphql'
+import UPDATE_LATEST_VISIT from './updateLatestVisit.graphql'
 import errorLog from '../../utils/errorLog'
 
 export const createNametag = graphql(CREATE_NAMETAG, {
@@ -9,6 +10,16 @@ export const createNametag = graphql(CREATE_NAMETAG, {
     createNametag: (nametag) => mutate({
       variables: {
         nametag
+      }
+    })
+  })
+})
+
+export const updateLatestVisit = graphql(UPDATE_LATEST_VISIT, {
+  props: ({ownProps, mutate}) => ({
+    updateLatestVisit: (nametagid) => mutate({
+      variables: {
+        nametagid
       }
     })
   })
