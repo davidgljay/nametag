@@ -24,6 +24,20 @@ const getByEmail = ({conn}, email) =>
     .then(cursor => cursor.getArray())
 
 /**
+ * Returns a user based on a nametag.
+ * USE SPARINGLY! This function is a temporary patch, eventually this lookup should be impossible
+ * to protect user privacy.
+ *
+ * @param {Object} context     graph context
+ * @param {String} nametagId   an email used to look up the user
+ *
+ */
+
+const getByNametag = ({conn}, nametagId) =>
+  r.db('nametag').table('users').getAll(nametagId, {index: 'nametags'}).run(conn)
+    .then(cursor => cursor.getArray())
+
+/**
  * Append an arbitrary value to an array in the user object.
  *
  * @param {Object} context     graph context

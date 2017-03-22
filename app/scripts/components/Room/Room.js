@@ -159,13 +159,11 @@ class Room extends Component {
                     >chevron_right</FontIcon>
               </div>
             </div>
-            {
-              <Messages
-                roomId={room.id}
-                norms={room.norms}
-                createMessage={createMessage}
-                messages={room.messages} />
-            }
+            <Messages
+              roomId={room.id}
+              norms={room.norms}
+              createMessage={createMessage}
+              messages={room.messages} />
           </div>
           <Compose
             createMessage={createMessage}

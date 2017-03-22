@@ -215,9 +215,6 @@ input CreateMessageInput {
   # The nametag ID of the message's author
   author: ID!
 
-  # The optional ID of the message's recipient (if it is a DM)
-  recipient: ID
-
   # The ID of the room where the message takes place
   room: ID!
 

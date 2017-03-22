@@ -14,13 +14,13 @@ const getRoomMessages = ({conn}, room, nametag) => Promise.all([
   r.db('nametag').table('messages').filter({room, recipient: null}).run(conn),
   r.db('nametag').table('messages').filter({room, recipient: nametag}).run(conn)
 ])
-   .then(([messageCursor, dmCursor]) => Promise.all([
-     messageCursor.toArray(),
-     dmCursor.toArray()
-   ]))
-   .then(([messages, dms]) =>
-      messages.concat(dms).sort((a, b) => b.created_at - a.created_at)
-    )
+ .then(([messageCursor, dmCursor]) => Promise.all([
+   messageCursor.toArray(),
+   dmCursor.toArray()
+ ]))
+ .then(([messages, dms]) =>
+    messages.concat(dms).sort((a, b) => b.created_at - a.created_at)
+  )
 
  /**
   * Returns the messages from a particular author.
@@ -51,55 +51,91 @@ const create = (context, msg) => {
     return message
   })
   .then(message => Promise.all([
-    checkMentions(context, message),
+    checkMentionsAndDMs(context, message),
     message
   ])
   )
-  .then(([res, message]) => {
-    if (message.recipient) {
-      return Nametags.addMention(message.recipient)
-        .then(() => mentionNotif(context, message.recipient, message, 'DM'))
-        .then(() => message)
-    }
-    return message
+  .then(([recipient, message]) => {
+    return recipient ? Object.assign({}, message, {recipient}) : message
   })
 }
 
 /**
- * Checks a message for mentions
+ * Checks a message for mentions and dms
  *
  * @param {Object} context     graph context
  * @param {Object} message   the message to be checked
  *
  **/
 
-const checkMentions = ({conn, models: {Nametags}}, message) => {
-  if (message.text.indexOf('@') === -1) { return null }
+const checkMentionsAndDMs = (context, message) => {
+  const {Nametags} = context.models
+  const dm = message.text.toLowerCase().slice(0,2) === 'd '
+  const mentions = message.text.indexOf('@') > -1
+  if ( !dm && !mentions) {
+    return null
+  }
 
   return Nametags.getRoomNametags(message.room)
-  .then((roomNametags) => {
-    const splitMsg = message.text.split('@')
-    let promises = []
-    // For every mention, check every nametag in the room to see if it matches the name.
-    roomNametags.toArray((err, nametags) => {
-      if (err) { return false }
-      for (let i = 0; i < splitMsg.length; i++) {
-        const msg = splitMsg[i]
-        for (let j = 0; j < nametags.length; j++) {
-          const {name, id} = nametags[j]
-          if (msg.slice(0, name.length).toLowerCase() === name.toLowerCase()) {
-            promises.push(
-              Nametags.addMention(id)
-              .then(() => mentionNotif({conn}, id, message, 'MENTION'))
-            )
-          }
-        }
-      }
-      return true
-    })
-
-    return Promise.all(promises)
+  .then(nametags => {
+    if (dm) {
+      return setDm(context, nametags, message)
+    } else if (mentions) {
+      return checkMentions(context, nametags, message)
+    }
   })
+}
+
+/**
+ * Checks a message for mentions and dms
+ *
+ * @param {Object} nametags     the room's nametags
+ * @param {Object} text         the text of the message to be checked
+ *
+ **/
+const checkMentions = (context, nametags, message) =>  {
+  const splitMsg = message.text.split('@')
+  const {Nametags} = context.models
+  let promises = []
+  // For every mention, check every nametag in the room to see if it matches the name.
+  for (let i = 0; i < splitMsg.length; i++) {
+    const section = splitMsg[i]
+    for (let j = 0; j < nametags.length; j++) {
+      const {name, id} = nametags[j]
+      if (section.slice(0, name.length).toLowerCase() === name.toLowerCase()) {
+        promises.push(
+          Nametags.addMention(id)
+          .then(() => mentionNotif(context, id, message, 'MENTION'))
+        )
+      }
+    }
+  }
+  return Promise.all(promises)
+}
+
+/**
+ * Checks sets a message recipient if it's a dm
+ *
+ * @param {Object} nametags     the room's nametags
+ * @param {Object} text         the text of the message to be checked
+ *
+ **/
+const setDm = (context, nametags, message) =>  {
+  const Nametags = context.models.Nametags
+  let promises = []
+  // For every mention, check every nametag in the room to see if it matches the name.
+  for (let i = 0; i < nametags.length; i++) {
+    const {name, id} = nametags[i]
+    if (message.text.slice(2, name.length + 2).toLowerCase() === name.toLowerCase()) {
+      return Promise.all([
+        Nametags.addMention(id)
+        .then(() => mentionNotif(context, id, message, 'DM')),
+        r.db('nametags').table('messages').get(message.id).update({recipient: id})
+      ])
+      .then(() => id)
+    }
+  }
+  return
 }
 
 /**
@@ -110,28 +146,30 @@ const checkMentions = ({conn, models: {Nametags}}, message) => {
  *
  **/
 
-const mentionNotif = ({conn}, to, message, reason) => Promise.all([
-  r.db('nametag').table('nametags').get(to).run(conn)
-    .then(cursor => new Promise((resolve, reject) =>
-      cursor.toArray((err, userNametags) => {
-        if (err) { reject(err) }
-        resolve(userNametags[0].user)
-      })
-    ))
-    .then(user => r.db('nametag').table('users').get(user).run(conn)),
-  r.db('nametag').table('rooms').get(message.room).run(conn),
-  r.db('nametag').table('nametags').get(message.author).run(conn),
-  message
-])
-.then(([user, room, sender, message]) => notification({
-  reason,
-  roomTitle: room.title,
-  roomId: room.id,
-  text: message.text.replace(/\*/g, ''),
-  senderName: sender.name,
-  icon: sender.icon
-}, user.data.fcmToken)
-)
+const mentionNotif = ({conn}, to, message, reason) => null
+// Temporarily commenting out until I can implement user token lookups
+// Promise.all([
+//   r.db('nametag').table('nametags').get(to).run(conn)
+//     .then(cursor => new Promise((resolve, reject) =>
+//       cursor.toArray((err, userNametags) => {
+//         if (err) { reject(err) }
+//         resolve(userNametags[0].user)
+//       })
+//     ))
+//     .then(user => r.db('nametag').table('users').get(user).run(conn)),
+//   r.db('nametag').table('rooms').get(message.room).run(conn),
+//   r.db('nametag').table('nametags').get(message.author).run(conn),
+//   message
+// ])
+// .then(([user, room, sender, message]) => notification({
+//   reason,
+//   roomTitle: room.title,
+//   roomId: room.id,
+//   text: message.text.replace(/\*/g, ''),
+//   senderName: sender.name,
+//   icon: sender.icon
+// }, user.data.fcmToken)
+// )
 
 module.exports = (context) => ({
   Messages: {
