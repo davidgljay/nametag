@@ -27,7 +27,7 @@ class NTIconMenu extends Component {
   }
 
   render () {
-    const {icon, iconUrls} = this.props
+    const {icon, icons} = this.props
     const {loadingImage, showMenu} = this.state
 
     const uploadIcon = <ImageUpload
@@ -54,7 +54,7 @@ class NTIconMenu extends Component {
         onTouchTap={() => { this.setState({showMenu: true}) }}
         menuStyle={styles.menuStyle}>
         {
-          iconUrls.map((url) =>
+          icons.map((url) =>
             <MenuItem
               key={url}
               style={styles.menuItemStyle}
@@ -76,7 +76,7 @@ class NTIconMenu extends Component {
 }
 
 NTIconMenu.propTypes = {
-  iconUrls: PropTypes.array.isRequired,
+  icons: PropTypes.arrayOf(PropTypes.string).isRequired,
   icon: PropTypes.string,
   updateNametagEdit: PropTypes.func.isRequired
 }

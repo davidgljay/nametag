@@ -43,7 +43,7 @@ class Join extends Component {
           {
             <EditNametag
               userNametag={nametag}
-              userDefaults={user}
+              user={user}
               addNametagEditBadge={addNametagEditBadge}
               removeNametagEditBadge={removeNametagEditBadge}
               updateNametagEdit={updateNametagEdit}

@@ -50,24 +50,23 @@ class EditNametag extends Component {
   }
 
   componentDidMount () {
-    const {userNametag = {}, updateNametagEdit, userDefaults = {}, room} = this.props
+    const {userNametag = {}, updateNametagEdit, user = {}, room} = this.props
     updateNametagEdit(room, 'room', room)
     if (!userNametag.name &&
-      userDefaults.displayNames &&
-      userDefaults.displayNames.length >= 1) {
-      updateNametagEdit(room, 'name', userDefaults.displayNames[0])
+      user.displayNames &&
+      user.displayNames.length >= 1) {
+      updateNametagEdit(room, 'name', user.displayNames[0])
     }
     if (!userNametag.icon &&
-      userDefaults.iconUrls &&
-      userDefaults.iconUrls.length > 0) {
-      updateNametagEdit(room, 'icon', userDefaults.iconUrls[0])
+      user.icons.length > 0) {
+      updateNametagEdit(room, 'icon', user.icons[0])
     }
   }
 
   render () {
     const {
       error,
-      userDefaults = {},
+      user = {},
       updateNametagEdit,
       room,
       userNametag
@@ -89,7 +88,7 @@ class EditNametag extends Component {
       <Card style={styles.editNametag} className='profile'>
         <div style={styles.cardInfo}>
           <NTIconMenu
-            iconUrls={userDefaults.iconUrls || []}
+            icons={user.icons || []}
             icon={nametag.icon}
             room={room}
             updateNametagEdit={updateNametagEdit} />
@@ -99,7 +98,7 @@ class EditNametag extends Component {
               filter={AutoComplete.noFilter}
               openOnFocus
               disableFocusRipple={false}
-              dataSource={userDefaults.displayNames || []}
+              dataSource={user.displayNames || []}
               errorText={error && error.nameError}
               onUpdateInput={(name) => updateNametagEdit(room, 'name', name)}
               animated
@@ -137,7 +136,10 @@ class EditNametag extends Component {
 
 EditNametag.propTypes = {
   userNametag: PropTypes.object,
-  userDefaults: PropTypes.object,
+  user: PropTypes.shape({
+    icons: PropTypes.arrayOf(PropTypes.string).isRequired,
+    displayNames: PropTypes.arrayOf(PropTypes.string).isRequired
+  }).isRequired,
   room: PropTypes.string.isRequired,
   isOver: PropTypes.bool.isRequired,
   updateNametagEdit: PropTypes.func.isRequired,
