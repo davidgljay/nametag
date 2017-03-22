@@ -33,12 +33,12 @@ class Compose extends Component {
   }
 
   post (e) {
-    const {authorId, roomId} = this.props
+    const {myNametag, roomId} = this.props
     e.preventDefault()
     if (this.state.message.length > 0) {
       let message = {
         text: this.state.message,
-        author: authorId,
+        author: myNametag,
         room: roomId
       }
       this.setState({message: '', showEmoji: false})
@@ -71,6 +71,7 @@ class Compose extends Component {
           name='compose'
           style={styles.textfield}
           onChange={this.onChange}
+          autoComplete='off'
           value={this.state.message} />
         <FlatButton
           style={styles.sendButton}
@@ -88,7 +89,7 @@ class Compose extends Component {
 
 Compose.propTypes = {
   roomId: PropTypes.string.isRequired,
-  authorId: PropTypes.string.isRequired,
+  myNametag: PropTypes.string.isRequired,
   createMessage: PropTypes.func.isRequired
 }
 

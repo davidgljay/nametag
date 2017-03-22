@@ -40,7 +40,8 @@ class Message extends Component {
         saved
       },
       norms,
-      roomId
+      roomId,
+      myNametag
     } = this.props
 
     if (this.checkYouTube(text)) {
@@ -78,20 +79,17 @@ class Message extends Component {
     // Get proper style if the this is a direct message
     let messageStyle
     let callout
-    switch (type) {
-      case 'direct_message_outgoing':
-        messageStyle = {...styles.messageText, ...styles.directMessageOutgoing}
-        callout = <div style={styles.dmCallout}>
-        Private Message to {recipient.name}
-          <img style={styles.tinyIconImg} src={recipient.icon} />
-        </div>
-        break
-      case 'direct_message_incoming':
-        messageStyle = {...styles.messageText, ...styles.directMessageIncoming}
-        callout = <div style={styles.dmCallout}>Private Message</div>
-        break
-      default:
-        messageStyle = styles.messageText
+    if (recipient && author === myNametag) {
+      messageStyle = {...styles.messageText, ...styles.directMessageOutgoing}
+      callout = <div style={styles.dmCallout}>
+      Private Message to {recipient.name}
+        <img style={styles.tinyIconImg} src={recipient.icon} />
+      </div>
+    } else if (recipient === myNametag) {
+      messageStyle = {...styles.messageText, ...styles.directMessageIncoming}
+      callout = <div style={styles.dmCallout}>Private Message</div>
+    } else {
+      messageStyle = styles.messageText
     }
 
     return <tr
@@ -139,10 +137,11 @@ Message.propTypes = {
       icon: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired
     }),
-    saved: PropTypes.bool.isRequired
+    saved: PropTypes.bool
   }).isRequired,
   norms: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-  roomId: PropTypes.string.isRequired
+  roomId: PropTypes.string.isRequired,
+  myNametag: PropTypes.string.isRequired
 }
 
 export default Message

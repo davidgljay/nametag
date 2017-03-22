@@ -71,14 +71,22 @@ class Room extends Component {
       data: {
         loading,
         room,
-        me
+        me,
+        error
       },
       createMessage
     } = this.props
 
-    let authorId
+    if (error) {
+      return <div>
+        <h1>Error</h1>
+        {Object.keys(error).map(errKey => <p>{error[errKey].toString()}</p>)}
+      </div>
+    }
+
+    let myNametag
     if (!loading) {
-      authorId = me.nametags.reduce(
+      myNametag = me.nametags.reduce(
         (val, nametag) => nametag.room.id === room.id ? nametag.id : val, null
       )
     }
@@ -163,12 +171,13 @@ class Room extends Component {
               roomId={room.id}
               norms={room.norms}
               createMessage={createMessage}
+              myNametag={myNametag}
               messages={room.messages} />
           </div>
           <Compose
             createMessage={createMessage}
             roomId={room.id}
-            authorId={authorId} />
+            myNametag={myNametag} />
         </div>
           : <div style={styles.spinner}>
             <CircularProgress />

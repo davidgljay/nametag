@@ -9,19 +9,20 @@ class Messages extends Component {
     super(props)
 
     this.mapMessage = (message) => {
-      const {norms, roomId} = this.props
+      const {norms, roomId, myNametag} = this.props
       return <Message
         message={message}
         roomId={roomId}
         key={message.id}
-        norms={this.props.norms} />
+        norms={norms}
+        myNametag={myNametag} />
     }
 
     this.scrollIfNeeded = (oldMessages, newMessages) => {
-      const numNewMessages = Object.keys(newMessages).length
-      const numPrevMessages = Object.keys(oldMessages).length
+      const numNewMessages = newMessages.length
+      const numPrevMessages = oldMessages.length
       if (numNewMessages > numPrevMessages && numPrevMessages === 0) {
-        const lastMessage = this.prepArray(newMessages)[numNewMessages - 1]
+        const lastMessage = newMessages[numNewMessages - 1]
         document.getElementById(lastMessage.id).scrollIntoViewIfNeeded()
       } else if (numNewMessages > numPrevMessages && numNewMessages > 3) {
         let counter = 0
@@ -61,7 +62,8 @@ class Messages extends Component {
 Messages.propTypes = {
   roomId: PropTypes.string.isRequired,
   messages: PropTypes.arrayOf(PropTypes.object).isRequired,
-  createMessage: PropTypes.func.isRequired
+  createMessage: PropTypes.func.isRequired,
+  myNametag: PropTypes.string.isRequired
 }
 
 export default radium(Messages)
