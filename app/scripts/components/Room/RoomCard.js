@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react'
-import NametagContainer from '../../containers/Nametag/NametagContainer'
 import Nametag from '../Nametag/Nametag'
-import Norms from '../Room/Norms'
-import Join from '../../containers/Room/JoinContainer'
+import Norms from './Norms'
+import Join from './Join'
 import constants from '../../constants'
 import {Card, CardTitle, CardMedia} from 'material-ui/Card'
 import Checkbox from 'material-ui/Checkbox'
@@ -52,23 +51,20 @@ class RoomCard extends Component {
   render () {
     const {
       room,
-      hostNametag,
       creating,
       style,
-      nametag,
       user,
-      addNametagEditCert,
-      updateUserNametag,
-      providerAuth,
-      removeNametagEditCert,
-      id
+      nametagEdits,
+      addNametagEditBadge,
+      removeNametagEditBadge,
+      updateNametagEdit
     } = this.props
     let card
     let flipping = {}
 
     let front = <Card key='front' style={styles.front}>
       {
-        this.props.room.image &&
+        room.image &&
         <CardMedia
           onClick={this.flip}>
           <img
@@ -90,25 +86,10 @@ class RoomCard extends Component {
             {room.nametagCount === 1 ? '' : 's'}
         </p>
       </div>
-      {
-        room.mod &&
-        <NametagContainer
-          style={styles.mod}
-          room={id}
-          id={room.mod}
-          mod={room.mod} />
-      }
-      {
-        creating &&
-        (hostNametag.name || hostNametag.bio) &&
-        <Nametag
-          style={styles.mod}
-          id='1'
-          mod='1'
-          watchNametag={() => {}}
-          unWatchNametag={() => {}}
-          {...hostNametag} />
-      }
+      <Nametag
+        style={styles.mod}
+        mod={room.mod.id}
+        nametag={room.mod} />
     </Card>
 
     let backStyle = this.state.flipping
@@ -129,14 +110,14 @@ class RoomCard extends Component {
       {
         !creating &&
         <Join
-          room={id}
-          nametag={nametag}
+          room={room.id}
+          nametag={nametagEdits[room.id]}
           user={user}
           normsChecked={this.state.normsChecked}
-          addNametagEditCert={addNametagEditCert}
-          removeNametagEditCert={removeNametagEditCert}
-          updateUserNametag={updateUserNametag}
-          providerAuth={providerAuth} />
+          addNametagEditBadge={addNametagEditBadge}
+          removeNametagEditBadge={removeNametagEditBadge}
+          updateNametagEdit={updateNametagEdit}
+          />
       }
     </Card>
 
@@ -161,12 +142,7 @@ class RoomCard extends Component {
 
 RoomCard.propTypes = {
   room: PropTypes.object.isRequired,
-  id: PropTypes.string.isRequired,
-  creating: PropTypes.bool,
-  userNametag: PropTypes.object,
-  user: PropTypes.shape({
-    id: PropTypes.string
-  })
+  creating: PropTypes.bool
 }
 
 export default RoomCard

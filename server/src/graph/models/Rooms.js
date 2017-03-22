@@ -5,7 +5,7 @@ const errors = require('../../errors')
  * Returns a particular room.
  *
  * @param {Object} context     graph context
- * @param {Array<String>} ids   an array of ids to be retrieved
+ * @param {Array<String>} id   the id of the room to be retrieved
  *
  */
 
@@ -48,7 +48,7 @@ const create = ({conn, models: {Nametags, Users}}, rm) => {
   .then(([nametag, id, room]) => {
     const modId = nametag.id
     return Promise.all([
-      r.db('nametag').table('rooms').get(id).update({mod: modId}),
+      r.db('nametag').table('rooms').get(id).update({mod: modId}).run(conn),
       id,
       modId,
       room

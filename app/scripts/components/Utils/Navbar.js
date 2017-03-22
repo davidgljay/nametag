@@ -18,6 +18,10 @@ const onHomeClick = () => {
   window.location = '/rooms'
 }
 
+const onLogoutClick = () => {
+  window.location = '/logout'
+}
+
 class Navbar extends Component {
 
   constructor (props) {
@@ -44,12 +48,11 @@ class Navbar extends Component {
             onClick={onCreateCertClick} label='CREATE BADGE' />
           <FlatButton
             style={styles.button}
-            onClick={() => this.props.logout()}
-            label='LOG OUT' />
+            onClick={onLogoutClick} label='LOG OUT' />
         </div>
           : <FlatButton
             style={styles.button}
-            onClick={() => this.props.setting('showLogin', true)}
+            onClick={() => this.props.toggleLogin()}
             label='LOG IN' />
         }
     </div>
@@ -62,8 +65,7 @@ class Navbar extends Component {
         onLeftIconButtonTouchTap={() => this.setState({open: true})} />
       <NavDrawer
         open={this.state.open}
-        logout={this.props.logout}
-        setting={this.props.setting}
+        toggleLogin={this.props.toggleLogin}
         user={this.props.user}
         setOpen={(open) => this.setState({open})} />
     </div>
@@ -74,8 +76,7 @@ Navbar.propTypes = {
   user: PropTypes.shape({
     id: PropTypes.string
   }),
-  logout: PropTypes.func.isRequired,
-  setting: PropTypes.func.isRequired
+  toggleLogin: PropTypes.func.isRequired
 }
 
 export default radium(Navbar)

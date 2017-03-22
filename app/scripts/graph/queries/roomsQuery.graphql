@@ -7,6 +7,7 @@ query roomsQuery {
     norms
     createdAt
     closedAt
+    nametagCount
     mod {
       name
       icon
@@ -22,4 +23,27 @@ query roomsQuery {
       }
     }
   }
+  me {
+   id
+   displayNames
+   icons
+   badges {
+     id
+     name
+     description
+     icon
+     notes {
+       text
+       date
+     }
+   }
+   nametags {
+     id
+     room {
+       id
+       title
+       image
+     }
+   }
+ }
 }

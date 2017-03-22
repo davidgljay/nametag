@@ -17,7 +17,6 @@ class NTIconMenu extends Component {
 
     this.onUpload = (res) => {
       this.props.updateNametagEdit(this.props.room, 'icon', res.url)
-      this.props.appendUserArray('iconUrls', res.url)
       this.setState({loadingImage: false})
     }
 
@@ -79,8 +78,7 @@ class NTIconMenu extends Component {
 NTIconMenu.propTypes = {
   iconUrls: PropTypes.array.isRequired,
   icon: PropTypes.string,
-  updateNametagEdit: PropTypes.func.isRequired,
-  appendUserArray: PropTypes.func.isRequired
+  updateNametagEdit: PropTypes.func.isRequired
 }
 
 export default NTIconMenu

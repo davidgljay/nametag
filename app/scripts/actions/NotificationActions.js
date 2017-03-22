@@ -1,6 +1,6 @@
 import errorLog from '../utils/errorLog'
 import constants from '../constants'
-import {addUserData} from './UserActions'
+// import {addUserData} from './UserActions'
 
 // Registers a serviceWorker and registers that worker with firebase
 export const registerServiceWorker = () => (dispatch) => {
@@ -31,7 +31,7 @@ export const fcmTokenRefresh = () => (dispatch) =>
 // Sends a new FCM token to the server.
 export const getFcmToken = () => (dispatch) =>
  firebase.messaging().getToken()
- .then(token => dispatch(addUserData('fcmToken', token)))
+ // .then(token => dispatch(addUserData('fcmToken', token)))
  .catch(errorLog('Receiving FCM token'))
 
 // Requests permission to send notifications to the user.

@@ -14,16 +14,16 @@ class Join extends Component {
     this.state = {alert: null}
 
     this.onJoinClick = () => {
-      const {room, nametag, joinRoom, normsChecked, user} = this.props
-      // TODO: Add new user name to displayNames list.
-      if (normsChecked) {
-        joinRoom(room, nametag, user.id)
-          .then(() => {
-            window.location = `/rooms/${room}`
-          })
-      } else {
-        this.setState({alert: 'You must agree to this room\'s norms.'})
-      }
+    //   const {room, nametag, joinRoom, normsChecked, user} = this.props
+    //   // TODO: Add new user name to displayNames list.
+    //   if (normsChecked) {
+    //     joinRoom(room, nametag, user.id)
+    //       .then(() => {
+    //         window.location = `/rooms/${room}`
+    //       })
+    //   } else {
+    //     this.setState({alert: 'You must agree to this room\'s norms.'})
+    //   }
     }
   }
 
@@ -31,30 +31,31 @@ class Join extends Component {
     let join
     const {
       nametag,
-      appendUserArray,
       removeNametagEditBadge,
       addNametagEditBadge,
       updateNametagEdit,
       room,
-      user,
-      providerAuth
+      user
     } = this.props
-    if (user.id) {
+    if (user) {
       join =
         <div style={styles.join}>
           <h4>Edit Your Nametag For This Conversation</h4>
-          <EditNametag
-            userNametag={nametag}
-            userDefaults={user.data}
-            appendUserArray={appendUserArray}
-            addNametagEditBadge={addNametagEditBadge}
-            removeNametagEditBadge={removeNametagEditBadge}
-            updateNametagEdit={updateNametagEdit}
-            room={room} />
+          {
+            <EditNametag
+              userNametag={nametag}
+              userDefaults={user}
+              addNametagEditBadge={addNametagEditBadge}
+              removeNametagEditBadge={removeNametagEditBadge}
+              updateNametagEdit={updateNametagEdit}
+              room={room} />
+          }
           <div style={styles.userBadges}>
-            <UserBadges
-              selectedBadges={nametag && nametag.badges}
-              badges={user.data.badges} />
+            {
+              <UserBadges
+                selectedBadges={nametag && nametag.badges}
+                badges={user.badges} />
+            }
           </div>
           <br />
           <Alert alert={this.state.alert} />
@@ -65,7 +66,7 @@ class Join extends Component {
             label='JOIN' />
         </div>
     } else {
-      join = <Login providerAuth={providerAuth} />
+      join = <Login />
     }
     return join
   }
@@ -77,9 +78,7 @@ Join.propTypes = {
   nametag: PropTypes.object,
   addNametagEditBadge: PropTypes.func.isRequired,
   removeNametagEditBadge: PropTypes.func.isRequired,
-  updateNametagEdit: PropTypes.func.isRequired,
-  providerAuth: PropTypes.func.isRequired,
-  joinRoom: PropTypes.func.isRequired
+  updateNametagEdit: PropTypes.func.isRequired
 }
 
 export default Join

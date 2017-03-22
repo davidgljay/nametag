@@ -17,6 +17,9 @@ const Room = {
     }
     return Nametags.getRoomNametags(id)
   },
+  nametagCount: ({id}, _, {models: {Nametags}}) => {
+    return Nametags.getNametagCount(id)
+  },
   mod: (room, _, {models: {Nametags}}) => Nametags.get(room.mod)
 }
 

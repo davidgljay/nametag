@@ -58,6 +58,9 @@ type Room {
   # The nametags of the individuals in the room
   nametags: [Nametag]
 
+  # The number of nametags currently in the room
+  nametagCount: Int!
+
 }
 
 # A message in a room

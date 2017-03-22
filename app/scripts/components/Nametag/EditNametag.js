@@ -70,8 +70,8 @@ class EditNametag extends Component {
       userDefaults = {},
       updateNametagEdit,
       room,
-      userNametag,
-      appendUserArray} = this.props
+      userNametag
+    } = this.props
 
     const {
       nameStyle,
@@ -92,9 +92,7 @@ class EditNametag extends Component {
             iconUrls={userDefaults.iconUrls || []}
             icon={nametag.icon}
             room={room}
-            updateNametagEdit={updateNametagEdit}
-            appendUserArray={appendUserArray}
-                />
+            updateNametagEdit={updateNametagEdit} />
           <div style={{width: 190, flex: 1}}>
             <AutoComplete
               floatingLabelText='Name'
@@ -143,7 +141,8 @@ EditNametag.propTypes = {
   room: PropTypes.string.isRequired,
   isOver: PropTypes.bool.isRequired,
   updateNametagEdit: PropTypes.func.isRequired,
-  appendUserArray: PropTypes.func.isRequired
+  addNametagEditBadge: PropTypes.func.isRequired,
+  removeNametagEditBadge: PropTypes.func.isRequired
 }
 
 export default DropTarget(dragTypes.badge, nametagTarget, collect)(EditNametag)

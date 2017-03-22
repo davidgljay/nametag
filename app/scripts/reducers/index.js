@@ -7,6 +7,7 @@ import messages from './MessageReducer'
 import reactions from './ReactionReducer'
 import userNametags from './UserNametagReducer'
 import nametagEdits from './NametagEditReducer'
+import {client} from '../graph/client'
 
 const mainReducer = combineReducers({
   rooms,
@@ -16,7 +17,8 @@ const mainReducer = combineReducers({
   messages,
   reactions,
   userNametags,
-  nametagEdits
+  nametagEdits,
+  apollo: client.reducer()
 })
 
 export default mainReducer

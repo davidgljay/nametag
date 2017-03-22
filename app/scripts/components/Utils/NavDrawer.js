@@ -14,6 +14,10 @@ const onHomeClick = () => {
   window.location = '/rooms'
 }
 
+const onLogoutClick = () => {
+  window.location = '/logout'
+}
+
 const NavDrawer = (props) => <Drawer
   docked={false}
   width={200}
@@ -22,15 +26,15 @@ const NavDrawer = (props) => <Drawer
   onRequestChange={props.setOpen}>
   <div style={styles.drawerTitle}><h2>Nametag</h2></div>
   {
-      props.user.id
+      props.user
       ? <div>
         <MenuItem onClick={onHomeClick}>Home</MenuItem>
         <MenuItem onClick={onCreateRoomClick}>Create Room</MenuItem>
         <MenuItem onClick={onCreateCertClick}>Create Badge</MenuItem>
         <MenuItem
-          onClick={() => props.logout()}>Log Out</MenuItem>
+          onClick={onLogoutClick}>Log Out</MenuItem>
       </div>
-      : <MenuItem onClick={() => props.setting('showLogin', true)}>Log In</MenuItem>
+      : <MenuItem onClick={() => props.toggleLogin()}>Log In</MenuItem>
       }
 </Drawer>
 

@@ -1,6 +1,9 @@
 const r = require('../../horizon/server/src/horizon.js').r
 
 const showPresence = (conn) => (err, nametagPresence) => {
+  if (!nametagPresence.new_val) {
+    return
+  }
   const id = nametagPresence.new_val.id
   if (err) {
     return

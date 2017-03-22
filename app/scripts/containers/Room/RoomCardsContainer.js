@@ -1,57 +1,22 @@
 import { connect } from 'react-redux'
 import {compose} from 'react-apollo'
 import component from '../../components/Room/RoomCards'
-import {getAuth} from '../../api/horizon'
-import {addUserNametag, watchUserNametags} from '../../actions/UserNametagActions'
-import {watchNametags, unWatchNametag} from '../../actions/NametagActions'
-import {logout, setting, providerAuth} from '../../actions/UserActions'
-import {fetchBadges} from '../../actions/BadgeActions'
-import {subscribe, unsubscribe} from '../../actions/RoomActions'
 import {roomsQuery} from '../../graph/queries'
+import {updateNametagEdit, addNametagEditBadge, removeNametagEditBadge} from '../../actions/NametagEditActions'
 
 const mapStateToProps = (state) => {
   return {
-    rooms: state.rooms,
-    user: state.user ? state.user : {loggedIn: false},
-    nametags: state.nametags,
-    userNametags: state.userNametags,
+    data: state.apollo.data,
     nametagEdits: state.nametagEdits
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
+  const disp = (func) => (...args) => dispatch(func.apply(this, args))
   return {
-    watchUserNametags (userId) {
-      return dispatch(watchUserNametags(userId))
-    },
-    subscribe (roomId) {
-      return dispatch(subscribe(roomId))
-    },
-    unsubscribe (roomId) {
-      return dispatch(unsubscribe(roomId))
-    },
-    addUserNametag (roomId, nametagId) {
-      return dispatch(addUserNametag(roomId, nametagId))
-    },
-    watchNametags (nametagIds) {
-      return dispatch(watchNametags(nametagIds))
-    },
-    unWatchNametags () {
-      return dispatch(unWatchNametag())
-    },
-    logout () {
-      return dispatch(logout())
-    },
-    setting (option, value) {
-      return dispatch(setting(option, value))
-    },
-    providerAuth (provider) {
-      return dispatch(providerAuth(provider))
-    },
-    fetchBadges (badges) {
-      return dispatch(fetchBadges(badges))
-    },
-    getAuth
+    updateNametagEdit: disp(updateNametagEdit),
+    addNametagEditBadge: disp(addNametagEditBadge),
+    removeNametagEditBadge: disp(removeNametagEditBadge)
   }
 }
 

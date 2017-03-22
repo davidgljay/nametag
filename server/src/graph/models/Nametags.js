@@ -83,12 +83,23 @@ const create = ({conn, models: {Users}}, nt) => {
 const addMention = ({conn}, nametag) => r.db('nametag').table('nametags').get(nametag)
 .update({mentions: r.row('mentions').prepend(Date.now())}).run(conn)
 
+/**
+ * Returns the total number of participants in a room
+ *
+ * @param {Object} context     graph context
+ * @param {Array<String>} id   the id of the room whose nametags should be counted
+ *
+ */
+
+const getNametagCount = ({conn}, room) => r.db('nametag').table('nametags').filter({room}).count().run(conn)
+
 module.exports = (context) => ({
   Nametags: {
     get: (id) => get(context, id),
     getAll: (ids) => getAll(context, ids),
     getRoomNametags: (room) => getRoomNametags(context, room),
     create: (nametag) => create(context, nametag),
-    addMention: (nametag) => addMention(context, nametag)
+    addMention: (nametag) => addMention(context, nametag),
+    getNametagCount: (room) => getNametagCount(context, room)
   }
 })

@@ -27,15 +27,21 @@ const Login = (props) => {
     <img
       style={styles.loginImg}
       src='/public/images/twitter.jpg'
-      onClick={() => props.providerAuth('twitter')} />
+      onClick={() => {
+        window.location = '/auth/twitter'
+      }} />
     <img
       style={styles.loginImg}
       src='/public/images/fb.jpg'
-      onClick={() => props.providerAuth('facebook')} />
+      onClick={() => {
+        window.location = '/auth/facebook'
+      }} />
     <img
       style={styles.loginImg}
       src='/public/images/google.png'
-      onClick={() => props.providerAuth('google')} />
+      onClick={() => {
+        window.location = '/auth/google'
+      }} />
   </div>
 }
 

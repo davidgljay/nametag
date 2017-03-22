@@ -1,7 +1,5 @@
 import errorLog from '../utils/errorLog'
 import constants from '../constants'
-import {hz} from '../api/horizon'
-import {postDirectMessage} from './DirectMessageActions'
 
 let messageSubscriptions = {}
 

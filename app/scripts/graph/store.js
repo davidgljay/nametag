@@ -1,4 +1,4 @@
-import {createStore, combineReducers, applyMiddleware, compose} from 'redux'
+import {createStore, applyMiddleware, compose} from 'redux'
 import thunk from 'redux-thunk'
 import mainReducer from '../reducers'
 import {client} from './client'
@@ -13,11 +13,9 @@ if (window.devToolsExtension) {
   middlewares.push(window.devToolsExtension())
 }
 
+
 export default createStore(
-  combineReducers({
-    ...mainReducer,
-    apollo: client.reducer()
-  }),
+  mainReducer,
   {},
   compose(...middlewares)
 )
