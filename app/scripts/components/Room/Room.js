@@ -71,25 +71,18 @@ class Room extends Component {
       data: {
         loading,
         room,
-        me,
-        error
+        me
       },
       createMessage,
       toggleSaved
     } = this.props
 
-    if (error) {
-      return <div>
-        <h1>Error</h1>
-        {Object.keys(error).map(errKey => <p>{error[errKey].toString()}</p>)}
-      </div>
-    }
-
     let myNametag
     if (!loading) {
-      myNametag = me.nametags.reduce(
+      const myNtId = me.nametags.reduce(
         (val, nametag) => nametag.room.id === room.id ? nametag.id : val, null
       )
+      myNametag = room.nametags.filter((nt) => nt.id === myNtId)[0]
     }
 
     let expanded = this.state.leftBarExpanded ? styles.expanded : styles.collapsed

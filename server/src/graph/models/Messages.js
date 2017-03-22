@@ -65,9 +65,7 @@ const create = (context, msg) => {
     message
   ])
   )
-  .then(([recipient, message]) => {
-    return recipient ? Object.assign({}, message, {recipient}) : message
-  })
+  .then(([recipient, message]) => recipient ? Object.assign({}, message, {recipient}) : message)
 }
 
 /**

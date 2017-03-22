@@ -2,6 +2,17 @@ mutation CreateMessage($message: CreateMessageInput!) {
   createMessage(message: $message) {
     message {
       id
+      text
+      createdAt
+      saved
+      author {
+        icon
+        name
+      }
+      recipient {
+        icon
+        name
+      }
     }
     errors {
       translation_key

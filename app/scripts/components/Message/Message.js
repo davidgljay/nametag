@@ -79,7 +79,7 @@ class Message extends Component {
     // Get proper style if the this is a direct message
     let messageStyle
     let callout
-    if (recipient && author === myNametag) {
+    if (recipient && author === myNametag.id) {
       messageStyle = {...styles.messageText, ...styles.directMessageOutgoing}
       callout = <div style={styles.dmCallout}>
       Private Message to {recipient.name}
@@ -141,7 +141,9 @@ Message.propTypes = {
   }).isRequired,
   norms: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   roomId: PropTypes.string.isRequired,
-  myNametag: PropTypes.string.isRequired
+  myNametag: PropTypes.shape({
+    id: PropTypes.string.isRequired
+  }).isRequired
 }
 
 export default Message

@@ -16,9 +16,42 @@ export const createNametag = graphql(CREATE_NAMETAG, {
 
 export const createMessage = graphql(CREATE_MESSAGE, {
   props: ({ownProps, mutate}) => ({
-    createMessage: (message) => mutate({
+    createMessage: (message, author) => mutate({
       variables: {
         message
+      },
+      optimisticResponse: {
+        createMessage: {
+          message: {
+            __typename: 'Message',
+            id: `tempMessage_${Date.now()}`,
+            text: message.text,
+            createdAt: new Date().toISOString(),
+            saved: false,
+            author: {
+              __typename: 'Nametag',
+              icon: author.icon,
+              name: author.name
+            },
+            recipient: null
+          },
+          errors: null
+        }
+      },
+      updateQueries: {
+        roomQuery: (oldData, {mutationResult: {data: {createMessage: {message, errors}}}}) => {
+          if (errors) {
+            errorLog('Error saving message')(errors)
+            return oldData
+          }
+          return {
+            ...oldData,
+            room: {
+              ...oldData.room,
+              messages: oldData.room.messages.concat(message)
+            }
+          }
+        }
       }
     })
   })
@@ -51,8 +84,13 @@ export const toggleSaved = graphql(TOGGLE_SAVED, {
           }
           return {
             ...oldData,
-            messages: newMessages
-
+            room: {
+              ...oldData.room,
+              messages: newMessages
+            },
+            me: {
+              ...oldData.me
+            }
           }
         }
       }

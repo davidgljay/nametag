@@ -38,11 +38,11 @@ class Compose extends Component {
     if (this.state.message.length > 0) {
       let message = {
         text: this.state.message,
-        author: myNametag,
+        author: myNametag.id,
         room: roomId
       }
       this.setState({message: '', showEmoji: false})
-      this.props.createMessage(message)
+      this.props.createMessage(message, myNametag)
     }
   }
 
@@ -89,7 +89,11 @@ class Compose extends Component {
 
 Compose.propTypes = {
   roomId: PropTypes.string.isRequired,
-  myNametag: PropTypes.string.isRequired,
+  myNametag: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    icon: PropTypes.string.isRequired
+  }).isRequired,
   createMessage: PropTypes.func.isRequired
 }
 

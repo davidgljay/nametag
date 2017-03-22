@@ -66,7 +66,7 @@ Messages.propTypes = {
   messages: PropTypes.arrayOf(PropTypes.object).isRequired,
   createMessage: PropTypes.func.isRequired,
   toggleSaved: PropTypes.func.isRequired,
-  myNametag: PropTypes.string.isRequired
+  myNametag: PropTypes.object.isRequired
 }
 
 export default radium(Messages)
