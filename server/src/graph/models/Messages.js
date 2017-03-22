@@ -19,7 +19,7 @@ const getRoomMessages = ({conn}, room, nametag) => Promise.all([
    dmCursor.toArray()
  ]))
  .then(([messages, dms]) =>
-    messages.concat(dms).sort((a, b) => b.created_at - a.created_at)
+    messages.concat(dms).sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
   )
 
  /**
