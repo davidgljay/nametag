@@ -47,11 +47,11 @@ const create = (context, msg) => {
     if (res.errors > 0) {
       return new errors.APIError('Error creating message')
     }
-    const message = Object.assign({}, message, {id: res.generated_keys[0]})
+    const message = Object.assign({}, messageObj, {id: res.generated_keys[0]})
     return message
   })
   .then(message => Promise.all([
-    checkMentions({conn}, message),
+    checkMentions(context, message),
     message
   ])
   )

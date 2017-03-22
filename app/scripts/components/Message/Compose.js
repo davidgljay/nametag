@@ -33,16 +33,16 @@ class Compose extends Component {
   }
 
   post (e) {
+    const {authorId, roomId} = this.props
     e.preventDefault()
     if (this.state.message.length > 0) {
       let message = {
         text: this.state.message,
-        timestamp: Date.now(),
-        author: this.context.userNametag.nametag,
-        room: this.context.room.id
+        author: authorId,
+        room: roomId
       }
       this.setState({message: '', showEmoji: false})
-      this.props.postMessage(message)
+      this.props.createMessage(message)
     }
   }
 
@@ -87,11 +87,9 @@ class Compose extends Component {
 }
 
 Compose.propTypes = {
-  postMessage: PropTypes.func.isRequired
-}
-Compose.contextTypes = {
-  room: PropTypes.object.isRequired,
-  userNametag: PropTypes.object.isRequired
+  roomId: PropTypes.string.isRequired,
+  authorId: PropTypes.string.isRequired,
+  createMessage: PropTypes.func.isRequired
 }
 
 export default radium(Compose)

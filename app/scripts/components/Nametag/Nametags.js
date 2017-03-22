@@ -3,39 +3,22 @@ import Nametag from './Nametag'
 import {Card} from 'material-ui/Card'
 
 const renderNametag = (nametag, mod) => {
-  // Make nametag.badges an empty array if it not already assigned.
-  nametag.badges = nametag.badges || []
-
   // Show whether the user is present.
   const cardStyle = nametag.present
   ? styles.nametag : {...styles.nametag, ...styles.absent}
 
   return <Card key={nametag.id} style={cardStyle}>
     <Nametag
-      name={nametag.name}
-      bio={nametag.bio}
-      icon={nametag.icon}
-      id={nametag.id}
-      badges={nametag.badges}
+      nametag={nametag}
       mod={mod} />
   </Card>
 }
 
-const Nametags = ({nametags = {}, room, mod}) => {
-  const nametagList = Object.keys(nametags)
-    .reduce((p, id) => p.concat(nametags[id]), [])
-    .filter((n) => n.room === room)
-    .sort((a, b) =>
-      a.present &&
-      !b.present ? -1 : 1
-    )
-
-  return <div style={styles.nametags}>
-    {
-        nametagList.map((nametag) => renderNametag(nametag, mod))
-      }
-  </div>
-}
+const Nametags = ({nametags, mod}) => <div style={styles.nametags}>
+  {
+    nametags.map((nametag) => renderNametag(nametag, mod))
+  }
+</div>
 
 export default Nametags
 

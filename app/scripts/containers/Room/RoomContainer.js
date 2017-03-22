@@ -1,16 +1,9 @@
 import { connect } from 'react-redux'
 import component from '../../components/Room/Room'
-// import {fetchRooms, subscribeToRoom, unsubscribeToRoom, addRoomMessage} from '../../actions/RoomActions'
-// import {showPresence} from '../../actions/NametagActions'
-// import {
-//   watchUserNametags,
-//   unWatchUserNametags,
-//   postUpdateUserNametag
-// } from '../../actions/UserNametagActions'
-// import {postMessage, saveMessage} from '../../actions/MessageActions'
-// import {watchDirectMessages, unWatchDirectMessages} from '../../actions/DirectMessageActions'
-// import {logout, setting} from '../../actions/UserActions'
-// import {requestNotifPermissions} from '../../actions/NotificationActions'
+import {compose} from 'react-apollo'
+import {roomQuery} from '../../graph/queries'
+import {createMessage} from '../../graph/mutations'
+import {requestNotifPermissions} from '../../actions/NotificationActions'
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -24,27 +17,14 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   const disp = (func) => (...args) => dispatch(func.apply(this, args))
   return {
-    // fetchRooms: disp(fetchRooms),
-    // subscribeToRoom: disp(subscribeToRoom),
-    // unsubscribeToRoom: disp(unsubscribeToRoom),
-    // addRoomMessage: disp(addRoomMessage),
-    // watchDirectMessages: disp(watchDirectMessages),
-    // unWatchDirectMessages: disp(unWatchDirectMessages),
-    // watchUserNametags: disp(watchUserNametags),
-    // unWatchUserNametags: disp(unWatchUserNametags),
-    // postUpdateUserNametag: disp(postUpdateUserNametag),
-    // postMessage: disp(postMessage),
-    // saveMessage: disp(saveMessage),
-    // showPresence: disp(showPresence),
-    // logout: disp(logout),
-    // setting: disp(setting),
-    // requestNotifPermissions: disp(requestNotifPermissions)
+    requestNotifPermissions: disp(requestNotifPermissions)
   }
 }
 
-const Room = connect(
-  mapStateToProps,
-  mapDispatchToProps
+const Room = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  createMessage,
+  roomQuery
 )(component)
 
 export default Room

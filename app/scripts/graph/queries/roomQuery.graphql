@@ -1,0 +1,52 @@
+query roomQuery($id: ID!){
+  room(id:$id) {
+    id
+    title
+    description
+    norms
+    mod {
+      id
+    }
+		nametags {
+      id
+      name
+      icon
+      bio
+      badges {
+        name
+        icon
+        description
+        notes {
+          text
+          date
+        }
+      }
+    }
+    messages {
+      id
+      text
+      createdAt
+      saved
+      author {
+        icon
+        name
+      }
+      recipient {
+        icon
+        name
+      }
+    }
+  }
+  me {
+    nametags {
+      id
+      mentions
+      room {
+        id
+        title
+        image
+        closedAt
+      }
+    }
+  }
+}

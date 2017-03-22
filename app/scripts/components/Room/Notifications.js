@@ -1,59 +1,69 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 import {List, ListItem} from 'material-ui/List'
 import Badge from 'material-ui/Badge'
 
-const Notifications = ({userNametags, rooms, roomId, homepage}) => {
+const Notifications = ({nametags, roomId, homepage}) => {
   const flexDisplay = window.innerWidth > 800 ? styles.flexDisplay
     : {...styles.flexDisplay, ...styles.flexDisplayMobile}
 
-  const visitedRooms = Object.keys(userNametags).sort((a, b) => {
-    if (!rooms[a] || !rooms[b]) return 0
-    if (rooms[a].title < rooms[b].title) return -1
-    if (rooms[a].title > rooms[b].title) return 1
-    return 0
-  }).filter((r) => rooms[r] && rooms[r].closedAt > Date.now())
+  const visitedRooms = nametags.filter(
+    nametag => new Date(nametag.room.closedAt) > new Date() && nametag.room.id !== roomId
+  )
 
-  const listItems = visitedRooms.map((id) => {
-    const room = rooms[id]
-    const userNametag = userNametags[id]
-    const mentions = userNametag.mentions ? userNametag.mentions.filter(
-      (time) => time > userNametag.latestVisit
+  const listItems = visitedRooms.map(nametag => {
+    const room = nametag.room
+    const mentions = nametag.mentions ? nametag.mentions.filter(
+      time => new Date(time) > new Date(nametag.latestVisit)
     ).length : 0
 
-    const newMessages = userNametag.latestMessage > userNametag.latestVisit
+    const newMessages = room.latestMessage > nametag.latestVisit
     const notificationStyle = newMessages ? styles.notification
     : {...styles.notification, ...styles.noNewMessages}
     const homepageNotif = homepage ? {...notificationStyle, ...styles.homepageNotif}
     : notificationStyle
-    return room && roomId !== id &&
-      <ListItem innerDivStyle={homepageNotif} key={id}>
-        <a href={`/rooms/${id}`} style={styles.link}>
-          {
-            mentions > 0 &&
-            <Badge
-              badgeContent={mentions}
-              secondary
-              style={styles.badgeStyle}
-              badgeStyle={styles.innerBadgeStyle} />
-          }
+    return <ListItem innerDivStyle={homepageNotif} key={room.id}>
+      <a href={`/rooms/${room.id}`} style={styles.link}>
+        {
+          mentions > 0 &&
+          <Badge
+            badgeContent={mentions}
+            secondary
+            style={styles.badgeStyle}
+            badgeStyle={styles.innerBadgeStyle} />
+        }
 
-          <div>
-            <img
-              src={room.image}
-              style={
-                homepage ? {...styles.roomImage, ...styles.homepageRoomImage}
-                : styles.roomImage
-              } />
-          </div>
-          <div>{room.title}</div>
-        </a>
-      </ListItem>
+        <div>
+          <img
+            src={room.image}
+            style={
+              homepage ? {...styles.roomImage, ...styles.homepageRoomImage}
+              : styles.roomImage
+            } />
+        </div>
+        <div>{room.title}</div>
+      </a>
+    </ListItem>
   })
 
   return <div style={homepage ? styles.container : {}}>
-    <List style={homepage ? flexDisplay : {}}
-      children={listItems} />
+    {
+      listItems.length > 0 &&
+      <List style={homepage ? flexDisplay : {}}
+        children={listItems} />
+    }
   </div>
+}
+
+Notifications.propTypes = {
+  roomId: PropTypes.string.isRequired,
+  nametags: PropTypes.arrayOf(PropTypes.shape({
+    room: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
+      closedAt: PropTypes.string.isRequired
+    })
+  })).isRequired
 }
 
 export default Notifications

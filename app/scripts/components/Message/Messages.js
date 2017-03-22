@@ -9,17 +9,12 @@ class Messages extends Component {
     super(props)
 
     this.mapMessage = (message) => {
-      const {nametags, room, norms, postMessage, saveMessage} = this.props
-      if (!nametags) { return null }
-      return message && <Message
-        {...message}
-        author={nametags[message.author]}
-        roomId={room}
-        recipient={nametags[message.recipient]}
+      const {norms, roomId} = this.props
+      return <Message
+        message={message}
+        roomId={roomId}
         key={message.id}
-        norms={norms}
-        postMessage={postMessage}
-        saveMessage={saveMessage} />
+        norms={this.props.norms} />
     }
 
     this.scrollIfNeeded = (oldMessages, newMessages) => {
@@ -39,11 +34,6 @@ class Messages extends Component {
         }, 0)
       }
     }
-
-    this.prepArray = (messages) =>
-      Object.keys(messages)
-      .reduce((p, id) => p.concat(messages[id]), [])
-      .sort((a, b) => a.timestamp - b.timestamp)
   }
 
   componentDidMount () {
@@ -55,12 +45,12 @@ class Messages extends Component {
   }
 
   render () {
-    const {messages = {}} = this.props
+    const {messages} = this.props
     return <div style={styles.messages}>
       <table style={styles.msgContainer}>
         <tbody>
           {
-            this.prepArray(messages).map(this.mapMessage)
+            messages.map(this.mapMessage)
           }
         </tbody>
       </table>
@@ -69,10 +59,9 @@ class Messages extends Component {
 }
 
 Messages.propTypes = {
-  room: PropTypes.string.isRequired,
-  messages: PropTypes.object,
-  postMessage: PropTypes.func.isRequired,
-  nametags: PropTypes.object.isRequired
+  roomId: PropTypes.string.isRequired,
+  messages: PropTypes.arrayOf(PropTypes.object).isRequired,
+  createMessage: PropTypes.func.isRequired
 }
 
 export default radium(Messages)

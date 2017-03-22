@@ -31,16 +31,16 @@ class Message extends Component {
     let below
     let media
     const {
-      text,
-      author,
-      id,
-      timestamp,
-      postMessage,
-      saveMessage,
-      type,
+      message: {
+        id,
+        author,
+        createdAt,
+        text,
+        recipient,
+        saved
+      },
       norms,
-      recipient,
-      saved
+      roomId
     } = this.props
 
     if (this.checkYouTube(text)) {
@@ -50,25 +50,27 @@ class Message extends Component {
     }
 
     if (this.state.modAction) {
-      below =
-        <ModAction
-          msgId={id}
-          author={author}
-          norms={norms}
-          text={text}
-          close={this.modAction(false)}
-          postMessage={postMessage} />
+      // below =
+      //   <ModAction
+      //     msgId={id}
+      //     author={author}
+      //     norms={norms}
+      //     text={text}
+      //     close={this.modAction(false)}
+      //     postMessage={postMessage} />
     } else {
       below = <div style={styles.below}>
-        <MessageMenu
-          modAction={this.modAction}
-          showActions={this.state.showActions}
-          type={type}
-          saveMessage={saveMessage}
-          saved={saved}
-          id={id} />
+        {
+        // <MessageMenu
+        //   modAction={this.modAction}
+        //   showActions={this.state.showActions}
+        //   isDM={recipient}
+        //   saveMessage={saveMessage}
+        //   saved={saved}
+        //   id={id} />
+        }
         <div style={styles.date}>
-          {moment(timestamp).format('h:mm A, ddd MMM DD YYYY')}
+          {moment(createdAt).format('h:mm A, ddd MMM DD YYYY')}
         </div>
       </div>
     }
@@ -125,11 +127,22 @@ class Message extends Component {
 }
 
 Message.propTypes = {
-  id: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
-  timestamp: PropTypes.number.isRequired,
-  author: PropTypes.object.isRequired,
-  type: PropTypes.string.isRequired
+  message: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired,
+    createdAt: PropTypes.string.isRequired,
+    author: PropTypes.shape({
+      icon: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired
+    }).isRequired,
+    recipient: PropTypes.shape({
+      icon: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired
+    }),
+    saved: PropTypes.bool.isRequired
+  }).isRequired,
+  norms: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  roomId: PropTypes.string.isRequired
 }
 
 export default Message

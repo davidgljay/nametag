@@ -1,0 +1,10 @@
+mutation CreateMessage($message: CreateMessageInput!) {
+  createMessage(message: $message) {
+    message {
+      id
+    }
+    errors {
+      translation_key
+    }
+  }
+}

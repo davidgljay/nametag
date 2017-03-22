@@ -37,7 +37,7 @@ class Room extends Component {
     }
 
     this.closeRoom = () => {
-      window.location = '/rooms/'
+      window.location = '/'
     }
 
     this.toggleLeftBar = () => {
@@ -49,32 +49,18 @@ class Room extends Component {
     }
   }
 
-  getChildContext () {
-    const {rooms, params, userNametags, nametags} = this.props
-    const room = rooms[params.roomId]
-    return {
-      userNametag: userNametags[params.roomId],
-      room,
-      mod: room ? nametags[room.mod] : null
-    }
-  }
-
   componentDidMount () {
-    const {params, subscribeToRoom, requestNotifPermissions} = this.props
-    const roomId = params.roomId
-    subscribeToRoom(roomId)
+    const {requestNotifPermissions} = this.props
     requestNotifPermissions()
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.userNametags[nextProps.params.roomId]) {
-      this.showPresence(nextProps.userNametags[nextProps.params.roomId].nametag)
-    }
+    // if (nextProps.userNametags[nextProps.params.roomId]) {
+    //   this.showPresence(nextProps.userNametags[nextProps.params.roomId].nametag)
+    // }
   }
 
   componentWillUnmount () {
-    const roomId = this.props.params.roomId
-    this.props.unsubscribeToRoom(roomId)
     if (this.state.presenceTimer) {
       clearInterval(this.state.presenceTimer)
     }
@@ -82,24 +68,26 @@ class Room extends Component {
 
   render () {
     const {
-      rooms,
-      nametags,
-      messages,
-      params,
-      postMessage,
-      saveMessage,
-      addRoomMessage,
-      userNametags
+      data: {
+        loading,
+        room,
+        me
+      },
+      createMessage
     } = this.props
 
-    const room = rooms[params.roomId]
-    const userNametag = userNametags[params.roomId]
+    let authorId
+    if (!loading) {
+      authorId = me.nametags.reduce(
+        (val, nametag) => nametag.room.id === room.id ? nametag.id : val, null
+      )
+    }
 
     let expanded = this.state.leftBarExpanded ? styles.expanded : styles.collapsed
     expanded = window.innerWidth < 800 ? expanded : {}
     return <div style={styles.roomContainer}>
       {
-        userNametag && room
+        !loading
         ? <div>
           <div style={styles.header}>
             <IconButton
@@ -144,9 +132,8 @@ class Room extends Component {
                 {
                   this.state.toggles.rooms &&
                   <Notifications
-                    userNametags={userNametags}
-                    rooms={rooms}
-                    roomId={params.roomId} />
+                    nametags={me.nametags}
+                    roomId={room.id} />
                 }
                 <div
                   style={styles.leftNavHeader}
@@ -159,9 +146,8 @@ class Room extends Component {
                 {
                   this.state.toggles.nametags &&
                   <Nametags
-                    room={params.roomId}
-                    mod={room.mod}
-                    nametags={nametags} />
+                    mod={room.mod.id}
+                    nametags={room.nametags} />
                 }
               </div>
               <div style={styles.leftBarChevron}>
@@ -173,19 +159,18 @@ class Room extends Component {
                     >chevron_right</FontIcon>
               </div>
             </div>
-            <Messages
-              room={params.roomId}
-              norms={room.norms}
-              nametags={nametags}
-              postMessage={postMessage}
-              saveMessage={saveMessage}
-              messages={messages} />
+            {
+              <Messages
+                roomId={room.id}
+                norms={room.norms}
+                createMessage={createMessage}
+                messages={room.messages} />
+            }
           </div>
-          {
-            <Compose
-              postMessage={postMessage}
-              addRoomMessage={addRoomMessage} />
-          }
+          <Compose
+            createMessage={createMessage}
+            roomId={room.id}
+            authorId={authorId} />
         </div>
           : <div style={styles.spinner}>
             <CircularProgress />
@@ -196,18 +181,21 @@ class Room extends Component {
 }
 
 Room.propTypes = {
-  rooms: PropTypes.object,
-  nametags: PropTypes.object,
-  messages: PropTypes.object,
+  data: PropTypes.shape({
+    loading: PropTypes.bool.isRequired,
+    room: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      norms: PropTypes.arrayOf(PropTypes.string).isRequired,
+      messages: PropTypes.arrayOf(PropTypes.object).isRequired,
+      nametags: PropTypes.arrayOf(PropTypes.object).isRequired
+    }),
+    me: PropTypes.object
+  }).isRequired,
   params: PropTypes.shape({
     roomId: PropTypes.string.isRequired
   }),
-  postMessage: PropTypes.func.isRequired,
-  saveMessage: PropTypes.func.isRequired,
-  addRoomMessage: PropTypes.func.isRequired,
-  subscribeToRoom: PropTypes.func.isRequired,
-  unsubscribeToRoom: PropTypes.func.isRequired,
-  userNametags: PropTypes.object
+  createMessage: PropTypes.func.isRequired
+  // saveMessage: PropTypes.func.isRequired
 }
 
 Room.childContextTypes = {

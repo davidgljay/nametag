@@ -61,6 +61,9 @@ type Room {
   # The number of nametags currently in the room
   nametagCount: Int!
 
+  # The latest message in this room
+  latestMessage: Date
+
 }
 
 # A message in a room
@@ -118,6 +121,9 @@ type Nametag {
 
   # The room where the nametag is posted
   room: Room!
+
+  # Latest visit to this nametag's room by the nametag holder
+  latestVisit: Date
 
 }
 
