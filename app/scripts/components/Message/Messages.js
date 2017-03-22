@@ -9,12 +9,14 @@ class Messages extends Component {
     super(props)
 
     this.mapMessage = (message) => {
-      const {norms, roomId, myNametag} = this.props
+      const {norms, roomId, myNametag, toggleSaved, createMessage} = this.props
       return <Message
         message={message}
         roomId={roomId}
         key={message.id}
         norms={norms}
+        toggleSaved={toggleSaved}
+        createMessage={createMessage}
         myNametag={myNametag} />
     }
 
@@ -63,6 +65,7 @@ Messages.propTypes = {
   roomId: PropTypes.string.isRequired,
   messages: PropTypes.arrayOf(PropTypes.object).isRequired,
   createMessage: PropTypes.func.isRequired,
+  toggleSaved: PropTypes.func.isRequired,
   myNametag: PropTypes.string.isRequired
 }
 

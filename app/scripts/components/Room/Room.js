@@ -74,7 +74,8 @@ class Room extends Component {
         me,
         error
       },
-      createMessage
+      createMessage,
+      toggleSaved
     } = this.props
 
     if (error) {
@@ -171,6 +172,7 @@ class Room extends Component {
               roomId={room.id}
               norms={room.norms}
               createMessage={createMessage}
+              toggleSaved={toggleSaved}
               myNametag={myNametag}
               messages={room.messages} />
           </div>
@@ -201,14 +203,8 @@ Room.propTypes = {
   params: PropTypes.shape({
     roomId: PropTypes.string.isRequired
   }),
-  createMessage: PropTypes.func.isRequired
-  // saveMessage: PropTypes.func.isRequired
-}
-
-Room.childContextTypes = {
-  userNametag: PropTypes.object,
-  room: PropTypes.object,
-  mod: PropTypes.object
+  createMessage: PropTypes.func.isRequired,
+  toggleSaved: PropTypes.func.isRequired
 }
 
 export default radium(Room)

@@ -15,7 +15,7 @@ class MessageMenu extends Component {
   }
 
   render () {
-    const {id, saved, modAction, showActions, saveMessage, type} = this.props
+    const {id, saved, showModAction, showActions, toggleSaved, isDM} = this.props
     const isMobile = window.innerWidth < 800
     const starStyle = saved ? {...styles.actionIcon, ...styles.savedIcon} : styles.actionIcon
     return <div style={styles.actionsContainer}>
@@ -23,11 +23,11 @@ class MessageMenu extends Component {
         !isMobile || showActions
         ? <div style={styles.actions} key='actions'>
           {
-            type === 'message' &&
+            !isDM &&
             <FontIcon
               key='starIcon'
               className='material-icons'
-              onClick={() => saveMessage(id, !saved)}
+              onClick={() => toggleSaved(id, !saved)}
               style={starStyle}>
               star
             </FontIcon>
@@ -36,7 +36,7 @@ class MessageMenu extends Component {
             key='flagIcon'
             className='material-icons'
             style={styles.actionIcon}
-            onClick={modAction(true)}>
+            onClick={showModAction(true)}>
             flag
           </FontIcon>
         </div>
@@ -54,7 +54,11 @@ class MessageMenu extends Component {
 }
 
 MessageMenu.propTypes = {
-  modAction: PropTypes.func.isRequired,
+  showModAction: PropTypes.func.isRequired,
+  showActions: PropTypes.bool.isRequired,
+  isDM: PropTypes.bool.isRequired,
+  toggleSaved: PropTypes.func.isRequired,
+  saved: PropTypes.bool,
   id: PropTypes.string.isRequired
 }
 

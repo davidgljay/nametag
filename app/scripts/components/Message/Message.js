@@ -12,7 +12,7 @@ class Message extends Component {
     super(props)
     this.state = {modAction: false, showActions: false}
 
-    this.modAction = (open) => (e) => {
+    this.showModAction = (open) => (e) => {
       if (e) { e.preventDefault() }
       this.setState({modAction: open})
     }
@@ -40,7 +40,7 @@ class Message extends Component {
       },
       norms,
       roomId,
-      saveMessage,
+      toggleSaved,
       myNametag
     } = this.props
 
@@ -63,9 +63,10 @@ class Message extends Component {
       below = <div style={styles.below}>
         {
           <MessageMenu
+            showModAction={this.showModAction}
             showActions={this.state.showActions}
-            isDM={recipient}
-            saveMessage={saveMessage}
+            isDM={recipient !== null}
+            toggleSaved={toggleSaved}
             saved={saved}
             id={id} />
         }
