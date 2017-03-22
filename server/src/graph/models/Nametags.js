@@ -50,7 +50,7 @@ const getAll = ({conn}, ids) => r.db('nametag').table('nametags').getAll(...ids)
  *
  **/
 
-const create = ({conn, models: {Users}}, nt) => {
+const create = ({conn, user, models: {Users}}, nt) => {
   const nametag = Object.assign({}, nt, {createdAt: new Date()})
   return r.db('nametag').table('nametags').insert(nametag).run(conn)
   // Append nametag ID to user object
@@ -61,12 +61,14 @@ const create = ({conn, models: {Users}}, nt) => {
     const id = res.generated_keys[0]
     return Promise.all([
       Users.addNametag(id, nametag.room),
-      id
+      id,
+      user.displayNames.indexOf(nametag.name) === -1 ? Users.appendUserArray('displayNames', nametag.name) : null,
+      user.icons.indexOf(nametag.icon) === -1 ? Users.appendUserArray('icons', nametag.icon) : null
     ])
   })
   .then(([res, id]) => {
     if (res.errors > 0) {
-      return new errors.APIError(`Error appending nametag ID to user: ${res.first_error}`)
+      return new errors.APIError(`Error adding nametag ID to user: ${res.first_error}`)
     }
     return Object.assign({}, nametag, {id})
   })
