@@ -1,0 +1,18 @@
+subscription messageAdded ($roomId: ID!) {
+  messageAdded(roomId: $roomId) {
+    message {
+      id
+      text
+      createdAt
+      saved
+      author {
+        icon
+        name
+      }
+      recipient {
+        icon
+        name
+      }
+    }
+  }
+}
