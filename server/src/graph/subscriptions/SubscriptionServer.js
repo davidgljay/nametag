@@ -1,12 +1,17 @@
+const { createServer } = require('ws')
 const { SubscriptionServer } = require('subscriptions-transport-ws')
 const subscriptionManager = require('./SubscriptionManager')
+const WS_PORT = 8185
 
-module.exports = (server) => new SubscriptionServer(
+
+const websocketServer = createServer({port: WS_PORT}, () => {})
+
+module.exports = () => new SubscriptionServer(
   {
     subscriptionManager
   },
   {
-    server,
-    path: '/api/v1/subscriptions'
+    server: websocketServer,
+    path: '/'
   }
 )

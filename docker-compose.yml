@@ -15,6 +15,7 @@ horizon:
     - rethinkdb
   ports:
     - "8181:8181"
+    - "8185:8185"
 rethinkdb:
   image: rethinkdb
   command: rethinkdb --bind "all"

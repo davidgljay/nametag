@@ -15,8 +15,9 @@ const subscriptions = require('./graph/subscriptions')
 const apollo = require('graphql-server-express')
 const {local, facebook, twitter, google} = require('./auth')
 const passport = require('passport')
-const SubscriptionServer = require('./graph/subscriptions/SubscriptionServer')
+const startSubscriptionServer = require('./graph/subscriptions/SubscriptionServer')
 const PORT = 8181
+const WS_PORT = 5000
 
 process.env.AWS_ACCESS_KEY_ID = config.s3.accessKeyId
 process.env.AWS_SECRET_ACCESS_KEY = config.s3.secretAccessKey
@@ -61,7 +62,7 @@ r.connect({host: 'rethinkdb'})
 
     /* Activate db listeners */
     // TODO: Replace with calls in mutations
-    listeners(conn)
+    // listeners(conn)
 
     /* Activate graphql subscriptions */
     subscriptions.activate(conn)
@@ -72,9 +73,7 @@ r.connect({host: 'rethinkdb'})
 app.use('/public', express.static(path.join('/usr', 'app', 'public')))
 
 /* Enable WS subscriptions */
-server.listen(PORT, () => {
-  SubscriptionServer(server)
-})
+startSubscriptionServer()
 
 /* Facebook auth */
 app.get('/auth/facebook', passport.authenticate('facebook',
@@ -147,18 +146,14 @@ if (app.get('env') !== 'production') {
   }))
 }
 
-  // GraphQL documention.
-  // app.get('/admin/docs', (req, res) => {
-  //   res.render('admin/docs');
-  // });
-// }
-/* Serve index.html */
+// Server sw.js
+app.get('/sw.js', (req, res) => {
+  res.sendFile(path.join('/usr', 'app', 'public', 'sw.js'))
+})
+
+/* All others serve index.html */
 app.get('*', (req, res, next) => {
-  if (req.url === '/sw.js') {
-    res.sendFile(path.join('/usr', 'app', 'public', 'sw.js'))
-  } else {
-    res.sendFile(path.join('/usr', 'app', 'public', 'index.html'))
-  }
+  res.sendFile(path.join('/usr', 'app', 'public', 'index.html'))
 })
 
 /* Upload an image and return the url of that image on S3 */
