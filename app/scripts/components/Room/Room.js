@@ -95,6 +95,7 @@ class Room extends Component {
 
     let myNametag
     if (!loading) {
+      console.log('props', this.props)
       myNametag = this.getMyNametag()
     }
 
@@ -180,6 +181,7 @@ class Room extends Component {
               createMessage={createMessage}
               toggleSaved={toggleSaved}
               myNametag={myNametag}
+              mod={room.mod}
               messages={room.messages} />
           </div>
           <Compose

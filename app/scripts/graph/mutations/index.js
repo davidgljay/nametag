@@ -42,6 +42,7 @@ export const createMessage = graphql(CREATE_MESSAGE, {
             author: {
               __typename: 'Nametag',
               icon: author.icon,
+              id: author.id,
               name: author.name
             },
             recipient: null

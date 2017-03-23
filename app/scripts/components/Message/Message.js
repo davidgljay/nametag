@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import moment from 'moment'
 import Media from './Media'
 import MessageMenu from './MessageMenu'
+import ModAction from './ModAction'
 import emojis from 'react-emoji'
 import {grey500, grey800, lightBlue100, yellow100} from 'material-ui/styles/colors'
 import ReactMarkdown from 'react-markdown'
@@ -40,8 +41,10 @@ class Message extends Component {
       },
       norms,
       roomId,
+      mod,
       toggleSaved,
-      myNametag
+      myNametag,
+      createMessage
     } = this.props
 
     if (this.checkYouTube(text)) {
@@ -51,14 +54,17 @@ class Message extends Component {
     }
 
     if (this.state.modAction) {
-      // below =
-      //   <ModAction
-      //     msgId={id}
-      //     author={author}
-      //     norms={norms}
-      //     text={text}
-      //     close={this.modAction(false)}
-      //     postMessage={postMessage} />
+      below =
+        <ModAction
+          msgId={id}
+          author={author}
+          norms={norms}
+          text={text}
+          mod={mod}
+          myNametag={myNametag}
+          close={this.showModAction(false)}
+          roomId={roomId}
+          createMessage={createMessage} />
     } else {
       below = <div style={styles.below}>
         {
@@ -143,7 +149,9 @@ Message.propTypes = {
   roomId: PropTypes.string.isRequired,
   myNametag: PropTypes.shape({
     id: PropTypes.string.isRequired
-  }).isRequired
+  }).isRequired,
+  createMessage: PropTypes.func.isRequired,
+  mod: PropTypes.object.isRequired
 }
 
 export default Message

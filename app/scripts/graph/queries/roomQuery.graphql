@@ -6,6 +6,8 @@ query roomQuery($id: ID!){
     norms
     mod {
       id
+      name
+      icon
     }
 		nametags {
       id
@@ -28,10 +30,12 @@ query roomQuery($id: ID!){
       createdAt
       saved
       author {
+        id
         icon
         name
       }
       recipient {
+        id
         icon
         name
       }

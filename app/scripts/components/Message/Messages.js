@@ -9,12 +9,13 @@ class Messages extends Component {
     super(props)
 
     this.mapMessage = (message) => {
-      const {norms, roomId, myNametag, toggleSaved, createMessage} = this.props
+      const {norms, roomId, myNametag, toggleSaved, mod, createMessage} = this.props
       return <Message
         message={message}
         roomId={roomId}
         key={message.id}
         norms={norms}
+        mod={mod}
         toggleSaved={toggleSaved}
         createMessage={createMessage}
         myNametag={myNametag} />

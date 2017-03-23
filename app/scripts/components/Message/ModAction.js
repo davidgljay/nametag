@@ -46,17 +46,16 @@ class ModAction extends Component {
     }
 
     this.remindOfNorms = () => {
-      const {author, text, close, postMessage} = this.props
+      const {author, text, norms, close, createMessage, roomId, myNametag, mod} = this.props
       const {normChecks, isPublic, note} = this.state
-      const {room, userNametag, mod} = this.context
-      const isMod = room.mod === userNametag.nametag
+      const isMod = mod.id === myNametag.id
 
       if (normChecks.length === 0) {
         this.setState({alert: 'Please check at least one norm.'})
         return
       }
 
-      const norms = room.norms.filter((norm, i) => normChecks[i])
+      const checkedNorms = norms.filter((norm, i) => normChecks[i])
 
       let message
       if (isMod) {
@@ -67,16 +66,14 @@ class ModAction extends Component {
       message += isMod ? '### Note from the Moderator\n\n'
         : `### Message Report\n\n`
       message += `\n> ${text}\n`
-      message += `${norms.reduce((msg, norm) => `${msg}* **${norm}** \n`, '')}\n`
+      message += `${checkedNorms.reduce((msg, norm) => `${msg}* **${norm}** \n`, '')}\n`
       message += `*${note}*`
       let modAction = {
-        type: 'mod_action',
         text: message,
-        timestamp: Date.now(),
-        author: userNametag.nametag,
-        room: room.id
+        author: myNametag.id,
+        room: roomId
       }
-      postMessage(modAction)
+      createMessage(modAction, myNametag)
       .catch((err) => {
         this.setState({alert: 'Error posting reminder'})
         errorLog('Error putting mod Action')(err)
@@ -113,10 +110,10 @@ class ModAction extends Component {
     // TODO: I could add complexity here, cite multiple posts, etc.
     // TODO: Create a system for notifying badgeholders.
 
-    const {close, author} = this.props
-    const {room, userNametag} = this.context
+    const {close, author, myNametag, mod, norms} = this.props
     const {alert, note, isPublic} = this.state
-    const isMod = room.mod === userNametag.nametag
+    const isMod = mod.id === myNametag.id
+    console.log('Rendering modaction')
 
     return <Card style={styles.modAction}>
       <IconButton
@@ -132,7 +129,7 @@ class ModAction extends Component {
       : <h4 style={styles.title}>Report This Post to the Moderator</h4>
       }
       <List>
-        {room.norms.map(this.showNorm)}
+        {norms.map(this.showNorm)}
       </List>
       <TextField
         style={styles.addNote}
@@ -151,23 +148,23 @@ class ModAction extends Component {
         removeUser={this.removeUser}
         notifyBadge={this.notifyBadge}
         authorName={author.name}
-        censorMessage={this.censorMessage}
-          />
+        censorMessage={this.censorMessage} />
     </Card>
   }
 }
 
 ModAction.propTypes = {
-  msgId: PropTypes.string,
-  close: PropTypes.func,
-  author: PropTypes.object,
-  postMessage: PropTypes.func.isRequired
-}
-
-ModAction.contextTypes = {
-  room: PropTypes.object,
-  userNametag: PropTypes.object,
-  mod: PropTypes.object
+  msgId: PropTypes.string.isRequired,
+  close: PropTypes.func.isRequired,
+  author: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired
+  }).isRequired,
+  mod: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired
+  }).isRequired,
+  createMessage: PropTypes.func.isRequired
 }
 
 export default ModAction

@@ -7,10 +7,12 @@ mutation CreateMessage($message: CreateMessageInput!) {
       saved
       author {
         icon
+        id
         name
       }
       recipient {
         icon
+        id
         name
       }
     }
