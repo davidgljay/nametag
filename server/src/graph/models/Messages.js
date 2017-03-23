@@ -51,6 +51,7 @@ const toggleSaved = ({conn}, id, saved) =>
 
 const create = (context, msg) => {
   const {conn, models: {Nametags}} = context
+  let text = msg.text
   const messageObj = Object.assign({}, msg, {createdAt: new Date(), recipient: null})
   return r.db('nametag').table('messages').insert(messageObj).run(conn)
   .then((res) => {
@@ -65,7 +66,7 @@ const create = (context, msg) => {
     message
   ])
   )
-  .then(([recipient, message]) => recipient ? Object.assign({}, message, {recipient}) : message)
+  .then(([updates = {}, message]) => Object.assign({}, message, updates))
 }
 
 /**
@@ -104,7 +105,10 @@ const checkMentionsAndDMs = (context, message) => {
 const checkMentions = (context, nametags, message) =>  {
   const splitMsg = message.text.split('@')
   const {Nametags} = context.models
-  let promises = []
+  const newText = message.text.replace(/@\S+/g, (mention) => `*${mention}*`)
+  let promises = [
+    r.db('nametag').table('messages').get(message.id).update({text: newText}).run(context.conn)
+  ]
   // For every mention, check every nametag in the room to see if it matches the name.
   for (let i = 0; i < splitMsg.length; i++) {
     const section = splitMsg[i]
@@ -118,7 +122,8 @@ const checkMentions = (context, nametags, message) =>  {
       }
     }
   }
-  return Promise.all(promises)
+
+  return Promise.all(promises).then(() => ({text: newText}))
 }
 
 /**
@@ -135,12 +140,13 @@ const setDm = (context, nametags, message) =>  {
   for (let i = 0; i < nametags.length; i++) {
     const {name, id} = nametags[i]
     if (message.text.slice(2, name.length + 2).toLowerCase() === name.toLowerCase()) {
+      const newText = message.text.slice(name.length + 2)
       return Promise.all([
         Nametags.addMention(id)
-        .then(() => mentionNotif(context, id, message, 'DM')),
-        r.db('nametags').table('messages').get(message.id).update({recipient: id})
+        .then(() => mentionNotif(context, id, Object.assign({}, message, {text: newText}), 'DM')),
+        r.db('nametag').table('messages').get(message.id).update({recipient: id, text: newText}).run(context.conn)
       ])
-      .then(() => id)
+      .then(() => ({recipient: id, text: newText}))
     }
   }
   return
