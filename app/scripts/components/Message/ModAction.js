@@ -113,7 +113,6 @@ class ModAction extends Component {
     const {close, author, myNametag, mod, norms} = this.props
     const {alert, note, isPublic} = this.state
     const isMod = mod.id === myNametag.id
-    console.log('Rendering modaction')
 
     return <Card style={styles.modAction}>
       <IconButton

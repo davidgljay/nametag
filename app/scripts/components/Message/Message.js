@@ -85,17 +85,19 @@ class Message extends Component {
     // Get proper style if the this is a direct message
     let messageStyle
     let callout
-    if (recipient && author === myNametag.id) {
+    if (!recipient) {
+      messageStyle = styles.messageText
+    } else if (author.id === myNametag.id) {
       messageStyle = {...styles.messageText, ...styles.directMessageOutgoing}
       callout = <div style={styles.dmCallout}>
       Private Message to {recipient.name}
         <img style={styles.tinyIconImg} src={recipient.icon} />
       </div>
-    } else if (recipient === myNametag) {
+    } else if (recipient.id === myNametag.id) {
       messageStyle = {...styles.messageText, ...styles.directMessageIncoming}
       callout = <div style={styles.dmCallout}>Private Message</div>
     } else {
-      messageStyle = styles.messageText
+
     }
 
     return <tr
