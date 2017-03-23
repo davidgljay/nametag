@@ -1,6 +1,6 @@
 const { SubscriptionManager } = require('graphql-subscriptions')
-const schema = require('../typeDefs')
-const { pubsub } = require('./pubsub')
+const schema = require('../schema')
+const pubsub = require('./pubsub')
 
 module.exports = new SubscriptionManager({
   schema,

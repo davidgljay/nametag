@@ -5,7 +5,6 @@
 class ExtendableError {
   constructor (message = null) {
     this.message = message
-    this.stack = (new Error()).stack
   }
 }
 

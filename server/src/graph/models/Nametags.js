@@ -114,11 +114,12 @@ const updateLatestVisit = ({conn}, nametagId) => r.db('nametag').table('nametags
       r.db('nametag').table('nametags').get(nametagId).run(conn)
       .then(nametag => {
         if (Date.now() - new Date(nametag.latestVisit).getTime() > 20000) {
-          r.db('nametag').table('nametags').get(nametagId).update({present: false}).run(conn)
+          return r.db('nametag').table('nametags').get(nametagId).update({present: false}).run(conn)
           .catch(errors.errorLog('Setting nametag presence to false'))
         }
+        return
       })
-      .catch(errors.errorLog('Checking nametag latestVisit after delay'))
+      .catch(err => console.log('latestVisit err', err))
     }, 30000)
 
   })
