@@ -9,11 +9,11 @@ export const roomQuery = graphql(ROOM_QUERY, {
   options: (props) => ({
     variables: {
       id: props.params.roomId
-    },
-    props: (data) => ({
-      data,
-      messageAddedSubscription: messageAdded(data.subscribeToMore),
-      checkNametagPresenceSubscription: checkNametagPresence(data.subscribeToMore)
-    })
+    }
+  }),
+  props: ({data}) => ({
+    data,
+    messageAddedSubscription: messageAdded(data.subscribeToMore),
+    checkNametagPresenceSubscription: checkNametagPresence(data.subscribeToMore)
   })
 })

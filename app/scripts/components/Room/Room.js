@@ -64,10 +64,10 @@ class Room extends Component {
   }
 
   componentDidMount () {
-    const {requestNotifPermissions, messageAddedSubscription, checkNametagPresenceSubscription} = this.props
+    const {requestNotifPermissions, messageAddedSubscription, checkNametagPresenceSubscription, params} = this.props
     requestNotifPermissions()
-    messageAddedSubscription()
-    checkNametagPresenceSubscription()
+    messageAddedSubscription(params.roomId)
+    checkNametagPresenceSubscription(params.roomId)
   }
 
   componentWillReceiveProps (nextProps) {

@@ -1,10 +1,10 @@
 import CHECK_NAMETAG_PRESENCE from './checkNametagPresence.graphql'
 import MESSAGE_ADDED from './messageAdded.graphql'
 
-export const checkNametagPresence = subscribeToMore => params => subscribeToMore({
+export const checkNametagPresence = subscribeToMore => roomId => subscribeToMore({
   document: CHECK_NAMETAG_PRESENCE,
   variables: {
-    roomId: params.roomId
+    roomId: roomId
   },
   updateQuery: (oldData, {subscriptionData}) => {
     console.log('subscriptionData', subscriptionData)
@@ -32,10 +32,10 @@ export const checkNametagPresence = subscribeToMore => params => subscribeToMore
   }
 })
 
-export const messageAdded = subscribeToMore => params => subscribeToMore({
+export const messageAdded = subscribeToMore => roomId => subscribeToMore({
   document: MESSAGE_ADDED,
   variables: {
-    roomId: params.roomId
+    roomId: roomId
   },
   updateQuery: (oldData, {subscriptionData}) => {
     console.log('subscriptionData', subscriptionData)
