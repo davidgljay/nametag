@@ -17,9 +17,9 @@ export const createNametag = graphql(CREATE_NAMETAG, {
 
 export const updateLatestVisit = graphql(UPDATE_LATEST_VISIT, {
   props: ({ownProps, mutate}) => ({
-    updateLatestVisit: (nametagid) => mutate({
+    updateLatestVisit: (nametagId) => mutate({
       variables: {
-        nametagid
+        nametagId
       }
     })
   })
