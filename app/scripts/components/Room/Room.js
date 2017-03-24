@@ -95,6 +95,13 @@ class Room extends Component {
     } = this.props
 
     let myNametag
+
+    // If the user is not logged in, return to the homepage
+    if (!loading && !me) {
+      window.location = '/'
+      return
+    }
+
     if (!loading) {
       myNametag = this.getMyNametag()
     }
