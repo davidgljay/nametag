@@ -351,7 +351,7 @@ type NametagPresence {
 type RootSubscription {
 
   # Fired when a message is added to a room
-  messageAdded(roomId: ID!): Message
+  messageAdded(roomId: ID!, nametagId: ID!): Message
 
   # Fired when a nametag is added to a room
   nametagAdded(roomId: ID!): Nametag

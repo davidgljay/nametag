@@ -4,6 +4,7 @@ const Nametag = require('./Nametag')
 const User = require('./User')
 const RootQuery = require('./RootQuery')
 const RootMutation = require('./RootMutation')
+const RootSubscription = require('./RootSubscription')
 const Date = require('./date')
 
 module.exports = {
@@ -13,5 +14,6 @@ module.exports = {
   Nametag,
   User,
   RootQuery,
-  RootMutation
+  RootMutation,
+  RootSubscription
 }

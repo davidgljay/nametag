@@ -4,7 +4,7 @@ import MESSAGE_ADDED from './messageAdded.graphql'
 export const checkNametagPresence = subscribeToMore => roomId => subscribeToMore({
   document: CHECK_NAMETAG_PRESENCE,
   variables: {
-    roomId: roomId
+    roomId
   },
   updateQuery: (oldData, {subscriptionData}) => {
     console.log('subscriptionData', subscriptionData)
@@ -32,17 +32,18 @@ export const checkNametagPresence = subscribeToMore => roomId => subscribeToMore
   }
 })
 
-export const messageAdded = subscribeToMore => roomId => subscribeToMore({
+export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeToMore({
   document: MESSAGE_ADDED,
   variables: {
-    roomId: roomId
+    roomId,
+    nametagId
   },
   updateQuery: (oldData, {subscriptionData}) => {
     console.log('subscriptionData', subscriptionData)
     if (!subscriptionData.data) {
       return oldData
     }
-    const {message} = subscriptionData.data
+    const message = subscriptionData.data.messageAdded
 
     // Check to see if the message has already been posted (for example, if the current user is the author.)
     const newMessage = oldData.room.messages.reduce((isNew, msg) => msg.id === message.id ? false : isNew, true)
@@ -57,9 +58,6 @@ export const messageAdded = subscribeToMore => roomId => subscribeToMore({
         messages: oldData.room.messages
           .concat(message)
           .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
-      },
-      me: {
-        ...oldData.me
       }
     }
   }

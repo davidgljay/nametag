@@ -1,18 +1,18 @@
-subscription messageAdded ($roomId: ID!) {
-  messageAdded(roomId: $roomId) {
-    message {
+subscription messageAdded ($roomId: ID!, $nametagId: ID!) {
+  messageAdded(roomId: $roomId, nametagId: $nametagId) {
+    id
+    text
+    createdAt
+    saved
+    author {
       id
-      text
-      createdAt
-      saved
-      author {
-        icon
-        name
-      }
-      recipient {
-        icon
-        name
-      }
+      name
+      icon
+    }
+    recipient {
+      id
+      name
+      icon
     }
   }
 }

@@ -8,7 +8,12 @@ module.exports = new SubscriptionManager({
   setupFunctions: {
     messageAdded: (options, args) => ({
       messageAdded: {
-        filter: message => message.room === args.roomId
+        filter: message => message.room === args.roomId &&
+                            (
+                              message.recipient === null ||
+                              message.recipient === args.nametagId ||
+                              message.author === args.nametagId
+                            )
       }
     }),
     nametagAdded: (options, args) => ({

@@ -66,14 +66,12 @@ r.connect({host: 'rethinkdb'})
 
     /* Activate graphql subscriptions */
     subscriptions.activate(conn)
+    startSubscriptionServer(conn)
   })
   .catch(err => console.log(`Error connecting to rethinkdb: ${err}`))
 
 /* Serve static files */
 app.use('/public', express.static(path.join('/usr', 'app', 'public')))
-
-/* Enable WS subscriptions */
-startSubscriptionServer()
 
 /* Facebook auth */
 app.get('/auth/facebook', passport.authenticate('facebook',

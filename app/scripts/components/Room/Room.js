@@ -64,15 +64,16 @@ class Room extends Component {
   }
 
   componentDidMount () {
-    const {requestNotifPermissions, messageAddedSubscription, checkNametagPresenceSubscription, params} = this.props
+    const {requestNotifPermissions, checkNametagPresenceSubscription, params} = this.props
     requestNotifPermissions()
-    messageAddedSubscription(params.roomId)
     checkNametagPresenceSubscription(params.roomId)
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (!nextProps.data.loading) {
+  componentDidUpdate (prevProps) {
+    const {loading, room} = this.props.data
+    if (prevProps.data.loading && !loading) {
       this.showPresence()
+      this.props.messageAddedSubscription(room.id, this.getMyNametag().id)
     }
   }
 
@@ -95,7 +96,6 @@ class Room extends Component {
 
     let myNametag
     if (!loading) {
-      console.log('props', this.props)
       myNametag = this.getMyNametag()
     }
 

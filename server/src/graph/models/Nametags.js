@@ -24,7 +24,7 @@ const getRoomNametags = ({conn}, room) =>
   *
   */
 
-const get = ({conn}, id) => r.db('nametag').table('nametags').get(id).run(conn)
+const get = ({conn}, id) =>  r.db('nametag').table('nametags').get(id).run(conn)
 
 /**
  * Returns an array of nametags from an array of ids.
