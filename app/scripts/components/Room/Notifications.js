@@ -55,7 +55,7 @@ const Notifications = ({nametags, roomId, homepage}) => {
 }
 
 Notifications.propTypes = {
-  roomId: PropTypes.string.isRequired,
+  roomId: PropTypes.string,
   nametags: PropTypes.arrayOf(PropTypes.shape({
     room: PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -63,7 +63,8 @@ Notifications.propTypes = {
       image: PropTypes.string.isRequired,
       closedAt: PropTypes.string.isRequired
     })
-  })).isRequired
+  })).isRequired,
+  homepage: PropTypes.bool
 }
 
 export default Notifications

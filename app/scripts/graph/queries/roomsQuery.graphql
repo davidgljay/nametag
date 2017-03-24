@@ -43,6 +43,7 @@ query roomsQuery {
        id
        title
        image
+       closedAt
      }
    }
  }

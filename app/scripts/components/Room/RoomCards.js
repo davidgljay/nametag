@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import RoomCard from './RoomCard'
 import Navbar from '../Utils/Navbar'
 import LoginDialog from '../User/LoginDialog'
-// import Notifications from '../Room/Notifications'
+import Notifications from '../Room/Notifications'
 import {lightBlue200} from 'material-ui/styles/colors'
 
 class RoomCards extends Component {
@@ -45,20 +45,34 @@ class RoomCards extends Component {
   }
 
   render () {
-    const {data: {me, rooms, loading},
-    updateNametagEdit,
-    addNametagEditBadge,
-    removeNametagEditBadge,
-    nametagEdits,
-    createNametag
-  } = this.props
+    const {
+      data: {me, rooms, loading},
+      updateNametagEdit,
+      addNametagEditBadge,
+      removeNametagEditBadge,
+      nametagEdits,
+      createNametag
+    } = this.props
+    let nametagHash = {}
+    if (me) {
+      nametagHash = me.nametags.reduce((hash, nametag) => {
+        hash[nametag.room.id] = nametag
+        return hash
+      }, {})
+    }
     return <div>
       <Navbar
         user={me}
         toggleLogin={this.toggleLogin} />
       <div style={styles.roomCards}>
         {
-          !loading && rooms.map(room =>
+          me &&
+          <Notifications nametags={me.nametags} homepage />
+        }
+        {
+          !loading && rooms
+          .filter(room => !nametagHash[room.id])
+          .map(room =>
             <RoomCard
               key={room.id}
               room={room}
@@ -71,13 +85,6 @@ class RoomCards extends Component {
           )
         }
       </div>
-
-      {
-        //   {
-        //     userNametags &&
-        //     <Notifications userNametags={userNametags} rooms={rooms} homepage />
-        //   }
-      }
       <LoginDialog
         showLogin={this.state.showLogin}
         toggleLogin={this.toggleLogin} />
@@ -89,7 +96,13 @@ class RoomCards extends Component {
 RoomCards.propTypes = {
   data: PropTypes.shape({
     me: PropTypes.shape({
-      id: PropTypes.string.isRequired
+      id: PropTypes.string.isRequired,
+      nametags: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        room: PropTypes.shape({
+          id: PropTypes.string.isRequired
+        }).isRequired
+      })).isRequired
     }),
     rooms: PropTypes.arrayOf(
       PropTypes.shape({
@@ -97,17 +110,6 @@ RoomCards.propTypes = {
       })
     )
   }).isRequired
-  // rooms: PropTypes.object.isRequired,
-  // nametags: PropTypes.object.isRequired,
-  // userNametags: PropTypes.object.isRequired,
-  // addUserNametag: PropTypes.func.isRequired,
-  // nametagEdits: PropTypes.object.isRequired,
-  // user: PropTypes.shape({
-  //   id: PropTypes.string,
-  //   data: PropTypes.shape({
-  //     badges: PropTypes.arrayOf(PropTypes.string).isRequired
-  //   })
-  // })
 }
 
 export default RoomCards
