@@ -7,18 +7,17 @@ export const checkNametagPresence = subscribeToMore => roomId => subscribeToMore
     roomId
   },
   updateQuery: (oldData, {subscriptionData}) => {
-    console.log('subscriptionData', subscriptionData)
     if (!subscriptionData.data) {
       return oldData
     }
-    const {nametagId, present} = subscriptionData.data
-    const newNametags = oldData.rooms.nametags.reduce(
+    const {nametagId, present} = subscriptionData.data.nametagPresence
+    const newNametags = oldData.room.nametags.reduce(
       (nametags, nametag, i) => {
         if (nametag.id === nametagId) {
-          nametags[i].present = present
+          nametags[i] = {...nametag, present}
         }
         return nametags
-      }, oldData.rooms.nametags.slice())
+      }, oldData.room.nametags.slice())
     return {
       ...oldData,
       room: {
@@ -39,7 +38,6 @@ export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeT
     nametagId
   },
   updateQuery: (oldData, {subscriptionData}) => {
-    console.log('subscriptionData', subscriptionData)
     if (!subscriptionData.data) {
       return oldData
     }
