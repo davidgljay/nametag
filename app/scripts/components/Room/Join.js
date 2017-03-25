@@ -34,7 +34,7 @@ class Join extends Component {
       addNametagEditBadge,
       updateNametagEdit,
       room,
-      user
+      me
     } = this.props
     if (user) {
       join =
@@ -43,7 +43,7 @@ class Join extends Component {
           {
             <EditNametag
               userNametag={nametag}
-              user={user}
+              me={me}
               addNametagEditBadge={addNametagEditBadge}
               removeNametagEditBadge={removeNametagEditBadge}
               updateNametagEdit={updateNametagEdit}

@@ -26,7 +26,7 @@ const NavDrawer = (props) => <Drawer
   onRequestChange={props.setOpen}>
   <div style={styles.drawerTitle}><h2>Nametag</h2></div>
   {
-      props.user
+      props.me
       ? <div>
         <MenuItem onClick={onHomeClick}>Home</MenuItem>
         <MenuItem onClick={onCreateRoomClick}>Create Room</MenuItem>

@@ -16,7 +16,7 @@ class CreateRoom extends Component {
       room: {
         title: '',
         description: '',
-        icon: '',
+        image: '',
         closedAt: new Date(86400000 * 2 + Date.now()).toISOString()
       },
       closedIn: {
@@ -101,11 +101,11 @@ class CreateRoom extends Component {
       const {room, nametagEdits} = this.state
       this.props.createRoom({
         ...room,
-        mod: nametagEdits.new
+        mod: this.props.nametagEdits.new
       })
-        .then(() => {
-          window.location = '/rooms'
-        })
+      .then(() => {
+        window.location = '/rooms'
+      })
     }
 
     this.updateRoom = (prop, val) => {
@@ -132,10 +132,10 @@ class CreateRoom extends Component {
           }
         case 2:
           return {
-            valid: this.state.hostNametag.name && this.state.hostNametag.bio,
+            valid: this.props.nametagEdits.new.name && this.props.nametagEdits.new.bio,
             error: {
-              nameError: this.state.hostNametag.name ? '' : 'Please choose a name for this room',
-              bioError: this.state.hostNametag.bio ? '' : 'Please provide a brief bio'
+              nameError: this.props.nametagEdits.new.name ? '' : 'Please choose a name for this room',
+              bioError: this.props.nametagEdits.new.bio ? '' : 'Please provide a brief bio'
             }
           }
         case 3:
@@ -151,6 +151,13 @@ class CreateRoom extends Component {
           }
       }
     }
+  }
+
+  componentDidMount () {
+    this.props.updateNametagEdit('new', 'icon', '')
+    this.props.updateNametagEdit('new', 'name', '')
+    this.props.updateNametagEdit('new', 'bio', '')
+    this.props.updateNametagEdit('new', 'badges', [])
   }
 
   render () {
@@ -216,28 +223,28 @@ class CreateRoom extends Component {
           error={this.state.error} />
         <div>
           {
-              this.state.stepIndex > 0 &&
-              <RaisedButton
-                style={styles.button}
-                labelStyle={styles.buttonLabel}
-                backgroundColor={indigo500}
-                onClick={this.handlePrev}
-                label='BACK' />
-            }
+            this.state.stepIndex > 0 &&
+            <RaisedButton
+              style={styles.button}
+              labelStyle={styles.buttonLabel}
+              backgroundColor={indigo500}
+              onClick={this.handlePrev}
+              label='BACK' />
+          }
           {
-              this.state.stepIndex >= 4
-              ? <RaisedButton
-                style={styles.button}
-                labelStyle={styles.buttonLabel}
-                backgroundColor={indigo500}
-                onClick={this.createRoom}
-                label='PUBLISH' />
-              : <RaisedButton
-                style={styles.button}
-                labelStyle={styles.buttonLabel}
-                backgroundColor={indigo500}
-                onClick={this.handleNext}
-                label='NEXT' />
+            this.state.stepIndex >= 4
+            ? <RaisedButton
+              style={styles.button}
+              labelStyle={styles.buttonLabel}
+              backgroundColor={indigo500}
+              onClick={this.createRoom}
+              label='PUBLISH' />
+            : <RaisedButton
+              style={styles.button}
+              labelStyle={styles.buttonLabel}
+              backgroundColor={indigo500}
+              onClick={this.handleNext}
+              label='NEXT' />
             }
         </div>
       </div>
@@ -252,6 +259,7 @@ CreateRoom.propTypes = {
   searchImage: PropTypes.func.isRequired,
   createRoom: PropTypes.func.isRequired,
   setImageFromUrl: PropTypes.func.isRequired,
+  nametagEdits: PropTypes.object.isRequired,
   data: PropTypes.shape({
     me: PropTypes.shape({
       badges: PropTypes.arrayOf(PropTypes.shape({

@@ -53,7 +53,7 @@ class RoomCard extends Component {
       room,
       creating,
       style,
-      user,
+      me,
       nametagEdits,
       addNametagEditBadge,
       removeNametagEditBadge,
@@ -65,13 +65,14 @@ class RoomCard extends Component {
 
     let front = <Card key='front' style={styles.front}>
       {
-        room.image &&
-        <CardMedia
+        room.image
+        ? <CardMedia
           onClick={this.flip}>
           <img
             style={styles.roomImage}
             src={room.image} />
         </CardMedia>
+        : null
       }
       <div style={styles.roomInfo}>
         <div style={styles.greyText}>
@@ -88,11 +89,12 @@ class RoomCard extends Component {
         </p>
       </div>
       {
-        !creating || room.mod.name &&
-        <Nametag
+        !creating || room.mod.name
+        ? <Nametag
           style={styles.mod}
           mod={room.mod.id}
           nametag={room.mod} />
+        : null
       }
     </Card>
 
@@ -116,7 +118,7 @@ class RoomCard extends Component {
         <Join
           room={room.id}
           nametag={nametagEdits[room.id]}
-          user={user}
+          me={me}
           createNametag={createNametag}
           normsChecked={this.state.normsChecked}
           addNametagEditBadge={addNametagEditBadge}
@@ -149,11 +151,11 @@ RoomCard.propTypes = {
   room: PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    icon: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     closedAt: PropTypes.string.isRequired
   }).isRequired,
-  style: PropTypes.object.isRequired,
+  style: PropTypes.object,
   me: PropTypes.shape({
     id: PropTypes.string.isRequired,
     badges: PropTypes.arrayOf(PropTypes.object).isRequired

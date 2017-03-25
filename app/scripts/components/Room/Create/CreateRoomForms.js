@@ -57,7 +57,7 @@ const getForm = ({
               addNametagEditBadge={addNametagEditBadge}
               removeNametagEditBadge={removeNametagEditBadge}
               updateNametagEdit={updateNametagEdit}
-              userDefaults={me}
+              me={me}
               room='new' />
             <div style={styles.userBadges}>
               <UserBadges

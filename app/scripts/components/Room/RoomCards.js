@@ -37,7 +37,7 @@ class RoomCards extends Component {
     }
     return <div>
       <Navbar
-        user={me}
+        me={me}
         toggleLogin={this.toggleLogin} />
       <div style={styles.roomCards}>
         {
@@ -51,7 +51,7 @@ class RoomCards extends Component {
             <RoomCard
               key={room.id}
               room={room}
-              user={me}
+              me={me}
               nametagEdits={nametagEdits}
               createNametag={createNametag}
               updateNametagEdit={updateNametagEdit}

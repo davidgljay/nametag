@@ -50,23 +50,23 @@ class EditNametag extends Component {
   }
 
   componentDidMount () {
-    const {nametagEdit = {}, updateNametagEdit, user = {}, room} = this.props
+    const {nametagEdit = {}, updateNametagEdit, me = {}, room} = this.props
     updateNametagEdit(room, 'room', room)
     if (!nametagEdit.name &&
-      user.displayNames &&
-      user.displayNames.length >= 1) {
-      updateNametagEdit(room, 'name', user.displayNames[0])
+      me.displayNames &&
+      me.displayNames.length >= 1) {
+      updateNametagEdit(room, 'name', me.displayNames[0])
     }
     if (!nametagEdit.icon &&
-      user.icons.length > 0) {
-      updateNametagEdit(room, 'icon', user.icons[0])
+      me.icons.length > 0) {
+      updateNametagEdit(room, 'icon', me.icons[0])
     }
   }
 
   render () {
     const {
       error,
-      user = {},
+      me = {},
       updateNametagEdit,
       room,
       nametagEdit
@@ -88,7 +88,7 @@ class EditNametag extends Component {
       <Card style={styles.editNametag} className='profile'>
         <div style={styles.cardInfo}>
           <NTIconMenu
-            icons={user.icons || []}
+            icons={me.icons || []}
             icon={nametag.icon}
             room={room}
             updateNametagEdit={updateNametagEdit} />
@@ -98,7 +98,7 @@ class EditNametag extends Component {
               filter={AutoComplete.noFilter}
               openOnFocus
               disableFocusRipple={false}
-              dataSource={user.displayNames || []}
+              dataSource={me.displayNames || []}
               errorText={error && error.nameError}
               onUpdateInput={(name) => updateNametagEdit(room, 'name', name)}
               animated
@@ -141,7 +141,7 @@ EditNametag.propTypes = {
     icon: PropTypes.string,
     badges: PropTypes.arrayOf(PropTypes.string)
   }),
-  user: PropTypes.shape({
+  me: PropTypes.shape({
     icons: PropTypes.arrayOf(PropTypes.string).isRequired,
     displayNames: PropTypes.arrayOf(PropTypes.string).isRequired
   }).isRequired,

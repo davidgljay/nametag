@@ -35,7 +35,7 @@ class Navbar extends Component {
     const mobile = window.innerWidth <= 800
     const auth = <div style={styles.buttons}>
       {
-        this.props.user && this.props.user.id
+        this.props.me && this.props.me.id
         ? <div>
           <FlatButton
             style={styles.button}
@@ -66,14 +66,14 @@ class Navbar extends Component {
       <NavDrawer
         open={this.state.open}
         toggleLogin={this.props.toggleLogin}
-        user={this.props.user}
+        me={this.props.me}
         setOpen={(open) => this.setState({open})} />
     </div>
   }
 }
 
 Navbar.propTypes = {
-  user: PropTypes.shape({
+  me: PropTypes.shape({
     id: PropTypes.string
   }),
   toggleLogin: PropTypes.func.isRequired

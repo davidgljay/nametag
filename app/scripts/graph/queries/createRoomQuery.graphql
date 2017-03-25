@@ -1,5 +1,7 @@
 query createRoomQuery {
   me {
+    icons
+    displayNames
     badges {
       id
       name
