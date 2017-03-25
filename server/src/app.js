@@ -25,9 +25,9 @@ const app = express()
 
 /* Create HTTPS server */
 https.createServer({
-  key: fs.readFileSync(path.join('usr', '.keys', 'privkey.pem')),
-  cert: fs.readFileSync(path.join('usr', '.keys', 'cert.pem')),
-  ca: fs.readFileSync(path.join('usr', '.keys', 'chain.pem'))
+  key: fs.readFileSync(path.join('/', 'usr', '.keys', 'privkey.pem')),
+  cert: fs.readFileSync(path.join('/', 'usr', '.keys', 'cert.pem')),
+  ca: fs.readFileSync(path.join('/', 'usr', '.keys', 'chain.pem'))
 }, app).listen(PORT)
 
 /* Use body parser middleware */
