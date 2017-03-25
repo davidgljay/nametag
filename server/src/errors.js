@@ -99,7 +99,7 @@ const ErrNotAuthorized = new APIError('not authorized', {
   status: 401
 })
 
-const errorLog = (err) => {
+const errorLog = (msg) => (err) => {
   if (!(err instanceof APIError))
   console.log(err)
 }

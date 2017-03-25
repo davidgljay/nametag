@@ -6,6 +6,7 @@ const Rooms = require('./Rooms')
 const Badges = require('./Badges')
 const Users = require('./Users')
 const schema = require('./schema')
+const {errorLog} = require('../../errors')
 
 module.exports = (context) => {
   // We need to return an object to be accessed.
@@ -30,6 +31,7 @@ module.exports.init = (conn) => {
     console.log(`Initializing ${table} table and indexes`)
     createTable(conn, table)
       .then(() => createIndexes(conn, table, indexes))
+      .catch(handleError)
   }
 }
 
@@ -38,24 +40,43 @@ module.exports.init = (conn) => {
 const createTable = (conn, table) => new Promise((resolve, reject) =>
   r.db('nametag').tableCreate(table).run(conn)
     .then(resolve)
-    .catch(resolve)
+    .catch(err => {
+      if (err.msg.match('already exists')) {
+        resolve()
+      } else {
+        reject(err)
+      }
+    })
   )
 
+
+// Create indexes, catching errors caused by indexes already existing
 const createIndexes = (conn, table, indexes) => {
   const promises = []
   for (let i=0; i < indexes.length; i++ ) {
     const index = indexes[i]
-    if (index.name) {
-      promises.push(r.db('nametag').table(table).indexCreate(
+    if (index instanceof Object) {
+      r.db('nametag').table(table).indexCreate(
         index.name,
         index.fields.map(field => {
+          if (field instanceof Object) {
+            switch (Object.keys(field)) {
+            case 'notEq':
+              return r.row(field.notEq[0]).not().eq(field.notEq[1])
+            }
+          }
           return r.row(field)
         })
-      ).run(conn))
+      ).run(conn).catch(handleError)
     } else {
-      promises.push(r.db('nametag').table(table).indexCreate(index).run(conn))
+      r.db('nametag').table(table).indexCreate(index).run(conn).catch(handleError)
     }
   }
-  // Return all promises, catch errors caused by indexes that already exist
-  return Promise.all(promises).catch(() => {})
+}
+
+const handleError = err => {
+  if (err.msg.match('already exists')) {
+    return
+  }
+  errorLog('Creating tables and indexes')(err)
 }

@@ -10,16 +10,18 @@ const notification = require('../../notifications')
  * @param {String} nametag the id of the nametag of the currently logged in user for this room
  */
 
-const getRoomMessages = ({conn}, room, nametag) => Promise.all([
+const getRoomMessages = ({user, conn}, room, nametag) => Promise.all([
   r.db('nametag').table('messages').getAll([room, false], {index: 'room_recipient'}).run(conn),
-  r.db('nametag').table('messages').getAll([room, nametag], {index: 'room_recipient'}).run(conn)
+  r.db('nametag').table('messages').getAll([room, nametag], {index: 'room_recipient'}).run(conn),
+  r.db('nametag').table('messages').getAll([room, user.nametags[room], false], {index: 'room_author_recipient'}).run(conn)
 ])
- .then(([messageCursor, dmCursor]) => Promise.all([
+ .then(([messageCursor, dmToCursor, dmFromCursor]) => Promise.all([
    messageCursor.toArray(),
-   dmCursor.toArray()
+   dmToCursor.toArray(),
+   dmFromCursor.toArray()
  ]))
- .then(([messages, dms]) =>
-    messages.concat(dms).sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+ .then(([messages, dmsTo, dmsFrom]) =>
+    messages.concat(dmsTo).concat(dmsFrom).sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
   )
 
  /**
