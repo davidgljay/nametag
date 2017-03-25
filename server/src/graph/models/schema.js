@@ -4,8 +4,8 @@ module.exports = {
   },
   messages: {
     indexes: [
-      {name: "room_recipient", fields:["room", "recipient"]},
-      {name: "room_author_isDM", fields:["room", "author", {notEq:["recipient", false]}]},
+      {name: 'room_recipient', fields: ['room', 'recipient']},
+      {name: 'room_author_isDM', fields: ['room', 'author', {notEq: ['recipient', false]}]},
       'author'
     ]
   },

@@ -1,6 +1,6 @@
 const r = require('rethinkdb')
 const errors = require('../../errors')
-const notification = require('../../notifications')
+// const notification = require('../../notifications')
 
 /**
  * Returns the messages from a particular room to display to a user. Also displays
@@ -43,7 +43,6 @@ const getNametagMessages = ({conn}, nametag) =>
 const toggleSaved = ({conn}, id, saved) =>
  r.db('nametag').table('messages').get(id).update({saved}).run(conn)
 
-
 /**
  * Creates a message
  *
@@ -53,8 +52,7 @@ const toggleSaved = ({conn}, id, saved) =>
  **/
 
 const create = (context, msg) => {
-  const {conn, models: {Nametags}} = context
-  let text = msg.text
+  const {conn} = context
   const messageObj = Object.assign({}, msg, {createdAt: new Date(), recipient: false})
   return r.db('nametag').table('messages').insert(messageObj).run(conn)
   .then((res) => {
@@ -82,9 +80,9 @@ const create = (context, msg) => {
 
 const checkMentionsAndDMs = (context, message) => {
   const {Nametags} = context.models
-  const dm = message.text.toLowerCase().slice(0,2) === 'd '
+  const dm = message.text.toLowerCase().slice(0, 2) === 'd '
   const mentions = message.text.indexOf('@') > -1
-  if ( !dm && !mentions) {
+  if (!dm && !mentions) {
     return null
   }
 
@@ -105,7 +103,7 @@ const checkMentionsAndDMs = (context, message) => {
  * @param {Object} text         the text of the message to be checked
  *
  **/
-const checkMentions = (context, nametags, message) =>  {
+const checkMentions = (context, nametags, message) => {
   const splitMsg = message.text.split('@')
   const {Nametags} = context.models
   const newText = message.text.replace(/@\S+/g, (mention) => `*${mention}*`)
@@ -136,9 +134,8 @@ const checkMentions = (context, nametags, message) =>  {
  * @param {Object} text         the text of the message to be checked
  *
  **/
-const setDm = (context, nametags, message) =>  {
+const setDm = (context, nametags, message) => {
   const Nametags = context.models.Nametags
-  let promises = []
   // For every mention, check every nametag in the room to see if it matches the name.
   for (let i = 0; i < nametags.length; i++) {
     const {name, id} = nametags[i]

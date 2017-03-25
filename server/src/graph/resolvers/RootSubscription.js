@@ -1,5 +1,5 @@
 const RootSubscription = {
-  messageAdded: messageAdded =>  messageAdded,
+  messageAdded: messageAdded => messageAdded,
   nametagPresence: presence => presence
 }
 

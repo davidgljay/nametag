@@ -100,8 +100,9 @@ const ErrNotAuthorized = new APIError('not authorized', {
 })
 
 const errorLog = (msg) => (err) => {
-  if (!(err instanceof APIError))
-  console.log(err)
+  if (!(err instanceof APIError)) {
+    console.log(err)
+  }
 }
 
 module.exports = {

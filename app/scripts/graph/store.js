@@ -13,7 +13,6 @@ if (window.devToolsExtension) {
   middlewares.push(window.devToolsExtension())
 }
 
-
 export default createStore(
   mainReducer,
   {},

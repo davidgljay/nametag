@@ -101,7 +101,7 @@ class CreateRoom extends Component {
       const {room, nametagEdits} = this.state
       this.props.createRoom({
         ...room,
-        mod: this.props.nametagEdits.new
+        mod: nametagEdits.new
       })
       .then(() => {
         window.location = '/rooms'

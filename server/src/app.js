@@ -17,7 +17,6 @@ const dbInit = require('./graph/models').init
 const passport = require('passport')
 const startSubscriptionServer = require('./graph/subscriptions/SubscriptionServer')
 const PORT = 8181
-const WS_PORT = 5000
 
 process.env.AWS_ACCESS_KEY_ID = config.s3.accessKeyId
 process.env.AWS_SECRET_ACCESS_KEY = config.s3.secretAccessKey
@@ -25,7 +24,7 @@ process.env.AWS_SECRET_ACCESS_KEY = config.s3.secretAccessKey
 const app = express()
 
 /* Create HTTPS server */
-const server = https.createServer({
+https.createServer({
   key: fs.readFileSync(path.join(__dirname, '..', '..', '.keys', 'privkey.pem')),
   cert: fs.readFileSync(path.join(__dirname, '..', '..', '.keys', 'cert.pem')),
   ca: fs.readFileSync(path.join(__dirname, '..', '..', '.keys', 'chain.pem'))
@@ -40,7 +39,6 @@ app.use(passport.session())
 /* Get rethinkdb connection */
 r.connect({host: 'rethinkdb'})
   .then(conn => {
-    
     /* Auth Providers */
     passport.use('local', local(conn))
     passport.use('facebook', facebook(conn))

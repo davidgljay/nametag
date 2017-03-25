@@ -24,7 +24,7 @@ const getRoomNametags = ({conn}, room) =>
   *
   */
 
-const get = ({conn}, id) =>  r.db('nametag').table('nametags').get(id).run(conn)
+const get = ({conn}, id) => r.db('nametag').table('nametags').get(id).run(conn)
 
 /**
  * Returns an array of nametags from an array of ids.
@@ -109,7 +109,7 @@ const updateLatestVisit = ({conn}, nametagId) => r.db('nametag').table('nametags
     if (res.errors > 0) {
       return new errors.APIError(`Error updating nametag presence: ${res.first_error}`)
     }
-    //Wait 30 seconds, then check this nametag again
+    // Wait 30 seconds, then check this nametag again
     setTimeout(() => {
       r.db('nametag').table('nametags').get(nametagId).run(conn)
       .then(nametag => {
@@ -121,9 +121,7 @@ const updateLatestVisit = ({conn}, nametagId) => r.db('nametag').table('nametags
       })
       .catch(err => console.log('latestVisit err', err))
     }, 30000)
-
   })
-
 
 module.exports = (context) => ({
   Nametags: {

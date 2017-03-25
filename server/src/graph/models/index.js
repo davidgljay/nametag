@@ -25,7 +25,7 @@ module.exports = (context) => {
 module.exports.init = (conn) => {
   const models = Object.keys(schema)
 
-  for (let i=0; i < models.length; i++ ) {
+  for (let i = 0; i < models.length; i++) {
     const table = models[i]
     const indexes = schema[models[i]].indexes
     console.log(`Initializing ${table} table and indexes`)
@@ -51,8 +51,7 @@ const createTable = (conn, table) => new Promise((resolve, reject) =>
 
 // Create indexes, catching errors caused by indexes already existing
 const createIndexes = (conn, table, indexes) => {
-  const promises = []
-  for (let i=0; i < indexes.length; i++ ) {
+  for (let i = 0; i < indexes.length; i++) {
     const index = indexes[i]
     if (index instanceof Object) {
       r.db('nametag').table(table).indexCreate(
@@ -60,8 +59,8 @@ const createIndexes = (conn, table, indexes) => {
         index.fields.map(field => {
           if (field instanceof Object) {
             switch (Object.keys(field)[0]) {
-            case 'notEq':
-              return r.row(field.notEq[0]).not().eq(field.notEq[1])
+              case 'notEq':
+                return r.row(field.notEq[0]).not().eq(field.notEq[1])
             }
           }
           return r.row(field)

@@ -41,8 +41,6 @@ const RootMutation = {
   toggleSaved: (obj, {messageId, saved}, {user, models: {Messages}}) => {
     if (!user) {
       return Promise.reject(errors.ErrNotLoggedIn)
-    } else if (user.nametags.indexOf(nametagId) === -1) {
-      return Promise.reject(errors.ErrNotInRoom)
     }
     return Messages.toggleSaved(messageId, saved)
       .then(wrapResponse('toggleSaved'))
@@ -58,7 +56,7 @@ const RootMutation = {
     if (!user) {
       return Promise.reject(errors.ErrNotLoggedIn)
     } else if (
-      //Confirm that the user is in the room
+      // Confirm that the user is in the room
       Object.keys(user.nametags).reduce((bool, room) => user.nametags[room] === nametagId ? false : bool, true)
     ) {
       return Promise.reject(errors.ErrNotInRoom)

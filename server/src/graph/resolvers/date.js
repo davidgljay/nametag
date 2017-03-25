@@ -1,27 +1,27 @@
-const GraphQLScalarType = require('graphql').GraphQLScalarType;
-const Kind = require('graphql/language').Kind;
+const GraphQLScalarType = require('graphql').GraphQLScalarType
+const Kind = require('graphql/language').Kind
 
 module.exports = new GraphQLScalarType({
   name: 'Date',
   description: 'Date represented as an ISO8601 string',
-  serialize(value) {
-    return value.toISOString();
+  serialize (value) {
+    return value.toISOString()
   },
-  parseValue(value) {
-    return new Date(value);
+  parseValue (value) {
+    return new Date(value)
   },
-  parseLiteral(ast) {
+  parseLiteral (ast) {
     switch (ast.kind) {
-    case Kind.STRING:
+      case Kind.STRING:
 
       // This handles an empty string.
-      if (ast.value && ast.value.length === 0) {
-        return null;
-      }
+        if (ast.value && ast.value.length === 0) {
+          return null
+        }
 
-      return new Date(ast.value);
-    default:
-      return null;
+        return new Date(ast.value)
+      default:
+        return null
     }
   }
-});
+})
