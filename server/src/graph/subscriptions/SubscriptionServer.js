@@ -8,9 +8,9 @@ const WS_PORT = 8185
 
 // Create WebSocket listener server
 const websocketServer = createServer({
-  key: fs.readFileSync(path.join(__dirname, '..', '..', '..', '..', '.keys', 'privkey.pem')),
-  cert: fs.readFileSync(path.join(__dirname, '..', '..', '..', '..', '.keys', 'cert.pem')),
-  ca: fs.readFileSync(path.join(__dirname, '..', '..', '..', '..', '.keys', 'chain.pem'))
+  key: fs.readFileSync(path.join('usr', '.keys', 'privkey.pem')),
+  cert: fs.readFileSync(path.join('usr', '.keys', 'cert.pem')),
+  ca: fs.readFileSync(path.join('usr', '.keys', 'chain.pem'))
 }, (request, response) => {
   response.writeHead(404)
   response.end()
