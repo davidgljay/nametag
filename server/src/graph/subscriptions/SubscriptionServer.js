@@ -1,11 +1,17 @@
-const { createServer } = require('http')
+const { createServer } = require('https')
+const fs = require('fs')
+const path = require('path')
 const { SubscriptionServer } = require('subscriptions-transport-ws')
 const subscriptionManager = require('./SubscriptionManager')
 const Context = require('../context')
 const WS_PORT = 8185
 
 // Create WebSocket listener server
-const websocketServer = createServer((request, response) => {
+const websocketServer = createServer({
+  key: fs.readFileSync(path.join(__dirname, '..', '..', '..', '..', '.keys', 'privkey.pem')),
+  cert: fs.readFileSync(path.join(__dirname, '..', '..', '..', '..', '.keys', 'cert.pem')),
+  ca: fs.readFileSync(path.join(__dirname, '..', '..', '..', '..', '.keys', 'chain.pem'))
+}, (request, response) => {
   response.writeHead(404)
   response.end()
 })

@@ -39,7 +39,6 @@
     "pem": "^1.8.1",
     "rethinkdb": "^2.1.1",
     "subscriptions-transport-ws": "^0.5.5-alpha.0",
-    "winston": "^2.1.0",
-    "ws": "^1.1.0"
+    "winston": "^2.1.0"
   }
 }
