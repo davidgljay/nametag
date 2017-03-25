@@ -68,17 +68,33 @@ export const createMessage = graphql(CREATE_MESSAGE, {
             return oldData
           }
 
+          let isNew = true
+          const oldMessages = oldData.room.messages
+          let newMessages = oldMessages.slice()
+          for (var i = 0; i < oldMessages.length; i++) {
+            const msg = oldMessages[i]
+            if (msg.id === message.id) {
+              isNew = false
+              newMessages[i] = message
+            }
+          }
+
           // Check to see if the message has already been posted (for example, if the current user is the author.)
-          const newMessage = oldData.room.messages.reduce((isNew, msg) => msg.id === message.id ? false : isNew, true)
-          if (!newMessage) {
-            return oldData
+          if (!isNew) {
+            return {
+              ...oldData,
+              room: {
+                ...oldData.room,
+                messages: newMessages
+              }
+            }
           }
 
           return {
             ...oldData,
             room: {
               ...oldData.room,
-              messages: oldData.room.messages.concat(message)
+              messages: oldMessages.concat(message)
             }
           }
         }
