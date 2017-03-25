@@ -11,8 +11,8 @@ const notification = require('../../notifications')
  */
 
 const getRoomMessages = ({conn}, room, nametag) => Promise.all([
-  r.db('nametag').table('messages').filter({room, recipient: null}).run(conn),
-  r.db('nametag').table('messages').filter({room, recipient: nametag}).run(conn)
+  r.db('nametag').table('messages').getAll([room, false], {index: 'room_recipient'}).run(conn),
+  r.db('nametag').table('messages').getAll([room, nametag], {index: 'room_recipient'}).run(conn)
 ])
  .then(([messageCursor, dmCursor]) => Promise.all([
    messageCursor.toArray(),
@@ -52,7 +52,7 @@ const toggleSaved = ({conn}, id, saved) =>
 const create = (context, msg) => {
   const {conn, models: {Nametags}} = context
   let text = msg.text
-  const messageObj = Object.assign({}, msg, {createdAt: new Date(), recipient: null})
+  const messageObj = Object.assign({}, msg, {createdAt: new Date(), recipient: false})
   return r.db('nametag').table('messages').insert(messageObj).run(conn)
   .then((res) => {
     if (res.errors > 0) {

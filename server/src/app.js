@@ -9,11 +9,11 @@ const config = require('./secrets.json')
 const path = require('path')
 const bodyParser = require('body-parser')
 const session = require('express-session')
-const listeners = require('./listeners')
 const graph = require('./graph')
 const subscriptions = require('./graph/subscriptions')
 const apollo = require('graphql-server-express')
 const {local, facebook, twitter, google} = require('./auth')
+const dbInit = require('./graph/models').init
 const passport = require('passport')
 const startSubscriptionServer = require('./graph/subscriptions/SubscriptionServer')
 const PORT = 8181
@@ -40,6 +40,7 @@ app.use(passport.session())
 /* Get rethinkdb connection */
 r.connect({host: 'rethinkdb'})
   .then(conn => {
+    
     /* Auth Providers */
     passport.use('local', local(conn))
     passport.use('facebook', facebook(conn))
@@ -60,9 +61,7 @@ r.connect({host: 'rethinkdb'})
     // GraphQL endpoint.
     app.use('/api/v1/graph/ql', apollo.graphqlExpress(graph.createGraphOptions(conn)))
 
-    /* Activate db listeners */
-    // TODO: Replace with calls in mutations
-    // listeners(conn)
+    dbInit(conn)
 
     /* Activate graphql subscriptions */
     subscriptions.activate(conn)

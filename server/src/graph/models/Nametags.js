@@ -10,7 +10,7 @@ const errors = require('../../errors')
  */
 
 const getRoomNametags = ({conn}, room) =>
-  r.db('nametag').table('nametags').filter({room}).run(conn)
+  r.db('nametag').table('nametags').getAll(room, {index: 'room'}).run(conn)
    .then(cursor => cursor.toArray())
    .then(nametags =>
       nametags.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))

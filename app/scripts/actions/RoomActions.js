@@ -1,29 +1,5 @@
 import errorLog from '../utils/errorLog'
-import constants from '../constants'
-
-export function addRoom (room, id) {
-  return {
-    type: constants.ADD_ROOM,
-    room,
-    id
-  }
-}
-
-export function addRoomArray (rooms) {
-  return {
-    type: constants.ADD_ROOM_ARRAY,
-    rooms
-  }
-}
-
-export function setRoomProp (room, property, value) {
-  return {
-    type: constants.SET_ROOM_PROP,
-    room,
-    property,
-    value
-  }
-}
+// import constants from '../constants'
 
 /*
 * Search Images
