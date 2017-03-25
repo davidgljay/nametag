@@ -1,14 +1,16 @@
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
+import {compose} from 'react-apollo'
 import component from '../../components/Room/CreateRoom'
-import {searchImage, setImageFromUrl, setRoomProp} from '../../actions/RoomActions'
-// import {getUser, logout, setting, appendUserArray} from '../../actions/UserActions'
-// import {fetchBadges} from '../../actions/BadgeActions'
+import {searchImage, setImageFromUrl} from '../../actions/RoomActions'
+import {updateNametagEdit, addNametagEditBadge, removeNametagEditBadge} from '../../actions/NametagEditActions'
+import {createRoomQuery} from '../../graph/queries'
+import {createRoom} from '../../graph/mutations'
 
 const mapStateToProps = (state) => {
   return {
     rooms: state.rooms,
-    user: state.user,
-    userNametags: state.userNametags
+    data: state.apollo.data,
+    nametagEdits: state.nametagEdits
   }
 }
 
@@ -16,18 +18,17 @@ const mapDispatchToProps = (dispatch) => {
   const disp = (func) => (...args) => dispatch(func.apply(this, args))
   return {
     searchImage: disp(searchImage),
-    // postRoom: disp(postRoom),
-    // joinRoom: disp(joinRoom),
-    // setting: disp(setting),
     setImageFromUrl: disp(setImageFromUrl),
-    // appendUserArray: disp(appendUserArray),
-    setRoomProp: disp(setRoomProp)
+    updateNametagEdit: disp(updateNametagEdit),
+    addNametagEditBadge: disp(addNametagEditBadge),
+    removeNametagEditBadge: disp(removeNametagEditBadge)
   }
 }
 
-const CreateRoom = connect(
-  mapStateToProps,
-  mapDispatchToProps
+const CreateRoomContainer = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  createRoom,
+  createRoomQuery
 )(component)
 
-export default CreateRoom
+export default CreateRoomContainer

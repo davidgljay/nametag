@@ -87,10 +87,13 @@ class RoomCard extends Component {
             {room.nametagCount === 1 ? '' : 's'}
         </p>
       </div>
-      <Nametag
-        style={styles.mod}
-        mod={room.mod.id}
-        nametag={room.mod} />
+      {
+        !creating || room.mod.name &&
+        <Nametag
+          style={styles.mod}
+          mod={room.mod.id}
+          nametag={room.mod} />
+      }
     </Card>
 
     let backStyle = this.state.flipping
@@ -143,7 +146,23 @@ class RoomCard extends Component {
 }
 
 RoomCard.propTypes = {
-  room: PropTypes.object.isRequired,
+  room: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    icon: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    closedAt: PropTypes.string.isRequired
+  }).isRequired,
+  style: PropTypes.object.isRequired,
+  me: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    badges: PropTypes.arrayOf(PropTypes.object).isRequired
+  }),
+  nametagEdits: PropTypes.object.isRequired,
+  addNametagEditBadge: PropTypes.func.isRequired,
+  removeNametagEditBadge: PropTypes.func.isRequired,
+  updateNametagEdit: PropTypes.func.isRequired,
+  createNametag: PropTypes.func,
   creating: PropTypes.bool
 }
 

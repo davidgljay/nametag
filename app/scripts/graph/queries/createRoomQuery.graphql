@@ -1,0 +1,14 @@
+query createRoomQuery {
+  me {
+    badges {
+      id
+      name
+      icon
+      description
+      notes {
+        date
+        text
+      }
+    }
+  }
+}

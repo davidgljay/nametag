@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 import TitleForm from './TitleForm'
 import EditNametag from '../../Nametag/EditNametag'
 import UserBadges from '../../Badge/UserBadges'
@@ -6,28 +6,45 @@ import ChooseNorms from './ChooseNorms'
 import ImageSearch from './ImageSearch'
 import {grey400} from 'material-ui/styles/colors'
 
-const getForm = (props) => {
-  switch (props.stepIndex) {
+const getForm = ({
+    error,
+    stepIndex,
+    updateRoom,
+    nametagEdits,
+    updateNametagEdit,
+    setClosed,
+    closedIn,
+    room,
+    searchImage,
+    setImageFromUrl,
+    addNametagEditBadge,
+    removeNametagEditBadge,
+    me,
+    norms,
+    addNorm,
+    removeNorm
+  }) => {
+  switch (stepIndex) {
     case 0:
       return <div>
         <h4>What would you like to talk about?</h4>
         <TitleForm
-          error={props.error}
-          updateRoom={props.updateRoom}
-          setClosed={props.setClosed}
-          closedIn={props.closedIn}
-          title={props.room.title}
-          desc={props.room.description} />
+          error={error}
+          updateRoom={updateRoom}
+          setClosed={setClosed}
+          closedIn={closedIn}
+          title={room.title}
+          desc={room.description} />
       </div>
     case 1:
       return <div>
         <h4>Please select an image for this conversation.</h4>
         <ImageSearch
-          error={props.error}
+          error={error}
           style={styles.imageSearch}
-          setImageFromUrl={props.setImageFromUrl}
-          searchImage={props.searchImage}
-          updateRoom={props.updateRoom} />
+          setImageFromUrl={setImageFromUrl}
+          searchImage={searchImage}
+          updateRoom={updateRoom} />
       </div>
     case 2:
       return <div>
@@ -35,18 +52,17 @@ const getForm = (props) => {
         <div style={styles.editNametagContainer}>
           <div>
             <EditNametag
-              error={props.error}
-              userNametag={props.hostNametag}
-              addNametagEditBadge={props.addNametagBadge}
-              appendUserArray={props.appendUserArray}
-              removeNametagEditBadge={props.removeNametagBadge}
-              updateNametagEdit={props.updateNametag}
-              userDefaults={props.user.data}
-              room='' />
+              error={error}
+              nametagEdit={nametagEdits.new}
+              addNametagEditBadge={addNametagEditBadge}
+              removeNametagEditBadge={removeNametagEditBadge}
+              updateNametagEdit={updateNametagEdit}
+              userDefaults={me}
+              room='new' />
             <div style={styles.userBadges}>
               <UserBadges
-                badges={props.user.data.badges}
-                selectedBadges={props.hostNametag.badges} />
+                badges={me.badges}
+                selectedBadges={nametagEdits.new && nametagEdits.new.badges} />
             </div>
           </div>
         </div>
@@ -55,11 +71,11 @@ const getForm = (props) => {
       return <div>
         <h4>Please set norms for this discussion.</h4>
         <ChooseNorms
-          error={props.error}
+          error={error}
           style={styles.chooseNorms}
-          addNorm={props.addNorm}
-          normsObj={props.norms}
-          removeNorm={props.removeNorm} />
+          addNorm={addNorm}
+          normsObj={norms}
+          removeNorm={removeNorm} />
       </div>
     case 4:
       return <div>
@@ -76,6 +92,36 @@ const CreateRoomForms = (props) => {
       getForm(props)
     }
   </div>
+}
+
+CreateRoomForms.propTypes = {
+  error: PropTypes.string.isRequired,
+  stepIndex: PropTypes.number.isRequired,
+  updateRoom: PropTypes.func.isRequired,
+  updateNametagEdit: PropTypes.func.isRequired,
+  setClosed: PropTypes.func.isRequired,
+  closedIn: PropTypes.shape({
+    unit: PropTypes.string.isRequired,
+    quantity: PropTypes.number.isRequired
+  }),
+  room: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    closedAt: PropTypes.string.isRequired
+  }).isRequired,
+  searchImage: PropTypes.func.isRequired,
+  setImageFromUrl: PropTypes.func.isRequired,
+  nametagEdits: PropTypes.object.isRequired,
+  addNametagEditBadge: PropTypes.func.isRequired,
+  removeNametagEditBadge: PropTypes.func.isRequired,
+  me: PropTypes.shape({
+    badges: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string.isRequired
+    })).isRequired
+  }).isRequired,
+  norms: PropTypes.object.isRequired,
+  addNorm: PropTypes.func.isRequired,
+  removeNorm: PropTypes.func.isRequired
 }
 
 export default CreateRoomForms

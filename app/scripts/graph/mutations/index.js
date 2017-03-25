@@ -1,5 +1,6 @@
 import {graphql} from 'react-apollo'
 import CREATE_NAMETAG from './createNametag.graphql'
+import CREATE_ROOM from './createRoom.graphql'
 import CREATE_MESSAGE from './createMessage.graphql'
 import TOGGLE_SAVED from './toggleSaved.graphql'
 import UPDATE_LATEST_VISIT from './updateLatestVisit.graphql'
@@ -10,6 +11,16 @@ export const createNametag = graphql(CREATE_NAMETAG, {
     createNametag: (nametag) => mutate({
       variables: {
         nametag
+      }
+    })
+  })
+})
+
+export const createRoom = graphql(CREATE_ROOM, {
+  props: ({ownProps, mutate}) => ({
+    createRoom: (room) => mutate({
+      variables: {
+        room
       }
     })
   })

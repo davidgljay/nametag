@@ -26,19 +26,6 @@ export function setRoomProp (room, property, value) {
 }
 
 /*
-* Optimistically add a messageId to a room.
-* The action of this message will be overwritten once the message has been
-* posted to the server
-*/
-export function addRoomMessage (room, messageId) {
-  return {
-    type: constants.ADD_ROOM_MESSAGE,
-    room,
-    messageId
-  }
-}
-
-/*
 * Search Images
 * @params
 *   searchString

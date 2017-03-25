@@ -50,14 +50,14 @@ class EditNametag extends Component {
   }
 
   componentDidMount () {
-    const {userNametag = {}, updateNametagEdit, user = {}, room} = this.props
+    const {nametagEdit = {}, updateNametagEdit, user = {}, room} = this.props
     updateNametagEdit(room, 'room', room)
-    if (!userNametag.name &&
+    if (!nametagEdit.name &&
       user.displayNames &&
       user.displayNames.length >= 1) {
       updateNametagEdit(room, 'name', user.displayNames[0])
     }
-    if (!userNametag.icon &&
+    if (!nametagEdit.icon &&
       user.icons.length > 0) {
       updateNametagEdit(room, 'icon', user.icons[0])
     }
@@ -69,7 +69,7 @@ class EditNametag extends Component {
       user = {},
       updateNametagEdit,
       room,
-      userNametag
+      nametagEdit
     } = this.props
 
     const {
@@ -78,7 +78,7 @@ class EditNametag extends Component {
       floatingLabelStyle
     } = styles
 
-    let nametag = userNametag || {
+    let nametag = nametagEdit || {
       name: '',
       bio: '',
       icon: ''
@@ -135,7 +135,12 @@ class EditNametag extends Component {
 }
 
 EditNametag.propTypes = {
-  userNametag: PropTypes.object,
+  nametagEdit: PropTypes.shape({
+    name: PropTypes.string,
+    bio: PropTypes.string,
+    icon: PropTypes.string,
+    badges: PropTypes.arrayOf(PropTypes.string)
+  }),
   user: PropTypes.shape({
     icons: PropTypes.arrayOf(PropTypes.string).isRequired,
     displayNames: PropTypes.arrayOf(PropTypes.string).isRequired
