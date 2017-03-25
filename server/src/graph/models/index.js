@@ -49,7 +49,6 @@ const createTable = (conn, table) => new Promise((resolve, reject) =>
     })
   )
 
-
 // Create indexes, catching errors caused by indexes already existing
 const createIndexes = (conn, table, indexes) => {
   const promises = []
@@ -60,7 +59,7 @@ const createIndexes = (conn, table, indexes) => {
         index.name,
         index.fields.map(field => {
           if (field instanceof Object) {
-            switch (Object.keys(field)) {
+            switch (Object.keys(field)[0]) {
             case 'notEq':
               return r.row(field.notEq[0]).not().eq(field.notEq[1])
             }

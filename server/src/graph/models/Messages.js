@@ -13,15 +13,16 @@ const notification = require('../../notifications')
 const getRoomMessages = ({user, conn}, room, nametag) => Promise.all([
   r.db('nametag').table('messages').getAll([room, false], {index: 'room_recipient'}).run(conn),
   r.db('nametag').table('messages').getAll([room, nametag], {index: 'room_recipient'}).run(conn),
-  r.db('nametag').table('messages').getAll([room, user.nametags[room], false], {index: 'room_author_recipient'}).run(conn)
+  r.db('nametag').table('messages').getAll([room, user.nametags[room], true], {index: 'room_author_isDM'}).run(conn)
 ])
  .then(([messageCursor, dmToCursor, dmFromCursor]) => Promise.all([
    messageCursor.toArray(),
    dmToCursor.toArray(),
    dmFromCursor.toArray()
  ]))
- .then(([messages, dmsTo, dmsFrom]) =>
-    messages.concat(dmsTo).concat(dmsFrom).sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+ .then(([messages, dmsTo, dmsFrom]) => messages
+    .concat(dmsTo).concat(dmsFrom)
+    .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
   )
 
  /**
