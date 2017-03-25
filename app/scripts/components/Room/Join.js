@@ -36,7 +36,7 @@ class Join extends Component {
       room,
       me
     } = this.props
-    if (user) {
+    if (me) {
       join =
         <div style={styles.join}>
           <h4>Edit Your Nametag For This Conversation</h4>
@@ -53,7 +53,7 @@ class Join extends Component {
             {
               <UserBadges
                 selectedBadges={nametag && nametag.badges}
-                badges={user.badges} />
+                badges={me.badges} />
             }
           </div>
           <br />
