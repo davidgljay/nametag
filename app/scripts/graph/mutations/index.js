@@ -67,6 +67,13 @@ export const createMessage = graphql(CREATE_MESSAGE, {
             errorLog('Error saving message')(errors)
             return oldData
           }
+
+          // Check to see if the message has already been posted (for example, if the current user is the author.)
+          const newMessage = oldData.room.messages.reduce((isNew, msg) => msg.id === message.id ? false : isNew, true)
+          if (!newMessage) {
+            return oldData
+          }
+
           return {
             ...oldData,
             room: {
