@@ -53,6 +53,11 @@ const ErrEmailTaken = new APIError('Email address already in use', {
   status: 400
 })
 
+const ErrBadAuth = new APIError('E-mail or password is incorrect', {
+  translation_key: 'BAD_AUTH',
+  status: 400
+})
+
 const ErrNotInRoom = new APIError('User has not joined this room', {
   translation_key: 'NOT_IN_ROOM',
   status: 400
@@ -95,12 +100,14 @@ const ErrNotAuthorized = new APIError('not authorized', {
 })
 
 const errorLog = (err) => {
+  if (!(err instanceof APIError))
   console.log(err)
 }
 
 module.exports = {
   ExtendableError,
   APIError,
+  ErrBadAuth,
   ErrPasswordTooShort,
   ErrMissingEmail,
   ErrMissingPassword,

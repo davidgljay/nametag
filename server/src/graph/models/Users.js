@@ -1,5 +1,6 @@
 const r = require('rethinkdb')
 const {fromUrl} = require('../../routes/images/imageUpload')
+const {ErrBadAuth} = require('../../errors')
 
 /**
  * Returns a particular user.
@@ -21,7 +22,7 @@ const get = ({conn}, id) => r.db('nametag').table('users').get(id).run(conn)
 
 const getByEmail = ({conn}, email) =>
   r.db('nametag').table('users').getAll(email, {index: 'email'}).run(conn)
-    .then(cursor => cursor.getArray())
+    .then(cursor => cursor ? cursor.getArray()[0] : ErrBadAuth)
 
 /**
  * Append an arbitrary value to an array in the user object.

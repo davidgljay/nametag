@@ -20,7 +20,7 @@ const get = ({conn}, id) => r.db('nametag').table('badges').get(id).run(conn)
  */
 
 const getAll = ({conn}, ids) => r.db('nametag').table('badges').getAll(...ids).run(conn)
-  .then(cursor => cursor.getArray())
+  .then(cursor => cursor.toArray())
 
 /**
  * Creates a badge
