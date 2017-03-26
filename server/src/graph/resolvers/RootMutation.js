@@ -70,8 +70,13 @@ const RootMutation = {
     : Badges.create(badge)
       .then(wrapResponse('badge'))
       .catch(catchErrors)
+  },
+  updateToken: (obj, {token}, {user, models: {Users}}) => {
+    return !user ? Promise.reject(errors.ErrNotLoggedIn)
+    : Users.addToken(token)
+    .then(wrapResponse('badge'))
+    .catch(catchErrors)
   }
-
 }
 
 module.exports = RootMutation

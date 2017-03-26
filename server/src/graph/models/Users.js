@@ -23,8 +23,7 @@ const get = ({conn}, id) => usersTable.get(id).run(conn)
  */
 
 const getByEmail = ({conn}, email) =>
-  usersTable.getAll(email, {index: 'email'}).run(conn)
-    .then(cursor => cursor ? cursor.getArray()[0] : ErrBadAuth)
+  usersTable.getAll(email, {index: 'email'}).nth(0).run(conn)
 
 /**
  * Append an arbitrary value to an array in the user object.
@@ -46,17 +45,41 @@ const appendUserArray = ({user, conn}, property, value) => user
   : Promise.reject('User not logged in')
 
 /**
- * Adds a nametag to the user.
+ * Adds a notification token to the user.
  *
  * @param {Object} context     graph context
- * @param {String} property   the property with the array to be updated
+ * @param {String} token   the property with the array to be updated
  * @param {String} value   the value to be appended
  *
  */
 
-const addNametag = ({user, conn}, nametagId, roomId) => user
-  ? usersTable.get(user.id).update({nametags: {[roomId]: nametagId}}).run(conn)
-  : Promise.reject('User not logged in')
+const addToken = ({user, conn}, token) =>
+  usersTable.get(user.id).update({token}).run(conn)
+
+/**
+ * Gets a notification token based on a nametag.
+ * NOTE: This is temporary, and breaks a core promise to our users: we shouldn't be able to
+ * track people from room to room! A nice, elegant solution has been planned for this later.
+ *
+ * @param {Object} context     graph context
+ * @param {String} nametagId   the nametagId which need to be sent a message
+ *
+ */
+
+const getToken = ({conn}, nametagId) =>
+  usersTable.getAll(nametagId, {index: 'nametags'})('token').nth(0).run(conn)
+
+/**
+ * Adds a nametag to the user.
+ *
+ * @param {Object} context     graph context
+ * @param {String} nametagId   the id of the nametag to be added
+ * @param {String} roomId   the id of the room for that nametag
+ *
+ */
+
+const addNametag = ({user, conn}, nametagId, roomId) =>
+  usersTable.get(user.id).update({nametags: {[roomId]: nametagId}}).run(conn)
 
 /**
  * Finds or creates a user based on an oauth provider.
@@ -70,9 +93,8 @@ const addNametag = ({user, conn}, nametagId, roomId) => user
 const findOrCreateFromAuth = ({conn}, profile, provider) => {
   let userObj
   const authProfile = userFromAuth(provider, profile)
-  return usersTable.filter({[provider]: authProfile.id}).run(conn)
-    .then(cursor => cursor.toArray())
-    .then(([user]) => {
+  return usersTable.filter({[provider]: authProfile.id}).nth(0).run(conn)
+    .then(user => {
       if (user) {
         return user
       }
@@ -128,6 +150,8 @@ module.exports = (context) => ({
     getByEmail: (email) => getByEmail(context, email),
     findOrCreateFromAuth: (profile, provider) => findOrCreateFromAuth(context, profile, provider),
     appendUserArray: (property, value) => appendUserArray(context, property, value),
-    addNametag: (nametagId, roomId) => addNametag(context, nametagId, roomId)
+    addNametag: (nametagId, roomId) => addNametag(context, nametagId, roomId),
+    addToken: (token) => addToken(context, token),
+    getToken: (nametagId) => getToken(context, nametagId)
   }
 })

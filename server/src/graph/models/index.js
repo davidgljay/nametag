@@ -56,15 +56,8 @@ const createIndexes = (conn, table, indexes) => {
     if (index instanceof Object) {
       r.db('nametag').table(table).indexCreate(
         index.name,
-        index.fields.map(field => {
-          if (field instanceof Object) {
-            switch (Object.keys(field)[0]) {
-              case 'notEq':
-                return r.row(field.notEq[0]).not().eq(field.notEq[1])
-            }
-          }
-          return r.row(field)
-        })
+        parseIndexes(index.fields),
+        {multi: !!index.multi}
       ).run(conn).catch(handleError)
     } else {
       r.db('nametag').table(table).indexCreate(index).run(conn).catch(handleError)
@@ -72,8 +65,26 @@ const createIndexes = (conn, table, indexes) => {
   }
 }
 
+const parseIndexes = (fields) => {
+  if (fields instanceof Array) {
+    return fields.map(field => {
+      if (field instanceof Object) {
+        return parseIndexes(field)
+      }
+      return r.row(field)
+    })
+  } else {
+    switch (Object.keys(fields)[0]) {
+      case 'notEq':
+        return r.row(fields.notEq[0]).not().eq(fields.notEq[1])
+      case 'values':
+        return r.row(fields.values).values()
+    }
+  }
+}
+
 const handleError = err => {
-  if (err.msg.match('already exists')) {
+  if (err.msg && err.msg.match('already exists')) {
     return
   }
   errorLog('Creating tables and indexes')(err)

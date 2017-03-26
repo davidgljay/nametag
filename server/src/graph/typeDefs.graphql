@@ -332,6 +332,9 @@ type RootMutation {
   # Updates the latest visit of a nametag
   updateLatestVisit(nametagId: ID!): BasicResponse
 
+  # Updates the users's notification token
+  updateToken(token: String!): BasicResponse
+
 }
 
 ################################################################################

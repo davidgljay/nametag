@@ -16,6 +16,12 @@ module.exports = {
     indexes: ['closedAt']
   },
   users: {
-    indexes: ['email', 'facebook', 'twitter', 'google']
+    indexes: [
+      'email',
+      'facebook',
+      'twitter',
+      'google',
+      {name: 'nametags', fields: {values: 'nametags'}, multi: true}
+    ]
   }
 }
