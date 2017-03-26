@@ -10,7 +10,7 @@ export default function getNetworkInterface (headers = {}) {
         headers
       }
     }),
-    new SubscriptionClient(`wss://${window.location.hostname}:8185`, {
+    new SubscriptionClient(`wss://${window.location.hostname}`, {
       reconnect: true
     })
   )

@@ -24,7 +24,7 @@ process.env.AWS_SECRET_ACCESS_KEY = config.s3.secretAccessKey
 const app = express()
 
 /* Create HTTPS server */
-https.createServer({
+const server = https.createServer({
   key: fs.readFileSync(path.join('/', 'usr', '.keys', 'privkey.pem')),
   cert: fs.readFileSync(path.join('/', 'usr', '.keys', 'cert.pem')),
   ca: fs.readFileSync(path.join('/', 'usr', '.keys', 'chain.pem'))
@@ -63,7 +63,7 @@ r.connect({host: 'rethinkdb'})
 
     /* Activate graphql subscriptions */
     subscriptions.activate(conn)
-    startSubscriptionServer(conn)
+    startSubscriptionServer(conn, server)
   })
   .catch(err => console.log(`Error connecting to rethinkdb: ${err}`))
 
