@@ -162,7 +162,6 @@ type Badge {
 
 }
 
-
 # A note attached to a badge
 type Note {
 
@@ -322,7 +321,7 @@ input CreateBadgeTemplateInput {
   name: String!
 
   # The template's icon
-  image: String!
+  icon: String!
 
   # The template's description
   description: String!
