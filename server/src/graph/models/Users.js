@@ -2,6 +2,8 @@ const r = require('rethinkdb')
 const {fromUrl} = require('../../routes/images/imageUpload')
 const {ErrBadAuth} = require('../../errors')
 
+const usersTable = r.db('nametag').table('users')
+
 /**
  * Returns a particular user.
  *
@@ -10,7 +12,7 @@ const {ErrBadAuth} = require('../../errors')
  *
  */
 
-const get = ({conn}, id) => r.db('nametag').table('users').get(id).run(conn)
+const get = ({conn}, id) => usersTable.get(id).run(conn)
 
 /**
  * Returns a user based on an e-mail address.
@@ -21,7 +23,7 @@ const get = ({conn}, id) => r.db('nametag').table('users').get(id).run(conn)
  */
 
 const getByEmail = ({conn}, email) =>
-  r.db('nametag').table('users').getAll(email, {index: 'email'}).run(conn)
+  usersTable.getAll(email, {index: 'email'}).run(conn)
     .then(cursor => cursor ? cursor.getArray()[0] : ErrBadAuth)
 
 /**
@@ -34,7 +36,7 @@ const getByEmail = ({conn}, email) =>
  */
 
 const appendUserArray = ({user, conn}, property, value) => user
-  ? r.db('nametag').table('users').get(user.id).update((user) =>
+  ? usersTable.get(user.id).update((user) =>
       r.branch(
         user.hasFields(property),
         {[property]: user(property).append(value)},
@@ -53,7 +55,7 @@ const appendUserArray = ({user, conn}, property, value) => user
  */
 
 const addNametag = ({user, conn}, nametagId, roomId) => user
-  ? r.db('nametag').table('users').get(user.id).update({nametags: {[roomId]: nametagId}}).run(conn)
+  ? usersTable.get(user.id).update({nametags: {[roomId]: nametagId}}).run(conn)
   : Promise.reject('User not logged in')
 
 /**
@@ -68,7 +70,7 @@ const addNametag = ({user, conn}, nametagId, roomId) => user
 const findOrCreateFromAuth = ({conn}, profile, provider) => {
   let userObj
   const authProfile = userFromAuth(provider, profile)
-  return r.db('nametag').table('users').filter({[provider]: authProfile.id}).run(conn)
+  return usersTable.filter({[provider]: authProfile.id}).run(conn)
     .then(cursor => cursor.toArray())
     .then(([user]) => {
       if (user) {
@@ -82,7 +84,7 @@ const findOrCreateFromAuth = ({conn}, profile, provider) => {
             [provider]: authProfile.id,
             createdAt: Date.now()
           }
-          return r.db('nametag').table('users').insert(userObj).run(conn)
+          return usersTable.insert(userObj).run(conn)
         })
         .then(rdbRes => {
           if (rdbRes.errors > 0) {

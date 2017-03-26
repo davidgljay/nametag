@@ -1,6 +1,8 @@
 const r = require('rethinkdb')
 const errors = require('../../errors')
 
+const roomsTable = r.db('nametag').table('rooms')
+
 /**
  * Returns a particular room.
  *
@@ -9,7 +11,7 @@ const errors = require('../../errors')
  *
  */
 
-const get = ({conn}, id) => r.db('nametag').table('rooms').get(id).run(conn)
+const get = ({conn}, id) => roomsTable.get(id).run(conn)
 
  /**
   * Returns all active rooms. This will be replaced in the future with a more nuanced room display search.
@@ -18,7 +20,7 @@ const get = ({conn}, id) => r.db('nametag').table('rooms').get(id).run(conn)
   *
   */
 
-const getActive = ({conn}) => r.db('nametag').table('rooms')
+const getActive = ({conn}) => roomsTable
   .between(new Date(), new Date(Date.now() * 100), {index: 'closedAt'}).run(conn)
   .then(rooms => rooms.toArray())
 
@@ -32,7 +34,7 @@ const getActive = ({conn}) => r.db('nametag').table('rooms')
 
 const create = ({conn, models: {Nametags, Users}}, rm) => {
   const room = Object.assign({}, rm, {createdAt: new Date()})
-  return r.db('nametag').table('rooms').insert(room).run(conn)
+  return roomsTable.insert(room).run(conn)
   .then((res) => {
     if (res.errors > 0) {
       return new errors.APIError('Error creating room')
@@ -48,7 +50,7 @@ const create = ({conn, models: {Nametags, Users}}, rm) => {
   .then(([nametag, id, room]) => {
     const modId = nametag.id
     return Promise.all([
-      r.db('nametag').table('rooms').get(id).update({mod: modId}).run(conn),
+      roomsTable.get(id).update({mod: modId}).run(conn),
       id,
       modId,
       room

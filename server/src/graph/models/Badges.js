@@ -1,6 +1,8 @@
 const r = require('rethinkdb')
 const errors = require('../../errors')
 
+const badgesTable = r.db('nametag').table('badges')
+
 /**
  * Returns a badge from an id.
  *
@@ -9,7 +11,7 @@ const errors = require('../../errors')
  *
  */
 
-const get = ({conn}, id) => r.db('nametag').table('badges').get(id).run(conn)
+const get = ({conn}, id) => badgesTable.get(id).run(conn)
 
 /**
  * Returns an array of badges from an array of ids.
@@ -19,7 +21,7 @@ const get = ({conn}, id) => r.db('nametag').table('badges').get(id).run(conn)
  *
  */
 
-const getAll = ({conn}, ids) => r.db('nametag').table('badges').getAll(...ids).run(conn)
+const getAll = ({conn}, ids) => badgesTable.getAll(...ids).run(conn)
   .then(cursor => cursor.toArray())
 
 /**
@@ -32,7 +34,7 @@ const getAll = ({conn}, ids) => r.db('nametag').table('badges').getAll(...ids).r
 
 const create = ({conn, models: {Users}}, b) => {
   const badge = Object.assign({}, b, {createdAt: new Date()})
-  r.db('nametag').table('badges').insert(badge).run(conn)
+  badgesTable.insert(badge).run(conn)
   // Append badge ID to user object
   .then(res => {
     if (res.errors > 0) {

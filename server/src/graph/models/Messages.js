@@ -2,6 +2,8 @@ const r = require('rethinkdb')
 const errors = require('../../errors')
 // const notification = require('../../notifications')
 
+const messagesTable = r.db('nametag').table('messages')
+
 /**
  * Returns the messages from a particular room to display to a user. Also displays
  * direct messages to that user.
@@ -11,9 +13,9 @@ const errors = require('../../errors')
  */
 
 const getRoomMessages = ({user, conn}, room, nametag) => Promise.all([
-  r.db('nametag').table('messages').getAll([room, false], {index: 'room_recipient'}).run(conn),
-  r.db('nametag').table('messages').getAll([room, nametag], {index: 'room_recipient'}).run(conn),
-  r.db('nametag').table('messages').getAll([room, user.nametags[room], true], {index: 'room_author_isDM'}).run(conn)
+  messagesTable.getAll([room, false], {index: 'room_recipient'}).run(conn),
+  messagesTable.getAll([room, nametag], {index: 'room_recipient'}).run(conn),
+  messagesTable.getAll([room, user.nametags[room], true], {index: 'room_author_isDM'}).run(conn)
 ])
  .then(([messageCursor, dmToCursor, dmFromCursor]) => Promise.all([
    messageCursor.toArray(),
@@ -32,7 +34,7 @@ const getRoomMessages = ({user, conn}, room, nametag) => Promise.all([
   */
 
 const getNametagMessages = ({conn}, nametag) =>
-  r.db('nametag').table('messages').filter({author: nametag}).run(conn)
+  messagesTable.filter({author: nametag}).run(conn)
 
 /**
  * Toggles the save boolean on a message.
@@ -41,7 +43,7 @@ const getNametagMessages = ({conn}, nametag) =>
  */
 
 const toggleSaved = ({conn}, id, saved) =>
- r.db('nametag').table('messages').get(id).update({saved}).run(conn)
+ messagesTable.get(id).update({saved}).run(conn)
 
 /**
  * Creates a message
@@ -54,7 +56,7 @@ const toggleSaved = ({conn}, id, saved) =>
 const create = (context, msg) => {
   const {conn} = context
   const messageObj = Object.assign({}, msg, {createdAt: new Date(), recipient: false})
-  return r.db('nametag').table('messages').insert(messageObj).run(conn)
+  return messagesTable.insert(messageObj).run(conn)
   .then((res) => {
     if (res.errors > 0) {
       return new errors.APIError('Error creating message')
@@ -108,7 +110,7 @@ const checkMentions = (context, nametags, message) => {
   const {Nametags} = context.models
   const newText = message.text.replace(/@\S+/g, (mention) => `*${mention}*`)
   let promises = [
-    r.db('nametag').table('messages').get(message.id).update({text: newText}).run(context.conn)
+    messagesTable.get(message.id).update({text: newText}).run(context.conn)
   ]
   // For every mention, check every nametag in the room to see if it matches the name.
   for (let i = 0; i < splitMsg.length; i++) {
@@ -144,7 +146,7 @@ const setDm = (context, nametags, message) => {
       return Promise.all([
         Nametags.addMention(id)
         .then(() => mentionNotif(context, id, Object.assign({}, message, {text: newText}), 'DM')),
-        r.db('nametag').table('messages').get(message.id).update({recipient: id, text: newText}).run(context.conn)
+        messagesTable.get(message.id).update({recipient: id, text: newText}).run(context.conn)
       ])
       .then(() => ({recipient: id, text: newText}))
     }
