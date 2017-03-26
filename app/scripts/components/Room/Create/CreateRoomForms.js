@@ -95,7 +95,7 @@ const CreateRoomForms = (props) => {
 }
 
 CreateRoomForms.propTypes = {
-  error: PropTypes.string.isRequired,
+  error: PropTypes.object,
   stepIndex: PropTypes.number.isRequired,
   updateRoom: PropTypes.func.isRequired,
   updateNametagEdit: PropTypes.func.isRequired,

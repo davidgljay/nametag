@@ -25,7 +25,7 @@ class CreateRoom extends Component {
       },
       image: '',
       norms: {},
-      error: '',
+      error: null,
       newRoom: false,
       finished: false,
       stepIndex: 0,
@@ -36,7 +36,7 @@ class CreateRoom extends Component {
       const validation = this.validate(this.state.stepIndex)
       if (validation.valid) {
         this.setState((prevState) => {
-          prevState.error = ''
+          prevState.error = null
           prevState.stepIndex ++
           prevState.finished = prevState.stepIndex > 3
           return prevState
@@ -98,7 +98,8 @@ class CreateRoom extends Component {
     }
 
     this.createRoom = () => {
-      const {room, nametagEdits} = this.state
+      const {room} = this.state
+      const {nametagEdits} = this.props
       this.props.createRoom({
         ...room,
         mod: nametagEdits.new

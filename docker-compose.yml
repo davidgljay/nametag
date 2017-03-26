@@ -6,11 +6,9 @@ horizon:
     - ./.keys:/usr/.keys
     - ./.hz:/usr/app/.hz
     - ./server/src:/usr/server/src
-    - ./server/schema.toml:/usr/server/schema.toml
     - ./server/starthz.sh:/usr/server/starthz.sh
     - ./server/backup.sh:/usr/server/backup.sh
     - ./server/backup:/usr/server/backup
-    - ./horizon:/usr/server/horizon
   links:
     - rethinkdb
   ports:
