@@ -7,7 +7,6 @@ import {updateNametagEdit, addNametagEditBadge, removeNametagEditBadge} from '..
 
 const mapStateToProps = (state) => {
   return {
-    data: state.apollo.data,
     nametagEdits: state.nametagEdits
   }
 }

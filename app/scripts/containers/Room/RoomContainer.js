@@ -5,15 +5,6 @@ import {roomQuery} from '../../graph/queries'
 import {createMessage, toggleSaved, updateLatestVisit, updateToken} from '../../graph/mutations'
 import {requestNotifPermissions} from '../../actions/NotificationActions'
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    rooms: state.rooms,
-    user: state.user,
-    userNametags: state.userNametags,
-    messages: state.messages,
-    nametags: state.nametags
-  }
-}
 const mapDispatchToProps = (dispatch) => {
   const disp = (func) => (...args) => dispatch(func.apply(this, args))
   return {
@@ -22,7 +13,7 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const Room = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(() => {}, mapDispatchToProps),
   createMessage,
   toggleSaved,
   updateLatestVisit,
