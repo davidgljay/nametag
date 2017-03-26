@@ -64,8 +64,8 @@ class Room extends Component {
   }
 
   componentDidMount () {
-    const {requestNotifPermissions, checkNametagPresenceSubscription, params} = this.props
-    requestNotifPermissions()
+    const {requestNotifPermissions, checkNametagPresenceSubscription, updateToken, params} = this.props
+    requestNotifPermissions(updateToken)
     checkNametagPresenceSubscription(params.roomId)
   }
 
@@ -219,7 +219,8 @@ Room.propTypes = {
     roomId: PropTypes.string.isRequired
   }),
   createMessage: PropTypes.func.isRequired,
-  toggleSaved: PropTypes.func.isRequired
+  toggleSaved: PropTypes.func.isRequired,
+  updateToken: PropTypes.func.isRequired
 }
 
 export default radium(Room)

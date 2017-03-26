@@ -2,7 +2,7 @@ import {connect} from 'react-redux'
 import component from '../../components/Room/Room'
 import {compose} from 'react-apollo'
 import {roomQuery} from '../../graph/queries'
-import {createMessage, toggleSaved, updateLatestVisit} from '../../graph/mutations'
+import {createMessage, toggleSaved, updateLatestVisit, updateToken} from '../../graph/mutations'
 import {requestNotifPermissions} from '../../actions/NotificationActions'
 
 const mapStateToProps = (state, ownProps) => {
@@ -26,6 +26,7 @@ const Room = compose(
   createMessage,
   toggleSaved,
   updateLatestVisit,
+  updateToken,
   roomQuery
 )(component)
 

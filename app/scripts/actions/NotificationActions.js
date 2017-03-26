@@ -25,18 +25,18 @@ export const firebaseInit = () => (dispatch) => {
 }
 
 // Checks for a refreshed Firebase Cloud messaging token
-export const fcmTokenRefresh = () => (dispatch) =>
-  firebase.messaging().onTokenRefresh(() => dispatch(getFcmToken()))
+export const fcmTokenRefresh = (updateToken) => (dispatch) =>
+  firebase.messaging().onTokenRefresh(() => dispatch(getFcmToken(updateToken)))
 
 // Sends a new FCM token to the server.
-export const getFcmToken = () => (dispatch) =>
+export const getFcmToken = (updateToken) => (dispatch) =>
  firebase.messaging().getToken()
- // .then(token => dispatch(addUserData('fcmToken', token)))
+ .then(updateToken)
  .catch(errorLog('Receiving FCM token'))
 
 // Requests permission to send notifications to the user.
-export const requestNotifPermissions = () => (dispatch) =>
+export const requestNotifPermissions = (updateToken) => (dispatch) =>
   firebase.messaging().requestPermission()
-    .then(() => dispatch(getFcmToken()))
-    .then(() => dispatch(fcmTokenRefresh()))
+    .then(() => dispatch(getFcmToken(updateToken)))
+    .then(() => dispatch(fcmTokenRefresh(updateToken)))
     .catch(() => console.log('Notification permission refused'))

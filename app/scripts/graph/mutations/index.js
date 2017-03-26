@@ -4,6 +4,7 @@ import CREATE_ROOM from './createRoom.graphql'
 import CREATE_MESSAGE from './createMessage.graphql'
 import TOGGLE_SAVED from './toggleSaved.graphql'
 import UPDATE_LATEST_VISIT from './updateLatestVisit.graphql'
+import UPDATE_TOKEN from './updateToken.graphql'
 import errorLog from '../../utils/errorLog'
 
 export const createNametag = graphql(CREATE_NAMETAG, {
@@ -31,6 +32,16 @@ export const updateLatestVisit = graphql(UPDATE_LATEST_VISIT, {
     updateLatestVisit: (nametagId) => mutate({
       variables: {
         nametagId
+      }
+    })
+  })
+})
+
+export const updateToken = graphql(UPDATE_TOKEN, {
+  props: ({ownProps, mutate}) => ({
+    updateToken: (token) => mutate({
+      variables: {
+        token
       }
     })
   })
