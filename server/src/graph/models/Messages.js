@@ -1,6 +1,6 @@
 const r = require('rethinkdb')
 const errors = require('../../errors')
-// const notification = require('../../notifications')
+const notification = require('../../notifications')
 
 const messagesTable = r.db('nametag').table('messages')
 
@@ -162,30 +162,24 @@ const setDm = (context, nametags, message) => {
  *
  **/
 
-const mentionNotif = ({conn}, to, message, reason) => null
-// Temporarily commenting out until I can implement user token lookups
-// Promise.all([
-//   r.db('nametag').table('nametags').get(to).run(conn)
-//     .then(cursor => new Promise((resolve, reject) =>
-//       cursor.toArray((err, userNametags) => {
-//         if (err) { reject(err) }
-//         resolve(userNametags[0].user)
-//       })
-//     ))
-//     .then(user => r.db('nametag').table('users').get(user).run(conn)),
-//   r.db('nametag').table('rooms').get(message.room).run(conn),
-//   r.db('nametag').table('nametags').get(message.author).run(conn),
-//   message
-// ])
-// .then(([user, room, sender, message]) => notification({
-//   reason,
-//   roomTitle: room.title,
-//   roomId: room.id,
-//   text: message.text.replace(/\*/g, ''),
-//   senderName: sender.name,
-//   icon: sender.icon
-// }, user.data.fcmToken)
-// )
+const mentionNotif = ({models: {Users, Rooms, Nametags}}, to, message, reason) =>
+  Promise.all([
+    Users.getToken(message.author),
+    Rooms.get(message.room),
+    Nametags.get(message.author),
+    message
+  ])
+  .then(([token, room, sender, message]) => token
+    ? notification({
+      reason,
+      roomTitle: room.title,
+      roomId: room.id,
+      text: message.text.replace(/\*/g, ''),
+      senderName: sender.name,
+      icon: sender.icon
+    }, token)
+    : null
+  )
 
 module.exports = (context) => ({
   Messages: {
