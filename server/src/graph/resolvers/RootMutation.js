@@ -21,69 +21,62 @@ const catchErrors = (err) => {
   throw err
 }
 
-const RootMutation = {
-  createRoom: (obj, {room}, {user, models: {Rooms}}) => {
-    return !user ? Promise.reject(errors.ErrNotLoggedIn)
-    : Rooms.create(room)
-    .then(wrapResponse('room'))
+const wrap = (mutation, key = 'result') => (obj, args, context) => !context.user
+  ? Promise.reject(errors.ErrNotLoggedIn)
+  : mutation(obj, args, context)
     .catch(catchErrors)
-  },
+
+const RootMutation = {
+  createRoom: (obj, {room}, {user, models: {Rooms}}) =>
+    Rooms.create(room)
+    .then(wrapResponse('room')),
+
   createMessage: (obj, {message}, {user, models: {Messages}}) => {
-    if (!user) {
-      return Promise.reject(errors.ErrNotLoggedIn)
-    } else if (!user.nametags[message.room]) {
+    if (!user.nametags[message.room]) {
       return Promise.reject(errors.ErrNotInRoom)
     }
     return Messages.create(message)
-      .then(wrapResponse('message'))
-      .catch(catchErrors)
+    .then(wrapResponse('message'))
   },
-  toggleSaved: (obj, {messageId, saved}, {user, models: {Messages}}) => {
-    if (!user) {
-      return Promise.reject(errors.ErrNotLoggedIn)
-    }
-    return Messages.toggleSaved(messageId, saved)
-      .then(wrapResponse('toggleSaved'))
-      .catch(catchErrors)
-  },
-  createNametag: (obj, {nametag}, {user, models: {Nametags}}) => {
-    return !user ? Promise.reject(errors.ErrNotLoggedIn)
-    : Nametags.create(nametag)
-      .then(wrapResponse('nametag'))
-      .catch(catchErrors)
-  },
+
+  toggleSaved: (obj, {messageId, saved}, {user, models: {Messages}}) =>
+    Messages.toggleSaved(messageId, saved)
+    .then(wrapResponse('toggleSaved')),
+
+  createNametag: (obj, {nametag}, {user, models: {Nametags}}) =>
+    Nametags.create(nametag)
+    .then(wrapResponse('nametag')),
+
   updateLatestVisit: (obj, {nametagId}, {user, models: {Nametags}}) => {
-    if (!user) {
-      return Promise.reject(errors.ErrNotLoggedIn)
-    } else if (
-      // Confirm that the user is in the room
-      Object.keys(user.nametags).reduce((bool, room) => user.nametags[room] === nametagId ? false : bool, true)
-    ) {
+    // Confirm that the user is in the room
+    if (Object.keys(user.nametags)
+      .reduce((bool, room) => user.nametags[room] === nametagId ? false : bool, true))
+    {
       return Promise.reject(errors.ErrNotInRoom)
     }
     return Nametags.updateLatestVisit(nametagId)
-      .then(wrapResponse('nametag'))
-      .catch(catchErrors)
   },
 
-  createBadge: (obj, {badge}, {user, models: {Badges}}) => {
-    return !user ? Promise.reject(errors.ErrNotLoggedIn)
-    : Badges.create(badge)
-      .then(wrapResponse('badge'))
-      .catch(catchErrors)
-  },
-  createBadgeTemplate: (obj, {template}, {user, models: {BadgeTemplates}}) => {
-    return !user ? Promise.reject(errors.ErrNotLoggedIn)
-    : BadgeTemplates.create(template)
-      .then(wrapResponse('badgeTemplate'))
-      .catch(catchErrors)
-  },
-  updateToken: (obj, {token}, {user, models: {Users}}) => {
-    return !user ? Promise.reject(errors.ErrNotLoggedIn)
-    : Users.addToken(token)
-    .then(wrapResponse('token'))
-    .catch(catchErrors)
-  }
+  createBadge: (obj, {badge}, {user, models: {Badges}}) =>
+    Badges.create(badge)
+    .then(wrapResponse('badge')),
+
+  createBadgeTemplate: (obj, {template}, {user, models: {BadgeTemplates}}) =>
+    BadgeTemplates.create(template)
+    .then(wrapResponse('template')),
+
+  createBadgeGranter: (obj, {granter}, {user, models: {BadgeGranters}}) =>
+    // TODO: Add concept of admin login and require that here.
+    BadgeGranters.create(granter)
+    .then(wrapResponse('granter')),
+
+  updateToken: (obj, {token}, {user, models: {Users}}) =>
+    Users.addToken(token)
 }
 
-module.exports = RootMutation
+
+
+module.exports = Object.keys(RootMutation).reduce((wrapped, key) => {
+  wrapped[key] = wrap(RootMutation[key])
+  return wrapped
+}, {})

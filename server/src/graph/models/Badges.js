@@ -44,12 +44,16 @@ const getTemplateBadges = ({conn}, template) => badgesTable.getAll(template, {in
  **/
 
 const create = ({conn, models: {Users}}, b) => {
-  const badge = Object.assign({}, b, {createdAt: new Date()})
+  const note = {
+    text: b.note,
+    date: new Date()
+  }
+  const badge = {createdAt: new Date(), template: b.template, notes: [note]}
   return badgesTable.insert(badge).run(conn)
   // Append badge ID to user object
   .then(res => {
     if (res.errors > 0) {
-      return new errors.APIError('Error creating badge')
+      return new Error(err)
     }
     const id = res.generated_keys[0]
     return Promise.all([

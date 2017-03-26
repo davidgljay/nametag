@@ -36,17 +36,16 @@ const getGranterTemplates = ({conn}, granterId) => badgeTemplatesTable.getAll(gr
   .then(cursor => cursor.toArray())
 
 /**
- * Creates a badge
+ * Creates a badge template
  *
  * @param {Object} context     graph context
- * @param {Object} badge   the badge to be created
+ * @param {Object} template   the badge template to be created
  *
  **/
 
 const create = ({conn}, template) => {
   const badgeTemplate = Object.assign({}, template, {createdAt: new Date(), updatedAt: new Date()})
   return badgeTemplatesTable.insert(badgeTemplate).run(conn)
-    .then(() => {})
 }
 
 

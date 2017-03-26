@@ -27,4 +27,7 @@ module.exports = {
   badgeTemplates: {
     indexes: ['granter']
   },
+  badgeGranters: {
+    indexes: []
+  }
 }

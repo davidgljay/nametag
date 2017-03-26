@@ -154,6 +154,9 @@ type Badge {
   # Notes appended to the badge
   notes: [Note]
 
+  # Default nametag for the badge visible to the badge granter
+  defaultNametag: Nametag
+
   # Time when the badge was created
   createdAt: Date!
 
@@ -187,6 +190,9 @@ type BadgeTemplate {
 
   # The organization or group granting the badge
   granter: BadgeGranter
+
+  # The badges that have been granted based on this template
+  badges: [Badge]
 
   # Time when the badge template was created
   createdAt: Date!
@@ -337,6 +343,22 @@ input CreateBadgeInput {
 
 }
 
+input CreateBadgeGranterInput {
+
+  # The name of the granter
+  name: String!
+
+  # A description of the granter
+  description: String!
+
+  # An image to use when referencing the granter
+  image: String!
+
+  # The type of granter
+  type: GRANTER_TYPES!
+
+}
+
 ## Responses
 
 # CreateRoomResponse is returned with the room that was created and any
@@ -383,6 +405,17 @@ type CreateBadgeResponse implements Response {
   errors: [UserError]
 }
 
+# CreateBadgeGranterResponse is returned with the badge granter that was created and any
+# errors that may have occurred in the attempt to create it.
+type CreateBadgeGranterResponse implements Response {
+
+  # The comment that was created.
+  badgeGranter: BadgeGranter
+
+  # An array of errors relating to the mutation that occurred.
+  errors: [UserError]
+}
+
 # Basic Response including only errors
 type BasicResponse implements Response {
 
@@ -408,6 +441,9 @@ type RootMutation {
 
   # Creates a badge template
   createBadgeTemplate(template: CreateBadgeTemplateInput!): BasicResponse
+
+  # Creates a badge granter
+  createBadgeGranter(granter: CreateBadgeGranterInput!): CreateBadgeGranterResponse
 
   # Saves a message
   toggleSaved(messageId: ID!, saved: Boolean!): BasicResponse

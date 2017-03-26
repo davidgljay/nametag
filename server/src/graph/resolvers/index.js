@@ -1,5 +1,6 @@
 const Room = require('./Room')
 const Badge = require('./Badge')
+const BadgeTemplate = require('./BadgeTemplate')
 const Message = require('./Message')
 const Nametag = require('./Nametag')
 const User = require('./User')
@@ -12,6 +13,7 @@ module.exports = {
   Date,
   Room,
   Badge,
+  BadgeTemplate,
   Message,
   Nametag,
   User,
