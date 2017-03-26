@@ -1,6 +1,6 @@
 module.exports = {
   badges: {
-    indexes: []
+    indexes: ['template']
   },
   messages: {
     indexes: [
@@ -23,5 +23,8 @@ module.exports = {
       'google',
       {name: 'nametags', fields: {values: 'nametags'}, multi: true}
     ]
-  }
+  },
+  badgeTemplates: {
+    indexes: ['granter']
+  },
 }

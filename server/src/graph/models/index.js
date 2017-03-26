@@ -4,6 +4,7 @@ const Messages = require('./Messages')
 const Nametags = require('./Nametags')
 const Rooms = require('./Rooms')
 const Badges = require('./Badges')
+const BadgeTemplates = require('./BadgeTemplates')
 const Users = require('./Users')
 const schema = require('./schema')
 const {errorLog} = require('../../errors')
@@ -15,6 +16,7 @@ module.exports = (context) => {
     Nametags,
     Rooms,
     Badges,
+    BadgeTemplates,
     Users
   ].map((loaders) => {
     // Each loader is a function which takes the context.

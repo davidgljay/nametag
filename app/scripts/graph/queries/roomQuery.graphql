@@ -16,9 +16,13 @@ query roomQuery($id: ID!){
       bio
       present
       badges {
-        name
-        icon
-        description
+        id
+        template {
+          id
+          name
+          icon
+          description
+        }
         notes {
           text
           date

@@ -13,9 +13,12 @@ query roomsQuery {
       icon
       bio
       badges {
-        name
-        description
-        icon
+        template {
+          id
+          name
+          description
+          icon
+        }
         notes {
           date
           text
@@ -28,10 +31,13 @@ query roomsQuery {
    displayNames
    icons
    badges {
-     id
-     name
-     description
-     icon
+    id
+    template {
+        id
+        name
+        description
+        icon
+      }
      notes {
        text
        date

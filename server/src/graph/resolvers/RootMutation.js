@@ -65,16 +65,23 @@ const RootMutation = {
       .then(wrapResponse('nametag'))
       .catch(catchErrors)
   },
+
   createBadge: (obj, {badge}, {user, models: {Badges}}) => {
     return !user ? Promise.reject(errors.ErrNotLoggedIn)
     : Badges.create(badge)
       .then(wrapResponse('badge'))
       .catch(catchErrors)
   },
+  createBadgeTemplate: (obj, {template}, {user, models: {BadgeTemplates}}) => {
+    return !user ? Promise.reject(errors.ErrNotLoggedIn)
+    : BadgeTemplates.create(template)
+      .then(wrapResponse('badgeTemplate'))
+      .catch(catchErrors)
+  },
   updateToken: (obj, {token}, {user, models: {Users}}) => {
     return !user ? Promise.reject(errors.ErrNotLoggedIn)
     : Users.addToken(token)
-    .then(wrapResponse('badge'))
+    .then(wrapResponse('token'))
     .catch(catchErrors)
   }
 }

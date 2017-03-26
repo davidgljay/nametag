@@ -47,7 +47,15 @@ class Badge extends Component {
 
   render () {
     const {
-      badge,
+      badge: {
+        id,
+        notes,
+        template: {
+          name,
+          description,
+          icon
+        }
+      },
       connectDragSource,
       showIconUpload,
       isDragging,
@@ -62,11 +70,11 @@ class Badge extends Component {
     }
 
     // Show an icon if one exists, or a manu to upload an icon if showIconUpload is enabled
-    let icon
-    if (badge.icon_array) {
-      icon = <img style={styles.icon} alt='icon' src={badge.icon_array[0]} />
+    let iconComponent
+    if (icon) {
+      iconComponent = <img style={styles.icon} alt='icon' src={icon} />
     } else if (showIconUpload) {
-      icon = this.state.uploading
+      iconComponent = this.state.uploading
       ? <CircularProgress />
         : <ImageUpload
           width={50}
@@ -87,18 +95,15 @@ class Badge extends Component {
               </FontIcon>
           <div style={styles.cardHeader}>
             <div>
-              {icon}
+              {iconComponent}
             </div>
             <div>
-              <div style={styles.name}>{badge.name}</div>
-              <div style={styles.granter}>
-                <em>Verified by: </em><br />{badge.granter}
-              </div>
+              <div style={styles.name}>{name}</div>
             </div>
           </div>
-          <div style={styles.description}>{badge.description_array[0]}</div>
+          <div style={styles.description}>{description}</div>
           <div style={styles.notes}>
-            {badge.notes.map((note) => {
+            {notes.map((note) => {
               return <div style={styles.note} key={note.date}>
                 <div style={styles.date}>{moment(note.date).format('MMMM Do, YYYY')}</div>
                 <div style={styles.msg}>{': ' + note.msg}</div>
@@ -122,11 +127,11 @@ class Badge extends Component {
         className='mdl-shadow--2dp'
         onClick={this.toggleExpanded}>
         {
-            badge.icon_array
-            ? <div style={Object.assign({}, styles.miniIcon, {background: 'url(' + badge.icon_array[0] + ') 0 0 / cover'})} />
+            icon
+            ? <div style={Object.assign({}, styles.miniIcon, {background: 'url(' + icon + ') 0 0 / cover'})} />
              : <div style={styles.spacer} />
           }
-        <div style={styles.chipText}>{badge.name}</div>
+        <div style={styles.chipText}>{name}</div>
       </div>
     }
 
@@ -141,7 +146,18 @@ class Badge extends Component {
 Badge.propTypes = {
   connectDragSource: PropTypes.func.isRequired,
   draggable: PropTypes.bool.isRequired,
-  badge: PropTypes.object,
+  badge: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    notes: PropTypes.arrayOf(PropTypes.shape({
+      text: PropTypes.string.isRequired,
+      date: PropTypes.string.isRequired
+    })).isRequired,
+    template: PropTypes.shape({
+      icon: PropTypes.string,
+      name: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired
+    }).isRequired
+  }).isRequired,
   isDragging: PropTypes.bool.isRequired,
   removeFromSource: PropTypes.func,
   showIconUpload: PropTypes.bool,

@@ -5,6 +5,19 @@
 # Date represented as an ISO8601 string.
 scalar Date
 
+# The possible types of badge granters
+ enum GRANTER_TYPES {
+
+    NONPROFIT
+
+    COMPANY
+
+    EDUCATIONAL
+
+    COMMUNITY_GROUP
+
+ }
+
 # A unique account in the system. In the future this information will be encrypted.
 type User {
 
@@ -22,6 +35,9 @@ type User {
 
   # Nametags created by this user
   nametags: [Nametag]
+
+  # Time when the user was created
+  createdAt: Date!
 
 }
 
@@ -132,18 +148,17 @@ type Badge {
   # The ID of the badge
   id: ID!
 
-  # The name of the badge
-  name: String!
-
-  # The icon for the badge
-  icon: String
-
-  # The badges description
-  description: String
+  # The template from which this badge is created
+  template: BadgeTemplate
 
   # Notes appended to the badge
   notes: [Note]
+
+  # Time when the badge was created
+  createdAt: Date!
+
 }
+
 
 # A note attached to a badge
 type Note {
@@ -153,6 +168,60 @@ type Note {
 
   # The text of the note
   text: String!
+
+}
+
+# A verified component of a user's identity
+type BadgeTemplate {
+  # The ID of the badge
+  id: ID!
+
+  # The name of the badge
+  name: String!
+
+  # The icon for the badge
+  icon: String
+
+  # The badges description
+  description: String
+
+  # The organization or group granting the badge
+  granter: BadgeGranter
+
+  # Time when the badge template was created
+  createdAt: Date!
+
+  # Time when the badge template was updated
+  updatedAt: Date!
+
+}
+
+# An organization or individual capable of granting a badge
+type BadgeGranter {
+
+  # The id of the badge granter
+  id: ID!
+
+  # The name of the granter
+  name: String!
+
+  # A description of the granter
+  description: String!
+
+  # An image to use when referencing the granter
+  image: String!
+
+  # Badges verifying the granter
+  badges: [Badge]
+
+  # The type of granter
+  type: GRANTER_TYPES!
+
+  # Time when the badge granter was created
+  createdAt: Date!
+
+  # Time when the badge granter was updated
+  updatedAt: Date!
 
 }
 
@@ -241,19 +310,30 @@ input CreateNametagInput {
 }
 
 # Input required to create a badge
-input CreateBadgeInput {
+input CreateBadgeTemplateInput {
 
-  # The name of the badge
+  # The name of the template
   name: String!
 
-  # The badge's icon
-  icon: String
+  # The template's icon
+  image: String!
 
-  # The badge's description
+  # The template's description
   description: String!
 
+  # The template's granter
+  granter: ID!
+
+}
+
+# Input required to create a badge
+input CreateBadgeInput {
+
+  # The badge's template
+  template: ID!
+
   # Additional information appended to the badge
-  notes: [String]
+  note: String!
 
 }
 
@@ -325,6 +405,9 @@ type RootMutation {
 
   # Creates a badge
   createBadge(badge: CreateBadgeInput!): CreateBadgeResponse
+
+  # Creates a badge template
+  createBadgeTemplate(template: CreateBadgeTemplateInput!): BasicResponse
 
   # Saves a message
   toggleSaved(messageId: ID!, saved: Boolean!): BasicResponse

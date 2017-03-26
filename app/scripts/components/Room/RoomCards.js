@@ -45,7 +45,9 @@ class RoomCards extends Component {
           <Notifications nametags={me.nametags} homepage />
         }
         {
-          !loading && rooms
+          !loading &&
+          rooms.length > 0 &&
+          rooms
           .filter(room => !nametagHash[room.id])
           .map(room =>
             <RoomCard

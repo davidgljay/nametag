@@ -25,6 +25,17 @@ const getAll = ({conn}, ids) => badgesTable.getAll(...ids).run(conn)
   .then(cursor => cursor.toArray())
 
 /**
+ * Returns an array of badges from a template id.
+ *
+ * @param {Object} context     graph context
+ * @param {String} templateId   the id of the badge tempalte
+ *
+ */
+
+const getTemplateBadges = ({conn}, template) => badgesTable.getAll(template, {index: 'template'}).run(conn)
+  .then(cursor => cursor.toArray())
+
+/**
  * Creates a badge
  *
  * @param {Object} context     graph context
@@ -34,11 +45,11 @@ const getAll = ({conn}, ids) => badgesTable.getAll(...ids).run(conn)
 
 const create = ({conn, models: {Users}}, b) => {
   const badge = Object.assign({}, b, {createdAt: new Date()})
-  badgesTable.insert(badge).run(conn)
+  return badgesTable.insert(badge).run(conn)
   // Append badge ID to user object
   .then(res => {
     if (res.errors > 0) {
-      return new errors.APIError('Error creating nametag')
+      return new errors.APIError('Error creating badge')
     }
     const id = res.generated_keys[0]
     return Promise.all([
@@ -58,6 +69,7 @@ module.exports = (context) => ({
   Badges: {
     get: (id) => get(context, id),
     getAll: (ids) => getAll(context, ids),
+    getTemplateBadges: (templateId) => getTemplateBadges(context, templateId),
     create: badge => create(context, badge)
   }
 })
