@@ -65,10 +65,6 @@ class Badge extends Component {
       draggable
     } = this.props
 
-    if (!badge) {
-      return null
-    }
-
     // Show an icon if one exists, or a manu to upload an icon if showIconUpload is enabled
     let iconComponent
     if (icon) {
@@ -85,7 +81,7 @@ class Badge extends Component {
     // Show expanded or collapsed badge
     let badgeComponent
     if (this.state.expanded) {
-      badgeComponent = <div>
+      badgeComponent = <div key={id}>
         <Card style={styles.badgeExpanded}>
           <FontIcon
             style={styles.close}
@@ -125,6 +121,7 @@ class Badge extends Component {
       badgeComponent = <div
         style={chipStyle}
         className='mdl-shadow--2dp'
+        key={id}
         onClick={this.toggleExpanded}>
         {
             icon
