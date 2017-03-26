@@ -17,5 +17,11 @@ module.exports = {
   },
   users: {
     indexes: ['email', 'facebook', 'twitter', 'google']
+  },
+  notificationTokens: {
+    indexes: ['token']
+  },
+  notificationReferences: {
+    indexes: []
   }
 }

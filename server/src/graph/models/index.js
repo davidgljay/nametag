@@ -5,6 +5,8 @@ const Nametags = require('./Nametags')
 const Rooms = require('./Rooms')
 const Badges = require('./Badges')
 const Users = require('./Users')
+const notificationTokens = require('./notificationTokens')
+const notificationReferences = require('./notificationReferences')
 const schema = require('./schema')
 const {errorLog} = require('../../errors')
 
@@ -15,7 +17,9 @@ module.exports = (context) => {
     Nametags,
     Rooms,
     Badges,
-    Users
+    Users,
+    NotificationTokens,
+    notificationReferences
   ].map((loaders) => {
     // Each loader is a function which takes the context.
     return loaders(context)

@@ -70,6 +70,14 @@ const RootMutation = {
     : Badges.create(badge)
       .then(wrapResponse('badge'))
       .catch(catchErrors)
+  },
+  updateNotifToken: (obj, {token, nametagId}, {user, models:{NotificationTokens, NotificationReferences, Nametags}}) => {
+    return !user ? Promise.reject(errors.ErrNotLoggedIn)
+    : NotificationTokens.updateOrCreate(token)
+    .then(({tokenId}) => NotificationReferences.create(tokenId))
+    .then(({referenceId}) => Nametags.addNotificationReference(nametagId, referenceId))
+    .then(wrapResponse('notificationToken'))
+    .catch(catchErrors)
   }
 
 }

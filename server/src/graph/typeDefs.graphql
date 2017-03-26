@@ -329,6 +329,9 @@ type RootMutation {
   # Saves a message
   toggleSaved(messageId: ID!, saved: Boolean!): BasicResponse
 
+  # Updates a notification token
+  updateNotifToken(token: String!, nametagId: ID!): BasicResponse
+
   # Updates the latest visit of a nametag
   updateLatestVisit(nametagId: ID!): BasicResponse
 

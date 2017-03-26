@@ -1,6 +1,8 @@
 const r = require('rethinkdb')
 const errors = require('../../errors')
 
+const table = r.db('nametag').table('nametags')
+
 /**
  * Returns the nametags from a particular room.
  *
@@ -10,7 +12,7 @@ const errors = require('../../errors')
  */
 
 const getRoomNametags = ({conn}, room) =>
-  r.db('nametag').table('nametags').getAll(room, {index: 'room'}).run(conn)
+  table.getAll(room, {index: 'room'}).run(conn)
    .then(cursor => cursor.toArray())
    .then(nametags =>
       nametags.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
@@ -24,7 +26,7 @@ const getRoomNametags = ({conn}, room) =>
   *
   */
 
-const get = ({conn}, id) => r.db('nametag').table('nametags').get(id).run(conn)
+const get = ({conn}, id) => table.get(id).run(conn)
 
 /**
  * Returns an array of nametags from an array of ids.
@@ -34,7 +36,7 @@ const get = ({conn}, id) => r.db('nametag').table('nametags').get(id).run(conn)
  *
  */
 
-const getAll = ({conn}, ids) => r.db('nametag').table('nametags').getAll(...ids).run(conn)
+const getAll = ({conn}, ids) => table.getAll(...ids).run(conn)
   .then(cursor => {
     return cursor.toArray()
   })
@@ -52,7 +54,7 @@ const getAll = ({conn}, ids) => r.db('nametag').table('nametags').getAll(...ids)
 
 const create = ({conn, user, models: {Users}}, nt) => {
   const nametag = Object.assign({}, nt, {createdAt: new Date()})
-  return r.db('nametag').table('nametags').insert(nametag).run(conn)
+  return table.insert(nametag).run(conn)
   // Append nametag ID to user object
   .then(res => {
     if (res.errors > 0) {
@@ -82,7 +84,7 @@ const create = ({conn, user, models: {Users}}, nt) => {
  *
  **/
 
-const addMention = ({conn}, nametag) => r.db('nametag').table('nametags').get(nametag)
+const addMention = ({conn}, nametag) => table.get(nametag)
 .update({mentions: r.row('mentions').prepend(Date.now())}).run(conn)
 
 /**
@@ -93,7 +95,7 @@ const addMention = ({conn}, nametag) => r.db('nametag').table('nametags').get(na
  *
  */
 
-const getNametagCount = ({conn}, room) => r.db('nametag').table('nametags').filter({room}).count().run(conn)
+const getNametagCount = ({conn}, room) => table.filter({room}).count().run(conn)
 
 /**
  * Updates the presence of a nametag in a room
@@ -103,7 +105,7 @@ const getNametagCount = ({conn}, room) => r.db('nametag').table('nametags').filt
  * @param {Date} latestVisit the date of the latest visit as an ISO string
  */
 
-const updateLatestVisit = ({conn}, nametagId) => r.db('nametag').table('nametags')
+const updateLatestVisit = ({conn}, nametagId) => table
   .get(nametagId).update({latestVisit: new Date(), present: true}).run(conn)
   .then((res) => {
     if (res.errors > 0) {
@@ -111,10 +113,10 @@ const updateLatestVisit = ({conn}, nametagId) => r.db('nametag').table('nametags
     }
     // Wait 30 seconds, then check this nametag again
     setTimeout(() => {
-      r.db('nametag').table('nametags').get(nametagId).run(conn)
+      table.get(nametagId).run(conn)
       .then(nametag => {
         if (Date.now() - new Date(nametag.latestVisit).getTime() > 20000) {
-          return r.db('nametag').table('nametags').get(nametagId).update({present: false}).run(conn)
+          return table.get(nametagId).update({present: false}).run(conn)
           .catch(errors.errorLog('Setting nametag presence to false'))
         }
         return
@@ -122,6 +124,18 @@ const updateLatestVisit = ({conn}, nametagId) => r.db('nametag').table('nametags
       .catch(err => console.log('latestVisit err', err))
     }, 30000)
   })
+
+/**
+ * Adds a notification reference to a nametag
+ *
+ * @param {Object} context     graph context
+ * @param {String} nametag      the id of the nametag to be updated
+ *
+ **/
+
+const addNotificationReference = ({conn}, nametagId, referenceId) =>
+  table.get(nametagId).update({notificationReference: referenceId}).run(conn)
+
 
 module.exports = (context) => ({
   Nametags: {
