@@ -1,12 +1,11 @@
-import { connect } from 'react-redux'
-import component from '../../components/Badge/Badge'
+import component from '../../components/Badge/CreateBadge'
+import {compose} from 'react-apollo'
+import {createNametag} from '../../graph/mutations'
+import {badgeTemplateQuery} from '../../graph/queries'
 
-const mapStateToProps = (state, ownProps) => {
-  return {...ownProps, badge: state.badges[ownProps.id]}
-}
-
-const Badge = connect(
-  mapStateToProps
+const CreateBadge = compose(
+  createNametag,
+  badgeTemplateQuery
 )(component)
 
-export default Badge
+export default CreateBadge
