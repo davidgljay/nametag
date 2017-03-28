@@ -42,7 +42,7 @@ class Join extends Component {
           <h4>Edit Your Nametag For This Conversation</h4>
           {
             <EditNametag
-              userNametag={nametag}
+              nametagEdit={nametag}
               me={me}
               addNametagEditBadge={addNametagEditBadge}
               removeNametagEditBadge={removeNametagEditBadge}
