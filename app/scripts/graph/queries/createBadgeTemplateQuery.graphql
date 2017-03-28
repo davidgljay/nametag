@@ -1,0 +1,34 @@
+query createBadgeTemplateQuery($granter: ID!) {
+  granter(id:$granter) {
+    id
+    name
+    description
+    image
+    type
+  }
+  me {
+    id
+    displayNames
+    icons
+    badges {
+      id
+      notes {
+        text
+        date
+      }
+      template {
+        id
+        name
+        description
+        icon
+        granter {
+          id
+          name
+					description
+          type
+          image
+        }
+      }
+    }
+  }
+}

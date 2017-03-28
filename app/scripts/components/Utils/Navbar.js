@@ -32,10 +32,11 @@ class Navbar extends Component {
   }
 
   render () {
+    const {toggleLogin = () => {}, me} = this.props
     const mobile = window.innerWidth <= 800
     const auth = <div style={styles.buttons}>
       {
-        this.props.me && this.props.me.id
+        me && me.id
         ? <div>
           <FlatButton
             style={styles.button}
@@ -52,7 +53,7 @@ class Navbar extends Component {
         </div>
           : <FlatButton
             style={styles.button}
-            onClick={() => this.props.toggleLogin()}
+            onClick={() => toggleLogin()}
             label='LOG IN' />
         }
     </div>
@@ -65,8 +66,8 @@ class Navbar extends Component {
         onLeftIconButtonTouchTap={() => this.setState({open: true})} />
       <NavDrawer
         open={this.state.open}
-        toggleLogin={this.props.toggleLogin}
-        me={this.props.me}
+        toggleLogin={toggleLogin}
+        me={me}
         setOpen={(open) => this.setState({open})} />
     </div>
   }
@@ -76,7 +77,7 @@ Navbar.propTypes = {
   me: PropTypes.shape({
     id: PropTypes.string
   }),
-  toggleLogin: PropTypes.func.isRequired
+  toggleLogin: PropTypes.func
 }
 
 export default radium(Navbar)

@@ -62,8 +62,7 @@ const RootMutation = {
     .then(wrapResponse('badge')),
 
   createBadgeTemplate: (obj, {template}, {user, models: {BadgeTemplates}}) =>
-    BadgeTemplates.create(template)
-    .then(wrapResponse('template')),
+    BadgeTemplates.create(template),
 
   createBadgeGranter: (obj, {granter}, {user, models: {BadgeGranters}}) =>
     // TODO: Add concept of admin login and require that here.

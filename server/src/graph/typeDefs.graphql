@@ -242,6 +242,9 @@ type RootQuery {
   # Retrieves the current user
   me: User
 
+  # Retrieves information about a badge granter
+  granter(id:ID!): BadgeGranter
+
 }
 
 ################################################################################

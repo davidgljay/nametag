@@ -46,6 +46,7 @@ const getGranterTemplates = ({conn}, granterId) => badgeTemplatesTable.getAll(gr
 const create = ({conn}, template) => {
   const badgeTemplate = Object.assign({}, template, {createdAt: new Date(), updatedAt: new Date()})
   return badgeTemplatesTable.insert(badgeTemplate).run(conn)
+    .then(res => Object.assign({}, template, {id: res.generated_keys[0]}))
 }
 
 

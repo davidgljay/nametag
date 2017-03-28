@@ -1,13 +1,8 @@
 const RootQuery = {
-  rooms: (obj, args, {models: {Rooms}}) => {
-    return Rooms.getActive()
-  },
-  room: (obj, {id}, {models: {Rooms}}) => {
-    return Rooms.get(id)
-  },
-  me: (obj, args, {user}) => {
-    return user
-  }
+  rooms: (obj, args, {models: {Rooms}}) => Rooms.getActive(),
+  room: (obj, {id}, {models: {Rooms}}) => Rooms.get(id),
+  me: (obj, args, {user}) =>  user,
+  granter: (obj, {id}, {models: {BadgeGranters}}) => BadgeGranters.get(id)
 }
 
 module.exports = RootQuery

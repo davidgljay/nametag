@@ -99,7 +99,7 @@ class Badge extends Component {
           </div>
           <div style={styles.description}>{description}</div>
           <div style={styles.notes}>
-            {notes.map((note) => {
+            {notes && notes.map((note) => {
               return <div style={styles.note} key={note.date}>
                 <div style={styles.date}>{moment(note.date).format('MMMM Do, YYYY')}</div>
                 <div style={styles.msg}>{': ' + note.msg}</div>
@@ -148,7 +148,7 @@ Badge.propTypes = {
     notes: PropTypes.arrayOf(PropTypes.shape({
       text: PropTypes.string.isRequired,
       date: PropTypes.string.isRequired
-    })).isRequired,
+    })),
     template: PropTypes.shape({
       icon: PropTypes.string,
       name: PropTypes.string.isRequired,
