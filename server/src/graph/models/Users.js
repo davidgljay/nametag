@@ -93,8 +93,9 @@ const addNametag = ({user, conn}, nametagId, roomId) =>
 const findOrCreateFromAuth = ({conn}, profile, provider) => {
   let userObj
   const authProfile = userFromAuth(provider, profile)
-  return usersTable.filter({[provider]: authProfile.id}).nth(0).run(conn)
-    .then(user => {
+  return usersTable.filter({[provider]: authProfile.id}).run(conn)
+    .then(cursor => cursor.toArray())
+    .then(([user]) => {
       if (user) {
         return user
       }
@@ -106,6 +107,7 @@ const findOrCreateFromAuth = ({conn}, profile, provider) => {
             [provider]: authProfile.id,
             createdAt: Date.now()
           }
+          console.log('userObj', userObj)
           return usersTable.insert(userObj).run(conn)
         })
         .then(rdbRes => {
