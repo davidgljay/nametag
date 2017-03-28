@@ -53,7 +53,8 @@ class Badge extends Component {
         template: {
           name,
           description,
-          icon
+          icon,
+          granter
         }
       },
       connectDragSource,
@@ -97,6 +98,7 @@ class Badge extends Component {
               <div style={styles.name}>{name}</div>
             </div>
           </div>
+          <div style={styles.granter}>Granted by {granter.name}</div>
           <div style={styles.description}>{description}</div>
           <div style={styles.notes}>
             {notes.map((note) => {

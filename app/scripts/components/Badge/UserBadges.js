@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import Badge from '../../containers/Badge/BadgeContainer'
+import Badge from './Badge'
 import CreateBadge from '../../containers/Badge/CreateBadgeContainer'
 import FlatButton from 'material-ui/FlatButton'
 import FontIcon from 'material-ui/FontIcon'
@@ -37,19 +37,20 @@ class UserBadges extends Component {
         </p>
         {
           badges
-            .filter((badgeId) => {
+            .filter((badge) => {
               if (!selectedBadges) {
                 return true
               }
-              return selectedBadges.reduce((bool, badge) =>
-                bool && badge.id !== badgeId, true)
+              return selectedBadges.reduce((bool, selected) =>
+                bool && selected.id !== badge.id, true)
             })
-            .map((badgeId) =>
-              <div key={badgeId}>
+            .map((badge) => {
+              return <div key={badge.id}>
                 <Badge
-                  id={badgeId}
+                  badge={badge}
                   draggable />
-              </div>)
+              </div>
+            })
         }
       </div>
     }
@@ -83,7 +84,9 @@ UserBadges.propTypes = {
   selectedBadges: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string
   })),
-  badges: PropTypes.arrayOf(PropTypes.string)
+  badges: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired
+  }))
 }
 
 const styles = {
