@@ -1,40 +1,13 @@
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import component from '../../components/Badge/CreateBadge'
-// import {logout, setting, providerAuth, appendUserArray} from '../../actions/UserActions'
-// import {createBadge} from '../../actions/BadgeActions'
+import {compose} from 'react-apollo'
+import {createBadgeTemplate} from '../../graph/mutations'
+import {userQuery} from '../../graph/queries'
 
-const mapStateToProps = (state, ownProps) => {
-  return Object.assign(
-    {},
-    {
-      user: state.user
-    },
-    ownProps.params)
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    // logout () {
-    //   return dispatch(logout())
-    // },
-    // setting (option, value) {
-    //   return dispatch(setting(option, value))
-    // },
-    // providerAuth (provider) {
-    //   return dispatch(providerAuth(provider))
-    // },
-    // createBadge (...args) {
-    //   return dispatch(createBadge.apply(this, args))
-    // },
-    // appendUserArray (...args) {
-    //   return dispatch(appendUserArray.apply(this, args))
-    // }
-  }
-}
-
-const Badge = connect(
-  mapStateToProps,
-  mapDispatchToProps
+const CreateBadge = compose(
+  connect((state, {params}) => ({granter: params.granterId})),
+  createBadgeTemplate,
+  userQuery
 )(component)
 
-export default Badge
+export default CreateBadge

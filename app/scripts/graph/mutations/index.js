@@ -2,6 +2,8 @@ import {graphql} from 'react-apollo'
 import CREATE_NAMETAG from './createNametag.graphql'
 import CREATE_ROOM from './createRoom.graphql'
 import CREATE_MESSAGE from './createMessage.graphql'
+import CREATE_BADGE from './createbadge.graphql'
+import CREATE_BADGE_TEMPLATE from './createBadgeTemplate.graphql'
 import TOGGLE_SAVED from './toggleSaved.graphql'
 import UPDATE_LATEST_VISIT from './updateLatestVisit.graphql'
 import UPDATE_TOKEN from './updateToken.graphql'
@@ -42,6 +44,26 @@ export const updateToken = graphql(UPDATE_TOKEN, {
     updateToken: (token) => mutate({
       variables: {
         token
+      }
+    })
+  })
+})
+
+export const createBadge = graphql(CREATE_BADGE, {
+  props: ({ownProps, mutate}) => ({
+    createBadge: (badge) => mutate({
+      variables: {
+        badge
+      }
+    })
+  })
+})
+
+export const createBadgeTemplate = graphql(CREATE_BADGE_TEMPLATE, {
+  props: ({ownProps, mutate}) => ({
+    createBadge: (template) => mutate({
+      variables: {
+        template
       }
     })
   })

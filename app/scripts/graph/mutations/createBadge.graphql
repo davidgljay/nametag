@@ -1,0 +1,10 @@
+mutation CreateBadge($badge:CreateBadgeInput!) {
+  createBadge(badge:$badge) {
+    badge {
+      id
+    }
+    errors {
+      translation_key
+    }
+  }
+}

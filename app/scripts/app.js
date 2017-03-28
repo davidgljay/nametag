@@ -53,8 +53,8 @@ class Nametag extends Component {
             <Route path='/rooms' component={RoomCards} />
             <Route path='/rooms/create' component={CreateRoom} />
             <Route path='/rooms/:roomId' component={Room} />
-            <Route path='/badges/create' component={CreateBadge} />
-            <Route path='/badges/:certificateId' component={BadgeDetail} />
+            <Route path='/granters/:granterId/badges/create' component={CreateBadge} />
+            <Route path='/badges/:badgeId' component={BadgeDetail} />
           </Router>
         </MuiThemeProvider>
       </StyleRoot>

@@ -1,0 +1,8 @@
+mutation CreateBadgeTemplate($template:CreateBadgeTemplateInput!) {
+  createBadgeTemplate(template:$template) {
+    id
+    errors {
+      translation_key
+    }
+  }
+}

@@ -3,7 +3,7 @@ import {compose} from 'react-apollo'
 import component from '../../components/Room/CreateRoom'
 import {searchImage, setImageFromUrl} from '../../actions/RoomActions'
 import {updateNametagEdit, addNametagEditBadge, removeNametagEditBadge} from '../../actions/NametagEditActions'
-import {createRoomQuery} from '../../graph/queries'
+import {userQuery} from '../../graph/queries'
 import {createRoom} from '../../graph/mutations'
 
 const mapStateToProps = (state) => {
@@ -28,7 +28,7 @@ const mapDispatchToProps = (dispatch) => {
 const CreateRoomContainer = compose(
   connect(mapStateToProps, mapDispatchToProps),
   createRoom,
-  createRoomQuery
+  userQuery
 )(component)
 
 export default CreateRoomContainer
