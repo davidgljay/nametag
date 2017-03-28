@@ -323,7 +323,10 @@ input CreateNametagInput {
   badges: [ID]
 
   # The room that this nametag is joining
-  room: ID!
+  room: ID
+
+  # The badge template this nametag is requesting
+  template: ID
 
 }
 
