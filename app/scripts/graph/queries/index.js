@@ -4,6 +4,7 @@ import ROOMS_QUERY from './roomsQuery.graphql'
 import ROOM_QUERY from './roomQuery.graphql'
 import USER_QUERY from './userQuery.graphql'
 import CREATE_BADGE_TEMPLATE_QUERY from './createBadgeTemplateQuery.graphql'
+import BADGE_TEMPLATE_QUERY from './badgeTemplateQuery'
 
 export const roomsQuery = graphql(ROOMS_QUERY)
 
@@ -28,5 +29,12 @@ export const createBadgeTemplateQuery = graphql(CREATE_BADGE_TEMPLATE_QUERY, {
       granter: props.params.granterId
     }
   })
+})
 
+export const badgeTemplateQuery = graphql(BADGE_TEMPLATE_QUERY, {
+  options: (props) => ({
+    variables: {
+      id: props.params.templateId
+    }
+  })
 })

@@ -10,7 +10,7 @@ import NTIconMenu from './IconMenu'
 
 const nametagTarget = {
   drop (props, monitor) {
-    props.addNametagEditBadge(monitor.getItem(), props.room)
+    props.addNametagEditBadge(monitor.getItem(), props.room || props.template)
   }
 }
 
@@ -34,9 +34,10 @@ class EditNametag extends Component {
     }
 
     this.updateNametagProperty = (property) => {
+      const {room, template} = this.props
       return (e) => {
         this.props.updateNametagEdit(
-          this.props.room,
+          room || template,
           property,
           e.target.value
           )
@@ -50,8 +51,13 @@ class EditNametag extends Component {
   }
 
   componentDidMount () {
-    const {nametagEdit = {}, updateNametagEdit, me = {}, room} = this.props
-    updateNametagEdit(room, 'room', room)
+    const {nametagEdit = {}, updateNametagEdit, me = {}, room, template} = this.props
+    if (room) {
+      updateNametagEdit(room, 'room', room)
+    } else {
+      updateNametagEdit(template, 'template', template)
+    }
+
     if (!nametagEdit.name &&
       me.displayNames &&
       me.displayNames.length >= 1) {
@@ -145,7 +151,8 @@ EditNametag.propTypes = {
     icons: PropTypes.arrayOf(PropTypes.string).isRequired,
     displayNames: PropTypes.arrayOf(PropTypes.string).isRequired
   }).isRequired,
-  room: PropTypes.string.isRequired,
+  room: PropTypes.string,
+  template: PropTypes.string,
   isOver: PropTypes.bool.isRequired,
   updateNametagEdit: PropTypes.func.isRequired,
   addNametagEditBadge: PropTypes.func.isRequired,

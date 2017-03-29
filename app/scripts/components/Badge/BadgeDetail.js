@@ -2,6 +2,8 @@ import React, {Component, PropTypes} from 'react'
 import Badge from './Badge'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
+import EditNametag from '../Nametag/EditNametag'
+import CircularProgress from 'material-ui/CircularProgress'
 import {indigo500} from 'material-ui/styles/colors'
 import Navbar from '../Utils/Navbar'
 import Login from '../User/Login'
@@ -16,16 +18,14 @@ class BadgeDetail extends Component {
       showQR: false
     }
 
-    this.onClaimClick = (certificateId) => () => {
-      const {appendUserArray, grantBadge} = this.props
-      appendUserArray('badges', certificateId)
-        .then(() => {
-          return grantBadge(certificateId)
-        })
+    this.onRequestClick = () => {
+      const {nametagEdits, createNametag, data: {template: {id}}} = this.props
+      createNametag(nametagEdits[id])
+      //TODO: Send to homepage with message, possibly via Router.link?
     }
 
     this.onEmailClick = () => {
-      const path = window.location.href
+      const path = `https://${window.location.host}/badges/${this.props.template.id}`
       window.open = (`mailto:?&subject=${encodeURIComponent('You\'ve been granted a certificate on Nametag!')}` +
                `&body=${encodeURIComponent(`To claim your certificate just visit this URL.\n\n${path}`)}`, '_blank').focus()
     }
@@ -55,82 +55,87 @@ class BadgeDetail extends Component {
   }
 
   render () {
-    const {user, logout, setting, certificate, providerAuth} = this.props
+    const {
+      params,
+      data: {me, template, loading},
+      nametagEdits,
+      updateNametagEdit,
+      addNametagEditBadge,
+      removeNametagEditBadge
+    } = this.props
+    const path = `https://${window.location.host}/badges/${template.id}`
+    const shareMode = !!params.granterId
+
+    if (loading) {
+      return <div style={styles.spinner}>
+        <CircularProgress />
+      </div>
+    }
 
     let headerText
     let claimButton
 
-    if (!certificate) {
-      return null
-    }
-
-    if (certificate.granted) {
-      headerText = <div style={styles.header}>
-        <h3>This certificate has been claimed.</h3>
+    headerText = shareMode
+    ? <div>
+      <div style={styles.header}>
+        <h3>Your certificate has been created.</h3>
+        <div>You can share this URL with the people you would like to grant it to.</div>
       </div>
+      <input
+        type='text'
+        id='hiddenPath'
+        value={path} />
+      <div style={styles.shareButtons}>
+        <FlatButton
+          style={styles.button}
+          onClick={this.onEmailClick}
+          label='E-MAIL' />
+        <FlatButton
+          style={styles.button}
+          onClick={this.onClipboardClick}
+          label='COPY TO CLIPBOARD' />
+        <FlatButton
+          style={styles.button}
+          onClick={this.onQRClick}
+          label='SHOW QR CODE' />
+      </div>
+    </div>
+      : <div style={styles.header}>
+        <h3>Request This Badge</h3>
+        Claim it so that you can show it off! Badges
+        let others know why you are worthy of trust and respect.
+        They can also give you access to exclusive communities.
+      </div>
+
+    if (!shareMode) {
+      claimButton = null
+    } else if (!me) {
+      claimButton = <Login message={'Log in to claim'} />
     } else {
-      headerText = certificate.creator === user.id
-      ? <div>
-        <div style={styles.header}>
-          <h3>Your certificate has been created.</h3>
-          It can be claimed by the first person to visit this URL, please
-          securly share it with the intended recipient of this certificate.
-        </div>
-        <input
-          type='text'
-          style={styles.hiddenPath}
-          id='hiddenPath'
-          value={window.location.href} />
-        <div style={styles.shareButtons}>
-          <FlatButton
-            style={styles.button}
-            onClick={this.onEmailClick}
-            label='E-MAIL' />
-          <FlatButton
-            style={styles.button}
-            onClick={this.onClipboardClick}
-            label='COPY TO CLIPBOARD' />
-          <FlatButton
-            style={styles.button}
-            onClick={this.onQRClick}
-            label='SHOW QR CODE' />
-        </div>
-      </div>
-        : <div style={styles.header}>
-          <h3>You have been granted a certificate!</h3>
-          Claim it so that you can show it off! Badges
-          let others know why you are worthy of trust and respect.
-          They can also give you access to exclusive communities.
-        </div>
-    }
-
-    if (certificate.granted) {
       claimButton = <div style={styles.claimButton}>
+        <div>
+          {template.granter.name} will need to know a little about you before granting you
+          this badge. What would you like to share?
+        </div>
+        <EditNametag
+          nametagEdit={nametagEdits[template.id]}
+          me={me}
+          template={template.id}
+          updateNametagEdit={updateNametagEdit}
+          addNametagEditBadge={addNametagEditBadge}
+          removeNametagEditBadge={removeNametagEditBadge} />
         <RaisedButton
           style={styles.button}
           labelStyle={styles.buttonLabel}
           backgroundColor={indigo500}
-          label='BACK TO HOMEPAGE'
-          onClick={this.onHomeClick} />
-      </div>
-    } else if (!user || !user.id) {
-      claimButton = <Login message={'Log in to claim'} providerAuth={providerAuth} />
-    } else if (certificate.creator !== user.id) {
-      claimButton = <div style={styles.claimButton}>
-        <RaisedButton
-          style={styles.button}
-          labelStyle={styles.buttonLabel}
-          backgroundColor={indigo500}
-          onClick={this.onClaimClick(certificate.id)}
-          label='CLAIM THIS CERTIFICATE' />
+          onClick={this.onRequestClick}
+          label='REQUEST THIS BADGE' />
       </div>
     }
 
     return <div>
       <Navbar
-        user={user}
-        logout={logout}
-        setting={setting} />
+        me={me} />
       <div style={styles.certDetailContainer}>
         {
           headerText
@@ -149,7 +154,7 @@ class BadgeDetail extends Component {
         }
         <div style={styles.certDetail}>
           <Badge
-            certificate={certificate}
+            badge={{template, notes: []}}
             draggable={false}
             expanded />
         </div>
@@ -160,14 +165,27 @@ class BadgeDetail extends Component {
 }
 
 BadgeDetail.propTypes = {
-  certificateId: PropTypes.string.isRequired,
-  user: PropTypes.object,
-  logout: PropTypes.func.isRequired,
-  setting: PropTypes.func.isRequired,
-  certificate: PropTypes.object,
-  fetchBadges: PropTypes.func.isRequired,
-  appendUserArray: PropTypes.func.isRequired,
-  grantBadge: PropTypes.func.isRequired
+  createNametag: PropTypes.func.isRequired,
+  data: PropTypes.shape({
+    loading: PropTypes.bool.isRequired,
+    template: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      icon: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      granter: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired
+      }).isRequired
+    }),
+    me: PropTypes.shape({
+      displayNames: PropTypes.arrayOf(PropTypes.string).isRequired,
+      icons: PropTypes.arrayOf(PropTypes.string).isRequired,
+      badges: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired
+    })
+  }).isRequired
 }
 
 export default BadgeDetail
@@ -197,18 +215,15 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between'
   },
-  hiddenPath: {
-    color: 'white',
-    border: 'none',
-    width: 1,
-    height: 1,
-    outline: 'none'
-  },
   QRcode: {
     margin: 20
   },
   copySuccess: {
     color: 'green',
     fontSize: 12
+  },
+  spinner: {
+    marginLeft: '45%',
+    marginTop: '40vh'
   }
 }
