@@ -133,27 +133,23 @@ describe('ADD_NT_EDIT_BADGE', () => {
 
 describe('REMOVE_NT_EDIT_BADGE', () => {
   it('should remove a badge from a nametag for the room', () => {
-    let testBadge = {
-      name: 'test certificate',
-      id: 'wudda'
-    }
 
     let newState = reducer({
       1: {
         name: 'tag',
-        badges: [testBadge]
+        badges: ['test123', 'badge456']
       }
     },
       {
         type: constants.REMOVE_NT_EDIT_BADGE,
         room: 1,
-        certId: 'wudda'
+        badgeId: 'test123'
       })
     expect(newState).toEqual(
       {
         1: {
           name: 'tag',
-          badges: []
+          badges: ['badge456']
         }
       })
   })
