@@ -248,7 +248,7 @@ const styles = {
     cursor: 'pointer'
   },
   header: {
-    borderBottom: '3px solid ' + indigo500,
+    borderBottom: '3px solid #12726a',
     position: 'fixed',
     top: 0,
     zIndex: 100,
@@ -281,7 +281,7 @@ const styles = {
   },
   leftBar: {
     minHeight: 400,
-    background: indigo500,
+    background: '#12726a',
     marginTop: 55,
     height: '100%',
     paddingTop: 15,
