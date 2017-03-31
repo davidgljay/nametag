@@ -16,13 +16,13 @@ class NTIconMenu extends Component {
     }
 
     this.onUpload = (res) => {
-      this.props.updateNametagEdit(this.props.room, 'icon', res.url)
+      this.props.updateNametagEdit(this.props.about, 'icon', res.url)
       this.setState({loadingImage: false})
     }
 
     this.onUpdateIcon = (url) => () => {
       this.setState({showMenu: false})
-      this.props.updateNametagEdit(this.props.room, 'icon', url)
+      this.props.updateNametagEdit(this.props.about, 'icon', url)
     }
   }
 
@@ -43,7 +43,7 @@ class NTIconMenu extends Component {
     } else {
       render = <IconMenu
         iconButtonElement={
-          <IconButton iconStyle={styles.icon}>
+          <IconButton style={styles.buttonStyle} iconStyle={styles.icon}>
             <img src={icon} />
           </IconButton>
         }
@@ -78,7 +78,8 @@ class NTIconMenu extends Component {
 NTIconMenu.propTypes = {
   icons: PropTypes.arrayOf(PropTypes.string).isRequired,
   icon: PropTypes.string,
-  updateNametagEdit: PropTypes.func.isRequired
+  updateNametagEdit: PropTypes.func.isRequired,
+  about: PropTypes.string.isRequired
 }
 
 export default NTIconMenu
@@ -92,9 +93,14 @@ const styles = {
     textAlign: 'center'
   },
   icon: {
-    borderRadius: 25,
-    width: 50,
-    height: 50,
-    margin: 5
+    borderRadius: 25
+  },
+  menuStyle: {
+    padding: 0
+  },
+  buttonStyle: {
+    padding: 4,
+    width: 'initial',
+    height: 'initial'
   }
 }

@@ -1,0 +1,36 @@
+query badgeTemplateQuery($id: ID!){
+  template(id:$id) {
+    id
+    description
+    name
+    icon
+    granter {
+      id
+      name
+      description
+      type
+    }
+  }
+  me {
+    displayNames,
+    icons,
+    badges {
+      id
+      notes {
+        text
+        date
+      }
+      template {
+        id
+        name
+        description
+        icon
+        granter {
+          id
+          name
+          description
+        }
+      }
+    }
+  }
+}

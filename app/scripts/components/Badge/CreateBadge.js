@@ -15,15 +15,14 @@ class CreateBadge extends Component {
       name: '',
       icon: null,
       description: '',
-      note: 'Badge granted.',
-      uploading: false,
-      badgeFor: 'me'
+      uploading: false
     }
 
     this.updateBadge = (property, value) => {
       if (property === 'name') {
-        this.setState({[property]: value.slice(0, 40)})
+        this.setState({name: value.slice(0, 40)})
       } else {
+        console.log('Setting', property, value)
         this.setState({[property]: value})
       }
     }
@@ -33,7 +32,7 @@ class CreateBadge extends Component {
     }
 
     this.onUploadImage = ({url}) => {
-      this.updateBadge('icon', [url])
+      this.updateBadge('icon', url)
       this.setState({uploading: false})
     }
 
@@ -41,51 +40,38 @@ class CreateBadge extends Component {
       this.setState({badgeFor: val})
     }
 
-    this.createSelfBadge = () => {
-      const {appendUserArray, toggleCreateBadge} = this.props
-      this.badgePromise(true)
-        .then(badge => {
-          if (!badge || !badge.id) {
-            console.log('Error creating badge', badge)
-            return
-          }
-          return appendUserArray('badges', badge.id)
-        })
-        .then(() => {
-          toggleCreateBadge()
-        })
-    }
-
-    this.badgePromise = (markGranted) => {
-      const {user, createBadge, mini} = this.props
-      const {name, icon, description, note} = this.state
-      const granter = mini ? 'Self' : this.props.user.data.displayNames[0]
-      return createBadge(
-        user.id,
-        [description],
-        granter,
-        icon && [icon],
-        name,
-        [{
-          date: Date.now(),
-          msg: note
-        }],
-        markGranted)
-    }
-
     this.createBadge = () => {
-      this.badgePromise(false)
-        .then(badge => {
-          window.location = `/badges/${badge.id}`
-        })
+      const {data: {granter}, createBadge} = this.props
+      const {name, icon, description} = this.state
+      return createBadge({
+        description,
+        granter: granter.id,
+        icon,
+        name
+      })
+      .then(({data: {createBadgeTemplate: {id}}}) => {
+        window.location = `/badges/${id}`
+      })
+    }
+  }
+
+  componentDidMount () {
+    if (!this.props.data.loading) {
+      this.updateBadge('icon', this.props.data.granter.image)
+    }
+  }
+
+  componentDidUpdate (prevProps) {
+    if (!this.props.data.loading && prevProps.data.loading) {
+      this.updateBadge('icon', this.props.data.granter.image)
     }
   }
 
   render () {
-    const {name, icon, description, note} = this.state
-    const {user, logout, setting, mini} = this.props
+    const {name, icon, description} = this.state
+    const {data: {me, loading, granter}, mini} = this.props
 
-    if (!user.id) {
+    if (loading) {
       return <CircularProgress />
     }
 
@@ -93,9 +79,7 @@ class CreateBadge extends Component {
       {
         !mini &&
         <Navbar
-          user={user}
-          logout={logout}
-          setting={setting} />
+          me={me} />
       }
       <div style={styles.container}>
         {
@@ -104,22 +88,20 @@ class CreateBadge extends Component {
             <h2>Create a Badge</h2>
             <div style={styles.description}>
               Badges can be used to verify things about someone, such as their
-              membership in a group. You can also create badges for yourself
-              to express your identity.
+              involvement in {granter.name}.
             </div>
           </div>
         }
         <div style={styles.badgePreview}>
           <Badge
             badge={{
-              name,
-              icon_array: icon,
-              description_array: [description],
-              notes: [{
-                date: Date.now(),
-                msg: note
-              }],
-              granter: mini ? 'Self' : this.props.user.data.displayNames[0]
+              template: {
+                name,
+                icon,
+                description
+              },
+              id: 'new',
+              granter
             }}
             draggable={false}
             expanded
@@ -128,45 +110,31 @@ class CreateBadge extends Component {
         </div>
         <TextField
           style={styles.textfield}
-          value={this.state.name}
+          value={name}
           onChange={(e) => this.updateBadge('name', e.target.value)}
           floatingLabelText='Title'
           />
-        <div style={styles.counter}>{40 - this.state.name.length}</div><br />
+        <div style={styles.counter}>{40 - name.length}</div><br />
         <div style={styles.description}>
           An identity that can be shared with others, such as "Lawyer" or "Dog Lover".
         </div>
         <TextField
           style={styles.textfield}
-          value={this.state.description}
+          value={description}
           onChange={(e) => this.updateBadge('description', e.target.value)}
           floatingLabelText='Description'
           />
         <div style={styles.description}>
           A more detailed explanation, such as
-          "Member in good standing of the House of Hufflepuff."
+          "This individual is licensed to practice law by the New York State Bar."
           Should not include personally identifiable information.
         </div>
-        {
-          !mini &&
-          <div>
-            <TextField
-              style={styles.textfield}
-              value={this.state.note}
-              onChange={(e) => this.updateBadge('note', e.target.value)}
-              floatingLabelText='Note'
-              />
-            <div style={styles.description}>
-              An optional note about why this badge was granted.
-            </div>
-          </div>
-        }
         <div style={styles.createButton}>
           <RaisedButton
             labelStyle={styles.buttonLabel}
             backgroundColor={indigo500}
             label={'CREATE BADGE'}
-            onClick={mini ? this.createSelfBadge : this.createBadge} />
+            onClick={this.createBadge} />
         </div>
       </div>
     </div>
@@ -174,9 +142,12 @@ class CreateBadge extends Component {
 }
 
 CreateBadge.propTypes = {
-  user: PropTypes.object.isRequired,
-  createBadge: PropTypes.func.isRequired,
-  appendUserArray: PropTypes.func.isRequired
+  data: PropTypes.shape({
+    me: PropTypes.shape({}),
+    granter: PropTypes.shape({}),
+    loading: PropTypes.bool.isRequired
+  }).isRequired,
+  createBadge: PropTypes.func.isRequired
 }
 
 export default CreateBadge

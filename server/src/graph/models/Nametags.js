@@ -32,7 +32,7 @@ const get = ({conn}, id) => nametagsTable.get(id).run(conn)
  * Returns an array of nametags from an array of ids.
  *
  * @param {Object} context     graph context
- * @param {Array<String>} id   the id of the nametag to be retrieved
+ * @param {Array<String>} ids   the id of the nametag to be retrieved
  *
  */
 
@@ -45,6 +45,17 @@ const getAll = ({conn}, ids) => nametagsTable.getAll(...ids).run(conn)
   })
 
 /**
+ * Grants a badge to a nametag
+ *
+ * @param {Object} context  graph context
+ * @param {String} id       the id of the nametag to be assigned
+ * @param {String} badgeId  the id of the badge to be granted
+ *
+ */
+
+const grantBadge = ({conn}, id, badgeId) => nametagsTable.get(id).update({badge: badgeId}).run(conn)
+
+/**
  * Creates a nametag
  *
  * @param {Object} context     graph context
@@ -55,14 +66,14 @@ const getAll = ({conn}, ids) => nametagsTable.getAll(...ids).run(conn)
 const create = ({conn, user, models: {Users}}, nt) => {
   const nametag = Object.assign({}, nt, {createdAt: new Date()})
   return nametagsTable.insert(nametag).run(conn)
-  // Append nametag ID to user object
+  // Append nametag ID to user object and update default names and icons
   .then(res => {
     if (res.errors > 0) {
       return new errors.APIError('Error creating nametag')
     }
     const id = res.generated_keys[0]
     return Promise.all([
-      Users.addNametag(id, nametag.room),
+      Users.addNametag(id, nametag.room || nametag.template),
       id,
       user.displayNames.indexOf(nametag.name) === -1 ? Users.appendUserArray('displayNames', nametag.name) : null,
       user.icons.indexOf(nametag.icon) === -1 ? Users.appendUserArray('icons', nametag.icon) : null
@@ -133,6 +144,7 @@ module.exports = (context) => ({
     create: (nametag) => create(context, nametag),
     addMention: (nametag) => addMention(context, nametag),
     getNametagCount: (room) => getNametagCount(context, room),
-    updateLatestVisit: (nametagId) => updateLatestVisit(context, nametagId)
+    updateLatestVisit: (nametagId) => updateLatestVisit(context, nametagId),
+    grantBadge: (id, badgeId) => grantBadge(context, id, badgeId)
   }
 })

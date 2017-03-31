@@ -10,7 +10,7 @@ import NTIconMenu from './IconMenu'
 
 const nametagTarget = {
   drop (props, monitor) {
-    props.addNametagEditBadge(monitor.getItem(), props.room)
+    props.addNametagEditBadge(monitor.getItem(), props.room || props.template)
   }
 }
 
@@ -34,9 +34,10 @@ class EditNametag extends Component {
     }
 
     this.updateNametagProperty = (property) => {
+      const {room, template, updateNametagEdit} = this.props
       return (e) => {
-        this.props.updateNametagEdit(
-          this.props.room,
+        updateNametagEdit(
+          room || template,
           property,
           e.target.value
           )
@@ -44,22 +45,28 @@ class EditNametag extends Component {
     }
 
     this.removeCert = (badge) => {
+      const {removeNametagEditBadge, room, template} = this.props
       trackEvent('REMOVE_NT_CERT')
-      this.props.removeNametagEditBadge(badge, this.props.room)
+      removeNametagEditBadge(badge, room || template)
     }
   }
 
   componentDidMount () {
-    const {nametagEdit = {}, updateNametagEdit, me = {}, room} = this.props
-    updateNametagEdit(room, 'room', room)
+    const {nametagEdit = {}, updateNametagEdit, me = {}, room, template} = this.props
+    if (room) {
+      updateNametagEdit(room || template, 'room', room)
+    } else {
+      updateNametagEdit(room || template, 'template', template)
+    }
+
     if (!nametagEdit.name &&
       me.displayNames &&
       me.displayNames.length >= 1) {
-      updateNametagEdit(room, 'name', me.displayNames[0])
+      updateNametagEdit(room || template, 'name', me.displayNames[0])
     }
     if (!nametagEdit.icon &&
       me.icons.length > 0) {
-      updateNametagEdit(room, 'icon', me.icons[0])
+      updateNametagEdit(room || template, 'icon', me.icons[0])
     }
   }
 
@@ -69,6 +76,7 @@ class EditNametag extends Component {
       me = {},
       updateNametagEdit,
       room,
+      template,
       nametagEdit
     } = this.props
 
@@ -90,7 +98,7 @@ class EditNametag extends Component {
           <NTIconMenu
             icons={me.icons || []}
             icon={nametag.icon}
-            room={room}
+            about={room || template}
             updateNametagEdit={updateNametagEdit} />
           <div style={{width: 190, flex: 1}}>
             <AutoComplete
@@ -108,15 +116,19 @@ class EditNametag extends Component {
               floatingLabelStyle={floatingLabelStyle}
               underlineShow={false}
               searchText={nametag.name} />
-            <TextField
-              style={{width: 160}}
-              rows={2}
-              multiLine
-              fullWidth
-              errorText={error && error.bioError}
-              onChange={this.updateNametagProperty('bio')}
-              value={nametag.bio}
-              hintText='What brings you to this conversation?' />
+            {
+              room &&
+              <TextField
+                style={{width: 160}}
+                rows={2}
+                multiLine
+                fullWidth
+                errorText={error && error.bioError}
+                onChange={this.updateNametagProperty('bio')}
+                value={nametag.bio}
+                hintText='What brings you to this conversation?' />
+            }
+
           </div>
         </div>
         <div className='badges'>
@@ -145,7 +157,8 @@ EditNametag.propTypes = {
     icons: PropTypes.arrayOf(PropTypes.string).isRequired,
     displayNames: PropTypes.arrayOf(PropTypes.string).isRequired
   }).isRequired,
-  room: PropTypes.string.isRequired,
+  room: PropTypes.string,
+  template: PropTypes.string,
   isOver: PropTypes.bool.isRequired,
   updateNametagEdit: PropTypes.func.isRequired,
   addNametagEditBadge: PropTypes.func.isRequired,
@@ -157,7 +170,6 @@ export default DropTarget(dragTypes.badge, nametagTarget, collect)(EditNametag)
 const styles = {
   editNametag: {
     width: 250,
-    minHeight: 100,
     verticalAlign: 'top',
     padding: 5,
     margin: 5

@@ -135,8 +135,15 @@ type Nametag {
   # Indicates when a user has been mentioned in other rooms
   mentions: [Date]
 
-  # The room where the nametag is posted
-  room: Room!
+  # The room where the nametag is posted. May be null if this is a template nametag.
+  room: Room
+
+  # The template that this Nametag is created for. May be null if this a room Nametag.
+  template: BadgeTemplate
+
+  # The badge that this Nametag is created for. May be null if this a room Nametag or if
+  # this is a badge template nametag that is not yet assigned.
+  badge: Badge
 
   # Latest visit to this nametag's room by the nametag holder
   latestVisit: Date
@@ -242,6 +249,12 @@ type RootQuery {
   # Retrieves the current user
   me: User
 
+  # Retrieves information about a badge granter
+  granter(id:ID!): BadgeGranter
+
+  # Retrieves information about a badge template
+  template(id: ID!): BadgeTemplate
+
 }
 
 ################################################################################
@@ -310,7 +323,10 @@ input CreateNametagInput {
   badges: [ID]
 
   # The room that this nametag is joining
-  room: ID!
+  room: ID
+
+  # The badge template this nametag is requesting
+  template: ID
 
 }
 

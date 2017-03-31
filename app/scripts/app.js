@@ -8,7 +8,7 @@ import Room from './containers/Room/RoomContainer'
 import RoomCards from './containers/Room/RoomCardsContainer'
 import CreateRoom from './containers/Room/CreateRoomContainer'
 import CreateBadge from './containers/Badge/CreateBadgeContainer'
-import BadgeDetail from './containers/Badge/BadgeDetailContainer'
+import Badge from './containers/Badge/BadgeContainer'
 // import {getUser} from './actions/UserActions'
 import {registerServiceWorker, firebaseInit} from './actions/NotificationActions'
 
@@ -54,7 +54,8 @@ class Nametag extends Component {
             <Route path='/rooms/create' component={CreateRoom} />
             <Route path='/rooms/:roomId' component={Room} />
             <Route path='/granters/:granterId/badges/create' component={CreateBadge} />
-            <Route path='/badges/:badgeId' component={BadgeDetail} />
+            <Route path='/granters/:granterId/badges/:templateId' component={Badge} />
+            <Route path='/badges/:templateId' component={Badge} />
           </Router>
         </MuiThemeProvider>
       </StyleRoot>
