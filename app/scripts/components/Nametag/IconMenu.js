@@ -49,7 +49,7 @@ class NTIconMenu extends Component {
         }
         anchorOrigin={{horizontal: 'left', vertical: 'top'}}
         targetOrigin={{horizontal: 'left', vertical: 'top'}}
-        style={styles.icon}
+        style={styles.menuStyle}
         open={showMenu}
         onTouchTap={() => { this.setState({showMenu: true}) }}
         menuStyle={styles.menuStyle}>
@@ -86,14 +86,17 @@ export default NTIconMenu
 
 const styles = {
   menuItemStyle: {
-    lineHeight: 'inherit'
+    lineHeight: 'inherit',
+    minHeight: 80
   },
   menuItemInnerDivStyle: {
     padding: 6,
     textAlign: 'center'
   },
   icon: {
-    borderRadius: 25
+    borderRadius: 25,
+    width: 50,
+    height: 50
   },
   menuStyle: {
     padding: 0
