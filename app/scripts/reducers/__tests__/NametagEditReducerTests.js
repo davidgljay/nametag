@@ -13,7 +13,7 @@ describe('UPDATE_NAMETAG_EDIT', () => {
     },
       {
         type: constants.UPDATE_NAMETAG_EDIT,
-        room: 1,
+        about: 1,
         property: 'name',
         value: 'Dinosaur'
       })
@@ -32,7 +32,7 @@ describe('UPDATE_NAMETAG_EDIT', () => {
     },
       {
         type: constants.UPDATE_NAMETAG_EDIT,
-        room: 1,
+        about: 1,
         property: 'bio',
         value: 'Rwaaarr!!!'
       })
@@ -56,7 +56,7 @@ describe('ADD_NT_EDIT_BADGE', () => {
       1: {name: 'tag', id: 1}
     }, {
       type: constants.ADD_NT_EDIT_BADGE,
-      room: 1,
+      about: 1,
       badge: testBadge
     })
     expect(newState).toEqual(
@@ -87,7 +87,7 @@ describe('ADD_NT_EDIT_BADGE', () => {
       }
     }, {
       type: constants.ADD_NT_EDIT_BADGE,
-      room: 1,
+      about: 1,
       badge: testBadge
     })
 
@@ -118,7 +118,7 @@ describe('ADD_NT_EDIT_BADGE', () => {
       }
     }, {
       type: constants.ADD_NT_EDIT_BADGE,
-      room: 1,
+      about: 1,
       badge: testBadge
     })
     expect(newState).toEqual(
@@ -142,8 +142,8 @@ describe('REMOVE_NT_EDIT_BADGE', () => {
     },
       {
         type: constants.REMOVE_NT_EDIT_BADGE,
-        room: 1,
-        badgeId: 'test123'
+        about: 1,
+        badge: 'test123'
       })
     expect(newState).toEqual(
       {
@@ -162,8 +162,8 @@ describe('REMOVE_NT_EDIT_BADGE', () => {
     },
       {
         type: constants.REMOVE_NT_EDIT_BADGE,
-        room: 1,
-        certId: 'wudda'
+        about: 1,
+        badge: 'wudda'
       })
     expect(newState).toEqual({
       1: {
