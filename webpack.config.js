@@ -70,6 +70,10 @@ module.exports = {
         to: path.join(__dirname, 'dist', 'public', 'sw.js')
       },
       {
+        from: path.join(__dirname, 'app', 'manifest.json'),
+        to: path.join(__dirname, 'dist', 'public', 'manifest.json')
+      },
+      {
         from: path.join(__dirname, 'app', 'index.html'),
         to: path.join(__dirname, 'dist', 'public', 'index.html')
       },

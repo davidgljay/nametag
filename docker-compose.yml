@@ -1,6 +1,6 @@
-horizon:
+nametag:
   build: .
-  dockerfile: horizonDockerfile
+  dockerfile: nametagDockerfile
   volumes:
     - ./dist:/usr/app/
     - ./.keys:/usr/.keys
@@ -11,6 +11,7 @@ horizon:
     - ./server/backup:/usr/server/backup
   links:
     - rethinkdb
+    - redis
   ports:
     - "8181:8181"
     - "8185:8185"
@@ -22,6 +23,7 @@ rethinkdb:
   ports:
     - "28015:28015"
     - "8080:8080"
-# horizon:
-#   image: rethinkdb/horizon
-#   command: su -s /bin/sh horizon -c "/usr/app/.hz/starthz.sh"
+redis:
+  image: redis
+  ports:
+    - "29015:29015"

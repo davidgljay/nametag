@@ -15,6 +15,8 @@ const apollo = require('graphql-server-express')
 const {local, facebook, twitter, google} = require('./auth')
 const dbInit = require('./graph/models').init
 const passport = require('passport')
+const RedisStore = require('connect-redis')(session)
+const redis = require('./redis');
 const startSubscriptionServer = require('./graph/subscriptions/SubscriptionServer')
 const PORT = 8181
 
@@ -32,9 +34,36 @@ const server = https.createServer({
 
 /* Use body parser middleware */
 app.use(bodyParser.json())
-app.use(session({ secret: config.session.secret }))
 app.use(passport.initialize())
+
+/* Set up sessions. */
+const sessionOptions = {
+  secret: config.session.secret,
+  // httpOnly: true,
+  // rolling: true,
+  // saveUninitialized: true,
+  // resave: true,
+  // unset: 'destroy',
+  // sameSite: true,
+  // logErrors: true,
+  // cookie: {
+  //   secure: false,
+  //   maxAge: null //2.59e+8 // 48 hours for session token expiry
+  // },
+  store: new RedisStore({
+    client: redis.createClient(),
+  })
+}
+
+if (app.get('env') === 'production') {
+
+  // Enable the secure cookie when we are in production mode.
+  sessionOptions.cookie.secure = true
+}
+
+app.use(session(sessionOptions))
 app.use(passport.session())
+
 
 /* Get rethinkdb connection */
 r.connect({host: 'rethinkdb'})
