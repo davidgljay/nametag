@@ -49,11 +49,6 @@ class BadgeDetail extends Component {
     }
   }
 
-  componentDidMount () {
-    const {fetchBadges, certificateId} = this.props
-    fetchBadges([certificateId])
-  }
-
   render () {
     const {
       params,
@@ -63,8 +58,6 @@ class BadgeDetail extends Component {
       addNametagEditBadge,
       removeNametagEditBadge
     } = this.props
-    const path = `https://${window.location.host}/badges/${template.id}`
-    const shareMode = !!params.granterId
 
     if (loading) {
       return <div style={styles.spinner}>
@@ -72,6 +65,8 @@ class BadgeDetail extends Component {
       </div>
     }
 
+    const path = `https://${window.location.host}/badges/${template.id}`
+    const shareMode = !!params.granterId
     let headerText
     let claimButton
 
@@ -107,29 +102,35 @@ class BadgeDetail extends Component {
         They can also give you access to exclusive communities.
       </div>
 
-    if (!shareMode) {
+    if (shareMode) {
       claimButton = null
     } else if (!me) {
-      claimButton = <Login message={'Log in to claim'} />
+      claimButton = <Login message={'Log in to request this badge'} />
     } else {
       claimButton = <div style={styles.claimButton}>
-        <div>
+        <div style={styles.header}>
           {template.granter.name} will need to know a little about you before granting you
           this badge. What would you like to share?
         </div>
-        <EditNametag
-          nametagEdit={nametagEdits[template.id]}
-          me={me}
-          template={template.id}
-          updateNametagEdit={updateNametagEdit}
-          addNametagEditBadge={addNametagEditBadge}
-          removeNametagEditBadge={removeNametagEditBadge} />
-        <RaisedButton
-          style={styles.button}
-          labelStyle={styles.buttonLabel}
-          backgroundColor={indigo500}
-          onClick={this.onRequestClick}
-          label='REQUEST THIS BADGE' />
+        <div style={styles.requestBadge}>
+          <div style={styles.editNametag}>
+            <EditNametag
+              nametagEdit={nametagEdits[template.id]}
+              me={me}
+              template={template.id}
+              updateNametagEdit={updateNametagEdit}
+              addNametagEditBadge={addNametagEditBadge}
+              removeNametagEditBadge={removeNametagEditBadge} />
+          </div>
+          <div style={styles.editNametag}>
+            <RaisedButton
+              style={styles.button}
+              labelStyle={styles.buttonLabel}
+              backgroundColor={indigo500}
+              onClick={this.onRequestClick}
+              label='REQUEST THIS BADGE' />
+          </div>
+        </div>
       </div>
     }
 
@@ -154,7 +155,7 @@ class BadgeDetail extends Component {
         }
         <div style={styles.certDetail}>
           <Badge
-            badge={{template, notes: []}}
+            badge={{template, notes: [], id:'template'}}
             draggable={false}
             expanded />
         </div>
@@ -183,7 +184,7 @@ BadgeDetail.propTypes = {
     me: PropTypes.shape({
       displayNames: PropTypes.arrayOf(PropTypes.string).isRequired,
       icons: PropTypes.arrayOf(PropTypes.string).isRequired,
-      badges: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired
+      badges: PropTypes.arrayOf(PropTypes.object.isRequired)
     })
   }).isRequired
 }
@@ -222,8 +223,17 @@ const styles = {
     color: 'green',
     fontSize: 12
   },
+  requestBadge: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   spinner: {
     marginLeft: '45%',
     marginTop: '40vh'
+  },
+  editNametag: {
+    margin: 10
   }
 }

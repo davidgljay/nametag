@@ -4,7 +4,7 @@ import ROOMS_QUERY from './roomsQuery.graphql'
 import ROOM_QUERY from './roomQuery.graphql'
 import USER_QUERY from './userQuery.graphql'
 import CREATE_BADGE_TEMPLATE_QUERY from './createBadgeTemplateQuery.graphql'
-import BADGE_TEMPLATE_QUERY from './badgeTemplateQuery'
+import BADGE_TEMPLATE_QUERY from './badgeTemplateQuery.graphql'
 
 export const roomsQuery = graphql(ROOMS_QUERY)
 

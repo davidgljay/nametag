@@ -2,23 +2,23 @@ import constants from '../constants'
 import _ from 'lodash'
 
 const updateNametagEdit = (state, action) => {
-  let newNametag = {...state[action.room], [action.property]: action.value}
-  return {...state, [action.room]: newNametag}
+  let newNametag = {...state[action.about], [action.property]: action.value}
+  return {...state, [action.about]: newNametag}
 }
 
 const addBadge = (state, action) => {
-  const badges = state[action.room].badges
-  ? _.uniqBy([action.badge].concat(state[action.room].badges), (b) => b.id)
+  const badges = state[action.about].badges
+  ? _.uniqBy([action.badge].concat(state[action.about].badges), b => b.id)
     : [action.badge]
-  const newEditNametag = {...state[action.room], badges: badges}
-  return {...state, [action.room]: newEditNametag}
+  const newEditNametag = {...state[action.about], badges: badges}
+  return {...state, [action.about]: newEditNametag}
 }
 
 const removeBadge = (state, action) => {
-  const editNametag = state[action.room]
-  const newBadges = _.remove(editNametag.badges, (b) => b === action.badgeId)
+  const editNametag = state[action.about]
+  const newBadges = editNametag.badges.filter(b => b !== action.badge)
   let newNametag = {...editNametag, badges: newBadges}
-  return {...state, [action.room]: newNametag}
+  return {...state, [action.about]: newNametag}
 }
 
 const nametagEdit = (state = {}, action) => {

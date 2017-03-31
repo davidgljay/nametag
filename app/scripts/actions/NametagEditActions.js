@@ -1,26 +1,26 @@
 import constants from '../constants'
 
-export function updateNametagEdit (room, property, value) {
+export function updateNametagEdit (about, property, value) {
   return {
     type: constants.UPDATE_NAMETAG_EDIT,
-    room,
+    about,
     property,
     value
   }
 }
 
-export function addNametagEditBadge (badge, room) {
+export function addNametagEditBadge (badge, about) {
   return {
     type: constants.ADD_NT_EDIT_BADGE,
     badge,
-    room
+    about
   }
 }
 
-export function removeNametagEditBadge (badgeId, room) {
+export function removeNametagEditBadge (badge, about) {
   return {
     type: constants.REMOVE_NT_EDIT_BADGE,
-    badgeId,
-    room
+    badge,
+    about
   }
 }
