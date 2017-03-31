@@ -96,7 +96,7 @@ export default RoomCards
 
 const styles = {
   roomCards: {
-    background: "#fbfbfb",
+    background: '#fbfbfb',
     paddingBottom: 50,
     paddingTop: 20,
     minHeight: '100vh',

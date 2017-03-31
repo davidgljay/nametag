@@ -18,6 +18,10 @@ query roomsQuery {
           name
           description
           icon
+          granter {
+            id
+            name
+          }
         }
         notes {
           date
@@ -37,6 +41,10 @@ query roomsQuery {
         name
         description
         icon
+        granter {
+          id
+          name
+        }
       }
      notes {
        text
