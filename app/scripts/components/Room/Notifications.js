@@ -7,7 +7,7 @@ const Notifications = ({nametags, roomId, homepage}) => {
     : {...styles.flexDisplay, ...styles.flexDisplayMobile}
 
   const visitedRooms = nametags.filter(
-    nametag => new Date(nametag.room.closedAt) > new Date() && nametag.room.id !== roomId
+    nametag => nametag.room && new Date(nametag.room.closedAt) > new Date() && nametag.room.id !== roomId
   )
 
   const listItems = visitedRooms.map(nametag => {

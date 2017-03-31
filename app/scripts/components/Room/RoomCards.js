@@ -31,6 +31,9 @@ class RoomCards extends Component {
     let nametagHash = {}
     if (me) {
       nametagHash = me.nametags.reduce((hash, nametag) => {
+        if (!nametag.room) {
+          return hash
+        }
         hash[nametag.room.id] = nametag
         return hash
       }, {})
@@ -77,16 +80,16 @@ RoomCards.propTypes = {
       nametags: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string.isRequired,
         room: PropTypes.shape({
-          id: PropTypes.string.isRequired
-        }).isRequired
+          id: PropTypes.string
+        })
       })).isRequired
     }),
     rooms: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.string.isRequired
-      })
+      }).isRequired
     )
-  }).isRequired
+  })
 }
 
 export default RoomCards
