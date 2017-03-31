@@ -46,7 +46,6 @@ class EditNametag extends Component {
 
     this.removeCert = (badge) => {
       const {removeNametagEditBadge, room, template} = this.props
-      trackEvent('REMOVE_NT_CERT')
       removeNametagEditBadge(badge.id, room || template)
     }
   }

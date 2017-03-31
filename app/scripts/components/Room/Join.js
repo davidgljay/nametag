@@ -16,7 +16,11 @@ class Join extends Component {
     this.onJoinClick = () => {
       const {room, nametag, createNametag, normsChecked} = this.props
       if (normsChecked) {
-        createNametag(nametag)
+        const nametagForPost = {
+          ...nametag,
+          badges: nametag.badges.map(badge => badge.id)
+        }
+        createNametag(nametagForPost)
           .then(() => {
             window.location = `/rooms/${room}`
           })

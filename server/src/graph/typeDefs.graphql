@@ -317,7 +317,7 @@ input CreateNametagInput {
   icon: String!
 
   # Additional information about the user
-  bio: String!
+  bio: String
 
   # IDs of badges to include in this Nametag
   badges: [ID]

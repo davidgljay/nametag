@@ -137,19 +137,19 @@ describe('REMOVE_NT_EDIT_BADGE', () => {
     let newState = reducer({
       1: {
         name: 'tag',
-        badges: ['test123', 'badge456']
+        badges: [{id: 'test123'}, {id: 'badge456'}]
       }
     },
       {
         type: constants.REMOVE_NT_EDIT_BADGE,
         about: 1,
-        badge: 'test123'
+        badgeId: 'test123'
       })
     expect(newState).toEqual(
       {
         1: {
           name: 'tag',
-          badges: ['badge456']
+          badges: [{id: 'badge456'}]
         }
       })
   })
@@ -163,7 +163,7 @@ describe('REMOVE_NT_EDIT_BADGE', () => {
       {
         type: constants.REMOVE_NT_EDIT_BADGE,
         about: 1,
-        badge: 'wudda'
+        badgeId: 'wudda'
       })
     expect(newState).toEqual({
       1: {

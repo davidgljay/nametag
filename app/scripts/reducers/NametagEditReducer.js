@@ -16,7 +16,7 @@ const addBadge = (state, action) => {
 
 const removeBadge = (state, action) => {
   const editNametag = state[action.about]
-  const newBadges = editNametag.badges.filter(b => b !== action.badge)
+  const newBadges = editNametag.badges.filter(b => b.id !== action.badgeId)
   let newNametag = {...editNametag, badges: newBadges}
   return {...state, [action.about]: newNametag}
 }

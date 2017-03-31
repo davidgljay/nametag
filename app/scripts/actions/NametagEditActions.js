@@ -17,10 +17,10 @@ export function addNametagEditBadge (badge, about) {
   }
 }
 
-export function removeNametagEditBadge (badge, about) {
+export function removeNametagEditBadge (badgeId, about) {
   return {
     type: constants.REMOVE_NT_EDIT_BADGE,
-    badge,
+    badgeId,
     about
   }
 }
