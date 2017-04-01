@@ -39,17 +39,17 @@ app.use(passport.initialize())
 /* Set up sessions. */
 const sessionOptions = {
   secret: config.session.secret,
-  // httpOnly: true,
-  // rolling: true,
-  // saveUninitialized: true,
-  // resave: true,
-  // unset: 'destroy',
-  // sameSite: true,
-  // logErrors: true,
-  // cookie: {
-  //   secure: false,
-  //   maxAge: null //2.59e+8 // 48 hours for session token expiry
-  // },
+  httpOnly: true,
+  rolling: true,
+  saveUninitialized: true,
+  resave: true,
+  unset: 'destroy',
+  sameSite: true,
+  logErrors: true,
+  cookie: {
+    secure: false,
+    maxAge: null //2.59e+8 // 48 hours for session token expiry
+  },
   store: new RedisStore({
     client: redis.createClient(),
   })
@@ -62,12 +62,20 @@ if (app.get('env') === 'production') {
 }
 
 app.use(session(sessionOptions))
+app.use(function (req, res, next) {
+  console.log('Sessions', req.session);
+  if (!req.session) {
+    return next(new Error('No session initialized')) // handle error
+  }
+  next() // otherwise continue
+})
 app.use(passport.session())
 
 
 /* Get rethinkdb connection */
 r.connect({host: 'rethinkdb'})
   .then(conn => {
+    console.log('Rethinkdb connected')
     /* Auth Providers */
     passport.use('local', local(conn))
     passport.use('facebook', facebook(conn))
@@ -76,10 +84,12 @@ r.connect({host: 'rethinkdb'})
 
     /* User session serialization */
     passport.serializeUser((user, done) => {
+      console.log('Deserializing user')
       done(null, user.id)
     })
 
     passport.deserializeUser((id, done) => {
+      console.log('id', id)
       r.db('nametag').table('users').get(id).run(conn)
         .then(user => done(null, user))
         .catch(done)

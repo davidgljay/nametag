@@ -26,4 +26,5 @@ rethinkdb:
 redis:
   image: redis
   ports:
-    - "29015:29015"
+    - "6379:6379"
+    - "6380:6380"
