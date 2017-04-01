@@ -34,7 +34,6 @@ const server = https.createServer({
 
 /* Use body parser middleware */
 app.use(bodyParser.json())
-app.use(passport.initialize())
 
 /* Set up sessions. */
 const sessionOptions = {
@@ -63,19 +62,18 @@ if (app.get('env') === 'production') {
 
 app.use(session(sessionOptions))
 app.use(function (req, res, next) {
-  console.log('Sessions', req.session);
   if (!req.session) {
     return next(new Error('No session initialized')) // handle error
   }
   next() // otherwise continue
 })
+app.use(passport.initialize())
 app.use(passport.session())
 
 
 /* Get rethinkdb connection */
 r.connect({host: 'rethinkdb'})
   .then(conn => {
-    console.log('Rethinkdb connected')
     /* Auth Providers */
     passport.use('local', local(conn))
     passport.use('facebook', facebook(conn))
@@ -89,7 +87,6 @@ r.connect({host: 'rethinkdb'})
     })
 
     passport.deserializeUser((id, done) => {
-      console.log('id', id)
       r.db('nametag').table('users').get(id).run(conn)
         .then(user => done(null, user))
         .catch(done)
