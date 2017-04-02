@@ -19,6 +19,7 @@
     "apollo-client": "^1.0.0-rc.5",
     "bluebird": "^3.4.0",
     "cookie": "^0.2.3",
+    "crypto-js": "^3.1.9-1",
     "dialog-polyfill": "^0.4.4",
     "fetch": "^1.1.0",
     "graphql-tag": "^1.3.2",
