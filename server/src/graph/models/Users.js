@@ -1,7 +1,7 @@
 const r = require('rethinkdb')
 const {fromUrl} = require('../../routes/images/imageUpload')
 const {ErrBadAuth} = require('../../errors')
-
+const {passwordsalt} = require('../../secrets.json')
 const usersTable = r.db('nametag').table('users')
 
 /**
@@ -107,7 +107,6 @@ const findOrCreateFromAuth = ({conn}, profile, provider) => {
             [provider]: authProfile.id,
             createdAt: Date.now()
           }
-          console.log('userObj', userObj)
           return usersTable.insert(userObj).run(conn)
         })
         .then(rdbRes => {
@@ -146,11 +145,43 @@ const userFromAuth = (provider, profile) => {
   }
 }
 
+/**
+ * Finds or creates a user based from local auth.
+ *
+ * @param {Object} context   graph context
+ * @param {String} email     E-mail address of the user
+ * @param {String} password  Hashed password from the user
+ *
+ */
+
+ const createLocal = (context, email, password) =>
+  usersTable.insert({
+    email
+  }).then({generated_keys} => {
+    const id = generated_keys[0]
+    return usersTable.get(id).update({
+      password: `${password}${passwordsalt}${id}`
+    })
+  })
+
+/**
+ * Determines whether a hashed password is valid
+ * TODO: Make this once function with findemail.
+ * @param {Object} context   graph context
+ * @param {String} id     E-mail address of the user
+ * @param {String} password  Hashed password from the user
+ *
+ */
+
+ const validPassword = (context, id, password) =>
+  usersTable.get(id)(password).eq(`${password}${passwordsalt}${id}`)
+
 module.exports = (context) => ({
   Users: {
     get: (id) => get(context, id),
     getByEmail: (email) => getByEmail(context, email),
     findOrCreateFromAuth: (profile, provider) => findOrCreateFromAuth(context, profile, provider),
+    createLocal: (email, password) => createLocal(context, email, password),
     appendUserArray: (property, value) => appendUserArray(context, property, value),
     addNametag: (nametagId, roomId) => addNametag(context, nametagId, roomId),
     addToken: (token) => addToken(context, token),
