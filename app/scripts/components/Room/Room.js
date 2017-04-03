@@ -30,6 +30,7 @@ class Room extends Component {
     this.showPresence = (nametagId) => {
       if (this.state.presenceTimer) { return }
       const {updateLatestVisit} = this.props
+      updateLatestVisit(this.getMyNametag().id)
       this.setState((prevState) => {
         clearInterval(prevState.presenceTimer)
         const presenceTimer = setInterval(() => {
