@@ -28,6 +28,11 @@ export function loginUser (email, password) {
       password: hashPassword(password)
     })
   }
+  return fetch(options)
+    .then(res => {
+      window.location = '/'
+    })
+    .catch(error)
 }
 
 const hashPassword = (password) => {
