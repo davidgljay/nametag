@@ -18,7 +18,7 @@ class Join extends Component {
       if (normsChecked) {
         const nametagForPost = {
           ...nametag,
-          badges: nametag.badges.map(badge => badge.id)
+          badges: nametag.badges ? nametag.badges.map(badge => badge.id) : []
         }
         createNametag(nametagForPost)
           .then(() => {

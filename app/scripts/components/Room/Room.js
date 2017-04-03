@@ -57,7 +57,7 @@ class Room extends Component {
     this.getMyNametag = () => {
       const {me, room} = this.props.data
       const myNtId = me.nametags.reduce(
-        (val, nametag) => nametag.room.id === room.id ? nametag.id : val, null
+        (val, nametag) => nametag.room && nametag.room.id === room.id ? nametag.id : val, null
       )
       return room.nametags.filter((nt) => nt.id === myNtId)[0]
     }
