@@ -5,7 +5,6 @@ var urlsToCache = [
   '/',
   '/public/scripts/app.js',
   '/public/manifest.json',
-  '/horizon/horizon.js',
   '/images/google.png',
   '/images/twitter.jpg',
   '/images/fb.jpg'
