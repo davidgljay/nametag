@@ -22,5 +22,4 @@ LABEL yarnUpdated="3/31/17"
 COPY $PWD/server/package.json /usr/server/package.json
 WORKDIR usr/server
 RUN yarn install
-RUN yarn global add horizon
 CMD ./starthz.sh

@@ -11,7 +11,7 @@
     "lint-fix": "standard --fix",
     "backup": "docker-compose run nametag sh backup.sh",
     "syncdb": "docker-compose run nametag hz schema apply schema.toml --project-name nametag --connect rethinkdb",
-    "pull": "git pull origin master && npm install && npm run build && docker-compose build nametag && docker-compose stop && docker-compose up -d",
+    "pull": "git pull origin master && yarn install && yarn build && docker-compose build nametag && docker-compose stop && docker-compose up -d",
     "storybook": "start-storybook -p 9001 -c .storybook"
   },
   "dependencies": {
