@@ -30,11 +30,14 @@ class Login extends Component {
     }
 
     this.updateField = fieldName => e => {
-      const {password, confirm} = this.state
+      const {password, confirm, register} = this.state
       e.preventDefault()
       this.setState({[fieldName]: e.target.value})
       if (fieldName === 'email' && validEmail(e.target.value)) {
         this.setState({emailAlert: ''})
+      }
+      if (!register) {
+        this.setState({passwordAlert: ''})
       }
       if (fieldName === 'password' && e.target.value.length >= 8 && e.target.value === confirm) {
         this.setState({passwordAlert: ''})
@@ -51,7 +54,7 @@ class Login extends Component {
     }
 
     this.validatePassword = () => {
-      if (this.state.password.length < 8) {
+      if (this.state.password.length < 8 && this.state.register) {
         this.setState({passwordAlert: 'Your password must be at least 8 characters'})
       }
     }
