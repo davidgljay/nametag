@@ -30,6 +30,7 @@ class Room extends Component {
     this.showPresence = (nametagId) => {
       if (this.state.presenceTimer) { return }
       const {updateLatestVisit} = this.props
+      updateLatestVisit(this.getMyNametag().id)
       this.setState((prevState) => {
         clearInterval(prevState.presenceTimer)
         const presenceTimer = setInterval(() => {
@@ -57,7 +58,7 @@ class Room extends Component {
     this.getMyNametag = () => {
       const {me, room} = this.props.data
       const myNtId = me.nametags.reduce(
-        (val, nametag) => nametag.room.id === room.id ? nametag.id : val, null
+        (val, nametag) => nametag.room && nametag.room.id === room.id ? nametag.id : val, null
       )
       return room.nametags.filter((nt) => nt.id === myNtId)[0]
     }

@@ -22,6 +22,9 @@ query roomQuery($id: ID!){
           name
           icon
           description
+          granter {
+            name
+          }
         }
         notes {
           text

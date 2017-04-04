@@ -6,7 +6,8 @@ const NametagSubscription = conn => r.db('nametag').table('nametags').changes().
   .then(feed => {
     feed.each((err, nametag) => {
       if (err) {
-        errorLog(new APIError('Error in nametag subscription feed'))
+        // errorLog(new APIError('Error in nametag subscription feed'))
+        console.log('Error in Nametag subscription', err)
         return
       }
       if (!nametag.old_val) {

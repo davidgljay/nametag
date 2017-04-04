@@ -54,11 +54,13 @@ class Compose extends Component {
     ? {...styles.selectorStyle, ...styles.mobileSelector} : styles.selectorStyle
     return <div style={styles.compose}>
       <div style={styles.spacer} />
-      <EmojiPicker
-        show={this.state.showEmoji}
-        selectorStyle={selectorStyle}
-        selector={() => null}
-        handleEmoji={this.handleEmoji} />
+      {
+        // <EmojiPicker
+        //   show={this.state.showEmoji}
+        //   selectorStyle={selectorStyle}
+        //   selector={() => null}
+        //   handleEmoji={this.handleEmoji} />
+      }
       <IconButton
         onClick={this.toggleEmoji}>
         <FontIcon
