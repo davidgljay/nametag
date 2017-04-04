@@ -2,7 +2,6 @@ const { SubscriptionServer } = require('subscriptions-transport-ws')
 const subscriptionManager = require('./SubscriptionManager')
 const Context = require('../context')
 
-
 module.exports = (conn, server) => new SubscriptionServer(
   {
     subscriptionManager,

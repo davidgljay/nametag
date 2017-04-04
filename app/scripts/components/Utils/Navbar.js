@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import AppBar from 'material-ui/AppBar'
 import FlatButton from 'material-ui/FlatButton'
-import {indigo500} from 'material-ui/styles/colors'
 import radium from 'radium'
 import {mobile} from '../../../styles/sizes'
 import NavDrawer from './NavDrawer'

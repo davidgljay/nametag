@@ -5,7 +5,6 @@ import { dragTypes } from '../../constants'
 import {Card} from 'material-ui/Card'
 import TextField from 'material-ui/TextField'
 import AutoComplete from 'material-ui/AutoComplete'
-import trackEvent from '../../utils/analytics'
 import NTIconMenu from './IconMenu'
 
 const nametagTarget = {

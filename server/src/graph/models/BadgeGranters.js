@@ -1,5 +1,5 @@
 const r = require('rethinkdb')
-const errors = require('../../errors')
+// const errors = require('../../errors')
 
 const badgeGrantersTable = r.db('nametag').table('badgeGranters')
 
@@ -31,7 +31,6 @@ const create = ({conn}, granter) => {
       return Object.assign({}, granter, {id: res.generated_keys[0]})
     })
 }
-
 
 module.exports = (context) => ({
   BadgeGranters: {

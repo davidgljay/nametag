@@ -166,7 +166,7 @@ const hashPassword = (password) => {
  *
  */
 
- const createLocal = ({conn}, email, password) =>
+const createLocal = ({conn}, email, password) =>
  r.branch(
    usersTable.getAll(email, {index: 'email'}).count().eq(0),
    usersTable.insert({
@@ -201,7 +201,7 @@ const hashPassword = (password) => {
  *
  */
 
- const validPassword = ({conn}, id, password) =>
+const validPassword = ({conn}, id, password) =>
   usersTable.get(id)('password').eq(hashPassword(`${password}${passwordsalt}${id}`)).run(conn)
 
 module.exports = (context) => ({

@@ -21,7 +21,7 @@ class BadgeDetail extends Component {
     this.onRequestClick = () => {
       const {nametagEdits, createNametag, data: {template: {id}}} = this.props
       createNametag(nametagEdits[id])
-      //TODO: Send to homepage with message, possibly via Router.link?
+      // TODO: Send to homepage with message, possibly via Router.link?
     }
 
     this.onEmailClick = () => {
@@ -155,7 +155,7 @@ class BadgeDetail extends Component {
         }
         <div style={styles.certDetail}>
           <Badge
-            badge={{template, notes: [], id:'template'}}
+            badge={{template, notes: [], id: 'template'}}
             draggable={false}
             expanded />
         </div>

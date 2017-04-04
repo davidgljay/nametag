@@ -1,5 +1,5 @@
 const r = require('rethinkdb')
-const errors = require('../../errors')
+// const errors = require('../../errors')
 
 const badgeTemplatesTable = r.db('nametag').table('badgeTemplates')
 
@@ -48,7 +48,6 @@ const create = ({conn}, template) => {
   return badgeTemplatesTable.insert(badgeTemplate).run(conn)
     .then(res => Object.assign({}, template, {id: res.generated_keys[0]}))
 }
-
 
 module.exports = (context) => ({
   BadgeTemplates: {

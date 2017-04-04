@@ -18,7 +18,6 @@ const dbInit = require('./graph/models').init
 const passport = require('passport')
 const RedisStore = require('connect-redis')(session)
 const redis = require('./redis')
-const flash = require('req-flash')
 const startSubscriptionServer = require('./graph/subscriptions/SubscriptionServer')
 const PORT = 8181
 
@@ -49,15 +48,14 @@ const sessionOptions = {
   logErrors: true,
   cookie: {
     secure: false,
-    maxAge: null //2.59e+8 // 48 hours for session token expiry
+    maxAge: null // 2.59e+8 // 48 hours for session token expiry
   },
   store: new RedisStore({
-    client: redis.createClient(),
+    client: redis.createClient()
   })
 }
 
 if (app.get('env') === 'production') {
-
   // Enable the secure cookie when we are in production mode.
   sessionOptions.cookie.secure = true
 }
@@ -71,7 +69,6 @@ app.use(function (req, res, next) {
 })
 app.use(passport.initialize())
 app.use(passport.session())
-
 
 /* Get rethinkdb connection */
 r.connect({host: 'rethinkdb'})

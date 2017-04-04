@@ -50,8 +50,7 @@ const RootMutation = {
   updateLatestVisit: (obj, {nametagId}, {user, models: {Nametags}}) => {
     // Confirm that the user is in the room
     if (Object.keys(user.nametags)
-      .reduce((bool, room) => user.nametags[room] === nametagId ? false : bool, true))
-    {
+      .reduce((bool, room) => user.nametags[room] === nametagId ? false : bool, true)) {
       return Promise.reject(errors.ErrNotInRoom)
     }
     return Nametags.updateLatestVisit(nametagId)
@@ -72,8 +71,6 @@ const RootMutation = {
   updateToken: (obj, {token}, {user, models: {Users}}) =>
     Users.addToken(token)
 }
-
-
 
 module.exports = Object.keys(RootMutation).reduce((wrapped, key) => {
   wrapped[key] = wrap(RootMutation[key])

@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import FontIcon from 'material-ui/FontIcon'
 import IconButton from 'material-ui/IconButton'
 import CircularProgress from 'material-ui/CircularProgress'
-import {indigo500} from 'material-ui/styles/colors'
 import {mobile} from '../../../styles/sizes'
 import radium, {keyframes} from 'radium'
 

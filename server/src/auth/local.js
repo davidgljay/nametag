@@ -4,9 +4,9 @@ const {ErrBadAuth} = require('../errors')
 const Users = (conn) => UsersLoader({conn}).Users
 
 module.exports = conn => new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'password'
-  },
+  usernameField: 'email',
+  passwordField: 'password'
+},
   (email, password, done) => {
     Users(conn).getByEmail(email)
       .then(user => {
@@ -16,7 +16,7 @@ module.exports = conn => new LocalStrategy({
         return Promise.all([Users(conn).validPassword(user.id, password), user])
       })
       .then(([valid, user]) => {
-      if (!valid) {
+        if (!valid) {
           return done(null, false, ErrBadAuth)
         }
         return done(null, user)

@@ -54,7 +54,7 @@ const create = ({conn, models: {Users, Nametags}}, badge, nametagId) => {
   // Append badge ID to user object
   .then(res => {
     if (res.errors > 0) {
-      return new Error(err)
+      return new Error(res.error)
     }
     const id = res.generated_keys[0]
     return Promise.all([

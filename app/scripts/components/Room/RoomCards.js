@@ -3,7 +3,6 @@ import RoomCard from './RoomCard'
 import Navbar from '../Utils/Navbar'
 import LoginDialog from '../User/LoginDialog'
 import Notifications from '../Room/Notifications'
-import {lightBlue200} from 'material-ui/styles/colors'
 
 class RoomCards extends Component {
 

@@ -133,7 +133,6 @@ describe('ADD_NT_EDIT_BADGE', () => {
 
 describe('REMOVE_NT_EDIT_BADGE', () => {
   it('should remove a badge from a nametag for the room', () => {
-
     let newState = reducer({
       1: {
         name: 'tag',

@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import EmojiPicker from 'react-simple-emoji'
 import radium from 'radium'
 import {mobile} from '../../../styles/sizes'
 import FontIcon from 'material-ui/FontIcon'
@@ -50,8 +49,8 @@ class Compose extends Component {
     // TODO: Add GIFs, image upload
 
     // Workaround for mobile sizing since Radium doesn't appear to work.
-    const selectorStyle = window.innerWidth < 800
-    ? {...styles.selectorStyle, ...styles.mobileSelector} : styles.selectorStyle
+    // const selectorStyle = window.innerWidth < 800
+    // ? {...styles.selectorStyle, ...styles.mobileSelector} : styles.selectorStyle
     return <div style={styles.compose}>
       <div style={styles.spacer} />
       {

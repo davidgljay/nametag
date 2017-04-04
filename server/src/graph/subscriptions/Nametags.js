@@ -1,13 +1,12 @@
 const pubsub = require('./pubsub')
-const {APIError, errorLog} = require('../../errors')
+const {errorLog} = require('../../errors')
 const r = require('rethinkdb')
 
 const NametagSubscription = conn => r.db('nametag').table('nametags').changes().run(conn)
   .then(feed => {
     feed.each((err, nametag) => {
       if (err) {
-        // errorLog(new APIError('Error in nametag subscription feed'))
-        console.log('Error in Nametag subscription', err)
+        errorLog('Error in nametag subscription feed')
         return
       }
       if (!nametag.old_val) {
