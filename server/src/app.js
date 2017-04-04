@@ -136,12 +136,9 @@ app.get('/auth/google/callback', passport.authenticate('google',
   { successRedirect: '/',
     failureRedirect: '/#login' }))
 
-app.post('/login',
-  passport.authenticate('local', { successRedirect: '/',
-    failureRedirect: '/#login',
-    successFlash: 'Welcome!',
-    failureFlash: 'Email or password is invalid.' })
-)
+app.post('/login', (req, res, next) => {
+  passport.authenticate('local', local.handleLocalCallback(req, res, next))(req, res, next)
+})
 
 app.get('/logout',
   (req, res) => {
@@ -192,20 +189,15 @@ app.post('/api/image_url',
   })
 
 app.use('/', (err, req, res, next) => {
-  if (err !== errors.ErrNotFound) {
-    console.error(err);
-  }
-
   if (err instanceof errors.APIError) {
-    res.status(err.status);
-    res.render('error', {
-      message: err.message,
-      error: app.get('env') === 'development' ? err : {}
+    res.status(err.status)
+    res.json({
+      error: err
     });
   } else {
-    res.render('error', {
-      message: err.message,
-      error: app.get('env') === 'development' ? err : {}
+    console.error(err)
+    res.json({
+      error: err
     });
   }
 })
