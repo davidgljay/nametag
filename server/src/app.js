@@ -13,6 +13,7 @@ const graph = require('./graph')
 const subscriptions = require('./graph/subscriptions')
 const apollo = require('graphql-server-express')
 const {local, facebook, twitter, google} = require('./auth')
+const errors = require('./errors')
 const dbInit = require('./graph/models').init
 const passport = require('passport')
 const RedisStore = require('connect-redis')(session)

@@ -175,7 +175,7 @@ const userFromAuth = (provider, profile) => {
  */
 
  const validPassword = ({conn}, id, password) =>
-  usersTable.get(id)(password).eq(`${password}${passwordsalt}${id}`).run(conn)
+  usersTable.get(id)('password').eq(`${password}${passwordsalt}${id}`).run(conn)
 
 module.exports = (context) => ({
   Users: {
@@ -183,6 +183,7 @@ module.exports = (context) => ({
     getByEmail: (email) => getByEmail(context, email),
     findOrCreateFromAuth: (profile, provider) => findOrCreateFromAuth(context, profile, provider),
     createLocal: (email, password) => createLocal(context, email, password),
+    validPassword: (id, password) => validPassword(context, id, password),
     appendUserArray: (property, value) => appendUserArray(context, property, value),
     addNametag: (nametagId, roomId) => addNametag(context, nametagId, roomId),
     addToken: (token) => addToken(context, token),
