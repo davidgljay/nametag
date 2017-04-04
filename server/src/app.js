@@ -103,6 +103,20 @@ r.connect({host: 'rethinkdb'})
     /* Activate graphql subscriptions */
     subscriptions.activate(conn)
     startSubscriptionServer(conn, server)
+
+    app.use('/', (err, req, res, next) => {
+      if (err instanceof errors.APIError) {
+        res.status(err.status)
+        res.json({
+          error: err
+        })
+      } else {
+        console.error(err)
+        res.json({
+          error: err
+        })
+      }
+    })
   })
   .catch(err => console.log(`Error connecting to rethinkdb: ${err}`))
 
@@ -187,19 +201,5 @@ app.post('/api/image_url',
       .then(data => res.json(data))
       .catch(err => next(`Uploading image from URL ${err}`))
   })
-
-app.use('/', (err, req, res, next) => {
-  if (err instanceof errors.APIError) {
-    res.status(err.status)
-    res.json({
-      error: err
-    })
-  } else {
-    console.error(err)
-    res.json({
-      error: err
-    })
-  }
-})
 
 console.log('Listening on port 8181.')

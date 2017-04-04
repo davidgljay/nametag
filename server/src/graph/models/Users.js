@@ -1,6 +1,6 @@
 const r = require('rethinkdb')
 const {fromUrl} = require('../../routes/images/imageUpload')
-const {ErrBadAuth, ErrNotLoggedIn} = require('../../errors')
+const {ErrBadAuth, ErrNotLoggedIn, ErrEmailTaken} = require('../../errors')
 const {passwordsalt} = require('../../secrets.json')
 const usersTable = r.db('nametag').table('users')
 const {enc, SHA3} = require('crypto-js')
@@ -167,15 +167,23 @@ const hashPassword = (password) => {
  */
 
  const createLocal = ({conn}, email, password) =>
-  usersTable.insert({
-    email,
-    createdAt: new Date(),
-    badges: [],
-    displayNames: [],
-    icons: []
-  }).run(conn).then(res => {
+ r.branch(
+   usersTable.getAll(email, {index: 'email'}).count().eq(0),
+   usersTable.insert({
+     email,
+     createdAt: new Date(),
+     badges: [],
+     displayNames: [],
+     icons: []
+   }),
+   {exists: true}
+ )
+  .run(conn).then(res => {
     if (res.errors) {
       return Promise.reject(new Error('Could not insert user', res.error))
+    }
+    if (res.exists) {
+      return Promise.reject(ErrEmailTaken)
     }
     const id = res.generated_keys[0]
     return usersTable.get(id).update({
