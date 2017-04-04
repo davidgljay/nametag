@@ -30,10 +30,17 @@ class Login extends Component {
     }
 
     this.updateField = fieldName => e => {
+      const {password, confirm} = this.state
       e.preventDefault()
       this.setState({[fieldName]: e.target.value})
       if (fieldName === 'email' && validEmail(e.target.value)) {
         this.setState({emailAlert: ''})
+      }
+      if (fieldName === 'password' && e.target.value.length >= 8 && e.target.value === confirm) {
+        this.setState({passwordAlert: ''})
+      }
+      if (fieldName === 'confirm' && e.target.value.length >= 8 && e.target.value === password) {
+        this.setState({passwordAlert: ''})
       }
     }
 
@@ -43,15 +50,25 @@ class Login extends Component {
       }
     }
 
+    this.validatePassword = () => {
+      if (this.state.password.length < 8) {
+        this.setState({passwordAlert: 'Your password must be at least 8 characters'})
+      }
+    }
+
     this.register = () => {
       const {email, password, confirm} = this.state
       if (password !== confirm) {
-        this.setState({alert: 'Passwords do not match'})
+        this.setState({passwordAlert: 'Passwords do not match'})
         return
       }
 
+      if (password.length < 8) {
+        this.setState({passwordAlert: 'Your password must be at least 8 characters'})
+      }
+
       if (!validEmail(email)) {
-        this.setState({alert: 'Please enter a valid e-mail address'})
+        this.setState({emailAlert: 'Please enter a valid e-mail address'})
         return
       }
       this.props.registerUser(email, password)
@@ -97,6 +114,7 @@ class Login extends Component {
           floatingLabelText='Password'
           type='password'
           errorText={passwordAlert}
+          onBlur={this.validatePassword}
           style={styles.field}
           onChange={this.updateField('password')} />
         {
