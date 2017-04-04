@@ -85,7 +85,7 @@ export default radium(Navbar)
 const styles = {
   appBar: {
     fontWeight: 'bold',
-    background: "#12726a",
+    background: '#12726a',
     cursor: 'pointer'
   },
   button: {

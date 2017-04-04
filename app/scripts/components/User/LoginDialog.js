@@ -2,12 +2,16 @@ import React from 'react'
 import Login from './Login'
 import Dialog from 'material-ui/Dialog'
 
-const LoginDialog = ({showLogin, setting, providerAuth}) => <Dialog
+const LoginDialog = ({toggleLogin, showLogin, message, loginUser, registerUser}) => <Dialog
   modal={false}
   contentStyle={styles.dialog}
   open={showLogin || false}
-  onRequestClose={() => setting('showLogin', false)}>
-  <Login providerAuth={providerAuth} />
+  onRequestClose={() => toggleLogin()}>
+  <Login
+    message={message}
+    registerUser={registerUser}
+    loginUser={loginUser}
+    />
 </Dialog>
 
 export default LoginDialog

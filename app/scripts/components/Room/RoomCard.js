@@ -108,10 +108,13 @@ class RoomCard extends Component {
       <div style={styles.norms}>
         <h4>Conversation Norms</h4>
         <Norms norms={room.norms} showChecks />
-        <Checkbox
-          style={styles.checkbox}
-          label='I agree to these norms'
-          onClick={this.onNormsCheck} />
+        {
+          me &&
+          <Checkbox
+            style={styles.checkbox}
+            label='I agree to these norms'
+            onClick={this.onNormsCheck} />
+        }
       </div>
       {
         !creating &&

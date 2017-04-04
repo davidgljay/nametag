@@ -3,6 +3,7 @@ import {compose} from 'react-apollo'
 import component from '../../components/Room/RoomCards'
 import {roomsQuery} from '../../graph/queries'
 import {createNametag} from '../../graph/mutations'
+import {registerUser, loginUser} from '../../actions/UserActions'
 import {updateNametagEdit, addNametagEditBadge, removeNametagEditBadge} from '../../actions/NametagEditActions'
 
 const mapStateToProps = (state) => {
@@ -16,7 +17,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateNametagEdit: disp(updateNametagEdit),
     addNametagEditBadge: disp(addNametagEditBadge),
-    removeNametagEditBadge: disp(removeNametagEditBadge)
+    removeNametagEditBadge: disp(removeNametagEditBadge),
+    registerUser: disp(registerUser),
+    loginUser: disp(loginUser)
   }
 }
 

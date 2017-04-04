@@ -40,8 +40,8 @@ app.use(bodyParser.json())
 /* Set up sessions. */
 const sessionOptions = {
   secret: config.session.secret,
-  httpOnly: true,
   rolling: true,
+  httpOnly: false,
   saveUninitialized: true,
   resave: true,
   unset: 'destroy',
@@ -71,7 +71,6 @@ app.use(function (req, res, next) {
 })
 app.use(passport.initialize())
 app.use(passport.session())
-app.use(flash())
 
 
 /* Get rethinkdb connection */
@@ -137,7 +136,8 @@ app.get('/auth/google/callback', passport.authenticate('google',
     failureRedirect: '/#login' }))
 
 app.post('/login', (req, res, next) => {
-  passport.authenticate('local', local.handleLocalCallback(req, res, next))(req, res, next)
+  passport.authenticate('local',
+  local.handleLocalCallback(req, res, next))(req, res, next)
 })
 
 app.get('/logout',
@@ -182,10 +182,10 @@ app.post('/api/images',
 
 /* Upload an image from a url and return the location of that image on S3 */
 app.post('/api/image_url',
-  (req, res) => {
+  (req, res, next) => {
     imageUpload.fromUrl(req.body.width, req.body.height, req.body.url)
       .then(data => res.json(data))
-      .catch(err => console.error('Uploading image from URL', err))
+      .catch(err => next(`Uploading image from URL ${err}`))
   })
 
 app.use('/', (err, req, res, next) => {
@@ -193,12 +193,12 @@ app.use('/', (err, req, res, next) => {
     res.status(err.status)
     res.json({
       error: err
-    });
+    })
   } else {
     console.error(err)
     res.json({
       error: err
-    });
+    })
   }
 })
 

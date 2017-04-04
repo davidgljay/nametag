@@ -67,13 +67,18 @@ class RoomCards extends Component {
       </div>
       <LoginDialog
         showLogin={this.state.showLogin}
-        toggleLogin={this.toggleLogin} />
+        toggleLogin={this.toggleLogin}
+        registerUser={this.props.registerUser}
+        loginUser={this.props.loginUser}
+        message='Log In or Register' />
 
     </div>
   }
 }
 
 RoomCards.propTypes = {
+  registerUser: PropTypes.func.isRequired,
+  loginUser: PropTypes.func.isRequired,
   data: PropTypes.shape({
     me: PropTypes.shape({
       id: PropTypes.string.isRequired,

@@ -34,13 +34,13 @@ module.exports.handleLocalCallback = (req, res, next) => (err, user) => {
     return next(ErrBadAuth)
   }
   // Perform the login of the user!
-  req.logIn(user, (err) => {
+  req.login(user, (err) => {
     if (err) {
       return next(err)
     }
-    // We logged in the user! Let's send back the user data and the CSRF token.
+    // We logged in the user! Let's send back the user id.
     res.json({id: user.id})
-  });
+  })
 }
 
 module.exports.register = conn => (req, res, next) => {
@@ -50,7 +50,7 @@ module.exports.register = conn => (req, res, next) => {
   }
   Users(conn).createLocal(email, password)
     .then((id) => {
-      res.send({id})
+      res.json({id})
     })
     .catch(err => next(err))
 }

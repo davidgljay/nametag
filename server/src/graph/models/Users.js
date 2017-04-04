@@ -23,7 +23,14 @@ const get = ({conn}, id) => usersTable.get(id).run(conn)
  */
 
 const getByEmail = ({conn}, email) =>
-  usersTable.getAll(email, {index: 'email'}).nth(0).run(conn)
+  usersTable.getAll(email, {index: 'email'}).run(conn)
+    .then(cursor => cursor.toArray())
+    .then(results => {
+      if (results.length === 0) {
+        return Promise.reject(ErrBadAuth)
+      }
+      return results[0]
+    })
 
 /**
  * Append an arbitrary value to an array in the user object.
@@ -154,7 +161,13 @@ const userFromAuth = (provider, profile) => {
  */
 
  const createLocal = ({conn}, email, password) =>
-  usersTable.insert({email}).run(conn).then(res => {
+  usersTable.insert({
+    email,
+    createdAt: new Date(),
+    badges: [],
+    displayNames: [],
+    icons: []
+  }).run(conn).then(res => {
     if (res.errors) {
       return Promise.reject(new Error('Could not insert user', res.error))
     }

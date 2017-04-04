@@ -17,12 +17,23 @@ import TouchBackend from 'react-dnd-touch-backend'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import {ApolloProvider} from 'react-apollo'
 import {client} from './graph/client'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import store from './graph/store'
 import { Router, Route, browserHistory } from 'react-router'
 
 injectTapEventPlugin()
 
 const mountNode = document.getElementById('app')
+
+const muiTheme = getMuiTheme({
+  palette: {
+    primary1Color: '#005362',
+    primary2Color: '#4cdc85',
+    accent1Color: '#620057',
+    accent2Color: '#dc6d4c',
+    pickerHeaderColor: '#005362'
+  }
+})
 
 class Nametag extends Component {
 
@@ -47,7 +58,7 @@ class Nametag extends Component {
   render () {
     return <ApolloProvider client={client} store={store}>
       <StyleRoot>
-        <MuiThemeProvider>
+        <MuiThemeProvider muiTheme={muiTheme}>
           <Router history={browserHistory}>
             <Route path='/' component={RoomCards} />
             <Route path='/rooms' component={RoomCards} />

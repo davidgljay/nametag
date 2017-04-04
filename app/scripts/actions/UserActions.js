@@ -1,44 +1,46 @@
-import errorLog from '../utils/errorLog'
-import {SHA1} from 'crypto-js'
+// import errorLog from '../utils/errorLog'
+import {enc, SHA3} from 'crypto-js'
+import cookie from 'react-cookie'
 
 export function registerUser (email, password) {
-
-  const options = {
-    method: 'POST',
-    path: '/auth/local/register',
-    body: JSON.stringify({
-      email,
-      password: hashPassword(password)
-    })
+  return () => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        email,
+        password: hashPassword(password)
+      })
+    }
+    return fetch('/register', options)
+      .then(res => res.json())
   }
-  return fetch(options)
-    .then(res => {
-      console.log(res)
-      //Redirect to login
-    })
-    .catch(errorLog('registering user'))
 }
 
 export function loginUser (email, password) {
-  const options = {
-    method: 'POST',
-    path: '/auth/local/register',
-    body: JSON.stringify({
-      email,
-      password: hashPassword(password)
-    })
+  return () => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        email,
+        password: hashPassword(password)
+      })
+    }
+    return fetch('/login', options)
+      .then(res => {
+        return res.json()
+      })
   }
-  return fetch(options)
-    .then(res => {
-      window.location = '/'
-    })
-    .catch(error)
 }
 
 const hashPassword = (password) => {
-  let hashedPassword = password
-  for (let i=0; i < 1000; i++ ) {
-    hashedPassword = SHA1(hashedPassword)
-  }
-  return hashedPassword
+  let hashedPassword = SHA3(password, {outputLength: 224})
+  return hashedPassword.toString(enc.Base64)
 }
