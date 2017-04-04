@@ -1,6 +1,6 @@
 const r = require('rethinkdb')
 const {fromUrl} = require('../../routes/images/imageUpload')
-const {ErrBadAuth} = require('../../errors')
+const {ErrBadAuth, ErrNotLoggedIn} = require('../../errors')
 const {passwordsalt} = require('../../secrets.json')
 const usersTable = r.db('nametag').table('users')
 
@@ -42,7 +42,7 @@ const appendUserArray = ({user, conn}, property, value) => user
         {[property]: [value]}
       )
     ).run(conn)
-  : Promise.reject('User not logged in')
+  : Promise.reject(ErrNotLoggedIn)
 
 /**
  * Adds a notification token to the user.
@@ -111,7 +111,7 @@ const findOrCreateFromAuth = ({conn}, profile, provider) => {
         })
         .then(rdbRes => {
           if (rdbRes.errors > 0) {
-            return Promise.reject('error while inserting user')
+            return Promise.reject(new Error('Error while inserting user'))
           }
           return Object.assign({}, userObj,
             {
@@ -119,7 +119,6 @@ const findOrCreateFromAuth = ({conn}, profile, provider) => {
             })
         })
     })
-    .catch(err => console.log(`Error finding or creating user: ${err}`))
 }
 
 const userFromAuth = (provider, profile) => {
@@ -154,14 +153,16 @@ const userFromAuth = (provider, profile) => {
  *
  */
 
- const createLocal = (context, email, password) =>
-  usersTable.insert({
-    email
-  }).then({generated_keys} => {
-    const id = generated_keys[0]
+ const createLocal = ({conn}, email, password) =>
+  usersTable.insert({email}).run(conn).then(res => {
+    if (res.errors) {
+      return Promise.reject(new Error('Could not insert user', res.error))
+    }
+    const id = res.generated_keys[0]
     return usersTable.get(id).update({
       password: `${password}${passwordsalt}${id}`
-    })
+    }).run(conn)
+    .then(() => id)
   })
 
 /**
@@ -173,8 +174,8 @@ const userFromAuth = (provider, profile) => {
  *
  */
 
- const validPassword = (context, id, password) =>
-  usersTable.get(id)(password).eq(`${password}${passwordsalt}${id}`)
+ const validPassword = ({conn}, id, password) =>
+  usersTable.get(id)(password).eq(`${password}${passwordsalt}${id}`).run(conn)
 
 module.exports = (context) => ({
   Users: {

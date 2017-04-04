@@ -16,7 +16,8 @@ const {local, facebook, twitter, google} = require('./auth')
 const dbInit = require('./graph/models').init
 const passport = require('passport')
 const RedisStore = require('connect-redis')(session)
-const redis = require('./redis');
+const redis = require('./redis')
+const flash = require('req-flash')
 const startSubscriptionServer = require('./graph/subscriptions/SubscriptionServer')
 const PORT = 8181
 
@@ -69,6 +70,7 @@ app.use(function (req, res, next) {
 })
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(flash())
 
 
 /* Get rethinkdb connection */
@@ -82,7 +84,6 @@ r.connect({host: 'rethinkdb'})
 
     /* User session serialization */
     passport.serializeUser((user, done) => {
-      console.log('Deserializing user')
       done(null, user.id)
     })
 
@@ -94,6 +95,8 @@ r.connect({host: 'rethinkdb'})
 
     // GraphQL endpoint.
     app.use('/api/v1/graph/ql', apollo.graphqlExpress(graph.createGraphOptions(conn)))
+
+    app.post('/register', local.register(conn))
 
     dbInit(conn)
 
@@ -147,24 +150,6 @@ app.get('/logout',
   }
 )
 
-/* Connect to Horizon */
-// const options = {
-//   project_name: 'nametag',
-//   rdb_host: 'rethinkdb',
-//   auto_create_collection: 'true',
-//   auto_create_index: 'true',
-//   auth: {
-//     allow_anonymous: false,
-//     duration: '30d',
-//     allow_unauthenticated: true,
-//     success_redirect: '/',
-//     create_new_users: true,
-//     new_user_group: 'authenticated',
-//     token_secret: config.token_secret
-//   }
-// }
-// const horizonServer = horizon(httpsServer, options)
-
 // ==============================================================================
 // GraphQL Router
 // ==============================================================================
@@ -204,5 +189,24 @@ app.post('/api/image_url',
       .then(data => res.json(data))
       .catch(err => console.error('Uploading image from URL', err))
   })
+
+app.use('/', (err, req, res, next) => {
+  if (err !== errors.ErrNotFound) {
+    console.error(err);
+  }
+
+  if (err instanceof errors.APIError) {
+    res.status(err.status);
+    res.render('error', {
+      message: err.message,
+      error: app.get('env') === 'development' ? err : {}
+    });
+  } else {
+    res.render('error', {
+      message: err.message,
+      error: app.get('env') === 'development' ? err : {}
+    });
+  }
+})
 
 console.log('Listening on port 8181.')

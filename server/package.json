@@ -39,6 +39,7 @@
     "passport-local": "^1.0.0",
     "passport-twitter": "^1.0.4",
     "pem": "^1.8.1",
+    "req-flash": "^0.0.3",
     "rethinkdb": "^2.1.1",
     "subscriptions-transport-ws": "^0.5.5-alpha.0",
     "winston": "^2.1.0"
