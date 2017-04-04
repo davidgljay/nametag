@@ -3,6 +3,7 @@ const {fromUrl} = require('../../routes/images/imageUpload')
 const {ErrBadAuth, ErrNotLoggedIn} = require('../../errors')
 const {passwordsalt} = require('../../secrets.json')
 const usersTable = r.db('nametag').table('users')
+const {enc, SHA3} = require('crypto-js')
 
 /**
  * Returns a particular user.
@@ -151,6 +152,11 @@ const userFromAuth = (provider, profile) => {
   }
 }
 
+const hashPassword = (password) => {
+  let hashedPassword = SHA3(password, {outputLength: 224})
+  return hashedPassword.toString(enc.Base64)
+}
+
 /**
  * Finds or creates a user based from local auth.
  *
@@ -173,7 +179,7 @@ const userFromAuth = (provider, profile) => {
     }
     const id = res.generated_keys[0]
     return usersTable.get(id).update({
-      password: `${password}${passwordsalt}${id}`
+      password: hashPassword(`${password}${passwordsalt}${id}`)
     }).run(conn)
     .then(() => id)
   })
@@ -188,7 +194,7 @@ const userFromAuth = (provider, profile) => {
  */
 
  const validPassword = ({conn}, id, password) =>
-  usersTable.get(id)('password').eq(`${password}${passwordsalt}${id}`).run(conn)
+  usersTable.get(id)('password').eq(hashPassword(`${password}${passwordsalt}${id}`)).run(conn)
 
 module.exports = (context) => ({
   Users: {

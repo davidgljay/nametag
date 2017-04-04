@@ -16,6 +16,7 @@
     "body-parser": "^1.17.1",
     "connect-redis": "^3.2.0",
     "cookie": "^0.2.3",
+    "crypto-js": "^3.1.9-1",
     "debug": "^2.6.3",
     "express": "^4.14.0",
     "express-session": "^1.15.1",
