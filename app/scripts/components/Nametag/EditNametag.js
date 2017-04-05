@@ -45,7 +45,7 @@ class EditNametag extends Component {
 
     this.removeCert = (badge) => {
       const {removeNametagEditBadge, room, template} = this.props
-      removeNametagEditBadge(badge.id, room || template)
+      removeNametagEditBadge(badge, room || template)
     }
   }
 
@@ -149,7 +149,7 @@ EditNametag.propTypes = {
     name: PropTypes.string,
     bio: PropTypes.string,
     icon: PropTypes.string,
-    badges: PropTypes.arrayOf(PropTypes.string)
+    badges: PropTypes.arrayOf(PropTypes.object)
   }),
   me: PropTypes.shape({
     icons: PropTypes.arrayOf(PropTypes.string).isRequired,
