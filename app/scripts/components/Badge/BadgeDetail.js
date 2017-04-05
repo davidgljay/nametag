@@ -56,7 +56,9 @@ class BadgeDetail extends Component {
       nametagEdits,
       updateNametagEdit,
       addNametagEditBadge,
-      removeNametagEditBadge
+      removeNametagEditBadge,
+      loginUser,
+      registerUser
     } = this.props
 
     if (loading) {
@@ -105,7 +107,10 @@ class BadgeDetail extends Component {
     if (shareMode) {
       claimButton = null
     } else if (!me) {
-      claimButton = <Login message={'Log in to request this badge'} />
+      claimButton = <Login
+        message={'Log in to request this badge'}
+        loginUser={loginUser}
+        registerUser={registerUser} />
     } else {
       claimButton = <div style={styles.claimButton}>
         <div style={styles.header}>

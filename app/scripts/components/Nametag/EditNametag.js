@@ -106,7 +106,7 @@ class EditNametag extends Component {
               disableFocusRipple={false}
               dataSource={me.displayNames || []}
               errorText={error && error.nameError}
-              onUpdateInput={(name) => updateNametagEdit(room, 'name', name)}
+              onUpdateInput={name => updateNametagEdit(room || template, 'name', name)}
               animated
               style={nameStyle}
               textFieldStyle={nameTextfieldStyle}

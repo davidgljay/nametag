@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {compose} from 'react-apollo'
 import {createNametag} from '../../graph/mutations'
 import {badgeTemplateQuery} from '../../graph/queries'
+import {loginUser, registerUser} from '../../actions/UserActions'
 import {updateNametagEdit, addNametagEditBadge, removeNametagEditBadge} from '../../actions/NametagEditActions'
 
 const mapStateToProps = (state) => {
@@ -14,6 +15,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   const disp = (func) => (...args) => dispatch(func.apply(this, args))
   return {
+    loginUser: disp(loginUser),
+    registerUser: disp(registerUser),
     updateNametagEdit: disp(updateNametagEdit),
     addNametagEditBadge: disp(addNametagEditBadge),
     removeNametagEditBadge: disp(removeNametagEditBadge)
