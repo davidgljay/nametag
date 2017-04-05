@@ -15,12 +15,14 @@ class BadgeDetail extends Component {
     super(props)
 
     this.state = {
-      showQR: false
+      showQR: false,
+      requested: false
     }
 
     this.onRequestClick = () => {
       const {nametagEdits, createNametag, data: {template: {id}}} = this.props
       createNametag(nametagEdits[id])
+        .then(() => this.setState({requested: true}))
       // TODO: Send to homepage with message, possibly via Router.link?
     }
 
@@ -75,7 +77,7 @@ class BadgeDetail extends Component {
     headerText = shareMode
     ? <div>
       <div style={styles.header}>
-        <h3>Your certificate has been created.</h3>
+        <h3>Your badge has been created.</h3>
         <div>You can share this URL with the people you would like to grant it to.</div>
       </div>
       <input
@@ -99,8 +101,7 @@ class BadgeDetail extends Component {
     </div>
       : <div style={styles.header}>
         <h3>Request This Badge</h3>
-        Claim it so that you can show it off! Badges
-        let others know why you are worthy of trust and respect.
+        Badges let others know why you are worthy of trust and respect.
         They can also give you access to exclusive communities.
       </div>
 
@@ -111,6 +112,19 @@ class BadgeDetail extends Component {
         message={'Log in to request this badge'}
         loginUser={loginUser}
         registerUser={registerUser} />
+    } else if (this.state.requested) {
+      claimButton = <div style={styles.claimButton}>
+        <div style={styles.header}>
+          <h3>Request submitted</h3>
+          You should hear back from {template.granter.name} shortly.
+          <RaisedButton
+            style={styles.claimButton}
+            labelStyle={styles.buttonLabel}
+            primary
+            onClick={() => {window.location = '/'}}
+            label='RETURN TO HOMEPAGE' />
+        </div>
+      </div>
     } else {
       claimButton = <div style={styles.claimButton}>
         <div style={styles.header}>
@@ -131,7 +145,7 @@ class BadgeDetail extends Component {
             <RaisedButton
               style={styles.button}
               labelStyle={styles.buttonLabel}
-              backgroundColor={indigo500}
+              primary
               onClick={this.onRequestClick}
               label='REQUEST THIS BADGE' />
           </div>
