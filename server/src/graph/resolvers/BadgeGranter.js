@@ -1,5 +1,6 @@
 const BadgeGranter = {
-  templates: ({id}, _, {user, models: {Badges}}) => BadgeTemplates.getGranterTemplates(id)
+  templates: ({id}, _, {models: {BadgeTemplates}}) => BadgeTemplates.getGranterTemplates(id),
+  badgeRequests: ({id}, _, {models: {BadgeRequests}}) => BadgeRequests.getByGranter(id)
 }
 
 module.exports = BadgeGranter

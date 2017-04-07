@@ -1,0 +1,76 @@
+const r = require('rethinkdb')
+const errors = require('../../errors')
+
+const badgeRequestsTable = r.db('nametag').table('badgeRequests')
+
+/**
+ * Returns a badge request from an id.
+ *
+ * @param {Object} context     graph context
+ * @param {String} id   the id of the badge to be retrieved
+ *
+ */
+
+const get = ({conn}, id) => badgeRequestsTable.get(id).run(conn)
+
+/**
+ * Returns an array of badge requests from an array of ids.
+ *
+ * @param {Object} context     graph context
+ * @param {Array<String>} ids   the ids of the badges to be retrieved
+ *
+ */
+
+const getAll = ({conn}, ids) => badgeRequestsTable.getAll(...ids).run(conn)
+  .then(cursor => cursor.toArray())
+
+/**
+ * Returns an array of active badge requests from a granter id.
+ *
+ * @param {Object} context     graph context
+ * @param {String} granterId   the id of a badge granter
+ * @param {String} state       the state of the badges to return
+ *
+ */
+
+const getByGranterAndState = ({conn}, granter, state) => badgeRequestsTable
+  .getAll(granter, state, {index: 'granterStatus'}).run(conn)
+  .then(cursor => cursor.toArray())
+
+/**
+ * Creates a badge request
+ *
+ * @param {Object} context     graph context
+ * @param {Object} nametagId   the id of the nametag making the request
+ * @param {Object} templateId  the id of the badge template being requested
+ * @param {String} granterId   the id of the granter receiving this request
+ *
+ **/
+
+const create = ({conn}, nametag, template, granter) => {
+  const badgeRequestObj = {
+    createdAt: new Date(),
+    nametag,
+    template,
+    granter,
+    status: 'ACTIVE'
+  }
+  return badgeRequestsTable.insert({badgeRequestObj})
+    .then(res => {
+      if (res.error) {
+        return Promise.reject(new Error(res.error))
+      }
+      return Object.assign({}, badgeRequestObj, {
+        id: res.generated_keys[0]
+      })
+    })
+}
+
+module.exports = (context) => ({
+  BadgeRequests: {
+    get: (id) => get(context, id),
+    getAll: (ids) => getAll(context, ids),
+    getByGranterState: (granterId, stae) => getByGranterState(context, granterId, state),
+    create: (nametag, template, granter) => create(context, nametag, template, granter)
+  }
+})
