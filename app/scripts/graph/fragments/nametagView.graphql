@@ -1,0 +1,12 @@
+#import "../fragments/badgeView.graphql"
+
+fragment nametagView on Nametag {
+  id
+  name
+  icon
+  bio
+  createdAt
+  badges {
+    ...badgeView
+  }
+}

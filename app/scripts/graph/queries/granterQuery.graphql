@@ -1,0 +1,34 @@
+#import "../fragments/nametagView.graphql"
+
+qeury granterQuery($shortname: String!) {
+  granter(shortname:$shortname) {
+    id
+    name
+    description
+    image
+    notifications {
+      text
+      createdAt
+      type
+      nametag {
+        ...nametagView
+      }
+    }
+    templates {
+      id
+      name
+      icon
+      description
+      badges {
+        id
+        notes {
+          text
+          date
+        }
+        defaultNametag {
+          ...nametagView
+        }
+      }
+    }
+  }
+}

@@ -1,27 +1,12 @@
+#import "../fragments/badgeView.graphql"
+
 query userQuery {
   me {
     id
     displayNames
     icons
     badges {
-      id
-      notes {
-        text
-        date
-      }
-      template {
-        id
-        name
-        description
-        icon
-        granter {
-          id
-          name
-					description
-          type
-          image
-        }
-      }
+      ...badgeView
     }
   }
 }

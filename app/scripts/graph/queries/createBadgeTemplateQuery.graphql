@@ -1,3 +1,5 @@
+#import "../fragments/badgeView.graphql"
+
 query createBadgeTemplateQuery($granter: ID!) {
   granter(id:$granter) {
     id
@@ -11,24 +13,7 @@ query createBadgeTemplateQuery($granter: ID!) {
     displayNames
     icons
     badges {
-      id
-      notes {
-        text
-        date
-      }
-      template {
-        id
-        name
-        description
-        icon
-        granter {
-          id
-          name
-					description
-          type
-          image
-        }
-      }
+      ...badgeView
     }
   }
 }

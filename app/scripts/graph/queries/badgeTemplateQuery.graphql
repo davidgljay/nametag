@@ -1,3 +1,5 @@
+#import "../fragments/badgeView.graphql"
+
 query badgeTemplateQuery($id: ID!){
   template(id:$id) {
     id
@@ -12,25 +14,10 @@ query badgeTemplateQuery($id: ID!){
     }
   }
   me {
-    displayNames,
-    icons,
+    displayNames
+    icons
     badges {
-      id
-      notes {
-        text
-        date
-      }
-      template {
-        id
-        name
-        description
-        icon
-        granter {
-          id
-          name
-          description
-        }
-      }
+      ...badgeView
     }
   }
 }

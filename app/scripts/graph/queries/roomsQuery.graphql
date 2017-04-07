@@ -1,3 +1,6 @@
+#import "../fragments/badgeView.graphql"
+#import "../fragments/nametagView.graphql"
+
 query roomsQuery {
   rooms{
     id
@@ -9,25 +12,7 @@ query roomsQuery {
     closedAt
     nametagCount
     mod {
-      name
-      icon
-      bio
-      badges {
-        template {
-          id
-          name
-          description
-          icon
-          granter {
-            id
-            name
-          }
-        }
-        notes {
-          date
-          text
-        }
-      }
+      ...nametagView
     }
   }
   me {
@@ -35,21 +20,7 @@ query roomsQuery {
    displayNames
    icons
    badges {
-    id
-    template {
-        id
-        name
-        description
-        icon
-        granter {
-          id
-          name
-        }
-      }
-     notes {
-       text
-       date
-     }
+    ...badgeView
    }
    nametags {
      id

@@ -1,0 +1,20 @@
+fragment badgeView on Badge {
+  id
+  template {
+    id
+    name
+    description
+    icon
+    createdAt
+    granter {
+      id
+      name
+      description
+      icon
+    }
+  }
+  notes {
+    date
+    text
+  }
+}

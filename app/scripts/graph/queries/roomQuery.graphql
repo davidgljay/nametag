@@ -1,3 +1,5 @@
+#import "../fragments/nametagView.graphql"
+
 query roomQuery($id: ID!){
   room(id:$id) {
     id
@@ -10,27 +12,7 @@ query roomQuery($id: ID!){
       icon
     }
 		nametags {
-      id
-      name
-      icon
-      bio
-      present
-      badges {
-        id
-        template {
-          id
-          name
-          icon
-          description
-          granter {
-            name
-          }
-        }
-        notes {
-          text
-          date
-        }
-      }
+      ...nametagView
     }
     messages {
       id
