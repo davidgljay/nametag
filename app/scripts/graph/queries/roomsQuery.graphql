@@ -1,4 +1,3 @@
-#import "../fragments/badgeView.graphql"
 #import "../fragments/nametagView.graphql"
 
 query roomsQuery {

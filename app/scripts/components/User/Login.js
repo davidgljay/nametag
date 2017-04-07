@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
+import CircularProgress from 'material-ui/CircularProgress'
 
 /* Function to Log in users via an auth provider or e-mail.
 
@@ -26,7 +27,8 @@ class Login extends Component {
       password: '',
       confirm: '',
       register: false,
-      alert: ''
+      alert: '',
+      loading: false
     }
 
     this.updateField = fieldName => e => {
@@ -95,11 +97,17 @@ class Login extends Component {
           window.location = '/'
         })
     }
+
+    this.providerAuth = provider => e => {
+      e.preventDefault()
+      this.setState({loading: true})
+      window.location = `/auth/${provider}`
+    }
   }
 
   render () {
     const {message} = this.props
-    const {emailAlert, passwordAlert, alert} = this.state
+    const {emailAlert, passwordAlert, alert, loading} = this.state
     return <div style={styles.login}>
       <h4>{message || 'Log in to join'}</h4>
       <div style={styles.alert}>
@@ -158,24 +166,24 @@ class Login extends Component {
         }
       </div>
       <div style={styles.authProviders}>
-        <img
-          style={styles.loginImg}
-          src='/public/images/twitter.jpg'
-          onClick={() => {
-            window.location = '/auth/twitter'
-          }} />
-        <img
-          style={styles.loginImg}
-          src='/public/images/fb.jpg'
-          onClick={() => {
-            window.location = '/auth/facebook'
-          }} />
-        <img
-          style={styles.loginImg}
-          src='/public/images/google.png'
-          onClick={() => {
-            window.location = '/auth/google'
-          }} />
+        {
+          loading
+          ? <CircularProgress />
+        : <div>
+          <img
+            style={styles.loginImg}
+            src='/public/images/twitter.jpg'
+            onClick={this.providerAuth('twitter')} />
+          <img
+            style={styles.loginImg}
+            src='/public/images/fb.jpg'
+            onClick={this.providerAuth('facebook')} />
+          <img
+            style={styles.loginImg}
+            src='/public/images/google.png'
+            onClick={this.providerAuth('google')} />
+        </div>
+        }
       </div>
     </div>
   }

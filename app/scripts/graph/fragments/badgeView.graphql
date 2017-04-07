@@ -10,7 +10,7 @@ fragment badgeView on Badge {
       id
       name
       description
-      icon
+      image
     }
   }
   notes {
