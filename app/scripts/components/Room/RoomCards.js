@@ -21,6 +21,7 @@ class RoomCards extends Component {
   componentWillMount () {
     const postAuth = window.sessionStorage.getItem('postAuth')
     if (postAuth) {
+      window.sessionStorage.removeItem('postAuth')
       window.location = postAuth
     }
   }
