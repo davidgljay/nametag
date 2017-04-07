@@ -100,6 +100,7 @@ class Login extends Component {
 
     this.providerAuth = provider => e => {
       e.preventDefault()
+      window.sessionStorage.setItem('postAuth', window.location)
       this.setState({loading: true})
       window.location = `/auth/${provider}`
     }

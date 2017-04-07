@@ -18,6 +18,13 @@ class RoomCards extends Component {
     }
   }
 
+  componentWillMount () {
+    const postAuth = window.sessionStorage.getItem('postAuth')
+    if (postAuth) {
+      window.location = postAuth
+    }
+  }
+
   render () {
     const {
       data: {me, rooms, loading},
