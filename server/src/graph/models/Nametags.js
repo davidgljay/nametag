@@ -40,9 +40,19 @@ const getAll = ({conn}, ids) => nametagsTable.getAll(...ids).run(conn)
   .then(cursor => {
     return cursor.toArray()
   })
-  .then(nametags => {
-    return nametags
-  })
+
+  /**
+   * Returns the default nametag for a badge.
+   *
+   * @param {Object} context     graph context
+   * @param {String} id   the id of the badge
+   *
+   */
+
+  const getByBadge = ({conn}, badgeId) => nametagsTable.getAll(badgeId, {index: 'badge'}).run(conn)
+    .then(cursor => {
+      return cursor.toArray()
+    })
 
 /**
  * Grants a badge to a nametag

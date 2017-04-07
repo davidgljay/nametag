@@ -10,7 +10,7 @@ module.exports = {
     ]
   },
   nametags: {
-    indexes: ['room']
+    indexes: ['room', 'badge']
   },
   rooms: {
     indexes: ['closedAt']

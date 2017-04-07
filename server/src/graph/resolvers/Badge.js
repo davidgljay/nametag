@@ -1,5 +1,6 @@
 const Badge = {
-  template: ({template}, _, {user, models: {BadgeTemplates}}) => BadgeTemplates.get(template)
+  template: ({template}, _, {models: {BadgeTemplates}}) => BadgeTemplates.get(template),
+  defaultNametag: ({id}, _, {models: {Nametags}}) => Nametags.getByBadge.get(id)
 }
 
 module.exports = Badge
