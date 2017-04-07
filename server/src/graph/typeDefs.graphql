@@ -18,6 +18,18 @@ scalar Date
 
  }
 
+# The possible types of granter notifications
+ enum GRANTER_NOTIFICATION_STATES {
+
+    ACTIVE
+
+    RESOLVED
+
+    IGNORED
+
+
+ }
+
 # A unique account in the system. In the future this information will be encrypted.
 type User {
 
@@ -234,6 +246,79 @@ type BadgeGranter {
 
   # Time when the badge granter was updated
   updatedAt: Date!
+
+}
+
+# An interface for notifications viewable to badge granters
+interface GranterNotification {
+
+  # The id of the notification
+  id: ID!
+
+  # The state of the notification
+  state: GRANTER_NOTIFICATION_STATE!
+
+  # The date when the notification was created
+  createdAt: Date!
+
+  # The granter to receive this notification
+  granter: ID!
+
+}
+
+# Notifies granters of a badge request
+type BadgeRequest implements GranterNotification {
+
+  # The id of the notification
+  id: ID!
+
+  # The state of the notification
+  state: GRANTER_NOTIFICATION_STATE!
+
+  # The date when the notification was created
+  createdAt: Date!
+
+  # The granter to receive this notification
+  granter: ID!
+
+  # The badge template being requested
+  template: BadgeTemplate
+
+  # The nametag requesting the badge
+  nametag: Nametag
+
+}
+
+
+# Alerts badge granters of messages transmitted in their rooms
+type ModAlert implements GranterNotification {
+
+  # The id of the notification
+  id: ID!
+
+  # The state of the notification
+  state: GRANTER_NOTIFICATION_STATE!
+
+  # The date when the notification was created
+  createdAt: Date!
+
+  # The granter to receive this notification
+  granter: ID!
+
+  # The nametag of the mod sending the alert
+  mod: Nametag
+
+  # The room from which the alert was sent
+  room: Room
+
+  # The norms marked as being violated
+  norms: [String!]
+
+  # The message violating these norms
+  message: String
+
+  # An optional note from the Moderator
+  note: String
 
 }
 

@@ -29,5 +29,11 @@ module.exports = {
   },
   badgeGranters: {
     indexes: []
+  },
+  badgeRequests: {
+    indexes: [{name: 'granterStatus', fields: ['granter', 'status']},]
+  },
+  modActions: {
+    indexes: [{name: 'granterStatus', fields: ['granter', 'status']},]
   }
 }
