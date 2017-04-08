@@ -450,6 +450,9 @@ input CreateBadgeInput {
   # Additional information appended to the badge
   note: String!
 
+  # Default nametag for this badge
+  defaultNametag: ID!
+
 }
 
 input CreateBadgeGranterInput {

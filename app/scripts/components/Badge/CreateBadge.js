@@ -22,7 +22,6 @@ class CreateBadge extends Component {
       if (property === 'name') {
         this.setState({name: value.slice(0, 40)})
       } else {
-        console.log('Setting', property, value)
         this.setState({[property]: value})
       }
     }

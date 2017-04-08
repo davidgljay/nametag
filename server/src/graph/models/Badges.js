@@ -44,12 +44,12 @@ const getTemplateBadges = ({conn}, template) => badgesTable.getAll(template, {in
  *
  **/
 
-const create = ({conn, models: {Users, Nametags}}, badge, nametagId) => {
-  const note = {
-    text: badge.note,
+const create = ({conn, models: {Users, Nametags, BadgeRequests}}, {note, template, defaultNametag}) => {
+  const firstNote = {
+    text: note,
     date: new Date()
   }
-  const badgeObj = {createdAt: new Date(), template: badge.template, notes: [note]}
+  const badgeObj = {createdAt: new Date(), template, notes: [firstNote]}
   return badgesTable.insert(badgeObj).run(conn)
   // Append badge ID to user object
   .then(res => {
@@ -58,17 +58,21 @@ const create = ({conn, models: {Users, Nametags}}, badge, nametagId) => {
     }
     const id = res.generated_keys[0]
     return Promise.all([
+      id,
       Users.appendUserArray('badges', id),
-      Nametags.grantBadge(nametagId, id),
-      id
+      Nametags.grantBadge(defaultNametag, id),
+      BadgeRequests.changeStatus(defaultNametag, 'RESOLVED')
     ])
   })
-  .then(([userRes, nametagRes, id]) => {
+  .then(([id, userRes, nametagRes, updateStatusRes]) => {
     if (userRes.errors > 0) {
       return new errors.APIError(`Error appending badge ID to user: ${userRes.first_error}`)
     }
     if (nametagRes.errors > 0) {
       return new errors.APIError(`Error granting badge to Nametag: ${nametagRes.first_error}`)
+    }
+    if (updateStatusRes.errors > 0) {
+      return new errors.APIError(`Error granting badge to Nametag: ${updateStatusRes.first_error}`)
     }
     return Object.assign({}, badgeObj, {id})
   })
@@ -79,6 +83,6 @@ module.exports = (context) => ({
     get: (id) => get(context, id),
     getAll: (ids) => getAll(context, ids),
     getTemplateBadges: (templateId) => getTemplateBadges(context, templateId),
-    create: (badge, nametagId) => create(context, badge, nametagId)
+    create: (badgeInput) => create(context, badgeInput)
   }
 })
