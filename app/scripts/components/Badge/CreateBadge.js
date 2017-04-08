@@ -98,10 +98,10 @@ class CreateBadge extends Component {
               template: {
                 name,
                 icon,
-                description
+                description,
+                granter
               },
-              id: 'new',
-              granter
+              id: 'new'
             }}
             draggable={false}
             expanded

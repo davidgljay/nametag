@@ -253,6 +253,9 @@ type BadgeGranter {
   # URL code for this granter
   urlCode: String!
 
+  # List of administrators
+  adminTemplate: BadgeTemplate
+
 }
 
 # An interface for notifications viewable to badge granters
