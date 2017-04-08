@@ -1,7 +1,7 @@
 #import "../fragments/badgeView.graphql"
 
-query createBadgeTemplateQuery($granter: ID!) {
-  granter(id:$granter) {
+query createBadgeTemplateQuery($granter: String!) {
+  granter(urlCode:$granter) {
     id
     name
     description

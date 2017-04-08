@@ -35,7 +35,7 @@ const getAll = ({conn}, ids) => badgeRequestsTable.getAll(...ids).run(conn)
 
 const getByGranterAndState = ({conn}, granter, state) => badgeRequestsTable
   .getAll(granter, state, {index: 'granterStatus'}).run(conn)
-  .then(cursor => cursor.toArray())
+  .then(cursor => cursor.next())
 
 /**
  * Creates a badge request
@@ -47,7 +47,7 @@ const getByGranterAndState = ({conn}, granter, state) => badgeRequestsTable
  *
  **/
 
-const create = ({conn}, nametag, template, granter) => {
+const create = ({conn}, nametag, template) => {
   const badgeRequestObj = {
     createdAt: new Date(),
     nametag,
@@ -57,9 +57,9 @@ const create = ({conn}, nametag, template, granter) => {
   return r.db('nametag').table('badgeTemplates').get(template).do(
     t =>
       badgeRequestsTable.insert(
-        Object.assign({}, badgeRequestObj, {granter: t.granter})
+        Object.assign({}, badgeRequestObj, {granter: t('granter')})
       )
-    )
+    ).run(conn)
     .then(res => {
       if (res.error) {
         return Promise.reject(new Error(res.error))

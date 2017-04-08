@@ -1,7 +1,7 @@
 #import "../fragments/nametagView.graphql"
 
-qeury granterQuery($shortname: String!) {
-  granter(shortname:$shortname) {
+qeury granterQuery($urlCode: String!) {
+  granter(urlCode:$urlCode) {
     id
     name
     description

@@ -247,6 +247,9 @@ type BadgeGranter {
   # Time when the badge granter was updated
   updatedAt: Date!
 
+  # URL code for this granter
+  urlCode: String!
+
 }
 
 # An interface for notifications viewable to badge granters
@@ -335,7 +338,7 @@ type RootQuery {
   me: User
 
   # Retrieves information about a badge granter
-  granter(id:ID!): BadgeGranter
+  granter(urlCode:String!): BadgeGranter
 
   # Retrieves information about a badge template
   template(id: ID!): BadgeTemplate

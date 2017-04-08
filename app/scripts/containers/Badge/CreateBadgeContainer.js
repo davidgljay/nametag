@@ -5,7 +5,7 @@ import {createBadgeTemplate} from '../../graph/mutations'
 import {createBadgeTemplateQuery} from '../../graph/queries'
 
 const CreateBadge = compose(
-  connect((state, {params}) => ({granter: params.granterId})),
+  connect((state, {params}) => ({granter: params.granterCode})),
   createBadgeTemplate,
   createBadgeTemplateQuery
 )(component)

@@ -4,7 +4,7 @@ const r = require('rethinkdb')
 const badgeGrantersTable = r.db('nametag').table('badgeGranters')
 
 /**
- * Returns a badge template from an id.
+ * Returns a badge granter from an id.
  *
  * @param {Object} context     graph context
  * @param {String} id   the id of the badge to be retrieved
@@ -12,6 +12,18 @@ const badgeGrantersTable = r.db('nametag').table('badgeGranters')
  */
 
 const get = ({conn}, id) => badgeGrantersTable.get(id).run(conn)
+
+/**
+ * Returns a badge granter from a url code.
+ *
+ * @param {Object} context     graph context
+ * @param {String} urlCode   the urlCode of the badge to be retrieved
+ *
+ */
+
+const getByUrlCode = ({conn}, urlCode) => badgeGrantersTable.getAll(urlCode, {index:'urlCode'}).run(conn)
+  .then(cursor => cursor.next())
+
 
 /**
  * Creates a badge granter

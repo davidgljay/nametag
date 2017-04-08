@@ -37,22 +37,18 @@ const get = ({conn}, id) => nametagsTable.get(id).run(conn)
  */
 
 const getAll = ({conn}, ids) => nametagsTable.getAll(...ids).run(conn)
-  .then(cursor => {
-    return cursor.toArray()
-  })
+  .then(cursor => cursor.toArray())
 
-  /**
-   * Returns the default nametag for a badge.
-   *
-   * @param {Object} context     graph context
-   * @param {String} id   the id of the badge
-   *
-   */
+/**
+ * Returns the default nametag for a badge.
+ *
+ * @param {Object} context     graph context
+ * @param {String} id   the id of the badge
+ *
+ */
 
-  const getByBadge = ({conn}, badgeId) => nametagsTable.getAll(badgeId, {index: 'badge'}).run(conn)
-    .then(cursor => {
-      return cursor.toArray()
-    })
+const getByBadge = ({conn}, badgeId) => nametagsTable.getAll(badgeId, {index: 'badge'}).run(conn)
+  .then(cursor => cursor.next())
 
 /**
  * Grants a badge to a nametag
@@ -90,7 +86,7 @@ const create = ({conn, user, models: {Users, BadgeRequests}}, nt) => {
 
       // Create a BadgeRequest if appropriate
       nametag.template ? BadgeRequests.create(id, nametag.template) : null,
-      
+
       // Add displayName and icon if they are new
       user.displayNames.indexOf(nametag.name) === -1 ? Users.appendUserArray('displayNames', nametag.name) : null,
       user.icons.indexOf(nametag.icon) === -1 ? Users.appendUserArray('icons', nametag.icon) : null
