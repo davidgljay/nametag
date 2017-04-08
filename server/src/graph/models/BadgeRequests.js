@@ -33,9 +33,9 @@ const getAll = ({conn}, ids) => badgeRequestsTable.getAll(...ids).run(conn)
  *
  */
 
-const getByGranterAndState = ({conn}, granter, state) => badgeRequestsTable
-  .getAll(granter, state, {index: 'granterStatus'}).run(conn)
-  .then(cursor => cursor.next())
+const getByGranterState = ({conn}, granter, status) => badgeRequestsTable
+  .getAll([granter, status], {index: 'granterStatus'}).run(conn)
+  .then(cursor => cursor.toArray())
 
 /**
  * Creates a badge request
@@ -74,7 +74,7 @@ module.exports = (context) => ({
   BadgeRequests: {
     get: (id) => get(context, id),
     getAll: (ids) => getAll(context, ids),
-    getByGranterState: (granterId, stae) => getByGranterState(context, granterId, state),
+    getByGranterState: (granterId, status) => getByGranterState(context, granterId, status),
     create: (nametag, template, granter) => create(context, nametag, template, granter)
   }
 })

@@ -48,7 +48,7 @@ const getAll = ({conn}, ids) => nametagsTable.getAll(...ids).run(conn)
  */
 
 const getByBadge = ({conn}, badgeId) => nametagsTable.getAll(badgeId, {index: 'badge'}).run(conn)
-  .then(cursor => cursor.next())
+  .then(cursor => cursor.toArray())
 
 /**
  * Grants a badge to a nametag
@@ -154,6 +154,7 @@ module.exports = (context) => ({
     get: (id) => get(context, id),
     getAll: (ids) => getAll(context, ids),
     getRoomNametags: (room) => getRoomNametags(context, room),
+    getByBadge: (badgeId) => getByBadge(context, badgeId),
     create: (nametag) => create(context, nametag),
     addMention: (nametag) => addMention(context, nametag),
     getNametagCount: (room) => getNametagCount(context, room),

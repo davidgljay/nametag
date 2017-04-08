@@ -236,7 +236,10 @@ type BadgeGranter {
   image: String!
 
   # Badges verifying the granter
-  badges: [Badge]
+  templates: [BadgeTemplate]
+
+  # Badge Requests for this granter
+  badgeRequests: [BadgeRequest]
 
   # The type of granter
   type: GRANTER_TYPES!

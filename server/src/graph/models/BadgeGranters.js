@@ -46,7 +46,8 @@ const create = ({conn}, granter) => {
 
 module.exports = (context) => ({
   BadgeGranters: {
-    get: (id) => get(context, id),
-    create: badge => create(context, badge)
+    get: id => get(context, id),
+    create: badge => create(context, badge),
+    getByUrlCode: urlCode => getByUrlCode(context, urlCode)
   }
 })
