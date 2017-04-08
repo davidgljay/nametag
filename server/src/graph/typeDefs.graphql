@@ -19,7 +19,7 @@ scalar Date
  }
 
 # The possible types of granter notifications
- enum GRANTER_NOTIFICATION_STATES {
+ enum GRANTER_NOTIFICATION_STATE {
 
     ACTIVE
 

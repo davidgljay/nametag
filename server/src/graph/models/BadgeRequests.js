@@ -52,10 +52,14 @@ const create = ({conn}, nametag, template, granter) => {
     createdAt: new Date(),
     nametag,
     template,
-    granter,
     status: 'ACTIVE'
   }
-  return badgeRequestsTable.insert({badgeRequestObj})
+  return r.db('nametag').table('badgeTemplates').get(template).do(
+    t =>
+      badgeRequestsTable.insert(
+        Object.assign({}, badgeRequestObj, {granter: t.granter})
+      )
+    )
     .then(res => {
       if (res.error) {
         return Promise.reject(new Error(res.error))

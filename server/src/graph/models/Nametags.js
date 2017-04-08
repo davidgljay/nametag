@@ -73,7 +73,7 @@ const grantBadge = ({conn}, id, badgeId) => nametagsTable.get(id).update({badge:
  *
  **/
 
-const create = ({conn, user, models: {Users}}, nt) => {
+const create = ({conn, user, models: {Users, BadgeRequests}}, nt) => {
   const nametag = Object.assign({}, nt, {createdAt: new Date()})
   return nametagsTable.insert(nametag).run(conn)
   // Append nametag ID to user object and update default names and icons
@@ -83,8 +83,15 @@ const create = ({conn, user, models: {Users}}, nt) => {
     }
     const id = res.generated_keys[0]
     return Promise.all([
+
+      // Add the nametag to the user profile
       Users.addNametag(id, nametag.room || nametag.template),
       id,
+
+      // Create a BadgeRequest if appropriate
+      nametag.template ? BadgeRequests.create(id, nametag.template) : null,
+      
+      // Add displayName and icon if they are new
       user.displayNames.indexOf(nametag.name) === -1 ? Users.appendUserArray('displayNames', nametag.name) : null,
       user.icons.indexOf(nametag.icon) === -1 ? Users.appendUserArray('icons', nametag.icon) : null
     ])
