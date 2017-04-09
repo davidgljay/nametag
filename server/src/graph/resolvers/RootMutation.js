@@ -1,4 +1,4 @@
-const errors = require('../../errors')
+const {APIError, ErrNotInRoom, ErrNotLoggedIn, ErrNotAuthorized} = require('../../errors')
 
 /**
  * Wraps up a promise to return an object with the resolution of the promise
@@ -13,7 +13,7 @@ const wrapResponse = (key) => (value) => {
 }
 
 const catchErrors = (err) => {
-  if (err instanceof errors.APIError) {
+  if (err instanceof APIError) {
     return {
       errors: [err]
     }
@@ -22,7 +22,7 @@ const catchErrors = (err) => {
 }
 
 const wrap = (mutation, key = 'result') => (obj, args, context) => !context.user
-  ? Promise.reject(errors.ErrNotLoggedIn)
+  ? Promise.reject(ErrNotLoggedIn)
   : mutation(obj, args, context)
     .catch(catchErrors)
 
@@ -33,7 +33,7 @@ const RootMutation = {
 
   createMessage: (obj, {message}, {user, models: {Messages}}) => {
     if (!user.nametags[message.room]) {
-      return Promise.reject(errors.ErrNotInRoom)
+      return Promise.reject(ErrNotInRoom)
     }
     return Messages.create(message)
     .then(wrapResponse('message'))
@@ -51,7 +51,7 @@ const RootMutation = {
     // Confirm that the user is in the room
     if (Object.keys(user.nametags)
       .reduce((bool, room) => user.nametags[room] === nametagId ? false : bool, true)) {
-      return Promise.reject(errors.ErrNotInRoom)
+      return Promise.reject(ErrNotInRoom)
     }
     return Nametags.updateLatestVisit(nametagId)
   },
@@ -60,8 +60,10 @@ const RootMutation = {
     Badges.create(badge)
     .then(wrapResponse('badge')),
 
-  createBadgeTemplate: (obj, {template}, {user, models: {BadgeTemplates}}) =>
-    BadgeTemplates.create(template),
+  createBadgeTemplate: (obj, {template}, {user, models: {BadgeTemplates, BadgeGranters}}) =>
+    BadgeGranters.get(template.granter)
+      .then(granter => user.badges[granter.adminTemplate]
+        ? BadgeTemplates.create(template) : ErrNotAuthorized),
 
   createBadgeGranter: (obj, {granter}, {user, models: {BadgeGranters}}) =>
     // TODO: Add concept of admin login and require that here.

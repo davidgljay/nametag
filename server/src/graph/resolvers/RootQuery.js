@@ -5,10 +5,7 @@ const RootQuery = {
   room: (obj, {id}, {models: {Rooms}}) => Rooms.get(id),
   me: (obj, args, {user}) => user,
   granter: (obj, {urlCode}, {user, models: {BadgeGranters}}) => BadgeGranters.getByUrlCode(urlCode)
-      .then(granter => {
-        console.log('user', user.badges)
-        return user.badges[granter.adminTemplate] ? granter : ErrNotAuthorized
-      }),
+      .then(granter =>  user.badges[granter.adminTemplate] ? granter : ErrNotAuthorized),
   template: (obj, {id}, {models: {BadgeTemplates}}) => BadgeTemplates.get(id)
 }
 
