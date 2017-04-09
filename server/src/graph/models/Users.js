@@ -90,6 +90,18 @@ const addNametag = ({user, conn}, nametagId, roomId) =>
   usersTable.get(user.id).update({nametags: {[roomId]: nametagId}}).run(conn)
 
 /**
+ * Adds a badge to the user.
+ *
+ * @param {Object} context     graph context
+ * @param {String} badgeId   the id of the badge to be added
+ * @param {String} templateId   the id of the template for that badge
+ *
+ */
+
+const addBadge = ({user, conn}, badgeId, templateId) =>
+  usersTable.get(user.id).update({badges: {[templateId]: badgeId}}).run(conn)
+
+/**
  * Finds or creates a user based on an oauth provider.
  *
  * @param {Object} context   graph context
@@ -213,6 +225,7 @@ module.exports = (context) => ({
     validPassword: (id, password) => validPassword(context, id, password),
     appendUserArray: (property, value) => appendUserArray(context, property, value),
     addNametag: (nametagId, roomId) => addNametag(context, nametagId, roomId),
+    addBadge: (badgeId, templateId) => addBadge(context, badgeId, templateId),
     addToken: (token) => addToken(context, token),
     getToken: (nametagId) => getToken(context, nametagId)
   }

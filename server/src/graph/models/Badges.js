@@ -59,7 +59,7 @@ const create = ({conn, models: {Users, Nametags, BadgeRequests}}, {note, templat
     const id = res.generated_keys[0]
     return Promise.all([
       id,
-      Users.appendUserArray('badges', id),
+      Users.addBadge(id, template),
       Nametags.grantBadge(defaultNametag, id),
       BadgeRequests.changeStatus(defaultNametag, 'RESOLVED')
     ])
