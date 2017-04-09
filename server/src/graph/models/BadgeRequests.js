@@ -74,12 +74,12 @@ const create = ({conn}, nametag, template) => {
  * Sets the state of a badge request based on a nametagId.
  *
  * @param {Object} context     graph context
- * @param {String} nametagId   the id of the nametag who initiated this request
+ * @param {String} id           the id of the badge request to be updated
  * @param {String} status      the new status to be set
  *
  */
 
-const changeStatus = ({conn}, nametagId, status) => badgeRequestsTable.getAll(nametagId, {index: 'nametag'})
+const updateStatus = ({conn}, id, status) => badgeRequestsTable.get(id)
   .update({status}).run(conn)
 
 module.exports = (context) => ({
@@ -88,6 +88,6 @@ module.exports = (context) => ({
     getAll: (ids) => getAll(context, ids),
     getByGranterState: (granterId, status) => getByGranterState(context, granterId, status),
     create: (nametag, template, granter) => create(context, nametag, template, granter),
-    changeStatus: (nametagId, status) => changeStatus(context, nametagId, status)
+    updateStatus: (id, status) => updateStatus(context, id, status)
   }
 })

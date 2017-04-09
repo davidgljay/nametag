@@ -1,4 +1,3 @@
-import {connect} from 'react-redux'
 import component from '../../components/Badge/CreateBadge'
 import {compose} from 'react-apollo'
 import {createBadgeTemplate} from '../../graph/mutations'

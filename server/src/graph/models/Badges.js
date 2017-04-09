@@ -44,7 +44,7 @@ const getTemplateBadges = ({conn}, template) => badgesTable.getAll(template, {in
  *
  **/
 
-const create = ({conn, models: {Users, Nametags, BadgeRequests}}, {note, template, defaultNametag}) => {
+const create = ({conn, models: {Users, Nametags}}, {note, template, defaultNametag}) => {
   const firstNote = {
     text: note,
     date: new Date()
@@ -60,19 +60,15 @@ const create = ({conn, models: {Users, Nametags, BadgeRequests}}, {note, templat
     return Promise.all([
       id,
       Users.addBadge(id, template),
-      Nametags.grantBadge(defaultNametag, id),
-      BadgeRequests.changeStatus(defaultNametag, 'RESOLVED')
+      Nametags.grantBadge(defaultNametag, id)
     ])
   })
-  .then(([id, userRes, nametagRes, updateStatusRes]) => {
+  .then(([id, userRes, nametagRes]) => {
     if (userRes.errors > 0) {
       return new errors.APIError(`Error appending badge ID to user: ${userRes.first_error}`)
     }
     if (nametagRes.errors > 0) {
       return new errors.APIError(`Error granting badge to Nametag: ${nametagRes.first_error}`)
-    }
-    if (updateStatusRes.errors > 0) {
-      return new errors.APIError(`Error granting badge to Nametag: ${updateStatusRes.first_error}`)
     }
     return Object.assign({}, badgeObj, {id})
   })

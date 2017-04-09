@@ -1,4 +1,4 @@
-qeury granterQuery($urlCode: String!) {
+query granterQuery($urlCode: String!) {
   granter(urlCode:$urlCode) {
     id
     name

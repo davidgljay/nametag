@@ -1,0 +1,7 @@
+mutation updateBadgeRequestStatus($badgeRequest: ID!, $status: GRANTER_NOTIFICATION_STATE!) {
+  updateBadgeRequestStatus(badgeRequest: $badgeRequest, status: $status) {
+    errors {
+      translation_key
+    }
+  }
+}

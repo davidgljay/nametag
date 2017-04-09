@@ -71,7 +71,16 @@ const RootMutation = {
     .then(wrapResponse('granter')),
 
   updateToken: (obj, {token}, {user, models: {Users}}) =>
-    Users.addToken(token)
+    Users.addToken(token),
+
+  updateBadgeRequestStatus: (obj, {badgeRequest, status}, {user, models: {BadgeGranters, BadgeRequests}}) =>
+    BadgeRequests.get(badgeRequest)
+      .then(br => BadgeGranters.get(br.granter))
+      .then(granter => user.badges[granter.adminTemplate]
+        ? BadgeRequests.updateStatus(badgeRequest, status)
+          .then(wrapResponse('updateBadgeRequest'))
+        : ErrNotAuthorized
+      )
 }
 
 module.exports = Object.keys(RootMutation).reduce((wrapped, key) => {
