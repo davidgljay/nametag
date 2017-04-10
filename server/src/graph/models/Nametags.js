@@ -48,7 +48,7 @@ const getAll = ({conn}, ids) => nametagsTable.getAll(...ids).run(conn)
  */
 
 const getByBadge = ({conn}, badgeId) => nametagsTable.getAll(badgeId, {index: 'badge'}).run(conn)
-  .then(cursor => cursor.toArray())
+  .then(cursor => cursor.next())
 
 /**
  * Grants a badge to a nametag
