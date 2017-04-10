@@ -25,13 +25,9 @@ const styles = {
   granterInfoContainer: {
     display: 'flex',
     justifyContent: 'flex-start',
-    paddingLeft: '20%',
-    paddingRight: '20%',
     [mobile]: {
       alignItems: 'center',
-      flexDirection: 'column',
-      paddingLeft: '5%',
-      paddingRight: '5%'
+      flexDirection: 'column'
     }
   },
   granterImage: {
@@ -42,6 +38,7 @@ const styles = {
     fontSize: 20
   },
   granterDetails: {
+    marginLeft: 30,
     width: '100%'
   }
 }

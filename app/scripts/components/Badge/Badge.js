@@ -144,7 +144,7 @@ class Badge extends Component {
 
 Badge.propTypes = {
   connectDragSource: PropTypes.func.isRequired,
-  draggable: PropTypes.bool.isRequired,
+  draggable: PropTypes.bool,
   badge: PropTypes.shape({
     id: PropTypes.string.isRequired,
     notes: PropTypes.arrayOf(PropTypes.shape({
@@ -200,7 +200,6 @@ const styles = {
     margin: 5,
     marginTop: 30,
     padding: 10,
-    width: '96%',
     minHeight: 100,
     borderRadius: 11,
     background: '#dedede',

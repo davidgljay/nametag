@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 import Badges from '../Badge/Badges'
 import FontIcon from 'material-ui/FontIcon'
 
@@ -19,6 +19,18 @@ const Nametag = ({mod, nametag: {id, name, icon, bio, present, badges}}) => {
     <div style={styles.bio}>{bio}</div>
     <Badges badges={badges} />
   </div>
+}
+
+Nametag.PropTypes = {
+  mod: PropTypes.string,
+  nametag: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    icon: PropTypes.string.isRequired,
+    bio: PropTypes.string,
+    present: PropTypes.bool,
+    badges: PropTypes.arrayOf(PropTypes.object).isRequired
+  }).isRequired
 }
 
 export default Nametag

@@ -19,6 +19,7 @@ import {ApolloProvider} from 'react-apollo'
 import {client} from './graph/client'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import store from './graph/store'
+import {primary, secondary} from '../styles/colors'
 import { Router, Route, browserHistory } from 'react-router'
 
 injectTapEventPlugin()
@@ -27,11 +28,11 @@ const mountNode = document.getElementById('app')
 
 const muiTheme = getMuiTheme({
   palette: {
-    primary1Color: '#005362',
+    primary1Color: primary,
     primary2Color: '#4cdc85',
-    accent1Color: '#620057',
+    accent1Color: secondary,
     accent2Color: '#dc6d4c',
-    pickerHeaderColor: '#005362'
+    pickerHeaderColor: primary
   }
 })
 

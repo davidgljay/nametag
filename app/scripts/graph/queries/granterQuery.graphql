@@ -8,12 +8,15 @@ query granterQuery($urlCode: String!) {
     image
     badgeRequests {
       id
-      status
       createdAt
       template {
         name
         icon
         description
+        granter {
+          name
+          image
+        }
       }
       nametag {
         id
