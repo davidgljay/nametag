@@ -1,11 +1,11 @@
-import component from '../../components/Badge/CreateBadge'
+import component from '../../components/Granter/Granter'
 import {compose} from 'react-apollo'
-import {createBadge, updateBadgeRequest} from '../../graph/mutations'
+import {createBadge, updateBadgeRequestStatus} from '../../graph/mutations'
 import {granterQuery} from '../../graph/queries'
 
 const Granter = compose(
   createBadge,
-  updateBadgeRequest,
+  updateBadgeRequestStatus,
   granterQuery
 )(component)
 

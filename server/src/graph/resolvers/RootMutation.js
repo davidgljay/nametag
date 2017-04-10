@@ -79,7 +79,7 @@ const RootMutation = {
       .then(granter => user.badges[granter.adminTemplate]
         ? BadgeRequests.updateStatus(badgeRequest, status)
           .then(wrapResponse('updateBadgeRequest'))
-        : ErrNotAuthorized
+        : Promise.reject(ErrNotAuthorized)
       )
 }
 

@@ -6,6 +6,7 @@ import CREATE_BADGE from './createBadge.graphql'
 import CREATE_BADGE_TEMPLATE from './createBadgeTemplate.graphql'
 import TOGGLE_SAVED from './toggleSaved.graphql'
 import UPDATE_LATEST_VISIT from './updateLatestVisit.graphql'
+import UPDATE_BADGE_REQUEST_STATUS from './updateBadgeRequestStatus.graphql'
 import UPDATE_TOKEN from './updateToken.graphql'
 import errorLog from '../../utils/errorLog'
 
@@ -54,6 +55,17 @@ export const createBadge = graphql(CREATE_BADGE, {
     createBadge: (badge) => mutate({
       variables: {
         badge
+      }
+    })
+  })
+})
+
+export const updateBadgeRequestStatus = graphql(UPDATE_BADGE_REQUEST_STATUS, {
+  props: ({ownProps, mutate}) => ({
+    updateBadgeRequestStatus: (badgeRequest, status) => mutate({
+      variables: {
+        badgeRequest,
+        status
       }
     })
   })

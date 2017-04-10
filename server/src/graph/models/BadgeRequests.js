@@ -29,7 +29,7 @@ const getAll = ({conn}, ids) => badgeRequestsTable.getAll(...ids).run(conn)
  *
  * @param {Object} context     graph context
  * @param {String} granterId   the id of a badge granter
- * @param {String} state       the state of the badges to return
+ * @param {String} status       the status of the badges to return
  *
  */
 
@@ -71,7 +71,7 @@ const create = ({conn}, nametag, template) => {
 }
 
 /**
- * Sets the state of a badge request based on a nametagId.
+ * Sets the status of a badge request based on a nametagId.
  *
  * @param {Object} context     graph context
  * @param {String} id           the id of the badge request to be updated

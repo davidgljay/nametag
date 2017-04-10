@@ -9,7 +9,7 @@ import RoomCards from './containers/Room/RoomCardsContainer'
 import CreateRoom from './containers/Room/CreateRoomContainer'
 import CreateBadge from './containers/Badge/CreateBadgeContainer'
 import Badge from './containers/Badge/BadgeContainer'
-// import {getUser} from './actions/UserActions'
+import Granter from './containers/Granter/GranterContainer'
 import {registerServiceWorker, firebaseInit} from './actions/NotificationActions'
 
 import { DragDropContext } from 'react-dnd'
@@ -64,6 +64,7 @@ class Nametag extends Component {
             <Route path='/rooms' component={RoomCards} />
             <Route path='/rooms/create' component={CreateRoom} />
             <Route path='/rooms/:roomId' component={Room} />
+            <Route path='/granters/:granterCode' component={Granter} />
             <Route path='/granters/:granterCode/badges/create' component={CreateBadge} />
             <Route path='/granters/:granterCode/badges/:templateId' component={Badge} />
             <Route path='/badges/:templateId' component={Badge} />

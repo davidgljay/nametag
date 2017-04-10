@@ -19,14 +19,13 @@ scalar Date
  }
 
 # The possible types of granter notifications
- enum GRANTER_NOTIFICATION_STATE {
+ enum GRANTER_NOTIFICATION_STATUS {
 
     ACTIVE
 
     RESOLVED
 
     IGNORED
-
 
  }
 
@@ -264,14 +263,14 @@ interface GranterNotification {
   # The id of the notification
   id: ID!
 
-  # The state of the notification
-  state: GRANTER_NOTIFICATION_STATE!
+  # The status of the notification
+  status: GRANTER_NOTIFICATION_STATUS!
 
   # The date when the notification was created
   createdAt: Date!
 
   # The granter to receive this notification
-  granter: ID!
+  granter: BadgeGranter!
 
 }
 
@@ -281,14 +280,14 @@ type BadgeRequest implements GranterNotification {
   # The id of the notification
   id: ID!
 
-  # The state of the notification
-  state: GRANTER_NOTIFICATION_STATE!
+  # The status of the notification
+  status: GRANTER_NOTIFICATION_STATUS!
 
   # The date when the notification was created
   createdAt: Date!
 
   # The granter to receive this notification
-  granter: ID!
+  granter: BadgeGranter!
 
   # The badge template being requested
   template: BadgeTemplate
@@ -305,14 +304,14 @@ type ModAlert implements GranterNotification {
   # The id of the notification
   id: ID!
 
-  # The state of the notification
-  state: GRANTER_NOTIFICATION_STATE!
+  # The status of the notification
+  status: GRANTER_NOTIFICATION_STATUS!
 
   # The date when the notification was created
   createdAt: Date!
 
   # The granter to receive this notification
-  granter: ID!
+  granter: BadgeGranter!
 
   # The nametag of the mod sending the alert
   mod: Nametag
@@ -570,7 +569,7 @@ type RootMutation {
   updateToken(token: String!): BasicResponse
 
   # Updates the status of a badge request
-  updateBadgeRequestStatus(badgeRequest: ID!, status: GRANTER_NOTIFICATION_STATE!): BasicResponse
+  updateBadgeRequestStatus(badgeRequest: ID!, status: GRANTER_NOTIFICATION_STATUS!): BasicResponse
 
 }
 

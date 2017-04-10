@@ -1,15 +1,28 @@
+#import "../fragments/nametagView.graphql"
+
 query granterQuery($urlCode: String!) {
   granter(urlCode:$urlCode) {
     id
     name
     description
     image
-    notifications {
-      text
+    badgeRequests {
+      id
+      status
       createdAt
-      type
+      template {
+        name
+        icon
+        description
+      }
       nametag {
-        ...nametagView
+        id
+        name
+        bio
+        icon
+        badges {
+          ...badgeView
+        }
       }
     }
     templates {
@@ -28,5 +41,8 @@ query granterQuery($urlCode: String!) {
         }
       }
     }
+  }
+  me {
+    id
   }
 }

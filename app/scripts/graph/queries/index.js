@@ -3,6 +3,7 @@ import {checkNametagPresence, messageAdded} from '../subscriptions'
 import ROOMS_QUERY from './roomsQuery.graphql'
 import ROOM_QUERY from './roomQuery.graphql'
 import USER_QUERY from './userQuery.graphql'
+import GRANTER_QUERY from './granterQuery.graphql'
 import CREATE_BADGE_TEMPLATE_QUERY from './createBadgeTemplateQuery.graphql'
 import BADGE_TEMPLATE_QUERY from './badgeTemplateQuery.graphql'
 
@@ -35,6 +36,14 @@ export const badgeTemplateQuery = graphql(BADGE_TEMPLATE_QUERY, {
   options: (props) => ({
     variables: {
       id: props.params.templateId
+    }
+  })
+})
+
+export const granterQuery = graphql(GRANTER_QUERY, {
+  options: (props) => ({
+    variables: {
+      granter: props.params.granterCode
     }
   })
 })

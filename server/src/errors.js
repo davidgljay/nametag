@@ -94,7 +94,7 @@ const ErrNotFound = new APIError('not found', {
 
 // ErrNotAuthorized is an error that is returned in the event an operation is
 // deemed not authorized.
-const ErrNotAuthorized = new APIError('not authorized', {
+const ErrNotAuthorized = new APIError('Not Authorized', {
   translation_key: 'NOT_AUTHORIZED',
   status: 401
 })
