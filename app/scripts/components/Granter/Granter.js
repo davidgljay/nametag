@@ -3,6 +3,7 @@ import NavBar from '../utils/NavBar'
 import GranterInfo from './GranterInfo'
 import BadgeRequest from '../Badge/BadgeRequest'
 import CircularProgress from 'material-ui/CircularProgress'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import {mobile} from '../../../styles/sizes'
 import radium from 'radium'
 
@@ -13,17 +14,23 @@ const Granter = ({data: {granter, me, loading}, createBadge, updateBadgeRequestS
       <NavBar me={me} />
       <div id='granterDetail' style={styles.granterDetail}>
         <GranterInfo granter={granter} />
-        <div id='badgeRequests' style={styles.badgeRequests}>
+        <ReactCSSTransitionGroup
+          transitionName='fade'
+          style={styles.badgeRequests}
+          transitionEnterTimeout={2000}
+          transitionLeaveTimeout={1500}>
           {
             granter.badgeRequests.map(badgeRequest =>
-              <BadgeRequest
-                key={badgeRequest.id}
-                badgeRequest={badgeRequest}
-                createBadge={createBadge}
-                updateBadgeRequestStatus={updateBadgeRequestStatus} />
+              <div
+                key={badgeRequest.id}>
+                <BadgeRequest
+                  badgeRequest={badgeRequest}
+                  createBadge={createBadge}
+                  updateBadgeRequestStatus={updateBadgeRequestStatus} />
+              </div>
             )
           }
-        </div>
+        </ReactCSSTransitionGroup>
         {
           // <div>
 

@@ -16,26 +16,26 @@ class BadgeRequest extends Component {
     this.state = {
       loading: false,
       showNote: false,
+      complete: false,
       note: 'Badge granted.'
     }
 
     this.deny = (e) => {
       e.preventDefault()
       const {updateBadgeRequestStatus, badgeRequest: {id}} = this.props
-      this.setState({loading: true})
       updateBadgeRequestStatus(id, 'RESOLVED')
     }
 
     this.grant = (e) => {
       const {updateBadgeRequestStatus, createBadge, badgeRequest: {id, template, nametag}} = this.props
-      this.setState({loading: true})
+      this.setState({complete: true})
       createBadge({
         template: template.id,
         defaultNametag: nametag.id,
         note: this.state.note
       })
       .then(() => {
-        updateBadgeRequestStatus(id, 'RESOLVED')
+        return updateBadgeRequestStatus(id, 'RESOLVED')
       })
     }
 
@@ -51,57 +51,67 @@ class BadgeRequest extends Component {
 
   render () {
     const {badgeRequest: {nametag, template}} = this.props
-    const {loading, showNote, note} = this.state
-    return <Card style={styles.card}>
-      {
-        loading
-        ? <CircularProgress />
-        : <div>
-          <Nametag nametag={nametag} />
-          {
-            showNote
-            ? <div style={styles.addNote}>
-              <TextField
-                multiLine
-                fullWidth
-                onChange={this.updateNote}
-                value={note}
-                floatingLabelText='Note' />
-              <div style={styles.noteText}>
-                Add a note explaining why you have granted this badge to {nametag.name}.
-                Do not include any personally identifiable information.
-              </div>
-              <div style={styles.grantButtons}>
-                <FontIcon style={styles.backLink}
-                  className='material-icons'
-                  alt='back'
-                  onClick={() => this.setState({showNote: false})} >
-                  chevron_left
-                </FontIcon>
-                <RaisedButton
-                  primary
-                  label='GRANT BADGE'
-                  onClick={this.grant} />
-              </div>
-            </div>
-            : <div>
-              <div style={styles.cardText}>would like the badge</div>
-              <div style={styles.badgeContainer}>
-                <Badge badge={{
-                  id: 'request',
-                  notes: [],
-                  template
-                }} />
-              </div>
-              <CardActions>
-                <FlatButton label='DENY' secondary onClick={this.deny} />
-                <FlatButton label='APPROVE' primary onClick={this.approve} />
-              </CardActions>
-            </div>
-          }
+    const {loading, showNote, note, complete} = this.state
+    if (loading) {
+      return <Card style={{...styles.card, ...styles.emptyCard}}>
+        <CircularProgress />
+      </Card>
+    }
 
-        </div>
-      }
+    if (complete) {
+      return <Card style={{...styles.card, ...styles.emptyCard}}>
+        <FontIcon style={styles.complete}
+          className='material-icons'
+          alt='complete' >
+          check
+        </FontIcon>
+      </Card>
+    }
+    return <Card style={styles.card}>
+      <div>
+        <Nametag nametag={nametag} />
+        {
+          showNote
+          ? <div style={styles.addNote}>
+            <TextField
+              multiLine
+              fullWidth
+              onChange={this.updateNote}
+              value={note}
+              floatingLabelText='Note' />
+            <div style={styles.noteText}>
+              Add a note explaining why you have granted this badge to {nametag.name}.
+              Do not include any personally identifiable information.
+            </div>
+            <div style={styles.grantButtons}>
+              <FontIcon style={styles.backLink}
+                className='material-icons'
+                alt='back'
+                onClick={() => this.setState({showNote: false})} >
+                chevron_left
+              </FontIcon>
+              <RaisedButton
+                primary
+                label='GRANT BADGE'
+                onClick={this.grant} />
+            </div>
+          </div>
+          : <div>
+            <div style={styles.cardText}>would like the badge</div>
+            <div style={styles.badgeContainer}>
+              <Badge badge={{
+                id: 'request',
+                notes: [],
+                template
+              }} />
+            </div>
+            <CardActions>
+              <FlatButton label='DENY' secondary onClick={this.deny} />
+              <FlatButton label='APPROVE' primary onClick={this.approve} />
+            </CardActions>
+          </div>
+        }
+      </div>
     </Card>
   }
 }
@@ -147,6 +157,13 @@ const styles = {
     maxWidth: 230,
     backgroundColor: '#E9F2F1'
   },
+  emptyCard: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: 230,
+    height: 230
+  },
   noteText: {
     fontSize: 14,
     fontStyle: 'italic',
@@ -160,6 +177,10 @@ const styles = {
     padding: 10,
     margin: 5,
     cursor: 'pointer'
+  },
+  complete: {
+    color: primary,
+    fontSize: 44
   },
   grantButtons: {
     display: 'flex',

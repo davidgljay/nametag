@@ -28,7 +28,8 @@ const styles = {
     [mobile]: {
       alignItems: 'center',
       flexDirection: 'column'
-    }
+    },
+    marginTop: 30
   },
   granterImage: {
     width: 200,
