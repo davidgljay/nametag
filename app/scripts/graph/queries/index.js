@@ -27,7 +27,7 @@ export const roomQuery = graphql(ROOM_QUERY, {
 export const createBadgeTemplateQuery = graphql(CREATE_BADGE_TEMPLATE_QUERY, {
   options: (props) => ({
     variables: {
-      granter: props.params.granterCode
+      granter: props.params.urlCode
     }
   })
 })
@@ -43,7 +43,7 @@ export const badgeTemplateQuery = graphql(BADGE_TEMPLATE_QUERY, {
 export const granterQuery = graphql(GRANTER_QUERY, {
   options: (props) => ({
     variables: {
-      granter: props.params.granterCode
+      urlCode: props.params.urlCode
     }
   })
 })
