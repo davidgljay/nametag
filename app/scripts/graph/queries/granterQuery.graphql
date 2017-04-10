@@ -10,6 +10,7 @@ query granterQuery($urlCode: String!) {
       id
       createdAt
       template {
+        id
         name
         icon
         description

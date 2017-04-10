@@ -29,10 +29,13 @@ class BadgeRequest extends Component {
     this.grant = (e) => {
       const {updateBadgeRequestStatus, createBadge, badgeRequest: {id, template, nametag}} = this.props
       this.setState({loading: true})
-      updateBadgeRequestStatus(id, 'RESOLVED')
       createBadge({
         template: template.id,
-        defaultNametag: nametag.id
+        defaultNametag: nametag.id,
+        note: this.state.note
+      })
+      .then(() => {
+        updateBadgeRequestStatus(id, 'RESOLVED')
       })
     }
 
@@ -110,6 +113,7 @@ BadgeRequest.propTypes = {
     id: PropTypes.string.isRequired,
     createdAt: PropTypes.string.isRequired,
     template: PropTypes.shape({
+      id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       icon: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired

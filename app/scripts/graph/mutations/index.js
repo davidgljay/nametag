@@ -66,6 +66,21 @@ export const updateBadgeRequestStatus = graphql(UPDATE_BADGE_REQUEST_STATUS, {
       variables: {
         badgeRequest,
         status
+      },
+      updateQueries: {
+        granterQuery: (oldData, {mutationResult: {data: {updateBadgeRequestStatus: {errors}}}}) => {
+          if (errors) {
+            errorLog('Error saving message')(errors)
+            return oldData
+          }
+          return {
+            ...oldData,
+            granter: {
+              ...oldData.granter,
+              badgeRequests: oldData.granter.badgeRequests.filter(br => br.id !== badgeRequest)
+            }
+          }
+        }
       }
     })
   })
