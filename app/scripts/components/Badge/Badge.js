@@ -53,7 +53,7 @@ class Badge extends Component {
         template: {
           name,
           description,
-          icon,
+          image,
           granter
         }
       },
@@ -67,12 +67,12 @@ class Badge extends Component {
       draggable
     } = this.props
 
-    // Show an icon if one exists, or a manu to upload an icon if showIconUpload is enabled
-    let iconComponent
-    if (icon) {
-      iconComponent = <img style={styles.icon} alt='icon' src={icon} />
+    // Show an image if one exists, or a manu to upload an image if showIconUpload is enabled
+    let imageComponent
+    if (image) {
+      imageComponent = <img style={styles.image} alt='image' src={image} />
     } else if (showIconUpload) {
-      iconComponent = this.state.uploading
+      imageComponent = this.state.uploading
       ? <CircularProgress />
         : <ImageUpload
           width={50}
@@ -93,7 +93,7 @@ class Badge extends Component {
               </FontIcon>
           <div style={styles.cardHeader}>
             <div>
-              {iconComponent}
+              {imageComponent}
             </div>
             <div>
               <div style={jumbo ? styles.jumboName : styles.name}>{name}</div>
@@ -123,18 +123,18 @@ class Badge extends Component {
             left: currentOffset.x - initialOffset.x
           })
       }
-      const iconStyle = Object.assign({},
+      const imageStyle = Object.assign({},
         styles.chipIcon,
         jumbo ? styles.jumboChipIcon : {},
-        {background: `url(${icon}) 0 0 / cover`})
+        {background: `url(${image}) 0 0 / cover`})
       badgeComponent = <div
         style={chipStyle}
         className='mdl-shadow--2dp'
         key={id}
         onClick={this.toggleExpanded}>
         {
-            icon
-            ? <div style={iconStyle} />
+            image
+            ? <div style={imageStyle} />
              : <div style={styles.spacer} />
           }
         <div style={styles.chipText}>{name}</div>
@@ -159,7 +159,7 @@ Badge.propTypes = {
       date: PropTypes.string.isRequired
     })),
     template: PropTypes.shape({
-      icon: PropTypes.string,
+      image: PropTypes.string,
       name: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired
     }).isRequired
@@ -233,7 +233,7 @@ const styles = {
     padding: 10,
     cursor: 'pointer'
   },
-  icon: {
+  image: {
     width: 50,
     height: 50,
     marginRight: 20,

@@ -245,7 +245,7 @@ const styles = {
     fontWeight: 'bold',
     display: 'inline-block'
   },
-  icon: {
+  image: {
     float: 'left',
     paddingRight: 10
   },

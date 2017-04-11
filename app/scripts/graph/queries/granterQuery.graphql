@@ -13,7 +13,7 @@ query granterQuery($urlCode: String!) {
       template {
         id
         name
-        icon
+        image
         description
         granter {
           name
@@ -24,7 +24,7 @@ query granterQuery($urlCode: String!) {
         id
         name
         bio
-        icon
+        image
         badges {
           ...badgeView
         }
@@ -33,7 +33,7 @@ query granterQuery($urlCode: String!) {
     templates {
       id
       name
-      icon
+      image
       createdAt
       description
       granter {

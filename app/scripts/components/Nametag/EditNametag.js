@@ -62,9 +62,9 @@ class EditNametag extends Component {
       me.displayNames.length >= 1) {
       updateNametagEdit(room || template, 'name', me.displayNames[0])
     }
-    if (!nametagEdit.icon &&
-      me.icons.length > 0) {
-      updateNametagEdit(room || template, 'icon', me.icons[0])
+    if (!nametagEdit.image &&
+      me.images.length > 0) {
+      updateNametagEdit(room || template, 'image', me.images[0])
     }
   }
 
@@ -87,15 +87,15 @@ class EditNametag extends Component {
     let nametag = nametagEdit || {
       name: '',
       bio: '',
-      icon: ''
+      image: ''
     }
 
     return this.props.connectDropTarget(<div>
       <Card style={styles.editNametag} className='profile'>
         <div style={styles.cardInfo}>
           <NTIconMenu
-            icons={me.icons || []}
-            icon={nametag.icon}
+            images={me.images || []}
+            image={nametag.image}
             about={room || template}
             updateNametagEdit={updateNametagEdit} />
           <div style={{width: 190, flex: 1}}>
@@ -148,11 +148,11 @@ EditNametag.propTypes = {
   nametagEdit: PropTypes.shape({
     name: PropTypes.string,
     bio: PropTypes.string,
-    icon: PropTypes.string,
+    image: PropTypes.string,
     badges: PropTypes.arrayOf(PropTypes.object)
   }),
   me: PropTypes.shape({
-    icons: PropTypes.arrayOf(PropTypes.string).isRequired,
+    images: PropTypes.arrayOf(PropTypes.string).isRequired,
     displayNames: PropTypes.arrayOf(PropTypes.string).isRequired
   }).isRequired,
   room: PropTypes.string,

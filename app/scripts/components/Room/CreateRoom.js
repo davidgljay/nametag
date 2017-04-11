@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import RoomCard from './RoomCard'
-import Navbar from '../Utils/Navbar'
+import NavBar from '../Utils/NavBar'
 import CreateRoomForms from './Create/CreateRoomForms'
 import CircularProgress from 'material-ui/CircularProgress'
 import Stepper from './Create/Stepper'
@@ -155,7 +155,7 @@ class CreateRoom extends Component {
   }
 
   componentDidMount () {
-    this.props.updateNametagEdit('new', 'icon', '')
+    this.props.updateNametagEdit('new', 'image', '')
     this.props.updateNametagEdit('new', 'name', '')
     this.props.updateNametagEdit('new', 'bio', '')
     this.props.updateNametagEdit('new', 'badges', [])
@@ -179,7 +179,7 @@ class CreateRoom extends Component {
     const {room, stepIndex} = this.state
     return !loading
     ? <div>
-      <Navbar
+      <NavBar
         user={me}
         toggleLogin={() => {}} />
       <div style={styles.title}>
@@ -266,7 +266,7 @@ CreateRoom.propTypes = {
       badges: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
-        icon: PropTypes.string.isRequired,
+        image: PropTypes.string.isRequired,
         notes: PropTypes.arrayOf(PropTypes.shape({
           text: PropTypes.string.isRequired,
           date: PropTypes.string.isRequired

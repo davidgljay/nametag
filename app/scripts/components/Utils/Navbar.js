@@ -21,7 +21,7 @@ const onLogoutClick = () => {
   window.location = '/logout'
 }
 
-class Navbar extends Component {
+class NavBar extends Component {
 
   constructor (props) {
     super(props)
@@ -61,7 +61,7 @@ class Navbar extends Component {
         title='Nametag'
         style={styles.appBar}
         onTitleTouchTap={onHomeClick}
-        iconElementRight={mobile ? null : auth}
+        imageElementRight={mobile ? null : auth}
         onLeftIconButtonTouchTap={() => this.setState({open: true})} />
       <NavDrawer
         open={this.state.open}
@@ -72,14 +72,14 @@ class Navbar extends Component {
   }
 }
 
-Navbar.propTypes = {
+NavBar.propTypes = {
   me: PropTypes.shape({
     id: PropTypes.string
   }),
   toggleLogin: PropTypes.func
 }
 
-export default radium(Navbar)
+export default radium(NavBar)
 
 const styles = {
   appBar: {

@@ -6,12 +6,12 @@ mutation CreateMessage($message: CreateMessageInput!) {
       createdAt
       saved
       author {
-        icon
+        image
         id
         name
       }
       recipient {
-        icon
+        image
         id
         name
       }

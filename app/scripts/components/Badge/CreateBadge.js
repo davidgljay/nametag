@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import Badge from './Badge'
 import TextField from 'material-ui/TextField'
-import Navbar from '../Utils/Navbar'
+import NavBar from '../Utils/NavBar'
 import CircularProgress from 'material-ui/CircularProgress'
 import RaisedButton from 'material-ui/RaisedButton'
 import {indigo500} from 'material-ui/styles/colors'
@@ -13,7 +13,7 @@ class CreateBadge extends Component {
 
     this.state = {
       name: '',
-      icon: null,
+      image: null,
       description: '',
       uploading: false
     }
@@ -31,7 +31,7 @@ class CreateBadge extends Component {
     }
 
     this.onUploadImage = ({url}) => {
-      this.updateBadge('icon', url)
+      this.updateBadge('image', url)
       this.setState({uploading: false})
     }
 
@@ -41,11 +41,11 @@ class CreateBadge extends Component {
 
     this.createBadge = () => {
       const {data: {granter}, createBadge} = this.props
-      const {name, icon, description} = this.state
+      const {name, image, description} = this.state
       return createBadge({
         description,
         granter: granter.id,
-        icon,
+        image,
         name
       })
       .then(({data: {createTemplate: {id}}}) => {
@@ -56,18 +56,18 @@ class CreateBadge extends Component {
 
   componentDidMount () {
     if (!this.props.data.loading) {
-      this.updateBadge('icon', this.props.data.granter.image)
+      this.updateBadge('image', this.props.data.granter.image)
     }
   }
 
   componentDidUpdate (prevProps) {
     if (!this.props.data.loading && prevProps.data.loading) {
-      this.updateBadge('icon', this.props.data.granter.image)
+      this.updateBadge('image', this.props.data.granter.image)
     }
   }
 
   render () {
-    const {name, icon, description} = this.state
+    const {name, image, description} = this.state
     const {data: {me, loading, granter}, mini} = this.props
 
     if (loading) {
@@ -77,7 +77,7 @@ class CreateBadge extends Component {
     return <div id='createBadge'>
       {
         !mini &&
-        <Navbar
+        <NavBar
           me={me} />
       }
       <div style={styles.container}>
@@ -96,7 +96,7 @@ class CreateBadge extends Component {
             badge={{
               template: {
                 name,
-                icon,
+                image,
                 description,
                 granter
               },

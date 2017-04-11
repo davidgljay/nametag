@@ -125,14 +125,14 @@ BadgeRequest.propTypes = {
     template: PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      icon: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired
     }).isRequired,
     nametag: PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       bio: PropTypes.string,
-      icon: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
       badges: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired
     })
   }).isRequired

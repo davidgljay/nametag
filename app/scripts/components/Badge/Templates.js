@@ -18,8 +18,8 @@ const Templates = ({templates, granterCode, addNote}) => <div>
               id: 'template'
             }} />
           <IconButton
-            style={styles.iconButton}
-            iconStyle={styles.shareIcon}
+            style={styles.imageButton}
+            imageStyle={styles.shareIcon}
             onTouchTap={() => { window.location = `/granters/${granterCode}/badges/${template.id}` }}>
             <FontIcon
               className='material-icons'>
@@ -53,7 +53,7 @@ Templates.propTypes = {
   templates: arrayOf(shape({
     id: string.isRequired,
     name: string.isRequired,
-    icon: string.isRequired,
+    image: string.isRequired,
     description: string.isRequired,
     badges: arrayOf(shape({
       id: string.isRequired,
@@ -88,7 +88,7 @@ const styles={
     display: 'flex',
     alignItems: 'flex-start'
   },
-  iconButton: {
+  imageButton: {
     width: 'inherit',
     height: 'inherit',
     padding: 0

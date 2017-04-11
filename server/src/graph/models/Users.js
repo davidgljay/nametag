@@ -120,10 +120,10 @@ const findOrCreateFromAuth = ({conn}, profile, provider) => {
         return user
       }
       return fromUrl(50, 50, authProfile.providerPhotoUrl)
-        .then(iconUrl => {
+        .then(imageUrl => {
           userObj = {
             displayNames: authProfile.displayNames,
-            icons: [iconUrl.url],
+            images: [imageUrl.url],
             [provider]: authProfile.id,
             createdAt: Date.now()
           }
@@ -186,7 +186,7 @@ const createLocal = ({conn}, email, password) =>
      createdAt: new Date(),
      badges: [],
      displayNames: [],
-     icons: []
+     images: []
    }),
    {exists: true}
  )

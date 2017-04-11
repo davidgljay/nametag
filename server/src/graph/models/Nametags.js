@@ -72,7 +72,7 @@ const grantBadge = ({conn}, id, badgeId) => nametagsTable.get(id).update({badge:
 const create = ({conn, user, models: {Users, BadgeRequests}}, nt) => {
   const nametag = Object.assign({}, nt, {createdAt: new Date()})
   return nametagsTable.insert(nametag).run(conn)
-  // Append nametag ID to user object and update default names and icons
+  // Append nametag ID to user object and update default names and images
   .then(res => {
     if (res.errors > 0) {
       return new errors.APIError('Error creating nametag')
@@ -87,9 +87,9 @@ const create = ({conn, user, models: {Users, BadgeRequests}}, nt) => {
       // Create a BadgeRequest if appropriate
       nametag.template ? BadgeRequests.create(id, nametag.template) : null,
 
-      // Add displayName and icon if they are new
+      // Add displayName and image if they are new
       user.displayNames.indexOf(nametag.name) === -1 ? Users.appendUserArray('displayNames', nametag.name) : null,
-      user.icons.indexOf(nametag.icon) === -1 ? Users.appendUserArray('icons', nametag.icon) : null
+      user.images.indexOf(nametag.image) === -1 ? Users.appendUserArray('images', nametag.image) : null
     ])
   })
   .then(([res, id]) => {

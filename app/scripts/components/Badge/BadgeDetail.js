@@ -5,7 +5,7 @@ import FlatButton from 'material-ui/FlatButton'
 import EditNametag from '../Nametag/EditNametag'
 import CircularProgress from 'material-ui/CircularProgress'
 import {indigo500} from 'material-ui/styles/colors'
-import Navbar from '../Utils/Navbar'
+import NavBar from '../Utils/NavBar'
 import Login from '../User/Login'
 import QRcode from 'qrcode.react'
 
@@ -154,7 +154,7 @@ class BadgeDetail extends Component {
     }
 
     return <div>
-      <Navbar
+      <NavBar
         me={me} />
       <div style={styles.certDetailContainer}>
         {
@@ -191,7 +191,7 @@ BadgeDetail.propTypes = {
     template: PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      icon: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       granter: PropTypes.shape({
         id: PropTypes.string.isRequired,
@@ -202,7 +202,7 @@ BadgeDetail.propTypes = {
     }),
     me: PropTypes.shape({
       displayNames: PropTypes.arrayOf(PropTypes.string).isRequired,
-      icons: PropTypes.arrayOf(PropTypes.string).isRequired,
+      images: PropTypes.arrayOf(PropTypes.string).isRequired,
       badges: PropTypes.arrayOf(PropTypes.object.isRequired)
     })
   }).isRequired

@@ -64,7 +64,7 @@ class Compose extends Component {
         onClick={this.toggleEmoji}>
         <FontIcon
           className='material-icons'>
-          insert_emoticon
+          insert_emotimage
         </FontIcon>
       </IconButton>
       <form onSubmit={this.post} style={styles.form}>
@@ -77,7 +77,7 @@ class Compose extends Component {
         <FlatButton
           style={styles.sendButton}
           type='submit'
-          icon={
+          image={
             <FontIcon
               className='material-icons'>
               send
@@ -93,7 +93,7 @@ Compose.propTypes = {
   myNametag: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    icon: PropTypes.string.isRequired
+    image: PropTypes.string.isRequired
   }).isRequired,
   createMessage: PropTypes.func.isRequired
 }

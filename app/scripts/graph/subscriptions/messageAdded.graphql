@@ -7,12 +7,12 @@ subscription messageAdded ($roomId: ID!, $nametagId: ID!) {
     author {
       id
       name
-      icon
+      image
     }
     recipient {
       id
       name
-      icon
+      image
     }
   }
 }

@@ -10,7 +10,7 @@ import Badge from '../Badge'
 //      date: PropTypes.string.isRequired
 //    })).isRequired,
 //    template: PropTypes.shape({
-//      icon: PropTypes.string,
+//      image: PropTypes.string,
 //      name: PropTypes.string.isRequired,
 //      description: PropTypes.string.isRequired
 //    }).isRequired
@@ -23,7 +23,7 @@ const badge = {
     date: new Date().toISOString()
   }],
   template: {
-    icon: 'https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.stayonsearch.com%2Fwp-content%2Fuploads%2F2012%2F12%2Fgoogle_penguin.png&f=1',
+    image: 'https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.stayonsearch.com%2Fwp-content%2Fuploads%2F2012%2F12%2Fgoogle_penguin.png&f=1',
     name: 'Super cool Penguin',
     description: 'Is a penguin'
   }

@@ -91,7 +91,7 @@ class Message extends Component {
       messageStyle = {...styles.messageText, ...styles.directMessageOutgoing}
       callout = <div style={styles.dmCallout}>
       Private Message to {recipient.name}
-        <img style={styles.tinyIconImg} src={recipient.icon} />
+        <img style={styles.tinyIconImg} src={recipient.image} />
       </div>
     } else if (recipient.id === myNametag.id) {
       messageStyle = {...styles.messageText, ...styles.directMessageIncoming}
@@ -104,8 +104,8 @@ class Message extends Component {
       style={styles.message}
       id={id}
       onClick={() => this.setState({showActions: !this.state.showActions})}>
-      <td style={styles.icon}>
-        <img style={styles.iconImg} src={author.icon} />
+      <td style={styles.image}>
+        <img style={styles.imageImg} src={author.image} />
       </td>
       <td style={messageStyle}>
         <div style={styles.name}>{author.name}</div>
@@ -138,11 +138,11 @@ Message.propTypes = {
     text: PropTypes.string.isRequired,
     createdAt: PropTypes.string.isRequired,
     author: PropTypes.shape({
-      icon: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired
     }).isRequired,
     recipient: PropTypes.shape({
-      icon: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired
     }),
     saved: PropTypes.bool
@@ -188,14 +188,14 @@ const styles = {
     wordWrap: 'break-word',
     wordBreak: 'break-word'
   },
-  icon: {
+  image: {
     paddingRight: 10,
     paddingLeft: 25,
     paddingTop: 10,
     minWidth: 50,
     verticalAlign: 'top'
   },
-  iconImg: {
+  imageImg: {
     borderRadius: 25,
     width: 50,
     height: 50

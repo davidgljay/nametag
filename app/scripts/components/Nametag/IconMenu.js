@@ -16,18 +16,18 @@ class NTIconMenu extends Component {
     }
 
     this.onUpload = (res) => {
-      this.props.updateNametagEdit(this.props.about, 'icon', res.url)
+      this.props.updateNametagEdit(this.props.about, 'image', res.url)
       this.setState({loadingImage: false})
     }
 
     this.onUpdateIcon = (url) => () => {
       this.setState({showMenu: false})
-      this.props.updateNametagEdit(this.props.about, 'icon', url)
+      this.props.updateNametagEdit(this.props.about, 'image', url)
     }
   }
 
   render () {
-    const {icon, icons} = this.props
+    const {image, images} = this.props
     const {loadingImage, showMenu} = this.state
 
     const uploadIcon = <ImageUpload
@@ -38,13 +38,13 @@ class NTIconMenu extends Component {
     let render
     if (loadingImage) {
       render = <CircularProgress />
-    } else if (!icon) {
+    } else if (!image) {
       render = uploadIcon
     } else {
       render = <IconMenu
-        iconButtonElement={
-          <IconButton style={styles.buttonStyle} iconStyle={styles.icon}>
-            <img src={icon} />
+        imageButtonElement={
+          <IconButton style={styles.buttonStyle} imageStyle={styles.image}>
+            <img src={image} />
           </IconButton>
         }
         anchorOrigin={{horizontal: 'left', vertical: 'top'}}
@@ -54,13 +54,13 @@ class NTIconMenu extends Component {
         onTouchTap={() => { this.setState({showMenu: true}) }}
         menuStyle={styles.menuStyle}>
         {
-          icons.map((url) =>
+          images.map((url) =>
             <MenuItem
               key={url}
               style={styles.menuItemStyle}
               innerDivStyle={styles.menuItemInnerDivStyle}
               onTouchTap={this.onUpdateIcon(url)}>
-              <img src={url} style={styles.icon} />
+              <img src={url} style={styles.image} />
             </MenuItem>
           )
       }
@@ -76,8 +76,8 @@ class NTIconMenu extends Component {
 }
 
 NTIconMenu.propTypes = {
-  icons: PropTypes.arrayOf(PropTypes.string).isRequired,
-  icon: PropTypes.string,
+  images: PropTypes.arrayOf(PropTypes.string).isRequired,
+  image: PropTypes.string,
   updateNametagEdit: PropTypes.func.isRequired,
   about: PropTypes.string.isRequired
 }
@@ -93,7 +93,7 @@ const styles = {
     padding: 6,
     textAlign: 'center'
   },
-  icon: {
+  image: {
     borderRadius: 25,
     width: 50,
     height: 50

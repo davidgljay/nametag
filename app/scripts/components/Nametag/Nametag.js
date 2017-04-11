@@ -3,7 +3,7 @@ import Badges from '../Badge/Badges'
 import FontIcon from 'material-ui/FontIcon'
 import {dateFormat} from '../Utils/DateFormat'
 
-const Nametag = ({mod, nametag: {id, name, icon, bio, present, badges}}) => {
+const Nametag = ({mod, nametag: {id, name, image, bio, present, badges}}) => {
   let star = ''
 
   // Show if user is a mod.
@@ -16,7 +16,7 @@ const Nametag = ({mod, nametag: {id, name, icon, bio, present, badges}}) => {
     style={styles.nametag}>
     <div style={styles.main}>
       {star}
-      <img src={icon} alt={name} style={styles.icon} />
+      <img src={image} alt={name} style={styles.image} />
       <div style={styles.details}>
         <div style={styles.name}>{name}</div>
         <div style={styles.bio}>{bio}</div>
@@ -33,7 +33,7 @@ Nametag.PropTypes = {
   nametag: shape({
     id: string.isRequired,
     name: string.isRequired,
-    icon: string.isRequired,
+    image: string.isRequired,
     bio: string,
     present: bool,
     badges: arrayOf(object).isRequired
@@ -58,7 +58,7 @@ const styles = {
     fontSize: 14,
     marginRop: 5
   },
-  icon: {
+  image: {
     float: 'left',
     margin: '3px 10px 3px 10px',
     width: 50,

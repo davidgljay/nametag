@@ -39,7 +39,7 @@ type User {
   displayNames: [String]
 
   # Icons uploaded by this user
-  icons: [String]
+  images: [String]
 
   # Badges owned by this user
   badges: [Badge]
@@ -128,8 +128,8 @@ type Nametag {
   # The name of the user
   name: String!
 
-  # The url of the user's icon
-  icon: String!
+  # The url of the user's image
+  image: String!
 
   # Further information about the user
   bio: String
@@ -199,8 +199,8 @@ type Template {
   # The name of the badge
   name: String!
 
-  # The icon for the badge
-  icon: String
+  # The image for the badge
+  image: String
 
   # The badges description
   description: String
@@ -406,8 +406,8 @@ input CreateNametagInput {
   # The content of the message
   name: String!
 
-  # The nametag's icon
-  icon: String!
+  # The nametag's image
+  image: String!
 
   # Additional information about the user
   bio: String
@@ -429,8 +429,8 @@ input CreateTemplateInput {
   # The name of the template
   name: String!
 
-  # The template's icon
-  icon: String!
+  # The template's image
+  image: String!
 
   # The template's description
   description: String!

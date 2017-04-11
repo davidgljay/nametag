@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react'
-import NavBar from '../utils/NavBar'
+import NavBar from '../Utils/NavBar'
 import GranterInfo from './GranterInfo'
 import BadgeRequest from '../Badge/BadgeRequest'
 import Templates from '../Badge/Templates'

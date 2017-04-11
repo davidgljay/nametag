@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import RoomCard from './RoomCard'
-import Navbar from '../Utils/Navbar'
+import NavBar from '../Utils/NavBar'
 import LoginDialog from '../User/LoginDialog'
 import Notifications from '../Room/Notifications'
 
@@ -46,7 +46,7 @@ class RoomCards extends Component {
       }, {})
     }
     return <div>
-      <Navbar
+      <NavBar
         me={me}
         toggleLogin={this.toggleLogin} />
       <div style={styles.roomCards}>

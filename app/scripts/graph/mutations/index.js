@@ -113,7 +113,7 @@ export const createMessage = graphql(CREATE_MESSAGE, {
             saved: false,
             author: {
               __typename: 'Nametag',
-              icon: author.icon,
+              image: author.image,
               id: author.id,
               name: author.name
             },

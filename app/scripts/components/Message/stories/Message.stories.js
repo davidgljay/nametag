@@ -11,7 +11,7 @@ storiesOf('Message', module)
       type='message'
       author={{
         name: 'Test author',
-        icon: 'http://test.author.icon'
+        image: 'http://test.author.image'
       }}
       />
   )

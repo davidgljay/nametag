@@ -126,8 +126,8 @@ class ImageSearch extends Component {
               options={uploadOptions}>
               <IconButton
                 style={styles.imageUploadButton}
-                iconStyle={styles.imageUploadIcon}
-                iconClassName='material-icons'
+                imageStyle={styles.imageUploadIcon}
+                imageClassName='material-icons'
                 ref='chooseAndUpload'>
                   cloud_upload
                 </IconButton>

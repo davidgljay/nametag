@@ -4,7 +4,7 @@ query userQuery {
   me {
     id
     displayNames
-    icons
+    images
     badges {
       ...badgeView
     }

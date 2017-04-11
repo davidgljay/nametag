@@ -176,7 +176,7 @@ const mentionNotif = ({models: {Users, Rooms, Nametags}}, to, message, reason) =
       roomId: room.id,
       text: message.text.replace(/\*/g, ''),
       senderName: sender.name,
-      icon: sender.icon
+      image: sender.image
     }, token)
     : null
   )

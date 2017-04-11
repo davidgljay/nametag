@@ -3,7 +3,7 @@
 fragment nametagView on Nametag {
   id
   name
-  icon
+  image
   bio
   createdAt
   badges {

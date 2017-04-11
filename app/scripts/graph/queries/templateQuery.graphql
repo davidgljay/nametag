@@ -5,7 +5,7 @@ query templateQuery($id: ID!){
     id
     description
     name
-    icon
+    image
     granter {
       id
       name
@@ -15,7 +15,7 @@ query templateQuery($id: ID!){
   }
   me {
     displayNames
-    icons
+    images
     badges {
       ...badgeView
     }

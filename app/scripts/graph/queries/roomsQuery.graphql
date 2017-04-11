@@ -17,7 +17,7 @@ query roomsQuery {
   me {
    id
    displayNames
-   icons
+   images
    badges {
     ...badgeView
    }
