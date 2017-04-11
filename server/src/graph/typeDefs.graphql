@@ -388,7 +388,7 @@ input CreateRoomInput {
   closedAt: Date!
 
   # An array of templates required to view and enter the room
-  templates:[]
+  templates:[ID!]
 
 }
 
