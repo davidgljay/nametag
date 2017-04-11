@@ -8,7 +8,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import {mobile} from '../../../styles/sizes'
 import radium from 'radium'
 
-const Granter = ({data: {granter, me, loading}, createBadge, updateBadgeRequestStatus}) =>
+const Granter = ({data: {granter, me, loading}, createBadge, updateBadgeRequestStatus, addNote}) =>
   loading
     ? <CircularProgress style={styles.spinner} />
     : <div>
@@ -33,24 +33,28 @@ const Granter = ({data: {granter, me, loading}, createBadge, updateBadgeRequestS
           }
         </ReactCSSTransitionGroup>
         <BadgeTemplates
+          addNote={addNote}
           templates={granter.templates}
           granterCode={granter.urlCode} />
       </div>
     </div>
 
+const {shape, string, cool, object, arrayOf, func, bool} = PropTypes
+
 Granter.propTypes = {
-  data: PropTypes.shape({
-    loading: PropTypes.bool.isRequired,
-    granter: PropTypes.shape({
-      badgeRequests: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
-      templates: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired
+  data: shape({
+    loading: bool.isRequired,
+    granter: shape({
+      badgeRequests: arrayOf(object.isRequired).isRequired,
+      templates: arrayOf(object.isRequired).isRequired
     }),
-    me: PropTypes.shape({
-      id: PropTypes.string.isRequired
+    me: shape({
+      id: string.isRequired
     })
   }).isRequired,
-  createBadge: PropTypes.func.isRequired,
-  updateBadgeRequestStatus: PropTypes.func.isRequired
+  createBadge: func.isRequired,
+  addNote: func.isRequired,
+  updateBadgeRequestStatus: func.isRequired
 }
 
 export default radium(Granter)

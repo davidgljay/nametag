@@ -8,6 +8,7 @@ import TOGGLE_SAVED from './toggleSaved.graphql'
 import UPDATE_LATEST_VISIT from './updateLatestVisit.graphql'
 import UPDATE_BADGE_REQUEST_STATUS from './updateBadgeRequestStatus.graphql'
 import UPDATE_TOKEN from './updateToken.graphql'
+import ADD_NOTE from './addNote.graphql'
 import errorLog from '../../utils/errorLog'
 
 export const createNametag = graphql(CREATE_NAMETAG, {
@@ -196,6 +197,47 @@ export const toggleSaved = graphql(TOGGLE_SAVED, {
             },
             me: {
               ...oldData.me
+            }
+          }
+        }
+      }
+    })
+  })
+})
+
+export const addNote = graphql(ADD_NOTE, {
+  props: ({ownProps, mutate}) => ({
+    addNote: (badgeId, text) => mutate({
+      variables: {
+        badgeId,
+        text
+      },
+      optimisticResponse: {
+        addNote: {
+          errors: null
+        }
+      },
+      updateQueries: {
+        granterQuery: (oldData, {mutationResult: {data: {addNote: {errors}}}}) => {
+          if (errors) {
+            errorLog('Error adding note')(errors)
+            return oldData
+          }
+          return {
+            ...oldData,
+            granter: {
+              ...oldData.granter,
+              templates: oldData.granter.templates.map(template => {
+                for (let i = 0; i < template.badges.length; i++) {
+                  if (template.badges[i].id === badgeId) {
+                    template.badges[i].notes = [{
+                      text,
+                      date: new Date().toISOString()
+                    }].concat(template.badges[i].notes)
+                  }
+                }
+                return template
+              })
             }
           }
         }

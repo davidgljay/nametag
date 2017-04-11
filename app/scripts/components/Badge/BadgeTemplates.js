@@ -6,7 +6,7 @@ import FontIcon from 'material-ui/FontIcon'
 import {grey} from '../../../styles/colors'
 import {dateFormat} from '../Utils/DateFormat'
 
-const BadgeTemplates = ({templates, granterCode}) => <div>
+const BadgeTemplates = ({templates, granterCode, addNote}) => <div>
   {
     templates.map(template =>
       <div key={template.id}>
@@ -35,6 +35,7 @@ const BadgeTemplates = ({templates, granterCode}) => <div>
               <DefaultNametag
                 key={id}
                 id={id}
+                addNote={addNote}
                 defaultNametag={defaultNametag}
                 notes={notes} />
             )
@@ -46,7 +47,7 @@ const BadgeTemplates = ({templates, granterCode}) => <div>
   }
 </div>
 
-const {shape, string, object, arrayOf} = PropTypes
+const {shape, string, object, arrayOf, func} = PropTypes
 
 BadgeTemplates.propTypes = {
   templates: arrayOf(shape({
@@ -63,7 +64,8 @@ BadgeTemplates.propTypes = {
       defaultNametag: object.isRequired
     })).isRequired
   })).isRequired,
-  granterCode: string.isRequired
+  granterCode: string.isRequired,
+  addNote: func.isRequired
 }
 
 export default BadgeTemplates
@@ -83,7 +85,8 @@ const styles={
   },
   nametagsContainer: {
     margin: 10,
-    display: 'flex'
+    display: 'flex',
+    alignItems: 'flex-start'
   },
   iconButton: {
     width: 'inherit',

@@ -1,0 +1,7 @@
+mutation AddNote($badgeId:ID!, $text: String!) {
+  addNote(badgeId:$badgeId, text:$text) {
+    errors {
+      translation_key
+    }
+  }
+}
