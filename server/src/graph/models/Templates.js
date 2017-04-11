@@ -44,9 +44,9 @@ const getGranterTemplates = ({conn}, granterId) => templatesTable.getAll(granter
  **/
 
 const create = ({conn}, template) => {
-  const template = Object.assign({}, template, {createdAt: new Date(), updatedAt: new Date()})
-  return templatesTable.insert(template).run(conn)
-    .then(res => Object.assign({}, template, {id: res.generated_keys[0]}))
+  const templateObj = Object.assign({}, template, {createdAt: new Date(), updatedAt: new Date()})
+  return templatesTable.insert(templateObj).run(conn)
+    .then(res => Object.assign({}, templateObj, {id: res.generated_keys[0]}))
 }
 
 module.exports = (context) => ({
