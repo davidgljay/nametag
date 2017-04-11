@@ -19,7 +19,7 @@ const Templates = ({templates, granterCode, addNote}) => <div>
             }} />
           <IconButton
             style={styles.imageButton}
-            imageStyle={styles.shareIcon}
+            iconStyle={styles.shareIcon}
             onTouchTap={() => { window.location = `/granters/${granterCode}/badges/${template.id}` }}>
             <FontIcon
               className='material-icons'>

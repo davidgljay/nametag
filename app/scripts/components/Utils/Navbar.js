@@ -61,7 +61,7 @@ class NavBar extends Component {
         title='Nametag'
         style={styles.appBar}
         onTitleTouchTap={onHomeClick}
-        imageElementRight={mobile ? null : auth}
+        iconElementRight={mobile ? null : auth}
         onLeftIconButtonTouchTap={() => this.setState({open: true})} />
       <NavDrawer
         open={this.state.open}
