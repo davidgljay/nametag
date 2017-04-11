@@ -571,6 +571,9 @@ type RootMutation {
   # Updates the status of a badge request
   updateBadgeRequestStatus(badgeRequest: ID!, status: GRANTER_NOTIFICATION_STATUS!): BasicResponse
 
+  # Adds a note to badge
+  addNote(badgeId: ID!, text: String!): BasicResponse
+
 }
 
 ################################################################################

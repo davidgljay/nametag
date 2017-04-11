@@ -74,11 +74,33 @@ const create = ({conn, models: {Users, Nametags}}, {note, template, defaultNamet
   })
 }
 
+/**
+ * Adds a note to a badge
+ *
+ * @param {Object} context     graph context
+ * @param {String} badgeId   the id of the badge to which the note should be added
+ * @param {String} note   the text of the note
+ *
+ **/
+
+ const addNote = ({conn}, badgeId, text) =>
+  badgesTable.get(badgeId).update(badge => Object.assign(
+    {},
+    badge,
+    {
+      notes: badge('notes').prepend({
+        text,
+        date: new Date()
+      })
+    }
+  )).run(conn)
+
 module.exports = (context) => ({
   Badges: {
     get: (id) => get(context, id),
     getAll: (ids) => getAll(context, ids),
     getTemplateBadges: (templateId) => getTemplateBadges(context, templateId),
-    create: (badgeInput) => create(context, badgeInput)
+    create: (badgeInput) => create(context, badgeInput),
+    addNote: (badgeId, text) => addNote(context, badgeId, text)
   }
 })

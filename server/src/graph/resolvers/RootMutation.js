@@ -80,6 +80,15 @@ const RootMutation = {
         ? BadgeRequests.updateStatus(badgeRequest, status)
           .then(wrapResponse('updateBadgeRequest'))
         : Promise.reject(ErrNotAuthorized)
+      ),
+  addNote: (obj, {badgeId, text}, {user, models:{BadgeGranters, BadgeTemplates, Badges}}) =>
+    Badges.get(badgeId)
+      .then(badge => BadgeTemplates.get(badge.template))
+      .then(template => BadgeGranters.get(template.granter))
+      .then(granter => user.badges[granter.adminTemplate]
+        ? Badges.addNote(badgeId, text)
+          .then(wrapResponse('addNote'))
+        : Promise.reject(ErrNotAuthorized)
       )
 }
 
