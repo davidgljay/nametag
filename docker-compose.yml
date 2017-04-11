@@ -17,7 +17,7 @@ nametag:
     - "8185:8185"
 rethinkdb:
   image: rethinkdb
-  command: rethinkdb --bind "all" --no-update-check
+  command: rethinkdb --bind "all"
   volumes:
     - ./rethinkdb_data/:/var/lib/rethinkdb/instances.d
   ports:

@@ -31,6 +31,7 @@ const styles = {
   },
   nametags: {
     marginBottom: 40,
-    display: 'flex'
+    display: 'flex',
+    flexDirection: 'column'
   }
 }
