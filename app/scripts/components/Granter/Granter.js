@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react'
 import NavBar from '../utils/NavBar'
 import GranterInfo from './GranterInfo'
 import BadgeRequest from '../Badge/BadgeRequest'
+import BadgeTemplates from '../Badge/BadgeTemplates'
 import CircularProgress from 'material-ui/CircularProgress'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import {mobile} from '../../../styles/sizes'
@@ -31,13 +32,9 @@ const Granter = ({data: {granter, me, loading}, createBadge, updateBadgeRequestS
             )
           }
         </ReactCSSTransitionGroup>
-        {
-          // <div>
-
-          //   <BadgeTemplates
-          //     templates={granter.templates}/>
-          // </div>
-        }
+        <BadgeTemplates
+          templates={granter.templates}
+          granterCode={granter.urlCode} />
       </div>
     </div>
 

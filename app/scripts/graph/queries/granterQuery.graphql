@@ -6,6 +6,7 @@ query granterQuery($urlCode: String!) {
     name
     description
     image
+    urlCode
     badgeRequests {
       id
       createdAt
@@ -33,7 +34,13 @@ query granterQuery($urlCode: String!) {
       id
       name
       icon
+      createdAt
       description
+      granter {
+        name
+        description
+        image
+      }
       badges {
         id
         notes {

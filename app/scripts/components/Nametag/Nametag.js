@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react'
 import Badges from '../Badge/Badges'
 import FontIcon from 'material-ui/FontIcon'
+import {dateFormat} from '../Utils/DateFormat'
 
 const Nametag = ({mod, nametag: {id, name, icon, bio, present, badges}}) => {
   let star = ''
@@ -13,23 +14,29 @@ const Nametag = ({mod, nametag: {id, name, icon, bio, present, badges}}) => {
   return <div
     key={id}
     style={styles.nametag}>
-    {star}
-    <img src={icon} alt={name} style={styles.icon} />
-    <div style={styles.name}>{name}</div>
-    <div style={styles.bio}>{bio}</div>
+    <div style={styles.main}>
+      {star}
+      <img src={icon} alt={name} style={styles.icon} />
+      <div style={styles.details}>
+        <div style={styles.name}>{name}</div>
+        <div style={styles.bio}>{bio}</div>
+      </div>
+    </div>
     <Badges badges={badges} />
   </div>
 }
 
+const {string, shape, arrayOf, bool, object} = PropTypes
+
 Nametag.PropTypes = {
-  mod: PropTypes.string,
-  nametag: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    icon: PropTypes.string.isRequired,
-    bio: PropTypes.string,
-    present: PropTypes.bool,
-    badges: PropTypes.arrayOf(PropTypes.object).isRequired
+  mod: string,
+  nametag: shape({
+    id: string.isRequired,
+    name: string.isRequired,
+    icon: string.isRequired,
+    bio: string,
+    present: bool,
+    badges: arrayOf(object).isRequired
   }).isRequired
 }
 
@@ -61,5 +68,12 @@ const styles = {
   nametag: {
     padding: 5,
     minHeight: 55
+  },
+  main: {
+    display: 'flex'
+  },
+  noteText: {
+    fontSize: 14,
+    margin: 5
   }
 }

@@ -57,6 +57,7 @@ class Badge extends Component {
           granter
         }
       },
+      jumbo,
       connectDragSource,
       showIconUpload,
       isDragging,
@@ -95,10 +96,10 @@ class Badge extends Component {
               {iconComponent}
             </div>
             <div>
-              <div style={styles.name}>{name}</div>
+              <div style={jumbo ? styles.jumboName : styles.name}>{name}</div>
+              <div style={styles.granter}>Granted by {granter.name}</div>
             </div>
           </div>
-          <div style={styles.granter}>Granted by {granter.name}</div>
           <div style={styles.description}>{description}</div>
           <div style={styles.notes}>
             {notes && notes.map((note) => {
@@ -111,15 +112,21 @@ class Badge extends Component {
         </Card>
       </div>
     } else {
-      let chipStyle = styles.badgeChip
+      let chipStyle = jumbo
+        ? {...styles.badgeChip, ...styles.jumboBadgeChip}
+        : styles.badgeChip
       if (isDragging && currentOffset) {
-        chipStyle = Object.assign({}, styles.badgeChip,
+        chipStyle = Object.assign({}, chipStyle,
           {
             position: 'relative',
             top: currentOffset.y - initialOffset.y - 20,
             left: currentOffset.x - initialOffset.x
           })
       }
+      const iconStyle = Object.assign({},
+        styles.chipIcon,
+        jumbo ? styles.jumboChipIcon : {},
+        {background: `url(${icon}) 0 0 / cover`})
       badgeComponent = <div
         style={chipStyle}
         className='mdl-shadow--2dp'
@@ -127,7 +134,7 @@ class Badge extends Component {
         onClick={this.toggleExpanded}>
         {
             icon
-            ? <div style={Object.assign({}, styles.miniIcon, {background: 'url(' + icon + ') 0 0 / cover'})} />
+            ? <div style={iconStyle} />
              : <div style={styles.spacer} />
           }
         <div style={styles.chipText}>{name}</div>
@@ -169,7 +176,7 @@ const styles = {
   badgeChip: {
     height: 22,
     borderRadius: 11,
-    display: 'inline-block',
+    display: 'flex',
     background: '#dedede',
     margin: 4,
     fontSize: 12,
@@ -177,18 +184,28 @@ const styles = {
     cursor: 'pointer',
     userSelect: 'none'
   },
-  miniIcon: {
+  jumboBadgeChip: {
+    height: 28,
+    borderRadius: 14,
+    fontSize: 20,
+    lineHeight: '28px'
+  },
+  chipIcon: {
     height: 22,
     width: 22,
     borderRadius: 11,
     marginRight: 4,
     fontSize: 12,
-    display: 'inline-block',
-    lineHeight: '22px',
     verticalAlign: 'top'
   },
+  jumboChipIcon: {
+    height: 28,
+    width: 28,
+    borderRadius: 14,
+    marginRight: 7
+  },
   chipText: {
-    display: 'inline-block',
+    display: 'flex',
     paddingRight: 10
   },
   spacer: {
@@ -203,7 +220,8 @@ const styles = {
     minHeight: 100,
     borderRadius: 11,
     background: '#dedede',
-    textAlign: 'left'
+    textAlign: 'left',
+    maxWidth: 300
   },
   cardHeader: {
     display: 'flex',
@@ -224,6 +242,9 @@ const styles = {
   name: {
     fontSize: 16,
     fontWeight: 'bold'
+  },
+  jumboName: {
+    fontSize: 22
   },
   granter: {
     fontSize: 12
