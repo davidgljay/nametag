@@ -20,7 +20,8 @@ const Room = {
   nametagCount: ({id}, _, {models: {Nametags}}) => {
     return Nametags.getNametagCount(id)
   },
-  mod: (room, _, {models: {Nametags}}) => Nametags.get(room.mod)
+  mod: ({mod}, _, {models: {Nametags}}) => Nametags.get(mod),
+  templates: ({templates}, _, {models: {Templates}}) => Templates.getAll(templates)
 }
 
 module.exports = Room

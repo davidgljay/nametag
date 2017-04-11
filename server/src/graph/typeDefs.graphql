@@ -91,6 +91,9 @@ type Room {
   # The latest message in this room
   latestMessage: Date
 
+  # Templates required to view and enter the room
+  templates: [Template]
+
 }
 
 # A message in a room
@@ -383,6 +386,9 @@ input CreateRoomInput {
 
   # The date when the room will be closed
   closedAt: Date!
+
+  # An array of templates required to view and enter the room
+  templates:[]
 
 }
 
