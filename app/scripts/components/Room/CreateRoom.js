@@ -29,7 +29,8 @@ class CreateRoom extends Component {
       newRoom: false,
       finished: false,
       stepIndex: 0,
-      showLogin: false
+      showLogin: false,
+      selectedBadges: []
     }
 
     this.handleNext = () => {
@@ -116,6 +117,24 @@ class CreateRoom extends Component {
       })
     }
 
+    this.addSelectedBadge = (badge) => {
+      const {selectedBadges} = this.state
+      const newBadge = selectedBadges.map(b => b.id).indexOf(badge.id) === -1
+      if (newBadge) {
+        this.setState({selectedBadges: this.state.selectedBadges.concat(badge)})
+      }
+    }
+
+    this.removeSelectedBadge = (badgeId) => {
+      this.setState(prevState => {
+        const selectedBadges = prevState.selectedBadges.filter(badge => badge.id !== badgeId)
+        return {
+          ...prevState,
+          selectedBadges
+        }
+      })
+    }
+
     this.validate = (stepIndex) => {
       switch (stepIndex) {
         case 0:
@@ -176,7 +195,7 @@ class CreateRoom extends Component {
       window.location = '/'
       return null
     }
-    const {room, stepIndex} = this.state
+    const {room, stepIndex, selectedBadges} = this.state
     return !loading
     ? <div>
       <NavBar
@@ -209,6 +228,10 @@ class CreateRoom extends Component {
           stepIndex={this.state.stepIndex}
           updateNametagEdit={updateNametagEdit}
           room={this.state.room}
+          badges={me.badges}
+          selectedBadges={selectedBadges}
+          addSelectedBadge={this.addSelectedBadge}
+          removeSelectedBadge={this.removeSelectedBadge}
           nametagEdits={nametagEdits}
           updateRoom={this.updateRoom}
           searchImage={searchImage}
@@ -256,22 +279,15 @@ class CreateRoom extends Component {
   }
 }
 
+const {func, object, shape, arrayOf} = PropTypes
 CreateRoom.propTypes = {
-  searchImage: PropTypes.func.isRequired,
-  createRoom: PropTypes.func.isRequired,
-  setImageFromUrl: PropTypes.func.isRequired,
-  nametagEdits: PropTypes.object.isRequired,
-  data: PropTypes.shape({
-    me: PropTypes.shape({
-      badges: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        image: PropTypes.string.isRequired,
-        notes: PropTypes.arrayOf(PropTypes.shape({
-          text: PropTypes.string.isRequired,
-          date: PropTypes.string.isRequired
-        })).isRequired
-      })).isRequired
+  searchImage: func.isRequired,
+  createRoom: func.isRequired,
+  setImageFromUrl: func.isRequired,
+  nametagEdits: object.isRequired,
+  data: shape({
+    me: shape({
+      badges: arrayOf(object).isRequired
     })
   }).isRequired
 }

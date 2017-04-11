@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react'
 import TitleForm from './TitleForm'
+import ChoosePrivacy from './ChoosePrivacy'
 import EditNametag from '../../Nametag/EditNametag'
 import UserBadges from '../../Badge/UserBadges'
 import ChooseNorms from './ChooseNorms'
@@ -15,10 +16,14 @@ const getForm = ({
     setClosed,
     closedIn,
     room,
+    badges,
+    selectedBadges,
     searchImage,
     setImageFromUrl,
     addNametagEditBadge,
     removeNametagEditBadge,
+    addSelectedBadge,
+    removeSelectedBadge,
     me,
     norms,
     addNorm,
@@ -35,6 +40,12 @@ const getForm = ({
           closedIn={closedIn}
           title={room.title}
           desc={room.description} />
+        <ChoosePrivacy
+          badges={badges}
+          selectedBadges={selectedBadges}
+          addSelectedBadge={addSelectedBadge}
+          removeSelectedBadge={removeSelectedBadge}
+           />
       </div>
     case 1:
       return <div>
