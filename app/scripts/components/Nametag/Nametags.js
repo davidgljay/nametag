@@ -1,11 +1,11 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 import Nametag from './Nametag'
 import {Card} from 'material-ui/Card'
 
-const Nametags = ({nametags, mod}) => <div style={styles.nametags}>
+const Nametags = ({nametags, mod, myNametagId}) => <div style={styles.nametags}>
   {
     nametags.map((nametag) => {
-      const cardStyle = nametag.present
+      const cardStyle = nametag.present || nametag.id === myNametagId
       ? styles.nametag : {...styles.nametag, ...styles.absent}
 
       return <Card key={nametag.id} style={cardStyle}>
@@ -16,6 +16,13 @@ const Nametags = ({nametags, mod}) => <div style={styles.nametags}>
     })
   }
 </div>
+
+const {arrayOf, string, object} = PropTypes
+Nametags.propTypes = {
+  nametags: arrayOf(object).isRequired,
+  mod: string.isRequired,
+  myNametagId: string
+}
 
 export default Nametags
 

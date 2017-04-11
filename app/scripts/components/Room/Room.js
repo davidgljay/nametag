@@ -170,7 +170,8 @@ class Room extends Component {
                   this.state.toggles.nametags &&
                   <Nametags
                     mod={room.mod.id}
-                    nametags={room.nametags} />
+                    nametags={room.nametags}
+                    myNametagId={myNametag.id} />
                 }
               </div>
               <div style={styles.leftBarChevron}>
