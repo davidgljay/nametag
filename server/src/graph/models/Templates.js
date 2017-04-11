@@ -1,7 +1,7 @@
 const r = require('rethinkdb')
 // const errors = require('../../errors')
 
-const badgeTemplatesTable = r.db('nametag').table('badgeTemplates')
+const templatesTable = r.db('nametag').table('templates')
 
 /**
  * Returns a badge template from an id.
@@ -11,7 +11,7 @@ const badgeTemplatesTable = r.db('nametag').table('badgeTemplates')
  *
  */
 
-const get = ({conn}, id) => badgeTemplatesTable.get(id).run(conn)
+const get = ({conn}, id) => templatesTable.get(id).run(conn)
 
 /**
  * Returns an array of badge templates from an array of ids.
@@ -21,7 +21,7 @@ const get = ({conn}, id) => badgeTemplatesTable.get(id).run(conn)
  *
  */
 
-const getAll = ({conn}, ids) => badgeTemplatesTable.getAll(...ids).run(conn)
+const getAll = ({conn}, ids) => templatesTable.getAll(...ids).run(conn)
   .then(cursor => cursor.toArray())
 
 /**
@@ -32,7 +32,7 @@ const getAll = ({conn}, ids) => badgeTemplatesTable.getAll(...ids).run(conn)
  *
  */
 
-const getGranterTemplates = ({conn}, granterId) => badgeTemplatesTable.getAll(granterId, {index: 'granter'}).run(conn)
+const getGranterTemplates = ({conn}, granterId) => templatesTable.getAll(granterId, {index: 'granter'}).run(conn)
   .then(cursor => cursor.toArray())
 
 /**
@@ -44,13 +44,13 @@ const getGranterTemplates = ({conn}, granterId) => badgeTemplatesTable.getAll(gr
  **/
 
 const create = ({conn}, template) => {
-  const badgeTemplate = Object.assign({}, template, {createdAt: new Date(), updatedAt: new Date()})
-  return badgeTemplatesTable.insert(badgeTemplate).run(conn)
+  const template = Object.assign({}, template, {createdAt: new Date(), updatedAt: new Date()})
+  return templatesTable.insert(template).run(conn)
     .then(res => Object.assign({}, template, {id: res.generated_keys[0]}))
 }
 
 module.exports = (context) => ({
-  BadgeTemplates: {
+  Templates: {
     get: (id) => get(context, id),
     getAll: (ids) => getAll(context, ids),
     getGranterTemplates: (granterId) => getGranterTemplates(context, granterId),

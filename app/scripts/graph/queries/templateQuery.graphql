@@ -1,6 +1,6 @@
 #import "../fragments/badgeView.graphql"
 
-query badgeTemplateQuery($id: ID!){
+query templateQuery($id: ID!){
   template(id:$id) {
     id
     description

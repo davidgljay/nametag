@@ -48,7 +48,7 @@ class CreateBadge extends Component {
         icon,
         name
       })
-      .then(({data: {createBadgeTemplate: {id}}}) => {
+      .then(({data: {createTemplate: {id}}}) => {
         window.location = `/badges/${id}`
       })
     }

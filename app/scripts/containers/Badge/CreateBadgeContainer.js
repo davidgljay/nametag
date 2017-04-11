@@ -1,11 +1,11 @@
 import component from '../../components/Badge/CreateBadge'
 import {compose} from 'react-apollo'
-import {createBadgeTemplate} from '../../graph/mutations'
-import {createBadgeTemplateQuery} from '../../graph/queries'
+import {createTemplate} from '../../graph/mutations'
+import {createTemplateQuery} from '../../graph/queries'
 
 const CreateBadge = compose(
-  createBadgeTemplate,
-  createBadgeTemplateQuery
+  createTemplate,
+  createTemplateQuery
 )(component)
 
 export default CreateBadge

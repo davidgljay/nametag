@@ -6,11 +6,11 @@ import FontIcon from 'material-ui/FontIcon'
 import {grey} from '../../../styles/colors'
 import {dateFormat} from '../Utils/DateFormat'
 
-const BadgeTemplates = ({templates, granterCode, addNote}) => <div>
+const Templates = ({templates, granterCode, addNote}) => <div>
   {
     templates.map(template =>
       <div key={template.id}>
-        <div style={styles.badgeTemplate}>
+        <div style={styles.template}>
           <Badge
             jumbo
             badge={{
@@ -49,7 +49,7 @@ const BadgeTemplates = ({templates, granterCode, addNote}) => <div>
 
 const {shape, string, object, arrayOf, func} = PropTypes
 
-BadgeTemplates.propTypes = {
+Templates.propTypes = {
   templates: arrayOf(shape({
     id: string.isRequired,
     name: string.isRequired,
@@ -68,10 +68,10 @@ BadgeTemplates.propTypes = {
   addNote: func.isRequired
 }
 
-export default BadgeTemplates
+export default Templates
 
 const styles={
-  badgeTemplate: {
+  template: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start',

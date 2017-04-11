@@ -1,7 +1,7 @@
 const r = require('rethinkdb')
 // const errors = require('../../errors')
 
-const badgeGrantersTable = r.db('nametag').table('badgeGranters')
+const grantersTable = r.db('nametag').table('granters')
 
 /**
  * Returns a badge granter from an id.
@@ -11,7 +11,7 @@ const badgeGrantersTable = r.db('nametag').table('badgeGranters')
  *
  */
 
-const get = ({conn}, id) => badgeGrantersTable.get(id).run(conn)
+const get = ({conn}, id) => grantersTable.get(id).run(conn)
 
 /**
  * Returns a badge granter from a url code.
@@ -21,7 +21,7 @@ const get = ({conn}, id) => badgeGrantersTable.get(id).run(conn)
  *
  */
 
-const getByUrlCode = ({conn}, urlCode) => badgeGrantersTable.getAll(urlCode, {index:'urlCode'}).run(conn)
+const getByUrlCode = ({conn}, urlCode) => grantersTable.getAll(urlCode, {index:'urlCode'}).run(conn)
   .then(cursor => cursor.next())
 
 
@@ -34,8 +34,8 @@ const getByUrlCode = ({conn}, urlCode) => badgeGrantersTable.getAll(urlCode, {in
  **/
 
 const create = ({conn}, granter) => {
-  const badgeTemplate = Object.assign({}, granter, {createdAt: new Date(), updatedAt: new Date()})
-  return badgeGrantersTable.insert(badgeTemplate).run(conn)
+  const template = Object.assign({}, granter, {createdAt: new Date(), updatedAt: new Date()})
+  return grantersTable.insert(template).run(conn)
     .then(res => {
       if (res.error) {
         return new Error(res.error)
@@ -45,7 +45,7 @@ const create = ({conn}, granter) => {
 }
 
 module.exports = (context) => ({
-  BadgeGranters: {
+  Granters: {
     get: id => get(context, id),
     create: badge => create(context, badge),
     getByUrlCode: urlCode => getByUrlCode(context, urlCode)

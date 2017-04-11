@@ -60,31 +60,31 @@ const RootMutation = {
     Badges.create(badge)
     .then(wrapResponse('badge')),
 
-  createBadgeTemplate: (obj, {template}, {user, models: {BadgeTemplates, BadgeGranters}}) =>
-    BadgeGranters.get(template.granter)
+  createTemplate: (obj, {template}, {user, models: {Templates, Granters}}) =>
+    Granters.get(template.granter)
       .then(granter => user.badges[granter.adminTemplate]
-        ? BadgeTemplates.create(template) : ErrNotAuthorized),
+        ? Templates.create(template) : ErrNotAuthorized),
 
-  createBadgeGranter: (obj, {granter}, {user, models: {BadgeGranters}}) =>
+  createGranter: (obj, {granter}, {user, models: {Granters}}) =>
     // TODO: Add concept of admin login and require that here.
-    BadgeGranters.create(granter)
+    Granters.create(granter)
     .then(wrapResponse('granter')),
 
   updateToken: (obj, {token}, {user, models: {Users}}) =>
     Users.addToken(token),
 
-  updateBadgeRequestStatus: (obj, {badgeRequest, status}, {user, models: {BadgeGranters, BadgeRequests}}) =>
+  updateBadgeRequestStatus: (obj, {badgeRequest, status}, {user, models: {Granters, BadgeRequests}}) =>
     BadgeRequests.get(badgeRequest)
-      .then(br => BadgeGranters.get(br.granter))
+      .then(br => Granters.get(br.granter))
       .then(granter => user.badges[granter.adminTemplate]
         ? BadgeRequests.updateStatus(badgeRequest, status)
           .then(wrapResponse('updateBadgeRequest'))
         : Promise.reject(ErrNotAuthorized)
       ),
-  addNote: (obj, {badgeId, text}, {user, models:{BadgeGranters, BadgeTemplates, Badges}}) =>
+  addNote: (obj, {badgeId, text}, {user, models:{Granters, Templates, Badges}}) =>
     Badges.get(badgeId)
-      .then(badge => BadgeTemplates.get(badge.template))
-      .then(template => BadgeGranters.get(template.granter))
+      .then(badge => Templates.get(badge.template))
+      .then(template => Granters.get(template.granter))
       .then(granter => user.badges[granter.adminTemplate]
         ? Badges.addNote(badgeId, text)
           .then(wrapResponse('addNote'))

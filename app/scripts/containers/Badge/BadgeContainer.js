@@ -2,7 +2,7 @@ import component from '../../components/Badge/BadgeDetail'
 import {connect} from 'react-redux'
 import {compose} from 'react-apollo'
 import {createNametag} from '../../graph/mutations'
-import {badgeTemplateQuery} from '../../graph/queries'
+import {templateQuery} from '../../graph/queries'
 import {loginUser, registerUser} from '../../actions/UserActions'
 import {updateNametagEdit, addNametagEditBadge, removeNametagEditBadge} from '../../actions/NametagEditActions'
 
@@ -26,7 +26,7 @@ const mapDispatchToProps = (dispatch) => {
 const CreateBadge = compose(
   connect(mapStateToProps, mapDispatchToProps),
   createNametag,
-  badgeTemplateQuery
+  templateQuery
 )(component)
 
 export default CreateBadge

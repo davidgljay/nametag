@@ -3,7 +3,7 @@ import CREATE_NAMETAG from './createNametag.graphql'
 import CREATE_ROOM from './createRoom.graphql'
 import CREATE_MESSAGE from './createMessage.graphql'
 import CREATE_BADGE from './createBadge.graphql'
-import CREATE_BADGE_TEMPLATE from './createBadgeTemplate.graphql'
+import CREATE_BADGE_TEMPLATE from './createTemplate.graphql'
 import TOGGLE_SAVED from './toggleSaved.graphql'
 import UPDATE_LATEST_VISIT from './updateLatestVisit.graphql'
 import UPDATE_BADGE_REQUEST_STATUS from './updateBadgeRequestStatus.graphql'
@@ -87,7 +87,7 @@ export const updateBadgeRequestStatus = graphql(UPDATE_BADGE_REQUEST_STATUS, {
   })
 })
 
-export const createBadgeTemplate = graphql(CREATE_BADGE_TEMPLATE, {
+export const createTemplate = graphql(CREATE_BADGE_TEMPLATE, {
   props: ({ownProps, mutate}) => ({
     createBadge: (template) => mutate({
       variables: {

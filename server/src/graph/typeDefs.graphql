@@ -150,7 +150,7 @@ type Nametag {
   room: Room
 
   # The template that this Nametag is created for. May be null if this a room Nametag.
-  template: BadgeTemplate
+  template: Template
 
   # The badge that this Nametag is created for. May be null if this a room Nametag or if
   # this is a badge template nametag that is not yet assigned.
@@ -167,7 +167,7 @@ type Badge {
   id: ID!
 
   # The template from which this badge is created
-  template: BadgeTemplate
+  template: Template
 
   # Notes appended to the badge
   notes: [Note]
@@ -192,7 +192,7 @@ type Note {
 }
 
 # A verified component of a user's identity
-type BadgeTemplate {
+type Template {
   # The ID of the badge
   id: ID!
 
@@ -206,7 +206,7 @@ type BadgeTemplate {
   description: String
 
   # The organization or group granting the badge
-  granter: BadgeGranter
+  granter: Granter
 
   # The badges that have been granted based on this template
   badges: [Badge]
@@ -220,7 +220,7 @@ type BadgeTemplate {
 }
 
 # An organization or individual capable of granting a badge
-type BadgeGranter {
+type Granter {
 
   # The id of the badge granter
   id: ID!
@@ -235,7 +235,7 @@ type BadgeGranter {
   image: String!
 
   # Badges verifying the granter
-  templates: [BadgeTemplate]
+  templates: [Template]
 
   # Badge Requests for this granter
   badgeRequests: [BadgeRequest]
@@ -253,7 +253,7 @@ type BadgeGranter {
   urlCode: String!
 
   # List of administrators
-  adminTemplate: BadgeTemplate
+  adminTemplate: Template
 
 }
 
@@ -270,7 +270,7 @@ interface GranterNotification {
   createdAt: Date!
 
   # The granter to receive this notification
-  granter: BadgeGranter!
+  granter: Granter!
 
 }
 
@@ -287,10 +287,10 @@ type BadgeRequest implements GranterNotification {
   createdAt: Date!
 
   # The granter to receive this notification
-  granter: BadgeGranter!
+  granter: Granter!
 
   # The badge template being requested
-  template: BadgeTemplate
+  template: Template
 
   # The nametag requesting the badge
   nametag: Nametag
@@ -311,7 +311,7 @@ type ModAlert implements GranterNotification {
   createdAt: Date!
 
   # The granter to receive this notification
-  granter: BadgeGranter!
+  granter: Granter!
 
   # The nametag of the mod sending the alert
   mod: Nametag
@@ -343,10 +343,10 @@ type RootQuery {
   me: User
 
   # Retrieves information about a badge granter
-  granter(urlCode:String!): BadgeGranter
+  granter(urlCode:String!): Granter
 
   # Retrieves information about a badge template
-  template(id: ID!): BadgeTemplate
+  template(id: ID!): Template
 
 }
 
@@ -424,7 +424,7 @@ input CreateNametagInput {
 }
 
 # Input required to create a badge
-input CreateBadgeTemplateInput {
+input CreateTemplateInput {
 
   # The name of the template
   name: String!
@@ -454,7 +454,7 @@ input CreateBadgeInput {
 
 }
 
-input CreateBadgeGranterInput {
+input CreateGranterInput {
 
   # The name of the granter
   name: String!
@@ -516,12 +516,12 @@ type CreateBadgeResponse implements Response {
   errors: [UserError]
 }
 
-# CreateBadgeGranterResponse is returned with the badge granter that was created and any
+# CreateGranterResponse is returned with the badge granter that was created and any
 # errors that may have occurred in the attempt to create it.
-type CreateBadgeGranterResponse implements Response {
+type CreateGranterResponse implements Response {
 
   # The comment that was created.
-  badgeGranter: BadgeGranter
+  granter: Granter
 
   # An array of errors relating to the mutation that occurred.
   errors: [UserError]
@@ -554,10 +554,10 @@ type RootMutation {
   createBadge(badge: CreateBadgeInput!): CreateBadgeResponse
 
   # Creates a badge template
-  createBadgeTemplate(template: CreateBadgeTemplateInput!): BasicResponse
+  createTemplate(template: CreateTemplateInput!): BasicResponse
 
   # Creates a badge granter
-  createBadgeGranter(granter: CreateBadgeGranterInput!): CreateBadgeGranterResponse
+  createGranter(granter: CreateGranterInput!): CreateGranterResponse
 
   # Saves a message
   toggleSaved(messageId: ID!, saved: Boolean!): BasicResponse

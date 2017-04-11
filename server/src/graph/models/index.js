@@ -4,8 +4,8 @@ const Messages = require('./Messages')
 const Nametags = require('./Nametags')
 const Rooms = require('./Rooms')
 const Badges = require('./Badges')
-const BadgeTemplates = require('./BadgeTemplates')
-const BadgeGranters = require('./BadgeGranters')
+const Templates = require('./Templates')
+const Granters = require('./Granters')
 const BadgeRequests = require('./BadgeRequests')
 const Users = require('./Users')
 const schema = require('./schema')
@@ -18,8 +18,8 @@ module.exports = (context) => {
     Nametags,
     Rooms,
     Badges,
-    BadgeTemplates,
-    BadgeGranters,
+    Templates,
+    Granters,
     BadgeRequests,
     Users
   ].map((loaders) => {

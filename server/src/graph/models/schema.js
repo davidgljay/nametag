@@ -24,10 +24,10 @@ module.exports = {
       {name: 'nametags', fields: {values: 'nametags'}, multi: true}
     ]
   },
-  badgeTemplates: {
+  templates: {
     indexes: ['granter']
   },
-  badgeGranters: {
+  granters: {
     indexes: ['urlCode']
   },
   badgeRequests: {
