@@ -7,6 +7,7 @@ import {Card, CardTitle, CardMedia} from 'material-ui/Card'
 import Checkbox from 'material-ui/Checkbox'
 import {grey400} from 'material-ui/styles/colors'
 import TimeAgo from 'react-timeago'
+import Badges from '../Badge/Badges'
 
 class RoomCard extends Component {
 
@@ -83,6 +84,9 @@ class RoomCard extends Component {
           style={styles.roomName}
           onClick={this.flip} />
         <div style={styles.roomDescription}>{room.description}</div>
+        <Badges
+          badges={room.templates.map(template => ({id: template.id, notes: [], template}))}
+          />
         <p style={styles.greyText}>
           {room.nametagCount || 0} participant
             {room.nametagCount === 1 ? '' : 's'}

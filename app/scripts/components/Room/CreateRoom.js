@@ -17,7 +17,8 @@ class CreateRoom extends Component {
         title: '',
         description: '',
         image: '',
-        closedAt: new Date(86400000 * 2 + Date.now()).toISOString()
+        closedAt: new Date(86400000 * 2 + Date.now()).toISOString(),
+        templates: []
       },
       closedIn: {
         unit: 'Days',
@@ -118,19 +119,22 @@ class CreateRoom extends Component {
     }
 
     this.addSelectedBadge = (badge) => {
-      const {selectedBadges} = this.state
-      const newBadge = selectedBadges.map(b => b.id).indexOf(badge.id) === -1
+      const {room: {templates}} = this.state
+      const newBadge = templates.map(t => t.id).indexOf(badge.template.id) === -1
       if (newBadge) {
-        this.setState({selectedBadges: this.state.selectedBadges.concat(badge)})
+        this.setState({room: {...this.state.room, templates: templates.concat(badge.template)}})
       }
     }
 
-    this.removeSelectedBadge = (badgeId) => {
+    this.removeSelectedBadge = (templateId) => {
       this.setState(prevState => {
-        const selectedBadges = prevState.selectedBadges.filter(badge => badge.id !== badgeId)
+        const newTemplates = prevState.room.templates.filter(template => template.id !== templateId)
         return {
           ...prevState,
-          selectedBadges
+          room: {
+            ...prevState.room,
+            templates: newTemplates
+          }
         }
       })
     }
@@ -195,7 +199,8 @@ class CreateRoom extends Component {
       window.location = '/'
       return null
     }
-    const {room, stepIndex, selectedBadges} = this.state
+    const {room, stepIndex} = this.state
+    const selectedBadges = room.templates.map(template => ({id: template.id, notes: [], template}))
     return !loading
     ? <div>
       <NavBar

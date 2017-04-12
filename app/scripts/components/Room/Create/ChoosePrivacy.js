@@ -27,7 +27,7 @@ class ChoosePrivacy extends Component {
       if (!selectedBadges) {
         return true
       }
-      return selectedBadges.map(selected => selected.id).indexOf(badge.id) === -1
+      return selectedBadges.map(selected => selected.template.id).indexOf(badge.template.id) === -1
     })
 
     let header = 'Conversation is Public'
