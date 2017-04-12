@@ -94,7 +94,7 @@ class EditNametag extends Component {
       <Card style={styles.editNametag} className='profile'>
         <div style={styles.cardInfo}>
           <NTIconMenu
-            images={me.images || []}
+            images={me.images}
             image={nametag.image}
             about={room || template}
             updateNametagEdit={updateNametagEdit} />
@@ -152,7 +152,7 @@ EditNametag.propTypes = {
     badges: PropTypes.arrayOf(PropTypes.object)
   }),
   me: PropTypes.shape({
-    images: PropTypes.arrayOf(PropTypes.string).isRequired,
+    images: PropTypes.arrayOf(PropTypes.string),
     displayNames: PropTypes.arrayOf(PropTypes.string).isRequired
   }).isRequired,
   room: PropTypes.string,

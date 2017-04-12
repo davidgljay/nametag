@@ -27,7 +27,7 @@ class NTIconMenu extends Component {
   }
 
   render () {
-    const {image, images} = this.props
+    const {image, images = []} = this.props
     const {loadingImage, showMenu} = this.state
 
     const uploadIcon = <ImageUpload
@@ -42,7 +42,7 @@ class NTIconMenu extends Component {
       render = uploadIcon
     } else {
       render = <IconMenu
-        imageButtonElement={
+        iconButtonElement={
           <IconButton style={styles.buttonStyle} imageStyle={styles.image}>
             <img src={image} />
           </IconButton>
@@ -76,7 +76,7 @@ class NTIconMenu extends Component {
 }
 
 NTIconMenu.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.string).isRequired,
+  images: PropTypes.arrayOf(PropTypes.string),
   image: PropTypes.string,
   updateNametagEdit: PropTypes.func.isRequired,
   about: PropTypes.string.isRequired
