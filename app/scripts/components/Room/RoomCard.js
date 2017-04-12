@@ -79,14 +79,13 @@ class RoomCard extends Component {
         <div style={styles.greyText}>
           Ends <TimeAgo date={new Date(room.closedAt)} />
         </div>
+        <Badges
+          badges={room.templates.map(template => ({id: template.id, notes: [], template}))} />
         <CardTitle
           title={room.title}
           style={styles.roomName}
           onClick={this.flip} />
         <div style={styles.roomDescription}>{room.description}</div>
-        <Badges
-          badges={room.templates.map(template => ({id: template.id, notes: [], template}))}
-          />
         <p style={styles.greyText}>
           {room.nametagCount || 0} participant
             {room.nametagCount === 1 ? '' : 's'}

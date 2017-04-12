@@ -3,7 +3,7 @@ import Badge from './Badge'
 import CreateBadge from '../../containers/Badge/CreateBadgeContainer'
 import FlatButton from 'material-ui/FlatButton'
 import FontIcon from 'material-ui/FontIcon'
-import {grey500} from 'material-ui/styles/colors'
+import {grey} from '../../../styles/colors'
 
 class UserBadges extends Component {
 
@@ -35,23 +35,23 @@ class UserBadges extends Component {
             style={styles.userBadgeIcon}
             className='material-icons'>arrow_upward</FontIcon>
         </p>
-        {
-          badges
-            .filter((badge) => {
-              if (!selectedBadges) {
-                return true
-              }
-              return selectedBadges.reduce((bool, selected) =>
-                bool && selected.id !== badge.id, true)
-            })
-            .map((badge) => {
-              return <div key={badge.id}>
-                <Badge
-                  badge={badge}
-                  draggable />
-              </div>
-            })
-        }
+        <div style={styles.badgesContainer}>
+          {
+            badges
+              .filter((badge) => {
+                if (!selectedBadges) {
+                  return true
+                }
+                return selectedBadges.reduce((bool, selected) =>
+                  bool && selected.id !== badge.id, true)
+              })
+              .map((badge) => <div key={badge.id}>
+                  <Badge
+                    badge={badge}
+                    draggable />
+                </div>)
+          }
+        </div>
       </div>
     }
   }
@@ -91,15 +91,19 @@ UserBadges.propTypes = {
 
 const styles = {
   noBadges: {
-    color: grey500
+    color: grey
   },
   userBadgeText: {
-    color: grey500
+    color: grey
   },
   userBadgeIcon: {
-    color: grey500
+    color: grey
   },
   container: {
     width: '100%'
+  },
+  badgesContainer: {
+    display: 'flex',
+    justifyContent: 'center'
   }
 }
