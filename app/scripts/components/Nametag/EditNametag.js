@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import Badge from '../Badge/Badge'
+import Badges from '../Badge/Badges'
 import { DropTarget } from 'react-dnd'
 import { dragTypes } from '../../constants'
 import {Card} from 'material-ui/Card'
@@ -129,16 +129,10 @@ class EditNametag extends Component {
 
           </div>
         </div>
-        <div className='badges'>
-          {nametag.badges && nametag.badges.map(
-                (badge) =>
-                  <Badge
-                    badge={badge}
-                    draggable
-                    removeFromSource={this.removeCert}
-                    key={badge.id} />
-                )}
-        </div>
+        <Badges
+          badges={nametag.badges}
+          draggable
+          removeFromSource={this.removeCert} />
       </Card>
     </div>)
   }

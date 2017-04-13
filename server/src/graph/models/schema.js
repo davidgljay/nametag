@@ -13,7 +13,11 @@ module.exports = {
     indexes: ['room', 'badge']
   },
   rooms: {
-    indexes: ['closedAt']
+    indexes: [
+      'closedAt',
+      {name: 'templates', multi: true},
+      {name: 'isPublic', fields: {countEq: ['templates', 0]}}
+    ]
   },
   users: {
     indexes: [

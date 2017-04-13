@@ -60,11 +60,20 @@ const createIndexes = (conn, table, indexes) => {
   for (let i = 0; i < indexes.length; i++) {
     const index = indexes[i]
     if (index instanceof Object) {
-      r.db('nametag').table(table).indexCreate(
-        index.name,
-        parseIndexes(index.fields),
-        {multi: !!index.multi}
-      ).run(conn).catch(handleError)
+      let args
+      if (index.fields) {
+        args = [
+          index.name,
+          parseIndexes(index.fields),
+          {multi: !!index.multi}
+        ]
+      } else {
+        args = [
+          index.name,
+          {multi: !!index.multi}
+        ]
+      }
+      r.db('nametag').table(table).indexCreate(...args).run(conn).catch(handleError)
     } else {
       r.db('nametag').table(table).indexCreate(index).run(conn).catch(handleError)
     }
@@ -85,6 +94,8 @@ const parseIndexes = (fields) => {
         return r.row(fields.notEq[0]).not().eq(fields.notEq[1])
       case 'values':
         return r.row(fields.values).values()
+      case 'countEq':
+        return r.row(fields.countEq[0]).count().eq(fields.countEq[1])
     }
   }
 }

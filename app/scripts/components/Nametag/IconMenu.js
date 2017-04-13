@@ -43,7 +43,7 @@ class NTIconMenu extends Component {
     } else {
       render = <IconMenu
         iconButtonElement={
-          <IconButton style={styles.buttonStyle} imageStyle={styles.image}>
+          <IconButton style={styles.buttonStyle} iconStyle={styles.image}>
             <img src={image} />
           </IconButton>
         }

@@ -102,9 +102,13 @@ class CreateRoom extends Component {
     this.createRoom = () => {
       const {room} = this.state
       const {nametagEdits} = this.props
+      const roomTemplates = room.templates.map(t => t.id)
       this.props.createRoom({
-        ...room,
-        mod: nametagEdits.new
+        room: {
+          ...room,
+          mod: nametagEdits.new,
+          templates: roomTemplates
+        }
       })
       .then(() => {
         window.location = '/rooms'
