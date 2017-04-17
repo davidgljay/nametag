@@ -1,8 +1,8 @@
-const r = require('rethinkdb')
+const {db} = require('../../db')
 const errors = require('../../errors')
 const notification = require('../../notifications')
 
-const messagesTable = r.db('nametag').table('messages')
+const messagesTable = db.table('messages')
 
 /**
  * Returns the messages from a particular room to display to a user. Also displays

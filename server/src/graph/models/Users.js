@@ -1,9 +1,10 @@
-const r = require('rethinkdb')
+const {db} = require('../../db')
 const {fromUrl} = require('../../routes/images/imageUpload')
 const {ErrBadAuth, ErrNotLoggedIn, ErrEmailTaken} = require('../../errors')
 const {passwordsalt} = require('../../secrets.json')
-const usersTable = r.db('nametag').table('users')
 const {enc, SHA3} = require('crypto-js')
+
+const usersTable = db.table('users')
 
 /**
  * Returns a particular user.

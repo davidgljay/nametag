@@ -5,7 +5,6 @@ import CreateRoomForms from './Create/CreateRoomForms'
 import CircularProgress from 'material-ui/CircularProgress'
 import Stepper from './Create/Stepper'
 import RaisedButton from 'material-ui/RaisedButton'
-import {indigo500} from 'material-ui/styles/colors'
 
 class CreateRoom extends Component {
 

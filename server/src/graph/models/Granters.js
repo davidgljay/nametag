@@ -1,7 +1,7 @@
-const r = require('rethinkdb')
+const {db} = require('../../db')
 // const errors = require('../../errors')
 
-const grantersTable = r.db('nametag').table('granters')
+const grantersTable = db.table('granters')
 
 /**
  * Returns a badge granter from an id.

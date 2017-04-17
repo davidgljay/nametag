@@ -1,7 +1,7 @@
-const r = require('rethinkdb')
+const {db} = require('../../db')
 // const errors = require('../../errors')
 
-const templatesTable = r.db('nametag').table('templates')
+const templatesTable = db.table('templates')
 
 /**
  * Returns a badge template from an id.

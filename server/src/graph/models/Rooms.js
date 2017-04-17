@@ -1,7 +1,7 @@
-const r = require('rethinkdb')
+const {db} = require('../../db')
 const errors = require('../../errors')
 
-const roomsTable = r.db('nametag').table('rooms')
+const roomsTable = db.table('rooms')
 
 /**
  * Returns a particular room.
