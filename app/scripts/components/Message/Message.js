@@ -3,7 +3,6 @@ import moment from 'moment'
 import Media from './Media'
 import MessageMenu from './MessageMenu'
 import ModAction from './ModAction'
-import emojis from 'react-emoji'
 import {grey500, grey800, lightBlue100, yellow100} from 'material-ui/styles/colors'
 import ReactMarkdown from 'react-markdown'
 
@@ -113,17 +112,12 @@ class Message extends Component {
             callout
           }
         <div style={styles.text}>
-          {
-              emojis.emojify(text).map((emojiText, i) => {
-                return emojiText.props ? emojiText : <ReactMarkdown
-                  key={i}
-                  containerTagName={'span'}
-                  className={'messageText'}
-                  style={styles.text}
-                  source={emojiText}
-                  escapeHtml />
-              })
-            }
+          <ReactMarkdown
+            containerTagName={'span'}
+            className={'messageText'}
+            style={styles.text}
+            source={text}
+            escapeHtml />
         </div>
         {media}
         {below}
