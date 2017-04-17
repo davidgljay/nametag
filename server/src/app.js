@@ -199,4 +199,4 @@ app.post('/api/image_url',
       .catch(err => next(`Uploading image from URL ${err}`))
   })
 
-console.log('Listening on port 8181.')
+console.log(`Listening on port ${PORT}.`)

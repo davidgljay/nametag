@@ -10,6 +10,7 @@ const TitleForm = ({badges, selectedBadges, desc, title, updateRoom, setClosed, 
     <TextField
       style={styles.textfield}
       value={title}
+      id='titleField'
       errorText={error && error.titleError}
       onChange={(e) => updateRoom('title', e.target.value.slice(0, 40))}
       floatingLabelText='Title' />
@@ -17,6 +18,7 @@ const TitleForm = ({badges, selectedBadges, desc, title, updateRoom, setClosed, 
     <TextField
       style={styles.textfield}
       value={desc}
+      id='descriptionField'
       multiLine
       errorText={error && error.descriptionError}
       inputStyle={styles.descriptionField}

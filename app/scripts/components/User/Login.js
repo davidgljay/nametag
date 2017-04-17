@@ -109,7 +109,7 @@ class Login extends Component {
   render () {
     const {message} = this.props
     const {emailAlert, passwordAlert, alert, loading} = this.state
-    return <div style={styles.login}>
+    return <div style={styles.login} id='loginForm'>
       <h4>{message || 'Log in to join'}</h4>
       <div style={styles.alert}>
         {alert}

@@ -39,19 +39,20 @@ class NavBar extends Component {
         ? <div>
           <FlatButton
             style={styles.button}
+            id='homeButton'
             onClick={onHomeClick} label='HOME' />
           <FlatButton
             style={styles.button}
+            id='createRoom'
             onClick={onCreateRoomClick} label='CREATE ROOM' />
           <FlatButton
             style={styles.button}
-            onClick={onCreateCertClick} label='CREATE BADGE' />
-          <FlatButton
-            style={styles.button}
+            id='logoutButton'
             onClick={onLogoutClick} label='LOG OUT' />
         </div>
           : <FlatButton
             style={styles.button}
+            id='loginButton'
             onClick={() => toggleLogin()}
             label='LOG IN' />
         }
