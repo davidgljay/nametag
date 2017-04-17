@@ -13,7 +13,7 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const Room = compose(
-  connect(() => {}, mapDispatchToProps),
+  connect(() => ({}), mapDispatchToProps),
   createMessage,
   toggleSaved,
   updateLatestVisit,

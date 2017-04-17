@@ -5,6 +5,7 @@ import FontIcon from 'material-ui/FontIcon'
 import IconButton from 'material-ui/IconButton'
 import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
+import Emojis from '../Utils/Emojis'
 
 class Compose extends Component {
   constructor (props) {
@@ -51,14 +52,14 @@ class Compose extends Component {
     // Workaround for mobile sizing since Radium doesn't appear to work.
     // const selectorStyle = window.innerWidth < 800
     // ? {...styles.selectorStyle, ...styles.mobileSelector} : styles.selectorStyle
+    const {showEmoji, message} = this.state
     return <div style={styles.compose}>
       <div style={styles.spacer} />
       {
-        // <EmojiPicker
-        //   show={this.state.showEmoji}
-        //   selectorStyle={selectorStyle}
-        //   selector={() => null}
-        //   handleEmoji={this.handleEmoji} />
+        <Emojis
+          open={showEmoji}
+          closeModal={() => this.setState({showEmoji: false})}
+          onEmojiClick={emoji => this.setState({message: message + emoji})} />
       }
       <IconButton
         onClick={this.toggleEmoji}>
@@ -77,7 +78,7 @@ class Compose extends Component {
         <FlatButton
           style={styles.sendButton}
           type='submit'
-          image={
+          icon={
             <FontIcon
               className='material-icons'>
               send

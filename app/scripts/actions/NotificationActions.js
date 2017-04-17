@@ -17,6 +17,9 @@ export const registerServiceWorker = () => (dispatch) => {
 // Initializes Firebase.
 // Registers a serviceWorker if one is registered on the system.
 export const firebaseInit = () => (dispatch) => {
+  if (process.env.NODE_ENV !== 'production') {
+    return
+  }
   firebase.initializeApp({
     apiKey: constants.FIREBASE_WEB_KEY,
     databaseURL: constants.FIREBASE_DB_URL,
@@ -35,8 +38,12 @@ export const getFcmToken = (updateToken) => (dispatch) =>
  .catch(errorLog('Receiving FCM token'))
 
 // Requests permission to send notifications to the user.
-export const requestNotifPermissions = (updateToken) => (dispatch) =>
+export const requestNotifPermissions = (updateToken) => (dispatch) => {
+  if (process.env.NODE_ENV !== 'production') {
+    return
+  }
   firebase.messaging().requestPermission()
     .then(() => dispatch(getFcmToken(updateToken)))
     .then(() => dispatch(fcmTokenRefresh(updateToken)))
     .catch(() => console.log('Notification permission refused'))
+}
