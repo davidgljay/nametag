@@ -1,29 +1,51 @@
 import emojis from 'emojis-list'
-import React, {PropTypes} from 'react'
+import React, {PropTypes, Component} from 'react'
 import Dialog from 'material-ui/Dialog'
 
-const Emojis = ({onEmojiClick, open, closeModal}) => <Dialog
-  bodyStyle={styles.container}
-  open={open}
-  onRequestClose={closeModal}>
-  {
-    emojiAddresses.map((addresses, i) => <div style={styles.section} key={i} >
-      {
-        addresses.reduce((arr, address) =>
-          address.legth === 1
-          ? arr.concat(emojis[address[0]])
-          : arr.concat(emojis.slice(address[0], address[1] + 1)), [])
-          .map(emoji => <div
-            style={styles.emoji}
-            key={emoji}
-            onClick={(e) => onEmojiClick(e.target.innerText)}
-            value={emoji}>
-            {emoji}
-          </div>)
+class Emojis extends Component {
+
+  constructor (props) {
+    super(props)
+    this.state = {
+      showEmoji: 0
+    }
+    this.handleScroll = (e) => {
+      const count = Math.round(e.target.scrollTop / 200)
+      if (count > this.state.showEmoji) {
+        this.setState({showEmoji: count})
       }
-    </div>)
+    }
   }
-</Dialog>
+
+  render () {
+    const {onEmojiClick, open, closeModal} = this.props
+    return <Dialog
+      bodyStyle={styles.container}
+      open={open}
+      onRequestClose={closeModal}>
+      <div id='emojis' style={{overflowY: 'scroll', maxHeight: 400}} onScroll={this.handleScroll}>
+        {
+          emojiAddresses.map((addresses, i) => <div style={styles.section} key={i} >
+            {
+              i <= this.state.showEmoji &&
+                addresses.reduce((arr, address) =>
+                  address.legth === 1
+                  ? arr.concat(emojis[address[0]])
+                  : arr.concat(emojis.slice(address[0], address[1] + 1)), [])
+                  .map(emoji => <div
+                    style={styles.emoji}
+                    key={emoji}
+                    onClick={(e) => onEmojiClick(e.target.innerText)}
+                    value={emoji}>
+                    {emoji}
+                  </div>)
+            }
+          </div>)
+        }
+      </div>
+    </Dialog>
+  }
+}
 
 const {func, bool} = PropTypes
 Emojis.propTypes = {
@@ -37,8 +59,9 @@ export default Emojis
 const styles = {
   container: {
     maxWidth: 800,
-    overflowY: 'scroll',
-    color: 'rgba(0,0,0,1)'
+    color: 'rgba(0,0,0,1)',
+    overflowY: 'hidden',
+    maxHeight: 400
   },
   section: {
     display: 'flex',
@@ -126,57 +149,57 @@ const emojiAddresses = [
     [2395,2396],
     [1382,1436],
     [1545,1584]
-  ],
-  [
-    // Time
-    [1519,1544],
-    [2274,2277],
-    [2358,2361],
-    [1603,1622],
-    [1437,1475],
-    [2263,226],
-    [2337,2343]
-  ],
-  [
-    // Abstract shapes
-    [1501,1512],
-    [2262],
-    [1482,1488],
-    [2460],
-    [2463,2464],
-    [2467,2473],
-    [2336],
-    [1513,1518],
-    [2309,2329],
-    [300,316],
-    [2278,2280],
-    [2437],
-    [2398],
-    [2452],
-    [2357],
-    [2267,2273]
-  ],
-  [
-    // Flags
-    [17,299]
-  ],
-  [
-    // Black and white symbols
-    [0,16],
-    [1476,1480],
-    [2250,2261],
-    [2281,2296],
-    [2397],
-    [2399,2400],
-    [2425,2430],
-    [2346],
-    [2330,2335],
-    [2432,2436],
-    [2438,2451],
-    [2453,2457],
-    [2459],
-    [2461,2462],
-    [2465,2466],
-    [2474,2476]
   ]
+  // [
+  //   // Time
+  //   [1519,1544],
+  //   [2274,2277],
+  //   [2358,2361],
+  //   [1603,1622],
+  //   [1437,1475],
+  //   [2263,226],
+  //   [2337,2343]
+  // ],
+  // [
+  //   // Abstract shapes
+  //   [1501,1512],
+  //   [2262],
+  //   [1482,1488],
+  //   [2460],
+  //   [2463,2464],
+  //   [2467,2473],
+  //   [2336],
+  //   [1513,1518],
+  //   [2309,2329],
+  //   [300,316],
+  //   [2278,2280],
+  //   [2437],
+  //   [2398],
+  //   [2452],
+  //   [2357],
+  //   [2267,2273]
+  // ],
+  // [
+  //   // Flags
+  //   [17,299]
+  // ],
+  // [
+  //   // Black and white symbols
+  //   [0,16],
+  //   [1476,1480],
+  //   [2250,2261],
+  //   [2281,2296],
+  //   [2397],
+  //   [2399,2400],
+  //   [2425,2430],
+  //   [2346],
+  //   [2330,2335],
+  //   [2432,2436],
+  //   [2438,2451],
+  //   [2453,2457],
+  //   [2459],
+  //   [2461,2462],
+  //   [2465,2466],
+  //   [2474,2476]
+  // ]
 ]
