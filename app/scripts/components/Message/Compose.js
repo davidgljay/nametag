@@ -14,35 +14,30 @@ class Compose extends Component {
       message: '',
       showEmoji: false
     }
-    this.onChange = this.onChange.bind(this)
-    this.post = this.post.bind(this)
-    this.toggleEmoji = this.toggleEmoji.bind(this)
-    this.handleEmoji = this.handleEmoji.bind(this)
-  }
 
-  onChange (e) {
-    this.setState({message: e.target.value})
-  }
+    this.onChange = (e) => {
+      this.setState({message: e.target.value})
+    }
 
-  toggleEmoji () {
-    this.setState({showEmoji: !this.state.showEmoji})
-  }
-
-  handleEmoji (emoji) {
-    this.setState({message: this.state.message + ':' + emoji + ':'})
-  }
-
-  post (e) {
-    const {myNametag, roomId} = this.props
-    e.preventDefault()
-    if (this.state.message.length > 0) {
-      let message = {
-        text: this.state.message,
-        author: myNametag.id,
-        room: roomId
+    this.post = (e) => {
+      const {myNametag, roomId} = this.props
+      e.preventDefault()
+      if (this.state.message.length > 0) {
+        let message = {
+          text: this.state.message,
+          author: myNametag.id,
+          room: roomId
+        }
+        this.setState({message: '', showEmoji: false})
+        this.props.createMessage(message, myNametag)
       }
-      this.setState({message: '', showEmoji: false})
-      this.props.createMessage(message, myNametag)
+    }
+    this.toggleEmoji = (open) => () => {
+      this.setState({showEmoji: open})
+    }
+
+    this.handleEmoji = (emoji) => {
+      this.setState({message: this.state.message + ':' + emoji + ':'})
     }
   }
 
@@ -55,20 +50,18 @@ class Compose extends Component {
     const {showEmoji, message} = this.state
     return <div style={styles.compose}>
       <div style={styles.spacer} />
-      {
-        <Emojis
-          open={showEmoji}
-          closeModal={() => this.setState({showEmoji: false})}
-          onEmojiClick={emoji => this.setState({message: message + emoji})} />
-      }
+      <Emojis
+        open={showEmoji}
+        closeModal={this.toggleEmoji(false)}
+        onEmojiClick={emoji => this.setState({message: message + emoji})} />
       <IconButton
-        onClick={this.toggleEmoji}>
+        onClick={this.toggleEmoji(!showEmoji)}>
         <FontIcon
           className='material-icons'>
           insert_emotimage
         </FontIcon>
       </IconButton>
-      <form onSubmit={this.post} style={styles.form}>
+      <form onSubmit={this.post} style={styles.form} onClick={this.toggleEmoji(false)}>
         <TextField
           name='compose'
           style={styles.textfield}
@@ -128,18 +121,18 @@ const styles = {
     flex: 1,
     width: 'inherit'
   },
-  selectorStyle: {
-    bottom: 75,
-    left: 300,
-    position: 'fixed',
-    background: '#fff',
-    width: '50%',
-    height: 250,
-    overflow: 'scroll',
-    padding: 5,
-    border: '1px solid #ccc',
-    borderRadius: 3
-  },
+  // selectorStyle: {
+  //   bottom: 75,
+  //   left: 300,
+  //   position: 'fixed',
+  //   background: '#fff',
+  //   width: '50%',
+  //   height: 250,
+  //   overflow: 'scroll',
+  //   padding: 5,
+  //   border: '1px solid #ccc',
+  //   borderRadius: 3
+  // },
   mobileSelector: {
     left: 20,
     width: 'inherit'
