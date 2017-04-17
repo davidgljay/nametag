@@ -1,5 +1,6 @@
 const _ = require('lodash')
 const r = require('rethinkdb')
+const {db, dbInit} = require('../../db')
 const Messages = require('./Messages')
 const Nametags = require('./Nametags')
 const Rooms = require('./Rooms')
@@ -31,20 +32,23 @@ module.exports = (context) => {
 module.exports.init = (conn) => {
   const models = Object.keys(schema)
 
-  for (let i = 0; i < models.length; i++) {
-    const table = models[i]
-    const indexes = schema[models[i]].indexes
-    console.log(`Initializing ${table} table and indexes`)
-    createTable(conn, table)
-      .then(() => createIndexes(conn, table, indexes))
-      .catch(handleError)
-  }
+  dbInit(conn)
+    .then(() => {
+      for (let i = 0; i < models.length; i++) {
+        const table = models[i]
+        const indexes = schema[models[i]].indexes
+        console.log(`Initializing ${table} table and indexes`)
+        createTable(conn, table)
+          .then(() => createIndexes(conn, table, indexes))
+          .catch(handleError)
+      }
+    })
 }
 
 // Create a promise that never returns an error, so that the chain continues if
 // the DB is already created
 const createTable = (conn, table) => new Promise((resolve, reject) =>
-  r.db('nametag').tableCreate(table).run(conn)
+  db.tableCreate(table).run(conn)
     .then(resolve)
     .catch(err => {
       if (err.msg.match('already exists')) {
@@ -73,9 +77,9 @@ const createIndexes = (conn, table, indexes) => {
           {multi: !!index.multi}
         ]
       }
-      r.db('nametag').table(table).indexCreate(...args).run(conn).catch(handleError)
+      db.table(table).indexCreate(...args).run(conn).catch(handleError)
     } else {
-      r.db('nametag').table(table).indexCreate(index).run(conn).catch(handleError)
+      db.table(table).indexCreate(index).run(conn).catch(handleError)
     }
   }
 }
