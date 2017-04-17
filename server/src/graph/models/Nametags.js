@@ -1,4 +1,5 @@
 const {db} = require('../../db')
+const r = require('rethinkdb')
 const errors = require('../../errors')
 
 const nametagsTable = db.table('nametags')

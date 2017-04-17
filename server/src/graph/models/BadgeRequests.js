@@ -1,5 +1,4 @@
 const {db} = require('../../db')
-const errors = require('../../errors')
 
 const badgeRequestsTable = db.table('badgeRequests')
 
@@ -54,7 +53,7 @@ const create = ({conn}, nametag, template) => {
     template,
     status: 'ACTIVE'
   }
-  return r.db('nametag').table('templates').get(template).do(
+  return db.table('templates').get(template).do(
     t =>
       badgeRequestsTable.insert(
         Object.assign({}, badgeRequestObj, {granter: t('granter')})

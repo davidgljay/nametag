@@ -1,4 +1,5 @@
 const {db} = require('../../db')
+const r = require('rethinkdb')
 const {fromUrl} = require('../../routes/images/imageUpload')
 const {ErrBadAuth, ErrNotLoggedIn, ErrEmailTaken} = require('../../errors')
 const {passwordsalt} = require('../../secrets.json')

@@ -1,3 +1,4 @@
+const r = require('rethinkdb')
 const {db} = require('../../db')
 const errors = require('../../errors')
 
@@ -35,14 +36,14 @@ const getPublic = ({conn, user}) => roomsTable
  */
 
 const getByTemplates = ({conn, user}, templateIds, active) => {
-  if (templateIds.length === 0 ) {
+  if (templateIds.length === 0) {
     return []
   }
   let query = roomsTable.getAll(...templateIds, {index: 'templates'})
   if (active) {
     query = query.filter(room => room('closedAt').gt(new Date()))
   }
- return query.run(conn)
+  return query.run(conn)
  .then(rooms => rooms.toArray())
 }
 

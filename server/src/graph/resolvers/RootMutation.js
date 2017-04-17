@@ -81,7 +81,7 @@ const RootMutation = {
           .then(wrapResponse('updateBadgeRequest'))
         : Promise.reject(ErrNotAuthorized)
       ),
-  addNote: (obj, {badgeId, text}, {user, models:{Granters, Templates, Badges}}) =>
+  addNote: (obj, {badgeId, text}, {user, models: {Granters, Templates, Badges}}) =>
     Badges.get(badgeId)
       .then(badge => Templates.get(badge.template))
       .then(template => Granters.get(template.granter))

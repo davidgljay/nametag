@@ -21,9 +21,8 @@ const get = ({conn}, id) => grantersTable.get(id).run(conn)
  *
  */
 
-const getByUrlCode = ({conn}, urlCode) => grantersTable.getAll(urlCode, {index:'urlCode'}).run(conn)
+const getByUrlCode = ({conn}, urlCode) => grantersTable.getAll(urlCode, {index: 'urlCode'}).run(conn)
   .then(cursor => cursor.next())
-
 
 /**
  * Creates a badge granter

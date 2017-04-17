@@ -83,7 +83,7 @@ const create = ({conn, models: {Users, Nametags}}, {note, template, defaultNamet
  *
  **/
 
- const addNote = ({conn}, badgeId, text) =>
+const addNote = ({conn}, badgeId, text) =>
   badgesTable.get(badgeId).update(badge => Object.assign(
     {},
     badge,
