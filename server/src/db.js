@@ -11,7 +11,7 @@ switch (process.env.NODE_ENV) {
     break
   default:
     db = r.db('nametag')
-    init = (conn) => r.dbCreate('nametag').run(conn)
+    init = (conn) => r.dbCreate('nametag').run(conn).catch(err => null)
 }
 
 module.exports.db = db

@@ -2,7 +2,7 @@ nametag:
   build: .
   dockerfile: nametagDockerfile
   environment:
-    - NODE_ENV=test
+    - NODE_ENV=${NODE_ENV}
   volumes:
     - ./dist:/usr/app/
     - ./.keys:/usr/.keys
