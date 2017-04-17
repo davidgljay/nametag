@@ -16,7 +16,8 @@ class ImageSearch extends Component {
     this.state = {
       images: [],
       loading: false,
-      loadingImage: false
+      loadingImage: false,
+      imageChosen: false
     }
 
     this.handleScroll = () => {
@@ -67,18 +68,27 @@ class ImageSearch extends Component {
       this.setState({imageQuery: e.target.value})
     }
 
+    this.onSelectImage = () => {
+      this.setState({loadingImage: false, imageChosen: true})
+      document.getElementById('roomPreview').scrollIntoViewIfNeeded()
+    }
+
     this.onImageClick = (url) => () => {
       this.setState({loadingImage: true})
       this.props.setImageFromUrl(300, null, url)
         .then((res) => {
           this.props.updateRoom('image', res.url)
-          this.setState({loadingImage: false})
+          this.onSelectImage()
         })
     }
 
     this.onUpload = (res) => {
       this.props.updateRoom('image', res.url)
-      this.setState({loadingImage: false})
+      this.onSelectImage()
+    }
+
+    this.onChoose = () => {
+      this.setState({loadingImage: true})
     }
   }
 
@@ -96,11 +106,32 @@ class ImageSearch extends Component {
       chooseAndUpload: true,
       accept: 'image/*',
       dataType: 'json',
+      chooseFile: this.onChoose,
       uploadSuccess: this.onUpload,
       uploadError: errorLog('Uploading Room Image')
     }
+    const {handlePrev, handleNext} = this.props
+    const {imageChosen, loading, loadingImage, images, searched} = this.state
 
     return <div style={styles.container}>
+      {
+        imageChosen &&
+        <div>
+          <RaisedButton
+            style={styles.button}
+            labelStyle={styles.buttonLabel}
+            primary
+            onClick={handlePrev}
+            label='BACK' />
+          <RaisedButton
+            style={styles.button}
+            labelStyle={styles.buttonLabel}
+            primary
+            onClick={handleNext}
+            label='NEXT' />
+        </div>
+
+      }
       <div style={styles.searchContainer}>
         <TextField
           onChange={this.setImageQuery}
@@ -116,7 +147,7 @@ class ImageSearch extends Component {
           onClick={this.onSearchClick} />
       </div>
       {
-        this.state.loadingImage
+        loadingImage
         ? <CircularProgress />
         : <div style={styles.imagesContainer}>
           <Card
@@ -134,7 +165,7 @@ class ImageSearch extends Component {
             </FileUpload>
           </Card>
           {
-            this.state.images.map((image, i) => {
+            images.map((image, i) => {
               return <Card
                 style={styles.thumbnailContainer}
                 key={i}
@@ -144,14 +175,14 @@ class ImageSearch extends Component {
             })
           }
           {
-            this.state.loading &&
+            loading &&
             <div style={styles.spinnerDiv}>
               <CircularProgress />
             </div>
           }
           {
-            this.state.searched &&
-            this.state.images.length === 0 &&
+            searched &&
+            images.length === 0 &&
             <div style={styles.noResults}>No results found, please try again.</div>
           }
           <div id='scrollBottom' />

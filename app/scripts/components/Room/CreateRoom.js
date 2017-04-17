@@ -49,18 +49,13 @@ class CreateRoom extends Component {
     }
 
     this.handlePrev = () => {
-      const validation = this.validate(this.state.stepIndex)
-      if (validation.valid) {
-        this.setState((prevState) => {
-          delete prevState.error
-          if (prevState.stepIndex > 0) {
-            prevState.stepIndex --
-          }
-          return prevState
-        })
-      } else {
-        this.setState({error: validation.error})
-      }
+      this.setState((prevState) => {
+        delete prevState.error
+        if (prevState.stepIndex > 0) {
+          prevState.stepIndex --
+        }
+        return prevState
+      })
     }
 
     this.setClosed = (type, unit) => {
@@ -214,7 +209,7 @@ class CreateRoom extends Component {
         <h1>Start a Conversation</h1>
         <Stepper stepIndex={stepIndex} />
       </div>
-      <div style={styles.roomPreview}>
+      <div style={styles.roomPreview} id='roomPreview'>
         <RoomCard
           room={{
             ...room,
@@ -238,6 +233,8 @@ class CreateRoom extends Component {
           updateNametagEdit={updateNametagEdit}
           room={this.state.room}
           badges={me.badges}
+          handleNext={this.handleNext}
+          handlePrev={this.handlePrev}
           selectedBadges={selectedBadges}
           addSelectedBadge={this.addSelectedBadge}
           removeSelectedBadge={this.removeSelectedBadge}
@@ -260,7 +257,7 @@ class CreateRoom extends Component {
             <RaisedButton
               style={styles.button}
               labelStyle={styles.buttonLabel}
-              backgroundColor={indigo500}
+              primary
               onClick={this.handlePrev}
               label='BACK' />
           }
@@ -269,13 +266,13 @@ class CreateRoom extends Component {
             ? <RaisedButton
               style={styles.button}
               labelStyle={styles.buttonLabel}
-              backgroundColor={indigo500}
+              primary
               onClick={this.createRoom}
               label='PUBLISH' />
             : <RaisedButton
               style={styles.button}
               labelStyle={styles.buttonLabel}
-              backgroundColor={indigo500}
+              primary
               onClick={this.handleNext}
               label='NEXT' />
             }

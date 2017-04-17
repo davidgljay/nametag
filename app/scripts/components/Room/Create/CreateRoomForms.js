@@ -19,6 +19,8 @@ const getForm = ({
     badges,
     selectedBadges,
     searchImage,
+    handleNext,
+    handlePrev,
     setImageFromUrl,
     addNametagEditBadge,
     removeNametagEditBadge,
@@ -49,10 +51,14 @@ const getForm = ({
       </div>
     case 1:
       return <div>
-        <h4>Please select an image for this conversation.</h4>
+        {
+          !room.image && <h4>Please select an image for this conversation.</h4>
+        }
         <ImageSearch
           error={error}
           style={styles.imageSearch}
+          handleNext={handleNext}
+          handlePrev={handlePrev}
           setImageFromUrl={setImageFromUrl}
           searchImage={searchImage}
           updateRoom={updateRoom} />
@@ -117,6 +123,7 @@ CreateRoomForms.propTypes = {
   }),
   room: PropTypes.shape({
     title: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     closedAt: PropTypes.string.isRequired
   }).isRequired,
