@@ -6,6 +6,7 @@ import IconButton from 'material-ui/IconButton'
 import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
 import Emojis from '../Utils/Emojis'
+import key from 'keymaster'
 
 class Compose extends Component {
   constructor (props) {
@@ -41,12 +42,17 @@ class Compose extends Component {
     }
   }
 
+  componentWillMount () {
+    key('enter', 'compose', this.post)
+  }
+
+  componentWillUnmount () {
+    key.deleteScope('compose')
+  }
+
   render () {
     // TODO: Add GIFs, image upload
 
-    // Workaround for mobile sizing since Radium doesn't appear to work.
-    // const selectorStyle = window.innerWidth < 800
-    // ? {...styles.selectorStyle, ...styles.mobileSelector} : styles.selectorStyle
     const {showEmoji, message} = this.state
     return <div style={styles.compose}>
       <div style={styles.spacer} />
@@ -58,7 +64,7 @@ class Compose extends Component {
         onClick={this.toggleEmoji(!showEmoji)}>
         <FontIcon
           className='material-icons'>
-          insert_emotimage
+          tag_faces
         </FontIcon>
       </IconButton>
       <form onSubmit={this.post} style={styles.form} onClick={this.toggleEmoji(false)}>
@@ -121,18 +127,6 @@ const styles = {
     flex: 1,
     width: 'inherit'
   },
-  // selectorStyle: {
-  //   bottom: 75,
-  //   left: 300,
-  //   position: 'fixed',
-  //   background: '#fff',
-  //   width: '50%',
-  //   height: 250,
-  //   overflow: 'scroll',
-  //   padding: 5,
-  //   border: '1px solid #ccc',
-  //   borderRadius: 3
-  // },
   mobileSelector: {
     left: 20,
     width: 'inherit'
