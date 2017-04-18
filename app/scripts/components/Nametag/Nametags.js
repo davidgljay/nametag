@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react'
 import Nametag from './Nametag'
 import {Card} from 'material-ui/Card'
 
-const Nametags = ({nametags, mod, myNametagId}) => <div style={styles.nametags}>
+const Nametags = ({nametags, mod, myNametagId}) => <div id='nametags' style={styles.nametags}>
   {
     nametags.map((nametag) => {
       const cardStyle = nametag.present || nametag.id === myNametagId

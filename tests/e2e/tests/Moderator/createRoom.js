@@ -18,20 +18,25 @@ module.exports = {
       .register(users.mod)
   },
   'Moderator creates a room': client => {
-    const createRoomPage = client.page.CreateRoom()
+    const page = client.page.CreateRoom()
+    const {room, users} = client.globals
 
-    createRoomPage
+    page
       .click('#createRoomButton')
-      .creatRoom({
-        title: 'Test Room',
-        description: 'A test room',
-        imageSearch: 'room',
-        norm: 'A test norm',
-        name: 'Test name',
-        bio: 'Test bio'
-      })
+      .createRoom(room, users.mod)
       .waitForElementVisible('.roomNotif')
-      .assert.containsText('.roomTitle', 'Test Room')
+      .assert.containsText('.roomTitle', room.title)
+  },
+  'Moderator enters a room and posts a message': client => {
+    const page = client.page.Room()
+    const {room, messages, users} = client.globals
+
+    page
+      .waitForElementVisible('.roomNotif')
+      .click('.roomNotif')
+      .assertLoaded(room, users.mod)
+      .postMessage(messages[0])
+
   },
   after: client => {
     client.end()

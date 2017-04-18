@@ -59,7 +59,9 @@ class RoomCard extends Component {
       addNametagEditBadge,
       removeNametagEditBadge,
       updateNametagEdit,
-      createNametag
+      createNametag,
+      loginUser,
+      registerUser
     } = this.props
     let card
     let flipping = {}
@@ -115,6 +117,7 @@ class RoomCard extends Component {
         {
           me &&
           <Checkbox
+            className='agreeToNorms'
             style={styles.checkbox}
             label='I agree to these norms'
             onClick={this.onNormsCheck} />
@@ -131,6 +134,8 @@ class RoomCard extends Component {
           addNametagEditBadge={addNametagEditBadge}
           removeNametagEditBadge={removeNametagEditBadge}
           updateNametagEdit={updateNametagEdit}
+          loginUser={loginUser}
+          registerUser={registerUser}
           />
       }
     </Card>
@@ -148,7 +153,9 @@ class RoomCard extends Component {
       card = this.state.flipped ? back : front
     }
 
-    return <div style={{...styles.roomCard, ...flipping, ...style}}>
+    return <div
+      className={`roomCard ${this.state.flipping ? 'flipping' : 'notFlipping'}`}
+      style={{...styles.roomCard, ...flipping, ...style}}>
       {card}
     </div>
   }
@@ -171,6 +178,8 @@ RoomCard.propTypes = {
   addNametagEditBadge: PropTypes.func.isRequired,
   removeNametagEditBadge: PropTypes.func.isRequired,
   updateNametagEdit: PropTypes.func.isRequired,
+  loginUser: PropTypes.func.isRequired,
+  registerUser: PropTypes.func.isRequired,
   createNametag: PropTypes.func,
   creating: PropTypes.bool
 }

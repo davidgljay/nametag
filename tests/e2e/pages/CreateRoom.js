@@ -37,7 +37,7 @@ const commands = {
       .getLocationInView('@nextButton')
       .click('@nextButton')
   },
-  creatRoom ({title, description, imageSearch, name, bio, norm}) {
+  createRoom ({title, description, imageSearch, norm}, {name, bio}) {
     return this
       .fillTitle(title, description)
       .chooseImage(imageSearch)

@@ -1,3 +1,5 @@
+echo 'Preparing for e2e'
+
 # fail the e2e if any of these fail
 set -e
 

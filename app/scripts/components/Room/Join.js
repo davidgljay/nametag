@@ -37,6 +37,8 @@ class Join extends Component {
       removeNametagEditBadge,
       addNametagEditBadge,
       updateNametagEdit,
+      loginUser,
+      registerUser,
       room,
       me
     } = this.props
@@ -63,13 +65,14 @@ class Join extends Component {
           <br />
           <Alert alert={this.state.alert} />
           <RaisedButton
+            id='joinRoomButton'
             backgroundColor={indigo500}
             labelStyle={styles.button}
             onClick={this.onJoinClick}
             label='JOIN' />
         </div>
     } else {
-      join = <Login />
+      join = <Login loginUser={loginUser} registerUser={registerUser} />
     }
     return join
   }
@@ -81,7 +84,9 @@ Join.propTypes = {
   nametag: PropTypes.object,
   addNametagEditBadge: PropTypes.func.isRequired,
   removeNametagEditBadge: PropTypes.func.isRequired,
-  updateNametagEdit: PropTypes.func.isRequired
+  updateNametagEdit: PropTypes.func.isRequired,
+  loginUser: PropTypes.func.isRequired,
+  registerUser: PropTypes.func.isRequired
 }
 
 export default Join

@@ -100,6 +100,7 @@ class Message extends Component {
     }
 
     return <tr
+      className='message'
       style={styles.message}
       id={id}
       onClick={() => this.setState({showActions: !this.state.showActions})}>
@@ -111,7 +112,7 @@ class Message extends Component {
         {
             callout
           }
-        <div style={styles.text}>
+        <div style={styles.text} className='messageText'>
           <ReactMarkdown
             containerTagName={'span'}
             className={'messageText'}

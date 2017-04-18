@@ -16,7 +16,7 @@ const {arrayOf, string, shape, bool, func} = PropTypes
 Badges.propTypes = {
   badges: arrayOf(shape({
     id: string.isRequired
-  })).isRequired,
+  })),
   draggable: bool,
   removeItem: func
 }

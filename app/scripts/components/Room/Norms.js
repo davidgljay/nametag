@@ -27,7 +27,7 @@ const styles = {
 }
 
 const Norms = (props) =>
-  <div>
+  <div id='norms'>
     {
       props.norms &&
       <List style={styles.norms}>

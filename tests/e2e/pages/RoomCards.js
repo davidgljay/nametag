@@ -21,6 +21,34 @@ const commands = {
     .waitForElementVisible('@submitLoginButton')
     .click('@submitLoginButton')
     .waitForElementVisible('@logoutButton')
+  },
+  registerInRoom (user) {
+    return this
+      .waitForElementVisible('@roomCard')
+      .click('@roomCard')
+      .waitForElementVisible('@enableRegisterButton')
+      .waitForElementVisible('.roomCard.notFlipping')
+      .click('@enableRegisterButton')
+      .waitForElementVisible('@registerButton')
+      .setValue('@emailForm', user.email)
+      .setValue('@passForm', user.pass)
+      .setValue('@confForm', user.pass)
+      .click('@registerButton')
+      .waitForElementVisible('@submitLoginButton')
+      .click('@submitLoginButton')
+      .waitForElementVisible('@logoutButton')
+  },
+  joinRoom ({name, bio}) {
+    return this
+      .waitForElementVisible('@roomCard')
+      .click('@roomCard')
+      .waitForElementVisible('.roomCard.notFlipping')
+      .waitForElementVisible('.agreeToNorms')
+      .click('.agreeToNorms input')
+      .setValue('@editNametagName', name)
+      .setValue('@editNametagBio', bio)
+      .waitForElementVisible('@joinRoomButton')
+      .click('@joinRoomButton')
   }
 }
 
@@ -62,6 +90,18 @@ module.exports = {
     },
     createRoomButton: {
       selector: '#createRoomButton'
+    },
+    editNametag: {
+      selector: '#editNametag'
+    },
+    editNametagName: {
+      selector: '#editNametagName'
+    },
+    editNametagBio: {
+      selector: '#editNametagBio'
+    },
+    joinRoomButton: {
+      selector: '#joinRoomButton'
     }
   }
 }

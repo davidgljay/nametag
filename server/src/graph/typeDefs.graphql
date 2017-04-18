@@ -132,7 +132,7 @@ type Nametag {
   name: String!
 
   # The url of the user's image
-  image: String!
+  image: String
 
   # Further information about the user
   bio: String
@@ -413,7 +413,7 @@ input CreateNametagInput {
   name: String!
 
   # The nametag's image
-  image: String!
+  image: String
 
   # Additional information about the user
   bio: String

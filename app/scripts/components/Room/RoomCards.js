@@ -32,6 +32,8 @@ class RoomCards extends Component {
       updateNametagEdit,
       addNametagEditBadge,
       removeNametagEditBadge,
+      loginUser,
+      registerUser,
       nametagEdits,
       createNametag
     } = this.props
@@ -69,6 +71,8 @@ class RoomCards extends Component {
               createNametag={createNametag}
               updateNametagEdit={updateNametagEdit}
               addNametagEditBadge={addNametagEditBadge}
+              registerUser={registerUser}
+              loginUser={loginUser}
               removeNametagEditBadge={removeNametagEditBadge} />
           )
         }
@@ -76,8 +80,8 @@ class RoomCards extends Component {
       <LoginDialog
         showLogin={this.state.showLogin}
         toggleLogin={this.toggleLogin}
-        registerUser={this.props.registerUser}
-        loginUser={this.props.loginUser}
+        registerUser={registerUser}
+        loginUser={loginUser}
         message='Log In or Register' />
 
     </div>

@@ -54,7 +54,7 @@ class Compose extends Component {
     // TODO: Add GIFs, image upload
 
     const {showEmoji, message} = this.state
-    return <div style={styles.compose}>
+    return <div style={styles.compose} id='compose'>
       <div style={styles.spacer} />
       <Emojis
         open={showEmoji}
@@ -70,12 +70,14 @@ class Compose extends Component {
       <form onSubmit={this.post} style={styles.form} onClick={this.toggleEmoji(false)}>
         <TextField
           name='compose'
+          id='composeTextInput'
           style={styles.textfield}
           onChange={this.onChange}
           autoComplete='off'
           value={this.state.message} />
         <FlatButton
           style={styles.sendButton}
+          id='sendMessageButton'
           type='submit'
           icon={
             <FontIcon
@@ -92,8 +94,7 @@ Compose.propTypes = {
   roomId: PropTypes.string.isRequired,
   myNametag: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired
+    name: PropTypes.string.isRequired
   }).isRequired,
   createMessage: PropTypes.func.isRequired
 }

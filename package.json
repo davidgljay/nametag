@@ -9,7 +9,7 @@
     "build-watch": "NODE_ENV=development webpack --progress --config webpack.config.js --watch",
     "lint": "standard",
     "lint-fix": "standard --fix",
-    "pree2e": "docker-compose stop && NODE_ENV=test ./tests/e2e/preE2e.sh",
+    "pree2e": "docker-compose down && NODE_ENV=test ./tests/e2e/preE2e.sh",
     "e2e": "nightwatch",
     "backup": "docker-compose run nametag sh backup.sh",
     "pull": "git pull origin master && yarn install && yarn build && docker-compose build nametag && docker-compose stop && docker-compose up -d",

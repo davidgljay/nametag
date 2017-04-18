@@ -111,8 +111,8 @@ class Room extends Component {
     return <div style={styles.roomContainer}>
       {
         !loading
-        ? <div>
-          <div style={styles.header}>
+        ? <div id='room'>
+          <div id='header' style={styles.header}>
             <IconButton
               style={styles.close}>
               <FontIcon
@@ -122,8 +122,8 @@ class Room extends Component {
                  close
                </FontIcon>
             </IconButton>
-            <h3 style={styles.title}>{room.title}</h3>
-            <div style={styles.description}>
+            <h3 id='roomTitle' style={styles.title} >{room.title}</h3>
+            <div id='roomDescription' style={styles.description} >
               {room.description}
             </div>
           </div>

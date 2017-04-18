@@ -90,7 +90,7 @@ const create = ({conn, user, models: {Users, BadgeRequests}}, nt) => {
 
       // Add displayName and image if they are new
       user.displayNames.indexOf(nametag.name) === -1 ? Users.appendUserArray('displayNames', nametag.name) : null,
-      user.images.indexOf(nametag.image) === -1 ? Users.appendUserArray('images', nametag.image) : null
+      nametag.image && user.images.indexOf(nametag.image) === -1 ? Users.appendUserArray('images', nametag.image) : null
     ])
   })
   .then(([res, id]) => {
