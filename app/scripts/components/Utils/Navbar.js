@@ -43,7 +43,7 @@ class NavBar extends Component {
             onClick={onHomeClick} label='HOME' />
           <FlatButton
             style={styles.button}
-            id='createRoom'
+            id='createRoomButton'
             onClick={onCreateRoomClick} label='CREATE ROOM' />
           <FlatButton
             style={styles.button}

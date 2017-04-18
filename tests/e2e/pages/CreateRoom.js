@@ -1,13 +1,50 @@
 const commands = {
-  ready() {
+  ready () {
     return this
-      .waitForElementVisible('body', 3000);
+      .waitForElementVisible('body', 3000)
   },
-  fillTitle(title, description) {
+  fillTitle (title, description) {
     return this
-      .waitForElementVisible('@titleField')
+      .waitForElementVisible('@roomPreview')
+      .getLocationInView('@descriptionField')
       .setValue('@titleField', title)
       .setValue('@descriptionField', description)
+      .getLocationInView('@nextButton')
+      .click('@nextButton')
+  },
+  chooseImage (imageSearch) {
+    return this
+      .waitForElementVisible('@imageSearchInput')
+      .setValue('@imageSearchInput', imageSearch)
+      .click('@findImageButton')
+      .waitForElementVisible('.imageSearchResult')
+      .click('.imageSearchResult')
+      .waitForElementVisible('@roomImage')
+      .click('@nextButton')
+  },
+  makeModNametag (name, bio) {
+    return this
+      .waitForElementVisible('@editNametag')
+      .setValue('@editNametagName', name)
+      .setValue('@editNametagBio', bio)
+      .getLocationInView('@nextButton')
+      .click('@nextButton')
+  },
+  addNorms (norm) {
+    return this
+      .waitForElementVisible('@addCustomNorm')
+      .setValue('@addCustomNorm', norm)
+      .getLocationInView('@nextButton')
+      .click('@nextButton')
+  },
+  creatRoom ({title, description, imageSearch, name, bio, norm}) {
+    return this
+      .fillTitle(title, description)
+      .chooseImage(imageSearch)
+      .makeModNametag(name, bio)
+      .addNorms(norm)
+      .waitForElementVisible('@publishButton')
+      .click('@publishButton')
   }
 }
 
@@ -19,6 +56,36 @@ module.exports = {
     },
     descriptionField: {
       selector: '#descriptionField'
+    },
+    roomPreview: {
+      selector: '#roomPreview'
+    },
+    imageSearchInput: {
+      selector: '#imageSearchInput'
+    },
+    nextButton: {
+      selector: '#nextButton'
+    },
+    publishButton: {
+      selector: '#publishButton'
+    },
+    findImageButton: {
+      selector: '#findImageButton'
+    },
+    roomImage: {
+      selector: '#roomImage'
+    },
+    editNametag: {
+      selector: '#editNametag'
+    },
+    editNametagName: {
+      selector: '#editNametagName'
+    },
+    editNametagBio: {
+      selector: '#editNametagBio'
+    },
+    addCustomNorm: {
+      selector: '#addCustomNorm'
     }
   }
 }

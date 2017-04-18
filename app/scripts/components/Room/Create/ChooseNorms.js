@@ -86,6 +86,7 @@ class ChooseNorms extends Component {
                 key={i}
                 primaryText={<TextField
                   value={norm}
+                  id='addCustomNorm'
                   multiLine
                   hintText='Add a norm...'
                   onChange={this.onCustomNormChange(subIndex, i)}

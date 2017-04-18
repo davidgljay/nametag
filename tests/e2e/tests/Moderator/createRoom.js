@@ -17,6 +17,22 @@ module.exports = {
     page
       .register(users.mod)
   },
+  'Moderator creates a room': client => {
+    const createRoomPage = client.page.CreateRoom()
+
+    createRoomPage
+      .click('#createRoomButton')
+      .creatRoom({
+        title: 'Test Room',
+        description: 'A test room',
+        imageSearch: 'room',
+        norm: 'A test norm',
+        name: 'Test name',
+        bio: 'Test bio'
+      })
+      .waitForElementVisible('.roomNotif')
+      .assert.containsText('.roomTitle', 'Test Room')
+  },
   after: client => {
     client.end()
   }

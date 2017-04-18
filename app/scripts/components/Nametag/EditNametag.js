@@ -90,7 +90,7 @@ class EditNametag extends Component {
       image: ''
     }
 
-    return this.props.connectDropTarget(<div>
+    return this.props.connectDropTarget(<div id='editNametag'>
       <Card style={styles.editNametag} className='profile'>
         <div style={styles.cardInfo}>
           <NTIconMenu
@@ -102,6 +102,7 @@ class EditNametag extends Component {
             <AutoComplete
               floatingLabelText='Name'
               filter={AutoComplete.noFilter}
+              id='editNametagName'
               openOnFocus
               disableFocusRipple={false}
               dataSource={me.displayNames || []}
@@ -120,6 +121,7 @@ class EditNametag extends Component {
                 style={{width: 160}}
                 rows={2}
                 multiLine
+                id='editNametagBio'
                 fullWidth
                 errorText={error && error.bioError}
                 onChange={this.updateNametagProperty('bio')}

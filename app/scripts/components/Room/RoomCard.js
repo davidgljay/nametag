@@ -68,6 +68,7 @@ class RoomCard extends Component {
       {
         room.image
         ? <CardMedia
+          id='roomImage'
           onClick={this.flip}>
           <img
             style={styles.roomImage}

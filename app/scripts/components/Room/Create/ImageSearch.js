@@ -4,7 +4,7 @@ import TextField from 'material-ui/TextField'
 import {Card} from 'material-ui/Card'
 import CircularProgress from 'material-ui/CircularProgress'
 import RaisedButton from 'material-ui/RaisedButton'
-import {indigo500, grey500} from 'material-ui/styles/colors'
+import {grey500} from 'material-ui/styles/colors'
 import IconButton from 'material-ui/IconButton'
 import errorLog from '../../../utils/errorLog'
 
@@ -134,13 +134,15 @@ class ImageSearch extends Component {
       }
       <div style={styles.searchContainer}>
         <TextField
+          id='imageSearchInput'
           onChange={this.setImageQuery}
           floatingLabelText='Search Flickr...'
           errorText={this.props.error}
           value={this.state.imageQuery}
           style={styles.searchField} />
         <RaisedButton
-          backgroundColor={indigo500}
+          primary
+          id='findImageButton'
           style={styles.button}
           labelStyle={styles.labelStyle}
           label='FIND IMAGE'
@@ -168,6 +170,7 @@ class ImageSearch extends Component {
             images.map((image, i) => {
               return <Card
                 style={styles.thumbnailContainer}
+                className='imageSearchResult'
                 key={i}
                 onClick={this.onImageClick(image.link)}>
                 <img src={image.thumbnail} style={styles.thumbnail} />

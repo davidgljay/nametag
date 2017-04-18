@@ -21,7 +21,7 @@ const Notifications = ({nametags, roomId, homepage}) => {
     : {...styles.notification, ...styles.noNewMessages}
     const homepageNotif = homepage ? {...notificationStyle, ...styles.homepageNotif}
     : notificationStyle
-    return <ListItem innerDivStyle={homepageNotif} key={room.id}>
+    return <ListItem innerDivStyle={homepageNotif} key={room.id} className='roomNotif'>
       <a href={`/rooms/${room.id}`} style={styles.link}>
         {
           mentions > 0 &&
@@ -40,7 +40,7 @@ const Notifications = ({nametags, roomId, homepage}) => {
               : styles.roomImage
             } />
         </div>
-        <div>{room.title}</div>
+        <div className='roomTitle'>{room.title}</div>
       </a>
     </ListItem>
   })

@@ -59,6 +59,9 @@ module.exports = {
     },
     confForm: {
       selector: '#loginConfirm'
+    },
+    createRoomButton: {
+      selector: '#createRoomButton'
     }
   }
 }

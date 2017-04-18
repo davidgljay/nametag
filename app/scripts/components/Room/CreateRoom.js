@@ -98,11 +98,9 @@ class CreateRoom extends Component {
       const {nametagEdits} = this.props
       const roomTemplates = room.templates.map(t => t.id)
       this.props.createRoom({
-        room: {
-          ...room,
-          mod: nametagEdits.new,
-          templates: roomTemplates
-        }
+        ...room,
+        mod: nametagEdits.new,
+        templates: roomTemplates
       })
       .then(() => {
         window.location = '/rooms'
@@ -257,6 +255,7 @@ class CreateRoom extends Component {
               style={styles.button}
               labelStyle={styles.buttonLabel}
               primary
+              id='backButton'
               onClick={this.handlePrev}
               label='BACK' />
           }
@@ -266,12 +265,14 @@ class CreateRoom extends Component {
               style={styles.button}
               labelStyle={styles.buttonLabel}
               primary
+              id='publishButton'
               onClick={this.createRoom}
               label='PUBLISH' />
             : <RaisedButton
               style={styles.button}
               labelStyle={styles.buttonLabel}
               primary
+              id='nextButton'
               onClick={this.handleNext}
               label='NEXT' />
             }
