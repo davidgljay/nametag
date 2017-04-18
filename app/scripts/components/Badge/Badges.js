@@ -3,13 +3,15 @@ import Badge from './Badge'
 
 const Badges = ({badges = [], draggable, removeFromSource}) =>
   <div id='badges' style={styles.badgesContainer}>
-    {badges.map((badge) => {
-      return <Badge
-        badge={badge}
-        key={badge.id}
-        draggable={draggable}
-        removeFromSource={removeFromSource} />
-    })}
+    {
+      badges.map((badge) => {
+        return <Badge
+          badge={badge}
+          key={badge.id}
+          draggable={draggable}
+          removeFromSource={removeFromSource} />
+      })
+    }
   </div>
 
 const {arrayOf, string, shape, bool, func} = PropTypes

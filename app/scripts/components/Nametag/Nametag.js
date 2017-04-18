@@ -2,25 +2,30 @@ import React, {PropTypes} from 'react'
 import Badges from '../Badge/Badges'
 import FontIcon from 'material-ui/FontIcon'
 import {dateFormat} from '../Utils/DateFormat'
+import {primary, white} from '../../../styles/colors'
 
 const Nametag = ({mod, nametag: {id, name, image, bio, present, badges}}) => {
-  let star = ''
+  let ismod = ''
 
   // Show if user is a mod.
   if (mod === id) {
-    star = <FontIcon style={styles.ismod} className='material-icons'>star</FontIcon>
+    ismod = <div style={styles.ismod}>Host</div>
   }
 
   return <div
     key={id}
     style={styles.nametag}>
     <div style={styles.main}>
-      {star}
-      <img src={image} alt={name} style={styles.image} />
+      {
+        image
+        ? <img src={image} alt={name} style={styles.image} />
+      : <div style={{...styles.image, ...styles.defaultImage}}>{name.slice(0, 2)}</div>
+      }
       <div style={styles.details}>
         <div style={styles.name}>{name}</div>
         <div style={styles.bio}>{bio}</div>
       </div>
+      {ismod}
     </div>
     <Badges badges={badges} />
   </div>
@@ -44,19 +49,24 @@ export default Nametag
 
 const styles = {
   ismod: {
-    float: 'right',
-    fontSize: 20,
-    cursor: 'default',
-    marginRight: 10
+    fontSize: 12,
+    fontStyle: 'italic',
+    margin: 3,
+    cursor: 'default'
+  },
+  details: {
+    flex: 1,
+    cursor: 'default'
   },
   bio: {
     fontSize: 12,
-    fontStyle: 'italic'
+    fontStyle: 'italic',
+    marginTop: 4
   },
   name: {
     fontWeight: 'bold',
     fontSize: 14,
-    marginRop: 5
+    marginTop: 5
   },
   image: {
     float: 'left',
@@ -64,6 +74,14 @@ const styles = {
     width: 50,
     height: 50,
     borderRadius: 25
+  },
+  defaultImage: {
+    backgroundColor: primary,
+    textAlign: 'center',
+    lineHeight: '50px',
+    fontSize: 22,
+    color: white,
+    cursor: 'default'
   },
   nametag: {
     padding: 5,

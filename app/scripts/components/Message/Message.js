@@ -5,6 +5,7 @@ import MessageMenu from './MessageMenu'
 import ModAction from './ModAction'
 import {grey500, grey800, lightBlue100, yellow100} from 'material-ui/styles/colors'
 import ReactMarkdown from 'react-markdown'
+import {primary, white} from '../../../styles/colors'
 
 class Message extends Component {
 
@@ -90,7 +91,11 @@ class Message extends Component {
       messageStyle = {...styles.messageText, ...styles.directMessageOutgoing}
       callout = <div style={styles.dmCallout}>
       Private Message to {recipient.name}
-        <img style={styles.tinyIconImg} src={recipient.image} />
+        {
+          recipient.image
+          ? <img style={styles.tinyIconImg} src={recipient.image} />
+        : <div style={{...styles.tinyIconImg, ...styles.tinyDefaultImage}}>{author.name.slice(0, 2)}</div>
+        }
       </div>
     } else if (recipient.id === myNametag.id) {
       messageStyle = {...styles.messageText, ...styles.directMessageIncoming}
@@ -105,7 +110,11 @@ class Message extends Component {
       id={id}
       onClick={() => this.setState({showActions: !this.state.showActions})}>
       <td style={styles.image}>
-        <img style={styles.imageImg} src={author.image} />
+        {
+          author.image
+          ? <img style={styles.imageImg} src={author.image} />
+          : <div style={{...styles.imageImg, ...styles.defaultImage}}>{author.name.slice(0, 2)}</div>
+        }
       </td>
       <td style={messageStyle}>
         <div style={styles.name}>{author.name}</div>
@@ -200,6 +209,7 @@ const styles = {
     borderRadius: 10,
     width: 20,
     height: 20,
+    display: 'inline-block',
     marginLeft: 5
   },
   name: {
@@ -217,5 +227,22 @@ const styles = {
   },
   text: {
     fontSize: 16
+  },
+  defaultImage: {
+    backgroundColor: primary,
+    textAlign: 'center',
+    lineHeight: '50px',
+    fontSize: 22,
+    color: white,
+    cursor: 'default'
+  },
+  tinyDefaultImage: {
+    backgroundColor: primary,
+    textAlign: 'center',
+    lineHeight: '20px',
+    fontSize: 10,
+    fontStyle: 'normal',
+    color: white,
+    cursor: 'default'
   }
 }
