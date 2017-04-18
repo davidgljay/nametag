@@ -14,6 +14,7 @@ const subscriptions = require('./graph/subscriptions')
 const apollo = require('graphql-server-express')
 const {local, facebook, twitter, google} = require('./auth')
 const errors = require('./errors')
+const {db} = require('./db')
 const dbInit = require('./graph/models').init
 const passport = require('passport')
 const RedisStore = require('connect-redis')(session)
@@ -85,7 +86,7 @@ r.connect({host: 'rethinkdb'})
     })
 
     passport.deserializeUser((id, done) => {
-      r.db('nametag').table('users').get(id).run(conn)
+      db.table('users').get(id).run(conn)
         .then(user => done(null, user))
         .catch(done)
     })

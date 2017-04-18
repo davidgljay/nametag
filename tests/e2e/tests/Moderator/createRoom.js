@@ -10,12 +10,12 @@ module.exports = {
     page
     .ready()
   },
-  'Moderator logs in': client => {
+  'Moderator registers and logs in': client => {
     const {users} = client.globals
     const page = client.page.RoomCards()
 
     page
-      .login(users.mod)
+      .register(users.mod)
   },
   after: client => {
     client.end()

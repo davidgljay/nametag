@@ -10,5 +10,5 @@ module.exports = {
       email: 'participant@test.com',
       pass: 'testtest'
     }
-  },
-};
+  }
+}

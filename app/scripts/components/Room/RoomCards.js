@@ -56,6 +56,7 @@ class RoomCards extends Component {
         }
         {
           !loading &&
+          rooms &&
           rooms.length > 0 &&
           rooms
           .filter(room => !nametagHash[room.id])

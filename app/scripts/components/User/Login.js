@@ -93,6 +93,7 @@ class Login extends Component {
         .then(res => {
           if (res.error) {
             this.setState({alert: res.error.message})
+            return
           }
           window.location = '/'
         })
@@ -117,6 +118,7 @@ class Login extends Component {
       <div className='localAuth'>
         <TextField
           floatingLabelText='E-mail'
+          id='loginEmail'
           style={styles.field}
           errorText={emailAlert}
           onBlur={this.validateEmail}
@@ -124,6 +126,7 @@ class Login extends Component {
         <br />
         <TextField
           floatingLabelText='Password'
+          id='loginPassword'
           type='password'
           errorText={passwordAlert}
           onBlur={this.validatePassword}
@@ -134,6 +137,7 @@ class Login extends Component {
           <TextField
             floatingLabelText='Confirm Password'
             style={styles.field}
+            id='loginConfirm'
             errorText={passwordAlert}
             type='password'
             onChange={this.updateField('confirm')} />
@@ -148,6 +152,7 @@ class Login extends Component {
               onClick={() => this.setState({register: false})} />
             <RaisedButton
               style={styles.button}
+              id='registerButton'
               label='REGISTER'
               primary
               onClick={this.register} />
@@ -155,12 +160,14 @@ class Login extends Component {
           : <div style={styles.buttonContainer}>
             <FlatButton
               label='Register'
+              id='enableRegisterButton'
               style={styles.button}
               secondary
               onClick={() => this.setState({register: true})} />
             <RaisedButton
               style={styles.button}
               label='LOG IN'
+              id='submitLoginButton'
               primary
               onClick={this.login} />
           </div>
