@@ -112,26 +112,42 @@ const addBadge = ({user, conn}, badgeId, templateId) =>
  *
  */
 
-const findOrCreateFromAuth = ({conn}, profile, provider) => {
-  let userObj
+const findOrCreateFromAuth = ({user, conn, models: {Templates, Granters, Badges}}, profile, provider) => {
   const authProfile = userFromAuth(provider, profile)
-  return usersTable.filter({[provider]: authProfile.id}).run(conn)
+  let userPromise
+
+  // If the user is logged in, add displayNames and images
+  if (user) {
+    let userUpdates = authProfile.displayNames
+      .reduce((arr, name) =>
+        user.displayNames.indexOf(name) === -1
+        ? arr.concat(Users.appendUserArray('displayNames', name)) : arr, [])
+    userPromise = fromUrl(50, 50, authProfile.providerPhotoUrl)
+      .then(imageUrl => Promise.all(
+        userUpdates.concat(
+          user.images.indexOf(imageUrl) === -1 ? Users.appendUserArray('images', imageUrl) : null
+        )
+      ))
+
+  // If the user is not logged in, either create the user or log them in
+  } else {
+    userPromise = usersTable
+    .getAll(authProfile.id, {index:[provider]}).run(conn)
     .then(cursor => cursor.toArray())
-    .then(([user]) => {
-      if (user) {
-        return user
+    .then(([usr]) => {
+      if (usr) {
+        return usr
       }
       return fromUrl(50, 50, authProfile.providerPhotoUrl)
         .then(imageUrl => {
-          userObj = {
+          const userObj = {
             displayNames: authProfile.displayNames,
             images: [imageUrl.url],
             [provider]: authProfile.id,
             createdAt: Date.now()
           }
-          return usersTable.insert(userObj).run(conn)
         })
-        .then(rdbRes => {
+        .then(([rdbRes, userObj]) => {
           if (rdbRes.errors > 0) {
             return Promise.reject(new Error('Error while inserting user'))
           }
@@ -141,6 +157,75 @@ const findOrCreateFromAuth = ({conn}, profile, provider) => {
             })
         })
     })
+  }
+
+  const addBadges = ((user, providerInfo) =>
+    Promise.all([
+      Templates.getAll(Object.keys(user.badges)).run(conn),
+      Granters.getByUrlCode('nametag').run(conn)
+    ])
+
+    // Check to see if the a badge has already been granted. If not, grant one.
+    .then(([templates, granter]) => {
+      const templateNames = templates
+        .filter(template => template.granter === granter.id)
+        .map(template => template.name)
+
+      const templateDescriptions = templates
+        .filter(template => template.granter === granter.id)
+        .map(template => template.description)
+
+      let promises = []
+
+      for (var i=0; i < providerInfo.badges.length; i++ ) {
+        const badgeInfo = badgesFromAuth(providerInfo.badges[i], provider)
+        if (
+          templateNames.indexOf(badgeInfo.name) === -1
+          && templateDescriptions.indexOf(badgeInfo.description) === -1
+        ) {
+          promises.push(
+            Templates.create({
+              name: badge.name,
+              description: badge.description,
+              image: badge.image,
+              granter: granter.id
+            })
+            .then(template => Promise.all([
+              template,
+              Nametags.create({
+                name: badge.name,
+                bio: badge.description,
+                template: template.id
+              })
+            ])
+            .then([template, nametag] => {
+              Badges.create(badge.note, template.id, nametag.id)
+            })
+          )
+        }
+      }
+      return promises
+    })
+  )
+}
+
+const badgesFromAuth = (badge, provider) => {
+  switch (Object.keys(badge)[0]) {
+  case 'name':
+    return {
+      name: badge.name,
+      description: `This individual uses the name ${badge.name} on Facebook.`,
+      image: '/images/fb.jpg',
+      note: 'Confirmed via Facebook.'
+    }
+  case 'twitter':
+    return {
+      name: `@${badge.twitter}`,
+      description: `This has the account @${badge.twitter} on Twitter.`,
+      image: '/images/twitter.jpg',
+      note: 'Confirmed via Twitter.'
+    }
+  }
 }
 
 const userFromAuth = (provider, profile) => {
@@ -149,13 +234,19 @@ const userFromAuth = (provider, profile) => {
       return {
         displayNames: [profile.displayName],
         providerPhotoUrl: profile.photos[0].value,
-        id: profile.id
+        id: profile.id,
+        badges: [{
+          name: profile.displayName
+        }]
       }
     case 'twitter':
       return {
         displayNames: [profile.displayName, profile.username],
         providerPhotoUrl: profile.photos[0].value,
-        id: profile.id
+        id: profile.id,
+        badges: [{
+          twitter: profile.username
+        }]
       }
     case 'google':
       return {
