@@ -127,7 +127,8 @@ const findOrCreateFromAuth = ({conn}, profile, provider) => {
             displayNames: authProfile.displayNames,
             images: [imageUrl.url],
             [provider]: authProfile.id,
-            createdAt: Date.now()
+            createdAt: new Date(),
+            images: []
           }
           return usersTable.insert(userObj).run(conn)
         })
@@ -186,7 +187,6 @@ const createLocal = ({conn}, email, password) =>
    usersTable.insert({
      email,
      createdAt: new Date(),
-     badges: [],
      displayNames: [],
      images: []
    }),
