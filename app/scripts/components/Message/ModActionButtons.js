@@ -7,7 +7,7 @@ import {indigo500, red500} from 'material-ui/styles/colors'
 const ModActionButtons = (props) => <CardActions>
   <RaisedButton
     fullWidth
-    backgroundColor={indigo500}
+    primary
     labelStyle={styles.primary}
     onClick={props.remindOfNorms}
     label='SEND MESSAGE' />

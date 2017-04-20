@@ -3,8 +3,6 @@ importScripts('https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js')
 var cacheName = 'nametag-cache-v1'
 var urlsToCache = [
   '/',
-  '/public/scripts/app.js',
-  '/public/manifest.json',
   '/images/google.png',
   '/images/twitter.jpg',
   '/images/fb.jpg'

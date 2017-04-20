@@ -66,7 +66,7 @@ class Join extends Component {
           <Alert alert={this.state.alert} />
           <RaisedButton
             id='joinRoomButton'
-            backgroundColor={indigo500}
+            primary
             labelStyle={styles.button}
             onClick={this.onJoinClick}
             label='JOIN' />

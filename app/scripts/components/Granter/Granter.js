@@ -4,12 +4,23 @@ import GranterInfo from './GranterInfo'
 import BadgeRequest from '../Badge/BadgeRequest'
 import Templates from '../Badge/Templates'
 import CircularProgress from 'material-ui/CircularProgress'
+import LoginDialog from '../User/LoginDialog'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import {mobile} from '../../../styles/sizes'
 import radium from 'radium'
 
-const Granter = ({data: {granter, me, loading}, createBadge, updateBadgeRequestStatus, addNote}) =>
-  loading
+const Granter = ({data: {granter, me, loading}, createBadge, updateBadgeRequestStatus, loginUser, registerUser, addNote}) => {
+  if (!me) {
+    return <div>
+      <LoginDialog
+        loginUser={loginUser}
+        registerUser={registerUser}
+        showLogin
+        message={'Log in to view this page.'} />
+    </div>
+  }
+
+  return loading
     ? <CircularProgress style={styles.spinner} />
     : <div>
       <NavBar me={me} />
@@ -38,8 +49,9 @@ const Granter = ({data: {granter, me, loading}, createBadge, updateBadgeRequestS
           granterCode={granter.urlCode} />
       </div>
     </div>
+}
 
-const {shape, string, cool, object, arrayOf, func, bool} = PropTypes
+const {shape, string, object, arrayOf, func, bool} = PropTypes
 
 Granter.propTypes = {
   data: shape({
