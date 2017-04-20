@@ -1,8 +1,10 @@
 const FacebookStrategy = require('passport-facebook').Strategy
 const UsersLoader = require('../graph/models/Users')
 const config = require('../secrets.json')
+const Context = require('../graph/context')
 
-const Users = (req, conn) => UsersLoader(new Context(req, conn)).Users
+const Users = (req, conn) =>
+  UsersLoader(new Context(req || {}, conn)).Users
 
 module.exports = conn => new FacebookStrategy({
   clientID: config.facebook.id,
@@ -17,12 +19,23 @@ module.exports = conn => new FacebookStrategy({
   }
 )
 
-module.exports.handleFacebookCallback = conn => (req, res, next) => (err, {authProfile, user}) =>
-  err
-  ? next(err)
-  : Promise.all([
-      Users(req, conn).addDefaultsFromAuth(authProfile, user),
-      Users(req, conn).addBadgesFromAuth(authProfile, user),
-    ]).then(() => {
-      res.redirect('/')
-    }).catch(next)
+module.exports.handleFacebookCallback = (req, res, next, conn) => (err, data) => {
+  if (err) {
+    next(err)
+    return
+  }
+  const {user, authProfile} = data
+  const reqWithUser = Object.assign({}, req, {user})
+  return Promise.all([
+        Users(reqWithUser, conn).addDefaultsFromAuth(authProfile),
+        Users(reqWithUser, conn).addBadgesFromAuth(authProfile),
+      ]).then(() => {
+        req.login(user, (err) => {
+          if (err) {
+            return next(err)
+          }
+          res.redirect('/')
+        })
+      }).catch(next)
+
+}

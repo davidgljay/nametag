@@ -102,6 +102,16 @@ r.connect({host: 'rethinkdb'})
     subscriptions.activate(conn)
     startSubscriptionServer(conn, server)
 
+    app.get('/auth/facebook/callback', (req, res, next) =>
+      passport.authenticate('facebook',
+        facebook.handleFacebookCallback(req, res, next, conn)
+      )(req, res, next))
+
+    /* All others serve index.html */
+    app.get('*', (req, res, next) => {
+      res.sendFile(path.join('/usr', 'app', 'public', 'index.html'))
+    })
+
     app.use('/', (err, req, res, next) => {
       if (err instanceof errors.APIError) {
         res.status(err.status)
@@ -129,9 +139,6 @@ app.get('/auth/facebook', passport.authenticate('facebook',
     scope: ['public_profile'],
     profileFields: ['id', 'displayName', 'email', 'picture']
   }))
-app.get('/auth/facebook/callback', passport.authenticate('facebook',
-  { successRedirect: '/',
-    failureRedirect: '/#login' }))
 
 /* Twitter auth */
 app.get('/auth/twitter', passport.authenticate('twitter'))
@@ -175,11 +182,6 @@ if (app.get('env') !== 'production') {
 // Server sw.js
 app.get('/sw.js', (req, res) => {
   res.sendFile(path.join('/usr', 'app', 'public', 'sw.js'))
-})
-
-/* All others serve index.html */
-app.get('*', (req, res, next) => {
-  res.sendFile(path.join('/usr', 'app', 'public', 'index.html'))
 })
 
 /* Upload an image and return the url of that image on S3 */

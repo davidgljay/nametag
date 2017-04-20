@@ -64,13 +64,13 @@ const createAndGrant = (context, template, note) => {
     .then(templ => Promise.all([
       templ,
       Nametags.create({
-        name: badge.name,
-        bio: badge.description,
+        name: templ.name,
+        bio: templ.description,
         template: templ.id
       })
     ]))
     .then(([templ, nametag]) =>
-      Badges.create(badge.note, templ.id, nametag.id)
+      Badges.create({note, template: templ.id, defaultNametag: nametag.id})
     )
 }
 
@@ -80,6 +80,7 @@ module.exports = (context) => ({
     get: (id) => get(context, id),
     getAll: (ids) => getAll(context, ids),
     getGranterTemplates: (granterId) => getGranterTemplates(context, granterId),
-    create: badge => create(context, badge)
+    create: badge => create(context, badge),
+    createAndGrant: (template, note) => createAndGrant(context, template, note)
   }
 })

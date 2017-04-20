@@ -121,7 +121,10 @@ const findOrCreateFromAuth = ({conn}, profile, provider) => {
     .then(cursor => cursor.toArray())
     .then(([user]) => {
       if (user) {
-        return user
+        return {
+          user,
+          authProfile
+        }
       }
       return fromUrl(50, 50, authProfile.providerPhotoUrl)
         .then(imageUrl => {
@@ -161,16 +164,17 @@ const findOrCreateFromAuth = ({conn}, profile, provider) => {
 *
 */
 
-const addDefaultsFromAuth = (context, authProfile, user) => {
+const addDefaultsFromAuth = (context, authProfile) => {
+  const {user} = context
   let userUpdates = authProfile.displayNames
     .reduce((arr, name) =>
       user.displayNames.indexOf(name) === -1
       ? arr.concat(appendUserArray(context, 'displayNames', name)) : arr, [])
   return fromUrl(50, 50, authProfile.providerPhotoUrl)
-    .then(imageUrl => Promise.all(
+    .then(({url}) => Promise.all(
       userUpdates
       .concat(
-        user.images.indexOf(imageUrl) === -1 ? appendUserArray(context, 'images', imageUrl) : null
+        user.images.indexOf(url) === -1 ? appendUserArray(context, 'images', url) : null
       ).concat(
         usersTable.update({[authProfile.provider]: authProfile.id})
       )
@@ -186,11 +190,11 @@ const addDefaultsFromAuth = (context, authProfile, user) => {
 *
 */
 
-const addBadgesFromAuth = ({conn, models: {Templates, Granters}}, {badges, provider}, user) => {
+const addBadgesFromAuth = ({conn, user, models: {Templates, Granters}}, {badges, provider}) => {
 
     return Promise.all([
-      user.badges ? Templates.getAll(Object.keys(user.badges)).run(conn) : [],
-      Granters.getByUrlCode('nametag').run(conn)
+      user.badges ? Templates.getAll(Object.keys(user.badges)) : [],
+      Granters.getByUrlCode('nametag')
     ])
 
     // Check to see if the a badge has already been granted. If not, grant one.
@@ -206,10 +210,10 @@ const addBadgesFromAuth = ({conn, models: {Templates, Granters}}, {badges, provi
       let promises = []
 
       for (var i=0; i < badges.length; i++ ) {
-        const badgeInfo = badgesFromAuth(badges[i], provider)
+        const badge = badgesFromAuth(badges[i], provider)
         if (
-          templateNames.indexOf(badgeInfo.name) === -1
-          && templateDescriptions.indexOf(badgeInfo.description) === -1
+          templateNames.indexOf(badge.name) === -1
+          && templateDescriptions.indexOf(badge.description) === -1
         ) {
           promises.push(
             Templates.createAndGrant({
@@ -231,14 +235,14 @@ const badgesFromAuth = (badge, provider) => {
     return {
       name: badge.name,
       description: `This individual uses the name ${badge.name} on Facebook.`,
-      image: '/images/fb.jpg',
+      image: '/public/images/fb.jpg',
       note: 'Confirmed via Facebook.'
     }
   case 'twitter':
     return {
       name: `@${badge.twitter}`,
       description: `This has the account @${badge.twitter} on Twitter.`,
-      image: '/images/twitter.jpg',
+      image: '/public/images/twitter.jpg',
       note: 'Confirmed via Twitter.'
     }
   }
