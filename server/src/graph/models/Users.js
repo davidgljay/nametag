@@ -109,34 +109,19 @@ const addBadge = ({user, conn}, badgeId, templateId) =>
  * @param {Object} context   graph context
  * @param {Object} profile   profile information returned from the oauth provider
  * @param {String} provider  string identifying the provider ('google', 'facebook', etc)
- *
+ * @returns {Object} data    Object containing the user profile and any badges to be created.
  */
 
-const findOrCreateFromAuth = ({user, conn, models: {Templates, Granters, Badges}}, profile, provider) => {
+const findOrCreateFromAuth = ({conn}, profile, provider) => {
   const authProfile = userFromAuth(provider, profile)
-  let userPromise
 
-  // If the user is logged in, add displayNames and images
-  if (user) {
-    let userUpdates = authProfile.displayNames
-      .reduce((arr, name) =>
-        user.displayNames.indexOf(name) === -1
-        ? arr.concat(Users.appendUserArray('displayNames', name)) : arr, [])
-    userPromise = fromUrl(50, 50, authProfile.providerPhotoUrl)
-      .then(imageUrl => Promise.all(
-        userUpdates.concat(
-          user.images.indexOf(imageUrl) === -1 ? Users.appendUserArray('images', imageUrl) : null
-        )
-      ))
-
-  // If the user is not logged in, either create the user or log them in
-  } else {
-    userPromise = usersTable
-    .getAll(authProfile.id, {index:[provider]}).run(conn)
+  // Either create the user or log them in
+  return usersTable
+    .getAll(authProfile.id, {index: provider}).run(conn)
     .then(cursor => cursor.toArray())
-    .then(([usr]) => {
-      if (usr) {
-        return usr
+    .then(([user]) => {
+      if (user) {
+        return user
       }
       return fromUrl(50, 50, authProfile.providerPhotoUrl)
         .then(imageUrl => {
@@ -146,22 +131,64 @@ const findOrCreateFromAuth = ({user, conn, models: {Templates, Granters, Badges}
             [provider]: authProfile.id,
             createdAt: Date.now()
           }
+          return Promise.all([
+            usersTable.insert(userObj).run(conn),
+            userObj
+          ])
         })
         .then(([rdbRes, userObj]) => {
           if (rdbRes.errors > 0) {
             return Promise.reject(new Error('Error while inserting user'))
           }
-          return Object.assign({}, userObj,
-            {
-              id: rdbRes.generated_keys[0]
-            })
-        })
+          return {
+            user: Object.assign({}, userObj,
+              {
+                id: rdbRes.generated_keys[0]
+              }),
+            authProfile
+          }
+      })
     })
+}
+
+/**
+* Adds default names and images to a user from an auth provider
+*
+* @param {Object} context   graph context
+* @param {Object} authProfile   The profile info from the auth provider
+* @param {Object} user  The freshly authed user
+*
+*/
+
+const addDefaultsFromAuth = (context, authProfile, user) => {
+  let userUpdates = authProfile.displayNames
+    .reduce((arr, name) =>
+      user.displayNames.indexOf(name) === -1
+      ? arr.concat(appendUserArray(context, 'displayNames', name)) : arr, [])
+  return fromUrl(50, 50, authProfile.providerPhotoUrl)
+    .then(imageUrl => Promise.all(
+      userUpdates
+      .concat(
+        user.images.indexOf(imageUrl) === -1 ? appendUserArray(context, 'images', imageUrl) : null
+      ).concat(
+        usersTable.update({[authProfile.provider]: authProfile.id})
+      )
+    ))
   }
 
-  const addBadges = ((user, providerInfo) =>
-    Promise.all([
-      Templates.getAll(Object.keys(user.badges)).run(conn),
+/**
+* Adds badges to a user from an auth provider
+*
+* @param {Object} context   graph context
+* @param {Object} authProfile   The profile info from the auth provider
+* @param {Object} user  The freshly authed user
+*
+*/
+
+const addBadgesFromAuth = ({conn, models: {Templates, Granters}}, {badges, provider}, user) => {
+
+    return Promise.all([
+      user.badges ? Templates.getAll(Object.keys(user.badges)).run(conn) : [],
       Granters.getByUrlCode('nametag').run(conn)
     ])
 
@@ -177,36 +204,24 @@ const findOrCreateFromAuth = ({user, conn, models: {Templates, Granters, Badges}
 
       let promises = []
 
-      for (var i=0; i < providerInfo.badges.length; i++ ) {
-        const badgeInfo = badgesFromAuth(providerInfo.badges[i], provider)
+      for (var i=0; i < badges.length; i++ ) {
+        const badgeInfo = badgesFromAuth(badges[i], provider)
         if (
           templateNames.indexOf(badgeInfo.name) === -1
           && templateDescriptions.indexOf(badgeInfo.description) === -1
         ) {
           promises.push(
-            Templates.create({
+            Templates.createAndGrant({
               name: badge.name,
               description: badge.description,
               image: badge.image,
               granter: granter.id
-            })
-            .then(template => Promise.all([
-              template,
-              Nametags.create({
-                name: badge.name,
-                bio: badge.description,
-                template: template.id
-              })
-            ])
-            .then([template, nametag] => {
-              Badges.create(badge.note, template.id, nametag.id)
-            })
+            }, badge.note)
           )
         }
       }
-      return promises
+      return Promise.all(promises)
     })
-  )
 }
 
 const badgesFromAuth = (badge, provider) => {
@@ -232,6 +247,7 @@ const userFromAuth = (provider, profile) => {
   switch (provider) {
     case 'facebook':
       return {
+        provider,
         displayNames: [profile.displayName],
         providerPhotoUrl: profile.photos[0].value,
         id: profile.id,
@@ -241,6 +257,7 @@ const userFromAuth = (provider, profile) => {
       }
     case 'twitter':
       return {
+        provider,
         displayNames: [profile.displayName, profile.username],
         providerPhotoUrl: profile.photos[0].value,
         id: profile.id,
@@ -250,6 +267,7 @@ const userFromAuth = (provider, profile) => {
       }
     case 'google':
       return {
+        provider,
         displayNames: [profile.displayName],
         providerPhotoUrl: profile.photos[0].value,
         id: profile.id
@@ -320,6 +338,8 @@ module.exports = (context) => ({
     addNametag: (nametagId, roomId) => addNametag(context, nametagId, roomId),
     addBadge: (badgeId, templateId) => addBadge(context, badgeId, templateId),
     addToken: (token) => addToken(context, token),
-    getToken: (nametagId) => getToken(context, nametagId)
+    getToken: (nametagId) => getToken(context, nametagId),
+    addBadgesFromAuth: (authProfile, user) => addBadgesFromAuth(context, authProfile, user),
+    addDefaultsFromAuth: (authProfile, user) => addDefaultsFromAuth(context, authProfile, user)
   }
 })
