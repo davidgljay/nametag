@@ -1,8 +1,10 @@
 const TwitterStrategy = require('passport-twitter').Strategy
 const UsersLoader = require('../graph/models/Users')
 const config = require('../secrets.json')
+const Context = require('../graph/context')
 
-const Users = (conn) => UsersLoader({conn}).Users
+const Users = (conn) =>
+  UsersLoader(new Context(){}, conn)).Users
 
 module.exports = conn => new TwitterStrategy(
   {

@@ -12,7 +12,7 @@ const session = require('express-session')
 const graph = require('./graph')
 const subscriptions = require('./graph/subscriptions')
 const apollo = require('graphql-server-express')
-const {local, facebook, twitter, google} = require('./auth')
+const {local, facebook, twitter, google, authCallback} = require('./auth')
 const errors = require('./errors')
 const {db} = require('./db')
 const dbInit = require('./graph/models').init
@@ -102,10 +102,39 @@ r.connect({host: 'rethinkdb'})
     subscriptions.activate(conn)
     startSubscriptionServer(conn, server)
 
+    /* Facebook auth */
+    app.get('/auth/facebook', passport.authenticate('facebook',
+      {
+        display: 'popup',
+        authType: 'rerequest',
+        scope: ['public_profile'],
+        profileFields: ['id', 'displayName', 'email', 'picture']
+      }))
     app.get('/auth/facebook/callback', (req, res, next) =>
       passport.authenticate('facebook',
-        facebook.handleFacebookCallback(req, res, next, conn)
+        authCallback(req, res, next, conn)
       )(req, res, next))
+
+    /* Twitter auth */
+    app.get('/auth/twitter', passport.authenticate('twitter'))
+    app.get('/auth/twitter/callback', (req, res, next) =>
+      passport.authenticate('twitter',
+        authCallback(req, res, next, conn)
+      )(req, res, next))
+
+    /* Google auth */
+    app.get('/auth/google', passport.authenticate('google', {
+      scope: ['https://www.googleapis.com/auth/plus.login']
+    }))
+    app.get('/auth/google/callback', (req, res, next) =>
+      passport.authenticate('twitter',
+        authCallback(req, res, next, conn)
+      )(req, res, next))
+
+    app.post('/login', (req, res, next) => {
+      passport.authenticate('local',
+      local.handleLocalCallback(req, res, next))(req, res, next)
+    })
 
     /* All others serve index.html */
     app.get('*', (req, res, next) => {
@@ -130,34 +159,6 @@ r.connect({host: 'rethinkdb'})
 
 /* Serve static files */
 app.use('/public', express.static(path.join('/usr', 'app', 'public')))
-
-/* Facebook auth */
-app.get('/auth/facebook', passport.authenticate('facebook',
-  {
-    display: 'popup',
-    authType: 'rerequest',
-    scope: ['public_profile'],
-    profileFields: ['id', 'displayName', 'email', 'picture']
-  }))
-
-/* Twitter auth */
-app.get('/auth/twitter', passport.authenticate('twitter'))
-app.get('/auth/twitter/callback', passport.authenticate('twitter',
-  { successRedirect: '/',
-    failureRedirect: '/#login' }))
-
-/* Google auth */
-app.get('/auth/google', passport.authenticate('google', {
-  scope: ['https://www.googleapis.com/auth/plus.login']
-}))
-app.get('/auth/google/callback', passport.authenticate('google',
-  { successRedirect: '/',
-    failureRedirect: '/#login' }))
-
-app.post('/login', (req, res, next) => {
-  passport.authenticate('local',
-  local.handleLocalCallback(req, res, next))(req, res, next)
-})
 
 app.get('/logout',
   (req, res) => {
