@@ -10,7 +10,15 @@ module.exports = conn => new FacebookStrategy({
   clientID: config.facebook.id,
   clientSecret: config.facebook.secret,
   callbackURL: '/auth/facebook/callback',
-  profileFields: ['id', 'name', 'picture', 'displayName']
+  profileFields: [
+    'id',
+    'about',
+    'age_range',
+    'link',
+    'picture',
+    'gender',
+    'displayName'
+  ]
 },
   (accessToken, refreshToken, profile, done) => {
     return Users(conn).findOrCreateFromAuth(profile, 'facebook')

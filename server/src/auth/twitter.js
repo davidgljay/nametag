@@ -4,7 +4,7 @@ const config = require('../secrets.json')
 const Context = require('../graph/context')
 
 const Users = (conn) =>
-  UsersLoader(new Context(){}, conn)).Users
+  UsersLoader(new Context({}, conn)).Users
 
 module.exports = conn => new TwitterStrategy(
   {
