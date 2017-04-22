@@ -32,14 +32,33 @@ const getByUrlCode = ({conn}, urlCode) => grantersTable.getAll(urlCode, {index: 
  *
  **/
 
-const create = ({conn}, granter) => {
-  const template = Object.assign({}, granter, {createdAt: new Date(), updatedAt: new Date()})
-  return grantersTable.insert(template).run(conn)
+const create = ({conn, models: {Templates}}, granter) => {
+  const granter = Object.assign({}, granter, {createdAt: new Date(), updatedAt: new Date()})
+  return grantersTable.insert(granter).run(conn)
     .then(res => {
       if (res.error) {
         return new Error(res.error)
       }
-      return Object.assign({}, granter, {id: res.generated_keys[0]})
+      const id = res.generated_keys[0]
+      return Promise.all([
+        id,
+        Templates.createAndGrant(
+        {
+          name: `Admin`,
+          description: `This individual has the right to grant and revoke badges on behalf of ${granter.name}.`
+          image: granter.image,
+          granter: granter.id
+        },
+        `Created account for ${granter.name}.`)
+        ])
+      })
+      .then(([id, [template]]) =>
+        Promise.all([
+          id,
+          grantersTable.get(id).update({adminTemplate: template.id})
+        ])
+      )
+      .then(([id]) => Object.assign({}, granter, {id}))
     })
 }
 

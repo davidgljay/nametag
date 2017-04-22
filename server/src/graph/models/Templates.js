@@ -70,8 +70,15 @@ const createAndGrant = (context, template, note) => {
       })
     ]))
     .then(([templ, nametag]) =>
-      Badges.create({note, template: templ.id, defaultNametag: nametag.id})
+      Promise.all([
+        templ,
+        Badges.create({note, template: templ.id, defaultNametag: nametag.id})
+      ])
     )
+    .then(([templ, badgeRes]) => ([
+      templ,
+      Object.assign({note, template: templ.id, defaultNametag: nametag.id, id: badgeRes.generated_keys[0]})
+    ]))
 }
 
 
