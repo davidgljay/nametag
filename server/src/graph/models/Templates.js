@@ -69,16 +69,18 @@ const createAndGrant = (context, template, note) => {
         template: templ.id
       })
     ]))
-    .then(([templ, nametag]) =>
-      Promise.all([
+    .then(([templ, nametag]) => {
+      const badge = {note, template: templ.id, defaultNametag: nametag.id}
+      return Promise.all([
         templ,
-        Badges.create({note, template: templ.id, defaultNametag: nametag.id})
+        badge,
+        Badges.create(badge)
       ])
-    )
-    .then(([templ, badgeRes]) => ([
-      templ,
-      Object.assign({note, template: templ.id, defaultNametag: nametag.id, id: badgeRes.generated_keys[0]})
-    ]))
+    })
+    .then(([templ, badge]) => ([
+        templ,
+        badge
+      ]))
 }
 
 

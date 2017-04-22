@@ -33,8 +33,8 @@ const getByUrlCode = ({conn}, urlCode) => grantersTable.getAll(urlCode, {index: 
  **/
 
 const create = ({conn, models: {Templates}}, granter) => {
-  const granter = Object.assign({}, granter, {createdAt: new Date(), updatedAt: new Date()})
-  return grantersTable.insert(granter).run(conn)
+  const granterObj = Object.assign({}, granter, {createdAt: new Date(), updatedAt: new Date()})
+  return grantersTable.insert(granterObj).run(conn)
     .then(res => {
       if (res.error) {
         return new Error(res.error)
@@ -45,9 +45,9 @@ const create = ({conn, models: {Templates}}, granter) => {
         Templates.createAndGrant(
         {
           name: `Admin`,
-          description: `This individual has the right to grant and revoke badges on behalf of ${granter.name}.`
+          description: `This individual has the right to grant and revoke badges on behalf of ${granter.name}.`,
           image: granter.image,
-          granter: granter.id
+          granter: id
         },
         `Created account for ${granter.name}.`)
         ])
@@ -59,7 +59,6 @@ const create = ({conn, models: {Templates}}, granter) => {
         ])
       )
       .then(([id]) => Object.assign({}, granter, {id}))
-    })
 }
 
 module.exports = (context) => ({
