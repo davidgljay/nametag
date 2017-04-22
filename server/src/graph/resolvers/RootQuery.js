@@ -11,8 +11,6 @@ const RootQuery = {
   granter: (obj, {urlCode}, {user, models: {Granters}}) => user
   ? Granters.getByUrlCode(urlCode)
       .then(granter => {
-        console.log('granter', granter)
-        console.log(user.badges[granter.adminTemplate]);
         return user.badges[granter.adminTemplate]
         ? granter : Promise.reject(ErrNotAuthorized)
       }

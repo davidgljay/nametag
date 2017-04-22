@@ -55,10 +55,10 @@ const create = ({conn, models: {Templates}}, granter) => {
       .then(([id, [template]]) =>
         Promise.all([
           id,
-          grantersTable.get(id).update({adminTemplate: template.id})
+          grantersTable.get(id).update({adminTemplate: template.id}).run(conn)
         ])
       )
-      .then(([id]) => Object.assign({}, granter, {id}))
+      .then(([id, adminRes]) => Object.assign({}, granter, {id}))
 }
 
 module.exports = (context) => ({
