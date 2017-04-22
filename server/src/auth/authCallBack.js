@@ -1,8 +1,8 @@
 const UsersLoader = require('../graph/models/Users')
 const Context = require('../graph/context')
 
-const Users = conn =>
-  UsersLoader(new Context({}, conn)).Users
+const Users = (req, conn) =>
+  UsersLoader(new Context(req, conn)).Users
 
 module.exports = (req, res, next, conn) => (err, data) => {
   if (err) {
@@ -10,7 +10,7 @@ module.exports = (req, res, next, conn) => (err, data) => {
     return
   }
   const {user, authProfile} = data
-  const reqWithUser = Object.assign({}, req, {user})
+  const reqWithUser = Object.assign({}, {user}, req)
   return Promise.all([
         Users(reqWithUser, conn).addDefaultsFromAuth(authProfile),
         Users(reqWithUser, conn).addBadgesFromAuth(authProfile),

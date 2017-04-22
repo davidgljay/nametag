@@ -113,7 +113,6 @@ const addBadge = ({user, conn}, badgeId, templateId) =>
  */
 
 const findOrCreateFromAuth = ({conn}, profile, provider) => {
-  console.log('profile', profile)
   const authProfile = userFromAuth(provider, profile)
 
   // Either create the user or log them in
