@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import {mobile} from '../../../styles/sizes'
 import FontIcon from 'material-ui/FontIcon'
 import radium from 'radium'
-import {grey500, yellow800} from 'material-ui/styles/colors'
+import {grey, primary} from '../../../styles/colors'
 
 class MessageMenu extends Component {
 
@@ -17,7 +17,7 @@ class MessageMenu extends Component {
   render () {
     const {id, saved, showModAction, showActions, toggleSaved, isDM} = this.props
     const isMobile = window.innerWidth < 800
-    const starStyle = saved ? {...styles.actionIcon, ...styles.savedIcon} : styles.actionIcon
+    const pinStyle = saved ? {...styles.actionIcon, ...styles.savedIcon} : styles.actionIcon
     return <div style={styles.actionsContainer}>
       {
         !isMobile || showActions
@@ -25,12 +25,10 @@ class MessageMenu extends Component {
           {
             !isDM &&
             <FontIcon
-              key='starIcon'
-              className='material-icons'
+              key='pinIcon'
+              className='fa fa-thumb-tack'
               onClick={() => toggleSaved(id, !saved)}
-              style={starStyle}>
-              star
-            </FontIcon>
+              style={pinStyle} />
           }
           <FontIcon
             key='flagIcon'
@@ -72,7 +70,7 @@ const styles = {
   },
   actionIcon: {
     cursor: 'pointer',
-    color: grey500,
+    color: grey,
     marginRight: 5,
     fontSize: 'inherit',
     opacity: 0.5,
@@ -81,7 +79,7 @@ const styles = {
     }
   },
   savedIcon: {
-    color: yellow800
+    color: primary
   },
   actions: {
     height: 22,
