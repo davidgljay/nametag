@@ -238,6 +238,13 @@ const badgesFromAuth = (badge, provider) => {
       image: '/public/images/fb.jpg',
       note: 'Confirmed via Facebook.'
     }
+  case 'gender':
+    return {
+      name: badge.gender,
+      description: `This individual has listed their gender as ${badge.gender} on Facebook.`,
+      image: '/public/images/fb.jpg',
+      note: 'Confirmed via Facebook.'
+    }
   case 'twitter':
     return {
       name: `@${badge.twitter}`,
@@ -258,6 +265,8 @@ const userFromAuth = (provider, profile) => {
         id: profile.id,
         badges: [{
           name: profile.displayName
+        }, {
+          gender: profile.gender
         }]
       }
     case 'twitter':
