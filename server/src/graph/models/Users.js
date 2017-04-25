@@ -112,8 +112,7 @@ const addBadge = ({user, conn}, badgeId, templateId) =>
  * @returns {Object} data    Object containing the user profile and any badges to be created.
  */
 
-const findOrCreateFromAuth = ({conn}, profile, provider) => {
-  const authProfile = userFromAuth(provider, profile)
+const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
 
   // Either create the user or log them in
   return usersTable
@@ -165,7 +164,7 @@ const findOrCreateFromAuth = ({conn}, profile, provider) => {
 */
 
 const addDefaultsFromAuth = (context, authProfile) => {
-  const {user} = context
+  const {user, conn} = context
   let userUpdates = authProfile.displayNames
     .reduce((arr, name) =>
       user.displayNames.indexOf(name) === -1
@@ -176,7 +175,7 @@ const addDefaultsFromAuth = (context, authProfile) => {
       .concat(
         user.images.indexOf(url) === -1 ? appendUserArray(context, 'images', url) : null
       ).concat(
-        usersTable.update({[authProfile.provider]: authProfile.id})
+        usersTable.update({[authProfile.provider]: authProfile.id}).run(conn)
       )
     ))
   }
@@ -190,8 +189,7 @@ const addDefaultsFromAuth = (context, authProfile) => {
 *
 */
 
-const addBadgesFromAuth = ({conn, user, models: {Templates, Granters}}, {badges, provider}) => {
-
+const addBadgesFromAuth = ({conn, user, models: {Templates, Granters}}, {badges = [], provider}) => {
     return Promise.all([
       user.badges ? Templates.getAll(Object.keys(user.badges)) : [],
       Granters.getByUrlCode('nametag')
@@ -252,40 +250,6 @@ const badgesFromAuth = (badge, provider) => {
       image: '/public/images/twitter.jpg',
       note: 'Confirmed via Twitter.'
     }
-  }
-}
-
-const userFromAuth = (provider, profile) => {
-  switch (provider) {
-    case 'facebook':
-      return {
-        provider,
-        displayNames: [profile.displayName],
-        providerPhotoUrl: profile.photos[0].value,
-        id: profile.id,
-        badges: [{
-          name: profile.displayName
-        }, {
-          gender: profile.gender
-        }]
-      }
-    case 'twitter':
-      return {
-        provider,
-        displayNames: [profile.displayName, profile.username],
-        providerPhotoUrl: profile.photos[0].value,
-        id: profile.id,
-        badges: [{
-          twitter: profile.username
-        }]
-      }
-    case 'google':
-      return {
-        provider,
-        displayNames: [profile.displayName],
-        providerPhotoUrl: profile.photos[0].value,
-        id: profile.id
-      }
   }
 }
 

@@ -8,11 +8,20 @@ module.exports = conn => new GoogleStrategy(
   {
     clientID: config.google.id,
     clientSecret: config.google.secret,
-    callbackURL: '/auth/google/callback'
+    callbackURL: '/auth/google/callback',
+    passReqToCallback: true
   },
-  (token, tokenSecret, profile, done) => {
-    return Users(conn).findOrCreateFromAuth(profile, 'google')
-      .then(user => done(null, user))
+  (req, token, tokenSecret, profile, done) => {
+    const authProfile = {
+      provider: 'google',
+      displayNames: [profile.displayName],
+      providerPhotoUrl: profile.photos[0].value,
+      id: profile.id
+    }
+    return req.user
+    ? done(null, {user: req.user, authProfile})
+    : Users(conn).findOrCreateFromAuth(authProfile, 'google')
+      .then(data => done(null, data))
       .catch(done)
   }
 )

@@ -127,7 +127,7 @@ r.connect({host: 'rethinkdb'})
       scope: ['https://www.googleapis.com/auth/plus.login']
     }))
     app.get('/auth/google/callback', (req, res, next) =>
-      passport.authenticate('twitter',
+      passport.authenticate('google',
         authCallback(req, res, next, conn)
       )(req, res, next))
 

@@ -18,10 +18,25 @@ module.exports = conn => new FacebookStrategy({
     'picture',
     'gender',
     'displayName'
-  ]
+  ],
+  passReqToCallback: true
 },
-  (accessToken, refreshToken, profile, done) => {
-    return Users(conn).findOrCreateFromAuth(profile, 'facebook')
+  (req, accessToken, refreshToken, profile, done) => {
+    const authProfile = {
+      provider: 'facebook',
+      displayNames: [profile.displayName],
+      providerPhotoUrl: profile.photos[0].value,
+      id: profile.id,
+      badges: [{
+        name: profile.displayName
+      }, {
+        gender: profile.gender
+      }]
+    }
+
+    return req.user
+      ? done(null, {user: req.user, authProfile})
+      : Users(conn).findOrCreateFromAuth(authProfile, 'facebook')
       .then(data => done(null, data))
       .catch(done)
   }
