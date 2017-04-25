@@ -208,7 +208,7 @@ const createLocal = ({conn}, email, password) =>
 
 /**
  * Sets a forgot password token.
- * TODO: Make this once function with findemail.
+ *
  * @param {Object} context   graph context
  * @param {String} email     E-mail address of the user
  *
@@ -225,6 +225,30 @@ const addForgotPasswordToken = (context, email) =>
         return sendEmail(email, forgotPassTemplate)
       }
     })
+
+/**
+ * Resets a password based on a user's token.
+ * @param {Object} context   graph context
+ * @param {String} token     Password reset token
+ * @param {String} password The new hashed password
+ *
+ */
+
+const resetPassword = (context, token, password) =>
+  const forgotPassToken = uuid.v4()
+  return usersTable.getAll(token, {index:'forgotPassToken'}).update({password}).run(conn)
+    .then(res => {
+      if (res.errors > 0) {
+        return new Error(res.error)
+      }
+      if (res.updated > 0) {
+        return
+      } else {
+        return new APIError('Invalid token')
+      }
+    })
+
+
 
   /**
    * Determines whether a hashed password is valid
