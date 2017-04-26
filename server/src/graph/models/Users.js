@@ -1,5 +1,6 @@
 const {db} = require('../../db')
 const r = require('rethinkdb')
+const uuid = require('uuid')
 const {fromUrl} = require('../../routes/images/imageUpload')
 const {ErrBadAuth, ErrNotLoggedIn, ErrEmailTaken} = require('../../errors')
 const {passwordsalt} = require('../../secrets.json')
@@ -167,11 +168,6 @@ const userFromAuth = (provider, profile) => {
   }
 }
 
-const hashPassword = (password) => {
-  let hashedPassword = SHA3(password, {outputLength: 224})
-  return hashedPassword.toString(enc.Base64)
-}
-
 /**
  * Finds or creates a user based from local auth.
  *
@@ -215,8 +211,7 @@ const createLocal = ({conn}, email, password) =>
  */
 
 const addForgotPasswordToken = (context, email) =>
-  const forgotPassToken = uuid.v4()
-  return usersTable.getAll(email, {index:'email'}).update({forgotPassToken}).run(conn)
+  usersTable.getAll(email, {index:'email'}).update({forgotPassToken: uuid.v4()}).run(conn)
     .then(res => {
       if (res.errors > 0) {
         return Promise.reject(new APIError(res.error))
@@ -236,7 +231,9 @@ const addForgotPasswordToken = (context, email) =>
 
 const resetPassword = (context, token, password) =>
   const forgotPassToken = uuid.v4()
-  return usersTable.getAll(token, {index:'forgotPassToken'}).update({password}).run(conn)
+  return usersTable.getAll(token, {index:'forgotPassToken'}).update({
+      password: hashPassword(`${password}${passwordsalt}${id}`)
+    }).run(conn)
     .then(res => {
       if (res.errors > 0) {
         return new Error(res.error)
@@ -250,17 +247,22 @@ const resetPassword = (context, token, password) =>
 
 
 
-  /**
-   * Determines whether a hashed password is valid
-   * TODO: Make this once function with findemail.
-   * @param {Object} context   graph context
-   * @param {String} id     E-mail address of the user
-   * @param {String} password  Hashed password from the user
-   *
-   */
+/**
+ * Determines whether a hashed password is valid
+ * TODO: Make this once function with findemail.
+ * @param {Object} context   graph context
+ * @param {String} id     E-mail address of the user
+ * @param {String} password  Hashed password from the user
+ *
+ */
 
-  const validPassword = ({conn}, id, password) =>
-    usersTable.get(id)('password').eq(hashPassword(`${password}${passwordsalt}${id}`)).run(conn)
+const validPassword = ({conn}, id, password) =>
+  usersTable.get(id)('password').eq(hashPassword(`${password}${passwordsalt}${id}`)).run(conn)
+
+const hashPassword = (password) => {
+  let hashedPassword = SHA3(password, {outputLength: 224})
+  return hashedPassword.toString(enc.Base64)
+}
 
 module.exports = (context) => ({
   Users: {
