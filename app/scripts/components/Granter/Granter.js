@@ -9,8 +9,8 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import {mobile} from '../../../styles/sizes'
 import radium from 'radium'
 
-const Granter = ({data: {granter, me, loading}, createBadge, updateBadgeRequestStatus, loginUser, registerUser, addNote}) => {
-  if (!me) {
+const Granter = ({data: {granter, me, loading, error}, createBadge, updateBadgeRequestStatus, loginUser, registerUser, addNote}) => {
+  if (error && error.message === 'GraphQL Error: Not Logged In') {
     return <div>
       <LoginDialog
         loginUser={loginUser}
@@ -18,6 +18,12 @@ const Granter = ({data: {granter, me, loading}, createBadge, updateBadgeRequestS
         showLogin
         message={'Log in to view this page.'} />
     </div>
+  } else if (error) {
+    return <h2>
+      {
+        error.message
+      }
+    </h2>
   }
 
   return loading

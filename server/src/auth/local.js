@@ -5,10 +5,14 @@ const Users = (conn) => UsersLoader({conn}).Users
 
 module.exports = conn => new LocalStrategy({
   usernameField: 'email',
-  passwordField: 'password'
+  passwordField: 'password',
+  passReqToCallback: true
 },
-  (email, password, done) => {
-    Users(conn).getByEmail(email)
+  (req, email, password, done) => {
+    req.user
+    ? Users(conn).addEmail(req.user.id, email)
+      .then(() => done(null, Object.assign({}, req.user, {email})))
+    : Users(conn).getByEmail(email)
       .then(user => {
         if (!user) {
           return done(null, false, ErrBadAuth)

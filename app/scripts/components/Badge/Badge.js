@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import moment from 'moment'
+import {dateFormat} from '../Utils/DateFormat'
 import { dragTypes } from '../../constants'
 import { DragSource } from 'react-dnd'
 import { Card } from 'material-ui/Card'
@@ -104,8 +104,8 @@ class Badge extends Component {
           <div style={styles.notes}>
             {notes && notes.map((note) => {
               return <div style={styles.note} key={note.date}>
-                <div style={styles.date}>{moment(note.date).format('MMMM Do, YYYY')}</div>
-                <div style={styles.msg}>{': ' + note.msg}</div>
+                <div style={styles.date}>{dateFormat(note.date)}</div>
+                <div style={styles.msg}>{'- ' + note.text}</div>
               </div>
             })}
           </div>

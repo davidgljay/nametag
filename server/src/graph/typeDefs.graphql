@@ -471,6 +471,9 @@ input CreateGranterInput {
   # An image to use when referencing the granter
   image: String!
 
+  # A unique code used for the granter's url
+  urlCode: String!
+
   # The type of granter
   type: GRANTER_TYPES!
 
