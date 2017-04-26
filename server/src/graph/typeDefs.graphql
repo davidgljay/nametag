@@ -474,6 +474,9 @@ input CreateGranterInput {
   # The type of granter
   type: GRANTER_TYPES!
 
+  # The url code for the granter
+  type: String!
+
 }
 
 ## Responses
