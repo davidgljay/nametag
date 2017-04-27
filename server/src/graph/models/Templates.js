@@ -67,7 +67,7 @@ const createAndGrant = (context, template, note) => {
         name: templ.name,
         bio: templ.description,
         template: templ.id
-      })
+      }, false)
     ]))
     .then(([templ, nametag]) => {
       const badge = {note, template: templ.id, defaultNametag: nametag.id}

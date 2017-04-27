@@ -67,10 +67,12 @@ const grantBadge = ({conn}, id, badgeId) => nametagsTable.get(id).update({badge:
  *
  * @param {Object} context     graph context
  * @param {Object} nametag   the nametag to be created
+ * @param {Boolean} createBadgeRequest Toggles whether the creation of this
+ *   nametag should trigger the creation of a badge request
  *
  **/
 
-const create = ({conn, user, models: {Users, BadgeRequests}}, nt) => {
+const create = ({conn, user, models: {Users, BadgeRequests}}, nt, createBadgeRequest = true) => {
   const nametag = Object.assign({}, nt, {createdAt: new Date()})
   return nametagsTable.insert(nametag).run(conn)
   // Append nametag ID to user object and update default names and images
@@ -86,7 +88,7 @@ const create = ({conn, user, models: {Users, BadgeRequests}}, nt) => {
       id,
 
       // Create a BadgeRequest if appropriate
-      nametag.template ? BadgeRequests.create(id, nametag.template) : null,
+      nametag.template && createBadgeRequest ? BadgeRequests.create(id, nametag.template) : null,
 
       // Add displayName and image if they are new
       user.displayNames.indexOf(nametag.name) === -1 ? Users.appendUserArray('displayNames', nametag.name) : null,
@@ -156,7 +158,7 @@ module.exports = (context) => ({
     getAll: (ids) => getAll(context, ids),
     getRoomNametags: (room) => getRoomNametags(context, room),
     getByBadge: (badgeId) => getByBadge(context, badgeId),
-    create: (nametag) => create(context, nametag),
+    create: (nametag, createBadgeRequest) => create(context, nametag, createBadgeRequest),
     addMention: (nametag) => addMention(context, nametag),
     getNametagCount: (room) => getNametagCount(context, room),
     updateLatestVisit: (nametagId) => updateLatestVisit(context, nametagId),
