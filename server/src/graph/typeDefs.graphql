@@ -586,6 +586,17 @@ type RootMutation {
   # Adds a note to badge
   addNote(badgeId: ID!, text: String!): BasicResponse
 
+  # Creates a password reset request
+  resetPasswordRequest(email: String!): BasicResponse
+
+  # Resets a password
+  resetPassword(token: String!, password: String!): BasicResponse
+
+  # Requests an email confirmation
+  emailConfirmationRequest(email: String!): BasicResponse
+
+  # Confirms an email
+  emailConfirmation(token: String!): BasicResponse
 }
 
 ################################################################################

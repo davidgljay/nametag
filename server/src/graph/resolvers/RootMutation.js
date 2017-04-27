@@ -89,7 +89,15 @@ const RootMutation = {
         ? Badges.addNote(badgeId, text)
           .then(wrapResponse('addNote'))
         : Promise.reject(ErrNotAuthorized)
-      )
+      ),
+  resetPasswordRequest(obj, {email}, {models:{Users}}) =>
+    Users.resetPasswordRequest(email),
+  resetPassword(obj, {token, password}, {models:{Users}}) =>
+    Users.resetPassword(token, password),
+  emailConfirmationRequest(obj, {email}, {models:{Users}}) =>
+    Users.emailConfirmationRequest(email),
+  emailConfirmation(obj, {token}, {models:{Users}}) =>
+    Users.emailConfirmation(token)
 }
 
 module.exports = Object.keys(RootMutation).reduce((wrapped, key) => {

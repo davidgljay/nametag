@@ -2,7 +2,7 @@ const {db} = require('../../db')
 const r = require('rethinkdb')
 const uuid = require('uuid')
 const {fromUrl} = require('../../routes/images/imageUpload')
-const {ErrBadAuth, ErrNotLoggedIn, ErrEmailTaken} = require('../../errors')
+const {ErrBadAuth, ErrNotLoggedIn, ErrEmailTaken, ErrNotFound} = require('../../errors')
 const {passwordsalt} = require('../../secrets.json')
 const {enc, SHA3} = require('crypto-js')
 const sendEmail = require('../../email')
@@ -364,6 +364,7 @@ const addEmailConfirmationToken = (context, email) => {
 
 const confirmEmail = (context, token) => {
   usersTable.getAll(token, {index:'confirmation'}).update({confirmation: 'confirmed'}).run(conn)
+    .then(res => res.replaced === 0 ? ErrNotFound : null )
 }
 
 
