@@ -283,10 +283,13 @@ const createLocal = ({conn}, email, password) =>
       return Promise.reject(ErrEmailTaken)
     }
     const id = res.generated_keys[0]
-    return usersTable.get(id).update({
+    return Promise.all([
+      id,
+      emailConfirmationRequest({conn}, email),
+      usersTable.get(id).update({
       password: hashPassword(`${password}${passwordsalt}${id}`)
     }).run(conn)
-    .then(() => id)
+    .then(([id]) => id)
   })
 
 /**
@@ -341,7 +344,7 @@ const resetPassword = (context, token, password) =>
  *
  */
 
-const addEmailConfirmationToken = (context, email) => {
+const emailConfirmationRequest = (context, email) => {
   const token = uuid.v4()
   return usersTable.getAll(email, {index:'email'}).update({confirmation: token}).run(conn)
     .then(res => {
@@ -362,7 +365,7 @@ const addEmailConfirmationToken = (context, email) => {
  *
  */
 
-const confirmEmail = (context, token) => {
+const emailConfirmation = (context, token) => {
   usersTable.getAll(token, {index:'confirmation'}).update({confirmation: 'confirmed'}).run(conn)
     .then(res => res.replaced === 0 ? ErrNotFound : null )
 }
@@ -398,6 +401,10 @@ module.exports = (context) => ({
     addToken: (token) => addToken(context, token),
     getToken: (nametagId) => getToken(context, nametagId),
     addBadgesFromAuth: (authProfile, user) => addBadgesFromAuth(context, authProfile, user),
-    addDefaultsFromAuth: (authProfile, user) => addDefaultsFromAuth(context, authProfile, user)
+    addDefaultsFromAuth: (authProfile, user) => addDefaultsFromAuth(context, authProfile, user),
+    resetPasswordRequest: (email) => resetPasswordRequest(context, email),
+    resetPassword: (token, password) => resetPassword(context, token, password),
+    emailConfirmationRequest: (email) => emailConfirmationRequest(context, email),
+    emailConfirmation: (token) => emailConfirmation(context, token)
   }
 })
