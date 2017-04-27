@@ -1,0 +1,7 @@
+mutation EmailConfirmationRequest($email: String!) {
+  emailConfirmationRequest(email: $email) {
+    errors {
+      translation_key
+    }
+  }
+}
