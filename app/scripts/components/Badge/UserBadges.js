@@ -104,6 +104,7 @@ const styles = {
   },
   badgesContainer: {
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    flexWrap: 'wrap'
   }
 }

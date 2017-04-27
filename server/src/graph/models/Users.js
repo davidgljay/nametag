@@ -110,61 +110,147 @@ const addBadge = ({user, conn}, badgeId, templateId) =>
  * @param {Object} context   graph context
  * @param {Object} profile   profile information returned from the oauth provider
  * @param {String} provider  string identifying the provider ('google', 'facebook', etc)
- *
+ * @returns {Object} data    Object containing the user profile and any badges to be created.
  */
 
-const findOrCreateFromAuth = ({conn}, profile, provider) => {
-  let userObj
-  const authProfile = userFromAuth(provider, profile)
-  return usersTable.filter({[provider]: authProfile.id}).run(conn)
+const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
+
+  // Either create the user or log them in
+  return usersTable
+    .getAll(authProfile.id, {index: provider}).run(conn)
     .then(cursor => cursor.toArray())
     .then(([user]) => {
       if (user) {
-        return user
+        return {
+          user,
+          authProfile
+        }
       }
       return fromUrl(50, 50, authProfile.providerPhotoUrl)
         .then(imageUrl => {
-          userObj = {
+          const userObj = {
             displayNames: authProfile.displayNames,
             images: [imageUrl.url],
             [provider]: authProfile.id,
             createdAt: new Date(),
             images: []
           }
-          return usersTable.insert(userObj).run(conn)
+          return Promise.all([
+            usersTable.insert(userObj).run(conn),
+            userObj
+          ])
         })
-        .then(rdbRes => {
+        .then(([rdbRes, userObj]) => {
           if (rdbRes.errors > 0) {
             return Promise.reject(new Error('Error while inserting user'))
           }
-          return Object.assign({}, userObj,
-            {
-              id: rdbRes.generated_keys[0]
-            })
-        })
+          return {
+            user: Object.assign({}, userObj,
+              {
+                id: rdbRes.generated_keys[0]
+              }),
+            authProfile
+          }
+      })
     })
 }
 
-const userFromAuth = (provider, profile) => {
-  switch (provider) {
-    case 'facebook':
-      return {
-        displayNames: [profile.displayName],
-        providerPhotoUrl: profile.photos[0].value,
-        id: profile.id
+/**
+* Adds default names and images to a user from an auth provider
+*
+* @param {Object} context   graph context
+* @param {Object} authProfile   The profile info from the auth provider
+* @param {Object} user  The freshly authed user
+*
+*/
+
+const addDefaultsFromAuth = (context, authProfile) => {
+  const {user, conn} = context
+  let userUpdates = authProfile.displayNames
+    .reduce((arr, name) =>
+      user.displayNames.indexOf(name) === -1
+      ? arr.concat(appendUserArray(context, 'displayNames', name)) : arr, [])
+  return fromUrl(50, 50, authProfile.providerPhotoUrl)
+    .then(({url}) => Promise.all(
+      userUpdates
+      .concat(
+        user.images.indexOf(url) === -1 ? appendUserArray(context, 'images', url) : null
+      ).concat(
+        usersTable.update({[authProfile.provider]: authProfile.id}).run(conn)
+      )
+    ))
+  }
+
+/**
+* Adds badges to a user from an auth provider
+*
+* @param {Object} context   graph context
+* @param {Object} authProfile   The profile info from the auth provider
+* @param {Object} user  The freshly authed user
+*
+*/
+
+const addBadgesFromAuth = ({conn, user, models: {Templates, Granters}}, {badges = [], provider}) => {
+    return Promise.all([
+      user.badges ? Templates.getAll(Object.keys(user.badges)) : [],
+      Granters.getByUrlCode('nametag')
+    ])
+
+    // Check to see if the a badge has already been granted. If not, grant one.
+    .then(([templates, granter]) => {
+      const templateNames = templates
+        .filter(template => template.granter === granter.id)
+        .map(template => template.name)
+
+      const templateDescriptions = templates
+        .filter(template => template.granter === granter.id)
+        .map(template => template.description)
+
+      let promises = []
+
+      for (var i=0; i < badges.length; i++ ) {
+        const badge = badgesFromAuth(badges[i], provider)
+        if (
+          templateNames.indexOf(badge.name) === -1
+          && templateDescriptions.indexOf(badge.description) === -1
+        ) {
+          promises.push(
+            Templates.createAndGrant({
+              name: badge.name,
+              description: badge.description,
+              image: badge.image,
+              granter: granter.id
+            }, badge.note)
+          )
+        }
       }
-    case 'twitter':
-      return {
-        displayNames: [profile.displayName, profile.username],
-        providerPhotoUrl: profile.photos[0].value,
-        id: profile.id
-      }
-    case 'google':
-      return {
-        displayNames: [profile.displayName],
-        providerPhotoUrl: profile.photos[0].value,
-        id: profile.id
-      }
+      return Promise.all(promises)
+    })
+}
+
+const badgesFromAuth = (badge, provider) => {
+  switch (Object.keys(badge)[0]) {
+  case 'name':
+    return {
+      name: badge.name,
+      description: `This individual uses the name ${badge.name} on Facebook.`,
+      image: '/public/images/fb.jpg',
+      note: 'Confirmed via Facebook.'
+    }
+  case 'gender':
+    return {
+      name: badge.gender,
+      description: `This individual has listed their gender as ${badge.gender} on Facebook.`,
+      image: '/public/images/fb.jpg',
+      note: 'Confirmed via Facebook.'
+    }
+  case 'twitter':
+    return {
+      name: `@${badge.twitter}`,
+      description: `This has the account @${badge.twitter} on Twitter.`,
+      image: '/public/images/twitter.jpg',
+      note: 'Confirmed via Twitter.'
+    }
   }
 }
 
@@ -274,6 +360,8 @@ module.exports = (context) => ({
     addNametag: (nametagId, roomId) => addNametag(context, nametagId, roomId),
     addBadge: (badgeId, templateId) => addBadge(context, badgeId, templateId),
     addToken: (token) => addToken(context, token),
-    getToken: (nametagId) => getToken(context, nametagId)
+    getToken: (nametagId) => getToken(context, nametagId),
+    addBadgesFromAuth: (authProfile, user) => addBadgesFromAuth(context, authProfile, user),
+    addDefaultsFromAuth: (authProfile, user) => addDefaultsFromAuth(context, authProfile, user)
   }
 })

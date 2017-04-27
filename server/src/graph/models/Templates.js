@@ -49,11 +49,47 @@ const create = ({conn}, template) => {
     .then(res => Object.assign({}, templateObj, {id: res.generated_keys[0]}))
 }
 
+/**
+ * Creates and automatically grants a badge template to the currently logged in user
+ *
+ * @param {Object} context     graph context
+ * @param {Object} template   the badge template to be created
+ * @param {String} note   a note to be appended when the badge is granted
+ *
+ **/
+
+const createAndGrant = (context, template, note) => {
+  const {models:{Nametags, Badges}} = context
+  return create(context, template)
+    .then(templ => Promise.all([
+      templ,
+      Nametags.create({
+        name: templ.name,
+        bio: templ.description,
+        template: templ.id
+      })
+    ]))
+    .then(([templ, nametag]) => {
+      const badge = {note, template: templ.id, defaultNametag: nametag.id}
+      return Promise.all([
+        templ,
+        badge,
+        Badges.create(badge)
+      ])
+    })
+    .then(([templ, badge]) => ([
+        templ,
+        badge
+      ]))
+}
+
+
 module.exports = (context) => ({
   Templates: {
     get: (id) => get(context, id),
     getAll: (ids) => getAll(context, ids),
     getGranterTemplates: (granterId) => getGranterTemplates(context, granterId),
-    create: badge => create(context, badge)
+    create: badge => create(context, badge),
+    createAndGrant: (template, note) => createAndGrant(context, template, note)
   }
 })
