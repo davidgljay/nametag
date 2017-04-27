@@ -296,8 +296,9 @@ const createLocal = ({conn}, email, password) =>
  *
  */
 
-const addForgotPasswordToken = (context, email) =>
-  usersTable.getAll(email, {index:'email'}).update({forgotPassToken: uuid.v4()}).run(conn)
+const addForgotPasswordToken = (context, email) => {
+  const forgotPassToken = uuid.v4()
+  return usersTable.getAll(email, {index:'email'}).update({forgotPassToken}).run(conn)
     .then(res => {
       if (res.errors > 0) {
         return Promise.reject(new APIError(res.error))
@@ -306,6 +307,7 @@ const addForgotPasswordToken = (context, email) =>
         return sendEmail(email, forgotPassTemplate)
       }
     })
+}
 
 /**
  * Resets a password based on a user's token.
@@ -330,6 +332,38 @@ const resetPassword = (context, token, password) =>
       }
     })
 
+/**
+ * Sets an email confirmation token.
+ *
+ * @param {Object} context   graph context
+ * @param {String} email     E-mail address of the user
+ *
+ */
+
+const addEmailConfirmationToken = (context, email) => {
+  const confirmationToken = uuid.v4()
+  return usersTable.getAll(email, {index:'email'}).update({confirmation: confirmationToken}).run(conn)
+    .then(res => {
+      if (res.errors > 0) {
+        return Promise.reject(new APIError(res.error))
+      }
+      if (res.updated > 0) {
+        return sendEmail(email, confirmEmailTemplate)
+      }
+    })
+}
+
+/**
+ * Confirms an e-mail.
+ *
+ * @param {Object} context   graph context
+ * @param {String} email     E-mail address of the user
+ *
+ */
+
+const confirmEmail = (context, token) => {
+  usersTable.getAll(token, {index:'confirmation'}).update({confirmation: 'confirmed'}).run(conn)
+}
 
 
 /**
