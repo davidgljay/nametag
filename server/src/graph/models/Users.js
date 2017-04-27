@@ -230,8 +230,7 @@ const addForgotPasswordToken = (context, email) =>
  */
 
 const resetPassword = (context, token, password) =>
-  const forgotPassToken = uuid.v4()
-  return usersTable.getAll(token, {index:'forgotPassToken'}).update({
+  usersTable.getAll(token, {index:'forgotPassToken'}).update({
       password: hashPassword(`${password}${passwordsalt}${id}`)
     }).run(conn)
     .then(res => {
