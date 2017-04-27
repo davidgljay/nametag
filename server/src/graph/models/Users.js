@@ -5,6 +5,7 @@ const {fromUrl} = require('../../routes/images/imageUpload')
 const {ErrBadAuth, ErrNotLoggedIn, ErrEmailTaken} = require('../../errors')
 const {passwordsalt} = require('../../secrets.json')
 const {enc, SHA3} = require('crypto-js')
+const sendEmail = require('../../email')
 
 const usersTable = db.table('users')
 
@@ -297,14 +298,14 @@ const createLocal = ({conn}, email, password) =>
  */
 
 const addForgotPasswordToken = (context, email) => {
-  const forgotPassToken = uuid.v4()
-  return usersTable.getAll(email, {index:'email'}).update({forgotPassToken}).run(conn)
+  const token = uuid.v4()
+  return usersTable.getAll(email, {index:'email'}).update({forgotPassToken: token}).run(conn)
     .then(res => {
       if (res.errors > 0) {
         return Promise.reject(new APIError(res.error))
       }
       if (res.updated > 0) {
-        return sendEmail(email, forgotPassTemplate)
+        return sendEmail('info@nametag.chat', email, 'passwordReset', {token})
       }
     })
 }
@@ -341,14 +342,14 @@ const resetPassword = (context, token, password) =>
  */
 
 const addEmailConfirmationToken = (context, email) => {
-  const confirmationToken = uuid.v4()
-  return usersTable.getAll(email, {index:'email'}).update({confirmation: confirmationToken}).run(conn)
+  const token = uuid.v4()
+  return usersTable.getAll(email, {index:'email'}).update({confirmation: token}).run(conn)
     .then(res => {
       if (res.errors > 0) {
         return Promise.reject(new APIError(res.error))
       }
       if (res.updated > 0) {
-        return sendEmail(email, confirmEmailTemplate)
+        return sendEmail('info@nametag.chat', email, 'emailConfirm', {email, token})
       }
     })
 }
