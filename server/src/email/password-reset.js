@@ -1,5 +1,5 @@
 module.exports = ({token}) => ({
-  subject: 'Nametag Password Reset'
+  subject: 'Nametag Password Reset',
   txt:
     `We received a request to reset your password, click here to reset your password:\n
     \n

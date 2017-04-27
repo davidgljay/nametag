@@ -1,5 +1,5 @@
 module.exports = ({email, token}) => ({
-  subject: 'Nametag E-mail Confirmation'
+  subject: 'Nametag E-mail Confirmation',
   txt: `A email confirmation has been requested for the following account:\n
   \n
       ${email}\n
