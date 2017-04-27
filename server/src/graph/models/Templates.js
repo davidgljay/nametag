@@ -73,14 +73,9 @@ const createAndGrant = (context, template, note) => {
       const badge = {note, template: templ.id, defaultNametag: nametag.id}
       return Promise.all([
         templ,
-        badge,
         Badges.create(badge)
       ])
     })
-    .then(([templ, badge]) => ([
-        templ,
-        badge
-      ]))
 }
 
 

@@ -1,6 +1,6 @@
 const Badge = {
   template: ({template}, _, {models: {Templates}}) => Templates.get(template),
-  defaultNametag: ({id}, _, {models: {Nametags}}) => Nametags.getByBadge(id)
+  defaultNametag: ({defaultNametag}, _, {models: {Nametags}}) => Nametags.get(defaultNametag)
 }
 
 module.exports = Badge

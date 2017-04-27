@@ -125,8 +125,8 @@ BadgeRequest.propTypes = {
     template: PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      image: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired
+      image: PropTypes.string,
+      description: PropTypes.string
     }).isRequired,
     nametag: PropTypes.shape({
       id: PropTypes.string.isRequired,

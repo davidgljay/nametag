@@ -49,7 +49,7 @@ const create = ({conn, models: {Users, Nametags}}, {note, template, defaultNamet
     text: note,
     date: new Date()
   }
-  const badgeObj = {createdAt: new Date(), template, notes: [firstNote]}
+  const badgeObj = {createdAt: new Date(), template, notes: [firstNote], defaultNametag}
   return badgesTable.insert(badgeObj).run(conn)
   // Append badge ID to user object
   .then(res => {

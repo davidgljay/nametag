@@ -9,6 +9,9 @@ const NametagSubscription = conn => r.db('nametag').table('nametags').changes().
         errorLog('Error in nametag subscription feed')
         return
       }
+      if (!nametag.new_val) {
+        return
+      }
       if (!nametag.old_val) {
         pubsub.publish('nametagAdded', nametag.new_val)
       } else if (nametag.old_val.present !== nametag.new_val.present) {
