@@ -175,7 +175,7 @@ const addDefaultsFromAuth = (context, authProfile) => {
     .then(({url}) => Promise.all(
       userUpdates
       .concat(
-        user.images.indexOf(url) === -1 ? appendUserArray(context, 'images', url) : null
+        user.images && user.images.indexOf(url) === -1 ? appendUserArray(context, 'images', url) : null
       ).concat(
         usersTable.update({[authProfile.provider]: authProfile.id}).run(conn)
       )
