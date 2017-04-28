@@ -34,6 +34,7 @@ class RoomCards extends Component {
       removeNametagEditBadge,
       loginUser,
       registerUser,
+      passwordResetRequest,
       nametagEdits,
       createNametag
     } = this.props
@@ -73,6 +74,7 @@ class RoomCards extends Component {
               addNametagEditBadge={addNametagEditBadge}
               registerUser={registerUser}
               loginUser={loginUser}
+              passwordResetRequest={passwordResetRequest}
               removeNametagEditBadge={removeNametagEditBadge} />
           )
         }

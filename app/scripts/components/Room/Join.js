@@ -39,6 +39,7 @@ class Join extends Component {
       updateNametagEdit,
       loginUser,
       registerUser,
+      passwordResetRequest,
       room,
       me
     } = this.props
@@ -72,7 +73,10 @@ class Join extends Component {
             label='JOIN' />
         </div>
     } else {
-      join = <Login loginUser={loginUser} registerUser={registerUser} />
+      join = <Login
+        loginUser={loginUser}
+        registerUser={registerUser}
+        passwordResetRequest={passwordResetRequest} />
     }
     return join
   }
@@ -86,7 +90,8 @@ Join.propTypes = {
   removeNametagEditBadge: PropTypes.func.isRequired,
   updateNametagEdit: PropTypes.func.isRequired,
   loginUser: PropTypes.func.isRequired,
-  registerUser: PropTypes.func.isRequired
+  registerUser: PropTypes.func.isRequired,
+  passwordResetRequest: PropTypes.func.isRequired
 }
 
 export default Join

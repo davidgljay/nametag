@@ -26,9 +26,9 @@ class Login extends Component {
       email: '',
       password: '',
       confirm: '',
-      register: false,
       alert: '',
-      loading: false
+      loading: false,
+      state : 'LOGIN'
     }
 
     this.updateField = fieldName => e => {
@@ -105,11 +105,45 @@ class Login extends Component {
       this.setState({loading: true})
       window.location = `/auth/${provider}`
     }
+
+    this.enablePasswordReset = e => {
+      e.preventDefault()
+      this.setState({state: 'PW_REQ'})
+    }
+
+    this.passwordReset = e => {
+      this.setState({loading: true})
+      this.props.passwordResetRequest(this.state.email)
+        .then(res => {
+          console.log('Response', res)
+          if (res.error) {
+            this.setState({alert: res.error})
+            return
+          }
+          this.setState({
+            loading: false,
+            message: 'Please check your E-mail',
+            alert: 'You should receive a password reset link shortly.',
+            state: 'LOGIN'
+          })
+        })
+    }
+  }
+
+  componentWillMount () {
+    this.setState({message: this.props.message})
   }
 
   render () {
-    const {message} = this.props
-    const {emailAlert, passwordAlert, alert, loading} = this.state
+    const {
+      emailAlert,
+      passwordAlert,
+      alert,
+      loading,
+      message,
+      state
+    } = this.state
+
     return <div style={styles.login} id='loginForm'>
       <h4>{message || 'Log in to join'}</h4>
       <div style={styles.alert}>
@@ -124,32 +158,45 @@ class Login extends Component {
           onBlur={this.validateEmail}
           onChange={this.updateField('email')} />
         <br />
-        <TextField
-          floatingLabelText='Password'
-          id='loginPassword'
-          type='password'
-          errorText={passwordAlert}
-          onBlur={this.validatePassword}
-          style={styles.field}
-          onChange={this.updateField('password')} />
         {
-          this.state.register &&
-          <TextField
-            floatingLabelText='Confirm Password'
-            style={styles.field}
-            id='loginConfirm'
-            errorText={passwordAlert}
-            type='password'
-            onChange={this.updateField('confirm')} />
+          state !== 'PW_RESET' &&
+          <div>
+            <TextField
+              floatingLabelText='Password'
+              id='loginPassword'
+              type='password'
+              errorText={passwordAlert}
+              onBlur={this.validatePassword}
+              style={styles.field}
+              onChange={this.updateField('password')} />
+            {
+              state === 'LOGIN' &&
+              <a href='#' onClick={this.enablePasswordReset}>
+                Forgot Password
+              </a>
+            }
+          </div>
         }
         {
-          this.state.register
-          ? <div style={styles.buttonContainer}>
+          state === 'REGISTER' &&
+          <div>
+            <TextField
+              floatingLabelText='Confirm Password'
+              style={styles.field}
+              id='loginConfirm'
+              errorText={passwordAlert}
+              type='password'
+              onChange={this.updateField('confirm')} />
+          </div>
+
+        }
+        {
+          state === 'REGISTER' && <div style={styles.buttonContainer}>
             <FlatButton
               label='Back'
               style={styles.button}
               secondary
-              onClick={() => this.setState({register: false})} />
+              onClick={() => this.setState({state: 'LOGIN', message: this.props.message})} />
             <RaisedButton
               style={styles.button}
               id='registerButton'
@@ -157,13 +204,15 @@ class Login extends Component {
               primary
               onClick={this.register} />
           </div>
-          : <div style={styles.buttonContainer}>
+        }
+        {
+          state === 'LOGIN' && <div style={styles.buttonContainer}>
             <FlatButton
               label='Register'
               id='enableRegisterButton'
               style={styles.button}
               secondary
-              onClick={() => this.setState({register: true})} />
+              onClick={() => this.setState({state: 'REGISTER', message: 'Register'})} />
             <RaisedButton
               style={styles.button}
               label='LOG IN'
@@ -171,6 +220,22 @@ class Login extends Component {
               primary
               onClick={this.login} />
           </div>
+        }
+        {
+          state === 'PW_REQ' && <div style={styles.buttonContainer}>
+            <FlatButton
+              label='Back'
+              style={styles.button}
+              secondary
+              onClick={() => this.setState({state: 'LOGIN', message: this.props.message})} />
+            <RaisedButton
+              style={styles.button}
+              id='resetPwButton'
+              label='RESET PASSWORD'
+              primary
+              onClick={this.passwordReset} />
+          </div>
+        }
         }
       </div>
       <div style={styles.authProviders}>
@@ -199,7 +264,8 @@ class Login extends Component {
 
 Login.propTypes = {
   registerUser: PropTypes.func.isRequired,
-  loginUser: PropTypes.func.isRequired
+  loginUser: PropTypes.func.isRequired,
+  resetPasswordRequest: PropTypes.func.isRequired
 }
 
 export default Login
