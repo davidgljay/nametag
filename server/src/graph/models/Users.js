@@ -166,9 +166,11 @@ const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
 const addDefaultsFromAuth = (context, authProfile) => {
   const {user, conn} = context
   let userUpdates = authProfile.displayNames
+  ? authProfile.displayNames
     .reduce((arr, name) =>
       user.displayNames.indexOf(name) === -1
       ? arr.concat(appendUserArray(context, 'displayNames', name)) : arr, [])
+  : []
   return fromUrl(50, 50, authProfile.providerPhotoUrl)
     .then(({url}) => Promise.all(
       userUpdates
