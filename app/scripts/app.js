@@ -69,6 +69,7 @@ class Nametag extends Component {
             <Route path='/granters/:urlCode/badges/create' component={CreateBadge} />
             <Route path='/granters/:urlCode/badges/:templateId' component={Badge} />
             <Route path='/badges/:templateId' component={Badge} />
+            <Route path='/pwtoken/:token' component={PasswordToken}
           </Router>
         </MuiThemeProvider>
       </StyleRoot>

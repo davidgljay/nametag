@@ -1,5 +1,5 @@
 // import errorLog from '../utils/errorLog'
-import {enc, SHA3} from 'crypto-js'
+import hashPassword from '../utils/pwHash'
 
 export function registerUser (email, password) {
   return () => {
