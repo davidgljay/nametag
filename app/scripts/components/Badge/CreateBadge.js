@@ -131,7 +131,7 @@ class CreateBadge extends Component {
         <div style={styles.createButton}>
           <RaisedButton
             labelStyle={styles.buttonLabel}
-            backgroundColor={indigo500}
+            primary
             label={'CREATE BADGE'}
             onClick={this.createBadge} />
         </div>

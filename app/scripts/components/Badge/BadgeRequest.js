@@ -132,7 +132,7 @@ BadgeRequest.propTypes = {
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       bio: PropTypes.string,
-      image: PropTypes.string.isRequired,
+      image: PropTypes.string,
       badges: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired
     })
   }).isRequired
