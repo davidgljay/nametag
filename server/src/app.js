@@ -185,6 +185,10 @@ app.get('/sw.js', (req, res) => {
   res.sendFile(path.join('/usr', 'app', 'public', 'sw.js'))
 })
 
+app.get('/favicon.ico', (req, res) => {
+  res.sendFile(path.join('/usr', 'app', 'public', 'favicon.ico'))
+})
+
 /* Upload an image and return the url of that image on S3 */
 app.post('/api/images',
   imageUpload.multer.any(),

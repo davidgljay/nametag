@@ -70,6 +70,10 @@ module.exports = {
         to: path.join(__dirname, 'dist', 'public', 'sw.js')
       },
       {
+        from: path.join(__dirname, 'app', 'favicon.ico'),
+        to: path.join(__dirname, 'dist', 'public', 'favicon.ico')
+      },
+      {
         from: path.join(__dirname, 'app', 'manifest.json'),
         to: path.join(__dirname, 'dist', 'public', 'manifest.json')
       },
