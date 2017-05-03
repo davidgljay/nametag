@@ -2,7 +2,14 @@ const {db} = require('../../db')
 const r = require('rethinkdb')
 const uuid = require('uuid')
 const {fromUrl} = require('../../routes/images/imageUpload')
-const {ErrBadAuth, ErrNotLoggedIn, ErrEmailTaken, ErrInvalidToken, APIError} = require('../../errors')
+const {
+  ErrBadAuth,
+  ErrNotLoggedIn,
+  ErrEmailTaken,
+  ErrInvalidToken,
+  ErrNotFound,
+  APIError
+} = require('../../errors')
 const {passwordsalt} = require('../../secrets.json')
 const {enc, SHA3} = require('crypto-js')
 const sendEmail = require('../../email')
@@ -309,7 +316,15 @@ const passwordResetRequest = ({conn}, email) => {
         return Promise.reject(new APIError(res.error))
       }
       if (res.replaced > 0) {
-        return sendEmail({from: 'info@nametag.chat', to: email, template:'passwordReset', params:{token}})
+        return sendEmail({
+          from: {
+            email: 'info@nametag.chat',
+            name: 'Nametag Password Reset'
+          },
+          to: email,
+          template:'passwordReset',
+          params:{token}
+        })
       }
     })
 }
@@ -349,15 +364,23 @@ const passwordReset = ({conn}, token, password) =>
  *
  */
 
-const emailConfirmationRequest = (context, email) => {
+const emailConfirmationRequest = ({conn}, email) => {
   const token = uuid.v4()
   return usersTable.getAll(email, {index:'email'}).update({confirmation: token}).run(conn)
     .then(res => {
       if (res.errors > 0) {
         return Promise.reject(new APIError(res.error))
       }
-      if (res.updated > 0) {
-        return sendEmail('info@nametag.chat', email, 'emailConfirm', {email, token})
+      if (res.replaced > 0) {
+        return sendEmail({
+          from: {
+            email: 'info@nametag.chat',
+            name: 'Nametag Confirmation'
+          },
+          to: email,
+          template: 'emailConfirm',
+          params: {email, token}
+        })
       }
     })
 }
@@ -370,10 +393,9 @@ const emailConfirmationRequest = (context, email) => {
  *
  */
 
-const emailConfirmation = (context, token) => {
+const emailConfirmation = ({conn}, token) =>
   usersTable.getAll(token, {index:'confirmation'}).update({confirmation: 'confirmed'}).run(conn)
     .then(res => res.replaced === 0 ? ErrNotFound : null )
-}
 
 
 /**

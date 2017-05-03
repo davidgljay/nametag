@@ -6,10 +6,11 @@ module.exports = ({email, token}) => ({
   \n
   To confirm the account, please visit the following link:\n
   \n
-      https://nametag.chat/confirm/endpoint#${token}\n
+      https://nametag.chat/emailconfirm/${token}\n
   \n
   If you did not request this, you can safely ignore this email.`,
   html: `<p>A email confirmation has been requested for the following account: <b>${email}</b>.</p>
-  <p>To confirm the account, please visit the following link: <a href="https://nametag.chat/admin/confirm-email#${token}">Confirm Email</a></p>
+  <p>To confirm the account, please visit the following link:</p>
+  <p>https://nametag.chat/emailconfirm/${token}</p>
   <p>If you did not request this, you can safely ignore this email.</p>`
 })

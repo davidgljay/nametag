@@ -29,7 +29,7 @@ class Login extends Component {
       confirm: '',
       alert: '',
       loading: false,
-      state : 'LOGIN'
+      state: 'LOGIN'
     }
 
     this.updateField = fieldName => e => {
@@ -83,7 +83,11 @@ class Login extends Component {
             this.setState({alert: res.error.message})
           }
           if (res.id) {
-            this.setState({alert: 'Your account has been created', register: false})
+            this.setState({
+              message: 'Log In',
+              alert: 'Your account has been created',
+              state: 'LOGIN'
+            })
           }
         })
     }
@@ -116,7 +120,6 @@ class Login extends Component {
       this.setState({loading: true})
       this.props.passwordResetRequest(this.state.email)
         .then(res => {
-          console.log('Response', res)
           if (res.error) {
             this.setState({alert: res.error})
             return

@@ -140,6 +140,6 @@ const RootMutation = {
 }
 
 module.exports = Object.keys(RootMutation).reduce((wrapped, key) => {
-  wrapped[key] = wrap(RootMutation[key].resolve, RootMutation[key].require)
+  wrapped[key] = wrap(RootMutation[key].resolve, RootMutation[key].requires)
   return wrapped
 }, {})

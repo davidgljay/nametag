@@ -19,8 +19,8 @@ module.exports = ({to, from, template, params}) => {
      }
    ],
    from: {
-     name: 'Nametag Password Reset',
-     email: from
+     name: from.name,
+     email: from.email
    },
    content: [
      {
