@@ -1,7 +1,5 @@
 import React, {PropTypes} from 'react'
 import Badges from '../Badge/Badges'
-import FontIcon from 'material-ui/FontIcon'
-import {dateFormat} from '../Utils/DateFormat'
 import {primary, white} from '../../../styles/colors'
 
 const Nametag = ({mod, nametag: {id, name, image, bio, present, badges}}) => {

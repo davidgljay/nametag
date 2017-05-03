@@ -70,7 +70,7 @@ Templates.propTypes = {
 
 export default Templates
 
-const styles={
+const styles = {
   template: {
     display: 'flex',
     alignItems: 'center',

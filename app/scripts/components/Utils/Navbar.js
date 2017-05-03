@@ -9,10 +9,6 @@ const onCreateRoomClick = () => {
   window.location = '/rooms/create'
 }
 
-const onCreateCertClick = () => {
-  window.location = '/badges/create'
-}
-
 const onHomeClick = () => {
   window.location = '/rooms'
 }
@@ -64,12 +60,12 @@ class NavBar extends Component {
         onTitleTouchTap={onHomeClick}
         iconElementRight={mobile || empty ? null : auth}
         onLeftIconButtonTouchTap={() => this.setState({open: true})} />
-        <NavDrawer
-          open={this.state.open}
-          toggleLogin={toggleLogin}
-          me={me}
-          empty={empty}
-          setOpen={(open) => this.setState({open})} />
+      <NavDrawer
+        open={this.state.open}
+        toggleLogin={toggleLogin}
+        me={me}
+        empty={empty}
+        setOpen={(open) => this.setState({open})} />
     </div>
   }
 }

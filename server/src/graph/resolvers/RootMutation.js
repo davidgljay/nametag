@@ -21,8 +21,7 @@ const catchErrors = (err) => {
   throw err
 }
 
-const wrap = (mutation, key = 'result', requires) => (obj, args, context) =>
-{
+const wrap = (mutation, key = 'result', requires) => (obj, args, context) => {
   if (requires === 'LOGIN' && !context.user) {
     return Promise.reject(ErrNotLoggedIn)
   }
@@ -116,25 +115,25 @@ const RootMutation = {
             .then(wrapResponse('addNote'))
           : Promise.reject(ErrNotAuthorized)
         )
-    },
+  },
   passwordResetRequest: {
     requires: null,
-    resolve: (obj, {email}, {models:{Users}}) =>
+    resolve: (obj, {email}, {models: {Users}}) =>
       Users.passwordResetRequest(email)
   },
   passwordReset: {
     requires: null,
-    resolve: (obj, {token, password}, {models:{Users}}) =>
+    resolve: (obj, {token, password}, {models: {Users}}) =>
       Users.passwordReset(token, password)
   },
   emailConfirmationRequest: {
     requires: null,
-    resolve: (obj, {email}, {models:{Users}}) =>
+    resolve: (obj, {email}, {models: {Users}}) =>
       Users.emailConfirmationRequest(email)
   },
   emailConfirmation: {
     requires: null,
-    resolve: (obj, {token}, {models:{Users}}) =>
+    resolve: (obj, {token}, {models: {Users}}) =>
       Users.emailConfirmation(token)
   }
 }

@@ -1,4 +1,4 @@
-const {ErrNotAuthorized, ErrNotLoggedIn, APIError} = require('../../errors')
+const {ErrNotAuthorized, ErrNotLoggedIn} = require('../../errors')
 
 const RootQuery = {
   rooms: (obj, args, {user, models: {Rooms}}) => Promise.all([

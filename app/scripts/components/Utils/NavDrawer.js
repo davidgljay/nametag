@@ -6,10 +6,6 @@ const onCreateRoomClick = () => {
   window.location = '/rooms/create'
 }
 
-const onCreateCertClick = () => {
-  window.location = '/badges/create'
-}
-
 const onHomeClick = () => {
   window.location = '/rooms'
 }

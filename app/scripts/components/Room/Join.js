@@ -2,9 +2,9 @@ import React, { Component, PropTypes } from 'react'
 import Login from '../User/Login'
 import EditNametag from '../Nametag/EditNametag'
 import UserBadges from '../Badge/UserBadges'
-import {grey400, indigo500} from 'material-ui/styles/colors'
 import RaisedButton from 'material-ui/RaisedButton'
 import Alert from '../Utils/Alert'
+import {grey} from '../../../styles/colors'
 
 class Join extends Component {
 
@@ -113,10 +113,10 @@ const styles = {
   userBadgeText: {
     fontStyle: 'italic',
     fontSize: 16,
-    color: grey400
+    color: grey
   },
   userBadgeIcon: {
-    color: grey400,
+    color: grey,
     fontSize: 18,
     verticalAlign: 'middle'
   },
