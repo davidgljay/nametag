@@ -84,28 +84,32 @@ class RoomCards extends Component {
         toggleLogin={this.toggleLogin}
         registerUser={registerUser}
         loginUser={loginUser}
+        passwordResetRequest={passwordResetRequest}
         message='Log In or Register' />
 
     </div>
   }
 }
 
+const {func, string, arrayOf, shape} = PropTypes
+
 RoomCards.propTypes = {
-  registerUser: PropTypes.func.isRequired,
-  loginUser: PropTypes.func.isRequired,
-  data: PropTypes.shape({
-    me: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      nametags: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        room: PropTypes.shape({
-          id: PropTypes.string
+  registerUser: func.isRequired,
+  loginUser: func.isRequired,
+  passwordResetRequest: func.isRequired,
+  data: shape({
+    me: shape({
+      id: string.isRequired,
+      nametags: arrayOf(shape({
+        id: string.isRequired,
+        room: shape({
+          id: string
         })
       })).isRequired
     }),
-    rooms: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired
+    rooms: arrayOf(
+      shape({
+        id: string.isRequired
       }).isRequired
     )
   })
