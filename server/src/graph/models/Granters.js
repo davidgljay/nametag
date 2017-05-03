@@ -43,15 +43,15 @@ const create = ({conn, models: {Templates}}, granter) => {
       return Promise.all([
         id,
         Templates.createAndGrant(
-        {
-          name: `Admin`,
-          description: `This individual has the right to grant and revoke badges on behalf of ${granter.name}.`,
-          image: granter.image,
-          granter: id
-        },
+          {
+            name: `Admin`,
+            description: `This individual has the right to grant and revoke badges on behalf of ${granter.name}.`,
+            image: granter.image,
+            granter: id
+          },
         `Created account for ${granter.name}.`)
-        ])
-      })
+      ])
+    })
       .then(([id, [template]]) =>
         Promise.all([
           id,

@@ -2,6 +2,7 @@ mutation updateBadgeRequestStatus($badgeRequest: ID!, $status: GRANTER_NOTIFICAT
   updateBadgeRequestStatus(badgeRequest: $badgeRequest, status: $status) {
     errors {
       translation_key
+      message
     }
   }
 }

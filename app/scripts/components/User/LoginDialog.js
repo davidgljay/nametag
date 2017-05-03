@@ -2,7 +2,7 @@ import React from 'react'
 import Login from './Login'
 import Dialog from 'material-ui/Dialog'
 
-const LoginDialog = ({toggleLogin, showLogin, message, loginUser, registerUser}) => <Dialog
+const LoginDialog = ({toggleLogin, showLogin, message, loginUser, registerUser, passwordResetRequest}) => <Dialog
   modal={false}
   contentStyle={styles.dialog}
   open={showLogin || false}
@@ -11,6 +11,7 @@ const LoginDialog = ({toggleLogin, showLogin, message, loginUser, registerUser})
     message={message}
     registerUser={registerUser}
     loginUser={loginUser}
+    passwordResetRequest={passwordResetRequest}
     />
 </Dialog>
 

@@ -36,7 +36,6 @@ module.exports = {
       .click('.roomNotif')
       .assertLoaded(room, users.mod)
       .postMessage(messages[0])
-
   },
   after: client => {
     client.end()

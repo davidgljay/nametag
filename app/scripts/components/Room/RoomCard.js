@@ -61,7 +61,8 @@ class RoomCard extends Component {
       updateNametagEdit,
       createNametag,
       loginUser,
-      registerUser
+      registerUser,
+      passwordResetRequest
     } = this.props
     let card
     let flipping = {}
@@ -136,6 +137,7 @@ class RoomCard extends Component {
           updateNametagEdit={updateNametagEdit}
           loginUser={loginUser}
           registerUser={registerUser}
+          passwordResetRequest={passwordResetRequest}
           />
       }
     </Card>

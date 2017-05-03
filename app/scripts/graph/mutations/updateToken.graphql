@@ -2,6 +2,7 @@ mutation UpdateToken($token: String!) {
   updateToken(token: $token) {
     errors {
       translation_key
+      message
     }
   }
 }

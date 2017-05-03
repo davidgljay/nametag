@@ -1,5 +1,5 @@
 // import errorLog from '../utils/errorLog'
-import {enc, SHA3} from 'crypto-js'
+import hashPassword from '../utils/pwHash'
 
 export function registerUser (email, password) {
   return () => {
@@ -37,9 +37,4 @@ export function loginUser (email, password) {
         return res.json()
       })
   }
-}
-
-const hashPassword = (password) => {
-  let hashedPassword = SHA3(password, {outputLength: 224})
-  return hashedPassword.toString(enc.Base64)
 }

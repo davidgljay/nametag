@@ -46,10 +46,10 @@ class UserBadges extends Component {
                   bool && selected.id !== badge.id, true)
               })
               .map((badge) => <div key={badge.id}>
-                  <Badge
-                    badge={badge}
-                    draggable />
-                </div>)
+                <Badge
+                  badge={badge}
+                  draggable />
+              </div>)
           }
         </div>
       </div>

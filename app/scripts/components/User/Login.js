@@ -3,6 +3,7 @@ import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import CircularProgress from 'material-ui/CircularProgress'
+import {grey} from '../../../styles/colors'
 
 /* Function to Log in users via an auth provider or e-mail.
 
@@ -26,9 +27,9 @@ class Login extends Component {
       email: '',
       password: '',
       confirm: '',
-      register: false,
       alert: '',
-      loading: false
+      loading: false,
+      state: 'LOGIN'
     }
 
     this.updateField = fieldName => e => {
@@ -82,7 +83,11 @@ class Login extends Component {
             this.setState({alert: res.error.message})
           }
           if (res.id) {
-            this.setState({alert: 'Your account has been created', register: false})
+            this.setState({
+              message: 'Log In',
+              alert: 'Your account has been created',
+              state: 'LOGIN'
+            })
           }
         })
     }
@@ -105,11 +110,44 @@ class Login extends Component {
       this.setState({loading: true})
       window.location = `/auth/${provider}`
     }
+
+    this.enablePasswordReset = e => {
+      e.preventDefault()
+      this.setState({state: 'PW_REQ'})
+    }
+
+    this.passwordReset = e => {
+      this.setState({loading: true})
+      this.props.passwordResetRequest(this.state.email)
+        .then(res => {
+          if (res.error) {
+            this.setState({alert: res.error})
+            return
+          }
+          this.setState({
+            loading: false,
+            message: 'Please check your E-mail',
+            alert: 'You should receive a password reset link shortly.',
+            state: 'LOGIN'
+          })
+        })
+    }
+  }
+
+  componentWillMount () {
+    this.setState({message: this.props.message})
   }
 
   render () {
-    const {message} = this.props
-    const {emailAlert, passwordAlert, alert, loading} = this.state
+    const {
+      emailAlert,
+      passwordAlert,
+      alert,
+      loading,
+      message,
+      state
+    } = this.state
+
     return <div style={styles.login} id='loginForm'>
       <h4>{message || 'Log in to join'}</h4>
       <div style={styles.alert}>
@@ -124,32 +162,45 @@ class Login extends Component {
           onBlur={this.validateEmail}
           onChange={this.updateField('email')} />
         <br />
-        <TextField
-          floatingLabelText='Password'
-          id='loginPassword'
-          type='password'
-          errorText={passwordAlert}
-          onBlur={this.validatePassword}
-          style={styles.field}
-          onChange={this.updateField('password')} />
         {
-          this.state.register &&
-          <TextField
-            floatingLabelText='Confirm Password'
-            style={styles.field}
-            id='loginConfirm'
-            errorText={passwordAlert}
-            type='password'
-            onChange={this.updateField('confirm')} />
+          state !== 'PW_REQ' &&
+          <div>
+            <TextField
+              floatingLabelText='Password'
+              id='loginPassword'
+              type='password'
+              errorText={passwordAlert}
+              onBlur={this.validatePassword}
+              style={styles.field}
+              onChange={this.updateField('password')} />
+            {
+              state === 'LOGIN' &&
+              <div style={styles.forgotPasswordLink} onClick={this.enablePasswordReset}>
+                Forgot Password?
+              </div>
+            }
+          </div>
         }
         {
-          this.state.register
-          ? <div style={styles.buttonContainer}>
+          state === 'REGISTER' &&
+          <div>
+            <TextField
+              floatingLabelText='Confirm Password'
+              style={styles.field}
+              id='loginConfirm'
+              errorText={passwordAlert}
+              type='password'
+              onChange={this.updateField('confirm')} />
+          </div>
+
+        }
+        {
+          state === 'REGISTER' && <div style={styles.buttonContainer}>
             <FlatButton
-              label='Back'
+              label='BACK'
               style={styles.button}
               secondary
-              onClick={() => this.setState({register: false})} />
+              onClick={() => this.setState({state: 'LOGIN', message: this.props.message})} />
             <RaisedButton
               style={styles.button}
               id='registerButton'
@@ -157,19 +208,36 @@ class Login extends Component {
               primary
               onClick={this.register} />
           </div>
-          : <div style={styles.buttonContainer}>
+        }
+        {
+          state === 'LOGIN' && <div style={styles.buttonContainer}>
             <FlatButton
               label='Register'
               id='enableRegisterButton'
               style={styles.button}
               secondary
-              onClick={() => this.setState({register: true})} />
+              onClick={() => this.setState({state: 'REGISTER', message: 'Register'})} />
             <RaisedButton
               style={styles.button}
               label='LOG IN'
               id='submitLoginButton'
               primary
               onClick={this.login} />
+          </div>
+        }
+        {
+          state === 'PW_REQ' && <div style={styles.buttonContainer}>
+            <FlatButton
+              label='BACK'
+              style={styles.button}
+              secondary
+              onClick={() => this.setState({state: 'LOGIN', message: this.props.message})} />
+            <RaisedButton
+              style={styles.button}
+              id='resetPwButton'
+              label='SEND LINK'
+              primary
+              onClick={this.passwordReset} />
           </div>
         }
       </div>
@@ -199,7 +267,8 @@ class Login extends Component {
 
 Login.propTypes = {
   registerUser: PropTypes.func.isRequired,
-  loginUser: PropTypes.func.isRequired
+  loginUser: PropTypes.func.isRequired,
+  passwordResetRequest: PropTypes.func.isRequired
 }
 
 export default Login
@@ -218,7 +287,8 @@ const styles = {
     marginTop: 10
   },
   button: {
-    margin: 4
+    margin: 4,
+    minWidth: 75
   },
   authProviders: {
     marginTop: 20
@@ -227,5 +297,12 @@ const styles = {
     textAlign: 'center',
     fontStyle: 'italic',
     fontSize: 14
+  },
+  forgotPasswordLink: {
+    color: grey,
+    fontStyle: 'italic',
+    fontSize: 12,
+    margin: 10,
+    cursor: 'pointer'
   }
 }

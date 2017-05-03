@@ -1,0 +1,8 @@
+mutation EmailConfirmation($token: String!) {
+  emailConfirmation(token: $token) {
+    errors {
+      translation_key
+      message
+    }
+  }
+}

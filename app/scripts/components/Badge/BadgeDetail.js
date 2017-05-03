@@ -4,7 +4,6 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import EditNametag from '../Nametag/EditNametag'
 import CircularProgress from 'material-ui/CircularProgress'
-import {indigo500} from 'material-ui/styles/colors'
 import NavBar from '../Utils/NavBar'
 import Login from '../User/Login'
 import QRcode from 'qrcode.react'
@@ -121,7 +120,7 @@ class BadgeDetail extends Component {
             style={styles.claimButton}
             labelStyle={styles.buttonLabel}
             primary
-            onClick={() => {window.location = '/'}}
+            onClick={() => { window.location = '/' }}
             label='RETURN TO HOMEPAGE' />
         </div>
       </div>

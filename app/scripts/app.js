@@ -10,6 +10,8 @@ import CreateRoom from './containers/Room/CreateRoomContainer'
 import CreateBadge from './containers/Badge/CreateBadgeContainer'
 import Badge from './containers/Badge/BadgeContainer'
 import Granter from './containers/Granter/GranterContainer'
+import PasswordReset from './containers/User/PasswordReset'
+import EmailConfirm from './containers/User/EmailConfirm'
 import {registerServiceWorker, firebaseInit} from './actions/NotificationActions'
 
 import { DragDropContext } from 'react-dnd'
@@ -69,6 +71,8 @@ class Nametag extends Component {
             <Route path='/granters/:urlCode/badges/create' component={CreateBadge} />
             <Route path='/granters/:urlCode/badges/:templateId' component={Badge} />
             <Route path='/badges/:templateId' component={Badge} />
+            <Route path='/passwordreset/:token' component={PasswordReset} />
+            <Route path='/emailconfirm/:token' component={EmailConfirm} />
           </Router>
         </MuiThemeProvider>
       </StyleRoot>

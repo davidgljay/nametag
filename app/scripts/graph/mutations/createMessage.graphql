@@ -18,6 +18,7 @@ mutation CreateMessage($message: CreateMessageInput!) {
     }
     errors {
       translation_key
+      message
     }
   }
 }
