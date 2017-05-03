@@ -3,6 +3,7 @@ import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import CircularProgress from 'material-ui/CircularProgress'
+import {grey} from '../../../styles/colors'
 
 /* Function to Log in users via an auth provider or e-mail.
 
@@ -159,7 +160,7 @@ class Login extends Component {
           onChange={this.updateField('email')} />
         <br />
         {
-          state !== 'PW_RESET' &&
+          state !== 'PW_REQ' &&
           <div>
             <TextField
               floatingLabelText='Password'
@@ -171,9 +172,9 @@ class Login extends Component {
               onChange={this.updateField('password')} />
             {
               state === 'LOGIN' &&
-              <a href='#' onClick={this.enablePasswordReset}>
-                Forgot Password
-              </a>
+              <div style={styles.forgotPasswordLink} onClick={this.enablePasswordReset}>
+                Forgot Password?
+              </div>
             }
           </div>
         }
@@ -193,7 +194,7 @@ class Login extends Component {
         {
           state === 'REGISTER' && <div style={styles.buttonContainer}>
             <FlatButton
-              label='Back'
+              label='BACK'
               style={styles.button}
               secondary
               onClick={() => this.setState({state: 'LOGIN', message: this.props.message})} />
@@ -224,18 +225,17 @@ class Login extends Component {
         {
           state === 'PW_REQ' && <div style={styles.buttonContainer}>
             <FlatButton
-              label='Back'
+              label='BACK'
               style={styles.button}
               secondary
               onClick={() => this.setState({state: 'LOGIN', message: this.props.message})} />
             <RaisedButton
               style={styles.button}
               id='resetPwButton'
-              label='RESET PASSWORD'
+              label='SEND LINK'
               primary
               onClick={this.passwordReset} />
           </div>
-        }
         }
       </div>
       <div style={styles.authProviders}>
@@ -284,7 +284,8 @@ const styles = {
     marginTop: 10
   },
   button: {
-    margin: 4
+    margin: 4,
+    minWidth: 75
   },
   authProviders: {
     marginTop: 20
@@ -293,5 +294,12 @@ const styles = {
     textAlign: 'center',
     fontStyle: 'italic',
     fontSize: 14
+  },
+  forgotPasswordLink: {
+    color: grey,
+    fontStyle: 'italic',
+    fontSize: 12,
+    margin: 10,
+    cursor: 'pointer'
   }
 }
