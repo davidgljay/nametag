@@ -32,9 +32,6 @@ class RoomCards extends Component {
       updateNametagEdit,
       addNametagEditBadge,
       removeNametagEditBadge,
-      loginUser,
-      registerUser,
-      passwordResetRequest,
       nametagEdits,
       createNametag
     } = this.props
@@ -72,9 +69,6 @@ class RoomCards extends Component {
               createNametag={createNametag}
               updateNametagEdit={updateNametagEdit}
               addNametagEditBadge={addNametagEditBadge}
-              registerUser={registerUser}
-              loginUser={loginUser}
-              passwordResetRequest={passwordResetRequest}
               removeNametagEditBadge={removeNametagEditBadge} />
           )
         }
@@ -82,21 +76,15 @@ class RoomCards extends Component {
       <LoginDialog
         showLogin={this.state.showLogin}
         toggleLogin={this.toggleLogin}
-        registerUser={registerUser}
-        loginUser={loginUser}
-        passwordResetRequest={passwordResetRequest}
         message='Log In or Register' />
 
     </div>
   }
 }
 
-const {func, string, arrayOf, shape} = PropTypes
+const {string, arrayOf, shape} = PropTypes
 
 RoomCards.propTypes = {
-  registerUser: func.isRequired,
-  loginUser: func.isRequired,
-  passwordResetRequest: func.isRequired,
   data: shape({
     me: shape({
       id: string.isRequired,

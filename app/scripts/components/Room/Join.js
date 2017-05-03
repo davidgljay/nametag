@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import Login from '../User/Login'
+import Login from '../../containers/User/LoginContainer'
 import EditNametag from '../Nametag/EditNametag'
 import UserBadges from '../Badge/UserBadges'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -37,9 +37,6 @@ class Join extends Component {
       removeNametagEditBadge,
       addNametagEditBadge,
       updateNametagEdit,
-      loginUser,
-      registerUser,
-      passwordResetRequest,
       room,
       me
     } = this.props
@@ -73,10 +70,7 @@ class Join extends Component {
             label='JOIN' />
         </div>
     } else {
-      join = <Login
-        loginUser={loginUser}
-        registerUser={registerUser}
-        passwordResetRequest={passwordResetRequest} />
+      join = <Login />
     }
     return join
   }
@@ -88,10 +82,7 @@ Join.propTypes = {
   nametag: PropTypes.object,
   addNametagEditBadge: PropTypes.func.isRequired,
   removeNametagEditBadge: PropTypes.func.isRequired,
-  updateNametagEdit: PropTypes.func.isRequired,
-  loginUser: PropTypes.func.isRequired,
-  registerUser: PropTypes.func.isRequired,
-  passwordResetRequest: PropTypes.func.isRequired
+  updateNametagEdit: PropTypes.func.isRequired
 }
 
 export default Join
