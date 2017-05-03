@@ -3,6 +3,7 @@ mutation CreateTemplate($template:CreateTemplateInput!) {
     id
     errors {
       translation_key
+      message
     }
   }
 }

@@ -5,6 +5,7 @@ mutation CreateRoom($room: CreateRoomInput!) {
     }
     errors {
       translation_key
+      message
     }
   }
 }

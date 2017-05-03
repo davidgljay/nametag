@@ -1,52 +1,49 @@
 const helper = require('sendgrid').mail
 const templates = require('./templates')
 const {sendgrid} = require('../secrets.json')
+const {errorLog, APIError} = require('../errors')
 const sg = require('sendgrid')(sendgrid.key)
 
 module.exports = ({to, from, template, params}) => {
   const {subject, txt, html} = templates[template](params)
 
   const mail = {
-    body: {
-     personalizations: [
-       {
-         to: [
-           {
-             email: to
-           }
-         ],
-         subject
-       }
-     ],
-     from: {
-       email: from
+   personalizations: [
+     {
+       to: [
+         {
+           email: to
+         }
+       ],
+       subject
+     }
+   ],
+   from: {
+     name: 'Nametag Password Reset',
+     email: from
+   },
+   content: [
+     {
+       type: 'text/plain',
+       value: txt
      },
-     content: [
-       {
-         type: 'text/plain',
-         value: txt
-       },
-       {
-         type: 'text/html',
-         value: html
-       }
-     ]
-   }
+     {
+       type: 'text/html',
+       value: html
+     }
+   ]
   }
 
   const request = sg.emptyRequest({
     method: 'POST',
     path: '/v3/mail/send',
-    body: mail.toJSON()
+    body: mail
   })
 
-  sg.API(request)
-    .then((error, response) => {
-    if (error) {
-      console.log('Error response received')
-    }
-    console.log(response.statusCode)
-    console.log(response.body)
-    console.log(response.headers)
-  })
+  return sg.API(request)
+    .catch(err => {
+      const errors = err.response.body.errors.reduce((text, err) =>
+        text.concat(` ${err.message}`), '')
+      return Promise.reject(new APIError(errors))
+    })
 }

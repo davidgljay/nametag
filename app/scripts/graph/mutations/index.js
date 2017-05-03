@@ -67,7 +67,7 @@ export const createBadge = graphql(CREATE_BADGE, {
 
 export const passwordResetRequest = graphql(PASSWORD_RESET_REQ, {
   props: ({ownProps, mutate}) => ({
-    createNametag: (email) => mutate({
+    passwordResetRequest: (email) => mutate({
       variables: {
         email
       }
@@ -77,7 +77,7 @@ export const passwordResetRequest = graphql(PASSWORD_RESET_REQ, {
 
 export const passwordReset = graphql(PASSWORD_RESET, {
   props: ({ownProps, mutate}) => ({
-    createNametag: (token, password) => mutate({
+    passwordReset: (token, password) => mutate({
       variables: {
         token,
         password
@@ -88,7 +88,7 @@ export const passwordReset = graphql(PASSWORD_RESET, {
 
 export const emailConfirmationRequest = graphql(EMAIL_CONF_REQ, {
   props: ({ownProps, mutate}) => ({
-    createNametag: (email) => mutate({
+    emailConfirmationRequest: (email) => mutate({
       variables: {
         email
       }
@@ -98,7 +98,7 @@ export const emailConfirmationRequest = graphql(EMAIL_CONF_REQ, {
 
 export const emailConfirmation = graphql(EMAIL_CONF, {
   props: ({ownProps, mutate}) => ({
-    createNametag: (token) => mutate({
+    emailConfirmation: (token) => mutate({
       variables: {
         token
       }

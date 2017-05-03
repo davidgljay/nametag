@@ -5,6 +5,7 @@ mutation CreateBadge($badge:CreateBadgeInput!) {
     }
     errors {
       translation_key
+      message
     }
   }
 }

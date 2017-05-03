@@ -5,6 +5,7 @@ mutation CreateNametag($nametag: CreateNametagInput!) {
     }
     errors {
       translation_key
+      message
     }
   }
 }

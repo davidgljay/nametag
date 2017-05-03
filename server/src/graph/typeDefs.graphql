@@ -587,10 +587,10 @@ type RootMutation {
   addNote(badgeId: ID!, text: String!): BasicResponse
 
   # Creates a password reset request
-  resetPasswordRequest(email: String!): BasicResponse
+  passwordResetRequest(email: String!): BasicResponse
 
   # Resets a password
-  resetPassword(token: String!, password: String!): BasicResponse
+  passwordReset(token: String!, password: String!): BasicResponse
 
   # Requests an email confirmation
   emailConfirmationRequest(email: String!): BasicResponse
@@ -630,11 +630,12 @@ type RootSubscription {
 ################################################################################
 
 # Any error rendered due to the user's input.
-interface UserError {
+type UserError {
 
   # Translation key relating to a translatable string containing details to be
   # displayed to the end user.
-  translation_key: String!
+  translation_key: String
+  message: String!
 }
 
 schema {

@@ -38,8 +38,3 @@ export function loginUser (email, password) {
       })
   }
 }
-
-const hashPassword = (password) => {
-  let hashedPassword = SHA3(password, {outputLength: 224})
-  return hashedPassword.toString(enc.Base64)
-}

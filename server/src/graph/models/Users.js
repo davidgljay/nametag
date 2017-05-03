@@ -2,7 +2,7 @@ const {db} = require('../../db')
 const r = require('rethinkdb')
 const uuid = require('uuid')
 const {fromUrl} = require('../../routes/images/imageUpload')
-const {ErrBadAuth, ErrNotLoggedIn, ErrEmailTaken, ErrNotFound} = require('../../errors')
+const {ErrBadAuth, ErrNotLoggedIn, ErrEmailTaken, ErrInvalidToken, APIError} = require('../../errors')
 const {passwordsalt} = require('../../secrets.json')
 const {enc, SHA3} = require('crypto-js')
 const sendEmail = require('../../email')
@@ -287,8 +287,9 @@ const createLocal = ({conn}, email, password) =>
       id,
       emailConfirmationRequest({conn}, email),
       usersTable.get(id).update({
-      password: hashPassword(`${password}${passwordsalt}${id}`)
-    }).run(conn)
+        password: hashPassword(`${password}${passwordsalt}${id}`)
+      }).run(conn)
+    ])
     .then(([id]) => id)
   })
 
@@ -300,15 +301,15 @@ const createLocal = ({conn}, email, password) =>
  *
  */
 
-const addForgotPasswordToken = (context, email) => {
+const passwordResetRequest = ({conn}, email) => {
   const token = uuid.v4()
   return usersTable.getAll(email, {index:'email'}).update({forgotPassToken: token}).run(conn)
     .then(res => {
       if (res.errors > 0) {
         return Promise.reject(new APIError(res.error))
       }
-      if (res.updated > 0) {
-        return sendEmail('info@nametag.chat', email, 'passwordReset', {token})
+      if (res.replaced > 0) {
+        return sendEmail({from: 'info@nametag.chat', to: email, template:'passwordReset', params:{token}})
       }
     })
 }
@@ -321,20 +322,24 @@ const addForgotPasswordToken = (context, email) => {
  *
  */
 
-const resetPassword = (context, token, password) =>
-  usersTable.getAll(token, {index:'forgotPassToken'}).update({
-      password: hashPassword(`${password}${passwordsalt}${id}`)
-    }).run(conn)
+const passwordReset = ({conn}, token, password) =>
+  token
+  ? usersTable.getAll(token, {index:'forgotPassToken'}).update(
+    u => ({
+      password: hashPassword(`${password}${passwordsalt}${u('id')}`),
+      forgotPassToken: null
+    })).run(conn)
     .then(res => {
       if (res.errors > 0) {
         return new Error(res.error)
       }
-      if (res.updated > 0) {
+      if (res.replaced > 0) {
         return
       } else {
-        return new APIError('Invalid token')
+        return Promise.reject(ErrInvalidToken)
       }
     })
+    : Promise.reject(ErrInvalidToken)
 
 /**
  * Sets an email confirmation token.
@@ -402,8 +407,8 @@ module.exports = (context) => ({
     getToken: (nametagId) => getToken(context, nametagId),
     addBadgesFromAuth: (authProfile, user) => addBadgesFromAuth(context, authProfile, user),
     addDefaultsFromAuth: (authProfile, user) => addDefaultsFromAuth(context, authProfile, user),
-    resetPasswordRequest: (email) => resetPasswordRequest(context, email),
-    resetPassword: (token, password) => resetPassword(context, token, password),
+    passwordResetRequest: (email) => passwordResetRequest(context, email),
+    passwordReset: (token, password) => passwordReset(context, token, password),
     emailConfirmationRequest: (email) => emailConfirmationRequest(context, email),
     emailConfirmation: (token) => emailConfirmation(context, token)
   }
