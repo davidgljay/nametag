@@ -428,7 +428,7 @@ module.exports = (context) => ({
     validPassword: (id, password) => validPassword(context, id, password),
     appendUserArray: (property, value) => appendUserArray(context, property, value),
     addNametag: (nametagId, roomId) => addNametag(context, nametagId, roomId),
-    addBadge: (badgeId, templateId) => addBadge(context, badgeId, templateId),
+    addBadge: (badgeId, templateId, nametagId) => addBadge(context, badgeId, templateId, nametagId),
     addToken: (token) => addToken(context, token),
     getToken: (nametagId) => getToken(context, nametagId),
     addBadgesFromAuth: (authProfile, user) => addBadgesFromAuth(context, authProfile, user),

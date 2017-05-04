@@ -48,7 +48,7 @@ class CreateBadge extends Component {
         name
       })
       .then(({data: {createTemplate: {id}}}) => {
-        window.location = `/badges/${id}`
+        window.location = `/granters/${granter.urlCode}`
       })
     }
   }

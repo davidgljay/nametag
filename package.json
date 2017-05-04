@@ -13,7 +13,7 @@
     "e2e": "nightwatch",
     "postE2e": "docker-compose down",
     "backup": "docker-compose run nametag sh backup.sh",
-    "pull": "git pull origin master && yarn install && yarn build && docker-compose build nametag && docker-compose stop && docker-compose up -d",
+    "pull": "git pull origin master && yarn install && yarn build && yarn backup && docker-compose build nametag && docker-compose stop && docker-compose up -d",
     "storybook": "start-storybook -p 9001 -c .storybook"
   },
   "dependencies": {

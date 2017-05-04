@@ -59,7 +59,7 @@ const create = ({conn, models: {Users, Nametags}}, {note, template, defaultNamet
     const id = res.generated_keys[0]
     return Promise.all([
       id,
-      Users.addBadge(id, template),
+      Users.addBadge(id, template, defaultNametag),
       Nametags.grantBadge(defaultNametag, id)
     ])
   })

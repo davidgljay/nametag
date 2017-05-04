@@ -63,34 +63,7 @@ class BadgeDetail extends Component {
       </div>
     }
 
-    // const path = `https://${window.location.host}/badges/${template.id}`
     let claimButton
-
-    // headerText = shareMode
-    // ? <div>
-    //   <div style={styles.header}>
-    //     <h3>Your badge has been created.</h3>
-    //     <div>You can share this URL with the people you would like to grant it to.</div>
-    //   </div>
-    //   <input
-    //     type='text'
-    //     id='hiddenPath'
-    //     value={path} />
-    //   <div style={styles.shareButtons}>
-    //     <FlatButton
-    //       style={styles.button}
-    //       onClick={this.onEmailClick}
-    //       label='E-MAIL' />
-    //     <FlatButton
-    //       style={styles.button}
-    //       onClick={this.onClipboardClick}
-    //       label='COPY TO CLIPBOARD' />
-    //     <FlatButton
-    //       style={styles.button}
-    //       onClick={this.onQRClick}
-    //       label='SHOW QR CODE' />
-    //   </div>
-    // </div>
 
     if (!me) {
       claimButton = <Login
@@ -138,7 +111,7 @@ class BadgeDetail extends Component {
 
     return <div>
       <NavBar
-        me={me} />
+        empty />
       <div style={styles.certDetailContainer}>
         <div style={styles.header}>
           <h3>Request This Badge</h3>
