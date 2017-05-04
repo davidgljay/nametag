@@ -48,10 +48,10 @@ class Template extends Component {
             id: 'template'
           }} />
         <div style={styles.shareContainer}>
-          <div style={styles.shareText}>
-            GRANT
-          </div>
           <div style={styles.shareOptions}>
+            <div style={styles.shareText}>
+              GRANT WITH:
+            </div>
             <IconButton
               style={styles.imageButton}
               iconStyle={styles.shareIcon}
@@ -183,6 +183,7 @@ const styles = {
   shareText: {
     textAlign: 'center',
     fontSize: 12,
+    lineHeight: 3,
     color: grey
   },
   copyLink: {

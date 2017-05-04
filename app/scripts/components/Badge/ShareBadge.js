@@ -3,7 +3,7 @@ import QRcode from 'qrcode.react'
 import Badge from './Badge'
 import NavBar from '../Utils/NavBar'
 import CircularProgress from 'material-ui/CircularProgress'
-import RaisedButton from 'material-ui/RaisedButton'
+import FlatButton from 'material-ui/FlatButton'
 
 const ShareBadge = ({data: {loading, template}}) => <div>
   <NavBar empty />
@@ -20,7 +20,7 @@ const ShareBadge = ({data: {loading, template}}) => <div>
       <div style={styles.QRcode}>
         <QRcode value={`https://nametag.chat/badges/${template.id}`} size={256} />
       </div>
-      <RaisedButton
+      <FlatButton
         labelStyle={styles.buttonLabel}
         primary
         label={'BACK'}

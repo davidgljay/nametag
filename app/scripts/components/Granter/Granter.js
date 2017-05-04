@@ -5,7 +5,8 @@ import BadgeRequest from '../Badge/BadgeRequest'
 import Template from '../Badge/Template'
 import CircularProgress from 'material-ui/CircularProgress'
 import LoginDialog from '../User/LoginDialog'
-import RaisedButton from 'material-ui/RaisedButton'
+import FlatButton from 'material-ui/FlatButton'
+import FontIcon from 'material-ui/FontIcon'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import {mobile} from '../../../styles/sizes'
 import radium from 'radium'
@@ -51,9 +52,16 @@ const Granter = ({data: {granter, me, loading, error}, createBadge, updateBadgeR
           }
         </ReactCSSTransitionGroup>
         <div style={styles.createButtonContainter}>
-          <RaisedButton
+          <FlatButton
             href={`/granters/${granter.urlCode}/badges/create`}
             label='Create Badge'
+            labelPosition='before'
+            icon={
+              <FontIcon
+                className='material-icons'>
+                add_circle
+              </FontIcon>
+            }
             primary />
         </div>
         <div>
