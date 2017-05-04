@@ -88,7 +88,7 @@ class ErrAuthentication extends APIError {
   }
 }
 
-const ErrNotFound = new APIError('not found', {
+const ErrNotFound = new APIError('Not Found', {
   status: 404
 })
 

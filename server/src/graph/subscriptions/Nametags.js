@@ -1,8 +1,8 @@
 const pubsub = require('./pubsub')
 const {errorLog} = require('../../errors')
-const r = require('rethinkdb')
+const {db} = require('../../db')
 
-const NametagSubscription = conn => r.db('nametag').table('nametags').changes().run(conn)
+const NametagSubscription = conn => db.table('nametags').changes().run(conn)
   .then(feed => {
     feed.each((err, nametag) => {
       if (err) {

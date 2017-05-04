@@ -1,5 +1,5 @@
 const {db} = require('../../db')
-// const errors = require('../../errors')
+const {ErrNotFound} = require('../../errors')
 
 const grantersTable = db.table('granters')
 
@@ -23,6 +23,9 @@ const get = ({conn}, id) => grantersTable.get(id).run(conn)
 
 const getByUrlCode = ({conn}, urlCode) => grantersTable.getAll(urlCode, {index: 'urlCode'}).run(conn)
   .then(cursor => cursor.next())
+  .catch(err => err.message === 'No more rows in the cursor.'
+    ? Promise.reject(ErrNotFound)
+    : Promise.reject(err))
 
 /**
  * Creates a badge granter

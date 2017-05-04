@@ -1,8 +1,8 @@
 const pubsub = require('./pubsub')
 const {APIError, errorLog} = require('../../errors')
-const r = require('rethinkdb')
+const {db} = require('../../db')
 
-const MessageSubscription = conn => r.db('nametag').table('messages').changes().run(conn)
+const MessageSubscription = conn => db.table('messages').changes().run(conn)
   .then(feed => {
     feed.each((err, message) => {
       if (err) {
