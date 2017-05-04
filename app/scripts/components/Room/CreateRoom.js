@@ -200,7 +200,7 @@ class CreateRoom extends Component {
     return !loading
     ? <div>
       <NavBar
-        user={me}
+        me={me}
         toggleLogin={() => {}} />
       <div style={styles.title}>
         <h1>Start a Conversation</h1>
