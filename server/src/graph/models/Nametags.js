@@ -91,8 +91,8 @@ const create = ({conn, user, models: {Users, BadgeRequests}}, nt, createBadgeReq
       nametag.template && createBadgeRequest ? BadgeRequests.create(id, nametag.template) : null,
 
       // Add displayName and image if they are new
-      user.displayNames.indexOf(nametag.name) === -1 ? Users.appendUserArray('displayNames', nametag.name) : null,
-      nametag.image && user.images.indexOf(nametag.image) === -1 ? Users.appendUserArray('images', nametag.image) : null
+      !createBadgeRequest && user.displayNames.indexOf(nametag.name) === -1 ? Users.appendUserArray('displayNames', nametag.name) : null,
+      !createBadgeRequest && nametag.image && user.images.indexOf(nametag.image) === -1 ? Users.appendUserArray('images', nametag.image) : null
     ])
   })
   .then(([res, id]) => {
