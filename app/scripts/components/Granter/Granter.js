@@ -2,9 +2,10 @@ import React, {PropTypes} from 'react'
 import NavBar from '../Utils/NavBar'
 import GranterInfo from './GranterInfo'
 import BadgeRequest from '../Badge/BadgeRequest'
-import Templates from '../Badge/Templates'
+import Template from '../Badge/Template'
 import CircularProgress from 'material-ui/CircularProgress'
 import LoginDialog from '../User/LoginDialog'
+import RaisedButton from 'material-ui/RaisedButton'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import {mobile} from '../../../styles/sizes'
 import radium from 'radium'
@@ -49,10 +50,23 @@ const Granter = ({data: {granter, me, loading, error}, createBadge, updateBadgeR
             )
           }
         </ReactCSSTransitionGroup>
-        <Templates
-          addNote={addNote}
-          templates={granter.templates}
-          granterCode={granter.urlCode} />
+        <div style={styles.createButtonContainter}>
+          <RaisedButton
+            href={`/granters/${granter.urlCode}/badges/create`}
+            label='Create Badge'
+            primary />
+        </div>
+        <div>
+          {
+            granter.templates.map(template =>
+              <Template
+                addNote={addNote}
+                key={template.id}
+                template={template} />
+            )
+          }
+        </div>
+
       </div>
     </div>
 }
@@ -85,6 +99,7 @@ const styles = {
   badgeRequests: {
     display: 'flex',
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'flex-start',
     alignItems: 'flex-start'
   },
@@ -95,5 +110,9 @@ const styles = {
       paddingLeft: '5%',
       paddingRight: '5%'
     }
+  },
+  createButtonContainter: {
+    display: 'flex',
+    justifyContent: 'flex-end'
   }
 }
