@@ -5,22 +5,24 @@ import constants from '../constants'
 // Registers a serviceWorker and registers that worker with firebase
 export const registerServiceWorker = () => (dispatch) => {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js', {scope: './'})
-      .then(reg => reg && firebase.messaging().useServiceWorker(reg))
+    return navigator.serviceWorker.register('/sw.js', {scope: './'})
+      .catch(errorLog('Error registering serviceWorker'))
+      .then(reg => reg ? firebase.messaging().useServiceWorker(reg)
+        : Promise.reject(new Error('No service worker returned!')))
       .then(res => dispatch(getFcmToken()))
       .then(() => dispatch(fcmTokenRefresh()))
-      .catch(errorLog('Registering serviceWorker with Firebase'))
-      .catch(errorLog('Error registering serviceWorker'))
+      .catch(errorLog('Error registering serviceWorker with Firebase'))
   }
+  return Promise.reject('ServiceWorker not supported in this browser')
 }
 
 // Initializes Firebase.
 // Registers a serviceWorker if one is registered on the system.
 export const firebaseInit = () => (dispatch) => {
-  if (process.env.NODE_ENV !== 'production') {
-    return
-  }
-  firebase.initializeApp({
+  // if (process.env.NODE_ENV !== 'production') {
+  //   return Promise.resolve()
+  // }
+  return firebase.initializeApp({
     apiKey: constants.FIREBASE_WEB_KEY,
     databaseURL: constants.FIREBASE_DB_URL,
     messagingSenderId: constants.FIREBASE_SENDER_ID
@@ -35,7 +37,7 @@ export const fcmTokenRefresh = (updateToken) => (dispatch) =>
 export const getFcmToken = (updateToken) => (dispatch) =>
  firebase.messaging().getToken()
  .then(updateToken)
- .catch(errorLog('Receiving FCM token'))
+ .catch(errorLog('Error receiving FCM token'))
 
 // Requests permission to send notifications to the user.
 export const requestNotifPermissions = (updateToken) => (dispatch) => {
