@@ -59,9 +59,7 @@ class RoomCard extends Component {
       addNametagEditBadge,
       removeNametagEditBadge,
       updateNametagEdit,
-      createNametag,
-      loginUser,
-      registerUser
+      createNametag
     } = this.props
     let card
     let flipping = {}
@@ -134,8 +132,6 @@ class RoomCard extends Component {
           addNametagEditBadge={addNametagEditBadge}
           removeNametagEditBadge={removeNametagEditBadge}
           updateNametagEdit={updateNametagEdit}
-          loginUser={loginUser}
-          registerUser={registerUser}
           />
       }
     </Card>
@@ -178,8 +174,6 @@ RoomCard.propTypes = {
   addNametagEditBadge: PropTypes.func.isRequired,
   removeNametagEditBadge: PropTypes.func.isRequired,
   updateNametagEdit: PropTypes.func.isRequired,
-  loginUser: PropTypes.func,
-  registerUser: PropTypes.func,
   createNametag: PropTypes.func,
   creating: PropTypes.bool
 }

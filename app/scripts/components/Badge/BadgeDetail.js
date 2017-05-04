@@ -1,13 +1,10 @@
 import React, {Component, PropTypes} from 'react'
 import Badge from './Badge'
 import RaisedButton from 'material-ui/RaisedButton'
-import FlatButton from 'material-ui/FlatButton'
 import EditNametag from '../Nametag/EditNametag'
 import CircularProgress from 'material-ui/CircularProgress'
-import {indigo500} from 'material-ui/styles/colors'
 import NavBar from '../Utils/NavBar'
-import Login from '../User/Login'
-import QRcode from 'qrcode.react'
+import Login from '../../containers/User/LoginContainer'
 
 class BadgeDetail extends Component {
 
@@ -53,14 +50,11 @@ class BadgeDetail extends Component {
 
   render () {
     const {
-      params,
       data: {me, template, loading},
       nametagEdits,
       updateNametagEdit,
       addNametagEditBadge,
-      removeNametagEditBadge,
-      loginUser,
-      registerUser
+      removeNametagEditBadge
     } = this.props
 
     if (loading) {
@@ -69,49 +63,38 @@ class BadgeDetail extends Component {
       </div>
     }
 
-    const path = `https://${window.location.host}/badges/${template.id}`
-    const shareMode = !!params.granterId
-    let headerText
+    // const path = `https://${window.location.host}/badges/${template.id}`
     let claimButton
 
-    headerText = shareMode
-    ? <div>
-      <div style={styles.header}>
-        <h3>Your badge has been created.</h3>
-        <div>You can share this URL with the people you would like to grant it to.</div>
-      </div>
-      <input
-        type='text'
-        id='hiddenPath'
-        value={path} />
-      <div style={styles.shareButtons}>
-        <FlatButton
-          style={styles.button}
-          onClick={this.onEmailClick}
-          label='E-MAIL' />
-        <FlatButton
-          style={styles.button}
-          onClick={this.onClipboardClick}
-          label='COPY TO CLIPBOARD' />
-        <FlatButton
-          style={styles.button}
-          onClick={this.onQRClick}
-          label='SHOW QR CODE' />
-      </div>
-    </div>
-      : <div style={styles.header}>
-        <h3>Request This Badge</h3>
-        Badges let others know why you are worthy of trust and respect.
-        They can also give you access to exclusive communities.
-      </div>
+    // headerText = shareMode
+    // ? <div>
+    //   <div style={styles.header}>
+    //     <h3>Your badge has been created.</h3>
+    //     <div>You can share this URL with the people you would like to grant it to.</div>
+    //   </div>
+    //   <input
+    //     type='text'
+    //     id='hiddenPath'
+    //     value={path} />
+    //   <div style={styles.shareButtons}>
+    //     <FlatButton
+    //       style={styles.button}
+    //       onClick={this.onEmailClick}
+    //       label='E-MAIL' />
+    //     <FlatButton
+    //       style={styles.button}
+    //       onClick={this.onClipboardClick}
+    //       label='COPY TO CLIPBOARD' />
+    //     <FlatButton
+    //       style={styles.button}
+    //       onClick={this.onQRClick}
+    //       label='SHOW QR CODE' />
+    //   </div>
+    // </div>
 
-    if (shareMode) {
-      claimButton = null
-    } else if (!me) {
+    if (!me) {
       claimButton = <Login
-        message={'Log in to request this badge'}
-        loginUser={loginUser}
-        registerUser={registerUser} />
+        message='Log in to request this badge' />
     } else if (this.state.requested) {
       claimButton = <div style={styles.claimButton}>
         <div style={styles.header}>
@@ -121,7 +104,7 @@ class BadgeDetail extends Component {
             style={styles.claimButton}
             labelStyle={styles.buttonLabel}
             primary
-            onClick={() => {window.location = '/'}}
+            onClick={() => { window.location = '/' }}
             label='RETURN TO HOMEPAGE' />
         </div>
       </div>
@@ -157,21 +140,11 @@ class BadgeDetail extends Component {
       <NavBar
         me={me} />
       <div style={styles.certDetailContainer}>
-        {
-          headerText
-        }
-        {
-          this.state.copySuccess &&
-          <div style={styles.copySuccess}>
-            Copied!
-          </div>
-        }
-        {
-          this.state.showQR &&
-          <div style={styles.QRcode}>
-            <QRcode value={window.location.href} size={256} />
-          </div>
-        }
+        <div style={styles.header}>
+          <h3>Request This Badge</h3>
+           Badges let others know why you are worthy of trust and respect.
+           They can also give you access to exclusive communities.
+        </div>
         <div style={styles.certDetail}>
           <Badge
             badge={{template, notes: [], id: 'template'}}
@@ -235,9 +208,7 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between'
   },
-  QRcode: {
-    margin: 20
-  },
+
   copySuccess: {
     color: 'green',
     fontSize: 12

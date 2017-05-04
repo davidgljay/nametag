@@ -14,7 +14,7 @@ class ExtendableError {
  * consistently.
  */
 class APIError extends ExtendableError {
-  constructor (message, {status = 500, translationKey = null}, metadata = {}) {
+  constructor (message, {status = 500, translationKey = null} = {}, metadata = {}) {
     super(message)
 
     this.status = status
@@ -33,17 +33,17 @@ class APIError extends ExtendableError {
 }
 
 // ErrPasswordTooShort is returned when the password length is too short.
-const ErrPasswordTooShort = new APIError('password must be at least 8 characters', {
+const ErrPasswordTooShort = new APIError('Password must be at least 8 characters', {
   status: 400,
   translation_key: 'PASSWORD_LENGTH'
 })
 
-const ErrMissingEmail = new APIError('email is required', {
+const ErrMissingEmail = new APIError('Email is required', {
   translation_key: 'EMAIL_REQUIRED',
   status: 400
 })
 
-const ErrMissingPassword = new APIError('password is required', {
+const ErrMissingPassword = new APIError('Password is required', {
   translation_key: 'PASSWORD_REQUIRED',
   status: 400
 })
@@ -99,6 +99,11 @@ const ErrNotAuthorized = new APIError('Not Authorized', {
   status: 401
 })
 
+const ErrInvalidToken = new APIError('Invalid Token', {
+  translation_key: 'INVALID_TOKEN',
+  status: 401
+})
+
 const errorLog = (msg) => (err) => {
   if (!(err instanceof APIError)) {
     console.log(err)
@@ -119,5 +124,6 @@ module.exports = {
   ErrNotFound,
   ErrAuthentication,
   ErrNotAuthorized,
+  ErrInvalidToken,
   errorLog
 }

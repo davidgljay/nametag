@@ -10,8 +10,8 @@ module.exports = {
   'output_folder': E2E_REPORT_PATH,
   'page_objects_path': './tests/e2e/pages',
   'globals_path': './tests/e2e/globals',
-  'custom_commands_path' : '',
-  'custom_assertions_path' : '',
+  'custom_commands_path': '',
+  'custom_assertions_path': '',
   'selenium': {
     'start_process': true,
     'server_path': 'node_modules/selenium-standalone/.selenium/selenium-server/3.3.1-server.jar',
@@ -24,7 +24,7 @@ module.exports = {
   },
   'test_settings': {
     'default': {
-      'launch_url' : 'https://localhost:8181',
+      'launch_url': 'https://localhost:8181',
       'selenium_port': 6666,
       'selenium_host': 'localhost',
       'silent': true,
@@ -37,7 +37,7 @@ module.exports = {
         'applicationCacheEnabled': false,
         'nativeEvents': true
       },
-      'screenshots' : {
+      'screenshots': {
         'enabled': true,
         'on_failure': true,
         'on_error': true,

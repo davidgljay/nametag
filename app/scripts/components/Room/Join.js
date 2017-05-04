@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react'
-import Login from '../User/Login'
+import Login from '../../containers/User/LoginContainer'
 import EditNametag from '../Nametag/EditNametag'
 import UserBadges from '../Badge/UserBadges'
-import {grey400, indigo500} from 'material-ui/styles/colors'
 import RaisedButton from 'material-ui/RaisedButton'
 import Alert from '../Utils/Alert'
+import {grey} from '../../../styles/colors'
 
 class Join extends Component {
 
@@ -37,8 +37,6 @@ class Join extends Component {
       removeNametagEditBadge,
       addNametagEditBadge,
       updateNametagEdit,
-      loginUser,
-      registerUser,
       room,
       me
     } = this.props
@@ -72,7 +70,7 @@ class Join extends Component {
             label='JOIN' />
         </div>
     } else {
-      join = <Login loginUser={loginUser} registerUser={registerUser} />
+      join = <Login />
     }
     return join
   }
@@ -84,9 +82,7 @@ Join.propTypes = {
   nametag: PropTypes.object,
   addNametagEditBadge: PropTypes.func.isRequired,
   removeNametagEditBadge: PropTypes.func.isRequired,
-  updateNametagEdit: PropTypes.func.isRequired,
-  loginUser: PropTypes.func.isRequired,
-  registerUser: PropTypes.func.isRequired
+  updateNametagEdit: PropTypes.func.isRequired
 }
 
 export default Join
@@ -108,10 +104,10 @@ const styles = {
   userBadgeText: {
     fontStyle: 'italic',
     fontSize: 16,
-    color: grey400
+    color: grey
   },
   userBadgeIcon: {
-    color: grey400,
+    color: grey,
     fontSize: 18,
     verticalAlign: 'middle'
   },

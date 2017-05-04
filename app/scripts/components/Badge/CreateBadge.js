@@ -4,7 +4,6 @@ import TextField from 'material-ui/TextField'
 import NavBar from '../Utils/NavBar'
 import CircularProgress from 'material-ui/CircularProgress'
 import RaisedButton from 'material-ui/RaisedButton'
-import {indigo500} from 'material-ui/styles/colors'
 
 class CreateBadge extends Component {
 
@@ -131,7 +130,7 @@ class CreateBadge extends Component {
         <div style={styles.createButton}>
           <RaisedButton
             labelStyle={styles.buttonLabel}
-            backgroundColor={indigo500}
+            primary
             label={'CREATE BADGE'}
             onClick={this.createBadge} />
         </div>

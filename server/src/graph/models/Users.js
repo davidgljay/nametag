@@ -1,9 +1,18 @@
 const {db} = require('../../db')
 const r = require('rethinkdb')
+const uuid = require('uuid')
 const {fromUrl} = require('../../routes/images/imageUpload')
-const {ErrBadAuth, ErrNotLoggedIn, ErrEmailTaken} = require('../../errors')
+const {
+  ErrBadAuth,
+  ErrNotLoggedIn,
+  ErrEmailTaken,
+  ErrInvalidToken,
+  ErrNotFound,
+  APIError
+} = require('../../errors')
 const {passwordsalt} = require('../../secrets.json')
 const {enc, SHA3} = require('crypto-js')
+const sendEmail = require('../../email')
 
 const usersTable = db.table('users')
 
@@ -113,7 +122,6 @@ const addBadge = ({user, conn}, badgeId, templateId) =>
  */
 
 const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
-
   // Either create the user or log them in
   return usersTable
     .getAll(authProfile.id, {index: provider}).run(conn)
@@ -131,8 +139,7 @@ const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
             displayNames: authProfile.displayNames,
             images: [imageUrl.url],
             [provider]: authProfile.id,
-            createdAt: new Date(),
-            images: []
+            createdAt: new Date()
           }
           return Promise.all([
             usersTable.insert(userObj).run(conn),
@@ -150,7 +157,7 @@ const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
               }),
             authProfile
           }
-      })
+        })
     })
 }
 
@@ -166,19 +173,21 @@ const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
 const addDefaultsFromAuth = (context, authProfile) => {
   const {user, conn} = context
   let userUpdates = authProfile.displayNames
+  ? authProfile.displayNames
     .reduce((arr, name) =>
       user.displayNames.indexOf(name) === -1
       ? arr.concat(appendUserArray(context, 'displayNames', name)) : arr, [])
+  : []
   return fromUrl(50, 50, authProfile.providerPhotoUrl)
     .then(({url}) => Promise.all(
       userUpdates
       .concat(
-        user.images.indexOf(url) === -1 ? appendUserArray(context, 'images', url) : null
+        user.images && user.images.indexOf(url) === -1 ? appendUserArray(context, 'images', url) : null
       ).concat(
         usersTable.update({[authProfile.provider]: authProfile.id}).run(conn)
       )
     ))
-  }
+}
 
 /**
 * Adds badges to a user from an auth provider
@@ -190,10 +199,10 @@ const addDefaultsFromAuth = (context, authProfile) => {
 */
 
 const addBadgesFromAuth = ({conn, user, models: {Templates, Granters}}, {badges = [], provider}) => {
-    return Promise.all([
-      user.badges ? Templates.getAll(Object.keys(user.badges)) : [],
-      Granters.getByUrlCode('nametag')
-    ])
+  return Promise.all([
+    user.badges ? Templates.getAll(Object.keys(user.badges)) : [],
+    Granters.getByUrlCode('nametag')
+  ])
 
     // Check to see if the a badge has already been granted. If not, grant one.
     .then(([templates, granter]) => {
@@ -207,11 +216,11 @@ const addBadgesFromAuth = ({conn, user, models: {Templates, Granters}}, {badges 
 
       let promises = []
 
-      for (var i=0; i < badges.length; i++ ) {
+      for (var i = 0; i < badges.length; i++) {
         const badge = badgesFromAuth(badges[i], provider)
         if (
-          templateNames.indexOf(badge.name) === -1
-          && templateDescriptions.indexOf(badge.description) === -1
+          templateNames.indexOf(badge.name) === -1 &&
+          templateDescriptions.indexOf(badge.description) === -1
         ) {
           promises.push(
             Templates.createAndGrant({
@@ -229,33 +238,28 @@ const addBadgesFromAuth = ({conn, user, models: {Templates, Granters}}, {badges 
 
 const badgesFromAuth = (badge, provider) => {
   switch (Object.keys(badge)[0]) {
-  case 'name':
-    return {
-      name: badge.name,
-      description: `This individual uses the name ${badge.name} on Facebook.`,
-      image: '/public/images/fb.jpg',
-      note: 'Confirmed via Facebook.'
-    }
-  case 'gender':
-    return {
-      name: badge.gender,
-      description: `This individual has listed their gender as ${badge.gender} on Facebook.`,
-      image: '/public/images/fb.jpg',
-      note: 'Confirmed via Facebook.'
-    }
-  case 'twitter':
-    return {
-      name: `@${badge.twitter}`,
-      description: `This has the account @${badge.twitter} on Twitter.`,
-      image: '/public/images/twitter.jpg',
-      note: 'Confirmed via Twitter.'
-    }
+    case 'name':
+      return {
+        name: badge.name,
+        description: `This individual uses the name ${badge.name} on Facebook.`,
+        image: '/public/images/fb.jpg',
+        note: 'Confirmed via Facebook.'
+      }
+    case 'gender':
+      return {
+        name: badge.gender,
+        description: `This individual has listed their gender as ${badge.gender} on Facebook.`,
+        image: '/public/images/fb.jpg',
+        note: 'Confirmed via Facebook.'
+      }
+    case 'twitter':
+      return {
+        name: `@${badge.twitter}`,
+        description: `This has the account @${badge.twitter} on Twitter.`,
+        image: '/public/images/twitter.jpg',
+        note: 'Confirmed via Twitter.'
+      }
   }
-}
-
-const hashPassword = (password) => {
-  let hashedPassword = SHA3(password, {outputLength: 224})
-  return hashedPassword.toString(enc.Base64)
 }
 
 /**
@@ -286,11 +290,112 @@ const createLocal = ({conn}, email, password) =>
       return Promise.reject(ErrEmailTaken)
     }
     const id = res.generated_keys[0]
-    return usersTable.get(id).update({
-      password: hashPassword(`${password}${passwordsalt}${id}`)
-    }).run(conn)
-    .then(() => id)
+    return Promise.all([
+      id,
+      emailConfirmationRequest({conn}, email),
+      usersTable.get(id).update({
+        password: hashPassword(`${password}${passwordsalt}${id}`)
+      }).run(conn)
+    ])
+    .then(([id]) => id)
   })
+
+/**
+ * Sets a forgot password token.
+ *
+ * @param {Object} context   graph context
+ * @param {String} email     E-mail address of the user
+ *
+ */
+
+const passwordResetRequest = ({conn}, email) => {
+  const token = uuid.v4()
+  return usersTable.getAll(email, {index: 'email'}).update({forgotPassToken: token}).run(conn)
+    .then(res => {
+      if (res.errors > 0) {
+        return Promise.reject(new APIError(res.error))
+      }
+      if (res.replaced > 0) {
+        return sendEmail({
+          from: {
+            email: 'info@nametag.chat',
+            name: 'Nametag Password Reset'
+          },
+          to: email,
+          template: 'passwordReset',
+          params: {token}
+        })
+      }
+    })
+}
+
+/**
+ * Resets a password based on a user's token.
+ * @param {Object} context   graph context
+ * @param {String} token     Password reset token
+ * @param {String} password The new hashed password
+ *
+ */
+
+const passwordReset = ({conn}, token, password) =>
+  token
+  ? usersTable.getAll(token, {index: 'forgotPassToken'}).update(
+    u => ({
+      password: hashPassword(`${password}${passwordsalt}${u('id')}`),
+      forgotPassToken: null
+    })).run(conn)
+    .then(res => {
+      if (res.errors > 0) {
+        return new Error(res.error)
+      }
+      if (res.replaced > 0) {
+        return
+      } else {
+        return Promise.reject(ErrInvalidToken)
+      }
+    })
+    : Promise.reject(ErrInvalidToken)
+
+/**
+ * Sets an email confirmation token.
+ *
+ * @param {Object} context   graph context
+ * @param {String} email     E-mail address of the user
+ *
+ */
+
+const emailConfirmationRequest = ({conn}, email) => {
+  const token = uuid.v4()
+  return usersTable.getAll(email, {index: 'email'}).update({confirmation: token}).run(conn)
+    .then(res => {
+      if (res.errors > 0) {
+        return Promise.reject(new APIError(res.error))
+      }
+      if (res.replaced > 0) {
+        return sendEmail({
+          from: {
+            email: 'info@nametag.chat',
+            name: 'Nametag Confirmation'
+          },
+          to: email,
+          template: 'emailConfirm',
+          params: {email, token}
+        })
+      }
+    })
+}
+
+/**
+ * Confirms an e-mail.
+ *
+ * @param {Object} context   graph context
+ * @param {String} email     E-mail address of the user
+ *
+ */
+
+const emailConfirmation = ({conn}, token) =>
+  usersTable.getAll(token, {index: 'confirmation'}).update({confirmation: 'confirmed'}).run(conn)
+    .then(res => res.replaced === 0 ? ErrNotFound : null)
 
 /**
  * Determines whether a hashed password is valid
@@ -303,6 +408,11 @@ const createLocal = ({conn}, email, password) =>
 
 const validPassword = ({conn}, id, password) =>
   usersTable.get(id)('password').eq(hashPassword(`${password}${passwordsalt}${id}`)).run(conn)
+
+const hashPassword = (password) => {
+  let hashedPassword = SHA3(password, {outputLength: 224})
+  return hashedPassword.toString(enc.Base64)
+}
 
 module.exports = (context) => ({
   Users: {
@@ -317,6 +427,10 @@ module.exports = (context) => ({
     addToken: (token) => addToken(context, token),
     getToken: (nametagId) => getToken(context, nametagId),
     addBadgesFromAuth: (authProfile, user) => addBadgesFromAuth(context, authProfile, user),
-    addDefaultsFromAuth: (authProfile, user) => addDefaultsFromAuth(context, authProfile, user)
+    addDefaultsFromAuth: (authProfile, user) => addDefaultsFromAuth(context, authProfile, user),
+    passwordResetRequest: (email) => passwordResetRequest(context, email),
+    passwordReset: (token, password) => passwordReset(context, token, password),
+    emailConfirmationRequest: (email) => emailConfirmationRequest(context, email),
+    emailConfirmation: (token) => emailConfirmation(context, token)
   }
 })

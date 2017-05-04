@@ -2,6 +2,7 @@ mutation updateLatestVisit ($nametagId: ID!) {
   updateLatestVisit(nametagId: $nametagId) {
     errors {
       translation_key
+      message
     }
   }
 }

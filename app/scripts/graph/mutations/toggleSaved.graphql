@@ -2,6 +2,7 @@ mutation ToggleSaved ($messageId: ID!, $saved: Boolean!) {
   toggleSaved(messageId: $messageId, saved: $saved) {
     errors {
       translation_key
+      message
     }
   }
 }

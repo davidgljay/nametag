@@ -8,6 +8,10 @@ import TOGGLE_SAVED from './toggleSaved.graphql'
 import UPDATE_LATEST_VISIT from './updateLatestVisit.graphql'
 import UPDATE_BADGE_REQUEST_STATUS from './updateBadgeRequestStatus.graphql'
 import UPDATE_TOKEN from './updateToken.graphql'
+import PASSWORD_RESET from './passwordReset.graphql'
+import PASSWORD_RESET_REQ from './passwordResetRequest.graphql'
+import EMAIL_CONF_REQ from './emailConfirmationRequest.graphql'
+import EMAIL_CONF from './emailConfirmation.graphql'
 import ADD_NOTE from './addNote.graphql'
 import errorLog from '../../utils/errorLog'
 
@@ -56,6 +60,47 @@ export const createBadge = graphql(CREATE_BADGE, {
     createBadge: (badge) => mutate({
       variables: {
         badge
+      }
+    })
+  })
+})
+
+export const passwordResetRequest = graphql(PASSWORD_RESET_REQ, {
+  props: ({ownProps, mutate}) => ({
+    passwordResetRequest: (email) => mutate({
+      variables: {
+        email
+      }
+    })
+  })
+})
+
+export const passwordReset = graphql(PASSWORD_RESET, {
+  props: ({ownProps, mutate}) => ({
+    passwordReset: (token, password) => mutate({
+      variables: {
+        token,
+        password
+      }
+    })
+  })
+})
+
+export const emailConfirmationRequest = graphql(EMAIL_CONF_REQ, {
+  props: ({ownProps, mutate}) => ({
+    emailConfirmationRequest: (email) => mutate({
+      variables: {
+        email
+      }
+    })
+  })
+})
+
+export const emailConfirmation = graphql(EMAIL_CONF, {
+  props: ({ownProps, mutate}) => ({
+    emailConfirmation: (token) => mutate({
+      variables: {
+        token
       }
     })
   })

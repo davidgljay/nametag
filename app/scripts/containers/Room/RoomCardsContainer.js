@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import {compose} from 'react-apollo'
 import component from '../../components/Room/RoomCards'
 import {roomsQuery} from '../../graph/queries'
-import {createNametag} from '../../graph/mutations'
+import {createNametag, passwordResetRequest} from '../../graph/mutations'
 import {registerUser, loginUser} from '../../actions/UserActions'
 import {updateNametagEdit, addNametagEditBadge, removeNametagEditBadge} from '../../actions/NametagEditActions'
 
@@ -26,6 +26,7 @@ const mapDispatchToProps = (dispatch) => {
 const RoomCards = compose(
   connect(mapStateToProps, mapDispatchToProps),
   createNametag,
+  passwordResetRequest,
   roomsQuery
 )(component)
 

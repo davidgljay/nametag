@@ -2,7 +2,7 @@ import React from 'react'
 import { CardActions } from 'material-ui/Card'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
-import {indigo500, red500} from 'material-ui/styles/colors'
+import {red} from '../../../styles/colors'
 
 const ModActionButtons = (props) => <CardActions>
   <RaisedButton
@@ -38,7 +38,7 @@ const styles = {
     padding: '0px 10px'
   },
   severe: {
-    color: red500,
+    color: red,
     marginTop: 10
   }
 }

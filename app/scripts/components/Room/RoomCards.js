@@ -32,8 +32,6 @@ class RoomCards extends Component {
       updateNametagEdit,
       addNametagEditBadge,
       removeNametagEditBadge,
-      loginUser,
-      registerUser,
       nametagEdits,
       createNametag
     } = this.props
@@ -71,8 +69,6 @@ class RoomCards extends Component {
               createNametag={createNametag}
               updateNametagEdit={updateNametagEdit}
               addNametagEditBadge={addNametagEditBadge}
-              registerUser={registerUser}
-              loginUser={loginUser}
               removeNametagEditBadge={removeNametagEditBadge} />
           )
         }
@@ -80,30 +76,28 @@ class RoomCards extends Component {
       <LoginDialog
         showLogin={this.state.showLogin}
         toggleLogin={this.toggleLogin}
-        registerUser={registerUser}
-        loginUser={loginUser}
         message='Log In or Register' />
 
     </div>
   }
 }
 
+const {string, arrayOf, shape} = PropTypes
+
 RoomCards.propTypes = {
-  registerUser: PropTypes.func.isRequired,
-  loginUser: PropTypes.func.isRequired,
-  data: PropTypes.shape({
-    me: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      nametags: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        room: PropTypes.shape({
-          id: PropTypes.string
+  data: shape({
+    me: shape({
+      id: string.isRequired,
+      nametags: arrayOf(shape({
+        id: string.isRequired,
+        room: shape({
+          id: string
         })
       })).isRequired
     }),
-    rooms: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired
+    rooms: arrayOf(
+      shape({
+        id: string.isRequired
       }).isRequired
     )
   })

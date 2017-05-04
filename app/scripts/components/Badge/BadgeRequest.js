@@ -5,7 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import Nametag from '../Nametag/Nametag'
 import Badge from './Badge'
 import FontIcon from 'material-ui/FontIcon'
-import {primary, secondary, grey} from '../../../styles/colors'
+import {primary, grey} from '../../../styles/colors'
 import CircularProgress from 'material-ui/CircularProgress'
 import TextField from 'material-ui/TextField'
 
@@ -132,7 +132,7 @@ BadgeRequest.propTypes = {
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       bio: PropTypes.string,
-      image: PropTypes.string.isRequired,
+      image: PropTypes.string,
       badges: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired
     })
   }).isRequired

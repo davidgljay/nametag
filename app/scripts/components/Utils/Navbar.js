@@ -9,10 +9,6 @@ const onCreateRoomClick = () => {
   window.location = '/rooms/create'
 }
 
-const onCreateCertClick = () => {
-  window.location = '/badges/create'
-}
-
 const onHomeClick = () => {
   window.location = '/rooms'
 }
@@ -31,7 +27,7 @@ class NavBar extends Component {
   }
 
   render () {
-    const {toggleLogin = () => {}, me} = this.props
+    const {toggleLogin = () => {}, me, empty} = this.props
     const mobile = window.innerWidth <= 800
     const auth = <div style={styles.buttons}>
       {
@@ -62,12 +58,13 @@ class NavBar extends Component {
         title='Nametag'
         style={styles.appBar}
         onTitleTouchTap={onHomeClick}
-        iconElementRight={mobile ? null : auth}
+        iconElementRight={mobile || empty ? null : auth}
         onLeftIconButtonTouchTap={() => this.setState({open: true})} />
       <NavDrawer
         open={this.state.open}
         toggleLogin={toggleLogin}
         me={me}
+        empty={empty}
         setOpen={(open) => this.setState({open})} />
     </div>
   }
@@ -77,7 +74,8 @@ NavBar.propTypes = {
   me: PropTypes.shape({
     id: PropTypes.string
   }),
-  toggleLogin: PropTypes.func
+  toggleLogin: PropTypes.func,
+  empty: PropTypes.bool
 }
 
 export default radium(NavBar)
