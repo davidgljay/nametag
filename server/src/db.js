@@ -12,8 +12,8 @@ switch (process.env.NODE_ENV) {
   default:
     db = r.db('nametag')
     init = (conn) => r.dbCreate('nametag').run(conn).catch(err => {
-      if (err.msg !==  'Database `nametag` already exists.') {
-        console.log('err', err)  
+      if (err.msg !== 'Database `nametag` already exists.') {
+        console.log('err', err)
       }
       return null
     })
