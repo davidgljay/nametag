@@ -2,6 +2,9 @@ import React, {Component, PropTypes} from 'react'
 import AppBar from 'material-ui/AppBar'
 import FlatButton from 'material-ui/FlatButton'
 import radium from 'radium'
+import Popover from 'material-ui/PopOver'
+import Menu from 'material-ui/Menu'
+import MenuItem from 'material-ui/MenuItem'
 import {mobile} from '../../../styles/sizes'
 import NavDrawer from './NavDrawer'
 
@@ -24,10 +27,18 @@ class NavBar extends Component {
     this.state = {
       open: false
     }
+
+    this.showGranters = (e) => {
+      this.setState({
+        showGranters: !this.state.showGranters,
+        element: e.currentTarget
+      })
+    }
   }
 
   render () {
     const {toggleLogin = () => {}, me, empty} = this.props
+    const {showGranters, element} = this.state
     const mobile = window.innerWidth <= 800
     const auth = <div style={styles.buttons}>
       {
@@ -37,6 +48,42 @@ class NavBar extends Component {
             style={styles.button}
             id='homeButton'
             onClick={onHomeClick} label='HOME' />
+          {
+            me.granters.length === 1 &&
+            <FlatButton
+              style={styles.button}
+              id='granterButton'
+              onClick={() => { window.location = `/granters/${me.granters[0].urlCode}` }}
+              label={me.granters[0].name} />
+          }
+          {
+            me.granters.length > 1 &&
+              <FlatButton
+                style={styles.button}
+                id='granterButton'
+                onClick={this.showGranters}
+                label={'ORGANIZATIONS'} />
+          }
+          {
+            me.granters.length > 1 &&
+              <Popover
+                open={showGranters}
+                anchorEl={element}
+                anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+                targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                onRequestClose={this.handleRequestClose}>
+                <Menu>
+                  {
+                    me.granters.map(granter =>
+                      <MenuItem
+                        key={granter.urlCode}
+                        primaryText={granter.name}
+                        href={`/granters/${granter.urlCode}`} />
+                    )
+                  }
+                </Menu>
+              </Popover>
+          }
           <FlatButton
             style={styles.button}
             id='createRoomButton'
@@ -92,6 +139,7 @@ const styles = {
 
   },
   buttons: {
+    display: 'flex',
     [mobile]: {
       display: 'none'
     }

@@ -2,26 +2,21 @@ import React from 'react'
 import Drawer from 'material-ui/Drawer'
 import MenuItem from 'material-ui/MenuItem'
 
-const onCreateRoomClick = () => {
-  window.location = '/rooms/create'
-}
-
-const onHomeClick = () => {
-  window.location = '/rooms'
-}
-
-const onLogoutClick = () => {
-  window.location = '/logout'
-}
-
 const NavDrawer = ({me, empty, toggleLogin, open, setOpen}) => {
   let items = null
   if (me) {
     items = <div>
-      <MenuItem onClick={onHomeClick}>Home</MenuItem>
-      <MenuItem onClick={onCreateRoomClick}>Create Room</MenuItem>
+      <MenuItem href='/rooms/create'>Create Room</MenuItem>
+      {
+        me.granters.map(granter =>
+          <MenuItem
+            key={granter.urlCode}
+            primaryText={granter.name}
+            href={`/granters/${granter.urlCode}`} />
+        )
+      }
       <MenuItem
-        onClick={onLogoutClick}>Log Out</MenuItem>
+        href='/logout'>Log Out</MenuItem>
     </div>
   } else if (!empty) {
     items = <MenuItem onClick={() => toggleLogin()}>Log In</MenuItem>
@@ -32,7 +27,7 @@ const NavDrawer = ({me, empty, toggleLogin, open, setOpen}) => {
     style={styles.drawer}
     onRequestChange={setOpen}>
     <div style={styles.drawerTitle}><h2>Nametag</h2></div>
-    <MenuItem onClick={onHomeClick}>Home</MenuItem>
+    <MenuItem href='/'>Home</MenuItem>
     {items}
   </Drawer>
 }

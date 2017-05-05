@@ -28,6 +28,10 @@ query roomsQuery {
   }
   me {
    id
+   granters {
+     name
+     urlCode
+   }
    displayNames
    images
    badges {

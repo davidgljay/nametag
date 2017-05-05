@@ -3,6 +3,10 @@
 query userQuery {
   me {
     id
+    granters {
+      name
+      urlCode
+    }
     displayNames
     images
     badges {

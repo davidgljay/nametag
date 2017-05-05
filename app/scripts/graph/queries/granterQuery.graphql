@@ -55,5 +55,9 @@ query granterQuery($urlCode: String!) {
   }
   me {
     id
+    granters {
+      name
+      urlCode
+    }
   }
 }
