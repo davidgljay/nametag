@@ -70,7 +70,10 @@ class Badge extends Component {
     // Show an image if one exists, or a manu to upload an image if showIconUpload is enabled
     let imageComponent
     if (image) {
-      imageComponent = <img style={styles.image} alt='image' src={image} />
+      const imageStyle = Object.assign({},
+        styles.image,
+        {background: `url(${image}) 0 0 / cover`})
+      imageComponent = <div style={imageStyle} />
     } else if (showIconUpload) {
       imageComponent = this.state.uploading
       ? <CircularProgress />
