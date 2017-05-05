@@ -87,7 +87,9 @@ const addToken = ({user, conn}, token) =>
 
 const getToken = ({conn}, nametagId) =>
   usersTable.getAll(nametagId, {index: 'nametags'})('token').nth(0).run(conn)
-  .catch(err => ErrNotFound)
+  .catch(err => err.name === 'ReqlNonExistenceError'
+    ? Promise.reject(ErrNotFound)
+    : Promise.reject(err))
 
 /**
  * Adds a nametag to the user.
@@ -114,8 +116,8 @@ const addBadge = ({user, conn}, badgeId, templateId, nametagId) =>
   usersTable.getAll(nametagId, {index: 'nametags'}).nth(0)
     .update({badges: {[templateId]: badgeId}}).run(conn)
     .catch(err => err.name === 'ReqlNonExistenceError'
-      ? ErrNotFound
-      : err)
+      ? Promise.reject(ErrNotFound)
+      : Promise.reject(err))
 
 /**
  * Finds or creates a user based on an oauth provider.
