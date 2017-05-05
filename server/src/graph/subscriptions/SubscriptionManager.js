@@ -10,7 +10,7 @@ module.exports = new SubscriptionManager({
       messageAdded: {
         filter: message => message.room === args.roomId &&
                             (
-                              message.recipient === null ||
+                              !message.recipient ||
                               message.recipient === args.nametagId ||
                               message.author === args.nametagId
                             )

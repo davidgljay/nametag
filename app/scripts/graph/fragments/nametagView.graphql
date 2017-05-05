@@ -5,6 +5,7 @@ fragment nametagView on Nametag {
   name
   image
   bio
+  present
   createdAt
   badges {
     ...badgeView
