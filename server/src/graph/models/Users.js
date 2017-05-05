@@ -92,6 +92,20 @@ const getToken = ({conn}, nametagId) =>
     : Promise.reject(err))
 
 /**
+ * Gets an array of e-mail addresses based on an array of nametags
+ * NOTE: This is temporary, and breaks a core promise to our users: we shouldn't be able to
+ * track people from room to room! A nice, elegant solution has been planned for this later.
+ *
+ * @param {Object} context     graph context
+ * @param {String} nametagIds   the nametagIds which need to be sent an email
+ *
+ */
+
+const getEmails = ({conn}, nametagIds) =>
+  usersTable.getAll(nametagIds, {index: 'nametags'})('email').run(conn)
+  .then(cursor => cursor.toArray())
+
+/**
  * Adds a nametag to the user.
  *
  * @param {Object} context     graph context
@@ -433,6 +447,7 @@ module.exports = (context) => ({
     addBadge: (badgeId, templateId, nametagId) => addBadge(context, badgeId, templateId, nametagId),
     addToken: (token) => addToken(context, token),
     getToken: (nametagId) => getToken(context, nametagId),
+    getEmails: (nametagId) => getEmails(context, nametagId),
     addBadgesFromAuth: (authProfile, user) => addBadgesFromAuth(context, authProfile, user),
     addDefaultsFromAuth: (authProfile, user) => addDefaultsFromAuth(context, authProfile, user),
     passwordResetRequest: (email) => passwordResetRequest(context, email),
