@@ -12,6 +12,12 @@ const User = {
     }
     const nametagIds = Object.keys(nametags).reduce((arr, room) => arr.concat(nametags[room]), [])
     return Nametags.getAll(nametagIds)
+  },
+  granters: (obj, args, {user: {badges}, models: {Granters}}) => {
+    if (!badges) {
+      return []
+    }
+    return Granters.getByAdminTemplate(Object.keys(badges))
   }
 }
 

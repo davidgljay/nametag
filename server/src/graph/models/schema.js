@@ -34,7 +34,7 @@ module.exports = {
     indexes: ['granter']
   },
   granters: {
-    indexes: ['urlCode']
+    indexes: ['urlCode', 'adminTemplate']
   },
   badgeRequests: {
     indexes: [{name: 'granterStatus', fields: ['granter', 'status']}, 'nametag']

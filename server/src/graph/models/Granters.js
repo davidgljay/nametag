@@ -17,7 +17,7 @@ const get = ({conn}, id) => grantersTable.get(id).run(conn)
  * Returns a badge granter from a url code.
  *
  * @param {Object} context     graph context
- * @param {String} urlCode   the urlCode of the badge to be retrieved
+ * @param {String} urlCode   the urlCode of the granter to be retrieved
  *
  */
 
@@ -26,6 +26,18 @@ const getByUrlCode = ({conn}, urlCode) => grantersTable.getAll(urlCode, {index: 
   .catch(err => err.message === 'No more rows in the cursor.'
     ? Promise.reject(ErrNotFound)
     : Promise.reject(err))
+
+/**
+ * Returns a badge granter from a url code.
+ *
+ * @param {Object} context     graph context
+ * @param {String} adminTemplateIds   the aminTemplate ids of one or more granters to be retrieved
+ *
+ */
+
+const getByAdminTemplate = ({conn}, adminTemplateIds) => grantersTable
+  .getAll(...adminTemplateIds, {index: 'adminTemplate'}).run(conn)
+  .then(cursor => cursor.toArray())
 
 /**
  * Creates a badge granter
@@ -68,6 +80,7 @@ module.exports = (context) => ({
   Granters: {
     get: id => get(context, id),
     create: badge => create(context, badge),
-    getByUrlCode: urlCode => getByUrlCode(context, urlCode)
+    getByUrlCode: urlCode => getByUrlCode(context, urlCode),
+    getByAdminTemplate: adminTemplateIds => getByAdminTemplate(context, adminTemplateIds)
   }
 })

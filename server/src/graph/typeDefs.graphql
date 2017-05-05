@@ -47,6 +47,9 @@ type User {
   # Nametags created by this user
   nametags: [Nametag]
 
+  # Granters administered by this user
+  granters: [Granter]
+
   # Time when the user was created
   createdAt: Date!
 
