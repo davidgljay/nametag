@@ -25,6 +25,8 @@ const styles = {
   granterInfoContainer: {
     display: 'flex',
     justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginBottom: 40,
     [mobile]: {
       alignItems: 'center',
       flexDirection: 'column'
@@ -32,8 +34,7 @@ const styles = {
     marginTop: 30
   },
   granterImage: {
-    width: 200,
-    height: 200
+    width: 200
   },
   description: {
     fontSize: 20
