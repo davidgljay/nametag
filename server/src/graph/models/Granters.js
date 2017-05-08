@@ -50,7 +50,7 @@ const getByAdminTemplate = ({conn}, adminTemplateIds) => grantersTable
    * @param {Object} params The params of the email to be sent
    */
 
-  const notifyAdmins = ({conn, models: {Users}}, granterId, reason, params) =>
+const notifyAdmins = ({conn, models: {Users}}, granterId, reason, params) =>
   grantersTable.get(granterId)
     .do(g => db.table('templates').get(g('adminTemplate')))
     .do(t => db.table('badges').getAll(t('id'), {index: 'template'}))
@@ -59,7 +59,7 @@ const getByAdminTemplate = ({conn}, adminTemplateIds) => grantersTable
       .then(cursor => cursor.toArray())
       .then(adminNametags => Users.getTokens(adminNametags))
       .then(adminTokens => {
-        for (var i=0; i < adminTokens.length; i++ ) {
+        for (var i = 0; i < adminTokens.length; i++) {
           notification(
             {
               reason,
@@ -80,7 +80,7 @@ const getByAdminTemplate = ({conn}, adminTemplateIds) => grantersTable
    * @param {Object} params The params of the email to be sent
    */
 
-  const emailAdmins = ({conn, models: {Users}}, granterId, template, params) =>
+const emailAdmins = ({conn, models: {Users}}, granterId, template, params) =>
     grantersTable.get(granterId)
       .do(g => db.table('templates').get(g('adminTemplate')))
       .do(t => db.table('badges').getAll(t('id'), {index: 'template'}))
@@ -89,19 +89,18 @@ const getByAdminTemplate = ({conn}, adminTemplateIds) => grantersTable
       .then(cursor => cursor.toArray())
       .then(adminNametags => Users.getEmails(adminNametags))
       .then(adminEmails => {
-          for (var i=0; i < adminEmails.length; i++ ) {
-            sendEmail({
-              to: adminEmails[i],
-              from: {
-                name: 'Nametag',
-                email: 'info@nametag.chat'
-              },
-              template,
-              params
-            })
-          }
-        })
-
+        for (var i = 0; i < adminEmails.length; i++) {
+          sendEmail({
+            to: adminEmails[i],
+            from: {
+              name: 'Nametag',
+              email: 'info@nametag.chat'
+            },
+            template,
+            params
+          })
+        }
+      })
 
 /**
  * Creates a badge granter
