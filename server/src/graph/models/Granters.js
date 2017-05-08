@@ -1,5 +1,7 @@
 const {db} = require('../../db')
 const {ErrNotFound} = require('../../errors')
+const sendEmail = require('../../email')
+const notification = require('../../notifications')
 
 const grantersTable = db.table('granters')
 
@@ -38,6 +40,68 @@ const getByUrlCode = ({conn}, urlCode) => grantersTable.getAll(urlCode, {index: 
 const getByAdminTemplate = ({conn}, adminTemplateIds) => grantersTable
   .getAll(...adminTemplateIds, {index: 'adminTemplate'}).run(conn)
   .then(cursor => cursor.toArray())
+
+  /**
+   * Emails the granter's admins
+   *
+   * @param {Object} context     graph context
+   * @param {String} granterId    The id of the granter
+   * @param {String} template   The email templated to be used
+   * @param {Object} params The params of the email to be sent
+   */
+
+  const notifyAdmins = ({conn, models: {Users}}, granterId, reason, params) =>
+    grantersTable.get(granterId)
+      .eqJoin(g => g('adminTemplate'), r.db('nametag').table('templates'))
+      .map(j => j('right'))
+      .eqJoin(t => t('id'), r.db('nametag').table('badges', index='template'))
+      .map(j => j('right')('defaultNametag'))
+      .then(cursor => cursor.toArray())
+      .then(adminNametags => Users.getTokens(adminNametags)
+        .then(adminTokens => {
+          for (var i=0; i < adminTokens.length; i++ ) {
+            notification(
+              data: {
+                reason,
+                params
+              }
+              adminTokens[i]
+            )
+          }
+        })
+      )
+
+  /**
+   * Notifies the granter's admins
+   *
+   * @param {Object} context     graph context
+   * @param {String} granterId    The id of the granter
+   * @param {String} template   The email templated to be used
+   * @param {Object} params The params of the email to be sent
+   */
+
+  const notifyAdmins = ({conn, models: {Users}}, granterId, template, params) =>
+    grantersTable.get(granterId)
+      .eqJoin(g => g('adminTemplate'), r.db('nametag').table('templates'))
+	    .map(j => j('right'))
+      .eqJoin(t => t('id'), r.db('nametag').table('badges', index='template'))
+      .map(j => j('right')('defaultNametag'))
+      .then(cursor => cursor.toArray())
+      .then(adminNametags => Users.getEmails(adminNametags)
+          .then(adminEmails => {
+              for (var i=0; i < adminEmails.length; i++ ) {
+                sendEmail({
+                  to: adminEmails[i],
+                  from: {
+                    name: 'Nametag',
+                    email: 'info@nametag.chat'
+                  },
+                  template,
+                  params)
+              }
+            })
+          )
+
 
 /**
  * Creates a badge granter

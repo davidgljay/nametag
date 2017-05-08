@@ -49,19 +49,33 @@ self.addEventListener('fetch', function (event) {
 firebase.messaging().setBackgroundMessageHandler((payload) => {
   // Customize notification here
   let notificationTitle
-  const {roomTitle, roomId, senderName, text, icon, reason} = payload.data
+  let notificationOptions
+  const {params, reason} = payload.data
   switch (reason) {
     case 'MENTION':
-      notificationTitle = `${senderName} has mentioned you in ${roomTitle}`
+      notificationTitle = `${params.senderName} has mentioned you in ${params.roomTitle}`
+      notificationOptions = {
+        body: params.text,
+        icon: params.icon,
+        data: `/rooms/${params.roomId}`
+      }
       break
     case 'DM':
-      notificationTitle = `${senderName} has sent you a direct message in ${roomTitle}`
+      notificationTitle = `${params.senderName} has sent you a direct message in ${params.roomTitle}`
+      notificationOptions = {
+        body: params.text,
+        icon: params.icon,
+        data: `/rooms/${params.roomId}`
+      }
       break
-  }
-  const notificationOptions = {
-    body: text,
-    icon,
-    data: `/rooms/${roomId}`
+    case 'BADGE_REQUEST':
+      notificationTitle = `${params.requesterName} has requested the badge ${params.requestedBadge}`
+      notificationOptions = {
+        body: params.requesterBio,
+        icon: params.requesterIcon,
+        data: `/granters/${params.granterCode}`
+
+      }
   }
 
   return self.registration.showNotification(notificationTitle, notificationOptions)

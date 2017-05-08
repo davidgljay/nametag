@@ -85,11 +85,8 @@ const addToken = ({user, conn}, token) =>
  *
  */
 
-const getToken = ({conn}, nametagId) =>
-  usersTable.getAll(nametagId, {index: 'nametags'})('token').nth(0).run(conn)
-  .catch(err => err.name === 'ReqlNonExistenceError'
-    ? Promise.reject(ErrNotFound)
-    : Promise.reject(err))
+const getTokens = ({conn}, nametagIds) =>
+  usersTable.getAll(...nametagIds, {index: 'nametags'})('token').run(conn)
 
 /**
  * Gets an array of e-mail addresses based on an array of nametags
@@ -102,7 +99,7 @@ const getToken = ({conn}, nametagId) =>
  */
 
 const getEmails = ({conn}, nametagIds) =>
-  usersTable.getAll(nametagIds, {index: 'nametags'})('email').run(conn)
+  usersTable.getAll(...nametagIds, {index: 'nametags'})('email').run(conn)
   .then(cursor => cursor.toArray())
 
 /**
@@ -446,7 +443,7 @@ module.exports = (context) => ({
     addNametag: (nametagId, roomId) => addNametag(context, nametagId, roomId),
     addBadge: (badgeId, templateId, nametagId) => addBadge(context, badgeId, templateId, nametagId),
     addToken: (token) => addToken(context, token),
-    getToken: (nametagId) => getToken(context, nametagId),
+    getTokens: (nametagIds) => getTokens(context, nametagIds),
     getEmails: (nametagId) => getEmails(context, nametagId),
     addBadgesFromAuth: (authProfile, user) => addBadgesFromAuth(context, authProfile, user),
     addDefaultsFromAuth: (authProfile, user) => addDefaultsFromAuth(context, authProfile, user),

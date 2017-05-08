@@ -164,19 +164,21 @@ const setDm = (context, nametags, message) => {
 
 const mentionNotif = ({models: {Users, Rooms, Nametags}}, to, message, reason) =>
   Promise.all([
-    Users.getToken(message.author),
+    Users.getTokens(message.author),
     Rooms.get(message.room),
     Nametags.get(message.author),
     message
   ])
-  .then(([token, room, sender, message]) => token
+  .then(([[token], room, sender, message]) => token
     ? notification({
       reason,
-      roomTitle: room.title,
-      roomId: room.id,
-      text: message.text.replace(/\*/g, ''),
-      senderName: sender.name,
-      image: sender.image
+      params: {
+        roomTitle: room.title,
+        roomId: room.id,
+        text: message.text.replace(/\*/g, ''),
+        senderName: sender.name,
+        image: sender.image
+      }
     }, token)
     : null
   )
