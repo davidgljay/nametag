@@ -29,8 +29,6 @@ module.exports = conn => new FacebookStrategy({
       id: profile.id,
       badges: [{
         name: profile.displayName
-      }, {
-        gender: profile.gender
       }]
     }
 
