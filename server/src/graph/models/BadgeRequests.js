@@ -46,25 +46,28 @@ const getByGranterState = ({conn}, granter, status) => badgeRequestsTable
  *
  **/
 
-const create = ({conn, models: {Granter}}, nametag, template) => {
+const create = ({conn, models: {Granters}}, nametag, template) => {
   const badgeRequestObj = {
     createdAt: new Date(),
     nametag,
     template,
     status: 'ACTIVE'
   }
-  return db.table('templates').get(template)
-  .eqJoin(t => t('granter'), db.table('granters'))
-  .map(m => ({template: m('left'), granter: m('right')}))
-  .merge(db.table('nametags').get(nametag), n => ({nametag: n}))
+  return db.table('templates').getAll(template)
+  .map(t => ({
+    template: t,
+    granter: db.table('granters').get(t('granter')),
+    nametag: db.table('nametags').get(nametag)
+  }))
   .run(conn)
+  .then(cursor => cursor.next())
   .then(({template, granter, nametag}) => Promise.all([
     badgeRequestsTable.insert(
       Object.assign({}, badgeRequestObj, {granter: granter.id})
     ).run(conn),
-    Granter.emailAdmins(
+    Granters.emailAdmins(
       granter.id,
-      'badge-request',
+      'badgeRequest',
       {
         requesterName: nametag.name,
         requesterBio: nametag.bio,
@@ -72,7 +75,7 @@ const create = ({conn, models: {Granter}}, nametag, template) => {
         granterCode: granter.urlCode
       }
     ),
-    Granter.notifyAdmins(
+    Granters.notifyAdmins(
       granter.id,
       'BADGE_REQUEST',
       {
@@ -83,7 +86,7 @@ const create = ({conn, models: {Granter}}, nametag, template) => {
       }
     )
   ]))
-  .then(res => {
+  .then(([res]) => {
     if (res.error) {
       return Promise.reject(new Error(res.error))
     }

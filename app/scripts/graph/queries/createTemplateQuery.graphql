@@ -7,9 +7,14 @@ query createTemplateQuery($granter: String!) {
     description
     image
     type
+    urlCode
   }
   me {
     id
+    granters {
+      name
+      urlCode
+    }
     displayNames
     images
     badges {

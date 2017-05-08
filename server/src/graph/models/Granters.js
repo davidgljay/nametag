@@ -51,25 +51,25 @@ const getByAdminTemplate = ({conn}, adminTemplateIds) => grantersTable
    */
 
   const notifyAdmins = ({conn, models: {Users}}, granterId, reason, params) =>
-    grantersTable.get(granterId)
-      .eqJoin(g => g('adminTemplate'), r.db('nametag').table('templates'))
-      .map(j => j('right'))
-      .eqJoin(t => t('id'), r.db('nametag').table('badges', index='template'))
-      .map(j => j('right')('defaultNametag'))
+  grantersTable.get(granterId)
+    .do(g => db.table('templates').get(g('adminTemplate')))
+    .do(t => db.table('badges').getAll(t('id'), {index: 'template'}))
+    .map(b => b('defaultNametag'))
+      .run(conn)
       .then(cursor => cursor.toArray())
-      .then(adminNametags => Users.getTokens(adminNametags)
-        .then(adminTokens => {
-          for (var i=0; i < adminTokens.length; i++ ) {
-            notification(
-              {
-                reason,
-                params
-              },
-              adminTokens[i]
-            )
-          }
-        })
-      )
+      .then(adminNametags => Users.getTokens(adminNametags))
+      .then(adminTokens => {
+        for (var i=0; i < adminTokens.length; i++ ) {
+          notification(
+            {
+              reason,
+              params
+            },
+            adminTokens[i]
+          )
+        }
+      })
+      .catch(() => ErrNotFound)
 
   /**
    * Emails the granter's admins
@@ -82,10 +82,10 @@ const getByAdminTemplate = ({conn}, adminTemplateIds) => grantersTable
 
   const emailAdmins = ({conn, models: {Users}}, granterId, template, params) =>
     grantersTable.get(granterId)
-      .eqJoin(g => g('adminTemplate'), r.db('nametag').table('templates'))
-	    .map(j => j('right'))
-      .eqJoin(t => t('id'), r.db('nametag').table('badges', index='template'))
-      .map(j => j('right')('defaultNametag'))
+      .do(g => db.table('templates').get(g('adminTemplate')))
+      .do(t => db.table('badges').getAll(t('id'), {index: 'template'}))
+      .map(b => b('defaultNametag'))
+      .run(conn)
       .then(cursor => cursor.toArray())
       .then(adminNametags => Users.getEmails(adminNametags))
       .then(adminEmails => {
