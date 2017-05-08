@@ -65,15 +65,20 @@ class UserBadges extends Component {
       {
         this.mapBadges(badges)
       }
-      <FlatButton
-        label='ADD BADGE'
-        onClick={this.onCreateBadgeClick} />
       {
-        this.state.showCreateBadge &&
-        <CreateBadge
-          mini
-          toggleCreateBadge={this.onCreateBadgeClick} />
+        // Disabling add badge until a marketplace can be established.
+        //
+        // <FlatButton
+        //   label='ADD BADGE'
+        //   onClick={this.onCreateBadgeClick} />
+        // {
+        //   this.state.showCreateBadge &&
+        //   <CreateBadge
+        //     mini
+        //     toggleCreateBadge={this.onCreateBadgeClick} />
+        // }
       }
+
     </div>
   }
 }
