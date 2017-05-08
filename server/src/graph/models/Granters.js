@@ -2,6 +2,7 @@ const {db} = require('../../db')
 const {ErrNotFound} = require('../../errors')
 const sendEmail = require('../../email')
 const notification = require('../../notifications')
+const {fromUrl} = require('../../routes/images/imageUpload')
 
 const grantersTable = db.table('granters')
 
@@ -110,9 +111,16 @@ const emailAdmins = ({conn, models: {Users}}, granterId, template, params) =>
  *
  **/
 
-const create = ({conn, models: {Templates}}, granter) => {
-  const granterObj = Object.assign({}, granter, {createdAt: new Date(), updatedAt: new Date()})
-  return grantersTable.insert(granterObj).run(conn)
+const create = ({conn, models: {Templates}}, granter) =>
+  fromUrl(200, null, granter.image)
+    .then(({url}) => {
+      const granterObj = Object.assign(
+        {},
+        granter,
+        {createdAt: new Date(), updatedAt: new Date(), image: url}
+      )
+      return grantersTable.insert(granterObj).run(conn)
+    })
     .then(res => {
       if (res.error) {
         return new Error(res.error)
@@ -137,7 +145,6 @@ const create = ({conn, models: {Templates}}, granter) => {
         ])
       )
       .then(([id, adminRes]) => Object.assign({}, granter, {id}))
-}
 
 module.exports = (context) => ({
   Granters: {
