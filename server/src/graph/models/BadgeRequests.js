@@ -37,7 +37,7 @@ const getByGranterState = ({conn}, granter, status) => badgeRequestsTable
   .then(cursor => cursor.toArray())
 
 /**
- * Creates a badge request
+ * Creates a badge request and notifies admins
  *
  * @param {Object} context     graph context
  * @param {Object} nametagId   the id of the nametag making the request
@@ -46,27 +46,51 @@ const getByGranterState = ({conn}, granter, status) => badgeRequestsTable
  *
  **/
 
-const create = ({conn}, nametag, template) => {
+const create = ({conn, models: {Granter}}, nametag, template) => {
   const badgeRequestObj = {
     createdAt: new Date(),
     nametag,
     template,
     status: 'ACTIVE'
   }
-  return db.table('templates').get(template).do(
-    t =>
-      badgeRequestsTable.insert(
-        Object.assign({}, badgeRequestObj, {granter: t('granter')})
-      )
-    ).run(conn)
-    .then(res => {
-      if (res.error) {
-        return Promise.reject(new Error(res.error))
+  return db.table('templates').get(template)
+  .eqJoin(t => t('granter'), db.table('granters'))
+  .map(m => ({template: m('left'), granter: m('right')}))
+  .merge(db.table('nametags').get(nametag), n => ({nametag: n}))
+  .run(conn)
+  .then(({template, granter, nametag}) => Promise.all([
+    badgeRequestsTable.insert(
+      Object.assign({}, badgeRequestObj, {granter: granter.id})
+    ).run(conn),
+    Granter.emailAdmins(
+      granter.id,
+      'badge-request',
+      {
+        requesterName: nametag.name,
+        requesterBio: nametag.bio,
+        templateName: template.name,
+        granterCode: granter.urlCode
       }
-      return Object.assign({}, badgeRequestObj, {
-        id: res.generated_keys[0]
-      })
+    ),
+    Granter.notifyAdmins(
+      granter.id,
+      'BADGE_REQUEST',
+      {
+        requesterName: nametag.name,
+        requesterBio: nametag.bio,
+        templateName: template.name,
+        granterCode: granter.urlCode
+      }
+    )
+  ]))
+  .then(res => {
+    if (res.error) {
+      return Promise.reject(new Error(res.error))
+    }
+    return Object.assign({}, badgeRequestObj, {
+      id: res.generated_keys[0]
     })
+  })
 }
 
 /**

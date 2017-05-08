@@ -42,7 +42,7 @@ const getByAdminTemplate = ({conn}, adminTemplateIds) => grantersTable
   .then(cursor => cursor.toArray())
 
   /**
-   * Emails the granter's admins
+   * Notifies the granter's admins
    *
    * @param {Object} context     graph context
    * @param {String} granterId    The id of the granter
@@ -61,10 +61,10 @@ const getByAdminTemplate = ({conn}, adminTemplateIds) => grantersTable
         .then(adminTokens => {
           for (var i=0; i < adminTokens.length; i++ ) {
             notification(
-              data: {
+              {
                 reason,
                 params
-              }
+              },
               adminTokens[i]
             )
           }
@@ -72,7 +72,7 @@ const getByAdminTemplate = ({conn}, adminTemplateIds) => grantersTable
       )
 
   /**
-   * Notifies the granter's admins
+   * Emails the granter's admins
    *
    * @param {Object} context     graph context
    * @param {String} granterId    The id of the granter
@@ -80,27 +80,27 @@ const getByAdminTemplate = ({conn}, adminTemplateIds) => grantersTable
    * @param {Object} params The params of the email to be sent
    */
 
-  const notifyAdmins = ({conn, models: {Users}}, granterId, template, params) =>
+  const emailAdmins = ({conn, models: {Users}}, granterId, template, params) =>
     grantersTable.get(granterId)
       .eqJoin(g => g('adminTemplate'), r.db('nametag').table('templates'))
 	    .map(j => j('right'))
       .eqJoin(t => t('id'), r.db('nametag').table('badges', index='template'))
       .map(j => j('right')('defaultNametag'))
       .then(cursor => cursor.toArray())
-      .then(adminNametags => Users.getEmails(adminNametags)
-          .then(adminEmails => {
-              for (var i=0; i < adminEmails.length; i++ ) {
-                sendEmail({
-                  to: adminEmails[i],
-                  from: {
-                    name: 'Nametag',
-                    email: 'info@nametag.chat'
-                  },
-                  template,
-                  params)
-              }
+      .then(adminNametags => Users.getEmails(adminNametags))
+      .then(adminEmails => {
+          for (var i=0; i < adminEmails.length; i++ ) {
+            sendEmail({
+              to: adminEmails[i],
+              from: {
+                name: 'Nametag',
+                email: 'info@nametag.chat'
+              },
+              template,
+              params
             })
-          )
+          }
+        })
 
 
 /**
@@ -145,6 +145,8 @@ module.exports = (context) => ({
     get: id => get(context, id),
     create: badge => create(context, badge),
     getByUrlCode: urlCode => getByUrlCode(context, urlCode),
-    getByAdminTemplate: adminTemplateIds => getByAdminTemplate(context, adminTemplateIds)
+    getByAdminTemplate: adminTemplateIds => getByAdminTemplate(context, adminTemplateIds),
+    notifyAdmins: (granterId, template, params) => notifyAdmins(context, granterId, template, params),
+    emailAdmins: (granterId, template, params) => emailAdmins(context, granterId, template, params)
   }
 })
