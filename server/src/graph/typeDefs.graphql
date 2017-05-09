@@ -342,8 +342,8 @@ type RootQuery {
   # Retrieves a single room based on the id
   room(id:ID!): Room
 
-  # Retrieves all active rooms in the system
-  rooms: [Room]
+  # Retrieves all active rooms in the system. May optionally include a specific id.
+  rooms(id:ID): [Room]
 
   # Retrieves the current user
   me: User
