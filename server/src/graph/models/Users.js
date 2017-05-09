@@ -53,7 +53,11 @@ const getByEmail = ({conn}, email) =>
  *
  */
 
-const appendUserArray = ({user, conn}, property, value) => user
+const appendUserArray = ({user, conn}, property, value) => {
+  if (!property || !value) {
+    return Promise.resolve()
+  }
+  user && property && value
   ? usersTable.get(user.id).update((user) =>
       r.branch(
         user.hasFields(property),
@@ -62,6 +66,7 @@ const appendUserArray = ({user, conn}, property, value) => user
       )
     ).run(conn)
   : Promise.reject(ErrNotLoggedIn)
+}
 
 /**
  * Adds a notification token to the user.
@@ -140,6 +145,7 @@ const addBadge = ({user, conn}, badgeId, templateId, nametagId) =>
  */
 
 const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
+
   // Either create the user or log them in
   return usersTable
     .getAll(authProfile.id, {index: provider}).run(conn)
@@ -151,25 +157,36 @@ const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
           authProfile
         }
       }
-      return fromUrl(50, 50, authProfile.providerPhotoUrl)
-        .then(imageUrl => {
-          const userObj = {
-            displayNames: authProfile.displayNames,
-            images: [imageUrl.url],
-            [provider]: authProfile.id,
-            createdAt: new Date()
+
+      const insertUser = (user) =>  Promise.all([
+          usersTable.insert(user).run(conn),
+          user
+        ])
+      const userObj = {
+        displayNames: authProfile.displayNames.filter(name => name),
+        images: [],
+        [provider]: authProfile.id,
+        createdAt: new Date()
+      }
+
+      // Load an image if one exists, otherwise just insert the user
+      const insertUserPromise = authProfile.providerPhotoUrl
+        ? fromUrl(50, 50, authProfile.providerPhotoUrl)
+        .then(({url}) => {
+          if (!url) {
+            return insertUser(userObj)
           }
-          return Promise.all([
-            usersTable.insert(userObj).run(conn),
-            userObj
-          ])
+          return insertUser(Object.assign({}, userObj, {images: [url]}))
         })
-        .then(([rdbRes, userObj]) => {
+        : insertUser(userObj())
+
+      return insertUserPromise
+        .then(([rdbRes, userObject]) => {
           if (rdbRes.errors > 0) {
             return Promise.reject(new Error('Error while inserting user'))
           }
           return {
-            user: Object.assign({}, userObj,
+            user: Object.assign({}, userObject,
               {
                 id: rdbRes.generated_keys[0]
               }),
@@ -184,7 +201,6 @@ const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
 *
 * @param {Object} context   graph context
 * @param {Object} authProfile   The profile info from the auth provider
-* @param {Object} user  The freshly authed user
 *
 */
 
@@ -192,17 +208,18 @@ const addDefaultsFromAuth = (context, authProfile) => {
   const {user, conn} = context
   let userUpdates = authProfile.displayNames
   ? authProfile.displayNames
-    .reduce((arr, name) =>
-      user.displayNames.indexOf(name) === -1
+    .reduce((arr, name) => name && user.displayNames.indexOf(name) === -1
       ? arr.concat(appendUserArray(context, 'displayNames', name)) : arr, [])
   : []
+
+
   return fromUrl(50, 50, authProfile.providerPhotoUrl)
     .then(({url}) => Promise.all(
       userUpdates
       .concat(
-        user.images && user.images.indexOf(url) === -1 ? appendUserArray(context, 'images', url) : null
+        url && user.images && user.images.indexOf(url) === -1 ? appendUserArray(context, 'images', url) : null
       ).concat(
-        usersTable.update({[authProfile.provider]: authProfile.id}).run(conn)
+        usersTable.get(user.id).update({[authProfile.provider]: authProfile.id}).run(conn)
       )
     ))
 }
