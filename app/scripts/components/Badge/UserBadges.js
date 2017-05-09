@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import Badge from './Badge'
-import CreateBadge from '../../containers/Badge/CreateBadgeContainer'
-import FlatButton from 'material-ui/FlatButton'
+// import CreateBadge from '../../containers/Badge/CreateBadgeContainer'
+// import FlatButton from 'material-ui/FlatButton'
 import FontIcon from 'material-ui/FontIcon'
 import {grey} from '../../../styles/colors'
 

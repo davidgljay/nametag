@@ -18,14 +18,29 @@ const get = ({conn}, id) => roomsTable.get(id).run(conn)
   * Returns all active public rooms.
   *
   * @param {Object} context     graph context
+  * @param {Object} id          the id of a room to be returned
   *
   */
 
-const getPublic = ({conn, user}) => roomsTable
-  .between(new Date(), new Date(Date.now() * 100), {index: 'closedAt'})
-  .filter(room => r.eq(room('templates').count(), 0))
-  .run(conn)
-  .then(rooms => rooms.toArray())
+const getPublic = ({conn, user}, id) => {
+  if (id) {
+    return roomsTable.get(id).run(conn)
+      .then(room => room && room.closedAt > new Date() && room.templates.length === 0
+        ? [room]
+        : []
+      )
+  }
+  let query = roomsTable
+    .between(new Date(), new Date(Date.now() * 100), {index: 'closedAt'})
+    .filter(room => r.eq(room('templates').count(), 0))
+
+  if (id) {
+    query = query.filter(room => r.eq(room('id'), id))
+  }
+
+  return query.run(conn)
+    .then(rooms => rooms.toArray())
+}
 
 /**
  * Returns all private rooms for a particular template.
@@ -33,18 +48,36 @@ const getPublic = ({conn, user}) => roomsTable
  * @param {Object} context     graph context
  * @param {Array<String>} templateIds  ids of the templates to be searched
  * @param {Boolean} active    Limit search to active rooms
+ * @param {String} id         The id of a specific room being searched for
  */
 
-const getByTemplates = ({conn, user}, templateIds, active) => {
+const getByTemplates = ({conn, user}, templateIds, active, id) => {
   if (templateIds.length === 0) {
     return []
+  }
+
+  if (id) {
+    roomsTable.get(id).run(conn)
+      .then(room => {
+        let userHasTemplate = false
+        for (var i = 0; i < room.templates.length; i++) {
+          if (templateIds.indexOf(room.templates[i]) > -1) {
+            userHasTemplate = true
+          }
+        }
+
+        return userHasTemplate &&
+        room.closedAt > new Date()
+        ? [room]
+        : []
+      })
   }
   let query = roomsTable.getAll(...templateIds, {index: 'templates'})
   if (active) {
     query = query.filter(room => room('closedAt').gt(new Date()))
   }
   return query.run(conn)
- .then(rooms => rooms.toArray())
+    .then(rooms => rooms.toArray())
 }
 
 /**
@@ -95,7 +128,7 @@ const create = ({conn, models: {Nametags, Users}}, rm) => {
 module.exports = (context) => ({
   Rooms: {
     get: (id) => get(context, id),
-    getPublic: () => getPublic(context),
+    getPublic: (search) => getPublic(context, search),
     getByTemplates: (templateIds, active) => getByTemplates(context, templateIds, active),
     create: (room) => create(context, room)
   }
