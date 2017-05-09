@@ -7,7 +7,27 @@ import GRANTER_QUERY from './granterQuery.graphql'
 import CREATE_BADGE_TEMPLATE_QUERY from './createTemplateQuery.graphql'
 import BADGE_TEMPLATE_QUERY from './templateQuery.graphql'
 
-export const roomsQuery = graphql(ROOMS_QUERY)
+function getQueryVariable (variable) {
+  let query = window.location.search.substring(1)
+  let vars = query.split('&')
+  for (let i = 0; i < vars.length; i++) {
+    let pair = vars[i].split('=')
+    if (decodeURIComponent(pair[0]) === variable) {
+      return decodeURIComponent(pair[1])
+    }
+  }
+
+  // If not found, return null.
+  return null
+}
+
+export const roomsQuery = graphql(ROOMS_QUERY, {
+  options: () => ({
+    variables: {
+      id: getQueryVariable('id')
+    }
+  })
+})
 
 export const userQuery = graphql(USER_QUERY)
 
