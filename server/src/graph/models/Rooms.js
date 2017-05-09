@@ -30,12 +30,12 @@ const getPublic = ({conn, user}, id) => {
         : []
       )
   }
-  const query = roomsTable
+  let query = roomsTable
     .between(new Date(), new Date(Date.now() * 100), {index: 'closedAt'})
     .filter(room => r.eq(room('templates').count(), 0))
 
   if (id) {
-    query =  query.filter(room => r.eq(room('id'), id))
+    query = query.filter(room => r.eq(room('id'), id))
   }
 
   return query.run(conn)
@@ -60,7 +60,7 @@ const getByTemplates = ({conn, user}, templateIds, active, id) => {
     roomsTable.get(id).run(conn)
       .then(room => {
         let userHasTemplate = false
-        for (var i=0; i < room.templates.length; i++ ) {
+        for (var i = 0; i < room.templates.length; i++) {
           if (templateIds.indexOf(room.templates[i]) > -1) {
             userHasTemplate = true
           }
