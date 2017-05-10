@@ -35,6 +35,7 @@ class BadgeDetail extends Component {
         const successful = document.execCommand('copy')
         this.setState({copySuccess: successful})
       } catch (err) {
+        //TODO: Display error in this case
         console.error('Oops, unable to copy')
       }
     }
@@ -46,6 +47,11 @@ class BadgeDetail extends Component {
     this.onHomeClick = () => {
       window.location = '/rooms'
     }
+  }
+
+  componentDidMount () {
+    const {requestNotifPermissions, updateToken} = this.props
+    requestNotifPermissions(updateToken)
   }
 
   render () {

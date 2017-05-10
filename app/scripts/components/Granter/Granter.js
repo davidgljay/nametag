@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react'
+import React, {Component, PropTypes} from 'react'
 import NavBar from '../Utils/NavBar'
 import GranterInfo from './GranterInfo'
 import BadgeRequest from '../Badge/BadgeRequest'
@@ -11,72 +11,88 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import {mobile} from '../../../styles/sizes'
 import radium from 'radium'
 
-const Granter = ({data: {granter, me, loading, error}, createBadge, updateBadgeRequestStatus, loginUser, registerUser, addNote}) => {
-  if (error && error.message === 'GraphQL Error: Not Logged In') {
-    return <div>
-      <LoginDialog
-        loginUser={loginUser}
-        registerUser={registerUser}
-        showLogin
-        message={'Log in to view this page.'} />
-    </div>
-  } else if (error) {
-    return <h2>
-      {
-        error.message
-      }
-    </h2>
+class Granter extends Component {
+
+  componentDidMount () {
+    const {requestNotifPermissions, updateToken} = this.props
+    requestNotifPermissions(updateToken)
   }
 
-  return loading
-    ? <CircularProgress style={styles.spinner} />
-    : <div>
-      <NavBar me={me} />
-      <div id='granterDetail' style={styles.granterDetail}>
-        <GranterInfo granter={granter} />
-        <ReactCSSTransitionGroup
-          transitionName='fade'
-          style={styles.badgeRequests}
-          transitionEnterTimeout={2000}
-          transitionLeaveTimeout={1500}>
-          {
-            granter.badgeRequests.map(badgeRequest =>
-              <div
-                key={badgeRequest.id}>
-                <BadgeRequest
-                  badgeRequest={badgeRequest}
-                  createBadge={createBadge}
-                  updateBadgeRequestStatus={updateBadgeRequestStatus} />
-              </div>
-            )
-          }
-        </ReactCSSTransitionGroup>
-        <div style={styles.createButtonContainter}>
-          <FlatButton
-            href={`/granters/${granter.urlCode}/badges/create`}
-            label='Create Badge'
-            labelPosition='before'
-            icon={
-              <FontIcon
-                className='material-icons'>
-                add_circle
-              </FontIcon>
-            }
-            primary />
-        </div>
-        <div>
-          {
-            granter.templates.map(template =>
-              <Template
-                addNote={addNote}
-                key={template.id}
-                template={template} />
-            )
-          }
-        </div>
+  render () {
+    const {
+      data: {granter, me, loading, error},
+      createBadge,
+      updateBadgeRequestStatus,
+      loginUser,
+      registerUser,
+      addNote
+    } = this.props
 
+    if (error && error.message === 'GraphQL Error: Not Logged In') {
+      return <div>
+        <LoginDialog
+          loginUser={loginUser}
+          registerUser={registerUser}
+          showLogin
+          message={'Log in to view this page.'} />
       </div>
-    </div>
+    } else if (error) {
+      return <h2>
+        {
+          error.message
+        }
+      </h2>
+    }
+
+    return loading
+      ? <CircularProgress style={styles.spinner} />
+      : <div>
+        <NavBar me={me} />
+        <div id='granterDetail' style={styles.granterDetail}>
+          <GranterInfo granter={granter} />
+          <ReactCSSTransitionGroup
+            transitionName='fade'
+            style={styles.badgeRequests}
+            transitionEnterTimeout={2000}
+            transitionLeaveTimeout={1500}>
+            {
+              granter.badgeRequests.map(badgeRequest =>
+                <div
+                  key={badgeRequest.id}>
+                  <BadgeRequest
+                    badgeRequest={badgeRequest}
+                    createBadge={createBadge}
+                    updateBadgeRequestStatus={updateBadgeRequestStatus} />
+                </div>
+              )
+            }
+          </ReactCSSTransitionGroup>
+          <div style={styles.createButtonContainter}>
+            <FlatButton
+              href={`/granters/${granter.urlCode}/badges/create`}
+              label='Create Badge'
+              labelPosition='before'
+              icon={
+                <FontIcon
+                  className='material-icons'>
+                  add_circle
+                </FontIcon>
+              }
+              primary />
+          </div>
+          <div>
+            {
+              granter.templates.map(template =>
+                <Template
+                  addNote={addNote}
+                  key={template.id}
+                  template={template} />
+              )
+            }
+          </div>
+        </div>
+      </div>
+  }
 }
 
 const {shape, string, object, arrayOf, func, bool} = PropTypes
