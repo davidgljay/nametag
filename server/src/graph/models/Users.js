@@ -145,7 +145,6 @@ const addBadge = ({user, conn}, badgeId, templateId, nametagId) =>
  */
 
 const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
-
   // Either create the user or log them in
   return usersTable
     .getAll(authProfile.id, {index: provider}).run(conn)
@@ -158,10 +157,10 @@ const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
         }
       }
 
-      const insertUser = (user) =>  Promise.all([
-          usersTable.insert(user).run(conn),
-          user
-        ])
+      const insertUser = (user) => Promise.all([
+        usersTable.insert(user).run(conn),
+        user
+      ])
       const userObj = {
         displayNames: authProfile.displayNames.filter(name => name),
         images: [],
@@ -211,7 +210,6 @@ const addDefaultsFromAuth = (context, authProfile) => {
     .reduce((arr, name) => name && user.displayNames.indexOf(name) === -1
       ? arr.concat(appendUserArray(context, 'displayNames', name)) : arr, [])
   : []
-
 
   return fromUrl(50, 50, authProfile.providerPhotoUrl)
     .then(({url}) => Promise.all(
@@ -374,11 +372,14 @@ const passwordResetRequest = ({conn}, email) => {
 
 const passwordReset = ({conn}, token, password) =>
   token
-  ? usersTable.getAll(token, {index: 'forgotPassToken'}).update(
-    u => ({
-      password: hashPassword(`${password}${passwordsalt}${u('id')}`),
-      forgotPassToken: null
-    })).run(conn)
+  ? usersTable.getAll(token, {index: 'forgotPassToken'})
+    .nth(0)('id').run(conn)
+    .then(id => usersTable.get(id)
+      .update({
+        password: hashPassword(`${password}${passwordsalt}${id}`),
+        forgotPassToken: null
+    }).run(conn)
+  )
     .then(res => {
       if (res.errors > 0) {
         return new Error(res.error)
@@ -389,6 +390,7 @@ const passwordReset = ({conn}, token, password) =>
         return Promise.reject(ErrInvalidToken)
       }
     })
+    .catch(err => Promise.reject(ErrInvalidToken))
     : Promise.reject(ErrInvalidToken)
 
 /**
