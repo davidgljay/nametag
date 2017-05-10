@@ -327,7 +327,7 @@ const createLocal = ({conn}, email, password) =>
       id,
       emailConfirmationRequest({conn}, email),
       usersTable.get(id).update({
-        password: hashPassword(`${password}${passwordsalt}${id}`)
+        password: hashPassword(`${password}${passwordsalt}`)
       }).run(conn)
     ])
     .then(([id]) => id)
@@ -373,13 +373,10 @@ const passwordResetRequest = ({conn}, email) => {
 const passwordReset = ({conn}, token, password) =>
   token
   ? usersTable.getAll(token, {index: 'forgotPassToken'})
-    .nth(0)('id').run(conn)
-    .then(id => usersTable.get(id)
-      .update({
-        password: hashPassword(`${password}${passwordsalt}${id}`),
-        forgotPassToken: null
+    .update({
+      password: hashPassword(`${password}${passwordsalt}`),
+      forgotPassToken: null
     }).run(conn)
-  )
     .then(res => {
       if (res.errors > 0) {
         return new Error(res.error)
@@ -444,7 +441,7 @@ const emailConfirmation = ({conn}, token) =>
  */
 
 const validPassword = ({conn}, id, password) =>
-  usersTable.get(id)('password').eq(hashPassword(`${password}${passwordsalt}${id}`)).run(conn)
+  usersTable.get(id)('password').eq(hashPassword(`${password}${passwordsalt}`)).run(conn)
 
 const hashPassword = (password) => {
   let hashedPassword = SHA3(password, {outputLength: 224})
