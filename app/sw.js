@@ -84,6 +84,13 @@ firebase.messaging().setBackgroundMessageHandler((payload) => {
         data: `/`
       }
       break
+    case 'MOD_ROOM_JOIN':
+      notificationTitle = `${params.nametagName} had joined the room ${params.roomName}`
+      notificationOptions = {
+        icon: params.image,
+        data: `/rooms/${params.roomId}`
+      }
+      break
   }
 
   return self.registration.showNotification(notificationTitle, notificationOptions)

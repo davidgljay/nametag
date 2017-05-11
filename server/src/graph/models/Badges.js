@@ -84,7 +84,7 @@ const create = ({conn, models: {Users, Nametags, Templates}}, {note, template, d
         image: template.image
       }
     }, token)
-    return Object.assign({}, badgeObj, {id})
+    .then(() => Object.assign({}, badgeObj, {id}))
   })
 }
 

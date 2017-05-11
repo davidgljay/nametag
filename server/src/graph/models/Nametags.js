@@ -93,6 +93,23 @@ const create = ({conn, user, models: {Users, BadgeRequests}}, nt, createBadgeReq
       // Add displayName and image if they are new
       !createBadgeRequest && user.displayNames.indexOf(nametag.name) === -1 ? Users.appendUserArray('displayNames', nametag.name) : null,
       !createBadgeRequest && nametag.image && user.images.indexOf(nametag.image) === -1 ? Users.appendUserArray('images', nametag.image) : null
+
+      //Send a notification to the room's moderator
+      nametag.room ? Promise.all([
+          Rooms.get(nametag.room),
+          Users.getTokens(nametag.id),
+          nametag
+        ])
+        .then([room, [token], nametag] => notification({
+          reason: 'MOD_ROOM_JOIN',
+          params: {
+            roomName: room.name,
+            roomId: room.id
+            nametagName: nametag.name,
+            image: nametag.image
+          }
+        }, token))
+        : null
     ])
   })
   .then(([res, id]) => {
