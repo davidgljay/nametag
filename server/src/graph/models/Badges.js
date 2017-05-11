@@ -2,7 +2,6 @@ const {db} = require('../../db')
 const errors = require('../../errors')
 const notification = require('../../notifications')
 
-
 const badgesTable = db.table('badges')
 
 /**

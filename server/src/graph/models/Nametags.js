@@ -1,6 +1,7 @@
 const {db} = require('../../db')
 const r = require('rethinkdb')
 const errors = require('../../errors')
+const notification = require('../../notifications')
 
 const nametagsTable = db.table('nametags')
 
@@ -72,7 +73,7 @@ const grantBadge = ({conn}, id, badgeId) => nametagsTable.get(id).update({badge:
  *
  **/
 
-const create = ({conn, user, models: {Users, BadgeRequests}}, nt, createBadgeRequest = true) => {
+const create = ({conn, user, models: {Users, BadgeRequests, Rooms}}, nt, createBadgeRequest = true) => {
   const nametag = Object.assign({}, nt, {createdAt: new Date()})
   return nametagsTable.insert(nametag).run(conn)
   // Append nametag ID to user object and update default names and images
@@ -92,19 +93,19 @@ const create = ({conn, user, models: {Users, BadgeRequests}}, nt, createBadgeReq
 
       // Add displayName and image if they are new
       !createBadgeRequest && user.displayNames.indexOf(nametag.name) === -1 ? Users.appendUserArray('displayNames', nametag.name) : null,
-      !createBadgeRequest && nametag.image && user.images.indexOf(nametag.image) === -1 ? Users.appendUserArray('images', nametag.image) : null
+      !createBadgeRequest && nametag.image && user.images.indexOf(nametag.image) === -1 ? Users.appendUserArray('images', nametag.image) : null,
 
-      //Send a notification to the room's moderator
+      // Send a notification to the room's moderator
       nametag.room ? Promise.all([
-          Rooms.get(nametag.room),
-          Users.getTokens(nametag.id),
-          nametag
-        ])
-        .then([room, [token], nametag] => notification({
+        Rooms.get(nametag.room),
+        Users.getTokens(nametag.id),
+        nametag
+      ])
+        .then(([room, [token], nametag]) => notification({
           reason: 'MOD_ROOM_JOIN',
           params: {
             roomName: room.name,
-            roomId: room.id
+            roomId: room.id,
             nametagName: nametag.name,
             image: nametag.image
           }

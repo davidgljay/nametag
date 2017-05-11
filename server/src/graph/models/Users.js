@@ -387,7 +387,7 @@ const passwordReset = ({conn}, token, password) =>
         return Promise.reject(ErrInvalidToken)
       }
     })
-    .catch(err => Promise.reject(ErrInvalidToken))
+    .catch(() => Promise.reject(ErrInvalidToken))
     : Promise.reject(ErrInvalidToken)
 
 /**

@@ -35,7 +35,7 @@ class BadgeDetail extends Component {
         const successful = document.execCommand('copy')
         this.setState({copySuccess: successful})
       } catch (err) {
-        //TODO: Display error in this case
+        // TODO: Display error in this case
         console.error('Oops, unable to copy')
       }
     }
