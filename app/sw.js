@@ -74,8 +74,16 @@ firebase.messaging().setBackgroundMessageHandler((payload) => {
         body: params.requesterBio,
         icon: params.requesterIcon,
         data: `/granters/${params.granterCode}`
-
       }
+      break
+    case 'BADGE_GRANTED:':
+      notificationTitle = `${params.badgeName} Badge Granted`
+      notificationOptions = {
+        body: `You have been granted the ${params.badgeName} badge by ${params.granterName}`,
+        icon: params.image,
+        data: `/`
+      }
+      break
   }
 
   return self.registration.showNotification(notificationTitle, notificationOptions)

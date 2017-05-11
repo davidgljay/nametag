@@ -1,5 +1,7 @@
 const {db} = require('../../db')
 const errors = require('../../errors')
+const notification = require('../../notifications')
+
 
 const badgesTable = db.table('badges')
 
@@ -44,7 +46,7 @@ const getTemplateBadges = ({conn}, template) => badgesTable.getAll(template, {in
  *
  **/
 
-const create = ({conn, models: {Users, Nametags}}, {note, template, defaultNametag}) => {
+const create = ({conn, models: {Users, Nametags, Templates}}, {note, template, defaultNametag}) => {
   const firstNote = {
     text: note,
     date: new Date()
@@ -60,16 +62,28 @@ const create = ({conn, models: {Users, Nametags}}, {note, template, defaultNamet
     return Promise.all([
       id,
       Users.addBadge(id, template, defaultNametag),
-      Nametags.grantBadge(defaultNametag, id)
+      Nametags.grantBadge(defaultNametag, id),
+      Users.getTokens(defaultNametag),
+      db.table('templates').get(template)
+        .eqJoin('granter', db.table('granters'))
+        .map((join) => ({template: join('left'), granter: join('right')}))
     ])
   })
-  .then(([id, userRes, nametagRes]) => {
+  .then(([id, userRes, nametagRes, [token], {template, granter}]) => {
     if (userRes.errors > 0) {
       return new errors.APIError(`Error appending badge ID to user: ${userRes.first_error}`)
     }
     if (nametagRes.errors > 0) {
       return new errors.APIError(`Error granting badge to Nametag: ${nametagRes.first_error}`)
     }
+    return notification({
+      reason: 'BADGE_GRANTED',
+      params: {
+        badgeName: template.name,
+        granterName: granter.name,
+        image: template.image
+      }
+    }, token)
     return Object.assign({}, badgeObj, {id})
   })
 }
