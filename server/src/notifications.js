@@ -25,8 +25,6 @@ module.exports = (data, token) => {
     })
   }
 
-  console.log('Sending notification', data);
-
   if (!token) {
     return Promise.resolve(new Error('Cannot send message, user does not have a fcm token'))
   }

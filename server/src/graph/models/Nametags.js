@@ -97,11 +97,14 @@ const create = ({conn, user, models: {Users, BadgeRequests, Rooms}}, nt, createB
 
       // Send a notification to the room's moderator
       nametag.room ? Promise.all([
-          Rooms.get(nametag.room),
-          Users.getTokens(nametag.id),
+          Rooms.get(nametag.room)
+            .then(room => Promise.all([
+              room,
+              Users.getTokens(room.mod)
+            ])),
           nametag
         ])
-        .then(([room, [token], nametag]) => notification({
+        .then(([[room, [token]], nametag]) => notification({
           reason: 'MOD_ROOM_JOIN',
           params: {
             roomName: room.title,
