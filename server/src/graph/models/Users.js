@@ -92,9 +92,10 @@ const addToken = ({user, conn}, token) =>
 
 const getTokens = ({conn}, nametagIds) =>
   nametagIds ? usersTable.getAll(...nametagIds, {index: 'nametags'})('token')
-  .run(conn)
-  .then(cursor => cursor.toArray())
-  : []
+    .run(conn)
+    .then(cursor => cursor.toArray())
+    : Promise.resolve([])
+
 
 /**
  * Gets an array of e-mail addresses based on an array of nametags

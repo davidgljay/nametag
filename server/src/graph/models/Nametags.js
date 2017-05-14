@@ -100,7 +100,7 @@ const create = ({conn, user, models: {Users, BadgeRequests, Rooms}}, nt, createB
         Rooms.get(nametag.room)
             .then(room => Promise.all([
               room,
-              Users.getTokens(room.mod)
+              Users.getTokens(id)
             ])),
         nametag
       ])
