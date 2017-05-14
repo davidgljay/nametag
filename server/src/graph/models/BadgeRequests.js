@@ -1,4 +1,5 @@
 const {db} = require('../../db')
+const pubsub = require('../subscriptions/pubsub')
 
 const badgeRequestsTable = db.table('badgeRequests')
 
@@ -53,46 +54,48 @@ const create = ({conn, models: {Granters}}, nametag, template) => {
     template,
     status: 'ACTIVE'
   }
-  return db.table('templates').getAll(template)
-  .map(t => ({
+
+  return db.table('templates').get(template)
+  .do(t => ({
     template: t,
     granter: db.table('granters').get(t('granter')),
     nametag: db.table('nametags').get(nametag)
   }))
   .run(conn)
-  .then(cursor => cursor.next())
-  .then(({template, granter, nametag}) => Promise.all([
-    badgeRequestsTable.insert(
-      Object.assign({}, badgeRequestObj, {granter: granter.id})
-    ).run(conn),
-    Granters.emailAdmins(
-      granter.id,
-      'badgeRequest',
-      {
-        requesterName: nametag.name,
-        requesterBio: nametag.bio,
-        templateName: template.name,
-        granterCode: granter.urlCode
-      }
-    ),
-    Granters.notifyAdmins(
-      granter.id,
-      'BADGE_REQUEST',
-      {
-        requesterName: nametag.name,
-        requesterBio: nametag.bio,
-        templateName: template.name,
-        granterCode: granter.urlCode
-      }
-    )
-  ]))
-  .then(([res]) => {
+  .then(({template, granter, nametag}) => {
+    const badgeRequest = Object.assign({}, badgeRequestObj, {granter: granter.id})
+    return Promise.all([
+      badgeRequestsTable.insert(badgeRequest).run(conn),
+      badgeRequest,
+      Granters.emailAdmins(
+        granter.id,
+        'badgeRequest',
+        {
+          requesterName: nametag.name,
+          requesterBio: nametag.bio,
+          templateName: template.name,
+          granterCode: granter.urlCode
+        }
+      ),
+      Granters.notifyAdmins(
+        granter.id,
+        'BADGE_REQUEST',
+        {
+          requesterName: nametag.name,
+          requesterBio: nametag.bio,
+          templateName: template.name,
+          granterCode: granter.urlCode
+        }
+      )
+    ])
+  })
+  .then(([res, badgeRequest]) => {
     if (res.error) {
       return Promise.reject(new Error(res.error))
     }
-    return Object.assign({}, badgeRequestObj, {
-      id: res.generated_keys[0]
-    })
+    const badgeRequestResult = Object.assign({}, badgeRequest, {id: res.generated_keys[0]})
+    pubsub.publish('badgeRequestAdded', badgeRequestResult)
+    return badgeRequestResult
   })
 }
 

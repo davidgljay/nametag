@@ -1,0 +1,27 @@
+#import "../fragments/badgeView.graphql"
+
+subscription badgeRequestAdded ($granterId: ID!) {
+  badgeRequestAdded(granterId: $granterId) {
+    id
+    createdAt
+    template {
+      id
+      name
+      image
+      description
+      granter {
+        name
+        image
+      }
+    }
+    nametag {
+      id
+      name
+      bio
+      image
+      badges {
+        ...badgeView
+      }
+    }
+  }
+}

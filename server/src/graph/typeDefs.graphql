@@ -623,6 +623,9 @@ type RootSubscription {
 
   # Fired when a nametag's presence changes in a room
   nametagPresence(roomId: ID!): NametagPresence
+
+  # Fired when a new badgeRequest is created
+  badgeRequestAdded(granterId: ID!): BadgeRequest
 }
 
 ################################################################################

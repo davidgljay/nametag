@@ -1,5 +1,5 @@
 import {graphql} from 'react-apollo'
-import {checkNametagPresence, messageAdded} from '../subscriptions'
+import {checkNametagPresence, messageAdded, badgeRequestAdded} from '../subscriptions'
 import ROOMS_QUERY from './roomsQuery.graphql'
 import ROOM_QUERY from './roomQuery.graphql'
 import USER_QUERY from './userQuery.graphql'
@@ -65,5 +65,9 @@ export const granterQuery = graphql(GRANTER_QUERY, {
     variables: {
       urlCode: props.params.urlCode
     }
+  }),
+  props: ({data}) => ({
+    data,
+    badgeRequestAddedSubscription: badgeRequestAdded(data.subscribeToMore)
   })
 })

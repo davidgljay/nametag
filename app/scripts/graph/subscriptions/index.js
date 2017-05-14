@@ -1,5 +1,6 @@
 import CHECK_NAMETAG_PRESENCE from './checkNametagPresence.graphql'
 import MESSAGE_ADDED from './messageAdded.graphql'
+import BADGE_REQUEST_ADDED from './badgeRequestAdded.graphql'
 
 export const checkNametagPresence = subscribeToMore => roomId => subscribeToMore({
   document: CHECK_NAMETAG_PRESENCE,
@@ -56,6 +57,27 @@ export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeT
         messages: oldData.room.messages
           .concat(message)
           .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+      }
+    }
+  }
+})
+
+export const badgeRequestAdded = subscribeToMore => (granterId) => subscribeToMore({
+  document: BADGE_REQUEST_ADDED,
+  variables: {
+    granterId
+  },
+  updateQuery: (oldData, {subscriptionData: {data: {badgeRequestAdded}}}) => {
+    if (!badgeRequestAdded) {
+      return oldData
+    }
+
+    return {
+      ...oldData,
+      granter: {
+        ...oldData.granter,
+        badgeRequests: oldData.granter.badgeRequests
+          .concat(badgeRequestAdded)
       }
     }
   }

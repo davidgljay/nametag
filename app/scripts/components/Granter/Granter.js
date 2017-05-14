@@ -18,6 +18,13 @@ class Granter extends Component {
     requestNotifPermissions(updateToken)
   }
 
+  componentDidUpdate (prevProps) {
+    const {loading, granter} = this.props.data
+    if (prevProps.data.loading && !loading) {
+      this.props.badgeRequestAddedSubscription(granter.id)
+    }
+  }
+
   render () {
     const {
       data: {granter, me, loading, error},
