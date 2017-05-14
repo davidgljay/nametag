@@ -53,35 +53,6 @@ class Message extends Component {
       media = <Media url={this.checkImage(text)[0]} />
     }
 
-    if (this.state.modAction) {
-      below =
-        <ModAction
-          msgId={id}
-          author={author}
-          norms={norms}
-          text={text}
-          mod={mod}
-          myNametag={myNametag}
-          close={this.showModAction(false)}
-          roomId={roomId}
-          createMessage={createMessage} />
-    } else {
-      below = <div style={styles.below}>
-        {
-          <MessageMenu
-            showModAction={this.showModAction}
-            showActions={this.state.showActions}
-            isDM={recipient !== null}
-            toggleSaved={toggleSaved}
-            saved={saved}
-            id={id} />
-        }
-        <div style={styles.date}>
-          {moment(createdAt).format('h:mm A, ddd MMM DD YYYY')}
-        </div>
-      </div>
-    }
-
     // Get proper style if the this is a direct message
     let messageStyle
     let callout
@@ -104,35 +75,63 @@ class Message extends Component {
 
     }
 
-    return <tr
-      className='message'
-      style={styles.message}
-      id={id}
-      onClick={() => this.setState({showActions: !this.state.showActions})}>
-      <td style={styles.image}>
-        {
-          author.image
-          ? <img style={styles.imageImg} src={author.image} />
-          : <div style={{...styles.imageImg, ...styles.defaultImage}}>{author.name.slice(0, 2)}</div>
-        }
-      </td>
-      <td style={messageStyle}>
-        <div style={styles.name}>{author.name}</div>
-        {
-            callout
+    return <div>
+      <tr
+        className='message'
+        style={styles.message}
+        id={id}
+        onClick={() => this.setState({showActions: !this.state.showActions})}>
+        <td style={styles.image}>
+          {
+            author.image
+            ? <img style={styles.imageImg} src={author.image} />
+            : <div style={{...styles.imageImg, ...styles.defaultImage}}>{author.name.slice(0, 2)}</div>
           }
-        <div style={styles.text} className='messageText'>
-          <ReactMarkdown
-            containerTagName={'span'}
-            className={'messageText'}
-            style={styles.text}
-            source={text}
-            escapeHtml />
-        </div>
-        {media}
-        {below}
-      </td>
-    </tr>
+        </td>
+        <td style={messageStyle}>
+          <div style={styles.name}>{author.name}</div>
+          {
+              callout
+            }
+          <div style={styles.text} className='messageText'>
+            <ReactMarkdown
+              containerTagName={'span'}
+              className={'messageText'}
+              style={styles.text}
+              source={text}
+              escapeHtml />
+          </div>
+          {media}
+          <div style={styles.below}>
+            {
+              <MessageMenu
+                showModAction={this.showModAction}
+                showActions={this.state.showActions}
+                isDM={recipient !== null}
+                toggleSaved={toggleSaved}
+                saved={saved}
+                id={id} />
+            }
+            <div style={styles.date}>
+              {moment(createdAt).format('h:mm A, ddd MMM DD YYYY')}
+            </div>
+          </div>
+        </td>
+      </tr>
+      {
+        this.state.modAction &&
+        <ModAction
+          msgId={id}
+          author={author}
+          norms={norms}
+          text={text}
+          mod={mod}
+          myNametag={myNametag}
+          close={this.showModAction(false)}
+          roomId={roomId}
+          createMessage={createMessage} />
+      }
+    </div>
   }
 }
 

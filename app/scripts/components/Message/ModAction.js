@@ -180,8 +180,7 @@ const styles = {
     maxWidth: 500,
     borderRadius: 6,
     padding: 10,
-    marginTop: 20,
-    marginBottom: 20
+    margin: '20px 30px'
   },
   closeButton: {
     float: 'right',
