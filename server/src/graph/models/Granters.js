@@ -1,5 +1,5 @@
 const {db} = require('../../db')
-const {ErrNotFound} = require('../../errors')
+const {ErrNotFound, APIError} = require('../../errors')
 const sendEmail = require('../../email')
 const notification = require('../../notifications')
 const {fromUrl} = require('../../routes/images/imageUpload')
@@ -113,7 +113,10 @@ const emailAdmins = ({conn, models: {Users}}, granterId, template, params) =>
 
 const create = ({conn, models: {Templates}}, granter) =>
   fromUrl(200, null, granter.image)
-    .then(({url}) => {
+    .then(({url, errorMessage}) => {
+      if (errorMessage) {
+        return Promise.reject(new APIError(errorMessage))
+      }
       const granterObj = Object.assign(
         {},
         granter,
