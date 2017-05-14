@@ -108,7 +108,7 @@ const checkMentionsAndDMs = (context, message) => {
 const checkMentions = (context, nametags, message) => {
   const splitMsg = message.text.split('@')
   const {Nametags} = context.models
-  const newText = message.text.replace(/@\S+/g, (mention) => `*${mention}*`)
+  let newText
   let promises = [
     messagesTable.get(message.id).update({text: newText}).run(context.conn)
   ]
@@ -118,6 +118,7 @@ const checkMentions = (context, nametags, message) => {
     for (let j = 0; j < nametags.length; j++) {
       const {name, id} = nametags[j]
       if (section.slice(0, name.length).toLowerCase() === name.toLowerCase()) {
+        newText = message.text.replace(new RegExp(`/@${name}+/g`), (mention) => `*${mention}*`)
         promises.push(
           Nametags.addMention(id)
           .then(() => mentionNotif(context, id, message, 'MENTION'))
