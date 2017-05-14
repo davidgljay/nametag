@@ -4,9 +4,9 @@ import TextField from 'material-ui/TextField'
 import {Card} from 'material-ui/Card'
 import CircularProgress from 'material-ui/CircularProgress'
 import RaisedButton from 'material-ui/RaisedButton'
-import {grey500} from 'material-ui/styles/colors'
+import {red} from '../../../styles/colors'
 import IconButton from 'material-ui/IconButton'
-import errorLog from '../../../utils/errorLog'
+// import errorLog from '../../../utils/errorLog'
 
 class ImageSearch extends Component {
 
@@ -17,7 +17,8 @@ class ImageSearch extends Component {
       images: [],
       loading: false,
       loadingImage: false,
-      imageChosen: false
+      imageChosen: false,
+      error: ''
     }
 
     this.handleScroll = () => {
@@ -90,6 +91,10 @@ class ImageSearch extends Component {
     this.onChoose = () => {
       this.setState({loadingImage: true})
     }
+
+    this.showError = (err) => {
+      this.setState({error: err})
+    }
   }
 
   componentDidMount () {
@@ -108,10 +113,10 @@ class ImageSearch extends Component {
       dataType: 'json',
       chooseFile: this.onChoose,
       uploadSuccess: this.onUpload,
-      uploadError: errorLog('Uploading Room Image')
+      uploadError: this.showError
     }
     const {handlePrev, handleNext} = this.props
-    const {imageChosen, loading, loadingImage, images, searched} = this.state
+    const {imageChosen, loading, loadingImage, images, searched, error} = this.state
 
     return <div style={styles.container}>
       {
@@ -131,6 +136,13 @@ class ImageSearch extends Component {
             label='NEXT' />
         </div>
 
+      }
+      {
+        error &&
+        <div style={styles.error}>
+          <h3>Error Uploading Image:</h3>
+          {error}
+        </div>
       }
       <div style={styles.searchContainer}>
         <TextField
@@ -269,5 +281,9 @@ const styles = {
   imageUploadIcon: {
     fontSize: 65,
     color: '#fff'
+  },
+  error: {
+    textAlign: 'center',
+    color: red
   }
 }
