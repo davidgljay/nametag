@@ -1,7 +1,19 @@
+#import "../fragments/nametagView.graphql"
+
 mutation CreateBadge($badge:CreateBadgeInput!) {
   createBadge(badge:$badge) {
     badge {
       id
+      defaultNametag {
+        ...nametagView
+      }
+      template {
+        id
+      }
+      notes {
+        date
+        text
+      }
     }
     errors {
       translation_key

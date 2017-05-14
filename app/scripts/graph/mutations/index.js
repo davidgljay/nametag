@@ -60,6 +60,28 @@ export const createBadge = graphql(CREATE_BADGE, {
     createBadge: (badge) => mutate({
       variables: {
         badge
+      },
+      updateQueries: {
+        granterQuery: (oldData, {mutationResult: {data: {createBadge: {errors, badge}}}}) => {
+          if (errors) {
+            errorLog('Error saving message')(errors)
+            return oldData
+          }
+          return {
+            ...oldData,
+            granter: {
+              ...oldData.granter,
+              templates: oldData.granter.templates.map(template =>
+                template.id === badge.template.id
+                ? {
+                  ...template,
+                  badges: template.badges.concat(badge)
+                }
+                : template
+              )
+            }
+          }
+        }
       }
     })
   })

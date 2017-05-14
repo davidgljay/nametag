@@ -89,7 +89,7 @@ class Template extends Component {
             type='text'
             onClick={this.onClipboardClick}
             value={this.getPath()}
-            readonly />
+            readOnly />
           <div style={styles.copyButtonContainer}>
             <FlatButton
               style={styles.copyButton}
@@ -161,7 +161,8 @@ const styles = {
   nametagsContainer: {
     margin: 10,
     display: 'flex',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+    flexWrap: 'wrap'
   },
   imageButton: {
     width: 'inherit',
