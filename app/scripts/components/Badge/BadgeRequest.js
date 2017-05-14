@@ -143,7 +143,8 @@ export default BadgeRequest
 const styles = {
   badgeContainer: {
     marginLeft: 10,
-    display: 'flex'
+    display: 'flex',
+    flexWrap: 'wrap'
   },
   headerText: {
     color: primary,
