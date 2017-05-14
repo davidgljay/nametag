@@ -91,7 +91,10 @@ const addToken = ({user, conn}, token) =>
  */
 
 const getTokens = ({conn}, nametagIds) =>
-  usersTable.getAll(...nametagIds, {index: 'nametags'})('token').run(conn)
+  nametagIds ? usersTable.getAll(...nametagIds, {index: 'nametags'})('token')
+  .run(conn)
+  .then(cursor => cursor.toArray())
+  : []
 
 /**
  * Gets an array of e-mail addresses based on an array of nametags
@@ -288,7 +291,7 @@ const badgesFromAuth = (badge, provider) => {
     case 'twitter':
       return {
         name: `@${badge.twitter}`,
-        description: `This has the account @${badge.twitter} on Twitter.`,
+        description: `This individual owns the account @${badge.twitter} on Twitter.`,
         image: '/public/images/twitter.jpg',
         note: 'Confirmed via Twitter.'
       }

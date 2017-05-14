@@ -63,9 +63,11 @@ const create = ({conn, models: {Users, Nametags, Templates}}, {note, template, d
       Users.addBadge(id, template, defaultNametag),
       Nametags.grantBadge(defaultNametag, id),
       Users.getTokens(defaultNametag),
-      db.table('templates').get(template)
+      db.table('templates').getAll(template)
         .eqJoin('granter', db.table('granters'))
         .map((join) => ({template: join('left'), granter: join('right')}))
+        .nth(0)
+        .run(conn)
     ])
   })
   .then(([id, userRes, nametagRes, [token], {template, granter}]) => {
