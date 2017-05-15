@@ -4,6 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import CircularProgress from 'material-ui/CircularProgress'
 import {grey} from '../../../styles/colors'
+import key from 'keymaster'
 
 /* Function to Log in users via an auth provider or e-mail.
 
@@ -132,10 +133,26 @@ class Login extends Component {
           })
         })
     }
+
+    this.onEnter = () => {
+      switch (this.state.state) {
+        case 'LOGIN':
+          return this.login()
+        case 'REGISTER':
+          return this.register()
+        case 'PW_REQ':
+          return this.passwordReset()
+      }
+    }
   }
 
   componentWillMount () {
     this.setState({message: this.props.message})
+    key('enter', this.onEnter)
+  }
+
+  componentWillUnmount () {
+    key.unbind('enter')
   }
 
   render () {
