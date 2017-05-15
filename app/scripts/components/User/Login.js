@@ -77,7 +77,7 @@ class Login extends Component {
         this.setState({emailAlert: 'Please enter a valid e-mail address'})
         return
       }
-      this.props.registerUser(email, password)
+      this.props.registerUser(email.trim().toLowerCase(), password)
         .then(res => {
           if (res.error) {
             this.setState({alert: res.error.message})
@@ -94,7 +94,7 @@ class Login extends Component {
 
     this.login = () => {
       const {email, password} = this.state
-      this.props.loginUser(email, password)
+      this.props.loginUser(email.trim().toLowerCase(), password)
         .then(res => {
           if (res.error) {
             this.setState({alert: res.error.message})
