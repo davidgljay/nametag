@@ -43,10 +43,13 @@ class EditNametag extends Component {
       }
     }
 
-    this.removeCert = (badge) => {
+    this.removeBadge = (badge) => {
       const {removeNametagEditBadge, room, template} = this.props
       removeNametagEditBadge(badge, room || template)
     }
+
+    this.requiredBadges = () =>
+      this.props.me.badges.filter(badge => this.props.requiredTemplates.indexOf(badge.template.id) > -1)
   }
 
   componentDidMount () {
@@ -66,6 +69,8 @@ class EditNametag extends Component {
       me.images.length > 0) {
       updateNametagEdit(room || template, 'image', me.images[0])
     }
+
+    updateNametagEdit(room || template, 'badges', this.requiredBadges())
   }
 
   render () {
@@ -133,30 +138,37 @@ class EditNametag extends Component {
         </div>
         <Badges
           badges={nametag.badges}
+          requiredBadges={this.requiredBadges().map(b => b.id)}
           draggable
-          removeFromSource={this.removeCert} />
+          removeFromSource={this.removeBadge} />
       </Card>
     </div>)
   }
 }
 
+const {shape, string, arrayOf, object, func, bool} = PropTypes
+
 EditNametag.propTypes = {
-  nametagEdit: PropTypes.shape({
-    name: PropTypes.string,
-    bio: PropTypes.string,
-    image: PropTypes.string,
-    badges: PropTypes.arrayOf(PropTypes.object)
+  nametagEdit: shape({
+    name: string,
+    bio: string,
+    image: string,
+    badges: arrayOf(object)
   }),
-  me: PropTypes.shape({
-    images: PropTypes.arrayOf(PropTypes.string),
-    displayNames: PropTypes.arrayOf(PropTypes.string).isRequired
+  me: shape({
+    images: arrayOf(string),
+    displayNames: arrayOf(string).isRequired,
+    badges: arrayOf(shape({
+      id: string.isRequired
+    })).isRequired
   }).isRequired,
-  room: PropTypes.string,
-  template: PropTypes.string,
-  isOver: PropTypes.bool.isRequired,
-  updateNametagEdit: PropTypes.func.isRequired,
-  addNametagEditBadge: PropTypes.func.isRequired,
-  removeNametagEditBadge: PropTypes.func.isRequired
+  room: string,
+  template: string,
+  isOver: bool.isRequired,
+  requiredTemplates: arrayOf(string).isRequired,
+  updateNametagEdit: func.isRequired,
+  addNametagEditBadge: func.isRequired,
+  removeNametagEditBadge: func.isRequired
 }
 
 export default DropTarget(dragTypes.badge, nametagTarget, collect)(EditNametag)

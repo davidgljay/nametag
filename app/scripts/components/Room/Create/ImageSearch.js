@@ -4,7 +4,7 @@ import TextField from 'material-ui/TextField'
 import {Card} from 'material-ui/Card'
 import CircularProgress from 'material-ui/CircularProgress'
 import RaisedButton from 'material-ui/RaisedButton'
-import {red} from '../../../styles/colors'
+import {red, grey} from '../../../../styles/colors'
 import IconButton from 'material-ui/IconButton'
 // import errorLog from '../../../utils/errorLog'
 
@@ -272,7 +272,7 @@ const styles = {
     paddingBottom: 10
   },
   imageUpload: {
-    backgroundColor: grey500
+    backgroundColor: grey
   },
   imageUploadButton: {
     width: 90,

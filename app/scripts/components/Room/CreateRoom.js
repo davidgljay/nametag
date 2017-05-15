@@ -225,29 +225,32 @@ class CreateRoom extends Component {
           removeNametagEditBadge={removeNametagEditBadge} />
       </div>
       <div style={styles.createRoom}>
-        <CreateRoomForms
-          stepIndex={this.state.stepIndex}
-          updateNametagEdit={updateNametagEdit}
-          room={this.state.room}
-          badges={me.badges}
-          handleNext={this.handleNext}
-          handlePrev={this.handlePrev}
-          selectedBadges={selectedBadges}
-          addSelectedBadge={this.addSelectedBadge}
-          removeSelectedBadge={this.removeSelectedBadge}
-          nametagEdits={nametagEdits}
-          updateRoom={this.updateRoom}
-          searchImage={searchImage}
-          setImageFromUrl={setImageFromUrl}
-          addNametagEditBadge={addNametagEditBadge}
-          removeNametagEditBadge={removeNametagEditBadge}
-          addNorm={this.addNorm}
-          norms={this.state.norms}
-          setClosed={this.setClosed}
-          closedIn={this.state.closedIn}
-          removeNorm={this.removeNorm}
-          me={me}
-          error={this.state.error} />
+        {
+          <CreateRoomForms
+            stepIndex={this.state.stepIndex}
+            updateNametagEdit={updateNametagEdit}
+            room={this.state.room}
+            badges={me.badges}
+            handleNext={this.handleNext}
+            handlePrev={this.handlePrev}
+            selectedBadges={selectedBadges}
+            addSelectedBadge={this.addSelectedBadge}
+            removeSelectedBadge={this.removeSelectedBadge}
+            nametagEdits={nametagEdits}
+            updateRoom={this.updateRoom}
+            searchImage={searchImage}
+            setImageFromUrl={setImageFromUrl}
+            addNametagEditBadge={addNametagEditBadge}
+            removeNametagEditBadge={removeNametagEditBadge}
+            addNorm={this.addNorm}
+            norms={this.state.norms}
+            setClosed={this.setClosed}
+            closedIn={this.state.closedIn}
+            removeNorm={this.removeNorm}
+            me={me}
+            error={this.state.error} />
+        }
+
         <div>
           {
             this.state.stepIndex > 0 &&

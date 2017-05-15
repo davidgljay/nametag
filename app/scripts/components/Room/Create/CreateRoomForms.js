@@ -46,8 +46,7 @@ const getForm = ({
           badges={badges}
           selectedBadges={selectedBadges}
           addSelectedBadge={addSelectedBadge}
-          removeSelectedBadge={removeSelectedBadge}
-           />
+          removeSelectedBadge={removeSelectedBadge} />
       </div>
     case 1:
       return <div>
@@ -72,6 +71,7 @@ const getForm = ({
               error={error}
               nametagEdit={nametagEdits.new}
               addNametagEditBadge={addNametagEditBadge}
+              requiredTemplates={selectedBadges.map(b => b.template.id)}
               removeNametagEditBadge={removeNametagEditBadge}
               updateNametagEdit={updateNametagEdit}
               me={me}

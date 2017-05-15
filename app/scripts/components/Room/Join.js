@@ -38,6 +38,7 @@ class Join extends Component {
       addNametagEditBadge,
       updateNametagEdit,
       room,
+      templates,
       me
     } = this.props
     if (me) {
@@ -48,6 +49,7 @@ class Join extends Component {
             <EditNametag
               nametagEdit={nametag}
               me={me}
+              requiredTemplates={templates}
               addNametagEditBadge={addNametagEditBadge}
               removeNametagEditBadge={removeNametagEditBadge}
               updateNametagEdit={updateNametagEdit}
@@ -76,13 +78,16 @@ class Join extends Component {
   }
 }
 
+const {string, bool, object, func, arrayOf} = PropTypes
+
 Join.propTypes = {
-  room: PropTypes.string.isRequired,
-  normsChecked: PropTypes.bool.isRequired,
-  nametag: PropTypes.object,
-  addNametagEditBadge: PropTypes.func.isRequired,
-  removeNametagEditBadge: PropTypes.func.isRequired,
-  updateNametagEdit: PropTypes.func.isRequired
+  room: string.isRequired,
+  normsChecked: bool.isRequired,
+  nametag: object,
+  addNametagEditBadge: func.isRequired,
+  removeNametagEditBadge: func.isRequired,
+  updateNametagEdit: func.isRequired,
+  templates: arrayOf(string).isRequired
 }
 
 export default Join
