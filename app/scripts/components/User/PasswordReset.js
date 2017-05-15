@@ -134,7 +134,9 @@ const styles = {
   resetPasswordContainer: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
+    textAlign: 'center',
+    padding: 10
   },
   errorsContainer: {
     display: 'flex',
