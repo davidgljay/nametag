@@ -24,6 +24,7 @@ const NavDrawer = ({me, empty, toggleLogin, open, setOpen}) => {
   return <Drawer
     width={200}
     open={open}
+    docked={false}
     style={styles.drawer}
     onRequestChange={setOpen}>
     <div style={styles.drawerTitle}><h2>Nametag</h2></div>
