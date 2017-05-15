@@ -4,6 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import EditNametag from '../Nametag/EditNametag'
 import CircularProgress from 'material-ui/CircularProgress'
 import NavBar from '../Utils/NavBar'
+import UserBadges from './UserBadges'
 import Login from '../../containers/User/LoginContainer'
 
 class BadgeDetail extends Component {
@@ -70,6 +71,7 @@ class BadgeDetail extends Component {
     }
 
     let claimButton
+    const nametag = nametagEdits[template.id]
 
     if (!me) {
       claimButton = <Login
@@ -95,13 +97,19 @@ class BadgeDetail extends Component {
         </div>
         <div style={styles.requestBadge}>
           <div style={styles.editNametag}>
-            <EditNametag
-              nametagEdit={nametagEdits[template.id]}
-              me={me}
-              template={template.id}
-              updateNametagEdit={updateNametagEdit}
-              addNametagEditBadge={addNametagEditBadge}
-              removeNametagEditBadge={removeNametagEditBadge} />
+              <EditNametag
+                nametagEdit={nametag}
+                me={me}
+                requiredTemplates={[]}
+                addNametagEditBadge={addNametagEditBadge}
+                removeNametagEditBadge={removeNametagEditBadge}
+                updateNametagEdit={updateNametagEdit}
+                template={template.id} />
+              <div style={styles.userBadges}>
+                <UserBadges
+                  selectedBadges={nametag && nametag.badges}
+                  badges={me.badges} />
+              </div>
           </div>
           <div style={styles.editNametag}>
             <RaisedButton

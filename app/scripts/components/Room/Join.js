@@ -45,22 +45,18 @@ class Join extends Component {
       join =
         <div style={styles.join}>
           <h4>Edit Your Nametag For This Conversation</h4>
-          {
-            <EditNametag
-              nametagEdit={nametag}
-              me={me}
-              requiredTemplates={templates}
-              addNametagEditBadge={addNametagEditBadge}
-              removeNametagEditBadge={removeNametagEditBadge}
-              updateNametagEdit={updateNametagEdit}
-              room={room} />
-          }
+          <EditNametag
+            nametagEdit={nametag}
+            me={me}
+            requiredTemplates={templates}
+            addNametagEditBadge={addNametagEditBadge}
+            removeNametagEditBadge={removeNametagEditBadge}
+            updateNametagEdit={updateNametagEdit}
+            room={room} />
           <div style={styles.userBadges}>
-            {
-              <UserBadges
-                selectedBadges={nametag && nametag.badges}
-                badges={me.badges} />
-            }
+            <UserBadges
+              selectedBadges={nametag && nametag.badges}
+              badges={me.badges} />
           </div>
           <br />
           <Alert alert={this.state.alert} />

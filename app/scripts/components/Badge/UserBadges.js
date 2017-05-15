@@ -22,7 +22,9 @@ class UserBadges extends Component {
       const {selectedBadges} = this.props
       if (!badges || badges.length === 0) {
         return <div style={styles.noBadges}>
-          You do not currently have any badges, want to add some?
+          {
+            //You do not currently have any badges, want to add some?
+          }
         </div>
       }
       return <div>
@@ -99,7 +101,8 @@ const styles = {
     color: grey
   },
   userBadgeText: {
-    color: grey
+    color: grey,
+    textAlign: 'center'
   },
   userBadgeIcon: {
     color: grey
