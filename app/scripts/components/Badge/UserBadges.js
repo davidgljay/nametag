@@ -23,7 +23,7 @@ class UserBadges extends Component {
       if (!badges || badges.length === 0) {
         return <div style={styles.noBadges}>
           {
-            //You do not currently have any badges, want to add some?
+            // You do not currently have any badges, want to add some?
           }
         </div>
       }

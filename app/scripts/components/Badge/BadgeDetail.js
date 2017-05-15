@@ -97,19 +97,19 @@ class BadgeDetail extends Component {
         </div>
         <div style={styles.requestBadge}>
           <div style={styles.editNametag}>
-              <EditNametag
-                nametagEdit={nametag}
-                me={me}
-                requiredTemplates={[]}
-                addNametagEditBadge={addNametagEditBadge}
-                removeNametagEditBadge={removeNametagEditBadge}
-                updateNametagEdit={updateNametagEdit}
-                template={template.id} />
-              <div style={styles.userBadges}>
-                <UserBadges
-                  selectedBadges={nametag && nametag.badges}
-                  badges={me.badges} />
-              </div>
+            <EditNametag
+              nametagEdit={nametag}
+              me={me}
+              requiredTemplates={[]}
+              addNametagEditBadge={addNametagEditBadge}
+              removeNametagEditBadge={removeNametagEditBadge}
+              updateNametagEdit={updateNametagEdit}
+              template={template.id} />
+            <div style={styles.userBadges}>
+              <UserBadges
+                selectedBadges={nametag && nametag.badges}
+                badges={me.badges} />
+            </div>
           </div>
           <div style={styles.editNametag}>
             <RaisedButton

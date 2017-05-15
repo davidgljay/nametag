@@ -28,7 +28,6 @@ class Message extends Component {
   }
 
   render () {
-    let below
     let media
     const {
       message: {

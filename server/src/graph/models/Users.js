@@ -96,7 +96,6 @@ const getTokens = ({conn}, nametagIds) =>
     .then(cursor => cursor.toArray())
     : Promise.resolve([])
 
-
 /**
  * Gets an array of e-mail addresses based on an array of nametags
  * NOTE: This is temporary, and breaks a core promise to our users: we shouldn't be able to
