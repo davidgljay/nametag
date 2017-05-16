@@ -28,7 +28,12 @@ class Navbar extends Component {
       open: false
     }
 
+    this.closeGranters = () => {
+      this.setState({showGranters: false})
+    }
+
     this.showGranters = (e) => {
+      e.preventDefault()
       this.setState({
         showGranters: !this.state.showGranters,
         element: e.currentTarget
@@ -71,7 +76,7 @@ class Navbar extends Component {
                 anchorEl={element}
                 anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
                 targetOrigin={{horizontal: 'left', vertical: 'top'}}
-                onRequestClose={this.handleRequestClose}>
+                onRequestClose={this.closeGranters}>
                 <Menu>
                   {
                     me.granters.map(granter =>
