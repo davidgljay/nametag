@@ -95,7 +95,7 @@ class EditNametag extends Component {
       image: ''
     }
 
-    return this.props.connectDropTarget(<div id='editNametag'>
+    return this.props.connectDropTarget(<div id='editNametag' style={styles.container}>
       <Card style={styles.editNametag} className='profile'>
         <div style={styles.cardInfo}>
           <NTIconMenu
@@ -174,6 +174,10 @@ EditNametag.propTypes = {
 export default DropTarget(dragTypes.badge, nametagTarget, collect)(EditNametag)
 
 const styles = {
+  container: {
+    display: 'flex',
+    justifyContent: 'center'
+  },
   editNametag: {
     width: 250,
     verticalAlign: 'top',

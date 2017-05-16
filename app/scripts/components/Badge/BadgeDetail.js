@@ -70,19 +70,19 @@ class BadgeDetail extends Component {
       </div>
     }
 
-    let claimButton
+    let claimInfo
     const nametag = nametagEdits[template.id]
 
     if (!me) {
-      claimButton = <Login
+      claimInfo = <Login
         message='Log in to request this badge' />
     } else if (this.state.requested) {
-      claimButton = <div style={styles.claimButton}>
+      claimInfo = <div style={styles.claimInfo}>
         <div style={styles.header}>
           <h3>Request submitted</h3>
           You should hear back from {template.granter.name} shortly.
           <RaisedButton
-            style={styles.claimButton}
+            style={styles.claimInfo}
             labelStyle={styles.buttonLabel}
             primary
             onClick={() => { window.location = '/' }}
@@ -90,7 +90,7 @@ class BadgeDetail extends Component {
         </div>
       </div>
     } else {
-      claimButton = <div style={styles.claimButton}>
+      claimInfo = <div style={styles.claimInfo}>
         <div style={styles.header}>
           {template.granter.name} will need to know a little about you before granting you
           this badge. What would you like to share?
@@ -138,7 +138,7 @@ class BadgeDetail extends Component {
             draggable={false}
             expanded />
         </div>
-        {claimButton}
+        {claimInfo}
       </div>
     </div>
   }
@@ -185,8 +185,12 @@ const styles = {
     lineHeight: '20px',
     maxWidth: 350
   },
-  claimButton: {
-    margin: 30
+  claimInfo: {
+    margin: 30,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    maxWidth: 450
   },
   buttonLabel: {
     color: '#fff'
