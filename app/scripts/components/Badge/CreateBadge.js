@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import Badge from './Badge'
 import TextField from 'material-ui/TextField'
-import NavBar from '../Utils/NavBar'
+import Navbar from '../Utils/Navbar'
 import CircularProgress from 'material-ui/CircularProgress'
 import RaisedButton from 'material-ui/RaisedButton'
 
@@ -76,7 +76,7 @@ class CreateBadge extends Component {
     return <div id='createBadge'>
       {
         !mini &&
-        <NavBar
+        <Navbar
           me={me} />
       }
       <div style={styles.container}>

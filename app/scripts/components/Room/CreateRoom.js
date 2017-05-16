@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import RoomCard from './RoomCard'
-import NavBar from '../Utils/NavBar'
+import Navbar from '../Utils/Navbar'
 import CreateRoomForms from './Create/CreateRoomForms'
 import CircularProgress from 'material-ui/CircularProgress'
 import Stepper from './Create/Stepper'
@@ -199,7 +199,7 @@ class CreateRoom extends Component {
     const selectedBadges = room.templates.map(template => ({id: template.id, notes: [], template}))
     return !loading
     ? <div>
-      <NavBar
+      <Navbar
         me={me}
         toggleLogin={() => {}} />
       <div style={styles.title}>

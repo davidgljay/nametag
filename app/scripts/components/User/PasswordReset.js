@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import NavBar from '../Utils/NavBar'
+import Navbar from '../Utils/Navbar'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 import hashPassword from '../../utils/pwHash'
@@ -71,7 +71,7 @@ class PasswordReset extends Component {
     const {passwordAlert, password, confirm, complete, errors} = this.state
 
     return <div id='passwordReset'>
-      <NavBar
+      <Navbar
         empty />
       {
         complete

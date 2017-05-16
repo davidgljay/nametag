@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import NavBar from '../Utils/NavBar'
+import Navbar from '../Utils/Navbar'
 import CircularProgress from 'material-ui/CircularProgress'
 import {red} from '../../../styles/colors'
 
@@ -32,7 +32,7 @@ class EmailConfirm extends Component {
   render () {
     const {complete, errors} = this.state
     return <div>
-      <NavBar
+      <Navbar
         empty />
       <div style={styles.emailConfirmationContainer}>
         {

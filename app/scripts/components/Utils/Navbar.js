@@ -20,7 +20,7 @@ const onLogoutClick = () => {
   window.location = '/logout'
 }
 
-class NavBar extends Component {
+class Navbar extends Component {
 
   constructor (props) {
     super(props)
@@ -117,7 +117,7 @@ class NavBar extends Component {
   }
 }
 
-NavBar.propTypes = {
+Navbar.propTypes = {
   me: PropTypes.shape({
     id: PropTypes.string
   }),
@@ -125,7 +125,7 @@ NavBar.propTypes = {
   empty: PropTypes.bool
 }
 
-export default radium(NavBar)
+export default radium(Navbar)
 
 const styles = {
   appBar: {

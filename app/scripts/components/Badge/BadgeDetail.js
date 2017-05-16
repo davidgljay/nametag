@@ -3,7 +3,7 @@ import Badge from './Badge'
 import RaisedButton from 'material-ui/RaisedButton'
 import EditNametag from '../Nametag/EditNametag'
 import CircularProgress from 'material-ui/CircularProgress'
-import NavBar from '../Utils/NavBar'
+import Navbar from '../Utils/Navbar'
 import UserBadges from './UserBadges'
 import Login from '../../containers/User/LoginContainer'
 
@@ -124,7 +124,7 @@ class BadgeDetail extends Component {
     }
 
     return <div>
-      <NavBar
+      <Navbar
         empty />
       <div style={styles.certDetailContainer}>
         <div style={styles.header}>

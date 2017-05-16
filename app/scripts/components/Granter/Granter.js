@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import NavBar from '../Utils/NavBar'
+import Navbar from '../Utils/Navbar'
 import GranterInfo from './GranterInfo'
 import BadgeRequest from '../Badge/BadgeRequest'
 import Template from '../Badge/Template'
@@ -54,7 +54,7 @@ class Granter extends Component {
     return loading
       ? <CircularProgress style={styles.spinner} />
       : <div>
-        <NavBar me={me} />
+        <Navbar me={me} />
         <div id='granterDetail' style={styles.granterDetail}>
           <GranterInfo granter={granter} />
           <ReactCSSTransitionGroup

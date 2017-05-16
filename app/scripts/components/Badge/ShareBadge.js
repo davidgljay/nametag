@@ -1,12 +1,12 @@
 import React, {PropTypes} from 'react'
 import QRcode from 'qrcode.react'
 import Badge from './Badge'
-import NavBar from '../Utils/NavBar'
+import Navbar from '../Utils/Navbar'
 import CircularProgress from 'material-ui/CircularProgress'
 import FlatButton from 'material-ui/FlatButton'
 
 const ShareBadge = ({data: {loading, template}}) => <div>
-  <NavBar empty />
+  <Navbar empty />
   {
     loading
     ? <div style={styles.shareBadgeContainer}>

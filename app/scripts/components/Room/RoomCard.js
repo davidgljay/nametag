@@ -5,7 +5,7 @@ import Join from './Join'
 import constants from '../../constants'
 import {Card, CardTitle, CardMedia} from 'material-ui/Card'
 import Checkbox from 'material-ui/Checkbox'
-import {grey400} from 'material-ui/styles/colors'
+import {grey} from '../../../styles/colors'
 import TimeAgo from 'react-timeago'
 import Badges from '../Badge/Badges'
 
@@ -80,6 +80,10 @@ class RoomCard extends Component {
         <div style={styles.greyText}>
           Ends <TimeAgo date={new Date(room.closedAt)} />
         </div>
+        {
+          room.templates && room.templates.length > 0 &&
+          <div style={styles.privateText}>Conversation Requires:</div>
+        }
         <Badges
           badges={room.templates.map(template => ({id: template.id, notes: [], template}))} />
         <CardTitle
@@ -243,7 +247,14 @@ const styles = {
     textAlign: 'right',
     fontSize: 11,
     fontStyle: 'italic',
-    color: grey400
+    color: grey
+  },
+  privateText: {
+    textAlign: 'center',
+    fontSize: 14,
+    fontStyle: 'italic',
+    color: grey,
+    marginTop: 10
   },
   ismod: {
     marginBottom: 5
