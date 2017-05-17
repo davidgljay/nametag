@@ -19,9 +19,14 @@ class BadgeDetail extends Component {
 
     this.onRequestClick = () => {
       const {nametagEdits, createNametag, data: {template: {id}}} = this.props
-      createNametag(nametagEdits[id])
+      const nametag = nametagEdits[id]
+      const nametagForPost = {
+        ...nametag,
+        badges: nametag.badges ? nametag.badges.map(badge => badge.id) : []
+      }
+      console.log('nametag for post', nametagForPost)
+      createNametag(nametagForPost)
         .then(() => this.setState({requested: true}))
-      // TODO: Send to homepage with message, possibly via Router.link?
     }
 
     this.onEmailClick = () => {
