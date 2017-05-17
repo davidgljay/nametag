@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import Badge from './Badge'
 import TextField from 'material-ui/TextField'
 import Navbar from '../Utils/Navbar'
+import Toggle from 'material-ui/Toggle'
 import CircularProgress from 'material-ui/CircularProgress'
 import RaisedButton from 'material-ui/RaisedButton'
 
@@ -14,7 +15,8 @@ class CreateBadge extends Component {
       name: '',
       image: null,
       description: '',
-      uploading: false
+      uploading: false,
+      requiresApproval: false
     }
 
     this.updateBadge = (property, value) => {
@@ -40,16 +42,22 @@ class CreateBadge extends Component {
 
     this.createBadge = () => {
       const {data: {granter}, createBadge} = this.props
-      const {name, image, description} = this.state
+      const {name, image, description, approvalRequired} = this.state
       return createBadge({
         description,
         granter: granter.id,
         image,
-        name
+        name,
+        approvalRequired
       })
       .then(({data: {createTemplate: {id}}}) => {
         window.location = `/granters/${granter.urlCode}`
       })
+    }
+
+    this.toggleApproval = (e) => {
+      e.preventDefault()
+      this.setState({approvalRequired: !this.state.approvalRequired})
     }
   }
 
@@ -66,7 +74,7 @@ class CreateBadge extends Component {
   }
 
   render () {
-    const {name, image, description} = this.state
+    const {name, image, description, approvalRequired} = this.state
     const {data: {me, loading, granter}, mini} = this.props
 
     if (loading) {
@@ -127,6 +135,18 @@ class CreateBadge extends Component {
           "This individual is licensed to practice law by the New York State Bar."
           Should not include personally identifiable information.
         </div>
+        <Toggle
+          label='Require Approval'
+          toggled={approvalRequired}
+          style={styles.toggle}
+          onToggle={this.toggleApproval} />
+        <div style={styles.description}>
+          {
+            approvalRequired
+            ? 'You must manually approve everyone who receives this badge.'
+            : 'This badge will be granted to anyone with the appropriate link.'
+          }
+        </div>
         <div style={styles.createButton}>
           <RaisedButton
             labelStyle={styles.buttonLabel}
@@ -170,6 +190,10 @@ const styles = {
     color: '#999',
     fontSize: 14,
     fontStyle: 'italic'
+  },
+  toggle: {
+    width: 290,
+    margin: '30px 0px 10px 0px'
   },
   textfield: {
     width: 290

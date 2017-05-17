@@ -217,6 +217,9 @@ type Template {
   # The badges that have been granted based on this template
   badges: [Badge]
 
+  # Indicates whether badges from this template must be manually approved or is granted automatically.
+  requiresApproval: Boolean!
+
   # Time when the badge template was created
   createdAt: Date!
 
@@ -446,6 +449,9 @@ input CreateTemplateInput {
 
   # The template's granter
   granter: ID!
+
+  # Indicates whether badges from this template require approval to be granted
+  approvalRequired: Boolean!
 
 }
 
