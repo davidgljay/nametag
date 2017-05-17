@@ -89,8 +89,8 @@ const create = ({conn, user, models: {Users, BadgeRequests, Rooms, Templates, Ba
       id,
 
       // Create a BadgeRequest or new badge if appropriate
-      nametag.template ?
-        Templates.get(nametag.template)
+      nametag.template
+        ? Templates.get(nametag.template)
           .then(template =>
             template.approvalRequired
             ? BadgeRequests.create(id, template.id)
