@@ -73,7 +73,7 @@ const grantBadge = ({conn}, id, badgeId) => nametagsTable.get(id).update({badge:
  *
  **/
 
-const create = ({conn, user, models: {Users, BadgeRequests, Rooms}}, nt, createBadgeRequest = true) => {
+const create = ({conn, user, models: {Users, BadgeRequests, Rooms, Templates, Badges}}, nt) => {
   const nametag = Object.assign({}, nt, {createdAt: new Date()})
   return nametagsTable.insert(nametag).run(conn)
   // Append nametag ID to user object and update default names and images
@@ -88,12 +88,19 @@ const create = ({conn, user, models: {Users, BadgeRequests, Rooms}}, nt, createB
       Users.addNametag(id, nametag.room || nametag.template),
       id,
 
-      // Create a BadgeRequest if appropriate
-      nametag.template && createBadgeRequest ? BadgeRequests.create(id, nametag.template) : null,
+      // Create a BadgeRequest or new badge if appropriate
+      nametag.template ?
+        Templates.get(nametag.template)
+          .then(template =>
+            template.approvalRequired
+            ? BadgeRequests.create(id, template.id)
+            : Badges.create({template: template.id, defaultNametag: id, note: 'Badge granted'})
+          )
+          : null,
 
       // Add displayName and image if they are new
-      !createBadgeRequest && user.displayNames.indexOf(nametag.name) === -1 ? Users.appendUserArray('displayNames', nametag.name) : null,
-      !createBadgeRequest && nametag.image && user.images.indexOf(nametag.image) === -1 ? Users.appendUserArray('images', nametag.image) : null,
+      user.displayNames.indexOf(nametag.name) === -1 ? Users.appendUserArray('displayNames', nametag.name) : null,
+      nametag.image && user.images.indexOf(nametag.image) === -1 ? Users.appendUserArray('images', nametag.image) : null,
 
       // Send a notification to the room's moderator
       nametag.room ? Promise.all([

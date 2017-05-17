@@ -41,7 +41,6 @@ const getTemplateBadges = ({conn}, template) => badgesTable.getAll(template, {in
  *
  * @param {Object} context     graph context
  * @param {Object} badge   the badge to be created
- * @param {String} nametagId   the id of the nametag to which this badge is being granted
  *
  **/
 

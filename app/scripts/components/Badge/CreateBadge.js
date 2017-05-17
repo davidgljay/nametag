@@ -16,7 +16,7 @@ class CreateBadge extends Component {
       image: null,
       description: '',
       uploading: false,
-      requiresApproval: false
+      approvalRequired: true
     }
 
     this.updateBadge = (property, value) => {

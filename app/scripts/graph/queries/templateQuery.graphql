@@ -6,6 +6,7 @@ query templateQuery($id: ID!){
     description
     name
     image
+    approvalRequired
     granter {
       id
       name

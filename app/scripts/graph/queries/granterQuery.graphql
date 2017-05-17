@@ -16,6 +16,7 @@ query granterQuery($urlCode: String!) {
         image
         description
         granter {
+          id
           name
           image
         }
@@ -37,6 +38,7 @@ query granterQuery($urlCode: String!) {
       createdAt
       description
       granter {
+        id
         name
         description
         image
@@ -56,6 +58,7 @@ query granterQuery($urlCode: String!) {
   me {
     id
     granters {
+      id
       name
       urlCode
     }

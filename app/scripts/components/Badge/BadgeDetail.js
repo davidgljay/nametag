@@ -76,16 +76,27 @@ class BadgeDetail extends Component {
     }
 
     let claimInfo
+    const verb = template.approvalRequired ? 'Request' : 'Claim'
     const nametag = nametagEdits[template.id]
 
     if (!me) {
       claimInfo = <Login
-        message='Log in to request this badge' />
+        message={`Log in to ${verb} this badge`} />
     } else if (this.state.requested) {
       claimInfo = <div style={styles.claimInfo}>
         <div style={styles.header}>
-          <h3>Request submitted</h3>
-          You should hear back from {template.granter.name} shortly.
+          {
+            template.approvalRequired
+            ? <div>
+              <h3>Request submitted</h3>
+              You should hear back from {template.granter.name} shortly.
+            </div>
+            : <div>
+              <h3>Badge granted</h3>
+              Return to the homepage to use it in conversation.
+            </div>
+          }
+
           <RaisedButton
             style={styles.claimInfo}
             labelStyle={styles.buttonLabel}
@@ -122,7 +133,7 @@ class BadgeDetail extends Component {
               labelStyle={styles.buttonLabel}
               primary
               onClick={this.onRequestClick}
-              label='REQUEST THIS BADGE' />
+              label={`${verb} THIS BADGE`} />
           </div>
         </div>
       </div>
@@ -133,7 +144,7 @@ class BadgeDetail extends Component {
         empty />
       <div style={styles.certDetailContainer}>
         <div style={styles.header}>
-          <h3>Request This Badge</h3>
+          <h3>{verb} This Badge</h3>
            Badges let others know why you are worthy of trust and respect.
            They can also give you access to exclusive communities.
         </div>

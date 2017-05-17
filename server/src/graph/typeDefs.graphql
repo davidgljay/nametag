@@ -218,7 +218,7 @@ type Template {
   badges: [Badge]
 
   # Indicates whether badges from this template must be manually approved or is granted automatically.
-  requiresApproval: Boolean!
+  approvalRequired: Boolean!
 
   # Time when the badge template was created
   createdAt: Date!
