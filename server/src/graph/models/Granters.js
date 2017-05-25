@@ -136,6 +136,7 @@ const create = ({conn, models: {Templates}}, granter) =>
             name: `Admin`,
             description: `This individual has the right to grant and revoke badges on behalf of ${granter.name}.`,
             image: granter.image,
+            approvalRequired: true,
             granter: id
           },
         `Created account for ${granter.name}.`)
