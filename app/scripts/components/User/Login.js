@@ -101,7 +101,7 @@ class Login extends Component {
             this.setState({alert: res.error.message})
             return
           }
-          window.location = '/'
+          window.location.reload()
         })
     }
 
