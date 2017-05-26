@@ -1,8 +1,10 @@
 const {ErrNotAuthorized, ErrNotLoggedIn} = require('../../errors')
 
 const RootQuery = {
-  rooms: (obj, {id}, {user, models: {Rooms}}) => {
-    return Promise.all([
+  rooms: (obj, {id, query}, {user, models: {Rooms}}) => {
+    return query
+    ? search(query, 'room', 'room').then(ids => Rooms.getAllVisible(ids))
+    : Promise.all([
       Rooms.getPublic(id),
       user && user.badges ? Rooms.getByTemplates(Object.keys(user.badges), true, id) : []
     ])

@@ -28,5 +28,37 @@ module.exports = {
     }
     return fetch(`http://elasticsearch:9200/${index}/${type}/${obj.id}`, options)
   },
-  search : () => {}
+  search : (query, index, type) => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'Authorization': "Basic " + btoa(`elastic:${elasticsearch.password}`),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+          {
+             "query": {
+              	"bool":{
+              		"should": [
+                    {
+                      "match": {
+                				"title": {
+                					"query": query,
+                					"boost": 2
+                				}
+              			  }
+                    },
+                  	{ "match": {"description": query} }
+              		]
+              	}
+              },
+              "_source": {
+          		    "excludes": "*"
+              }
+          }
+      })
+    }
+    return fetch(`http://elasticsearch:9200/${index}/${type}`, options)
+      .then(res => res.hits.hits.map(hit => hit._id))
+  }
 }
