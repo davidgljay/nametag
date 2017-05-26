@@ -133,7 +133,8 @@ const create = ({conn, models: {Nametags, Users}}, rm) => {
  **/
 
 const updateLatestMessage = ({conn}, roomId) =>
-  roomsTable.get(roomId).update({latestMessage: new Date()})
+  roomsTable.get(roomId).update({latestMessage: new Date()}).run(conn)
+
 
 module.exports = (context) => ({
   Rooms: {

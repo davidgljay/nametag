@@ -44,6 +44,7 @@ query roomsQuery($id: ID) {
        id
        title
        image
+       latestMessage
        closedAt
      }
    }
