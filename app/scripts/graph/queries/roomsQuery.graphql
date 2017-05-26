@@ -10,6 +10,7 @@ query roomsQuery($id: ID) {
     createdAt
     closedAt
     nametagCount
+    latestMessage
     templates {
       id
       name

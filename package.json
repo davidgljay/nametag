@@ -95,16 +95,18 @@
   },
   "jest": {
     "unmockedModulePathPatterns": [
-      "<rootDir>/node_modules/react"
+      "<rootDir>/node_modules/react",
+      "<rootDir>/node_modules/bluebird",
+      "<rootDir>/server/node_modules"
     ],
     "testPathIgnorePatterns": [
       "/app/bower_components/",
       "/dist/bower_components",
       "/node_modules/",
-      "/dist/",
-      "/horizon/"
+      "/dist/"
     ],
-    "automock": true
+    "automock": true,
+    "verbose": true
   },
   "standard": {
     "globals": [
