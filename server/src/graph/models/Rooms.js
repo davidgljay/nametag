@@ -1,6 +1,7 @@
 const r = require('rethinkdb')
 const {db} = require('../../db')
 const errors = require('../../errors')
+const {search} = require('../../elasticsearch')
 
 const roomsTable = db.table('rooms')
 
@@ -14,13 +15,13 @@ const roomsTable = db.table('rooms')
 
 const get = ({conn}, id) => roomsTable.get(id).run(conn)
 
- /**
-  * Returns all active public rooms.
-  *
-  * @param {Object} context     graph context
-  * @param {Object} id          the id of a room to be returned
-  *
-  */
+/**
+* Returns all active public rooms.
+*
+* @param {Object} context     graph context
+* @param {Object} id          the id of a room to be returned
+*
+*/
 
 const getPublic = ({conn, user}, id) => {
   if (id) {
@@ -79,6 +80,19 @@ const getByTemplates = ({conn, user}, templateIds, active, id) => {
   return query.run(conn)
     .then(rooms => rooms.toArray())
 }
+
+/**
+* Returns active rooms based on a query rooms.
+*
+* @param {Object} context     graph context
+* @param {String} query       a query string
+*
+*/
+
+const getQuery = ({conn, user}, query) =>
+  search(query, Object.keys(user.badges), 'room', 'room')
+    .then(roomIds => roomsTable.getAll(...roomIds))
+    .then(rooms => rooms.toArray())
 
 /**
  * Creates a room

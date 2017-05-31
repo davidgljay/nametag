@@ -28,17 +28,17 @@ module.exports = {
     }
     return fetch(`http://elasticsearch:9200/${index}/${type}/${obj.id}`, options)
   },
-  search : (query, index, type) => {
+  search : (query, templates, index, type) => {
     const options = {
       method: 'POST',
       headers: {
         'Authorization': "Basic " + btoa(`elastic:${elasticsearch.password}`),
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
+      body: JSON.stringify(
           {
              "query": {
-              	"bool":{
+              	"bool": {
               		"should": [
                     {
                       "match": {
@@ -49,14 +49,30 @@ module.exports = {
               			  }
                     },
                   	{ "match": {"description": query} }
-              		]
+                  ],
+                  "filter": {
+                    "bool": {
+                      "should": [
+                        {
+                          "match": {
+                            "template": "public"
+                          }
+                        }
+                      ].concat(
+                        templates.map(template => ({
+                          "match": {
+                            "template": template
+                          }
+                        }))
+                      )
+                    }
+                  }
               	}
               },
               "_source": {
           		    "excludes": "*"
               }
-          }
-      })
+        })
     }
     return fetch(`http://elasticsearch:9200/${index}/${type}`, options)
       .then(res => res.hits.hits.map(hit => hit._id))

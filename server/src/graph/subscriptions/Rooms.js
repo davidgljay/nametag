@@ -9,7 +9,10 @@ const RoomSubscription = conn => db.table('rooms').changes().run(conn)
         errorLog(new APIError('Error in room subscription feed'))
         return
       }
-      index(room.new_val, 'room', 'room')
+      const roomForIndex = room.new_val.templates.length === 0 ?
+        Object.assign({}, room.new_val, {templates: ['public']})
+        : room.new_val
+      index(roomForIndex, 'room', 'room')
     })
   })
 
