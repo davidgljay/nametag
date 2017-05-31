@@ -1,5 +1,6 @@
 const fetch = require('node-fetch')
 const btoa = require('btoa')
+const {errorLog} = require('./errors')
 const {elasticsearch} = require('./secrets.json')
 module.exports = {
 
@@ -37,44 +38,49 @@ module.exports = {
       },
       body: JSON.stringify(
           {
-             "query": {
-              	"bool": {
-              		"should": [
+             query: {
+              	bool: {
+              		should: [
                     {
-                      "match": {
-                				"title": {
-                					"query": query,
-                					"boost": 2
+                      match: {
+                				title: {
+                					query: query,
+                					boost: 2
                 				}
               			  }
                     },
-                  	{ "match": {"description": query} }
+                  	{ match: {description: query} }
                   ],
-                  "filter": {
-                    "bool": {
-                      "should": [
+                  filter: {
+                    bool: {
+                      should: [
                         {
-                          "match": {
-                            "template": "public"
+                          match: {
+                            templates: "public"
                           }
                         }
                       ].concat(
                         templates.map(template => ({
-                          "match": {
-                            "template": template
+                          match: {
+                            templates: template
                           }
                         }))
                       )
                     }
                   }
-              	}
+              	},
               },
-              "_source": {
-          		    "excludes": "*"
+              min_score: 0.1,
+              _source: {
+          		    excludes: "*"
               }
         })
     }
-    return fetch(`http://elasticsearch:9200/${index}/${type}`, options)
+    return fetch(`http://elasticsearch:9200/${index}/${type}/_search`, options)
+      .then(res => res.ok
+        ? res.json()
+        : Promise.reject(res.statusText))
       .then(res => res.hits.hits.map(hit => hit._id))
+      .catch(err => Promise.reject(new Error(`Elasticsearch: ${err}`)))
   }
 }
