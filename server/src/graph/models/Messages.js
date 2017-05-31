@@ -54,7 +54,7 @@ const toggleSaved = ({conn}, id, saved) =>
  **/
 
 const create = (context, msg) => {
-  const {conn, models:{Rooms}} = context
+  const {conn, models: {Rooms}} = context
   const messageObj = Object.assign({}, msg, {createdAt: new Date(), recipient: false})
   return messagesTable.insert(messageObj).run(conn)
   .then((res) => {
