@@ -65,6 +65,11 @@ class ImageSearch extends Component {
       this.setState({images: []})
     }
 
+    this.onSearchSubmit = e => {
+      e.preventDefault()
+      this.onSearchClick()
+    }
+
     this.setImageQuery = (e) => {
       this.setState({imageQuery: e.target.value})
     }
@@ -144,7 +149,7 @@ class ImageSearch extends Component {
           {error}
         </div>
       }
-      <div style={styles.searchContainer}>
+      <form style={styles.searchContainer} onSubmit={this.onSearchSubmit}>
         <TextField
           id='imageSearchInput'
           onChange={this.setImageQuery}
@@ -159,7 +164,8 @@ class ImageSearch extends Component {
           labelStyle={styles.labelStyle}
           label='FIND IMAGE'
           onClick={this.onSearchClick} />
-      </div>
+        <input type='submit' style={styles.hiddenSubmit} />
+      </form>
       {
         loadingImage
         ? <CircularProgress />
@@ -281,6 +287,9 @@ const styles = {
   imageUploadIcon: {
     fontSize: 65,
     color: '#fff'
+  },
+  hiddenSubmit: {
+    display: 'none'
   },
   error: {
     textAlign: 'center',

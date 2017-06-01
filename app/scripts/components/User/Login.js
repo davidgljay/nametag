@@ -258,7 +258,7 @@ class Login extends Component {
               onClick={this.passwordReset} />
           </div>
         }
-        <input type='submit' style={styles.submit} />
+        <input type='submit' style={styles.hiddenSubmit} />
       </form>
       <div style={styles.authProviders}>
         {
@@ -316,6 +316,9 @@ const styles = {
     textAlign: 'center',
     fontStyle: 'italic',
     fontSize: 14
+  },
+  hiddenSubmit: {
+    display: 'none'
   },
   forgotPasswordLink: {
     color: grey,
