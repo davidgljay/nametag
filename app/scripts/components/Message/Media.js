@@ -31,7 +31,7 @@ const styles = {
     padding: 10
   },
   mediaImage: {
-    CmaxWidth: '80%'
+    maxWidth: '80%'
   },
   video: {
     '@media (max-width: 975px)': {

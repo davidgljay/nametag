@@ -10,6 +10,7 @@ query roomsQuery($id: ID, $query: String) {
     createdAt
     closedAt
     nametagCount
+    latestMessage
     templates {
       id
       name
@@ -43,6 +44,7 @@ query roomsQuery($id: ID, $query: String) {
        id
        title
        image
+       latestMessage
        closedAt
      }
    }

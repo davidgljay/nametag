@@ -130,7 +130,6 @@ const create = ({conn, models: {Nametags, Users}}, rm) => {
       room
     ])
   })
-
   // Return room
   .then(([res, id, modId, room]) => {
     if (res.errors > 0) {
@@ -143,6 +142,18 @@ const create = ({conn, models: {Nametags, Users}}, rm) => {
   })
 }
 
+/**
+ * Updates a room's latestMessage value
+ *
+ * @param {Object} context     graph context
+  * @param {Object} roomId   the room to be updated
+ *
+ **/
+
+const updateLatestMessage = ({conn}, roomId) =>
+  roomsTable.get(roomId).update({latestMessage: new Date()}).run(conn)
+
+
 module.exports = (context) => ({
   Rooms: {
     get: (id) => get(context, id),
@@ -150,5 +161,6 @@ module.exports = (context) => ({
     getByTemplates: (templateIds, active) => getByTemplates(context, templateIds, active),
     getQuery: (query) => getQuery(context, query),
     create: (room) => create(context, room)
+    updateLatestMessage: (roomId) => updateLatestMessage(context, roomId)
   }
 })

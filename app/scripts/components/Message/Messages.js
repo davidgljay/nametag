@@ -76,16 +76,17 @@ const styles = {
   messages: {
     minHeight: '100vh',
     height: '100%',
+    width: 'calc(100% - 275px)',
     display: 'flex',
     paddingLeft: 275,
     paddingTop: 100,
     scrollBehavior: 'smooth',
     [mobile]: {
-      paddingLeft: 30
+      paddingLeft: 30,
+      width: 'calc(100% - 30px)'
     }
   },
   msgContainer: {
-    width: 'inherit',
     marginBottom: 75
   }
 }
