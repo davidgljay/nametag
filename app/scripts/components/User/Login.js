@@ -134,7 +134,8 @@ class Login extends Component {
         })
     }
 
-    this.onEnter = () => {
+    this.onEnter = (e) => {
+      e.preventDefault()
       switch (this.state.state) {
         case 'LOGIN':
           return this.login()
@@ -170,7 +171,7 @@ class Login extends Component {
       <div style={styles.alert}>
         {alert}
       </div>
-      <div className='localAuth'>
+      <form className='localAuth' onSubmit={this.onEnter}>
         <TextField
           floatingLabelText='E-mail'
           id='loginEmail'
@@ -257,7 +258,8 @@ class Login extends Component {
               onClick={this.passwordReset} />
           </div>
         }
-      </div>
+        <input type='submit' style={styles.submit} />
+      </form>
       <div style={styles.authProviders}>
         {
           loading
