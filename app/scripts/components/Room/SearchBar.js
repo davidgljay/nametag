@@ -7,8 +7,7 @@ class SearchBar extends Component {
     super(props)
 
     this.state = {
-      query: '',
-      clicked: false
+      query: ''
     }
 
     this.onQueryChange = (e) => {
@@ -18,7 +17,7 @@ class SearchBar extends Component {
 
     this.onClickSearch = (e) => {
       e.preventDefault()
-      this.setState({clicked: true})
+      // this.setState({clicked: true})
       document.getElementById('searchInput').focus()
     }
 
@@ -29,10 +28,10 @@ class SearchBar extends Component {
   }
 
   render () {
-    const {clicked, query} = this.state
-    const container = clicked ? {...styles.container, ...styles.border}
-      : styles.container
-    return <div style={container}>
+    const {query} = this.state
+    // const container = clicked ? {...styles.container, ...styles.border}
+    //   : styles.container
+    return <div style={styles.container}>
       <FontIcon
         style={styles.icon}
         onClick={this.onClickSearch}
