@@ -12,6 +12,7 @@ module.exports = conn => new LocalStrategy({
     req.user
     ? Users(conn).addEmail(req.user.id, email)
       .then(() => done(null, Object.assign({}, req.user, {email})))
+      .catch(done)
     : Users(conn).getByEmail(email)
       .then(user => {
         if (!user) {

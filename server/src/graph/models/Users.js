@@ -45,6 +45,18 @@ const getByEmail = ({conn}, email) =>
     })
 
 /**
+ * Adds an e-mail address to an existing user
+ *
+ * @param {Object} context     graph context
+ * @param {String} userId   the id of the user to be updated
+ * @param {String} email   an email to be added to the user
+ *
+ */
+
+const addEmail = ({conn}, userId, email) =>
+  usersTable.get(userId).update({email}).run(conn)
+
+/**
  * Append an arbitrary value to an array in the user object.
  *
  * @param {Object} context     graph context
@@ -455,6 +467,7 @@ module.exports = (context) => ({
   Users: {
     get: (id) => get(context, id),
     getByEmail: (email) => getByEmail(context, email),
+    addEmail: (userId, email) => addEmail(context, userId, email),
     findOrCreateFromAuth: (profile, provider) => findOrCreateFromAuth(context, profile, provider),
     createLocal: (email, password) => createLocal(context, email, password),
     validPassword: (id, password) => validPassword(context, id, password),
