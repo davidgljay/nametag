@@ -97,9 +97,13 @@ class CreateRoom extends Component {
       const {room} = this.state
       const {nametagEdits} = this.props
       const roomTemplates = room.templates.map(t => t.id)
+      const mod = {
+        ...nametagEdits.new,
+        badges: nametagEdits.new.badges.map(b => b.id)
+      }
       this.props.createRoom({
         ...room,
-        mod: nametagEdits.new,
+        mod,
         templates: roomTemplates
       })
       .then(() => {
