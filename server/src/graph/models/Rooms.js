@@ -92,12 +92,11 @@ const getByTemplates = ({conn, user}, templateIds, active, id) => {
 const getQuery = ({conn, user}, query) =>
   search(query, user ? Object.keys(user.badges) : [], 'room', 'room')
     .then(roomIds =>
-      roomIds.length > 0 ?
-      roomsTable.getAll(...roomIds).run(conn)
+      roomIds.length > 0
+      ? roomsTable.getAll(...roomIds).run(conn)
         .then(rooms => rooms.toArray())
       : []
     )
-
 
 /**
  * Creates a room
@@ -150,6 +149,6 @@ module.exports = (context) => ({
     getPublic: (id) => getPublic(context, id),
     getByTemplates: (templateIds, active) => getByTemplates(context, templateIds, active),
     getQuery: (query) => getQuery(context, query),
-    create: (room) => create(context, room),
+    create: (room) => create(context, room)
   }
 })
