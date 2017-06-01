@@ -26,6 +26,18 @@ export const roomsQuery = graphql(ROOMS_QUERY, {
     variables: {
       id: getQueryVariable('id')
     }
+  }),
+  props: ({data}) => ({
+    data,
+    search: (query) => data.fetchMore({
+      variables: {
+        query
+      },
+      updateQuery: (previousResult, { fetchMoreResult }) => ({
+        ...previousResult,
+        rooms: fetchMoreResult.rooms
+      })
+    })
   })
 })
 

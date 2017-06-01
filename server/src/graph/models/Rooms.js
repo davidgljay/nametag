@@ -90,7 +90,7 @@ const getByTemplates = ({conn, user}, templateIds, active, id) => {
 */
 
 const getQuery = ({conn, user}, query) =>
-  search(query, Object.keys(user.badges), 'room', 'room')
+  search(query, user ? Object.keys(user.badges) : [], 'room', 'room')
     .then(roomIds =>
       roomIds.length > 0 ?
       roomsTable.getAll(...roomIds).run(conn)

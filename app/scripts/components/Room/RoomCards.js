@@ -31,11 +31,13 @@ class RoomCards extends Component {
     const {
       data: {me, rooms, loading},
       updateNametagEdit,
+      search,
       addNametagEditBadge,
       removeNametagEditBadge,
       nametagEdits,
       createNametag
     } = this.props
+    console.log('me', me)
     let nametagHash = {}
     if (me) {
       nametagHash = me.nametags.reduce((hash, nametag) => {
@@ -52,7 +54,7 @@ class RoomCards extends Component {
         toggleLogin={this.toggleLogin} />
       <div style={styles.background}>
         <SearchBar
-          search={() => {}} />
+          search={search} />
         <div style={styles.roomCards}>
           {
             me &&

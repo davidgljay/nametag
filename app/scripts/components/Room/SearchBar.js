@@ -1,16 +1,42 @@
 import React, {Component, PropTypes} from 'react'
 import FontIcon from 'material-ui/FontIcon'
+import key from 'keymaster'
 
 class SearchBar extends Component {
 
-  render() {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      query: ''
+    }
+
+    this.onQueryChange = (e) => {
+      e.preventDefault()
+      this.setState({query: e.target.value})
+    }
+
+    this.search = (e) => {
+      e.preventDefault()
+      this.props.search(this.state.query)
+    }
+  }
+
+  render () {
     return <div style={styles.container}>
       <FontIcon
         style={styles.icon}
         className='material-icons'>
         search
       </FontIcon>
-      <input type='text' style={styles.input} />
+      <form onSubmit={this.search}>
+        <input
+          type='text'
+          style={styles.input}
+          value={this.state.query}
+          onChange={this.onQueryChange} />
+        <input type='submit' style={styles.submit} />
+      </form>
     </div>
   }
 }
@@ -38,5 +64,8 @@ const styles = {
     focus: {
       border: 'none'
     }
+  },
+  submit: {
+    display: 'none'
   }
 }
