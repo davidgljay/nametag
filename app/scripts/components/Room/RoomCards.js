@@ -37,7 +37,6 @@ class RoomCards extends Component {
       nametagEdits,
       createNametag
     } = this.props
-    console.log('me', me)
     let nametagHash = {}
     if (me) {
       nametagHash = me.nametags.reduce((hash, nametag) => {
