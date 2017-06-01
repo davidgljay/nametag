@@ -48,8 +48,12 @@ const Notifications = ({nametags, roomId, homepage}) => {
   return <div style={homepage ? styles.container : {}}>
     {
       listItems.length > 0 &&
-      <List style={homepage ? flexDisplay : {}}
-        children={listItems} />
+      <div>
+        <div style={styles.activeRooms}>Your Active Rooms</div>
+        <List style={homepage ? flexDisplay : {}}
+          children={listItems} />
+      </div>
+
     }
   </div>
 }
@@ -132,5 +136,9 @@ const styles = {
     fontSize: 10,
     width: 15,
     height: 15
+  },
+  activeRooms: {
+    fontSize: 14,
+    fontWeight: 'bold'
   }
 }

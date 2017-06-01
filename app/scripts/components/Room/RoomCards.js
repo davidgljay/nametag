@@ -52,13 +52,13 @@ class RoomCards extends Component {
         me={me}
         toggleLogin={this.toggleLogin} />
       <div style={styles.background}>
+        {
+          me &&
+          <Notifications nametags={me.nametags} homepage />
+        }
         <SearchBar
           search={search} />
         <div style={styles.roomCards}>
-          {
-            me &&
-            <Notifications nametags={me.nametags} homepage />
-          }
           {
             !loading &&
             rooms &&
