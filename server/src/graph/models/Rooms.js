@@ -159,7 +159,7 @@ module.exports = (context) => ({
     getPublic: (id) => getPublic(context, id),
     getByTemplates: (templateIds, active) => getByTemplates(context, templateIds, active),
     getQuery: (query) => getQuery(context, query),
-    create: (room) => create(context, room)
+    create: (room) => create(context, room),
     updateLatestMessage: (roomId) => updateLatestMessage(context, roomId)
   }
 })
