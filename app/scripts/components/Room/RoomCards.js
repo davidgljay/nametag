@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import RoomCard from './RoomCard'
 import Navbar from '../Utils/Navbar'
 import LoginDialog from '../User/LoginDialog'
+import SearchBar from './SearchBar'
 import Notifications from '../Room/Notifications'
 
 class RoomCards extends Component {
@@ -30,6 +31,7 @@ class RoomCards extends Component {
     const {
       data: {me, rooms, loading},
       updateNametagEdit,
+      search,
       addNametagEditBadge,
       removeNametagEditBadge,
       nametagEdits,
@@ -49,35 +51,38 @@ class RoomCards extends Component {
       <Navbar
         me={me}
         toggleLogin={this.toggleLogin} />
-      <div style={styles.roomCards}>
-        {
-          me &&
-          <Notifications nametags={me.nametags} homepage />
-        }
-        {
-          !loading &&
-          rooms &&
-          rooms.length > 0 &&
-          rooms
-          .filter(room => !nametagHash[room.id])
-          .map(room =>
-            <RoomCard
-              key={room.id}
-              room={room}
-              me={me}
-              nametagEdits={nametagEdits}
-              createNametag={createNametag}
-              updateNametagEdit={updateNametagEdit}
-              addNametagEditBadge={addNametagEditBadge}
-              removeNametagEditBadge={removeNametagEditBadge} />
-          )
-        }
+      <div style={styles.background}>
+        <SearchBar
+          search={search} />
+        <div style={styles.roomCards}>
+          {
+            me &&
+            <Notifications nametags={me.nametags} homepage />
+          }
+          {
+            !loading &&
+            rooms &&
+            rooms.length > 0 &&
+            rooms
+            .filter(room => !nametagHash[room.id])
+            .map(room =>
+              <RoomCard
+                key={room.id}
+                room={room}
+                me={me}
+                nametagEdits={nametagEdits}
+                createNametag={createNametag}
+                updateNametagEdit={updateNametagEdit}
+                addNametagEditBadge={addNametagEditBadge}
+                removeNametagEditBadge={removeNametagEditBadge} />
+            )
+          }
+        </div>
+        <LoginDialog
+          showLogin={this.state.showLogin}
+          toggleLogin={this.toggleLogin}
+          message='Log In or Register' />
       </div>
-      <LoginDialog
-        showLogin={this.state.showLogin}
-        toggleLogin={this.toggleLogin}
-        message='Log In or Register' />
-
     </div>
   }
 }
@@ -106,8 +111,11 @@ RoomCards.propTypes = {
 export default RoomCards
 
 const styles = {
-  roomCards: {
+  background: {
     background: '#fbfbfb',
+    paddingTop: 30
+  },
+  roomCards: {
     paddingBottom: 50,
     paddingTop: 20,
     minHeight: '100vh',

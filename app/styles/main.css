@@ -8,6 +8,11 @@ body {
   display: none;
 }
 
+
+input:focus {
+  outline-width: 0
+}
+
 .messageText p {
   display: inline;
 }

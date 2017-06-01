@@ -19,6 +19,7 @@ const dbInit = require('./graph/models').init
 const passport = require('passport')
 const RedisStore = require('connect-redis')(session)
 const redis = require('./redis')
+const elasticsearch = require('./elasticsearch')
 const startSubscriptionServer = require('./graph/subscriptions/SubscriptionServer')
 const PORT = 8181
 
@@ -60,6 +61,8 @@ if (app.get('env') === 'production') {
   // Enable the secure cookie when we are in production mode.
   sessionOptions.cookie.secure = true
 }
+
+elasticsearch.init()
 
 app.use(session(sessionOptions))
 app.use(function (req, res, next) {

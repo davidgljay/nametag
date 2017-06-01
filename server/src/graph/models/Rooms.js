@@ -1,6 +1,7 @@
 const r = require('rethinkdb')
 const {db} = require('../../db')
 const errors = require('../../errors')
+const {search} = require('../../elasticsearch')
 
 const roomsTable = db.table('rooms')
 
@@ -14,13 +15,13 @@ const roomsTable = db.table('rooms')
 
 const get = ({conn}, id) => roomsTable.get(id).run(conn)
 
- /**
-  * Returns all active public rooms.
-  *
-  * @param {Object} context     graph context
-  * @param {Object} id          the id of a room to be returned
-  *
-  */
+/**
+* Returns all active public rooms.
+*
+* @param {Object} context     graph context
+* @param {Object} id          the id of a room to be returned
+*
+*/
 
 const getPublic = ({conn, user}, id) => {
   if (id) {
@@ -81,6 +82,23 @@ const getByTemplates = ({conn, user}, templateIds, active, id) => {
 }
 
 /**
+* Returns active rooms based on a query rooms.
+*
+* @param {Object} context     graph context
+* @param {String} query       a query string
+*
+*/
+
+const getQuery = ({conn, user}, query) =>
+  search(query, user ? Object.keys(user.badges) : [], 'room', 'room')
+    .then(roomIds =>
+      roomIds.length > 0
+      ? roomsTable.getAll(...roomIds).run(conn)
+        .then(rooms => rooms.toArray())
+      : []
+    )
+
+/**
  * Creates a room
  *
  * @param {Object} context     graph context
@@ -138,9 +156,10 @@ const updateLatestMessage = ({conn}, roomId) =>
 module.exports = (context) => ({
   Rooms: {
     get: (id) => get(context, id),
-    getPublic: (search) => getPublic(context, search),
+    getPublic: (id) => getPublic(context, id),
     getByTemplates: (templateIds, active) => getByTemplates(context, templateIds, active),
-    create: (room) => create(context, room),
+    getQuery: (query) => getQuery(context, query),
+    create: (room) => create(context, room)
     updateLatestMessage: (roomId) => updateLatestMessage(context, roomId)
   }
 })
