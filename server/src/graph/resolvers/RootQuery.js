@@ -15,8 +15,7 @@ const RootQuery = {
       .then(granter => {
         return user.badges[granter.adminTemplate]
         ? granter : Promise.reject(ErrNotAuthorized)
-      }
-      )
+      })
   : Promise.reject(ErrNotLoggedIn),
   template: (obj, {id}, {models: {Templates}}) => Templates.get(id)
 }

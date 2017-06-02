@@ -151,6 +151,28 @@ const addBadge = ({user, conn}, badgeId, templateId, nametagId) =>
       : Promise.reject(err))
 
 /**
+ * Get templates for granters that this user administers
+ *
+ * @param {Object} context   graph context
+ *
+**/
+
+const getAdminTemplates = ({user, conn}) => {
+  if (!user || !user.badges || !user.badges.length === 0) {
+    return []
+  }
+  return Granters.getByAdminTemplate(Object.keys(user.badges))
+    .then(granters => Promise.all(granters.map(g => Templates.getGranterTemplates(g.id))))
+    .then(templates => {
+      let flat = []
+      for (var i=0; i < templates.length; i++ ) {
+        flat = flat.concat(templates[i])
+      }
+      return flat
+    })
+  }
+
+/**
  * Finds or creates a user based on an oauth provider.
  *
  * @param {Object} context   graph context
