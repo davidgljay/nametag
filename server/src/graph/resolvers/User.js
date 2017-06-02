@@ -6,6 +6,20 @@ const User = {
     const badgeIds = Object.keys(badges).reduce((arr, template) => arr.concat(badges[template]), [])
     return Badges.getAll(badgeIds)
   },
+  adminTemplates: (obj, args, {user: {badges}, models: {Templates, Granters}}) => {
+    if (!badges) {
+      return []
+    }
+    return Granters.getByAdminTemplate(Object.keys(badges))
+      .then(granters => Promise.all(granters.map(g => Templates.getGranterTemplates(g.id))))
+      .then(templates => {
+        let flat = []
+        for (var i=0; i < templates.length; i++ ) {
+          flat = flat.concat(templates[i])
+        }
+        return flat
+      })
+  },
   nametags: (obj, args, {user: {nametags}, models: {Nametags}}) => {
     if (!nametags) {
       return []

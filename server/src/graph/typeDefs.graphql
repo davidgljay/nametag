@@ -53,6 +53,9 @@ type User {
   # Time when the user was created
   createdAt: Date!
 
+  # Templates from organizations that this user administers
+  adminTemplates: [Template]
+
 }
 
 # A room where discussions can take place

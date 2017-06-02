@@ -31,7 +31,7 @@ const getByUrlCode = ({conn}, urlCode) => grantersTable.getAll(urlCode, {index: 
     : Promise.reject(err))
 
 /**
- * Returns a badge granter from a url code.
+ * Returns admin templates from a set of ids. If non-admin template IDs are passed they are ignored
  *
  * @param {Object} context     graph context
  * @param {String} adminTemplateIds   the aminTemplate ids of one or more granters to be retrieved
