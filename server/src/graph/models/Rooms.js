@@ -16,31 +16,43 @@ const roomsTable = db.table('rooms')
 const get = ({conn}, id) => roomsTable.get(id).run(conn)
 
 /**
-* Returns all active public rooms.
+* Returns all visible public rooms for this user.
 *
 * @param {Object} context     graph context
 * @param {Object} id          the id of a room to be returned
 *
 */
 
-const getPublic = ({conn, user}, id) => {
-  if (id) {
-    return roomsTable.get(id).run(conn)
-      .then(room => room && room.closedAt > new Date() && room.templates.length === 0
-        ? [room]
+const getVisible = ({conn, user, models: {Users}}, id) =>
+
+  // First, get templates that the user can access as an admin
+  Users.getAdminTemplates()
+    .then(adminTemplates => {
+      const visibleTemplates = user
+        ? Object.keys(user.badges).concat(adminTemplates.map(t => t.id))
         : []
-      )
-  }
-  let query = roomsTable
-    .between(new Date(), new Date(Date.now() * 100), {index: 'closedAt'})
-    .filter(room => r.eq(room('templates').count(), 0))
 
-  if (id) {
-    query = query.filter(room => r.eq(room('id'), id))
-  }
+      //If an id is passed, return that room if it's visible
+      if (id) {
+        return Rooms.get(id)
+          .then(room => {
+            const visible = visibleTemplates.reduce(
+              (template, visible) => room.templates.indexOf(template) > -1 || visible, false)
+            return room.templates.length === 0 || visible ? [room] : []
+          })
+      }
 
-  return query.run(conn)
-    .then(rooms => rooms.toArray())
+      // Otherwise, return all public rooms and rooms that the user can see based on their templates
+      // TODO: Add pagination
+      return roomsTable
+        .between(new Date(), new Date(Date.now() * 100), {index: 'closedAt'})
+        .filter(room =>
+          r.eq(room('templates').count(), 0)
+          || room('templates').contains(template => visibleTemplates.indexOf(template) > -1)
+        )
+        .run(conn)
+        .then(rooms => rooms.toArray())
+    })
 }
 
 /**
@@ -82,21 +94,28 @@ const getByTemplates = ({conn, user}, templateIds, active, id) => {
 }
 
 /**
-* Returns active rooms based on a query rooms.
+* Returns active rooms based on a query.
 *
 * @param {Object} context     graph context
 * @param {String} query       a query string
 *
 */
 
-const getQuery = ({conn, user}, query) =>
-  search(query, user ? Object.keys(user.badges) : [], 'room', 'room')
-    .then(roomIds =>
-      roomIds.length > 0
-      ? roomsTable.getAll(...roomIds).run(conn)
-        .then(rooms => rooms.toArray())
+const getQuery = ({conn, user, models: {Users}}, query) =>
+  Users.getAdminTemplates()
+  .then(adminTemplates => {
+    const visibleTemplates = user
+      ? Object.keys(user.badges).concat(adminTemplates.map(t => t.id))
       : []
-    )
+    return search(query, visibleTemplates, 'room', 'room')
+        .then(roomIds =>
+          roomIds.length > 0
+          ? roomsTable.getAll(...roomIds).run(conn)
+            .then(rooms => rooms.toArray())
+          : []
+        )
+  })
+
 
 /**
  * Creates a room
