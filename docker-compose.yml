@@ -4,9 +4,9 @@ nametag:
   environment:
     - NODE_ENV=${NODE_ENV}
   volumes:
-    - ./dist:/usr/app/
+    - ./dist:/usr/client/
     - ./.keys:/usr/.keys
-    - ./.hz:/usr/app/.hz
+    - ./.hz:/usr/client/.hz
     - ./server/src:/usr/server/src
     - ./server/starthz.sh:/usr/server/starthz.sh
     - ./server/backup.sh:/usr/server/backup.sh

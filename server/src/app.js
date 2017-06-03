@@ -141,7 +141,7 @@ r.connect({host: 'rethinkdb'})
 
     /* All others serve index.html */
     app.get('*', (req, res, next) => {
-      res.sendFile(path.join('/usr', 'app', 'public', 'index.html'))
+      res.sendFile(path.join('/usr', 'client', 'public', 'index.html'))
     })
 
     app.use('/', (err, req, res, next) => {
@@ -161,7 +161,7 @@ r.connect({host: 'rethinkdb'})
   .catch(err => console.log(`Error connecting to rethinkdb: ${err}`))
 
 /* Serve static files */
-app.use('/public', express.static(path.join('/usr', 'app', 'public')))
+app.use('/public', express.static(path.join('/usr', 'client', 'public')))
 
 app.get('/logout',
   (req, res) => {
@@ -185,11 +185,11 @@ if (app.get('env') !== 'production') {
 
 // Server sw.js
 app.get('/sw.js', (req, res) => {
-  res.sendFile(path.join('/usr', 'app', 'public', 'sw.js'))
+  res.sendFile(path.join('/usr', 'client', 'public', 'sw.js'))
 })
 
 app.get('/favicon.ico', (req, res) => {
-  res.sendFile(path.join('/usr', 'app', 'public', 'favicon.ico'))
+  res.sendFile(path.join('/usr', 'client', 'public', 'favicon.ico'))
 })
 
 /* Upload an image and return the url of that image on S3 */

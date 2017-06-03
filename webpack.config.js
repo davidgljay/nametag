@@ -11,7 +11,7 @@ module.exports = {
   entry: Object.assign({}, {
     'app': [
       'babel-polyfill',
-      path.join(__dirname, 'app/scripts/app')
+      path.join(__dirname, 'client/scripts/app')
     ]
   }),
   output: {
@@ -62,27 +62,27 @@ module.exports = {
     }),
     new Copy([
       {
-        from: path.join(__dirname, 'app', 'images'),
+        from: path.join(__dirname, 'client', 'images'),
         to: path.join(__dirname, 'dist', 'public', 'images')
       },
       {
-        from: path.join(__dirname, 'app', 'sw.js'),
+        from: path.join(__dirname, 'client', 'sw.js'),
         to: path.join(__dirname, 'dist', 'public', 'sw.js')
       },
       {
-        from: path.join(__dirname, 'app', 'favicon.ico'),
+        from: path.join(__dirname, 'client', 'favicon.ico'),
         to: path.join(__dirname, 'dist', 'public', 'favicon.ico')
       },
       {
-        from: path.join(__dirname, 'app', 'manifest.json'),
+        from: path.join(__dirname, 'client', 'manifest.json'),
         to: path.join(__dirname, 'dist', 'public', 'manifest.json')
       },
       {
-        from: path.join(__dirname, 'app', 'index.html'),
+        from: path.join(__dirname, 'client', 'index.html'),
         to: path.join(__dirname, 'dist', 'public', 'index.html')
       },
       {
-        from: path.join(__dirname, 'app', 'styles'),
+        from: path.join(__dirname, 'client', 'styles'),
         to: path.join(__dirname, 'dist', 'public', 'styles')
       }
     ]),
@@ -98,7 +98,7 @@ module.exports = {
   ],
   resolve: {
     modules: [
-      path.resolve(__dirname, 'app'),
+      path.resolve(__dirname, 'client'),
       'node_modules'
     ]
   }

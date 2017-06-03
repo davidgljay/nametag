@@ -22,8 +22,10 @@ const collect = (connect, monitor) => {
 
 class ChoosePrivacy extends Component {
   render () {
-    const {badges, selectedBadges, connectDropTarget, removeSelectedBadge} = this.props
-    const unselectedBadges = badges.filter(badge => {
+    const {badges, adminTemplates, selectedBadges, connectDropTarget, removeSelectedBadge} = this.props
+    const privacyOptions = adminTemplates.map(template => ({template, notes: [], id: template.id}))
+      .concat(badges)
+    const unselectedBadges = privacyOptions.filter(badge => {
       if (!selectedBadges) {
         return true
       }

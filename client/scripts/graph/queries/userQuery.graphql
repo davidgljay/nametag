@@ -12,5 +12,18 @@ query userQuery {
     badges {
       ...badgeView
     }
+    adminTemplates {
+      id
+      name
+      description
+      image
+      createdAt
+      granter {
+        id
+        name
+        description
+        image
+      }
+    }
   }
 }

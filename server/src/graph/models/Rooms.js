@@ -52,8 +52,8 @@ const getVisible = ({conn, user, models: {Users}}, id) =>
         )
         .run(conn)
         .then(rooms => rooms.toArray())
+        .then(arr => arr.sort((a,b) => a.createdAt - b.createdAt))
     })
-}
 
 /**
  * Returns all private rooms for a particular template.
@@ -64,34 +64,34 @@ const getVisible = ({conn, user, models: {Users}}, id) =>
  * @param {String} id         The id of a specific room being searched for
  */
 
-const getByTemplates = ({conn, user}, templateIds, active, id) => {
-  if (templateIds.length === 0) {
-    return []
-  }
-
-  if (id) {
-    roomsTable.get(id).run(conn)
-      .then(room => {
-        let userHasTemplate = false
-        for (var i = 0; i < room.templates.length; i++) {
-          if (templateIds.indexOf(room.templates[i]) > -1) {
-            userHasTemplate = true
-          }
-        }
-
-        return userHasTemplate &&
-        room.closedAt > new Date()
-        ? [room]
-        : []
-      })
-  }
-  let query = roomsTable.getAll(...templateIds, {index: 'templates'})
-  if (active) {
-    query = query.filter(room => room('closedAt').gt(new Date()))
-  }
-  return query.run(conn)
-    .then(rooms => rooms.toArray())
-}
+// const getByTemplates = ({conn, user}, templateIds, active, id) => {
+//   if (templateIds.length === 0) {
+//     return []
+//   }
+//
+//   if (id) {
+//     roomsTable.get(id).run(conn)
+//       .then(room => {
+//         let userHasTemplate = false
+//         for (var i = 0; i < room.templates.length; i++) {
+//           if (templateIds.indexOf(room.templates[i]) > -1) {
+//             userHasTemplate = true
+//           }
+//         }
+//
+//         return userHasTemplate &&
+//         room.closedAt > new Date()
+//         ? [room]
+//         : []
+//       })
+//   }
+//   let query = roomsTable.getAll(...templateIds, {index: 'templates'})
+//   if (active) {
+//     query = query.filter(room => room('closedAt').gt(new Date()))
+//   }
+//   return query.run(conn)
+//     .then(rooms => rooms.toArray())
+// }
 
 /**
 * Returns active rooms based on a query.
@@ -175,7 +175,7 @@ const updateLatestMessage = ({conn}, roomId) =>
 module.exports = (context) => ({
   Rooms: {
     get: (id) => get(context, id),
-    getPublic: (id) => getPublic(context, id),
+    getVisible: (id) => getVisible(context, id),
     getByTemplates: (templateIds, active) => getByTemplates(context, templateIds, active),
     getQuery: (query) => getQuery(context, query),
     create: (room) => create(context, room),

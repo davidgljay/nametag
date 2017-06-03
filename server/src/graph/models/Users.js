@@ -157,9 +157,9 @@ const addBadge = ({user, conn}, badgeId, templateId, nametagId) =>
  *
 **/
 
-const getAdminTemplates = ({user, conn}) => {
+const getAdminTemplates = ({user, conn, models:{Granters, Templates}}) => {
   if (!user || !user.badges || !user.badges.length === 0) {
-    return []
+    return Promise.resolve([])
   }
   return Granters.getByAdminTemplate(Object.keys(user.badges))
     .then(granters => Promise.all(granters.map(g => Templates.getGranterTemplates(g.id))))
@@ -490,6 +490,7 @@ module.exports = (context) => ({
     get: (id) => get(context, id),
     getByEmail: (email) => getByEmail(context, email),
     addEmail: (userId, email) => addEmail(context, userId, email),
+    getAdminTemplates: () => getAdminTemplates(context),
     findOrCreateFromAuth: (profile, provider) => findOrCreateFromAuth(context, profile, provider),
     createLocal: (email, password) => createLocal(context, email, password),
     validPassword: (id, password) => validPassword(context, id, password),

@@ -235,6 +235,7 @@ class CreateRoom extends Component {
             updateNametagEdit={updateNametagEdit}
             room={this.state.room}
             badges={me.badges}
+            adminTemplates={me.adminTemplates}
             handleNext={this.handleNext}
             handlePrev={this.handlePrev}
             selectedBadges={selectedBadges}
