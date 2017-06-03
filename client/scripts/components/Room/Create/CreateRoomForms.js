@@ -44,6 +44,7 @@ const getForm = ({
           desc={room.description} />
         <ChoosePrivacy
           badges={badges}
+          adminTemplates={me.adminTemplates}
           selectedBadges={selectedBadges}
           addSelectedBadge={addSelectedBadge}
           removeSelectedBadge={removeSelectedBadge} />

@@ -6,6 +6,7 @@ import { DropTarget } from 'react-dnd'
 import { dragTypes } from '../../../constants'
 import {grey} from '../../../../styles/colors'
 import FontIcon from 'material-ui/FontIcon'
+import _ from 'lodash'
 
 const privacyTarget = {
   drop (props, monitor) {
@@ -23,8 +24,9 @@ const collect = (connect, monitor) => {
 class ChoosePrivacy extends Component {
   render () {
     const {badges, adminTemplates, selectedBadges, connectDropTarget, removeSelectedBadge} = this.props
-    const privacyOptions = adminTemplates.map(template => ({template, notes: [], id: template.id}))
+    let privacyOptions = adminTemplates.map(template => ({template, notes: [], id: template.id}))
       .concat(badges)
+    privacyOptions = _.uniqBy(privacyOptions, b => b.template.id)
     const unselectedBadges = privacyOptions.filter(badge => {
       if (!selectedBadges) {
         return true
@@ -73,6 +75,7 @@ class ChoosePrivacy extends Component {
 const {arrayOf, object, func} = PropTypes
 ChoosePrivacy.propTypes = {
   badges: arrayOf(object).isRequired,
+  adminTemplates: arrayOf(object).isRequired,
   selectedBadges: arrayOf(object).isRequired,
   addSelectedBadge: func.isRequired,
   removeSelectedBadge: func.isRequired,
