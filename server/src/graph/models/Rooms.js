@@ -46,10 +46,10 @@ const getVisible = ({conn, user, models: {Users}}, id) =>
       // TODO: Add pagination
       return roomsTable
         .between(new Date(), new Date(Date.now() * 100), {index: 'closedAt'})
-        .filter(room =>
-          r.eq(room('templates').count(), 0)
-          || room('templates').contains(template => visibleTemplates.indexOf(template) > -1)
-        )
+        .filter(room => r.or([
+          r.eq(room('templates').count(), 0),
+          room('templates').contains(template => visibleTemplates.indexOf(template) > -1)
+        ]))
         .run(conn)
         .then(rooms => rooms.toArray())
         .then(arr => arr.sort((a,b) => a.createdAt - b.createdAt))
