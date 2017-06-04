@@ -58,7 +58,7 @@ class RoomCards extends Component {
           <Notifications
             nametags={me.nametags}
             latestMessageUpdatedSubscription={latestMessageUpdatedSubscription}
-            Subscriptionhomepage />
+            homepage />
         }
         <SearchBar
           search={search} />

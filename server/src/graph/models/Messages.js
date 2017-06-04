@@ -109,17 +109,15 @@ const checkMentionsAndDMs = (context, message) => {
 const checkMentions = (context, nametags, message) => {
   const splitMsg = message.text.split('@')
   const {Nametags} = context.models
-  let newText
-  let promises = [
-    messagesTable.get(message.id).update({text: newText}).run(context.conn)
-  ]
+  let newText = message.text
+  let promises = []
   // For every mention, check every nametag in the room to see if it matches the name.
   for (let i = 0; i < splitMsg.length; i++) {
     const section = splitMsg[i]
     for (let j = 0; j < nametags.length; j++) {
       const {name, id} = nametags[j]
       if (section.slice(0, name.length).toLowerCase() === name.toLowerCase()) {
-        newText = message.text.replace(new RegExp(`/@${name}+/g`), (mention) => `*${mention}*`)
+        newText = newText.replace(new RegExp(`@${name}+`,'g'), (mention) => `*${mention}*`)
         promises.push(
           Nametags.addMention(id)
           .then(() => mentionNotif(context, id, message, 'MENTION'))
@@ -127,7 +125,7 @@ const checkMentions = (context, nametags, message) => {
       }
     }
   }
-
+  promises.push(messagesTable.get(message.id).update({text: newText}).run(context.conn))
   return Promise.all(promises).then(() => ({text: newText}))
 }
 
