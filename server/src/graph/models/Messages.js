@@ -117,7 +117,7 @@ const checkMentions = (context, nametags, message) => {
     for (let j = 0; j < nametags.length; j++) {
       const {name, id} = nametags[j]
       if (section.slice(0, name.length).toLowerCase() === name.toLowerCase()) {
-        newText = newText.replace(new RegExp(`@${name}+`,'g'), (mention) => `*${mention}*`)
+        newText = newText.replace(new RegExp(`@${name}+`, 'g'), (mention) => `*${mention}*`)
         promises.push(
           Nametags.addMention(id)
           .then(() => mentionNotif(context, id, message, 'MENTION'))

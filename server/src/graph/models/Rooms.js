@@ -32,9 +32,9 @@ const getVisible = ({conn, user, models: {Users}}, id) =>
         ? Object.keys(user.badges).concat(adminTemplates.map(t => t.id))
         : []
 
-      //If an id is passed, return that room if it's visible
+      // If an id is passed, return that room if it's visible
       if (id) {
-        return Rooms.get(id)
+        return get(id)
           .then(room => {
             const visible = visibleTemplates.reduce(
               (template, visible) => room.templates.indexOf(template) > -1 || visible, false)
@@ -52,7 +52,7 @@ const getVisible = ({conn, user, models: {Users}}, id) =>
         ))
         .run(conn)
         .then(rooms => rooms.toArray())
-        .then(arr => arr.sort((a,b) => a.createdAt - b.createdAt))
+        .then(arr => arr.sort((a, b) => a.createdAt - b.createdAt))
     })
 
 /**
@@ -116,7 +116,6 @@ const getQuery = ({conn, user, models: {Users}}, query) =>
         )
   })
 
-
 /**
  * Creates a room
  *
@@ -176,7 +175,6 @@ module.exports = (context) => ({
   Rooms: {
     get: (id) => get(context, id),
     getVisible: (id) => getVisible(context, id),
-    getByTemplates: (templateIds, active) => getByTemplates(context, templateIds, active),
     getQuery: (query) => getQuery(context, query),
     create: (room) => create(context, room),
     updateLatestMessage: (roomId) => updateLatestMessage(context, roomId)

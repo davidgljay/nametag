@@ -157,7 +157,7 @@ const addBadge = ({user, conn}, badgeId, templateId, nametagId) =>
  *
 **/
 
-const getAdminTemplates = ({user, conn, models:{Granters, Templates}}) => {
+const getAdminTemplates = ({user, conn, models: {Granters, Templates}}) => {
   if (!user || !user.badges || !user.badges.length === 0) {
     return Promise.resolve([])
   }
@@ -165,12 +165,12 @@ const getAdminTemplates = ({user, conn, models:{Granters, Templates}}) => {
     .then(granters => Promise.all(granters.map(g => Templates.getGranterTemplates(g.id))))
     .then(templates => {
       let flat = []
-      for (var i=0; i < templates.length; i++ ) {
+      for (var i = 0; i < templates.length; i++) {
         flat = flat.concat(templates[i])
       }
       return flat
     })
-  }
+}
 
 /**
  * Finds or creates a user based on an oauth provider.
