@@ -1,0 +1,6 @@
+subscription latestMessageUpdated ($roomIds: [ID!]) {
+  latestMessageUpdated(roomIds: $roomIds) {
+    roomId
+    latestMessage
+  }
+}

@@ -31,6 +31,7 @@ class RoomCards extends Component {
     const {
       data: {me, rooms, loading},
       updateNametagEdit,
+      latestMessageUpdatedSubscription,
       search,
       addNametagEditBadge,
       removeNametagEditBadge,
@@ -54,7 +55,10 @@ class RoomCards extends Component {
       <div style={styles.background}>
         {
           me &&
-          <Notifications nametags={me.nametags} homepage />
+          <Notifications
+            nametags={me.nametags}
+            latestMessageUpdatedSubscription={latestMessageUpdatedSubscription}
+            Subscriptionhomepage />
         }
         <SearchBar
           search={search} />

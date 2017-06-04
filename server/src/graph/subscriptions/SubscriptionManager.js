@@ -30,6 +30,11 @@ module.exports = new SubscriptionManager({
       badgeRequestAdded: {
         filter: badgeRequest => badgeRequest.granter === args.granterId
       }
+    }),
+    latestMessageUpdated: (options, args) => ({
+      latestMessageUpdated: {
+        filter: latestMessageUpdated => args.roomIds.indexOf(latestMessageUpdated.room) > -1
+      }
     })
   }
 })

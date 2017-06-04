@@ -1,5 +1,5 @@
 import {graphql} from 'react-apollo'
-import {checkNametagPresence, messageAdded, badgeRequestAdded} from '../subscriptions'
+import {checkNametagPresence, messageAdded, badgeRequestAdded, latestMessageUpdated} from '../subscriptions'
 import ROOMS_QUERY from './roomsQuery.graphql'
 import ROOM_QUERY from './roomQuery.graphql'
 import USER_QUERY from './userQuery.graphql'
@@ -37,7 +37,8 @@ export const roomsQuery = graphql(ROOMS_QUERY, {
         ...previousResult,
         rooms: fetchMoreResult.rooms
       })
-    })
+    }),
+    latestMessageUpdatedSubscription: latestMessageUpdated(data.subscribeToMore)
   })
 })
 

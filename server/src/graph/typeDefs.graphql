@@ -622,6 +622,15 @@ type NametagPresence {
 
 }
 
+type LatestMessageUpdate {
+
+  # The id of the room to be updated
+  roomId: ID!
+
+  # The new value of latestMessage
+  latestMessage: Date!
+}
+
 type RootSubscription {
 
   # Fired when a message is added to a room
@@ -635,6 +644,9 @@ type RootSubscription {
 
   # Fired when a new badgeRequest is created
   badgeRequestAdded(granterId: ID!): BadgeRequest
+
+  # Fired when a room's latestMessage value is updated
+  latestMessageUpdated(roomIds: [ID!]): LatestMessageUpdate
 }
 
 ################################################################################

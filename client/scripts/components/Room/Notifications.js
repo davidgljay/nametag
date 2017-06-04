@@ -1,74 +1,91 @@
-import React, {PropTypes} from 'react'
+import React, {Component, PropTypes} from 'react'
 import {List, ListItem} from 'material-ui/List'
 import Badge from 'material-ui/Badge'
 
-const Notifications = ({nametags, roomId, homepage}) => {
-  const flexDisplay = window.innerWidth > 800 ? styles.flexDisplay
-    : {...styles.flexDisplay, ...styles.flexDisplayMobile}
+class Notifications extends Component {
+  constructor (props) {
+    super(props)
 
-  const visitedRooms = nametags.filter(
-    nametag => nametag.room && new Date(nametag.room.closedAt) > new Date() && nametag.room.id !== roomId
-  )
+    this.visitedRooms = (nametags) => nametags.filter(
+      nametag => nametag.room &&
+      new Date(nametag.room.closedAt) > new Date() &&
+      nametag.room.id !== this.props.roomId
+    )
+  }
 
-  const listItems = visitedRooms.map(nametag => {
-    const room = nametag.room
-    const mentions = nametag.mentions ? nametag.mentions.filter(
-      time => new Date(time) > new Date(nametag.latestVisit)
-    ).length : 0
+  componentWillMount () {
+    const {latestMessageUpdatedSubscription, nametags} = this.props
+    latestMessageUpdatedSubscription(this.visitedRooms(nametags).map(nt => nt.room.id))
+  }
 
-    const newMessages = room.latestMessage > nametag.latestVisit
-    const notificationStyle = newMessages ? styles.notification
-    : {...styles.notification, ...styles.noNewMessages}
-    const homepageNotif = homepage ? {...notificationStyle, ...styles.homepageNotif}
-    : notificationStyle
-    return <ListItem innerDivStyle={homepageNotif} key={room.id} className='roomNotif'>
-      <a href={`/rooms/${room.id}`} style={styles.link}>
-        {
-          mentions > 0 &&
-          <Badge
-            badgeContent={mentions}
-            secondary
-            style={styles.badgeStyle}
-            badgeStyle={styles.innerBadgeStyle} />
-        }
+  render () {
+    const {nametags, homepage} = this.props
+    const flexDisplay = window.innerWidth > 800 ? styles.flexDisplay
+      : {...styles.flexDisplay, ...styles.flexDisplayMobile}
 
+    const listItems = this.visitedRooms(nametags).map(nametag => {
+      const room = nametag.room
+      const mentions = nametag.mentions ? nametag.mentions.filter(
+        time => new Date(time) > new Date(nametag.latestVisit)
+      ).length : 0
+
+      const newMessages = room.latestMessage > nametag.latestVisit
+      const notificationStyle = newMessages ? styles.notification
+      : {...styles.notification, ...styles.noNewMessages}
+      const homepageNotif = homepage ? {...notificationStyle, ...styles.homepageNotif}
+      : notificationStyle
+      return <ListItem innerDivStyle={homepageNotif} key={room.id} className='roomNotif'>
+        <a href={`/rooms/${room.id}`} style={styles.link}>
+          {
+            mentions > 0 &&
+            <Badge
+              badgeContent={mentions}
+              secondary
+              style={styles.badgeStyle}
+              badgeStyle={styles.innerBadgeStyle} />
+          }
+
+          <div>
+            <img
+              src={room.image}
+              style={
+                homepage ? {...styles.roomImage, ...styles.homepageRoomImage}
+                : styles.roomImage
+              } />
+          </div>
+          <div className='roomTitle'>{room.title}</div>
+        </a>
+      </ListItem>
+    })
+
+    return <div style={homepage ? styles.container : {}}>
+      {
+        listItems.length > 0 &&
         <div>
-          <img
-            src={room.image}
-            style={
-              homepage ? {...styles.roomImage, ...styles.homepageRoomImage}
-              : styles.roomImage
-            } />
+          <div style={styles.activeRooms}>Your Active Rooms</div>
+          <List style={homepage ? flexDisplay : {}}
+            children={listItems} />
         </div>
-        <div className='roomTitle'>{room.title}</div>
-      </a>
-    </ListItem>
-  })
 
-  return <div style={homepage ? styles.container : {}}>
-    {
-      listItems.length > 0 &&
-      <div>
-        <div style={styles.activeRooms}>Your Active Rooms</div>
-        <List style={homepage ? flexDisplay : {}}
-          children={listItems} />
-      </div>
-
-    }
-  </div>
+      }
+    </div>
+  }
 }
 
+const {string, arrayOf, shape, func, bool} = PropTypes
+
 Notifications.propTypes = {
-  roomId: PropTypes.string,
-  nametags: PropTypes.arrayOf(PropTypes.shape({
-    room: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      image: PropTypes.string.isRequired,
-      closedAt: PropTypes.string.isRequired
+  roomId: string,
+  nametags: arrayOf(shape({
+    room: shape({
+      id: string.isRequired,
+      title: string.isRequired,
+      image: string.isRequired,
+      closedAt: string.isRequired
     })
   })).isRequired,
-  homepage: PropTypes.bool
+  latestMessageUpdatedSubscription: func.isRequired,
+  homepage: bool
 }
 
 export default Notifications

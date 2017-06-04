@@ -38,11 +38,11 @@ const getByUrlCode = ({conn}, urlCode) => grantersTable.getAll(urlCode, {index: 
  *
  */
 
-const getByAdminTemplate = ({conn}, adminTemplateIds) => adminTemplateIds
+const getByAdminTemplate = ({conn}, adminTemplateIds) => adminTemplateIds && adminTemplateIds.length > 0
   ? grantersTable
   .getAll(...adminTemplateIds, {index: 'adminTemplate'}).run(conn)
   .then(cursor => cursor.toArray())
-  : []
+  : Promise.resolve([])
 
   /**
    * Notifies the granter's admins
