@@ -74,7 +74,12 @@ const grantBadge = ({conn}, id, badgeId) => nametagsTable.get(id).update({badge:
  **/
 
 const create = ({conn, user, models: {Users, BadgeRequests, Rooms, Templates, Badges}}, nt) => {
-  const nametag = Object.assign({}, nt, {createdAt: new Date()})
+  const nametag = Object.assign(
+    {},
+    nt,
+    {createdAt: new Date()},
+    nt.room ? {latestVisit: new Date()} : {}
+  )
   return nametagsTable.insert(nametag).run(conn)
   // Append nametag ID to user object and update default names and images
   .then(res => {

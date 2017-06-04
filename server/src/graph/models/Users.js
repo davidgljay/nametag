@@ -202,7 +202,8 @@ const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
         displayNames: authProfile.displayNames.filter(name => name),
         images: [],
         [provider]: authProfile.id,
-        createdAt: new Date()
+        createdAt: new Date(),
+        badges: {}
       }
 
       // Load an image if one exists, otherwise just insert the user
@@ -348,7 +349,8 @@ const createLocal = ({conn}, email, password) =>
      email,
      createdAt: new Date(),
      displayNames: [],
-     images: []
+     images: [],
+     badges: {}
    }),
    {exists: true}
  )

@@ -40,6 +40,7 @@ query roomsQuery($id: ID, $query: String) {
    }
    nametags {
      id
+     latestVisit
      room {
        id
        title

@@ -28,7 +28,7 @@ const getVisible = ({conn, user, models: {Users}}, id) =>
   // First, get templates that the user can access as an admin
   Users.getAdminTemplates()
     .then(adminTemplates => {
-      const visibleTemplates = user
+      const visibleTemplates = user && user.badges
         ? Object.keys(user.badges).concat(adminTemplates.map(t => t.id))
         : []
 
