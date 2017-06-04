@@ -35,6 +35,7 @@ query roomQuery($id: ID!){
     nametags {
       id
       mentions
+      latestVisit
       room {
         id
         title

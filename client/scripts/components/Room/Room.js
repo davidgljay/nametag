@@ -90,6 +90,7 @@ class Room extends Component {
         room,
         me
       },
+      latestMessageUpdatedSubscription,
       createMessage,
       toggleSaved
     } = this.props
@@ -155,6 +156,7 @@ class Room extends Component {
                 {
                   this.state.toggles.rooms &&
                   <Notifications
+                    latestMessageUpdatedSubscription={latestMessageUpdatedSubscription}
                     nametags={me.nametags}
                     roomId={room.id} />
                 }

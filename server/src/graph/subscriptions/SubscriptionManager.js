@@ -33,7 +33,7 @@ module.exports = new SubscriptionManager({
     }),
     latestMessageUpdated: (options, args) => ({
       latestMessageUpdated: {
-        filter: latestMessageUpdated => args.roomIds.indexOf(latestMessageUpdated.room) > -1
+        filter: latestMessageUpdated => args.roomIds.indexOf(latestMessageUpdated.roomId) > -1
       }
     })
   }

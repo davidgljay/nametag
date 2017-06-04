@@ -17,7 +17,7 @@ const RoomSubscription = conn => db.table('rooms').changes().run(conn)
       if (room.old_val.latestMessage !== room.new_val.latestMessage) {
         pubsub.publish('latestMessageUpdated', {
           latestMessage: room.new_val.latestMessage,
-          room: room.new_val.id
+          roomId: room.new_val.id
         })
       }
     })

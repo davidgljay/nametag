@@ -53,7 +53,8 @@ export const roomQuery = graphql(ROOM_QUERY, {
   props: ({data}) => ({
     data,
     messageAddedSubscription: messageAdded(data.subscribeToMore),
-    checkNametagPresenceSubscription: checkNametagPresence(data.subscribeToMore)
+    checkNametagPresenceSubscription: checkNametagPresence(data.subscribeToMore),
+    latestMessageUpdatedSubscription: latestMessageUpdated(data.subscribeToMore)
   })
 })
 

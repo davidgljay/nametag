@@ -140,11 +140,11 @@ Message.propTypes = {
     text: PropTypes.string.isRequired,
     createdAt: PropTypes.string.isRequired,
     author: PropTypes.shape({
-      image: PropTypes.string.isRequired,
+      image: PropTypes.string,
       name: PropTypes.string.isRequired
     }).isRequired,
     recipient: PropTypes.shape({
-      image: PropTypes.string.isRequired,
+      image: PropTypes.string,
       name: PropTypes.string.isRequired
     }),
     saved: PropTypes.bool
