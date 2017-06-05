@@ -50,7 +50,7 @@ const sessionOptions = {
   logErrors: true,
   cookie: {
     secure: false,
-    maxAge: null // 2.59e+8 // 48 hours for session token expiry
+    maxAge: 2629746000 //1 month in milliseconds
   },
   store: new RedisStore({
     client: redis.createClient()
