@@ -92,7 +92,6 @@ export default Notifications
 
 const styles = {
   container: {
-    width: '100%',
     padding: '0px 30px 0px 30px'
   },
   listStyle: {
