@@ -10,7 +10,7 @@ const NavDrawer = ({me, empty, toggleLogin, open, setOpen}) => {
       {
         me.granters.map(granter =>
           <MenuItem
-            key={granter.urlCode}
+            key={granter.id}
             primaryText={granter.name}
             href={`/granters/${granter.urlCode}`} />
         )
