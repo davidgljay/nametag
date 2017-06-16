@@ -59,7 +59,7 @@ const create = ({conn}, template) => {
  **/
 
 const createAndGrant = (context, template, note) => {
-  const {models: {Nametags, Badges}} = context
+  const {models: {Nametags}} = context
   return create(context, template)
     .then(templ => Promise.all([
       templ,
