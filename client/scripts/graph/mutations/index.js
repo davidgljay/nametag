@@ -64,7 +64,7 @@ export const createBadge = graphql(CREATE_BADGE, {
       updateQueries: {
         granterQuery: (oldData, {mutationResult: {data: {createBadge: {errors, badge}}}}) => {
           if (errors) {
-            errorLog('Error saving message')(errors)
+            errorLog('Error creating badge')(errors)
             return oldData
           }
           return {
@@ -138,7 +138,7 @@ export const updateBadgeRequestStatus = graphql(UPDATE_BADGE_REQUEST_STATUS, {
       updateQueries: {
         granterQuery: (oldData, {mutationResult: {data: {updateBadgeRequestStatus: {errors}}}}) => {
           if (errors) {
-            errorLog('Error saving message')(errors)
+            errorLog('Error updating badge request status')(errors)
             return oldData
           }
           return {
