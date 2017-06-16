@@ -83,6 +83,7 @@ const create = ({conn, models: {Granters}}, nametag, template) => {
         {
           requesterName: nametag.name,
           requesterBio: nametag.bio,
+          requesterIcon: nametag.image,
           templateName: template.name,
           granterCode: granter.urlCode
         }

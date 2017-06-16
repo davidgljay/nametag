@@ -69,7 +69,7 @@ firebase.messaging().setBackgroundMessageHandler((payload) => {
       }
       break
     case 'BADGE_REQUEST':
-      notificationTitle = `${params.requesterName} has requested the badge ${params.requestedBadge}`
+      notificationTitle = `${params.requesterName} has requested the badge ${params.templateName}`
       notificationOptions = {
         body: params.requesterBio,
         icon: params.requesterIcon,
