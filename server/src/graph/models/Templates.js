@@ -69,13 +69,6 @@ const createAndGrant = (context, template, note) => {
         template: templ.id
       }, false)
     ]))
-    .then(([templ, nametag]) => {
-      const badge = {note, template: templ.id, defaultNametag: nametag.id}
-      return Promise.all([
-        templ,
-        Badges.create(badge)
-      ])
-    })
 }
 
 module.exports = (context) => ({

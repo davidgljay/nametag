@@ -138,7 +138,7 @@ const create = ({conn, models: {Templates}}, granter) =>
             name: `Admin`,
             description: `This individual has the right to grant and revoke badges on behalf of ${granter.name}.`,
             image: granter.image,
-            approvalRequired: true,
+            approvalRequired: false,
             granter: id
           },
         `Created account for ${granter.name}.`)
@@ -147,10 +147,11 @@ const create = ({conn, models: {Templates}}, granter) =>
       .then(([id, [template]]) =>
         Promise.all([
           id,
-          grantersTable.get(id).update({adminTemplate: template.id}).run(conn)
+          grantersTable.get(id).update({adminTemplate: template.id}).run(conn),
+          db.table('templates').get(template.id).update({approvalRequired: true}).run(conn)
         ])
       )
-      .then(([id, adminRes]) => Object.assign({}, granter, {id}))
+      .then(([id, adminRes, templateUpdateRes]) => Object.assign({}, granter, {id}))
 
 module.exports = (context) => ({
   Granters: {
