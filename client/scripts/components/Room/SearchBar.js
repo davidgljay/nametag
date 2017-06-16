@@ -61,7 +61,7 @@ export default SearchBar
 
 const styles = {
   container: {
-    display: 'flex',
+    display: 'none',
     margin: '0px 30px',
     padding: '10px'
   },

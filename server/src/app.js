@@ -50,7 +50,7 @@ const sessionOptions = {
   logErrors: true,
   cookie: {
     secure: false,
-    maxAge: 2629746000 //1 month in milliseconds
+    maxAge: 2629746000 // 1 month in milliseconds
   },
   store: new RedisStore({
     client: redis.createClient()
