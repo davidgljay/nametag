@@ -185,6 +185,7 @@ if (app.get('env') !== 'production') {
 
 // Server sw.js
 app.get('/sw.js', (req, res) => {
+  res.setHeader('Content-Type', 'application/javascript')
   res.sendFile(path.join('/usr', 'client', 'public', 'sw.js'))
 })
 
