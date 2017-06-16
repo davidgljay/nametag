@@ -62,7 +62,7 @@ class Notifications extends Component {
       {
         listItems.length > 0 &&
         <div>
-          <div style={styles.activeRooms}>Your Active Rooms</div>
+          {homepage && <div style={styles.activeRooms}>Your Active Rooms</div>}
           <List style={homepage ? flexDisplay : {}}
             children={listItems} />
         </div>

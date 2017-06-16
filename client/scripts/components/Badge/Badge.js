@@ -199,6 +199,7 @@ const styles = {
     borderRadius: 11,
     marginRight: 4,
     fontSize: 12,
+    zIndex: 100,
     verticalAlign: 'top'
   },
   jumboChipIcon: {

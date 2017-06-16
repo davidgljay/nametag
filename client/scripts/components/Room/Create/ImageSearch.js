@@ -89,6 +89,9 @@ class ImageSearch extends Component {
     }
 
     this.onUpload = (res) => {
+      if (!res.url) {
+        this.showError('Image upload failed.')
+      }
       this.props.updateRoom('image', res.url)
       this.onSelectImage()
     }
