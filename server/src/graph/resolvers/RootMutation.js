@@ -25,7 +25,8 @@ const wrap = (mutation, key = 'result', requires) => (obj, args, context) => {
   if (requires === 'LOGIN' && !context.user) {
     return Promise.reject(ErrNotLoggedIn)
   }
-  return mutation(obj, args, context).catch(catchErrors)
+  return mutation(obj, args, context)
+    .catch(catchErrors)
 }
 
 const RootMutation = {
@@ -92,6 +93,7 @@ const RootMutation = {
     requires: 'LOGIN',
     resolve: (obj, {token}, {user, models: {Users}}) =>
     Users.addToken(token)
+    .then(wrapResponse('updateToken'))
   },
   updateBadgeRequestStatus: {
     requires: 'LOGIN',
