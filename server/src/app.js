@@ -184,9 +184,9 @@ if (app.get('env') !== 'production') {
 }
 
 // Server sw.js
-app.get('/sw.js', (req, res) => {
+app.get('/firebase-messaging-sw.js', (req, res) => {
   res.setHeader('Content-Type', 'application/javascript')
-  res.sendFile(path.join('/usr', 'client', 'public', 'sw.js'))
+  res.sendFile(path.join('/usr', 'client', 'public', 'firebase-messaging-sw.js'))
 })
 
 app.get('/favicon.ico', (req, res) => {

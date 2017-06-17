@@ -98,7 +98,7 @@ export const latestMessageUpdated = subscribeToMore => (roomIds) => subscribeToM
       ...oldData,
       me: {
         ...oldData.me,
-        nametags: oldData.me.nametags.map(nametag => nametag.room.id === latestMessageUpdated.roomId
+        nametags: oldData.me.nametags.map(nametag => nametag.room && nametag.room.id === latestMessageUpdated.roomId
           ? {
             ...nametag,
             room: {

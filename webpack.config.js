@@ -66,8 +66,8 @@ module.exports = {
         to: path.join(__dirname, 'dist', 'public', 'images')
       },
       {
-        from: path.join(__dirname, 'client', 'sw.js'),
-        to: path.join(__dirname, 'dist', 'public', 'sw.js')
+        from: path.join(__dirname, 'client', 'firebase-messaging-sw.js'),
+        to: path.join(__dirname, 'dist', 'public', 'firebase-messaging-sw.js')
       },
       {
         from: path.join(__dirname, 'client', 'favicon.ico'),

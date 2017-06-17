@@ -93,6 +93,7 @@ firebase.messaging().setBackgroundMessageHandler((payload) => {
       break
   }
 
+  console.log('notifications in serviceWorker', notificationTitle)
   return self.registration.showNotification(notificationTitle, notificationOptions)
 })
 

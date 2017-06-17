@@ -5,10 +5,10 @@ import constants from '../constants'
 // Registers a serviceWorker and registers that worker with firebase
 export const registerServiceWorker = () => (dispatch) => {
   if ('serviceWorker' in navigator) {
-    return navigator.serviceWorker.register('/sw.js', {scope: './'})
+    return navigator.serviceWorker.register('/firebase-messaging-sw.js', {scope: './'})
       .catch(errorLog('Error registering serviceWorker'))
-      .then(reg => reg ? firebase.messaging().useServiceWorker(reg)
-        : Promise.reject(new Error('No service worker returned!')))
+      // .then(reg => reg ? firebase.messaging().useServiceWorker(reg)
+      //   : Promise.reject(new Error('No service worker returned!')))
       .then(res => dispatch(getFcmToken()))
       .then(() => dispatch(fcmTokenRefresh()))
       .catch(errorLog('Error registering serviceWorker with Firebase'))
