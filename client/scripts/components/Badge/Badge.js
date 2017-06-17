@@ -183,6 +183,7 @@ const styles = {
     background: '#dedede',
     margin: 4,
     fontSize: 12,
+    zIndex: 100,
     lineHeight: '22px',
     cursor: 'pointer',
     userSelect: 'none'
@@ -199,7 +200,6 @@ const styles = {
     borderRadius: 11,
     marginRight: 4,
     fontSize: 12,
-    zIndex: 100,
     verticalAlign: 'top'
   },
   jumboChipIcon: {
