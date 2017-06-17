@@ -151,7 +151,7 @@ const create = ({conn, models: {Templates}}, granter) =>
           db.table('templates').get(template.id).update({approvalRequired: true}).run(conn)
         ])
       )
-      .then(([id, adminRes, templateUpdateRes]) => Object.assign({}, granter, {id})) 
+      .then(([id, adminRes, templateUpdateRes]) => Object.assign({}, granter, {id}))
 
 module.exports = (context) => ({
   Granters: {

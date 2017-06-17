@@ -41,7 +41,7 @@ export const getFcmToken = (updateToken) => (dispatch) =>
 
 // Requests permission to send notifications to the user.
 export const requestNotifPermissions = (updateToken) => (dispatch) => {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV === 'test') {
     return
   }
   firebase.messaging().requestPermission()
