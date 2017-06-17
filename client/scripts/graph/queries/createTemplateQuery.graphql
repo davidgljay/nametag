@@ -12,6 +12,7 @@ query createTemplateQuery($granter: String!) {
   me {
     id
     granters {
+      id
       name
       urlCode
     }

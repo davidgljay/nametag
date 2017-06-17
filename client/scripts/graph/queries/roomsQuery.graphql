@@ -30,6 +30,7 @@ query roomsQuery($id: ID, $query: String) {
   me {
    id
    granters {
+     id
      name
      urlCode
    }

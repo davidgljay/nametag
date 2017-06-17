@@ -16,6 +16,7 @@ query templateQuery($id: ID!){
   }
   me {
     granters {
+      id
       name
       urlCode
     }

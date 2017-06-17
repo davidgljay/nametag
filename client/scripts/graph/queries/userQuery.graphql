@@ -4,6 +4,7 @@ query userQuery {
   me {
     id
     granters {
+      id
       name
       urlCode
     }
