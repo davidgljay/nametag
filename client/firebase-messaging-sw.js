@@ -47,10 +47,10 @@ self.addEventListener('fetch', function (event) {
 
 // Handle messages while in the background
 firebase.messaging().setBackgroundMessageHandler((payload) => {
-  // Customize notification here
   let notificationTitle
   let notificationOptions
-  const {params, reason} = payload.data
+  const reason = payload.data.reason
+  const params = JSON.parse(payload.data.params)
   switch (reason) {
     case 'MENTION':
       notificationTitle = `${params.senderName} has mentioned you in ${params.roomTitle}`
