@@ -47,6 +47,7 @@ self.addEventListener('fetch', function (event) {
 
 // Handle messages while in the background
 firebase.messaging().setBackgroundMessageHandler((payload) => {
+  // Customize notification here
   let notificationTitle
   let notificationOptions
   const reason = payload.data.reason
@@ -91,9 +92,16 @@ firebase.messaging().setBackgroundMessageHandler((payload) => {
         data: `/rooms/${params.roomId}`
       }
       break
+    case 'ROOM_NEW_MESSAGES':
+      notificationTitle = `New messages in ${params.roomName}.`
+      notificationOptions = {
+        icon: params.image,
+        body: 'Click to check it out',
+        data: `/rooms/${params.roomId}`
+      }
+      break
   }
 
-  console.log('notifications in serviceWorker', notificationTitle)
   return self.registration.showNotification(notificationTitle, notificationOptions)
 })
 
