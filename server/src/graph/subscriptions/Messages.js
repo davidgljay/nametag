@@ -13,7 +13,7 @@ const MessageSubscription = ({conn, models: {Rooms}}) => db.table('messages').ch
         // Send the message to people in the room
         pubsub.publish('messageAdded', message.new_val)
 
-        //Send a new room message notification if necessary
+        // Send a new room message notification if necessary
         Rooms.notifyOfNewMessage(message.new_val.room)
       }
     })

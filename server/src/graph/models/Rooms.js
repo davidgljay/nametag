@@ -180,7 +180,7 @@ const updateLatestMessage = ({conn}, roomId) =>
  *
  **/
 
- const notifyOfNewMessage = ({conn, models: {Nametags, Users}}, roomId) =>
+const notifyOfNewMessage = ({conn, models: {Nametags, Users}}, roomId) =>
   Promise.all([
     roomsTable.get(roomId).pluck(['latestMessage', 'id', 'name']).run(conn),
     Nametags.getRoomNametags(roomId)
@@ -207,7 +207,6 @@ const updateLatestMessage = ({conn}, roomId) =>
       })
   })
   .catch(errors.errorLog('notifyOfNewMessage'))
-
 
 module.exports = (context) => ({
   Rooms: {
