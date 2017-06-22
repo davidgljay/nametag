@@ -3,7 +3,7 @@ const {db} = require('../../db')
 const pubsub = require('./pubsub')
 const {index} = require('../../elasticsearch')
 
-const RoomSubscription = conn => db.table('rooms').changes().run(conn)
+const RoomSubscription = ({conn}) => db.table('rooms').changes().run(conn)
   .then(feed => {
     feed.each((err, room) => {
       if (err) {

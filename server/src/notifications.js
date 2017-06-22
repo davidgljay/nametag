@@ -30,9 +30,8 @@ module.exports = (data, token) => {
   }
 
   return fetch(GCM_NOTIF_URL, options)
-    .then((res) => {
-      return res.ok ? res.json()
-        : Promise.reject(res.statusCode)
-    })
+    .then((res) => res.ok ? res.json()
+        : Promise.reject(res.statusText)
+    )
     .catch(err => console.log('Error posting notification', err))
 }

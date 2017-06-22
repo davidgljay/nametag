@@ -2,6 +2,7 @@ const r = require('rethinkdb')
 const {db} = require('../../db')
 const errors = require('../../errors')
 const {search} = require('../../elasticsearch')
+const notification = require('../../notifications')
 
 const roomsTable = db.table('rooms')
 
@@ -171,12 +172,50 @@ const create = ({conn, models: {Nametags, Users}}, rm) => {
 const updateLatestMessage = ({conn}, roomId) =>
   roomsTable.get(roomId).update({latestMessage: new Date()}).run(conn)
 
+/**
+ * Notifies users of a new message in a room
+ *
+ * @param {Object} context     graph context
+  * @param {Object} roomId   the room to be updated
+ *
+ **/
+
+ const notifyOfNewMessage = ({conn, models: {Nametags, Users}}, roomId) =>
+  Promise.all([
+    roomsTable.get(roomId).pluck(['latestMessage', 'id', 'name']).run(conn),
+    Nametags.getRoomNametags(roomId)
+  ])
+  .then(([room, nametags]) => {
+    const {latestMessage, name, id} = room
+    const notifData = {
+      reason: 'ROOM_NEW_MESSAGES',
+      params: {
+        roomId: id,
+        roomName: name
+      }
+    }
+    const toNotify = nametags.filter(
+        ({latestRoomNotif, latestVisit}) =>
+        (!latestRoomNotif || latestRoomNotif < latestVisit) &&
+        latestVisit < latestMessage
+      ).map(n => n.id)
+    return Users.getTokens(toNotify)
+      .then(tokens => {
+        return Promise.all(
+          tokens.map(token => notification(notifData, token))
+        )
+      })
+  })
+  .catch(errors.errorLog('notifyOfNewMessage'))
+
+
 module.exports = (context) => ({
   Rooms: {
     get: (id) => get(context, id),
     getVisible: (id) => getVisible(context, id),
     getQuery: (query) => getQuery(context, query),
     create: (room) => create(context, room),
-    updateLatestMessage: (roomId) => updateLatestMessage(context, roomId)
+    updateLatestMessage: (roomId) => updateLatestMessage(context, roomId),
+    notifyOfNewMessage: (roomId) => notifyOfNewMessage(context, roomId)
   }
 })
