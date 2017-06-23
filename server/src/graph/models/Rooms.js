@@ -64,8 +64,8 @@ const getVisible = ({conn, user, models: {Users}}, id) =>
  */
 
 const getGranterRooms = ({conn, user, models: {Users}}, granterCode) =>
-  user ?
-  db.table('granters').getAll('nametag', {index: 'urlCode'})
+  user
+  ? db.table('granters').getAll('nametag', {index: 'urlCode'})
     .eqJoin('id', r.db('nametag').table('templates'), {index: 'granter'})
     .map(join => join('right'))
     .pluck('id')
@@ -76,7 +76,7 @@ const getGranterRooms = ({conn, user, models: {Users}}, granterCode) =>
       if (userTemplateIds.length === 0) {
         return Promise.resolve([])
       }
-      return roomsTable.getAll(...userTemplateIds, {index:'templates'})
+      return roomsTable.getAll(...userTemplateIds, {index: 'templates'})
         .filter(r => r('closedAt').gt(new Date()))
         .run(conn)
         .then(cursor => cursor.toArray())
