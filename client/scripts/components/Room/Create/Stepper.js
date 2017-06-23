@@ -5,10 +5,11 @@ import {
   StepLabel
 } from 'material-ui/Stepper'
 
-const orientation = window.innerWidth < 650 ? 'vertical' : 'horizontal'
+const display = window.innerWidth < 650 ? {display: 'none'} : {}
 const CreateRoomStepper = (props) => <Stepper
   activeStep={props.stepIndex}
-  orientation={orientation}>
+  orientation='horizontal'
+  style={display}>
   <Step>
     <StepLabel>Choose a topic</StepLabel>
   </Step>
