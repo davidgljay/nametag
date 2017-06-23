@@ -1,7 +1,7 @@
 #import "../fragments/nametagView.graphql"
 
-query roomsQuery($id: ID, $query: String) {
-  rooms(id:$id, query: $query) {
+query roomsQuery($id: ID, $query: String, $granter: String) {
+  rooms(id:$id, query: $query, granter: $granter) {
     id
     title
     description

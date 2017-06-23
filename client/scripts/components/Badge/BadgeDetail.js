@@ -93,7 +93,7 @@ class BadgeDetail extends Component {
             </div>
             : <div>
               <h3>Badge granted</h3>
-              Return to the homepage to use it in conversation.
+              Check out {template.granter.name.slice(-1) === 's' ? `${template.granter.name}'s` : `${template.granter.name}'`} conversations.
             </div>
           }
 
@@ -101,8 +101,8 @@ class BadgeDetail extends Component {
             style={styles.claimInfo}
             labelStyle={styles.buttonLabel}
             primary
-            onClick={() => { window.location = '/' }}
-            label='RETURN TO HOMEPAGE' />
+            onClick={() => { window.location = template.approvalRequired ? `/?granter=${template.granter.name}` : '/' }}
+            label={template.approvalRequired ? 'RETURN TO HOMEPAGE' : 'SEE CONVERSATIONS'} />
         </div>
       </div>
     } else {
