@@ -57,42 +57,31 @@ const getVisible = ({conn, user, models: {Users}}, id) =>
     })
 
 /**
- * Returns all private rooms for a particular template.
+ * Returns all private rooms for a particular granter.
  *
  * @param {Object} context     graph context
- * @param {Array<String>} templateIds  ids of the templates to be searched
- * @param {Boolean} active    Limit search to active rooms
- * @param {String} id         The id of a specific room being searched for
+ * @param {Array<String>} granterCode  urlCode of the granter to be returned
  */
 
-// const getByTemplates = ({conn, user}, templateIds, active, id) => {
-//   if (templateIds.length === 0) {
-//     return []
-//   }
-//
-//   if (id) {
-//     roomsTable.get(id).run(conn)
-//       .then(room => {
-//         let userHasTemplate = false
-//         for (var i = 0; i < room.templates.length; i++) {
-//           if (templateIds.indexOf(room.templates[i]) > -1) {
-//             userHasTemplate = true
-//           }
-//         }
-//
-//         return userHasTemplate &&
-//         room.closedAt > new Date()
-//         ? [room]
-//         : []
-//       })
-//   }
-//   let query = roomsTable.getAll(...templateIds, {index: 'templates'})
-//   if (active) {
-//     query = query.filter(room => room('closedAt').gt(new Date()))
-//   }
-//   return query.run(conn)
-//     .then(rooms => rooms.toArray())
-// }
+const getGranterRooms = ({conn, user, models: {Users}}, granterCode) =>
+  user ?
+  db.table('granters').getAll('nametag', {index: 'urlCode'})
+    .eqJoin('id', r.db('nametag').table('templates'), {index: 'granter'})
+    .map(join => join('right'))
+    .pluck('id')
+    .run(conn)
+    .then(cursor => cursor.toArray())
+    .then(templateIds => {
+      const userTemplateIds = templateIds.map(t => t.id).filter(id => !!user.badges[id])
+      if (userTemplateIds.length === 0) {
+        return Promise.resolve([])
+      }
+      return roomsTable.getAll(...userTemplateIds, {index:'templates'})
+        .filter(r => r('closedAt').gt(new Date()))
+        .run(conn)
+        .then(cursor => cursor.toArray())
+    })
+  : Promise.resolve([])
 
 /**
 * Returns active rooms based on a query.
@@ -214,6 +203,7 @@ module.exports = (context) => ({
     getVisible: (id) => getVisible(context, id),
     getQuery: (query) => getQuery(context, query),
     create: (room) => create(context, room),
+    getGranterRooms: (granterCode) => getGranterRooms(context, granterCode),
     updateLatestMessage: (roomId) => updateLatestMessage(context, roomId),
     notifyOfNewMessage: (roomId) => notifyOfNewMessage(context, roomId)
   }
