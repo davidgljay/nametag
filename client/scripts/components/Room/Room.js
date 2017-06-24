@@ -23,7 +23,8 @@ class Room extends Component {
         rooms: true,
         nametags: true
       },
-      presenceTime: null
+      presenceTime: null,
+      defaultMessage: ''
     }
 
     this.showPresence = (nametagId) => {
@@ -61,6 +62,8 @@ class Room extends Component {
       )
       return room.nametags.filter((nt) => nt.id === myNtId)[0]
     }
+
+    this.setDefaultMessage = (defaultMessage) => this.setState({defaultMessage})
   }
 
   componentDidMount () {
@@ -94,6 +97,8 @@ class Room extends Component {
       createMessage,
       toggleSaved
     } = this.props
+
+    const {defaultMessage} = this.state
 
     let myNametag
 
@@ -172,6 +177,7 @@ class Room extends Component {
                   this.state.toggles.nametags &&
                   <Nametags
                     mod={room.mod.id}
+                    setDefaultMessage={this.setDefaultMessage}
                     nametags={room.nametags}
                     myNametagId={myNametag.id} />
                 }
@@ -197,6 +203,7 @@ class Room extends Component {
           <Compose
             createMessage={createMessage}
             roomId={room.id}
+            defaultMessage={defaultMessage}
             myNametag={myNametag} />
         </div>
           : <div style={styles.spinner}>

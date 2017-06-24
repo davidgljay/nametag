@@ -1,35 +1,87 @@
-import React, {PropTypes} from 'react'
+import React, {PropTypes, Component} from 'react'
 import Badges from '../Badge/Badges'
+import Popover from 'material-ui/Popover'
+import Menu from 'material-ui/Menu'
+import MenuItem from 'material-ui/MenuItem'
 import {primary, white} from '../../../styles/colors'
 
-const Nametag = ({mod, nametag: {id, name, image, bio, present, badges}}) => {
-  let ismod = ''
+class Nametag extends Component {
 
-  // Show if user is a mod.
-  if (mod === id) {
-    ismod = <div style={styles.ismod}>Host</div>
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      showMenu: false,
+      element: null
+    }
+
+    this.toggleMenu = e => {
+      e.preventDefault()
+      this.setState({
+        showMenu: !this.state.showMenu,
+        element: e.currentTarget
+      })
+    }
+
+    this.setMessage = message => e => {
+      e.preventDefault()
+      this.props.setDefaultMessage(message)
+      this.toggleMenu(e)
+    }
   }
 
-  return <div
-    key={id}
-    style={styles.nametag}>
-    <div style={styles.main}>
-      {
-        image
-        ? <img src={image} alt={name} style={styles.image} />
-      : <div style={{...styles.image, ...styles.defaultImage}}>{name.slice(0, 2)}</div>
-      }
-      <div style={styles.details}>
-        <div style={styles.name}>{name}</div>
-        <div style={styles.bio}>{bio}</div>
+  render () {
+    const {mod, nametag: {id, name, image, bio, badges}, setDefaultMessage} = this.props
+    const {showMenu, element} = this.state
+    let ismod = ''
+
+    // Show if user is a mod.
+    if (mod === id) {
+      ismod = <div style={styles.ismod}>Host</div>
+    }
+
+    return <div
+      key={id}
+      style={styles.nametag}
+      onClick={this.toggleMenu}>
+      <div style={styles.main}>
+        {
+          image
+          ? <img src={image} alt={name} style={styles.image} />
+        : <div style={{...styles.image, ...styles.defaultImage}}>{name.slice(0, 2)}</div>
+        }
+        <div style={styles.details}>
+          <div style={styles.name}>{name}</div>
+          <div style={styles.bio}>{bio}</div>
+        </div>
+        {ismod}
       </div>
-      {ismod}
+      <Badges badges={badges} />
+      {
+        setDefaultMessage &&
+        <Popover
+          open={showMenu}
+          anchorEl={element}
+          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+          targetOrigin={{horizontal: 'left', vertical: 'top'}}
+          onRequestClose={this.toggleMenu}>
+          <Menu>
+            <MenuItem
+              key='Mention'
+              primaryText={`Message Publicly`}
+              onClick={this.setMessage(`@${name} `)} />
+            <MenuItem
+              key='DM'
+              primaryText={`Message Privately`}
+              onClick={this.setMessage(`d ${name} `)} />
+          </Menu>
+        </Popover>
+      }
     </div>
-    <Badges badges={badges} />
-  </div>
+  }
 }
 
-const {string, shape, arrayOf, bool, object} = PropTypes
+const {string, shape, arrayOf, bool, object, func} = PropTypes
 
 Nametag.PropTypes = {
   mod: string,
@@ -40,7 +92,8 @@ Nametag.PropTypes = {
     bio: string,
     present: bool,
     badges: arrayOf(object).isRequired
-  }).isRequired
+  }).isRequired,
+  setDefaultMessage: func
 }
 
 export default Nametag

@@ -46,6 +46,13 @@ class Compose extends Component {
     key('enter', 'compose', this.post)
   }
 
+  componentDidUpdate (prevProps) {
+    console.log('Updating', this.props.defaultMessage, prevProps.defaultMessage)
+    if (this.props.defaultMessage !== prevProps.defaultMessage) {
+      this.setState({message: this.props.defaultMessage})
+    }
+  }
+
   componentWillUnmount () {
     key.deleteScope('compose')
   }
@@ -96,7 +103,8 @@ Compose.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired
   }).isRequired,
-  createMessage: PropTypes.func.isRequired
+  createMessage: PropTypes.func.isRequired,
+  defaultMessage: PropTypes.string
 }
 
 export default radium(Compose)
