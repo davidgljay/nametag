@@ -47,7 +47,6 @@ class Compose extends Component {
   }
 
   componentDidUpdate (prevProps) {
-    console.log('Updating', this.props.defaultMessage, prevProps.defaultMessage)
     if (this.props.defaultMessage !== prevProps.defaultMessage) {
       this.setState({message: this.props.defaultMessage})
     }

@@ -82,7 +82,7 @@ const create = (context, msg) => {
  **/
 
 const checkMentionsAndDMs = (context, message) => {
-  const {Nametags} = context.models
+  const {Nametags, Rooms} = context.models
   const dm = message.text.toLowerCase().slice(0, 2) === 'd '
   const mentions = message.text.indexOf('@') > -1
   if (!dm && !mentions) {
