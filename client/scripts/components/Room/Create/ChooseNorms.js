@@ -8,8 +8,9 @@ const defaultNorms = [
   'Refrain from personal attacks',
   'Respect the experiences of others',
   'Keep it on topic',
-  'Keep it professional',
-  'Keep it PG'
+  'Take time to welcome newcomers',
+  'Keep comments brief and to the point',
+  'Personal experience > personal opinion'
 ]
 
 class ChooseNorms extends Component {
