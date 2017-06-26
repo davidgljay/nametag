@@ -145,8 +145,7 @@ const setDm = (context, nametags, message, room) => {
   for (let i = 0; i < nametags.length; i++) {
     const {name, id} = nametags[i]
     if (message.text.slice(2, name.length + 2).toLowerCase() === name.toLowerCase()) {
-
-      //If the room allows mod-only DMing, return if the message is not to or from a mod
+      // If the room allows mod-only DMing, return if the message is not to or from a mod
       if (id !== room.mod && message.author !== room.mod && room.modOnlyDMs) {
         return
       }

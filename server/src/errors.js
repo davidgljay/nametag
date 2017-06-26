@@ -63,7 +63,7 @@ const ErrNotInRoom = new APIError('User has not joined this room', {
   status: 400
 })
 
-const ErrNotMod= new APIError('User must be the mod of this room', {
+const ErrNotMod = new APIError('User must be the mod of this room', {
   translation_key: 'NOT_ROOM_MOD',
   status: 400
 })

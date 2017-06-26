@@ -170,7 +170,7 @@ const updateLatestMessage = ({conn}, roomId) =>
    *
    **/
 
-  const setModOnlyDMs = ({conn}, roomId, modOnlyDMs) =>
+const setModOnlyDMs = ({conn}, roomId, modOnlyDMs) =>
     roomsTable.get(roomId).update({modOnlyDMs}).run(conn)
 
 /**
