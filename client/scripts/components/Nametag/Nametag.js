@@ -31,7 +31,7 @@ class Nametag extends Component {
   }
 
   render () {
-    const {mod, nametag: {id, name, image, bio, badges}, setDefaultMessage} = this.props
+    const {mod, nametag: {id, name, image, bio, badges}, setDefaultMessage, hideDMs} = this.props
     const {showMenu, element} = this.state
     let ismod = ''
 
@@ -70,10 +70,13 @@ class Nametag extends Component {
               key='Mention'
               primaryText={`Message Publicly`}
               onClick={this.setMessage(`@${name} `)} />
-            <MenuItem
-              key='DM'
-              primaryText={`Message Privately`}
-              onClick={this.setMessage(`d ${name} `)} />
+            {
+              !hideDMs &&
+              <MenuItem
+                key='DM'
+                primaryText={`Message Privately`}
+                onClick={this.setMessage(`d ${name} `)} />
+            }
           </Menu>
         </Popover>
       }
@@ -93,7 +96,8 @@ Nametag.PropTypes = {
     present: bool,
     badges: arrayOf(object).isRequired
   }).isRequired,
-  setDefaultMessage: func
+  setDefaultMessage: func,
+  hideDMs: bool
 }
 
 export default Nametag

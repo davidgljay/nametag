@@ -89,10 +89,13 @@ const checkMentionsAndDMs = (context, message) => {
     return null
   }
 
-  return Nametags.getRoomNametags(message.room)
-  .then(nametags => {
+  return Promise.all([
+    Nametags.getRoomNametags(message.room),
+    Rooms.get(message.room)
+  ])
+  .then(([nametags, room]) => {
     if (dm) {
-      return setDm(context, nametags, message)
+      return setDm(context, nametags, message, room)
     } else if (mentions) {
       return checkMentions(context, nametags, message)
     }

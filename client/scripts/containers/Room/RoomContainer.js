@@ -2,7 +2,7 @@ import {connect} from 'react-redux'
 import component from '../../components/Room/Room'
 import {compose} from 'react-apollo'
 import {roomQuery} from '../../graph/queries'
-import {createMessage, toggleSaved, updateLatestVisit, updateToken} from '../../graph/mutations'
+import {createMessage, toggleSaved, updateLatestVisit, updateToken, setModOnlyDMs} from '../../graph/mutations'
 import {requestNotifPermissions} from '../../actions/NotificationActions'
 
 const mapDispatchToProps = (dispatch) => {
@@ -18,6 +18,7 @@ const Room = compose(
   toggleSaved,
   updateLatestVisit,
   updateToken,
+  setModOnlyDMs,
   roomQuery
 )(component)
 

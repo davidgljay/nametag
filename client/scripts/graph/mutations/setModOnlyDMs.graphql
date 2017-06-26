@@ -1,0 +1,8 @@
+mutation setModOnlyDMs ($roomId: ID!, $modOnlyDMs: Boolean!) {
+  setModOnlyDMs(roomId: $roomId, modOnlyDMs: $modOnlyDMs) {
+    errors {
+      translation_key
+      message
+    }
+  }
+}

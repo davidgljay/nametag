@@ -9,6 +9,7 @@ import UPDATE_LATEST_VISIT from './updateLatestVisit.graphql'
 import UPDATE_BADGE_REQUEST_STATUS from './updateBadgeRequestStatus.graphql'
 import UPDATE_TOKEN from './updateToken.graphql'
 import PASSWORD_RESET from './passwordReset.graphql'
+import SET_MOD_ONLY_DMS from './setModOnlyDMs.graphql'
 import PASSWORD_RESET_REQ from './passwordResetRequest.graphql'
 import EMAIL_CONF_REQ from './emailConfirmationRequest.graphql'
 import EMAIL_CONF from './emailConfirmation.graphql'
@@ -223,6 +224,37 @@ export const createMessage = graphql(CREATE_MESSAGE, {
             room: {
               ...oldData.room,
               messages: oldMessages.concat(message)
+            }
+          }
+        }
+      }
+    })
+  })
+})
+
+export const setModOnlyDMs = graphql(SET_MOD_ONLY_DMS, {
+  props: ({ownProps, mutate}) => ({
+    setModOnlyDMs: (roomId, modOnlyDMs) => mutate({
+      variables: {
+        roomId,
+        modOnlyDMs
+      },
+      optimisticResponse: {
+        setModOnlyDMs: {
+          errors: null
+        }
+      },
+      updateQueries: {
+        roomQuery: (oldData, {mutationResult: {data: {setModOnlyDMs: {errors}}}}) => {
+          if (errors) {
+            errorLog('Error setting mod only DMs')(errors)
+            return oldData
+          }
+          return {
+            ...oldData,
+            room: {
+              ...oldData.room,
+              modOnlyDMs
             }
           }
         }

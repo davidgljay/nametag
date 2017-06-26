@@ -5,6 +5,7 @@ import CircularProgress from 'material-ui/CircularProgress'
 import {mobile} from '../../../styles/sizes'
 import radium, {keyframes} from 'radium'
 
+import RoomSettings from './RoomSettings'
 import Norms from './Norms'
 import Notifications from './Notifications'
 import Nametags from '../../components/Nametag/Nametags'
@@ -21,7 +22,8 @@ class Room extends Component {
       toggles: {
         norms: true,
         rooms: true,
-        nametags: true
+        nametags: true,
+        settings: true
       },
       presenceTime: null,
       defaultMessage: ''
@@ -95,6 +97,7 @@ class Room extends Component {
       },
       latestMessageUpdatedSubscription,
       createMessage,
+      setModOnlyDMs,
       toggleSaved
     } = this.props
 
@@ -107,9 +110,10 @@ class Room extends Component {
       window.location = '/'
       return
     }
-
+    let isMod
     if (!loading) {
       myNametag = this.getMyNametag()
+      isMod = room.mod.id === me.id
     }
 
     let expanded = this.state.leftBarExpanded ? styles.expanded : styles.collapsed
@@ -165,6 +169,26 @@ class Room extends Component {
                     nametags={me.nametags}
                     roomId={room.id} />
                 }
+                {
+                  isMod &&
+                  <div>
+                    <div
+                      style={styles.leftNavHeader}
+                      onClick={this.toggleLeftBarSection('settings')}>
+                      {
+                        this.state.toggles.nametags ? '- ' : '+ '
+                      }
+                      Settings
+                    </div>
+                    {
+                      this.state.toggles.settings &&
+                      <RoomSettings
+                        setModOnlyDMs={setModOnlyDMs}
+                        roomId={room.id}
+                        modOnlyDMs={room.modOnlyDMs} />
+                    }
+                  </div>
+                }
                 <div
                   style={styles.leftNavHeader}
                   onClick={this.toggleLeftBarSection('nametags')}>
@@ -179,6 +203,7 @@ class Room extends Component {
                     mod={room.mod.id}
                     setDefaultMessage={this.setDefaultMessage}
                     nametags={room.nametags}
+                    hideDMs={room.modOnlyDMs && !isMod}
                     myNametagId={myNametag.id} />
                 }
               </div>
@@ -214,23 +239,27 @@ class Room extends Component {
   }
 }
 
+const {func, string, arrayOf, object, shape, bool} = PropTypes
+
 Room.propTypes = {
-  data: PropTypes.shape({
-    loading: PropTypes.bool.isRequired,
-    room: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      norms: PropTypes.arrayOf(PropTypes.string).isRequired,
-      messages: PropTypes.arrayOf(PropTypes.object).isRequired,
-      nametags: PropTypes.arrayOf(PropTypes.object).isRequired
+  data: shape({
+    loading: bool.isRequired,
+    room: shape({
+      id: string.isRequired,
+      norms: arrayOf(string).isRequired,
+      messages: arrayOf(object).isRequired,
+      nametags: arrayOf(object).isRequired,
+      modOnlyDMs: bool
     }),
-    me: PropTypes.object
+    me: object
   }).isRequired,
-  params: PropTypes.shape({
-    roomId: PropTypes.string.isRequired
+  params: shape({
+    roomId: string.isRequired
   }),
-  createMessage: PropTypes.func.isRequired,
-  toggleSaved: PropTypes.func.isRequired,
-  updateToken: PropTypes.func.isRequired
+  setModOnlyDMs: func.isRequired,
+  createMessage: func.isRequired,
+  toggleSaved: func.isRequired,
+  updateToken: func.isRequired
 }
 
 export default radium(Room)
