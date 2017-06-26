@@ -115,7 +115,7 @@ const getQuery = ({conn, user, models: {Users}}, query) =>
  **/
 
 const create = ({conn, models: {Nametags, Users}}, rm) => {
-  const room = Object.assign({}, rm, {createdAt: new Date()})
+  const room = Object.assign({}, rm, {createdAt: new Date(), modOnlyDMs: false})
   return roomsTable.insert(room).run(conn)
   .then((res) => {
     if (res.errors > 0) {
@@ -161,6 +161,18 @@ const create = ({conn, models: {Nametags, Users}}, rm) => {
 const updateLatestMessage = ({conn}, roomId) =>
   roomsTable.get(roomId).update({latestMessage: new Date()}).run(conn)
 
+  /**
+   * Updates a room's modOnlyDMs setting
+   *
+   * @param {Object} context     graph context
+   * @param {String} roomId   the room to be updated
+   * @param {Bool} modOnlyDMs the modOnlyDMs value to be set
+   *
+   **/
+
+  const setModOnlyDMs = ({conn}, roomId, modOnlyDMs) =>
+    roomsTable.get(roomId).update({modOnlyDMs}).run(conn)
+
 /**
  * Notifies users of a new message in a room
  *
@@ -203,6 +215,7 @@ module.exports = (context) => ({
     getVisible: (id) => getVisible(context, id),
     getQuery: (query) => getQuery(context, query),
     create: (room) => create(context, room),
+    setModOnlyDMs: (roomId, modOnlyDMs) => setModOnlyDMs(context, roomId, modOnlyDMs),
     getGranterRooms: (granterCode) => getGranterRooms(context, granterCode),
     updateLatestMessage: (roomId) => updateLatestMessage(context, roomId),
     notifyOfNewMessage: (roomId) => notifyOfNewMessage(context, roomId)

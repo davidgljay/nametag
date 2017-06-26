@@ -100,6 +100,9 @@ type Room {
   # Templates required to view and enter the room
   templates: [Template]
 
+  # Indicates whether the DMs are limited to messages to and from Mods
+  modOnlyDMs: Boolean
+
 }
 
 # A message in a room
@@ -565,6 +568,9 @@ type RootMutation {
   # Creates a room
   createRoom(room: CreateRoomInput!): CreateRoomResponse
 
+  # Sets whether users can DM non-mods in the rooms
+  setModOnlyDMs(roomId: ID!, modOnlyDMs: Boolean!): BasicResponse
+
   # Creates a message
   createMessage(message: CreateMessageInput!): CreateMessageResponse
 
@@ -606,6 +612,7 @@ type RootMutation {
 
   # Confirms an email
   emailConfirmation(token: String!): BasicResponse
+
 }
 
 ################################################################################

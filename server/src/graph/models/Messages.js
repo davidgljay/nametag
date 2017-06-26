@@ -130,18 +130,24 @@ const checkMentions = (context, nametags, message) => {
 }
 
 /**
- * Checks sets a message recipient if it's a dm
+ * Checks sets a message recipient if the message is a dm
  *
  * @param {Object} nametags     the room's nametags
  * @param {Object} text         the text of the message to be checked
  *
  **/
-const setDm = (context, nametags, message) => {
+const setDm = (context, nametags, message, room) => {
   const Nametags = context.models.Nametags
   // For every mention, check every nametag in the room to see if it matches the name.
   for (let i = 0; i < nametags.length; i++) {
     const {name, id} = nametags[i]
     if (message.text.slice(2, name.length + 2).toLowerCase() === name.toLowerCase()) {
+
+      //If the room allows mod-only DMing, return if the message is not to or from a mod
+      if (id !== room.mod && message.author !== room.mod && room.modOnlyDMs) {
+        return
+      }
+
       const newText = message.text.slice(name.length + 2)
       return Promise.all([
         Nametags.addMention(id)

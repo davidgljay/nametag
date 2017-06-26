@@ -36,6 +36,12 @@ const RootMutation = {
       Rooms.create(room)
       .then(wrapResponse('room'))
   },
+  setModOnlyDMs: {
+    requires: 'ROOM_MOD',
+    resolve: (obj, {roomId, modOnlyDMs}, {models: {Rooms}}) =>
+      Rooms.setModOnlyDMs(roomId, modOnlyDMs)
+        .then(wrapResponse('setModOnlyDMs'))
+  },
   createMessage: {
     requires: 'LOGIN',
     resolve: (obj, {message}, {user, models: {Messages}}) => {
