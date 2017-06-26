@@ -1,4 +1,4 @@
-const {APIError, ErrNotInRoom, ErrNotLoggedIn, ErrNotAuthorized} = require('../../errors')
+const {APIError, ErrNotInRoom, ErrNotLoggedIn, ErrNotAuthorized, ErrNotMod} = require('../../errors')
 
 /**
  * Wraps up a promise to return an object with the resolution of the promise
@@ -21,9 +21,17 @@ const catchErrors = (err) => {
   throw err
 }
 
-const wrap = (mutation, key = 'result', requires) => (obj, args, context) => {
+const wrap = (mutation, requires, key = 'result') => (obj, args, context) => {
   if (requires === 'LOGIN' && !context.user) {
     return Promise.reject(ErrNotLoggedIn)
+  }
+  if (requires === 'ROOM_MOD') {
+    return context.models.Rooms.get(args.roomId)
+      .then(room => room.mod === context.user.nametags[room.id]
+        ? mutation(obj, args, context)
+          .catch(catchErrors)
+        : Promise.reject(ErrNotMod)
+      )
   }
   return mutation(obj, args, context)
     .catch(catchErrors)

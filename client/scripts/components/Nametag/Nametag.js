@@ -16,7 +16,9 @@ class Nametag extends Component {
     }
 
     this.toggleMenu = e => {
-      e.preventDefault()
+      if (e && e.preventDefault) {
+        e.preventDefault()
+      }
       this.setState({
         showMenu: !this.state.showMenu,
         element: e.currentTarget

@@ -111,9 +111,16 @@ class Room extends Component {
       return
     }
     let isMod
+    let notifCount
     if (!loading) {
       myNametag = this.getMyNametag()
-      isMod = room.mod.id === me.id
+      isMod = me.nametags
+        .reduce((isMod, nametag) => nametag.id === room.mod.id ? true : isMod, false)
+      notifCount = me.nametags.filter(
+        nametag => nametag.room &&
+        new Date(nametag.room.closedAt) > new Date() &&
+        nametag.room.id !== this.props.roomId
+      )
     }
 
     let expanded = this.state.leftBarExpanded ? styles.expanded : styles.collapsed
@@ -154,14 +161,17 @@ class Room extends Component {
                     <Norms norms={room.norms} />
                   </div>
                 }
-                <div
-                  style={styles.leftNavHeader}
-                  onClick={this.toggleLeftBarSection('rooms')}>
-                  {
-                    this.state.toggles.rooms ? '- ' : '+ '
-                  }
-                  Rooms
-                </div>
+                {
+                  notifCount > 0 &&
+                    <div
+                      style={styles.leftNavHeader}
+                      onClick={this.toggleLeftBarSection('rooms')}>
+                      {
+                        this.state.toggles.rooms ? '- ' : '+ '
+                      }
+                      Rooms
+                    </div>
+                }
                 {
                   this.state.toggles.rooms &&
                   <Notifications
