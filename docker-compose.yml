@@ -20,7 +20,7 @@ nametag:
     - "8185:8185"
 rethinkdb:
   image: rethinkdb
-  command: rethinkdb --bind-http "0.0.0.0" --bind-driver "all" #--http-tls-key /usr/.keys/privkey.pem --http-tls-cert /usr/.keys/cert.pem
+  command: rethinkdb --bind-http "127.0.0.1" --bind-driver "all" #--http-tls-key /usr/.keys/privkey.pem --http-tls-cert /usr/.keys/cert.pem
   volumes:
     - ./rethinkdb_data/:/var/lib/rethinkdb/instances.d
     - ./.keys:/usr/.keys
