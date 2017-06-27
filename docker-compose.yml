@@ -20,12 +20,14 @@ nametag:
     - "8185:8185"
 rethinkdb:
   image: rethinkdb
-  command: rethinkdb --bind "all"
+  command: rethinkdb --bind-http "0.0.0.0" --bind-driver "all" #--http-tls-key /usr/.keys/privkey.pem --http-tls-cert /usr/.keys/cert.pem
   volumes:
     - ./rethinkdb_data/:/var/lib/rethinkdb/instances.d
+    - ./.keys:/usr/.keys
+  expose:
+    - "28015"
   ports:
-    - "28015:28015"
-    - "8080:8080"
+    - "8080"
 redis:
   image: redis
   ports:
