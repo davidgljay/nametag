@@ -44,8 +44,8 @@ export const requestNotifPermissions = (updateToken) => (dispatch) => {
   if (process.env.NODE_ENV === 'test') {
     return
   }
-  firebase.messaging().requestPermission()
-    .then(() => dispatch(getFcmToken(updateToken)))
-    .then(() => dispatch(fcmTokenRefresh(updateToken)))
-    .catch(() => console.log('Notification permission refused'))
+  // firebase.messaging().requestPermission()
+  //   .then(() => dispatch(getFcmToken(updateToken)))
+  //   .then(() => dispatch(fcmTokenRefresh(updateToken)))
+  //   .catch(() => console.log('Notification permission refused'))
 }

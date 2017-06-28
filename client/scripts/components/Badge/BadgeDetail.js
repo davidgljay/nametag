@@ -24,7 +24,6 @@ class BadgeDetail extends Component {
         ...nametag,
         badges: nametag.badges ? nametag.badges.map(badge => badge.id) : []
       }
-      console.log('nametag for post', nametagForPost)
       createNametag(nametagForPost)
         .then(() => this.setState({requested: true}))
     }
