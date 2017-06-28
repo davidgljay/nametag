@@ -5,4 +5,5 @@ rethinkdb dump -c rethinkdb
 #Move file
 mv rethinkdb_dump* backup
 
-#TODO Add sc3md
+# Add sc3md
+s3cmd sync * s3://nametag_backups
