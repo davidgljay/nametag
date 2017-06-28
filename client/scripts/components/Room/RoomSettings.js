@@ -3,7 +3,7 @@ import Toggle from 'material-ui/Toggle'
 
 const RoomSettings = ({modOnlyDMs, roomId, setModOnlyDMs}) => <div>
   <Toggle
-    label='Limit Private Messaging to Room Host'
+    label={modOnlyDMs ? 'Only host can message privately' : 'Anyone can message privately'}
     toggled={modOnlyDMs}
     onClick={() => setModOnlyDMs(roomId, !modOnlyDMs)}
     labelStyle={styles.labelStyle}

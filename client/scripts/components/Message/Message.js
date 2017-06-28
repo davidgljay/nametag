@@ -133,7 +133,7 @@ class Message extends Component {
           </div>
           <MentionMenu
             name={author.name}
-            hideDMs={hideDMs}
+            hideDMs={hideDMs && mod.id !== author.id}
             showMenu={showMenu}
             toggleMenu={this.toggleMenu}
             setDefaultMessage={setDefaultMessage} />

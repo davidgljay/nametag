@@ -54,7 +54,7 @@ class Nametag extends Component {
         setDefaultMessage &&
         <MentionMenu
           name={name}
-          hideDMs={hideDMs}
+          hideDMs={hideDMs && mod !== id}
           showMenu={showMenu}
           toggleMenu={this.toggleMenu}
           setDefaultMessage={setDefaultMessage} />
