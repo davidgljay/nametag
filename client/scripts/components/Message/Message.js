@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import moment from 'moment'
 import Media from './Media'
 import MessageMenu from './MessageMenu'
+import MentionMenu from './MentionMenu'
 import ModAction from './ModAction'
 import {grey500, grey800, lightBlue100, yellow100} from 'material-ui/styles/colors'
 import ReactMarkdown from 'react-markdown'
@@ -11,7 +12,7 @@ class Message extends Component {
 
   constructor (props) {
     super(props)
-    this.state = {modAction: false, showActions: false}
+    this.state = {modAction: false, showActions: false, showMenu: null}
 
     this.showModAction = (open) => (e) => {
       if (e) { e.preventDefault() }
@@ -24,6 +25,15 @@ class Message extends Component {
 
     this.checkImage = (message) => {
       return /[^ ]+(\.gif|\.jpg|\.png)/.exec(message)
+    }
+
+    this.toggleMenu = e => {
+      if (e && e.preventDefault) {
+        e.preventDefault()
+      }
+      this.setState({
+        showMenu: this.state.showMenu ? null : e.currentTarget
+      })
     }
   }
 
@@ -43,8 +53,12 @@ class Message extends Component {
       mod,
       toggleSaved,
       myNametag,
-      createMessage
+      createMessage,
+      hideDMs,
+      setDefaultMessage
     } = this.props
+
+    const {showMenu, showActions, modAction} = this.state
 
     if (this.checkYouTube(text)) {
       media = <Media url={this.checkYouTube(text)[0]} />
@@ -79,8 +93,8 @@ class Message extends Component {
         className='message'
         style={styles.message}
         id={id}
-        onClick={() => this.setState({showActions: !this.state.showActions})}>
-        <td style={styles.image}>
+        onClick={() => this.setState({showActions: !showActions})}>
+        <td style={styles.image} onClick={this.toggleMenu}>
           {
             author.image
             ? <img style={styles.imageImg} src={author.image} />
@@ -88,7 +102,9 @@ class Message extends Component {
           }
         </td>
         <td style={messageStyle}>
-          <div style={styles.name}>{author.name}</div>
+          <div style={styles.name} onClick={this.toggleMenu}>
+            {author.name}
+          </div>
           {
               callout
             }
@@ -105,7 +121,7 @@ class Message extends Component {
             {
               <MessageMenu
                 showModAction={this.showModAction}
-                showActions={this.state.showActions}
+                showActions={showActions}
                 isDM={recipient !== null}
                 toggleSaved={toggleSaved}
                 saved={saved}
@@ -115,6 +131,12 @@ class Message extends Component {
               {moment(createdAt).format('h:mm A, ddd MMM DD YYYY')}
             </div>
           </div>
+          <MentionMenu
+            name={author.name}
+            hideDMs={hideDMs}
+            showMenu={showMenu}
+            toggleMenu={this.toggleMenu}
+            setDefaultMessage={setDefaultMessage} />
         </td>
       </tr>
       {
@@ -134,28 +156,32 @@ class Message extends Component {
   }
 }
 
+const {shape, string, bool, object, func, arrayOf} = PropTypes
+
 Message.propTypes = {
-  message: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired,
-    createdAt: PropTypes.string.isRequired,
-    author: PropTypes.shape({
-      image: PropTypes.string,
-      name: PropTypes.string.isRequired
+  message: shape({
+    id: string.isRequired,
+    text: string.isRequired,
+    createdAt: string.isRequired,
+    author: shape({
+      image: string,
+      name: string.isRequired
     }).isRequired,
-    recipient: PropTypes.shape({
-      image: PropTypes.string,
-      name: PropTypes.string.isRequired
+    recipient: shape({
+      image: string,
+      name: string.isRequired
     }),
-    saved: PropTypes.bool
+    saved: bool
   }).isRequired,
-  norms: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-  roomId: PropTypes.string.isRequired,
-  myNametag: PropTypes.shape({
-    id: PropTypes.string.isRequired
+  norms: arrayOf(string.isRequired).isRequired,
+  roomId: string.isRequired,
+  myNametag: shape({
+    id: string.isRequired
   }).isRequired,
-  createMessage: PropTypes.func.isRequired,
-  mod: PropTypes.object.isRequired
+  createMessage: func.isRequired,
+  mod: object.isRequired,
+  hideDMs: bool.isRequired,
+  setDefaultMessage: func.isRequired
 }
 
 export default Message
@@ -195,7 +221,8 @@ const styles = {
     paddingLeft: 25,
     paddingTop: 10,
     minWidth: 50,
-    verticalAlign: 'top'
+    verticalAlign: 'top',
+    cursor: 'pointer'
   },
   imageImg: {
     borderRadius: 25,
@@ -214,7 +241,8 @@ const styles = {
     fontWeight: 'bold',
     fontSize: 14,
     marginBottom: 5,
-    display: 'inline-block'
+    display: 'inline-block',
+    cursor: 'pointer'
   },
   date: {
     fontSize: 10,

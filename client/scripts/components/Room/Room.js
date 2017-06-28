@@ -112,10 +112,12 @@ class Room extends Component {
     }
     let isMod
     let notifCount
+    let hideDMs
     if (!loading) {
       myNametag = this.getMyNametag()
       isMod = me.nametags
         .reduce((isMod, nametag) => nametag.id === room.mod.id ? true : isMod, false)
+      hideDMs = !isMod && room.modOnlyDMs
       notifCount = me.nametags.filter(
         nametag => nametag.room &&
         new Date(nametag.room.closedAt) > new Date() &&
@@ -213,7 +215,7 @@ class Room extends Component {
                     mod={room.mod.id}
                     setDefaultMessage={this.setDefaultMessage}
                     nametags={room.nametags}
-                    hideDMs={room.modOnlyDMs && !isMod}
+                    hideDMs={hideDMs}
                     myNametagId={myNametag.id} />
                 }
               </div>
@@ -232,6 +234,8 @@ class Room extends Component {
               createMessage={createMessage}
               toggleSaved={toggleSaved}
               myNametag={myNametag}
+              hideDMs={hideDMs}
+              setDefaultMessage={this.setDefaultMessage}
               mod={room.mod}
               messages={room.messages} />
           </div>

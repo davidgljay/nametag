@@ -1,8 +1,6 @@
 import React, {PropTypes, Component} from 'react'
 import Badges from '../Badge/Badges'
-import Popover from 'material-ui/Popover'
-import Menu from 'material-ui/Menu'
-import MenuItem from 'material-ui/MenuItem'
+import MentionMenu from '../Message/MentionMenu'
 import {primary, white} from '../../../styles/colors'
 
 class Nametag extends Component {
@@ -11,8 +9,7 @@ class Nametag extends Component {
     super(props)
 
     this.state = {
-      showMenu: false,
-      element: null
+      showMenu: null
     }
 
     this.toggleMenu = e => {
@@ -20,21 +17,14 @@ class Nametag extends Component {
         e.preventDefault()
       }
       this.setState({
-        showMenu: !this.state.showMenu,
-        element: e.currentTarget
+        showMenu: this.state.showMenu ? null : e.currentTarget
       })
-    }
-
-    this.setMessage = message => e => {
-      e.preventDefault()
-      this.props.setDefaultMessage(message)
-      this.toggleMenu(e)
     }
   }
 
   render () {
     const {mod, nametag: {id, name, image, bio, badges}, setDefaultMessage, hideDMs} = this.props
-    const {showMenu, element} = this.state
+    const {showMenu} = this.state
     let ismod = ''
 
     // Show if user is a mod.
@@ -44,16 +34,17 @@ class Nametag extends Component {
 
     return <div
       key={id}
-      style={styles.nametag}
-      onClick={this.toggleMenu}>
+      style={styles.nametag}>
       <div style={styles.main}>
         {
           image
-          ? <img src={image} alt={name} style={styles.image} />
-        : <div style={{...styles.image, ...styles.defaultImage}}>{name.slice(0, 2)}</div>
+          ? <img src={image} alt={name} style={styles.image} onClick={this.toggleMenu} />
+        : <div style={{...styles.image, ...styles.defaultImage}}onClick={this.toggleMenu}>
+          {name.slice(0, 2)}
+        </div>
         }
         <div style={styles.details}>
-          <div style={styles.name}>{name}</div>
+          <div style={styles.name} onClick={this.toggleMenu}>{name}</div>
           <div style={styles.bio}>{bio}</div>
         </div>
         {ismod}
@@ -61,26 +52,12 @@ class Nametag extends Component {
       <Badges badges={badges} />
       {
         setDefaultMessage &&
-        <Popover
-          open={showMenu}
-          anchorEl={element}
-          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-          targetOrigin={{horizontal: 'left', vertical: 'top'}}
-          onRequestClose={this.toggleMenu}>
-          <Menu>
-            <MenuItem
-              key='Mention'
-              primaryText={`Message Publicly`}
-              onClick={this.setMessage(`@${name} `)} />
-            {
-              !hideDMs &&
-              <MenuItem
-                key='DM'
-                primaryText={`Message Privately`}
-                onClick={this.setMessage(`d ${name} `)} />
-            }
-          </Menu>
-        </Popover>
+        <MentionMenu
+          name={name}
+          hideDMs={hideDMs}
+          showMenu={showMenu}
+          toggleMenu={this.toggleMenu}
+          setDefaultMessage={setDefaultMessage} />
       }
     </div>
   }
@@ -123,14 +100,16 @@ const styles = {
   name: {
     fontWeight: 'bold',
     fontSize: 14,
-    marginTop: 5
+    marginTop: 5,
+    cursor: 'pointer'
   },
   image: {
     float: 'left',
     margin: '3px 10px 3px 10px',
     width: 50,
     height: 50,
-    borderRadius: 25
+    borderRadius: 25,
+    cursor: 'pointer'
   },
   defaultImage: {
     backgroundColor: primary,

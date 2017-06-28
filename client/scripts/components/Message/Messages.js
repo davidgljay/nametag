@@ -9,11 +9,13 @@ class Messages extends Component {
     super(props)
 
     this.mapMessage = (message) => {
-      const {norms, roomId, myNametag, toggleSaved, mod, createMessage} = this.props
+      const {norms, roomId, myNametag, toggleSaved, mod, createMessage, setDefaultMessage, hideDMs} = this.props
       return <Message
         message={message}
         roomId={roomId}
         key={message.id}
+        hideDMs={hideDMs}
+        setDefaultMessage={setDefaultMessage}
         norms={norms}
         mod={mod}
         toggleSaved={toggleSaved}
@@ -62,12 +64,16 @@ class Messages extends Component {
   }
 }
 
+const {string, arrayOf, object, func, bool} = PropTypes
+
 Messages.propTypes = {
-  roomId: PropTypes.string.isRequired,
-  messages: PropTypes.arrayOf(PropTypes.object).isRequired,
-  createMessage: PropTypes.func.isRequired,
-  toggleSaved: PropTypes.func.isRequired,
-  myNametag: PropTypes.object.isRequired
+  roomId: string.isRequired,
+  messages: arrayOf(object).isRequired,
+  createMessage: func.isRequired,
+  toggleSaved: func.isRequired,
+  myNametag: object.isRequired,
+  hideDMs: bool.isRequired,
+  setDefaultMessage: func.isRequired
 }
 
 export default radium(Messages)
