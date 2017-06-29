@@ -13,10 +13,16 @@ class Compose extends Component {
     super(props)
     this.state = {
       message: '',
-      showEmoji: false
+      showEmoji: false,
+      showMentionMenu: false
     }
 
     this.onChange = (e) => {
+      if (e.target.value.slice(-1) === '@') {
+        this.setState({showMentionMenu: true})
+      } else if (e.target.value.slice(-1) === ' ') {
+        this.setState({showMentionMenu: false})
+      }
       this.setState({message: e.target.value})
     }
 
@@ -29,7 +35,7 @@ class Compose extends Component {
           author: myNametag.id,
           room: roomId
         }
-        this.setState({message: '', showEmoji: false})
+        this.setState({message: '', showEmoji: false, showMentionMenu: false})
         this.props.createMessage(message, myNametag)
       }
     }
@@ -39,6 +45,18 @@ class Compose extends Component {
 
     this.handleEmoji = (emoji) => {
       this.setState({message: this.state.message + ':' + emoji + ':'})
+    }
+
+    this.nametagList = () => {
+      const query = /@\S+/.exec(this.state.message).slice(1)
+      return this.props.nametags.filter(n => n.name.match(query))
+        .map(n => n.name)
+    }
+
+    this.addMention = (mention) => {
+      this.setState({
+        message: this.state.message.replace(/@\S+(?=[^@]*$)/, mention)
+      })
     }
   }
 
