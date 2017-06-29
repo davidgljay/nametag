@@ -138,7 +138,7 @@ class Room extends Component {
                 className='material-icons'
                 onClick={this.closeRoom}
                 style={styles.closeIcon}>
-                 close
+                 arrow_back
                </FontIcon>
             </IconButton>
             <h3 id='roomTitle' style={styles.title} >{room.title}</h3>
