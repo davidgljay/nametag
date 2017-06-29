@@ -5,6 +5,9 @@ import FontIcon from 'material-ui/FontIcon'
 import IconButton from 'material-ui/IconButton'
 import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
+import Popover from 'material-ui/Popover'
+import Menu from 'material-ui/Menu'
+import MenuItem from 'material-ui/MenuItem'
 import Emojis from '../Utils/Emojis'
 import key from 'keymaster'
 
@@ -14,16 +17,21 @@ class Compose extends Component {
     this.state = {
       message: '',
       showEmoji: false,
-      showMentionMenu: false
+      showMentionMenu: false,
+      nametagList: []
     }
 
     this.onChange = (e) => {
       if (e.target.value.slice(-1) === '@') {
         this.setState({showMentionMenu: true})
+        document.getElementById('composeTextInput').focus()
       } else if (e.target.value.slice(-1) === ' ') {
         this.setState({showMentionMenu: false})
       }
-      this.setState({message: e.target.value})
+      this.setState({
+        message: e.target.value,
+        nametagList: this.nametagList()
+      })
     }
 
     this.post = (e) => {
@@ -48,14 +56,17 @@ class Compose extends Component {
     }
 
     this.nametagList = () => {
-      const query = /@\S+/.exec(this.state.message).slice(1)
-      return this.props.nametags.filter(n => n.name.match(query))
+      const query = /@\S*/.exec(this.state.message)
+      return query ? this.props.nametags.filter(n => n.name.match(query[0].slice(1)))
         .map(n => n.name)
+        : []
     }
 
-    this.addMention = (mention) => {
+    this.addMention = mention => e => {
+      e.preventDefault()
       this.setState({
-        message: this.state.message.replace(/@\S+(?=[^@]*$)/, mention)
+        message: this.state.message.replace(/@\S*(?=[^@]*$)/, mention),
+        showMentionMenu: false
       })
     }
   }
@@ -77,7 +88,7 @@ class Compose extends Component {
   render () {
     // TODO: Add GIFs, image upload
 
-    const {showEmoji, message} = this.state
+    const {showEmoji, message, showMentionMenu} = this.state
     return <div style={styles.compose} id='compose'>
       <div style={styles.spacer} />
       <Emojis
@@ -110,6 +121,23 @@ class Compose extends Component {
             </FontIcon>
             } />
       </form>
+      <Popover
+        open={showMentionMenu}
+        anchorEl={document.getElementById('compose')}
+        anchorOrigin={{horizontal: 'middle', vertical: 'top'}}
+        targetOrigin={{horizontal: 'middle', vertical: 'bottom'}}
+        onRequestClose={() => this.setState({showMentionMenu: false})} >
+        <Menu>
+          {
+            this.nametagList().map(name =>
+              <MenuItem
+                key={name}
+                primaryText={`@${name}`}
+                onClick={this.addMention(`@${name} `)} />
+            )
+          }
+        </Menu>
+      </Popover>
     </div>
   }
 }

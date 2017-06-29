@@ -242,6 +242,7 @@ class Room extends Component {
           <Compose
             createMessage={createMessage}
             roomId={room.id}
+            nametags={room.nametags}
             defaultMessage={defaultMessage}
             myNametag={myNametag} />
         </div>
