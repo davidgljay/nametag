@@ -24,7 +24,6 @@ class Compose extends Component {
     this.onChange = (e) => {
       if (e.target.value.slice(-1) === '@') {
         this.setState({showMentionMenu: true})
-        document.getElementById('composeTextInput').focus()
       } else if (e.target.value.slice(-1) === ' ') {
         this.setState({showMentionMenu: false})
       }
@@ -75,9 +74,12 @@ class Compose extends Component {
     key('enter', 'compose', this.post)
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate (prevProps, prevState) {
     if (this.props.defaultMessage !== prevProps.defaultMessage) {
       this.setState({message: this.props.defaultMessage})
+    }
+    if (this.state.showMentionMenu) {
+      document.getElementById('composeTextInput').focus()
     }
   }
 
