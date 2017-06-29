@@ -58,7 +58,7 @@ class Message extends Component {
       setDefaultMessage
     } = this.props
 
-    const {showMenu, showActions, modAction} = this.state
+    const {showMenu, showActions} = this.state
 
     if (this.checkYouTube(text)) {
       media = <Media url={this.checkYouTube(text)[0]} />
