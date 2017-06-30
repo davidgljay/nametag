@@ -3,12 +3,9 @@ import FontIcon from 'material-ui/FontIcon'
 import IconButton from 'material-ui/IconButton'
 import CircularProgress from 'material-ui/CircularProgress'
 import {mobile} from '../../../styles/sizes'
+import RoomLeftBar from './RoomLeftBar'
+import AppBar from 'material-ui/AppBar'
 import radium, {keyframes} from 'radium'
-
-import RoomSettings from './RoomSettings'
-import Norms from './Norms'
-import Notifications from './Notifications'
-import Nametags from '../../components/Nametag/Nametags'
 import Messages from '../../components/Message/Messages'
 import Compose from '../Message/Compose'
 
@@ -49,14 +46,6 @@ class Room extends Component {
       window.location = '/'
     }
 
-    this.toggleLeftBar = () => {
-      this.setState({leftBarExpanded: !this.state.leftBarExpanded})
-    }
-
-    this.toggleLeftBarSection = (section) => () => {
-      this.setState({toggles: {...this.state.toggles, [section]: !this.state.toggles[section]}})
-    }
-
     this.getMyNametag = () => {
       const {me, room} = this.props.data
       const myNtId = me.nametags.reduce(
@@ -64,6 +53,8 @@ class Room extends Component {
       )
       return room.nametags.filter((nt) => nt.id === myNtId)[0]
     }
+
+    this.toggleLeftBar = () => this.setState({leftBarExpanded: !this.state.leftBarExpanded})
 
     this.setDefaultMessage = (defaultMessage) => this.setState({defaultMessage})
   }
@@ -110,124 +101,40 @@ class Room extends Component {
       window.location = '/'
       return
     }
-    let isMod
-    let notifCount
     let hideDMs
     if (!loading) {
       myNametag = this.getMyNametag()
-      isMod = me.nametags
-        .reduce((isMod, nametag) => nametag.id === room.mod.id ? true : isMod, false)
-      hideDMs = !isMod && room.modOnlyDMs
-      notifCount = me.nametags.filter(
-        nametag => nametag.room &&
-        new Date(nametag.room.closedAt) > new Date() &&
-        nametag.room.id !== this.props.roomId
-      )
     }
 
-    let expanded = this.state.leftBarExpanded ? styles.expanded : styles.collapsed
-    expanded = window.innerWidth < 800 ? expanded : {}
+    const backIcon = <IconButton
+      style={styles.close}>
+      <FontIcon
+        className='material-icons'
+        onClick={this.closeRoom}
+        style={styles.closeIcon}>
+         arrow_back
+       </FontIcon>
+    </IconButton>
+
+    // TODO: Add swipe to show bar, remove bar icon on desktop mode
     return <div style={styles.roomContainer}>
       {
         !loading
         ? <div id='room'>
-          <div id='header' style={styles.header}>
-            <IconButton
-              style={styles.close}>
-              <FontIcon
-                className='material-icons'
-                onClick={this.closeRoom}
-                style={styles.closeIcon}>
-                 arrow_back
-               </FontIcon>
-            </IconButton>
-            <h3 id='roomTitle' style={styles.title} >{room.title}</h3>
-            <div id='roomDescription' style={styles.description} >
-              {room.description}
-            </div>
-          </div>
+          <AppBar
+            title={room.title}
+            style={styles.appBar}
+            iconElementRight={backIcon}
+            onLeftIconButtonTouchTap={this.toggleLeftBar} />
           <div>
-            <div style={{...styles.leftBar, ...expanded}}>
-              <div style={styles.leftBarContent}>
-                <div
-                  style={styles.leftNavHeader}
-                  onClick={this.toggleLeftBarSection('norms')}>
-                  {
-                    this.state.toggles.norms ? '- ' : '+ '
-                  }
-                  Norms
-                </div>
-                {
-                  this.state.toggles.norms &&
-                  <div style={styles.norms}>
-                    <Norms norms={room.norms} />
-                  </div>
-                }
-                {
-                  notifCount > 0 &&
-                    <div
-                      style={styles.leftNavHeader}
-                      onClick={this.toggleLeftBarSection('rooms')}>
-                      {
-                        this.state.toggles.rooms ? '- ' : '+ '
-                      }
-                      Rooms
-                    </div>
-                }
-                {
-                  this.state.toggles.rooms &&
-                  <Notifications
-                    latestMessageUpdatedSubscription={latestMessageUpdatedSubscription}
-                    nametags={me.nametags}
-                    roomId={room.id} />
-                }
-                {
-                  isMod &&
-                  <div>
-                    <div
-                      style={styles.leftNavHeader}
-                      onClick={this.toggleLeftBarSection('settings')}>
-                      {
-                        this.state.toggles.nametags ? '- ' : '+ '
-                      }
-                      Settings
-                    </div>
-                    {
-                      this.state.toggles.settings &&
-                      <RoomSettings
-                        setModOnlyDMs={setModOnlyDMs}
-                        roomId={room.id}
-                        modOnlyDMs={room.modOnlyDMs} />
-                    }
-                  </div>
-                }
-                <div
-                  style={styles.leftNavHeader}
-                  onClick={this.toggleLeftBarSection('nametags')}>
-                  {
-                    this.state.toggles.nametags ? '- ' : '+ '
-                  }
-                  Nametags
-                </div>
-                {
-                  this.state.toggles.nametags &&
-                  <Nametags
-                    mod={room.mod.id}
-                    setDefaultMessage={this.setDefaultMessage}
-                    nametags={room.nametags}
-                    hideDMs={hideDMs}
-                    myNametagId={myNametag.id} />
-                }
-              </div>
-              <div style={styles.leftBarChevron}>
-                <FontIcon
-                  color='#FFF'
-                  className='material-icons'
-                  style={this.state.leftBarExpanded ? styles.chevronOut : {}}
-                  onClick={this.toggleLeftBar.bind(this)}
-                    >chevron_right</FontIcon>
-              </div>
-            </div>
+            <RoomLeftBar
+              room={room}
+              me={me}
+              latestMessageUpdatedSubscription={latestMessageUpdatedSubscription}
+              setModOnlyDMs={setModOnlyDMs}
+              myNametag={myNametag}
+              expanded={this.state.leftBarExpanded}
+              toggleLeftBar={this.toggleLeftBar} />
             <Messages
               roomId={room.id}
               norms={room.norms}
@@ -293,14 +200,7 @@ const styles = {
   roomContainer: {
     overflowX: 'hidden'
   },
-  leftNavHeader: {
-    fontWeight: 800,
-    fontSize: 16,
-    color: '#FFF',
-    marginTop: 15,
-    marginBottom: 5,
-    cursor: 'pointer'
-  },
+
   header: {
     borderBottom: '3px solid #12726a',
     position: 'fixed',
@@ -333,33 +233,7 @@ const styles = {
     padding: 0,
     cursor: 'pointer'
   },
-  leftBar: {
-    minHeight: 400,
-    background: '#12726a',
-    marginTop: 55,
-    height: '100%',
-    paddingTop: 15,
-    paddingLeft: 15,
-    paddingRight: 15,
-    paddingBottom: 50,
-    width: 265,
-    overflowY: 'auto',
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    zIndex: 50
-  },
-  leftBarChevron: {
-    display: 'none',
-    color: '#FFF',
-    position: 'absolute',
-    top: '45%',
-    left: 255,
-    cursor: 'pointer',
-    [mobile]: {
-      display: 'block'
-    }
-  },
+
   description: {
     fontSize: 14,
     [mobile]: {
@@ -384,11 +258,5 @@ const styles = {
   spinner: {
     marginLeft: '45%',
     marginTop: '40vh'
-  },
-  norms: {
-    color: '#FFF'
-  },
-  leftBarContent: {
-    marginBottom: 100
   }
 }
