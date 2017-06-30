@@ -35,6 +35,11 @@ module.exports = new SubscriptionManager({
       latestMessageUpdated: {
         filter: latestMessageUpdated => args.roomIds.indexOf(latestMessageUpdated.roomId) > -1
       }
+    }),
+    roomUpdated: (options, args) => ({
+      roomUpdated: {
+        filter: room => args.roomId === room.id
+      }
     })
   }
 })

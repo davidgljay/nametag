@@ -674,6 +674,9 @@ type RootSubscription {
 
   # Fired when a room's latestMessage value is updated
   latestMessageUpdated(roomIds: [ID!]): LatestMessageUpdate
+
+  # Fired when data about a room is updated
+  roomUpdated(roomId: ID!): Room
 }
 
 ################################################################################
