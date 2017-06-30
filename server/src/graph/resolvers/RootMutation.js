@@ -46,10 +46,10 @@ const RootMutation = {
   },
   updateRoom: {
     requires: 'ROOM_MOD',
-    resolve: (obj, {roomId, property, value}, models: {Rooms}) =>
+    resolve: (obj, {roomId, property, value}, {models: {Rooms}}) =>
       Rooms.update(roomId, property, value)
         .then(wrapResponse('updateRoom'))
-  }
+  },
   setModOnlyDMs: {
     requires: 'ROOM_MOD',
     resolve: (obj, {roomId, modOnlyDMs}, {models: {Rooms}}) =>
