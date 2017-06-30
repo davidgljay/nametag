@@ -104,7 +104,7 @@ type Room {
   modOnlyDMs: Boolean
 
   # A message to welcome new users into the room
-  welcomeMessage: String
+  welcome: String
 
   # Topics of discussion in the room
   topics:[Topic]
