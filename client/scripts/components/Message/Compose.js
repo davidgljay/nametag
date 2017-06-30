@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import radium from 'radium'
 import {mobile} from '../../../styles/sizes'
+import {grey} from '../../../styles/colors'
 import FontIcon from 'material-ui/FontIcon'
 import IconButton from 'material-ui/IconButton'
 import FlatButton from 'material-ui/FlatButton'
@@ -18,7 +19,9 @@ class Compose extends Component {
       message: '',
       showEmoji: false,
       showMentionMenu: false,
-      nametagList: []
+      nametagList: [],
+      // TODO: lastMessage in nametag
+      posted: false
     }
 
     this.onChange = (e) => {
@@ -42,7 +45,7 @@ class Compose extends Component {
           author: myNametag.id,
           room: roomId
         }
-        this.setState({message: '', showEmoji: false, showMentionMenu: false})
+        this.setState({message: '', showEmoji: false, showMentionMenu: false, posted: true})
         this.props.createMessage(message, myNametag)
       }
     }
@@ -90,90 +93,125 @@ class Compose extends Component {
   render () {
     // TODO: Add GIFs, image upload
 
-    const {showEmoji, message, showMentionMenu} = this.state
-    return <div style={styles.compose} id='compose'>
-      <div style={styles.spacer} />
-      <Emojis
-        open={showEmoji}
-        closeModal={this.toggleEmoji(false)}
-        onEmojiClick={emoji => this.setState({message: message + emoji})} />
-      <IconButton
-        onClick={this.toggleEmoji(!showEmoji)}>
-        <FontIcon
-          className='material-icons'>
-          tag_faces
-        </FontIcon>
-      </IconButton>
-      <form onSubmit={this.post} style={styles.form} onClick={this.toggleEmoji(false)}>
-        <TextField
-          name='compose'
-          id='composeTextInput'
-          style={styles.textfield}
-          onChange={this.onChange}
-          autoComplete='off'
-          value={this.state.message} />
-        <FlatButton
-          style={styles.sendButton}
-          id='sendMessageButton'
-          type='submit'
-          icon={
-            <FontIcon
-              className='material-icons'>
-              send
-            </FontIcon>
-            } />
-      </form>
-      <Popover
-        open={showMentionMenu}
-        anchorEl={document.getElementById('compose')}
-        anchorOrigin={{horizontal: 'middle', vertical: 'top'}}
-        targetOrigin={{horizontal: 'middle', vertical: 'bottom'}}
-        onRequestClose={() => this.setState({showMentionMenu: false})} >
-        <Menu>
+    const {welcome, mod} = this.props
+    const {showEmoji, message, showMentionMenu, posted} = this.state
+    const topic = posted ? '' : welcome
+    return <div style={styles.container}>
+      {
+        topic && <div style={styles.topicContainer}>
           {
-            this.nametagList().map(name =>
-              <MenuItem
-                key={name}
-                primaryText={`@${name}`}
-                onClick={this.addMention(`@${name} `)} />
-            )
+          mod.image
+          ? <img style={styles.modImg} src={mod.image} />
+          : <div style={{...styles.modImg, ...styles.defaultImage}}>{mod.name.slice(0, 2)}</div>
           }
-        </Menu>
-      </Popover>
+          <div id='topic' style={styles.topic}>{topic}</div>
+        </div>
+      }
+      <div style={styles.compose} id='compose'>
+        <Emojis
+          open={showEmoji}
+          closeModal={this.toggleEmoji(false)}
+          onEmojiClick={emoji => this.setState({message: message + emoji})} />
+        <IconButton
+          onClick={this.toggleEmoji(!showEmoji)}>
+          <FontIcon
+            className='material-icons'>
+            tag_faces
+          </FontIcon>
+        </IconButton>
+        <form onSubmit={this.post} style={styles.form} onClick={this.toggleEmoji(false)}>
+          <TextField
+            name='compose'
+            id='composeTextInput'
+            style={styles.textfield}
+            onChange={this.onChange}
+            autoComplete='off'
+            value={this.state.message} />
+          <FlatButton
+            style={styles.sendButton}
+            id='sendMessageButton'
+            type='submit'
+            icon={
+              <FontIcon
+                className='material-icons'>
+                send
+              </FontIcon>
+              } />
+        </form>
+        <Popover
+          open={showMentionMenu}
+          anchorEl={document.getElementById('compose')}
+          anchorOrigin={{horizontal: 'middle', vertical: 'top'}}
+          targetOrigin={{horizontal: 'middle', vertical: 'bottom'}}
+          onRequestClose={() => this.setState({showMentionMenu: false})} >
+          <Menu>
+            {
+              this.nametagList().map(name =>
+                <MenuItem
+                  key={name}
+                  primaryText={`@${name}`}
+                  onClick={this.addMention(`@${name} `)} />
+              )
+            }
+          </Menu>
+        </Popover>
+      </div>
     </div>
   }
 }
 
+const {string, func, shape, bool} = PropTypes
+
 Compose.propTypes = {
-  roomId: PropTypes.string.isRequired,
-  myNametag: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired
+  roomId: string.isRequired,
+  myNametag: shape({
+    id: string.isRequired,
+    name: string.isRequired
   }).isRequired,
-  createMessage: PropTypes.func.isRequired,
-  defaultMessage: PropTypes.string
+  createMessage: func.isRequired,
+  defaultMessage: string,
+  welcome: string,
+  posted: bool,
+  mod: shape({
+    name: string.isRequired,
+    image: string.isRequired
+  })
 }
 
 export default radium(Compose)
 
 const styles = {
-  compose: {
+  container: {
     display: 'flex',
     position: 'fixed',
     bottom: 0,
+    flexDirection: 'column',
     borderCollapse: 'separate',
     paddingBottom: 20,
     paddingTop: 10,
     background: '#FFF',
     width: '100%',
     paddingRight: 15,
-    zIndex: 40
-  },
-  spacer: {
-    width: 290,
+    zIndex: 40,
+    marginLeft: 290,
     [mobile]: {
-      width: 20
+      marginLeft: 20
     }
+  },
+  topic: {
+    fontStyle: 'italic',
+    fontSize: 14,
+    color: grey
+  },
+  topicContainer: {
+    display: 'flex',
+    paddingLeft: 25
+  },
+  modImage: {
+    marginRight: 10
+  },
+  compose: {
+    display: 'flex'
   },
   showEmoji: {
     cursor: 'pointer',

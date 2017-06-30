@@ -149,6 +149,8 @@ class Room extends Component {
           <Compose
             createMessage={createMessage}
             roomId={room.id}
+            welcome={room.welcome}
+            mod={room.mod}
             nametags={room.nametags}
             defaultMessage={defaultMessage}
             myNametag={myNametag} />
