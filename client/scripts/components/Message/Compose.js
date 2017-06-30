@@ -37,18 +37,36 @@ class Compose extends Component {
     }
 
     this.post = (e) => {
-      const {myNametag, roomId} = this.props
+      const {myNametag, roomId, createMessage} = this.props
+      const {message} = this.state
       e.preventDefault()
-      if (this.state.message.length > 0) {
-        let message = {
-          text: this.state.message,
+      if (message.length > 0) {
+        let msg = {
+          text: message,
           author: myNametag.id,
           room: roomId
         }
         this.setState({message: '', showEmoji: false, showMentionMenu: false, posted: true})
-        this.props.createMessage(message, myNametag)
+        this.slashCommand(msg)
+        createMessage(msg, myNametag)
       }
     }
+
+    this.slashCommand = (message) => {
+      const {updateRoom, room: {id}} = this.props
+      const command = /^\/(\S+)\s(.+)/.exec(message)
+      if (!command) {
+        return
+      }
+      switch (command[1]) {
+        case 'welcome':
+          updateRoom(id, 'welcome', command[2])
+          break
+        default:
+          return
+      }
+    }
+
     this.toggleEmoji = (open) => () => {
       this.setState({showEmoji: open})
     }
@@ -169,6 +187,7 @@ Compose.propTypes = {
     name: string.isRequired
   }).isRequired,
   createMessage: func.isRequired,
+  updateRoom: func.isRequired,
   defaultMessage: string,
   welcome: string,
   posted: bool,

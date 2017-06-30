@@ -60,9 +60,16 @@ class Room extends Component {
   }
 
   componentDidMount () {
-    const {requestNotifPermissions, checkNametagPresenceSubscription, updateToken, params} = this.props
+    const {
+      requestNotifPermissions,
+      checkNametagPresenceSubscription,
+      roomUpdatedSubscription,
+      updateToken,
+      params
+    } = this.props
     requestNotifPermissions(updateToken)
     checkNametagPresenceSubscription(params.roomId)
+    roomUpdatedSubscription(params.roomId)
   }
 
   componentDidUpdate (prevProps) {
@@ -88,7 +95,7 @@ class Room extends Component {
       },
       latestMessageUpdatedSubscription,
       createMessage,
-      setModOnlyDMs,
+      updateRoom,
       toggleSaved
     } = this.props
 
@@ -131,7 +138,7 @@ class Room extends Component {
               room={room}
               me={me}
               latestMessageUpdatedSubscription={latestMessageUpdatedSubscription}
-              setModOnlyDMs={setModOnlyDMs}
+              updateRoom={updateRoom}
               myNametag={myNametag}
               expanded={this.state.leftBarExpanded}
               toggleLeftBar={this.toggleLeftBar} />
@@ -151,6 +158,7 @@ class Room extends Component {
             roomId={room.id}
             welcome={room.welcome}
             mod={room.mod}
+            updateRoom={updateRoom}
             nametags={room.nametags}
             defaultMessage={defaultMessage}
             myNametag={myNametag} />
@@ -180,7 +188,7 @@ Room.propTypes = {
   params: shape({
     roomId: string.isRequired
   }),
-  setModOnlyDMs: func.isRequired,
+  updateRoom: func.isRequired,
   createMessage: func.isRequired,
   toggleSaved: func.isRequired,
   updateToken: func.isRequired

@@ -1,5 +1,11 @@
 import {graphql} from 'react-apollo'
-import {checkNametagPresence, messageAdded, badgeRequestAdded, latestMessageUpdated} from '../subscriptions'
+import {
+  checkNametagPresence,
+  messageAdded,
+  badgeRequestAdded,
+  latestMessageUpdated,
+  roomUpdated
+} from '../subscriptions'
 import ROOMS_QUERY from './roomsQuery.graphql'
 import ROOM_QUERY from './roomQuery.graphql'
 import USER_QUERY from './userQuery.graphql'
@@ -55,7 +61,8 @@ export const roomQuery = graphql(ROOM_QUERY, {
     data,
     messageAddedSubscription: messageAdded(data.subscribeToMore),
     checkNametagPresenceSubscription: checkNametagPresence(data.subscribeToMore),
-    latestMessageUpdatedSubscription: latestMessageUpdated(data.subscribeToMore)
+    latestMessageUpdatedSubscription: latestMessageUpdated(data.subscribeToMore),
+    roomUpdatedSubscription: roomUpdated(data.subscribeToMore)
   })
 })
 

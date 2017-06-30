@@ -1,11 +1,11 @@
 import React from 'react'
 import Toggle from 'material-ui/Toggle'
 
-const RoomSettings = ({modOnlyDMs, roomId, setModOnlyDMs}) => <div>
+const RoomSettings = ({modOnlyDMs, roomId, updateRoom}) => <div>
   <Toggle
     label={modOnlyDMs ? 'Only host can message privately' : 'Anyone can message privately'}
     toggled={modOnlyDMs}
-    onClick={() => setModOnlyDMs(roomId, !modOnlyDMs)}
+    onClick={() => updateRoom(roomId, (!modOnlyDMs).toString())}
     labelStyle={styles.labelStyle}
     thumbStyle={styles.thumbOff}
     thumbSwitchedStyle={styles.thumbSwitched}

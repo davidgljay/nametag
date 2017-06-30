@@ -1,0 +1,8 @@
+mutation UpdateRoom($roomId: ID!, $property: String!, $value: String!) {
+  updateRoom(roomId: $roomId, $property: property, $value: value) {
+    errors {
+      translation_key
+      message
+    }
+  }
+}

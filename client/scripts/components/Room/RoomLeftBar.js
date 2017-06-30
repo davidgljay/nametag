@@ -34,7 +34,7 @@ class RoomLeftBar extends Component {
       room,
       me,
       latestMessageUpdatedSubscription,
-      setModOnlyDMs,
+      updateRoom,
       myNametag,
       expanded,
       toggleLeftBar
@@ -98,7 +98,7 @@ class RoomLeftBar extends Component {
             {
               this.state.toggles.settings &&
               <RoomSettings
-                setModOnlyDMs={setModOnlyDMs}
+                updateRoom={updateRoom}
                 roomId={room.id}
                 modOnlyDMs={room.modOnlyDMs} />
             }
@@ -154,7 +154,7 @@ RoomLeftBar.propTypes = {
     nametags: arrayOf(object.isRequired).isRequired
   }),
   latestMessageUpdatedSubscription: func.isRequired,
-  setModOnlyDMs: func.isRequired,
+  updateRoom: func.isRequired,
   myNametag: shape({
     id: string.isRequired
   }).isRequired,

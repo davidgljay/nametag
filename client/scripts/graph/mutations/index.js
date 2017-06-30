@@ -5,6 +5,7 @@ import CREATE_MESSAGE from './createMessage.graphql'
 import CREATE_BADGE from './createBadge.graphql'
 import CREATE_BADGE_TEMPLATE from './createTemplate.graphql'
 import TOGGLE_SAVED from './toggleSaved.graphql'
+import UPDATE_ROOM from './updateRoom.graphql'
 import UPDATE_LATEST_VISIT from './updateLatestVisit.graphql'
 import UPDATE_BADGE_REQUEST_STATUS from './updateBadgeRequestStatus.graphql'
 import UPDATE_TOKEN from './updateToken.graphql'
@@ -31,6 +32,18 @@ export const createRoom = graphql(CREATE_ROOM, {
     createRoom: (room) => mutate({
       variables: {
         room
+      }
+    })
+  })
+})
+
+export const updateRoom = graphql(UPDATE_ROOM, {
+  props: ({ownProps, mutate}) => ({
+    createRoom: (roomId, property, value) => mutate({
+      variables: {
+        roomId,
+        property,
+        value
       }
     })
   })
