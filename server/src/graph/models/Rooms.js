@@ -151,6 +151,37 @@ const create = ({conn, models: {Nametags, Users}}, rm) => {
 }
 
 /**
+ * Updates am arbitrary component in a room
+ *
+ * @param {Object} context     graph context
+ * @param {String} roomId   the room to be updated
+ * @param {String} property  the property to be updated
+ * @param {String} value    the value to be set
+ *
+ **/
+
+const update = ({conn}, roomId, property, value) => {
+  if (property === 'id') {
+
+  }
+  let val
+  switch (property) {
+  case 'id':
+    return Promise.reject(errors.ErrNoIdUpdate)
+  case 'setModOnlyDMs':
+    val = value === 'true'
+    break
+  case 'norms':
+    val = JSON.parse(value)
+    break
+  default:
+    val = value
+  }
+
+  return roomsTable.get(roomId).update({[property]: value}).run(conn)
+}
+
+/**
  * Updates a room's latestMessage value
  *
  * @param {Object} context     graph context
