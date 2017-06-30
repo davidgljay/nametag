@@ -157,6 +157,26 @@ const addMention = ({conn}, nametag) => nametagsTable.get(nametag)
 
 const getNametagCount = ({conn}, room) => nametagsTable.filter({room}).count().run(conn)
 
+
+/**
+ * Updates arbitrary data about a Nametag
+ *
+ * @param {Object} context     graph context
+ * @param {String} nametagId   the id of the nametag to be updated
+ * @param {String} property    the property to be updated
+ * @param {String} value       the value to be updated
+ *
+ */
+
+const update = ({conn}, nametagId, property, value) => {
+  switch (property) {
+  case 'id':
+    return Promise.reject(errors.ErrNoIdUpdate)
+  }
+
+  return nametagsTable.get(nametagId).update({[property]: value}).run(conn)
+}
+
 /**
  * Updates the presence of a nametag in a room
  *

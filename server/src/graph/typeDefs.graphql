@@ -585,14 +585,15 @@ type RootMutation {
   # Updates a room
   updateRoom(roomId: ID!, property: String!, value: String!): BasicResponse
 
-  # Sets whether users can DM non-mods in the rooms
-  setModOnlyDMs(roomId: ID!, modOnlyDMs: Boolean!): BasicResponse
-
   # Creates a message
   createMessage(message: CreateMessageInput!): CreateMessageResponse
 
   # Creates a nametag
   createNametag(nametag: CreateNametagInput!): CreateNametagResponse
+
+  # Updates a nametag
+  updateNametag(nametagId: ID!, property: String!, value: String!): BasicResponse
+
 
   # Updates a nametag
   updateNametag(nametagId: ID!, property: String!, value: String!): BasicResponse

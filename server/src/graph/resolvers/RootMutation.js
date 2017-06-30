@@ -1,4 +1,11 @@
-const {APIError, ErrNotInRoom, ErrNotLoggedIn, ErrNotAuthorized, ErrNotMod} = require('../../errors')
+const {
+  APIError,
+  ErrNotInRoom,
+  ErrNotLoggedIn,
+  ErrNotAuthorized,
+  ErrNotMod,
+  ErrNotYourNametag
+} = require('../../errors')
 
 /**
  * Wraps up a promise to return an object with the resolution of the promise
@@ -33,6 +40,17 @@ const wrap = (mutation, requires, key = 'result') => (obj, args, context) => {
         : Promise.reject(ErrNotMod)
       )
   }
+  if (requires === 'MY_NAMETAG') {
+    if (!context.user) {
+      return Promise.reject(ErrNotLoggedIn)
+    }
+    const myNametagIds = Object.keys(context.user.nametags)
+      .map(roomId => context.user.nametags(roomId))
+    return myNametagIds.indexOf(args.nametagId) > -1
+    ? mutation(obj, args, context)
+      .catch(catchErrors)
+    : Promise.reject(ErrNotYourNametag)
+  }
   return mutation(obj, args, context)
     .catch(catchErrors)
 }
@@ -49,12 +67,6 @@ const RootMutation = {
     resolve: (obj, {roomId, property, value}, {models: {Rooms}}) =>
       Rooms.update(roomId, property, value)
         .then(wrapResponse('updateRoom'))
-  },
-  setModOnlyDMs: {
-    requires: 'ROOM_MOD',
-    resolve: (obj, {roomId, modOnlyDMs}, {models: {Rooms}}) =>
-      Rooms.setModOnlyDMs(roomId, modOnlyDMs)
-        .then(wrapResponse('setModOnlyDMs'))
   },
   createMessage: {
     requires: 'LOGIN',
@@ -77,6 +89,12 @@ const RootMutation = {
     resolve: (obj, {nametag}, {user, models: {Nametags}}) =>
     Nametags.create(nametag)
     .then(wrapResponse('nametag'))
+  },
+  updateNametag: {
+    requires: 'MY_NAMETAG',
+    resolve: (obj, {nametagId, property, value}, {models: {Nametags}}) =>
+      Nametags.update(nametagId, property, value)
+        .then(wrapResponse('updateNametag'))
   },
   updateLatestVisit: {
     requires: 'LOGIN',

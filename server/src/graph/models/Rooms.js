@@ -161,9 +161,6 @@ const create = ({conn, models: {Nametags, Users}}, rm) => {
  **/
 
 const update = ({conn}, roomId, property, value) => {
-  if (property === 'id') {
-
-  }
   let val
   switch (property) {
   case 'id':
@@ -178,7 +175,7 @@ const update = ({conn}, roomId, property, value) => {
     val = value
   }
 
-  return roomsTable.get(roomId).update({[property]: value}).run(conn)
+  return roomsTable.get(roomId).update({[property]: val}).run(conn)
 }
 
 /**

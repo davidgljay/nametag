@@ -83,6 +83,10 @@ const ErrNoIdUpdate = new APIError('cannot update an object\'s id', {
   status: 400
 })
 
+const ErrNotYourNametag = new APIError('that nametag is not part of your account', {
+  status: 400
+})
+
 /**
  * ErrAuthentication is returned when there is an error authenticating and the
  * message is provided.
@@ -129,6 +133,7 @@ module.exports = {
   ErrMissingToken,
   ErrNotInRoom,
   ErrNotMod,
+  ErrNotYourNametag,
   ErrNotLoggedIn,
   ErrEmailTaken,
   ErrNotFound,
