@@ -64,8 +64,8 @@ const RootMutation = {
   },
   updateRoom: {
     requires: 'ROOM_MOD',
-    resolve: (obj, {roomId, property, value}, {models: {Rooms}}) =>
-      Rooms.update(roomId, property, value)
+    resolve: (obj, {roomId, roomUpdate}, {models: {Rooms}}) =>
+      Rooms.update(roomId, roomUpdate)
         .then(wrapResponse('updateRoom'))
   },
   createMessage: {
@@ -92,8 +92,8 @@ const RootMutation = {
   },
   updateNametag: {
     requires: 'MY_NAMETAG',
-    resolve: (obj, {nametagId, property, value}, {models: {Nametags}}) =>
-      Nametags.update(nametagId, property, value)
+    resolve: (obj, {nametagUpdate}, {models: {Nametags}}) =>
+      Nametags.update(nametagUpdate)
         .then(wrapResponse('updateNametag'))
   },
   updateLatestVisit: {

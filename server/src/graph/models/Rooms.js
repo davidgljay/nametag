@@ -156,14 +156,12 @@ const create = ({conn, models: {Nametags, Users}}, rm) => {
  *
  * @param {Object} context     graph context
  * @param {Object} roomUpdate   the data about the room to be updated
- * @param {String} property  the property to be updated
- * @param {String} value    the value to be set
  *
  **/
 
-const update = ({conn}, roomUpdate) => {
-  pubsub('roomUpdated', roomUpdate)
-  return roomsTable.get(roomUpdate.id).update(roomUpdate).run(conn)
+const update = ({conn}, roomId, roomUpdate) => {
+  pubsub.publish('roomUpdated', Object.assign({}, roomUpdate, {id: roomId}))
+  return roomsTable.get(roomId).update(roomUpdate).run(conn)
 }
 
 /**
@@ -231,7 +229,7 @@ module.exports = (context) => ({
     getVisible: (id) => getVisible(context, id),
     getQuery: (query) => getQuery(context, query),
     create: (room) => create(context, room),
-    update: (roomUpdate) => update(context, roomUpdate),
+    update: (roomId, roomUpdate) => update(context, roomId, roomUpdate),
     setModOnlyDMs: (roomId, modOnlyDMs) => setModOnlyDMs(context, roomId, modOnlyDMs),
     getGranterRooms: (granterCode) => getGranterRooms(context, granterCode),
     updateLatestMessage: (roomId) => updateLatestMessage(context, roomId),

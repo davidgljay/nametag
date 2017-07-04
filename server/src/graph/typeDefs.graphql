@@ -436,9 +436,6 @@ input CreateMessageInput {
 
 input UpdateRoomInput {
 
-  # The ID of the room to be updated
-  id: ID!
-
   # The room's title
   title: String
 
@@ -471,6 +468,9 @@ input CreateNametagInput {
   # Additional information about the user
   bio: String
 
+  # Sets whether DMing is limited to modOnlyDMs
+  modOnlyDMs: Boolean
+
   # IDs of badges to include in this Nametag
   badges: [ID]
 
@@ -484,9 +484,6 @@ input CreateNametagInput {
 
 # Input to update a nametag
 input UpdateNametagInput {
-
-  # The ID of the nametag to be updated
-  id: ID!
 
   # The content of the message
   name: String
@@ -632,7 +629,7 @@ type RootMutation {
   createRoom(room: CreateRoomInput!): CreateRoomResponse
 
   # Updates a room
-  updateRoom(roomUpdate: UpdateRoomInput!): BasicResponse
+  updateRoom(roomId: ID!, roomUpdate: UpdateRoomInput!): BasicResponse
 
   # Creates a message
   createMessage(message: CreateMessageInput!): CreateMessageResponse
@@ -641,11 +638,7 @@ type RootMutation {
   createNametag(nametag: CreateNametagInput!): CreateNametagResponse
 
   # Updates a nametag
-  updateNametag(nametagUpdate: UpdateNametagInput!): BasicResponse
-
-
-  # Updates a nametag
-  updateNametag(nametagId: ID!, property: String!, value: String!): BasicResponse
+  updateNametag(nametagId: ID!, nametagUpdate: UpdateNametagInput!): BasicResponse
 
   # Creates a badge
   createBadge(badge: CreateBadgeInput!): CreateBadgeResponse
@@ -710,7 +703,7 @@ type LatestMessageUpdate {
 
 # Update to a room
 
-type UpdateRoomInput {
+type UpdateRoom {
 
   # The ID of the room being updated
   id: ID!
@@ -727,6 +720,9 @@ type UpdateRoomInput {
   # An array of the room's norms
   norms: [String!]
 
+  # Sets whether or not DMing is limited to models
+  modOnlyDMs: Boolean
+
   # The date when the room will be closed
   closedAt: Date
 
@@ -736,7 +732,7 @@ type UpdateRoomInput {
 }
 
 # Update to a nametag
-type UpdateNametagInput {
+type UpdateNametag {
 
   # The ID of the nametag being update
   id: ID!
@@ -776,7 +772,10 @@ type RootSubscription {
   latestMessageUpdated(roomIds: [ID!]): LatestMessageUpdate
 
   # Fired when data about a room is updated
-  roomUpdated(roomId: ID!): Room
+  roomUpdated(roomId: ID!): UpdateRoom
+
+  # Fired when data about a nametag is updated
+  nametagUpdated(roomId: ID!): UpdateNametag
 }
 
 ################################################################################

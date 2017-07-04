@@ -38,7 +38,7 @@ module.exports = new SubscriptionManager({
     }),
     roomUpdated: (options, args) => ({
       roomUpdated: {
-        filter: roomUpdate => args.roomId === roomUpdate.id
+        filter: updateRoom => args.roomId === updateRoom.id
       }
     })
   }
