@@ -2,6 +2,7 @@ const r = require('rethinkdb')
 const {db} = require('../../db')
 const errors = require('../../errors')
 const {search} = require('../../elasticsearch')
+const pubsub = require('../subscriptions/pubsub')
 const notification = require('../../notifications')
 
 const roomsTable = db.table('rooms')
@@ -154,28 +155,15 @@ const create = ({conn, models: {Nametags, Users}}, rm) => {
  * Updates am arbitrary component in a room
  *
  * @param {Object} context     graph context
- * @param {String} roomId   the room to be updated
+ * @param {Object} roomUpdate   the data about the room to be updated
  * @param {String} property  the property to be updated
  * @param {String} value    the value to be set
  *
  **/
 
-const update = ({conn}, roomId, property, value) => {
-  let val
-  switch (property) {
-  case 'id':
-    return Promise.reject(errors.ErrNoIdUpdate)
-  case 'setModOnlyDMs':
-    val = value === 'true'
-    break
-  case 'norms':
-    val = JSON.parse(value)
-    break
-  default:
-    val = value
-  }
-
-  return roomsTable.get(roomId).update({[property]: val}).run(conn)
+const update = ({conn}, roomUpdate) => {
+  pubsub('roomUpdated', roomUpdate)
+  return roomsTable.get(roomUpdate.id).update(roomUpdate).run(conn)
 }
 
 /**
@@ -243,6 +231,7 @@ module.exports = (context) => ({
     getVisible: (id) => getVisible(context, id),
     getQuery: (query) => getQuery(context, query),
     create: (room) => create(context, room),
+    update: (roomUpdate) => update(context, roomUpdate),
     setModOnlyDMs: (roomId, modOnlyDMs) => setModOnlyDMs(context, roomId, modOnlyDMs),
     getGranterRooms: (granterCode) => getGranterRooms(context, granterCode),
     updateLatestMessage: (roomId) => updateLatestMessage(context, roomId),

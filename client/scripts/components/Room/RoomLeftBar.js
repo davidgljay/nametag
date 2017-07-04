@@ -1,10 +1,10 @@
 import React, {Component, PropTypes} from 'react'
-import {mobile} from '../../../styles/sizes'
+// import {mobile} from '../../../styles/sizes'
 import RoomSettings from './RoomSettings'
 import Norms from './Norms'
 import Drawer from 'material-ui/Drawer'
 import Notifications from './Notifications'
-import FontIcon from 'material-ui/FontIcon'
+// import FontIcon from 'material-ui/FontIcon'
 import Nametags from '../../components/Nametag/Nametags'
 
 class RoomLeftBar extends Component {

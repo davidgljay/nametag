@@ -1,5 +1,5 @@
-mutation UpdateRoom($roomId: ID!, $property: String!, $value: String!) {
-  updateRoom(roomId: $roomId, $property: property, $value: value) {
+mutation UpdateRoom($roomUpdate: RoomUpdate!) {
+  updateRoom(roomUpdate: $roomUpdate) {
     errors {
       translation_key
       message

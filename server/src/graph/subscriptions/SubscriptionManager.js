@@ -21,9 +21,9 @@ module.exports = new SubscriptionManager({
         filter: nametag => nametag.room === args.roomId
       }
     }),
-    nametagPresence: (options, args) => ({
-      nametagPresence: {
-        filter: nametagPresence => nametagPresence.roomId === args.roomId
+    nametagUpdated: (options, args) => ({
+      nametagUpdated: {
+        filter: nametagUpdate => args.roomId === nametagUpdate.room
       }
     }),
     badgeRequestAdded: (options, args) => ({
@@ -38,7 +38,7 @@ module.exports = new SubscriptionManager({
     }),
     roomUpdated: (options, args) => ({
       roomUpdated: {
-        filter: room => args.roomId === room.id
+        filter: roomUpdate => args.roomId === roomUpdate.id
       }
     })
   }

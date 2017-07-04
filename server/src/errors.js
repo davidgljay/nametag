@@ -79,10 +79,6 @@ const ErrMissingToken = new APIError('token is required', {
   status: 400
 })
 
-const ErrNoIdUpdate = new APIError('cannot update an object\'s id', {
-  status: 400
-})
-
 const ErrNotYourNametag = new APIError('that nametag is not part of your account', {
   status: 400
 })

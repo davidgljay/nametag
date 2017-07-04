@@ -22,10 +22,6 @@ const RoomSubscription = ({conn}) => db.table('rooms').changes().run(conn)
           latestMessage: room.new_val.latestMessage,
           roomId: room.new_val.id
         })
-      } else {
-        pubsub.publish('roomUpdated', {
-          room: room.new_val
-        })
       }
     })
   })

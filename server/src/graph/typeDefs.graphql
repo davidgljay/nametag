@@ -432,6 +432,33 @@ input CreateMessageInput {
 
 }
 
+# Input required to update a room
+
+input UpdateRoomInput {
+
+  # The ID of the room to be updated
+  id: ID!
+
+  # The room's title
+  title: String
+
+  # A description for the room
+  description: String
+
+  # The image to be displayed on the room's card
+  image: String
+
+  # An array of the room's norms
+  norms: [String!]
+
+  # The date when the room will be closed
+  closedAt: Date
+
+  # The welcome given for the room
+  welcome: String
+
+}
+
 # Input required to create a nametag
 input CreateNametagInput {
 
@@ -452,6 +479,26 @@ input CreateNametagInput {
 
   # The badge template this nametag is requesting
   template: ID
+
+}
+
+# Input to update a nametag
+input UpdateNametagInput {
+
+  # The ID of the nametag to be updated
+  id: ID!
+
+  # The content of the message
+  name: String
+
+  # The nametag's image
+  image: String
+
+  # Additional information about the user
+  bio: String
+
+  # IDs of badges to include in this Nametag
+  badges: [ID]
 
 }
 
@@ -507,6 +554,8 @@ input CreateGranterInput {
   type: GRANTER_TYPES!
 
 }
+
+# Input required to update a nametag
 
 ## Responses
 
@@ -583,7 +632,7 @@ type RootMutation {
   createRoom(room: CreateRoomInput!): CreateRoomResponse
 
   # Updates a room
-  updateRoom(roomId: ID!, property: String!, value: String!): BasicResponse
+  updateRoom(roomUpdate: UpdateRoomInput!): BasicResponse
 
   # Creates a message
   createMessage(message: CreateMessageInput!): CreateMessageResponse
@@ -592,7 +641,7 @@ type RootMutation {
   createNametag(nametag: CreateNametagInput!): CreateNametagResponse
 
   # Updates a nametag
-  updateNametag(nametagId: ID!, property: String!, value: String!): BasicResponse
+  updateNametag(nametagUpdate: UpdateNametagInput!): BasicResponse
 
 
   # Updates a nametag
@@ -657,6 +706,56 @@ type LatestMessageUpdate {
 
   # The new value of latestMessage
   latestMessage: Date!
+}
+
+# Update to a room
+
+type UpdateRoomInput {
+
+  # The ID of the room being updated
+  id: ID!
+
+  # The room's title
+  title: String
+
+  # A description for the room
+  description: String
+
+  # The image to be displayed on the room's card
+  image: String
+
+  # An array of the room's norms
+  norms: [String!]
+
+  # The date when the room will be closed
+  closedAt: Date
+
+  # The welcome given for the room
+  welcome: String
+
+}
+
+# Update to a nametag
+type UpdateNametagInput {
+
+  # The ID of the nametag being update
+  id: ID!
+
+  # The id of the room to where this nametag is used
+  room: ID!
+
+  # The content of the message
+  name: String
+
+  # The nametag's image
+  image: String
+
+  # Additional information about the user
+  bio: String
+
+  # IDs of badges to include in this Nametag
+  badges: [ID]
+
 }
 
 type RootSubscription {

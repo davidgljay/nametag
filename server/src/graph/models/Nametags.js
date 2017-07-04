@@ -1,6 +1,7 @@
 const {db} = require('../../db')
 const r = require('rethinkdb')
 const errors = require('../../errors')
+const pubsub = require('../subscriptions/pubsub')
 const notification = require('../../notifications')
 
 const nametagsTable = db.table('nametags')
@@ -157,25 +158,27 @@ const addMention = ({conn}, nametag) => nametagsTable.get(nametag)
 
 const getNametagCount = ({conn}, room) => nametagsTable.filter({room}).count().run(conn)
 
-
 /**
  * Updates arbitrary data about a Nametag
  *
  * @param {Object} context     graph context
- * @param {String} nametagId   the id of the nametag to be updated
+ * @param {String} nametagUpdate  information about the nametag to be updated
  * @param {String} property    the property to be updated
  * @param {String} value       the value to be updated
  *
  */
 
-const update = ({conn}, nametagId, property, value) => {
-  switch (property) {
-  case 'id':
-    return Promise.reject(errors.ErrNoIdUpdate)
-  }
-
-  return nametagsTable.get(nametagId).update({[property]: value}).run(conn)
-}
+const update = ({conn}, nametagUpdate) =>
+  nametagsTable.get(nametagUpdate.id).update(nametagUpdate).run(conn)
+    .then(res => {
+      if (res.errors) {
+        return Promise.reject(new errors.APIError(res.errors[0]))
+      }
+      return nametagsTable.get(nametagUpdate.id).run(conn)
+    })
+    .then(nametag => {
+      pubsub('nametagUpdated', Object.assign({}, nametagUpdate, {room: nametag.room}))
+    })
 
 /**
  * Updates the presence of a nametag in a room
@@ -212,6 +215,7 @@ module.exports = (context) => ({
     getRoomNametags: (room) => getRoomNametags(context, room),
     getByBadge: (badgeId) => getByBadge(context, badgeId),
     create: (nametag, createBadgeRequest) => create(context, nametag, createBadgeRequest),
+    update: (nametagUpdate) => update(context, nametagUpdate),
     addMention: (nametag) => addMention(context, nametag),
     getNametagCount: (room) => getNametagCount(context, room),
     updateLatestVisit: (nametagId) => updateLatestVisit(context, nametagId),
