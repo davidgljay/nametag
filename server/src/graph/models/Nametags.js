@@ -162,22 +162,21 @@ const getNametagCount = ({conn}, room) => nametagsTable.filter({room}).count().r
  * Updates arbitrary data about a Nametag
  *
  * @param {Object} context     graph context
+ * @param {String} nametagId   the nametag to be updated
  * @param {String} nametagUpdate  information about the nametag to be updated
- * @param {String} property    the property to be updated
- * @param {String} value       the value to be updated
  *
  */
 
-const update = ({conn}, nametagUpdate) =>
-  nametagsTable.get(nametagUpdate.id).update(nametagUpdate).run(conn)
+const update = ({conn}, nametagId, nametagUpdate) =>
+  nametagsTable.get(nametagId).update(nametagUpdate).run(conn)
     .then(res => {
       if (res.errors) {
         return Promise.reject(new errors.APIError(res.errors[0]))
       }
-      return nametagsTable.get(nametagUpdate.id).run(conn)
+      return nametagsTable.get(nametagId).pluck('room').run(conn)
     })
-    .then(nametag => {
-      pubsub('nametagUpdated', Object.assign({}, nametagUpdate, {room: nametag.room}))
+    .then(({room}) => {
+      pubsub.publish('nametagUpdated', Object.assign({}, nametagUpdate, {room, id: nametagId}))
     })
 
 /**
@@ -215,7 +214,7 @@ module.exports = (context) => ({
     getRoomNametags: (room) => getRoomNametags(context, room),
     getByBadge: (badgeId) => getByBadge(context, badgeId),
     create: (nametag, createBadgeRequest) => create(context, nametag, createBadgeRequest),
-    update: (nametagUpdate) => update(context, nametagUpdate),
+    update: (nametagId, nametagUpdate) => update(context, nametagId, nametagUpdate),
     addMention: (nametag) => addMention(context, nametag),
     getNametagCount: (room) => getNametagCount(context, room),
     updateLatestVisit: (nametagId) => updateLatestVisit(context, nametagId),

@@ -2,6 +2,7 @@ import CHECK_NAMETAG_PRESENCE from './checkNametagPresence.graphql'
 import MESSAGE_ADDED from './messageAdded.graphql'
 import BADGE_REQUEST_ADDED from './badgeRequestAdded.graphql'
 import ROOM_UPDATED from './roomUpdated.graphql'
+import NAMETAG_UPDATED from './nametagUpdated.graphql'
 import LATEST_MESSAGE_UPDATED from './latestMessageUpdated.graphql'
 
 export const checkNametagPresence = subscribeToMore => roomId => subscribeToMore({
@@ -123,12 +124,36 @@ export const roomUpdated = subscribeToMore => (roomId) => subscribeToMore({
     if (!roomUpdated) {
       return oldData
     }
+    console.log('RoomUpdated', roomUpdated)
 
     return {
       ...oldData,
       room: {
         ...oldData.room,
         ...roomUpdated
+      }
+    }
+  }
+})
+
+export const nametagUpdated = subscribeToMore => (roomId) => subscribeToMore({
+  document: NAMETAG_UPDATED,
+  variables: {
+    roomId
+  },
+  updateQuery: (oldData, {subscriptionData: {data: {nametagUpdated}}}) => {
+    if (!nametagUpdated) {
+      return oldData
+    }
+    console.log('NametagUpdated', nametagUpdated)
+
+    return {
+      ...oldData,
+      room: {
+        ...oldData.room,
+        nametags: oldData.nametags.map(n => n.id === nametagUpdated.id
+          ? {...n, nametagUpdated}
+          : n)
       }
     }
   }

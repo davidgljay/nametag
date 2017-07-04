@@ -45,7 +45,7 @@ const wrap = (mutation, requires, key = 'result') => (obj, args, context) => {
       return Promise.reject(ErrNotLoggedIn)
     }
     const myNametagIds = Object.keys(context.user.nametags)
-      .map(roomId => context.user.nametags(roomId))
+      .map(roomId => context.user.nametags[roomId])
     return myNametagIds.indexOf(args.nametagId) > -1
     ? mutation(obj, args, context)
       .catch(catchErrors)
@@ -92,8 +92,8 @@ const RootMutation = {
   },
   updateNametag: {
     requires: 'MY_NAMETAG',
-    resolve: (obj, {nametagUpdate}, {models: {Nametags}}) =>
-      Nametags.update(nametagUpdate)
+    resolve: (obj, {nametagId, nametagUpdate}, {models: {Nametags}}) =>
+      Nametags.update(nametagId, nametagUpdate)
         .then(wrapResponse('updateNametag'))
   },
   updateLatestVisit: {

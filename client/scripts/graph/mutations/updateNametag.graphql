@@ -1,0 +1,8 @@
+mutation UpdateNametag($nametagId: ID!, $nametagUpdate: UpdateNametagInput!) {
+  updateNametag(nametagId: $nametagId, nametagUpdate: $nametagUpdate) {
+    errors {
+      translation_key
+      message
+    }
+  }
+}
