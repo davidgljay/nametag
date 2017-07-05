@@ -90,7 +90,11 @@ class RoomCard extends Component {
           title={room.title}
           style={styles.roomName}
           onClick={this.flip} />
-        <div style={styles.roomDescription}>{room.description}</div>
+        <div
+          style={styles.roomDescription}
+          onClick={this.flip}>
+          {room.description}
+        </div>
         <p style={styles.greyText}>
           {room.nametagCount || 0} participant
             {room.nametagCount === 1 ? '' : 's'}
