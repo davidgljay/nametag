@@ -119,8 +119,8 @@ class Compose extends Component {
         topic && <div style={styles.topicContainer}>
           {
           mod.image
-          ? <img style={styles.modImg} src={mod.image} />
-          : <div style={{...styles.modImg, ...styles.defaultImage}}>{mod.name.slice(0, 2)}</div>
+          ? <img style={styles.modImage} src={mod.image} />
+        : <div style={{...styles.modImage, ...styles.defaultImage}}>{mod.name.slice(0, 2)}</div>
           }
           <div id='topic' style={styles.topic}>{topic}</div>
         </div>
@@ -227,7 +227,10 @@ const styles = {
     paddingLeft: 25
   },
   modImage: {
-    marginRight: 10
+    marginRight: 10,
+    borderRadius: 10,
+    width: 20,
+    height: 20
   },
   compose: {
     display: 'flex'
