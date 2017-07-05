@@ -749,8 +749,11 @@ type UpdateNametag {
   # Additional information about the user
   bio: String
 
-  # IDs of badges to include in this Nametag
-  badges: [ID]
+  # Badges to include in this Nametag
+  badges: [Badge]
+
+  # Indicates whether the owner of this nametag is present in the room
+  present: Boolean
 
 }
 

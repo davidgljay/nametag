@@ -23,7 +23,7 @@ module.exports = new SubscriptionManager({
     }),
     nametagUpdated: (options, args) => ({
       nametagUpdated: {
-        filter: nametagUpdate => args.roomId === nametagUpdate.room
+        filter: nametagUpdated => args.roomId === nametagUpdated.room
       }
     }),
     badgeRequestAdded: (options, args) => ({

@@ -103,7 +103,7 @@ const addToken = ({user, conn}, token) =>
  */
 
 const getTokens = ({conn}, nametagIds) =>
-  nametagIds ? usersTable.getAll(...nametagIds, {index: 'nametags'})('token')
+  nametagIds && nametagIds.length > 0 ? usersTable.getAll(...nametagIds, {index: 'nametags'})('token')
     .run(conn)
     .then(cursor => cursor.toArray())
     : Promise.resolve([])

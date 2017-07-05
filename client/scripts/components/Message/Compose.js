@@ -37,8 +37,8 @@ class Compose extends Component {
     }
 
     this.post = (e) => {
-      const {myNametag, roomId, createMessage} = this.props
-      const {message} = this.state
+      const {myNametag, roomId, updateNametag, createMessage} = this.props
+      const {message, posted} = this.state
       e.preventDefault()
       if (message.length > 0) {
         let msg = {
@@ -46,21 +46,26 @@ class Compose extends Component {
           author: myNametag.id,
           room: roomId
         }
+        if (!posted) {
+          updateNametag(myNametag.id, {bio: message})
+        }
         this.setState({message: '', showEmoji: false, showMentionMenu: false, posted: true})
-        this.slashCommand(msg)
+        this.slashCommand(message)
         createMessage(msg, myNametag)
       }
     }
 
     this.slashCommand = (message) => {
       const {updateRoom, roomId} = this.props
-      const command = /^\/(\S+)\s(.+)/.exec(message.text)
-      if (!command) {
+      const commandRegex = /^\/(\S+)\s(.+)/.exec(message)
+      if (!commandRegex) {
         return
       }
-      switch (command[1]) {
+      const command = commandRegex[1]
+      const text = commandRegex[2]
+      switch (command) {
         case 'welcome':
-          updateRoom(roomId, {welcome: command[2]})
+          updateRoom(roomId, {welcome: text})
           break
         default:
           return

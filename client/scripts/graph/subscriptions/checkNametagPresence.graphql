@@ -1,6 +1,0 @@
-subscription nametagPresence ($roomId: ID!) {
-  nametagPresence(roomId: $roomId) {
-    nametagId
-    present
-  }
-}

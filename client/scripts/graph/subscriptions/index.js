@@ -1,39 +1,42 @@
-import CHECK_NAMETAG_PRESENCE from './checkNametagPresence.graphql'
+
 import MESSAGE_ADDED from './messageAdded.graphql'
 import BADGE_REQUEST_ADDED from './badgeRequestAdded.graphql'
 import ROOM_UPDATED from './roomUpdated.graphql'
 import NAMETAG_UPDATED from './nametagUpdated.graphql'
 import LATEST_MESSAGE_UPDATED from './latestMessageUpdated.graphql'
 
-export const checkNametagPresence = subscribeToMore => roomId => subscribeToMore({
-  document: CHECK_NAMETAG_PRESENCE,
-  variables: {
-    roomId
-  },
-  updateQuery: (oldData, {subscriptionData}) => {
-    if (!subscriptionData.data) {
-      return oldData
-    }
-    const {nametagId, present} = subscriptionData.data.nametagPresence
-    const newNametags = oldData.room.nametags.reduce(
-      (nametags, nametag, i) => {
-        if (nametag.id === nametagId) {
-          nametags[i] = {...nametag, present}
-        }
-        return nametags
-      }, oldData.room.nametags.slice())
-    return {
-      ...oldData,
-      room: {
-        ...oldData.room,
-        nametags: newNametags
-      },
-      me: {
-        ...oldData.me
-      }
-    }
-  }
-})
+const clearObjectNulls = (object) => Object.keys(object).reduce(
+      (obj, key) => object[key] ? {...obj, [key]: object[key]} : obj, {})
+
+// export const checkNametagPresence = subscribeToMore => roomId => subscribeToMore({
+//   document: CHECK_NAMETAG_PRESENCE,
+//   variables: {
+//     roomId
+//   },
+//   updateQuery: (oldData, {subscriptionData}) => {
+//     if (!subscriptionData.data) {
+//       return oldData
+//     }
+//     const {nametagId, present} = subscriptionData.data.nametagPresence
+//     const newNametags = oldData.room.nametags.reduce(
+//       (nametags, nametag, i) => {
+//         if (nametag.id === nametagId) {
+//           nametags[i] = {...nametag, present}
+//         }
+//         return nametags
+//       }, oldData.room.nametags.slice())
+//     return {
+//       ...oldData,
+//       room: {
+//         ...oldData.room,
+//         nametags: newNametags
+//       },
+//       me: {
+//         ...oldData.me
+//       }
+//     }
+//   }
+// })
 
 export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeToMore({
   document: MESSAGE_ADDED,
@@ -124,15 +127,12 @@ export const roomUpdated = subscribeToMore => (roomId) => subscribeToMore({
     if (!roomUpdated) {
       return oldData
     }
-    console.log('RoomUpdated', roomUpdated)
-    const newRoomData = Object.keys(roomUpdated).reduce(
-      (obj, key) => roomUpdated[key] ? {...obj, [key]: roomUpdated[key]} : obj, {})
 
     return {
       ...oldData,
       room: {
         ...oldData.room,
-        ...newRoomData
+        ...clearObjectNulls(roomUpdated)
       }
     }
   }
@@ -147,14 +147,13 @@ export const nametagUpdated = subscribeToMore => (roomId) => subscribeToMore({
     if (!nametagUpdated) {
       return oldData
     }
-    console.log('NametagUpdated', nametagUpdated)
 
     return {
       ...oldData,
       room: {
         ...oldData.room,
-        nametags: oldData.nametags.map(n => n.id === nametagUpdated.id
-          ? {...n, nametagUpdated}
+        nametags: oldData.room.nametags.map(n => n.id === nametagUpdated.id
+          ? {...n, ...clearObjectNulls(nametagUpdated)}
           : n)
       }
     }

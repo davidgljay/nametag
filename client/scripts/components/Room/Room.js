@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import FontIcon from 'material-ui/FontIcon'
 import IconButton from 'material-ui/IconButton'
 import CircularProgress from 'material-ui/CircularProgress'
-import {mobile} from '../../../styles/sizes'
 import RoomLeftBar from './RoomLeftBar'
 import AppBar from 'material-ui/AppBar'
 import radium, {keyframes} from 'radium'
@@ -62,14 +61,14 @@ class Room extends Component {
   componentDidMount () {
     const {
       requestNotifPermissions,
-      checkNametagPresenceSubscription,
       roomUpdatedSubscription,
+      nametagUpdatedSubscription,
       updateToken,
       params
     } = this.props
     requestNotifPermissions(updateToken)
-    checkNametagPresenceSubscription(params.roomId)
     roomUpdatedSubscription(params.roomId)
+    nametagUpdatedSubscription(params.roomId)
   }
 
   componentDidUpdate (prevProps) {
@@ -96,6 +95,7 @@ class Room extends Component {
       latestMessageUpdatedSubscription,
       createMessage,
       updateRoom,
+      updateNametag,
       toggleSaved
     } = this.props
 
@@ -162,6 +162,7 @@ class Room extends Component {
             welcome={room.welcome}
             mod={room.mod}
             updateRoom={updateRoom}
+            updateNametag={updateNametag}
             nametags={room.nametags}
             defaultMessage={defaultMessage}
             myNametag={myNametag} />
