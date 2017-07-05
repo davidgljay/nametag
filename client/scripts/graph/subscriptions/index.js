@@ -148,13 +148,21 @@ export const nametagUpdated = subscribeToMore => (roomId) => subscribeToMore({
       return oldData
     }
 
+    let newNametags
+    const nametags = oldData.room.nametags
+    if (nametags.filter(n => n.id === nametagUpdated.id).length > 0) {
+      newNametags = nametags.map(n => n.id === nametagUpdated.id
+        ? {...n, ...clearObjectNulls(nametagUpdated)}
+        : n)
+    } else {
+      newNametags = nametags.concat(nametagUpdated)
+    }
+
     return {
       ...oldData,
       room: {
         ...oldData.room,
-        nametags: oldData.room.nametags.map(n => n.id === nametagUpdated.id
-          ? {...n, ...clearObjectNulls(nametagUpdated)}
-          : n)
+        nametags: newNametags
       }
     }
   }
