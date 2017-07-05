@@ -39,11 +39,10 @@ export const createRoom = graphql(CREATE_ROOM, {
 
 export const updateRoom = graphql(UPDATE_ROOM, {
   props: ({ownProps, mutate}) => ({
-    createRoom: (roomId, property, value) => mutate({
+    updateRoom: (roomId, roomUpdate) => mutate({
       variables: {
         roomId,
-        property,
-        value
+        roomUpdate
       }
     })
   })

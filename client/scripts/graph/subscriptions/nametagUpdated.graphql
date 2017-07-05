@@ -1,0 +1,7 @@
+#import "../fragments/nametagView.graphql"
+
+subscription nametagUpdated ($roomId: ID!) {
+  nametagUpdated(roomId: $roomId) {
+    ...nametagView
+  }
+}

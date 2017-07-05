@@ -16,9 +16,9 @@ const Room = compose(
   connect(() => ({}), mapDispatchToProps),
   createMessage,
   toggleSaved,
+  updateRoom,
   updateLatestVisit,
   updateToken,
-  updateRoom,
   roomQuery
 )(component)
 

@@ -1,10 +1,10 @@
 subscription roomUpdated ($roomId: ID!) {
   roomUpdated(roomId: $roomId) {
+    id
     title
     description
     norms
     welcome
     modOnlyDMs
-    topics
   }
 }

@@ -150,7 +150,6 @@ RoomLeftBar.propTypes = {
     modOnlyDMs: bool
   }),
   me: shape({
-    id: string.isRequired,
     nametags: arrayOf(object.isRequired).isRequired
   }),
   latestMessageUpdatedSubscription: func.isRequired,

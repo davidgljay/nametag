@@ -12,7 +12,7 @@ const MentionMenu = ({name, hideDMs, showMenu, toggleMenu, setDefaultMessage}) =
 
   return <div>
     <Popover
-      open={showMenu}
+      open={!!showMenu}
       anchorEl={showMenu}
       anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
       targetOrigin={{horizontal: 'left', vertical: 'top'}}

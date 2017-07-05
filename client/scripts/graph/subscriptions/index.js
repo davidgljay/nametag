@@ -125,12 +125,14 @@ export const roomUpdated = subscribeToMore => (roomId) => subscribeToMore({
       return oldData
     }
     console.log('RoomUpdated', roomUpdated)
+    const newRoomData = Object.keys(roomUpdated).reduce(
+      (obj, key) => roomUpdated[key] ? {...obj, [key]: roomUpdated[key]} : obj, {})
 
     return {
       ...oldData,
       room: {
         ...oldData.room,
-        ...roomUpdated
+        ...newRoomData
       }
     }
   }

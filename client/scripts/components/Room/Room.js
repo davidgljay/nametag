@@ -26,7 +26,7 @@ class Room extends Component {
       defaultMessage: ''
     }
 
-    this.showPresence = (nametagId) => {
+    this.showPresence = () => {
       if (this.state.presenceTimer) { return }
       const {updateLatestVisit} = this.props
       updateLatestVisit(this.getMyNametag().id)
@@ -113,6 +113,8 @@ class Room extends Component {
       myNametag = this.getMyNametag()
     }
 
+    const isMobile = window.innerWidth < 800
+
     const backIcon = <IconButton
       style={styles.close}>
       <FontIcon
@@ -132,7 +134,8 @@ class Room extends Component {
             title={room.title}
             style={styles.appBar}
             iconElementRight={backIcon}
-            onLeftIconButtonTouchTap={this.toggleLeftBar} />
+            onLeftIconButtonTouchTap={this.toggleLeftBar}
+            iconStyleLeft={isMobile ? {display: 'inline-block'} : {display: 'none'}} />
           <div>
             <RoomLeftBar
               room={room}
@@ -148,7 +151,7 @@ class Room extends Component {
               createMessage={createMessage}
               toggleSaved={toggleSaved}
               myNametag={myNametag}
-              hideDMs={hideDMs}
+              hideDMs={!!hideDMs}
               setDefaultMessage={this.setDefaultMessage}
               mod={room.mod}
               messages={room.messages} />
@@ -210,18 +213,9 @@ const styles = {
   roomContainer: {
     overflowX: 'hidden'
   },
-
-  header: {
-    borderBottom: '3px solid #12726a',
+  appBar: {
     position: 'fixed',
-    top: 0,
-    zIndex: 100,
-    background: 'white',
-    width: '100%',
-    paddingLeft: 15,
-    paddingBottom: 5,
-    paddingRight: 15,
-    maxHeight: 80
+    boxShadow: 'none'
   },
   title: {
     marginTop: 10,
@@ -242,13 +236,6 @@ const styles = {
     float: 'left',
     padding: 0,
     cursor: 'pointer'
-  },
-
-  description: {
-    fontSize: 14,
-    [mobile]: {
-      display: 'none'
-    }
   },
   expanded: {
     animationName: slideOut,

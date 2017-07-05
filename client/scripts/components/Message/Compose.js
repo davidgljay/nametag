@@ -53,14 +53,14 @@ class Compose extends Component {
     }
 
     this.slashCommand = (message) => {
-      const {updateRoom, room: {id}} = this.props
-      const command = /^\/(\S+)\s(.+)/.exec(message)
+      const {updateRoom, roomId} = this.props
+      const command = /^\/(\S+)\s(.+)/.exec(message.text)
       if (!command) {
         return
       }
       switch (command[1]) {
         case 'welcome':
-          updateRoom(id, 'welcome', command[2])
+          updateRoom(roomId, {welcome: command[2]})
           break
         default:
           return
