@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import Nametag from '../Nametag/Nametag'
 import Norms from './Norms'
 import Join from './Join'
+import NametagIcon from '../Nametag/NametagIcon'
 import constants from '../../constants'
 import {Card, CardTitle, CardMedia} from 'material-ui/Card'
 import Checkbox from 'material-ui/Checkbox'
@@ -118,7 +119,14 @@ class RoomCard extends Component {
         onClick={this.flip}
         title={room.title} />
       <div style={styles.norms}>
-        <div>Will Enforce These Norms:</div>
+        <div style={styles.normsTitle}>
+          <NametagIcon
+            image={room.mod.image}
+            name={room.mod.name}
+            marginRight={5}
+            diameter={30} />
+          Has Set These Norms:
+        </div>
         <Norms norms={room.norms} showChecks />
         {
           me &&
@@ -223,6 +231,13 @@ const styles = {
   flippingBack: {
     backfaceVisibility: 'hidden',
     transformStyle: 'preserve-3d'
+  },
+  normsTitle: {
+    display: 'flex',
+    justifyContent: 'center',
+    fontWeight: 'bold',
+    lineHeight: '30px',
+    margin: 5
   },
   front: {
     zIndex: 2,

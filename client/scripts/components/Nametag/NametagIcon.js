@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react'
 import {primary, white} from '../../../styles/colors'
 
-const NametagIcon = ({image, name, diameter}) => {
+const NametagIcon = ({image, name, diameter, marginRight}) => {
   const imageStyle = {
     width: diameter,
     height: diameter,
@@ -13,7 +13,7 @@ const NametagIcon = ({image, name, diameter}) => {
     lineHeight: `#{diameter}px`,
     fontSize: diameter / 2
   }
-  return <div>
+  return <div style={{marginRight}}>
     {
       image
       ? <img src={image} alt={name} style={imageStyle} />
@@ -29,7 +29,8 @@ const {string, number} = PropTypes
 NametagIcon.propTypes = {
   image: string.isRequired,
   name: string.isRequired,
-  diameter: number.isRequired
+  diameter: number.isRequired,
+  marginRight: number
 }
 
 export default NametagIcon
