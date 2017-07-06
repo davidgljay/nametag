@@ -143,6 +143,7 @@ class Room extends Component {
               latestMessageUpdatedSubscription={latestMessageUpdatedSubscription}
               updateRoom={updateRoom}
               myNametag={myNametag}
+              setDefaultMessage={this.setDefaultMessage}
               expanded={this.state.leftBarExpanded}
               toggleLeftBar={this.toggleLeftBar} />
             <Messages

@@ -4,6 +4,7 @@ import Media from './Media'
 import MessageMenu from './MessageMenu'
 import MentionMenu from './MentionMenu'
 import ModAction from './ModAction'
+import NametagIcon from '../Nametag/NametagIcon'
 import {grey500, grey800, lightBlue100, yellow100} from 'material-ui/styles/colors'
 import ReactMarkdown from 'react-markdown'
 import {primary, white} from '../../../styles/colors'
@@ -75,11 +76,10 @@ class Message extends Component {
       messageStyle = {...styles.messageText, ...styles.directMessageOutgoing}
       callout = <div style={styles.dmCallout}>
       Private Message to {recipient.name}
-        {
-          recipient.image
-          ? <img style={styles.tinyIconImg} src={recipient.image} />
-        : <div style={{...styles.tinyIconImg, ...styles.tinyDefaultImage}}>{author.name.slice(0, 2)}</div>
-        }
+        <NametagIcon
+          image={author.image}
+          name={author.name}
+          diameter={20} />
       </div>
     } else if (recipient.id === myNametag.id) {
       messageStyle = {...styles.messageText, ...styles.directMessageIncoming}
@@ -95,11 +95,10 @@ class Message extends Component {
         id={id}
         onClick={() => this.setState({showActions: !showActions})}>
         <td style={styles.image} onClick={this.toggleMenu}>
-          {
-            author.image
-            ? <img style={styles.imageImg} src={author.image} />
-            : <div style={{...styles.imageImg, ...styles.defaultImage}}>{author.name.slice(0, 2)}</div>
-          }
+          <NametagIcon
+            image={author.image}
+            name={author.name}
+            diameter={50} />
         </td>
         <td style={messageStyle}>
           <div style={styles.name} onClick={this.toggleMenu}>

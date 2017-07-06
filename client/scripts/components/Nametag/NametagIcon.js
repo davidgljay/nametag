@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react'
 import {primary, white} from '../../../styles/colors'
 
-const Icon = ({image, name, onClick, diameter}) => {
+const NametagIcon = ({image, name, diameter}) => {
   const imageStyle = {
     width: diameter,
     height: diameter,
@@ -16,31 +16,29 @@ const Icon = ({image, name, onClick, diameter}) => {
   return <div>
     {
       image
-      ? <img src={image} alt={name} style={imageStyle} onClick={onClick} />
-      : <div style={{...imageStyle, ...defaultImageStyle}} onClick={onClick}>
+      ? <img src={image} alt={name} style={imageStyle} />
+      : <div style={{...imageStyle, ...defaultImageStyle}} >
         {name.slice(0, 2)}
       </div>
     }
   </div>
 }
 
-const {string, number, func} = PropTypes
+const {string, number} = PropTypes
 
-Icon.propTypes = {
+NametagIcon.propTypes = {
   image: string.isRequired,
   name: string.isRequired,
-  diameter: number.isRequired,
-  onClick: func.isRequired
+  diameter: number.isRequired
 }
 
-export default Icon
+export default NametagIcon
 
 const styles = {
   defaultImage: {
     backgroundColor: primary,
     textAlign: 'center',
     lineHeight: '50px',
-    color: white,
-    cursor: 'default'
+    color: white
   }
 }

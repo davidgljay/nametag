@@ -35,6 +35,7 @@ class RoomLeftBar extends Component {
       me,
       latestMessageUpdatedSubscription,
       updateRoom,
+      setDefaultMessage,
       myNametag,
       expanded,
       toggleLeftBar
@@ -116,7 +117,7 @@ class RoomLeftBar extends Component {
           this.state.toggles.nametags &&
           <Nametags
             mod={room.mod.id}
-            setDefaultMessage={this.setDefaultMessage}
+            setDefaultMessage={setDefaultMessage}
             nametags={room.nametags}
             hideDMs={hideDMs}
             myNametagId={myNametag.id} />

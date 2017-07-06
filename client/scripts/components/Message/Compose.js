@@ -3,6 +3,7 @@ import radium from 'radium'
 import {mobile} from '../../../styles/sizes'
 import {grey} from '../../../styles/colors'
 import FontIcon from 'material-ui/FontIcon'
+import NametagIcon from '../Nametag/NametagIcon'
 import IconButton from 'material-ui/IconButton'
 import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
@@ -131,11 +132,12 @@ class Compose extends Component {
     return <div style={styles.container}>
       {
         topic && <div style={styles.topicContainer}>
-          {
-          mod.image
-          ? <img style={styles.modImage} src={mod.image} />
-        : <div style={{...styles.modImage, ...styles.defaultImage}}>{mod.name.slice(0, 2)}</div>
-          }
+          <div style={styles.nametagIconContainer}>
+            <NametagIcon
+              image={mod.image}
+              name={mod.name}
+              diameter={20} />
+          </div>
           <div id='topic' style={styles.topic}>{topic}</div>
         </div>
       }
@@ -232,6 +234,9 @@ const styles = {
       marginLeft: 20
     }
   },
+  nametagIconContainer: {
+    marginRight: 5
+  },
   topic: {
     fontStyle: 'italic',
     fontSize: 14,
@@ -240,12 +245,6 @@ const styles = {
   topicContainer: {
     display: 'flex',
     paddingLeft: 25
-  },
-  modImage: {
-    marginRight: 10,
-    borderRadius: 10,
-    width: 20,
-    height: 20
   },
   compose: {
     display: 'flex'

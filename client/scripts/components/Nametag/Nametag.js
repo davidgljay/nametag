@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react'
 import Badges from '../Badge/Badges'
 import MentionMenu from '../Message/MentionMenu'
-import Icon from './Icon'
+import NametagIcon from './NametagIcon'
 
 class Nametag extends Component {
 
@@ -36,8 +36,8 @@ class Nametag extends Component {
       key={id}
       style={styles.nametag}>
       <div style={styles.main}>
-        <div style={styles.iconContainer}>
-          <Icon name={name} image={image} diameter={50} onClick={this.toggleMenu} />
+        <div style={styles.iconContainer} onClick={this.toggleMenu}>
+          <NametagIcon name={name} image={image} diameter={50} />
         </div>
         <div style={styles.details}>
           <div style={styles.name} onClick={this.toggleMenu}>{name}</div>
@@ -101,7 +101,8 @@ const styles = {
   },
   iconContainer: {
     marginLeft: 8,
-    marginRight: 8
+    marginRight: 8,
+    cursor: 'pointer'
   },
   nametag: {
     padding: 5,

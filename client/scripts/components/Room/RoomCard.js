@@ -118,7 +118,7 @@ class RoomCard extends Component {
         onClick={this.flip}
         title={room.title} />
       <div style={styles.norms}>
-        <h4>Conversation Norms</h4>
+        <div>Will Enforce These Norms:</div>
         <Norms norms={room.norms} showChecks />
         {
           me &&
