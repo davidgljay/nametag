@@ -44,7 +44,7 @@ class Join extends Component {
     if (me) {
       join =
         <div style={styles.join}>
-          <h4>Edit Your Nametag For This Conversation</h4>
+          <h4>How Would You Like To Appear In This Conversation?</h4>
           <EditNametag
             nametagEdit={nametag}
             me={me}

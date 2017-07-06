@@ -404,6 +404,9 @@ input CreateRoomInput {
   # The image to be displayed on the room's card
   image: String!
 
+  # An optional welcome message
+  welcome: String
+
   # The ID of the room's moderator
   mod: CreateNametagInput!
 

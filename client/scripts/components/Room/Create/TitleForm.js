@@ -2,10 +2,10 @@ import React, {PropTypes} from 'react'
 import TextField from 'material-ui/TextField'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
-import {grey500} from 'material-ui/styles/colors'
+import {grey} from '../../../../styles/colors'
 import _ from 'lodash'
 
-const TitleForm = ({badges, selectedBadges, desc, title, updateRoom, setClosed, closedIn, error}) =>
+const TitleForm = ({badges, selectedBadges, desc, title, welcome, updateRoom, setClosed, closedIn, error}) =>
   <div style={styles.titleForm}>
     <TextField
       style={styles.textfield}
@@ -24,6 +24,18 @@ const TitleForm = ({badges, selectedBadges, desc, title, updateRoom, setClosed, 
       inputStyle={styles.descriptionField}
       onChange={(e) => updateRoom('description', e.target.value)}
       floatingLabelText='Description' />
+    <TextField
+      style={styles.textfield}
+      value={welcome}
+      id='welcomeField'
+      multiLine
+      errorText={error && error.welcomeError}
+      inputStyle={styles.welcomeField}
+      onChange={(e) => updateRoom('welcome', e.target.value)}
+      floatingLabelText='Welcome Prompt' />
+    <div style={styles.helpText}>
+      (Optional) Users will be given this prompt when they enter the room.
+    </div>
     <div
       style={styles.textfield}>
       <div style={styles.closedAtHeader}>Keep conversation active for</div>
@@ -84,6 +96,11 @@ const styles = {
   descriptionField: {
     fontSize: 16
   },
+  helpText: {
+    color: grey,
+    fontSize: 14,
+    fontStyle: 'italic'
+  },
   counter: {
     marginLeft: 240,
     fontSize: 12,
@@ -98,7 +115,7 @@ const styles = {
     margin: 10
   },
   closedAtHeader: {
-    color: grey500,
+    color: grey,
     fontSize: 14
   }
 }

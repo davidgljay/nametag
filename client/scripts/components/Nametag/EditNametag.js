@@ -120,20 +120,6 @@ class EditNametag extends Component {
               floatingLabelStyle={floatingLabelStyle}
               underlineShow={false}
               searchText={nametag.name} />
-            {
-              room &&
-              <TextField
-                style={{width: 160}}
-                rows={2}
-                multiLine
-                id='editNametagBio'
-                fullWidth
-                errorText={error && error.bioError}
-                onChange={this.updateNametagProperty('bio')}
-                value={nametag.bio}
-                hintText='What brings you to this conversation?' />
-            }
-
           </div>
         </div>
         <Badges

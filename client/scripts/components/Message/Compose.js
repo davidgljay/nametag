@@ -56,7 +56,7 @@ class Compose extends Component {
     }
 
     this.slashCommand = (message) => {
-      const {updateRoom, roomId} = this.props
+      const {updateRoom, updateNametag, roomId, myNametag} = this.props
       const commandRegex = /^\/(\S+)\s(.+)/.exec(message)
       if (!commandRegex) {
         return
@@ -66,6 +66,15 @@ class Compose extends Component {
       switch (command) {
         case 'welcome':
           updateRoom(roomId, {welcome: text})
+          break
+        case 'intro':
+          updateNametag(myNametag.id, {bio: text})
+          break
+        case 'title':
+          updateRoom(roomId, {title: text})
+          break
+        case 'description':
+          updateRoom(roomId, {description: text})
           break
         default:
           return
@@ -149,6 +158,7 @@ class Compose extends Component {
             style={styles.textfield}
             onChange={this.onChange}
             autoComplete='off'
+            multiLine
             value={this.state.message} />
           <FlatButton
             style={styles.sendButton}
