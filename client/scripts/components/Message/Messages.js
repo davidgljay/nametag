@@ -42,7 +42,7 @@ class Messages extends Component {
   componentDidMount () {
     const {messages} = this.props
     if (messages.length > 0) {
-      document.getElementById(messages[messages.length - 1].id).scrollIntoViewIfNeeded()
+      document.getElementById(messages[messages.length - 1].id).scrollIntoView()
     }
   }
 

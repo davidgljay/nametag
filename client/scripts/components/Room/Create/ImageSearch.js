@@ -76,7 +76,7 @@ class ImageSearch extends Component {
 
     this.onSelectImage = () => {
       this.setState({loadingImage: false, imageChosen: true})
-      document.getElementById('roomPreview').scrollIntoViewIfNeeded()
+      document.getElementById('roomPreview').scrollIntoView()
     }
 
     this.onImageClick = (url) => () => {
