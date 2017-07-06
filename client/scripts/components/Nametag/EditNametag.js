@@ -3,7 +3,6 @@ import Badges from '../Badge/Badges'
 import { DropTarget } from 'react-dnd'
 import { dragTypes } from '../../constants'
 import {Card} from 'material-ui/Card'
-import TextField from 'material-ui/TextField'
 import AutoComplete from 'material-ui/AutoComplete'
 import NTIconMenu from './IconMenu'
 

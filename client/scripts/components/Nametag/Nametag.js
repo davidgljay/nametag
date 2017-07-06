@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react'
 import Badges from '../Badge/Badges'
 import MentionMenu from '../Message/MentionMenu'
-import {primary, white} from '../../../styles/colors'
+import Icon from './Icon'
 
 class Nametag extends Component {
 
@@ -36,13 +36,9 @@ class Nametag extends Component {
       key={id}
       style={styles.nametag}>
       <div style={styles.main}>
-        {
-          image
-          ? <img src={image} alt={name} style={styles.image} onClick={this.toggleMenu} />
-        : <div style={{...styles.image, ...styles.defaultImage}}onClick={this.toggleMenu}>
-          {name.slice(0, 2)}
+        <div style={styles.iconContainer}>
+          <Icon name={name} image={image} diameter={50} onClick={this.toggleMenu} />
         </div>
-        }
         <div style={styles.details}>
           <div style={styles.name} onClick={this.toggleMenu}>{name}</div>
           <div style={styles.bio}>{bio}</div>
@@ -103,21 +99,9 @@ const styles = {
     marginTop: 5,
     cursor: 'pointer'
   },
-  image: {
-    float: 'left',
-    margin: '3px 10px 3px 10px',
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    cursor: 'pointer'
-  },
-  defaultImage: {
-    backgroundColor: primary,
-    textAlign: 'center',
-    lineHeight: '50px',
-    fontSize: 22,
-    color: white,
-    cursor: 'default'
+  iconContainer: {
+    marginLeft: 8,
+    marginRight: 8
   },
   nametag: {
     padding: 5,
