@@ -26,7 +26,6 @@ const commands = {
     return this
       .waitForElementVisible('@editNametag')
       .setValue('@editNametagName', name)
-      .setValue('@editNametagBio', bio)
       .getLocationInView('@nextButton')
       .click('@nextButton')
   },

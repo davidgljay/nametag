@@ -10,7 +10,7 @@ const NametagIcon = ({image, name, diameter, marginRight}) => {
 
   const defaultImageStyle = {
     ...styles.defaultImage,
-    lineHeight: `#{diameter}px`,
+    lineHeight: `${diameter}px`,
     fontSize: diameter / 2
   }
   return <div style={{marginRight}}>
@@ -39,7 +39,6 @@ const styles = {
   defaultImage: {
     backgroundColor: primary,
     textAlign: 'center',
-    lineHeight: '50px',
     color: white
   }
 }

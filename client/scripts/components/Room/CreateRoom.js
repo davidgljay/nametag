@@ -156,10 +156,9 @@ class CreateRoom extends Component {
           }
         case 2:
           return {
-            valid: this.props.nametagEdits.new.name && this.props.nametagEdits.new.bio,
+            valid: this.props.nametagEdits.new.name,
             error: {
-              nameError: this.props.nametagEdits.new.name ? '' : 'Please choose a name for this room',
-              bioError: this.props.nametagEdits.new.bio ? '' : 'Please provide a brief bio'
+              nameError: this.props.nametagEdits.new.name ? '' : 'Please choose a name for this room'
             }
           }
         case 3:

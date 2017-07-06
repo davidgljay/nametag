@@ -131,6 +131,7 @@ class Room extends Component {
         !loading
         ? <div id='room'>
           <AppBar
+            id='roomTitle'
             title={room.title}
             style={styles.appBar}
             iconElementRight={backIcon}

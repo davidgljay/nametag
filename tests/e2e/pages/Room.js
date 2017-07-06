@@ -5,9 +5,7 @@ const commands = {
   assertLoaded ({title, description, norm}, {bio, name}) {
     return this.waitForElementVisible('#roomTitle')
     .assert.containsText('#roomTitle', title)
-    .assert.containsText('#roomDescription', description)
     .assert.containsText('@nametags', name)
-    .assert.containsText('@nametags', bio)
     .assert.containsText('#norms', norm)
   },
   postMessage (message) {

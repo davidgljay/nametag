@@ -46,7 +46,6 @@ const commands = {
       .waitForElementVisible('.agreeToNorms')
       .click('.agreeToNorms input')
       .setValue('@editNametagName', name)
-      .setValue('@editNametagBio', bio)
       .waitForElementVisible('@joinRoomButton')
       .click('@joinRoomButton')
   }
