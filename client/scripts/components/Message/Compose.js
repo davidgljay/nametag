@@ -226,12 +226,13 @@ const styles = {
     paddingBottom: 20,
     paddingTop: 10,
     background: '#FFF',
-    width: '100%',
+    width: 'calc(100% - 300px)',
     paddingRight: 15,
     zIndex: 40,
     marginLeft: 290,
     [mobile]: {
-      marginLeft: 20
+      marginLeft: 20,
+      width: 'calc(100% - 40px)'
     }
   },
   nametagIconContainer: {
@@ -255,7 +256,7 @@ const styles = {
   },
   textfield: {
     flex: 1,
-    width: 'inherit'
+    width: '100%'
   },
   mobileSelector: {
     left: 20,
