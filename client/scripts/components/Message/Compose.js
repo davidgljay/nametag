@@ -26,13 +26,20 @@ class Compose extends Component {
     }
 
     this.onChange = (e) => {
-      if (e.target.value.slice(-1) === '@') {
+      const text = e.target.value
+      if (text.slice(-1) === '@') {
         this.setState({showMentionMenu: true})
-      } else if (e.target.value.slice(-1) === ' ') {
+      } else if (text.slice(-1) === ' ') {
         this.setState({showMentionMenu: false})
       }
+      if (text.slice(-1) === '\n') {
+        this.post(e)
+        this.setState({message: ' '})
+        this.setState({message: ''})
+        return
+      }
       this.setState({
-        message: e.target.value,
+        message: text,
         nametagList: this.nametagList()
       })
     }
