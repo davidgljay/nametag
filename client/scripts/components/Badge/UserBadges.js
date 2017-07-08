@@ -19,7 +19,7 @@ class UserBadges extends Component {
     }
 
     this.mapBadges = (badges) => {
-      const {selectedBadges} = this.props
+      const {selectedBadges = []} = this.props
       if (!badges || badges.length === 0) {
         return <div style={styles.noBadges}>
           {
