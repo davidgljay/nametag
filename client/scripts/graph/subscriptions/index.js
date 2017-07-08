@@ -8,36 +8,6 @@ import LATEST_MESSAGE_UPDATED from './latestMessageUpdated.graphql'
 const clearObjectNulls = (object) => Object.keys(object).reduce(
       (obj, key) => object[key] ? {...obj, [key]: object[key]} : obj, {})
 
-// export const checkNametagPresence = subscribeToMore => roomId => subscribeToMore({
-//   document: CHECK_NAMETAG_PRESENCE,
-//   variables: {
-//     roomId
-//   },
-//   updateQuery: (oldData, {subscriptionData}) => {
-//     if (!subscriptionData.data) {
-//       return oldData
-//     }
-//     const {nametagId, present} = subscriptionData.data.nametagPresence
-//     const newNametags = oldData.room.nametags.reduce(
-//       (nametags, nametag, i) => {
-//         if (nametag.id === nametagId) {
-//           nametags[i] = {...nametag, present}
-//         }
-//         return nametags
-//       }, oldData.room.nametags.slice())
-//     return {
-//       ...oldData,
-//       room: {
-//         ...oldData.room,
-//         nametags: newNametags
-//       },
-//       me: {
-//         ...oldData.me
-//       }
-//     }
-//   }
-// })
-
 export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeToMore({
   document: MESSAGE_ADDED,
   variables: {
@@ -132,7 +102,8 @@ export const roomUpdated = subscribeToMore => (roomId) => subscribeToMore({
       ...oldData,
       room: {
         ...oldData.room,
-        ...clearObjectNulls(roomUpdated)
+        ...clearObjectNulls(roomUpdated),
+        __typename: 'Room'
       }
     }
   }
@@ -152,10 +123,10 @@ export const nametagUpdated = subscribeToMore => (roomId) => subscribeToMore({
     const nametags = oldData.room.nametags
     if (nametags.filter(n => n.id === nametagUpdated.id).length > 0) {
       newNametags = nametags.map(n => n.id === nametagUpdated.id
-        ? {...n, ...clearObjectNulls(nametagUpdated)}
+        ? {...n, ...clearObjectNulls(nametagUpdated), __typename: 'Nametag'}
         : n)
     } else {
-      newNametags = nametags.concat(nametagUpdated)
+      newNametags = nametags.concat({...nametagUpdated, __typename: 'Nametag'})
     }
 
     return {

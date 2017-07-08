@@ -27,7 +27,7 @@ const NametagIcon = ({image, name, diameter, marginRight}) => {
 const {string, number} = PropTypes
 
 NametagIcon.propTypes = {
-  image: string.isRequired,
+  image: string,
   name: string.isRequired,
   diameter: number.isRequired,
   marginRight: number
