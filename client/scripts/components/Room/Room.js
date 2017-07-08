@@ -49,7 +49,7 @@ class Room extends Component {
       const {me, room} = this.props.data
       const myNtId = me.nametags.reduce(
         (val, nametag) => nametag.room && nametag.room.id === room.id ? nametag.id : val, null
-      ) 
+      )
       return room.nametags.filter((nt) => nt.id === myNtId)[0]
     }
 
@@ -162,6 +162,7 @@ class Room extends Component {
             createMessage={createMessage}
             roomId={room.id}
             welcome={room.welcome}
+            topic={room.topic}
             mod={room.mod}
             updateRoom={updateRoom}
             updateNametag={updateNametag}

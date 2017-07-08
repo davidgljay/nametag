@@ -107,7 +107,7 @@ type Room {
   welcome: String
 
   # Topics of discussion in the room
-  topics:[Topic]
+  topic: String
 }
 
 # A topic of discussion in a room
@@ -457,6 +457,9 @@ input UpdateRoomInput {
   # The welcome given for the room
   welcome: String
 
+  # The current topic in a room
+  topic: String
+
 }
 
 # Input required to create a nametag
@@ -731,6 +734,9 @@ type UpdateRoom {
 
   # The welcome given for the room
   welcome: String
+
+  # The current topic of discussion in the room
+  topic: String
 
 }
 

@@ -93,6 +93,6 @@ const styles = {
     }
   },
   msgContainer: {
-    marginBottom: 75
+    marginBottom: 100
   }
 }

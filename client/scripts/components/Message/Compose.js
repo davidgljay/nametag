@@ -34,8 +34,6 @@ class Compose extends Component {
       }
       if (text.slice(-1) === '\n') {
         this.post(e)
-        this.setState({message: ' '})
-        this.setState({message: ''})
         return
       }
       this.setState({
@@ -78,11 +76,17 @@ class Compose extends Component {
         case 'intro':
           updateNametag(myNametag.id, {bio: text})
           break
+        case 'name':
+          updateNametag(myNametag.id, {name: text})
+          break
         case 'title':
           updateRoom(roomId, {title: text})
           break
         case 'description':
           updateRoom(roomId, {description: text})
+          break
+        case 'topic':
+          updateRoom(roomId, {topic: text})
           break
         default:
           return
@@ -133,19 +137,19 @@ class Compose extends Component {
   render () {
     // TODO: Add GIFs, image upload
 
-    const {welcome, mod} = this.props
+    const {welcome, topic, mod} = this.props
     const {showEmoji, message, showMentionMenu, posted} = this.state
-    const topic = posted ? '' : welcome
+    const prompt = posted ? topic : welcome
     return <div style={styles.container}>
       {
-        topic && <div style={styles.topicContainer}>
+        prompt && <div style={styles.topicContainer}>
           <div style={styles.nametagIconContainer}>
             <NametagIcon
               image={mod.image}
               name={mod.name}
               diameter={20} />
           </div>
-          <div id='topic' style={styles.topic}>{topic}</div>
+          <div id='topic' style={styles.topic}>{prompt}</div>
         </div>
       }
       <div style={styles.compose} id='compose'>

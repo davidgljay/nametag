@@ -84,11 +84,7 @@ class Login extends Component {
             this.setState({alert: res.error.message})
           }
           if (res.id) {
-            this.setState({
-              message: 'Log In',
-              alert: 'Your account has been created',
-              state: 'LOGIN'
-            })
+            this.login()
           }
         })
     }

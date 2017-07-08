@@ -5,6 +5,7 @@ subscription roomUpdated ($roomId: ID!) {
     description
     norms
     welcome
+    topic
     modOnlyDMs
   }
 }
