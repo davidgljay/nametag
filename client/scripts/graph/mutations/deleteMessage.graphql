@@ -1,0 +1,8 @@
+mutation deleteMessage($messageId: ID!, $roomId: Id!) {
+  deleteMessage(messageId: $messageId, roomId: $roomId) {
+    errors {
+      translation_key
+      message
+    }
+  }
+}

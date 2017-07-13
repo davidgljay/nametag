@@ -55,6 +55,7 @@ class Message extends Component {
       toggleSaved,
       myNametag,
       createMessage,
+      deleteMessage,
       hideDMs,
       setDefaultMessage
     } = this.props
@@ -146,6 +147,7 @@ class Message extends Component {
           norms={norms}
           text={text}
           mod={mod}
+          deleteMessage={deleteMessage}
           myNametag={myNametag}
           close={this.showModAction(false)}
           roomId={roomId}
@@ -179,6 +181,7 @@ Message.propTypes = {
   }).isRequired,
   createMessage: func.isRequired,
   mod: object.isRequired,
+  deleteMessage: func.isRequired,
   hideDMs: bool.isRequired,
   setDefaultMessage: func.isRequired
 }

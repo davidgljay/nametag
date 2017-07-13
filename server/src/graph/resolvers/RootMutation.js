@@ -78,6 +78,16 @@ const RootMutation = {
       .then(wrapResponse('message'))
     }
   },
+  deleteMessage: {
+    requires: 'ROOM_MOD',
+    resolve: (obj, {messageId, roomId}, {models: {Messages}}) =>
+      Messages.get(messageId)
+        .then(message => message.room === roomId
+          ? Messages.delete(messageId)
+          : Promise.reject(ErrNotInRoom)
+        )
+      .then(wrapResponse('messageDelete'))
+  }
   toggleSaved: {
     requires: 'LOGIN',
     resolve: (obj, {messageId, saved}, {user, models: {Messages}}) =>

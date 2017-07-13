@@ -74,6 +74,16 @@ const create = (context, msg) => {
 }
 
 /**
+ * Deletes a message
+ *
+ * @param {Object} context     graph context
+ * @param {Object} messageId   the id of the message to be deleted
+ *
+ **/
+
+ const delete = (context, messageId) => messagesTable.get(messageId).delete()
+
+/**
  * Checks a message for mentions and dms
  *
  * @param {Object} context     graph context
@@ -196,6 +206,7 @@ module.exports = (context) => ({
     getRoomMessages: (room, nametag) => getRoomMessages(context, room, nametag),
     getNametagMessages: (nametag) => getNametagMessages(context, nametag),
     create: (message) => create(context, message),
+    delete: (messageId) => delete(context, messageId),
     toggleSaved: (id, saved) => toggleSaved(context, id, saved)
   }
 })

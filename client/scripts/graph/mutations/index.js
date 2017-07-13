@@ -10,6 +10,7 @@ import UPDATE_NAMETAG from './updateNametag.graphql'
 import UPDATE_LATEST_VISIT from './updateLatestVisit.graphql'
 import UPDATE_BADGE_REQUEST_STATUS from './updateBadgeRequestStatus.graphql'
 import UPDATE_TOKEN from './updateToken.graphql'
+import DELETE_MESSAGE from './deleteMessage.graphql'
 import PASSWORD_RESET from './passwordReset.graphql'
 import SET_MOD_ONLY_DMS from './setModOnlyDMs.graphql'
 import PASSWORD_RESET_REQ from './passwordResetRequest.graphql'
@@ -251,6 +252,17 @@ export const createMessage = graphql(CREATE_MESSAGE, {
             }
           }
         }
+      }
+    })
+  })
+})
+
+export const deleteMessage = graphql(DELETE_MESSAGE, {
+  props: ({ownProps, mutate}) => ({
+    createBadge: (messageId, roomId) => mutate({
+      variables: {
+        messageId,
+        roomId
       }
     })
   })

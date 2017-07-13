@@ -640,6 +640,9 @@ type RootMutation {
   # Creates a message
   createMessage(message: CreateMessageInput!): CreateMessageResponse
 
+  # Deletes a message
+  deleteMessage(messageId: ID!): BasicResponse
+
   # Creates a nametag
   createNametag(nametag: CreateNametagInput!): CreateNametagResponse
 

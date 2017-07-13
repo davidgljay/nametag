@@ -93,7 +93,8 @@ class ModAction extends Component {
     }
 
     this.censorMessage = () => {
-      // TODO: Add functionality to censor a message
+      const {deleteMessage, msgId, roomId} = this.props
+      deleteMessage(msgId, roomId)
     }
 
     this.addNote = (e) => {
@@ -152,18 +153,22 @@ class ModAction extends Component {
   }
 }
 
+const {string, func, shape} = PropTypes
+
 ModAction.propTypes = {
-  msgId: PropTypes.string.isRequired,
-  close: PropTypes.func.isRequired,
-  author: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired
+  roomId: string.isRequired,
+  msgId: string.isRequired,
+  close: func.isRequired,
+  author: shape({
+    name: string.isRequired,
+    id: string.isRequired
   }).isRequired,
-  mod: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired
+  mod: shape({
+    name: string.isRequired,
+    id: string.isRequired
   }).isRequired,
-  createMessage: PropTypes.func.isRequired
+  deleteMessage: func.isRequired,
+  createMessage: func.isRequired
 }
 
 export default ModAction

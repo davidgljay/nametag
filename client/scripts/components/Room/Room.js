@@ -96,6 +96,7 @@ class Room extends Component {
       createMessage,
       updateRoom,
       updateNametag,
+      deleteMessage,
       toggleSaved
     } = this.props
 
@@ -154,6 +155,7 @@ class Room extends Component {
               toggleSaved={toggleSaved}
               myNametag={myNametag}
               hideDMs={!!hideDMs}
+              deleteMessage={deleteMessage}
               setDefaultMessage={this.setDefaultMessage}
               mod={room.mod}
               messages={room.messages} />
