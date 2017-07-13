@@ -19,7 +19,7 @@ class Compose extends Component {
     this.state = {
       message: '',
       showEmoji: false,
-      showMentionMenu: false,
+      showComposeMenu: '',
       nametagList: [],
       // TODO: lastMessage in nametag
       posted: false
@@ -28,9 +28,11 @@ class Compose extends Component {
     this.onChange = (e) => {
       const text = e.target.value
       if (text.slice(-1) === '@') {
-        this.setState({showMentionMenu: true})
+        this.setState({showComposeMenu: 'mention'})
+      } else if (text.slice(-1) === '/') {
+        this.setState({showComposeMenu: 'command'})
       } else if (text.slice(-1) === ' ') {
-        this.setState({showMentionMenu: false})
+        this.setState({showComposeMenu: ''})
       }
       if (text.slice(-1) === '\n') {
         this.post(e)
@@ -112,7 +114,15 @@ class Compose extends Component {
       e.preventDefault()
       this.setState({
         message: this.state.message.replace(/@\S*(?=[^@]*$)/, mention),
-        showMentionMenu: false
+        showComposeMenu: false
+      })
+    }
+
+    this.addCommand = command => e => {
+      e.preventDefault()
+      this.setState({
+        message: this.state.message.replace(/\/\S*(?=[^\/]*$)/, command),
+        showComposeMenu: false
       })
     }
   }
@@ -137,8 +147,36 @@ class Compose extends Component {
   render () {
     // TODO: Add GIFs, image upload
 
+    const commands = [
+      {
+        command: 'welcome',
+        mod: true,
+        description: 'Update this room\'s welcome prompt'
+      },
+      {
+        command: 'intro',
+        mod: false,
+        description: 'Update the intro message on your nametag'
+      },
+      {
+        command: 'title',
+        mod: true,
+        description: 'Update the room\'s title'
+      },
+      {
+        command: 'description',
+        mod: true,
+        description: 'Update the room\'s description'
+      },
+      {
+        command: 'topic',
+        mod: true,
+        description: 'Update the current topic of discussion'
+      }
+    ]
+
     const {welcome, topic, mod} = this.props
-    const {showEmoji, message, showMentionMenu, posted} = this.state
+    const {showEmoji, message, showComposeMenu, posted} = this.state
     const prompt = posted ? topic : welcome
     return <div style={styles.container}>
       {
@@ -185,18 +223,26 @@ class Compose extends Component {
               } />
         </form>
         <Popover
-          open={showMentionMenu}
+          open={showComposeMenu}
           anchorEl={document.getElementById('compose')}
           anchorOrigin={{horizontal: 'middle', vertical: 'top'}}
           targetOrigin={{horizontal: 'middle', vertical: 'bottom'}}
-          onRequestClose={() => this.setState({showMentionMenu: false})} >
+          onRequestClose={() => this.setState({showComposeMenu: false})} >
           <Menu>
             {
-              this.nametagList().map(name =>
+              showComposeMenu === 'mention' && this.nametagList().map(name =>
                 <MenuItem
                   key={name}
                   primaryText={`@${name}`}
                   onClick={this.addMention(`@${name} `)} />
+              )
+            }
+            {
+              showComposeMenu === 'command' && commands.map(({command, description}) =>
+                <MenuItem
+                  key={command}
+                  primaryText={`/${command} ${description}`}
+                  onClick={this.addMention(`\${command} `)} />
               )
             }
           </Menu>
