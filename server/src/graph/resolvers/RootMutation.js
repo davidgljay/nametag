@@ -87,7 +87,7 @@ const RootMutation = {
           : Promise.reject(ErrNotInRoom)
         )
       .then(wrapResponse('messageDelete'))
-  }
+  },
   toggleSaved: {
     requires: 'LOGIN',
     resolve: (obj, {messageId, saved}, {user, models: {Messages}}) =>

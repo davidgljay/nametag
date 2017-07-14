@@ -81,7 +81,7 @@ const create = (context, msg) => {
  *
  **/
 
- const delete = (context, messageId) => messagesTable.get(messageId).delete()
+ const deleteMessage = (context, messageId) => messagesTable.get(messageId).delete().run(context.conn)
 
 /**
  * Checks a message for mentions and dms
@@ -206,7 +206,7 @@ module.exports = (context) => ({
     getRoomMessages: (room, nametag) => getRoomMessages(context, room, nametag),
     getNametagMessages: (nametag) => getNametagMessages(context, nametag),
     create: (message) => create(context, message),
-    delete: (messageId) => delete(context, messageId),
+    delete: (messageId) => deleteMessage(context, messageId),
     toggleSaved: (id, saved) => toggleSaved(context, id, saved)
   }
 })

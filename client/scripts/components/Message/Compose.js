@@ -223,7 +223,7 @@ class Compose extends Component {
               } />
         </form>
         <Popover
-          open={showComposeMenu}
+          open={!!showComposeMenu}
           anchorEl={document.getElementById('compose')}
           anchorOrigin={{horizontal: 'middle', vertical: 'top'}}
           targetOrigin={{horizontal: 'middle', vertical: 'bottom'}}

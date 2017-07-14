@@ -259,7 +259,7 @@ export const createMessage = graphql(CREATE_MESSAGE, {
 
 export const deleteMessage = graphql(DELETE_MESSAGE, {
   props: ({ownProps, mutate}) => ({
-    createBadge: (messageId, roomId) => mutate({
+    deleteMessage: (messageId, roomId) => mutate({
       variables: {
         messageId,
         roomId
