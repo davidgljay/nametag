@@ -4,6 +4,7 @@ import {
   badgeRequestAdded,
   latestMessageUpdated,
   roomUpdated,
+  messageDeleted,
   nametagUpdated
 } from '../subscriptions'
 import ROOMS_QUERY from './roomsQuery.graphql'
@@ -60,6 +61,7 @@ export const roomQuery = graphql(ROOM_QUERY, {
   props: ({data}) => ({
     data,
     messageAddedSubscription: messageAdded(data.subscribeToMore),
+    messageDeletedSubscription: messageDeleted(data.subscribeToMore),
     latestMessageUpdatedSubscription: latestMessageUpdated(data.subscribeToMore),
     roomUpdatedSubscription: roomUpdated(data.subscribeToMore),
     nametagUpdatedSubscription: nametagUpdated(data.subscribeToMore)

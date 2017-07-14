@@ -1,0 +1,4 @@
+subscription messageDeleted ($roomId: ID!) {
+  messageDeleted(roomId: $roomId) {
+    messageId
+}

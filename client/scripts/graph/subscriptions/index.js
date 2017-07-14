@@ -4,6 +4,7 @@ import BADGE_REQUEST_ADDED from './badgeRequestAdded.graphql'
 import ROOM_UPDATED from './roomUpdated.graphql'
 import NAMETAG_UPDATED from './nametagUpdated.graphql'
 import LATEST_MESSAGE_UPDATED from './latestMessageUpdated.graphql'
+import MESSAGE_DELETED from './messageDeleted.graphql'
 
 const clearObjectNulls = (object) => Object.keys(object).reduce(
       (obj, key) => object[key] ? {...obj, [key]: object[key]} : obj, {})
@@ -33,6 +34,26 @@ export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeT
         messages: oldData.room.messages
           .concat(message)
           .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+      }
+    }
+  }
+})
+
+export const messageDeleted = subscribeToMore => (roomId) => subscribeToMore({
+  document: MESSAGE_DELETED,
+  variables: {
+    roomId
+  },
+  updateQuery: (oldData, {subscriptionData: {data: {messageDeleted}}}) => {
+    if (!messageDeleted) {
+      return oldData
+    }
+
+    return {
+      ...oldData,
+      room: {
+        ...oldData.room,
+        messages: oldData.room.messages.filter(msg => msg.id !== messageDeleted.messageId)
       }
     }
   }

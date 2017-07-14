@@ -72,10 +72,12 @@ class Room extends Component {
   }
 
   componentDidUpdate (prevProps) {
+    const {messageAddedSubscription, messageDeletedSubscription} = this.props
     const {loading, room} = this.props.data
     if (prevProps.data.loading && !loading) {
       this.showPresence()
-      this.props.messageAddedSubscription(room.id, this.getMyNametag().id)
+      messageAddedSubscription(room.id, this.getMyNametag().id)
+      messageDeletedSubscription(room.id)
     }
   }
 

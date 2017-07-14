@@ -16,6 +16,9 @@ const MessageSubscription = ({conn, models: {Rooms}}) => db.table('messages').ch
         // Send a new room message notification if necessary
         Rooms.notifyOfNewMessage(message.new_val.room)
       }
+      if (!message.new_val) {
+        pubsub.publish('messageDeleted', message.old_val)
+      }
     })
   })
 

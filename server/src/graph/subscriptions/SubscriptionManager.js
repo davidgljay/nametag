@@ -16,6 +16,11 @@ module.exports = new SubscriptionManager({
                             )
       }
     }),
+    messageDeleted: (options, args) => ({
+      messageDeleted: {
+        filter: message => message.room === args.roomId
+      }
+    }),
     nametagAdded: (options, args) => ({
       nametagAdded: {
         filter: nametag => nametag.room === args.roomId
