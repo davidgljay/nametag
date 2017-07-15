@@ -9,7 +9,7 @@ const messagesTable = db.table('messages')
  * @param {Object} context  graph context
  * @param {String} id       the ID of the message to be retrieved
  */
- const get = ({conn}, id) => messagesTable.get(id).run(conn)
+const get = ({conn}, id) => messagesTable.get(id).run(conn)
 
 /**
  * Returns the messages from a particular room to display to a user. Also displays
@@ -88,7 +88,7 @@ const create = (context, msg) => {
  *
  **/
 
- const deleteMessage = (context, messageId) => messagesTable.get(messageId).delete().run(context.conn)
+const deleteMessage = (context, messageId) => messagesTable.get(messageId).delete().run(context.conn)
 
 /**
  * Checks a message for mentions and dms

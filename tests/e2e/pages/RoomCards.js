@@ -18,8 +18,8 @@ const commands = {
     .setValue('@passForm', user.pass)
     .setValue('@confForm', user.pass)
     .click('@registerButton')
-    .waitForElementVisible('@submitLoginButton')
-    .click('@submitLoginButton')
+    // .waitForElementVisible('@submitLoginButton')
+    // .click('@submitLoginButton')
     .waitForElementVisible('@logoutButton')
   },
   registerInRoom (user) {
@@ -34,8 +34,8 @@ const commands = {
       .setValue('@passForm', user.pass)
       .setValue('@confForm', user.pass)
       .click('@registerButton')
-      .waitForElementVisible('@submitLoginButton')
-      .click('@submitLoginButton')
+      // .waitForElementVisible('@submitLoginButton')
+      // .click('@submitLoginButton')
       .waitForElementVisible('@logoutButton')
   },
   joinRoom ({name, bio}) {
