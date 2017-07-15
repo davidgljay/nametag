@@ -1,4 +1,4 @@
-mutation deleteMessage($messageId: ID!, $roomId: Id!) {
+mutation deleteMessage($messageId: ID!, $roomId: ID!) {
   deleteMessage(messageId: $messageId, roomId: $roomId) {
     errors {
       translation_key

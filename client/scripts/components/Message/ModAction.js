@@ -92,7 +92,7 @@ class ModAction extends Component {
       // TODO: Add functionality to remove user.
     }
 
-    this.censorMessage = () => {
+    this.removeMessage = () => {
       const {deleteMessage, msgId, roomId} = this.props
       deleteMessage(msgId, roomId)
     }
@@ -148,7 +148,7 @@ class ModAction extends Component {
         removeUser={this.removeUser}
         notifyBadge={this.notifyBadge}
         authorName={author.name}
-        censorMessage={this.censorMessage} />
+        removeMessage={this.removeMessage} />
     </Card>
   }
 }

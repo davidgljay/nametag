@@ -5,6 +5,13 @@ const notification = require('../../notifications')
 const messagesTable = db.table('messages')
 
 /**
+ * Returns a messages by ID.
+ * @param {Object} context  graph context
+ * @param {String} id       the ID of the message to be retrieved
+ */
+ const get = ({conn}, id) => messagesTable.get(id).run(conn)
+
+/**
  * Returns the messages from a particular room to display to a user. Also displays
  * direct messages to that user.
  * @param {Object} context     graph context
@@ -203,6 +210,7 @@ const mentionNotif = ({models: {Users, Rooms, Nametags}}, to, message, reason) =
 
 module.exports = (context) => ({
   Messages: {
+    get: (id) => get(context, id),
     getRoomMessages: (room, nametag) => getRoomMessages(context, room, nametag),
     getNametagMessages: (nametag) => getNametagMessages(context, nametag),
     create: (message) => create(context, message),
