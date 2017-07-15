@@ -53,7 +53,7 @@ export const messageDeleted = subscribeToMore => (roomId) => subscribeToMore({
       ...oldData,
       room: {
         ...oldData.room,
-        messages: oldData.room.messages.filter(msg => msg.id !== messageDeleted.messageId)
+        messages: oldData.room.messages.filter(msg => msg.id !== messageDeleted.id)
       }
     }
   }
