@@ -18,7 +18,10 @@ const EmojiReactions = ({reactions, addReaction, myNametagId, messageId}) => {
     alreadyClicked: reactionsHash[key].indexOf(myNametagId) > -1
   }))
 
-  const onReactionClick = emoji => e => addReaction(messageId, emoji, myNametagId)
+  const onReactionClick = emoji => e => {
+    e.preventDefault()
+    addReaction(messageId, emoji, myNametagId)
+  }
 
   return <div style={styles.container}> {
         reactionsArray.map(reaction =>
@@ -48,7 +51,8 @@ export default EmojiReactions
 
 const styles = {
   container: {
-    display: 'flex'
+    display: 'flex',
+    marginTop: 3
   },
   reaction: {
     border: `1px solid ${grey}`,

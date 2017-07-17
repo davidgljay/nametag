@@ -21,6 +21,7 @@ class Messages extends Component {
         myNametag,
         mod,
         createMessage,
+        addReaction,
         setDefaultMessage,
         hideDMs,
         deleteMessage
@@ -32,7 +33,7 @@ class Messages extends Component {
         hideDMs={hideDMs}
         toggleEmoji={this.toggleEmoji}
         deleteMessage={deleteMessage}
-        addReaction={this.addReaction}
+        addReaction={addReaction}
         setDefaultMessage={setDefaultMessage}
         norms={norms}
         mod={mod}
