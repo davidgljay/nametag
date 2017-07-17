@@ -99,8 +99,7 @@ class Room extends Component {
       updateRoom,
       updateNametag,
       deleteMessage,
-      addReaction,
-      toggleSaved
+      addReaction
     } = this.props
 
     const {defaultMessage} = this.state

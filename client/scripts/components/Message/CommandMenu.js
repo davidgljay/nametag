@@ -1,7 +1,6 @@
 import React, {PropTypes} from 'react'
 import MenuItem from 'material-ui/MenuItem'
 import Menu from 'material-ui/Menu'
-import {grey} from '../../../styles/colors'
 import Popover from 'material-ui/Popover'
 
 const CommandMenu = ({isMod, setDefaultMessage, onRequestClose, open, anchor}) => {
@@ -57,7 +56,7 @@ const CommandMenu = ({isMod, setDefaultMessage, onRequestClose, open, anchor}) =
             <MenuItem
               key={command}
               style={styles.commandMenu}
-              primaryText={`/${command} ${description}`}
+              primaryText={`/${command}: ${description}`}
               onClick={onMenuItemClick(command)} />
             )
         }
@@ -77,8 +76,5 @@ CommandMenu.propTypes = {
 export default CommandMenu
 
 const styles = {
-  commandMenu: {
-    color: grey,
-    fontStyle: 'italic'
-  }
+  commandMenu: {}
 }
