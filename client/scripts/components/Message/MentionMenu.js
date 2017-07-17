@@ -3,7 +3,7 @@ import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 
-const MentionMenu = ({name, hideDMs, showMenu, toggleMenu, setDefaultMessage}) => {
+const MentionMenu = ({name, hideDMs, open, anchor, toggleMenu, setDefaultMessage}) => {
   const setMessage = message => e => {
     e.preventDefault()
     setDefaultMessage(message)
@@ -12,8 +12,8 @@ const MentionMenu = ({name, hideDMs, showMenu, toggleMenu, setDefaultMessage}) =
 
   return <div>
     <Popover
-      open={!!showMenu}
-      anchorEl={showMenu}
+      open={open}
+      anchorEl={anchor}
       anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
       targetOrigin={{horizontal: 'left', vertical: 'top'}}
       onRequestClose={toggleMenu}>
@@ -34,12 +34,13 @@ const MentionMenu = ({name, hideDMs, showMenu, toggleMenu, setDefaultMessage}) =
   </div>
 }
 
-const {func, string, object} = PropTypes
+const {func, string, bool, object} = PropTypes
 MentionMenu.propTypes = {
   toggleMenu: func.isRequired,
   name: string.isRequired,
   setDefaultMessage: func.isRequired,
-  showMenu: object
+  anchor: object,
+  open: bool.isRequired
 }
 
 export default MentionMenu

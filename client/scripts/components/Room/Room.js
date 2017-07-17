@@ -168,6 +168,7 @@ class Room extends Component {
             welcome={room.welcome}
             topic={room.topic}
             mod={room.mod}
+            setDefaultMessage={this.setDefaultMessage}
             updateRoom={updateRoom}
             updateNametag={updateNametag}
             nametags={room.nametags}

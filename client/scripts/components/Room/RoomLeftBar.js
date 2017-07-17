@@ -83,6 +83,7 @@ class RoomLeftBar extends Component {
           <Notifications
             latestMessageUpdatedSubscription={latestMessageUpdatedSubscription}
             nametags={me.nametags}
+            myNametag={myNametag}
             roomId={room.id} />
         }
         {

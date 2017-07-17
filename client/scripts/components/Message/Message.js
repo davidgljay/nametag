@@ -3,6 +3,7 @@ import moment from 'moment'
 import Media from './Media'
 import MessageMenu from './MessageMenu'
 import MentionMenu from './MentionMenu'
+import CommandMenu from './CommandMenu'
 import ModAction from './ModAction'
 import NametagIcon from '../Nametag/NametagIcon'
 import ReactMarkdown from 'react-markdown'
@@ -14,7 +15,7 @@ class Message extends Component {
 
   constructor (props) {
     super(props)
-    this.state = {modAction: false, showActions: false, showMenu: null}
+    this.state = {modAction: false, showActions: false, showMenu: ''}
 
     this.showModAction = (open) => (e) => {
       if (e) { e.preventDefault() }
@@ -30,11 +31,13 @@ class Message extends Component {
     }
 
     this.toggleMenu = e => {
+      const {myNametag, message: {author}} = this.props
       if (e && e.preventDefault) {
         e.preventDefault()
       }
+      const target = author.id === myNametag.id ? 'commands' : 'mentions'
       this.setState({
-        showMenu: this.state.showMenu ? null : e.currentTarget
+        showMenu: this.state.showMenu ? '' : target
       })
     }
   }
@@ -92,6 +95,8 @@ class Message extends Component {
     // Getting around Markdown's splitting of the '_' character in a hacky way for now
     const emojiText = text.replace(/(?=\S+)_(?=\S+:)/g, '~@~A~')
 
+    const isMod = mod.id === author.id
+
     return <div>
       <tr
         className='message'
@@ -145,10 +150,17 @@ class Message extends Component {
           </div>
           <MentionMenu
             name={author.name}
-            hideDMs={hideDMs && mod.id !== author.id}
-            showMenu={showMenu}
+            hideDMs={hideDMs && !isMod}
+            open={showMenu === 'mentions'}
+            anchor={document.getElementById(id)}
             toggleMenu={this.toggleMenu}
             setDefaultMessage={setDefaultMessage} />
+          <CommandMenu
+            isMod={isMod}
+            setDefaultMessage={setDefaultMessage}
+            anchor={document.getElementById(id)}
+            onRequestClose={this.toggleMenu}
+            open={showMenu === 'commands'} />
         </td>
       </tr>
       {

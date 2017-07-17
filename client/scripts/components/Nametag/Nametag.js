@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react'
 import Badges from '../Badge/Badges'
 import MentionMenu from '../Message/MentionMenu'
+import CommandMenu from '../Message/CommandMenu'
 import NametagIcon from './NametagIcon'
 import EmojiText from '../Message/EmojiText'
 
@@ -10,15 +11,17 @@ class Nametag extends Component {
     super(props)
 
     this.state = {
-      showMenu: null
+      showMenu: ''
     }
 
     this.toggleMenu = e => {
+      const {nametag: {id}, myNametagId} = this.props
       if (e && e.preventDefault) {
         e.preventDefault()
       }
+      const target = id === myNametagId ? 'commands' : 'mentions'
       this.setState({
-        showMenu: this.state.showMenu ? null : e.currentTarget
+        showMenu: this.state.showMenu ? '' : target
       })
     }
   }
@@ -35,6 +38,7 @@ class Nametag extends Component {
 
     return <div
       key={id}
+      id={id}
       style={styles.nametag}>
       <div style={styles.main}>
         <div style={styles.iconContainer} onClick={this.toggleMenu}>
@@ -51,13 +55,22 @@ class Nametag extends Component {
       <Badges badges={badges} />
       {
         setDefaultMessage &&
-        <MentionMenu
-          name={name}
-          hideDMs={hideDMs && mod !== id}
-          showMenu={showMenu}
-          toggleMenu={this.toggleMenu}
-          setDefaultMessage={setDefaultMessage} />
+        <div>
+          <MentionMenu
+            name={name}
+            hideDMs={hideDMs && mod !== id}
+            open={showMenu === 'mentions'}
+            anchor={document.getElementById(id)}
+            toggleMenu={this.toggleMenu}
+            setDefaultMessage={setDefaultMessage} />
+          <CommandMenu
+            open={showMenu === 'commands'}
+            anchor={document.getElementById(id)}
+            onRequestClose={this.toggleMenu}
+            setDefaultMessage={setDefaultMessage} />
+        </div>
       }
+
     </div>
   }
 }

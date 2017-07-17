@@ -12,6 +12,7 @@ import Menu from 'material-ui/Menu'
 import {Picker} from 'emoji-mart'
 import emojiText from 'emoji-text'
 import MenuItem from 'material-ui/MenuItem'
+import CommandMenu from './CommandMenu'
 import key from 'keymaster'
 
 class Compose extends Component {
@@ -122,6 +123,10 @@ class Compose extends Component {
         showComposeMenu: false
       })
     }
+
+    this.closeMenus = () => {
+      this.setState({showComposeMenu: false})
+    }
   }
 
   componentWillMount () {
@@ -144,35 +149,7 @@ class Compose extends Component {
   render () {
     // TODO: Add GIFs, image upload
 
-    const commands = [
-      {
-        command: 'welcome',
-        mod: true,
-        description: 'Update this room\'s welcome prompt'
-      },
-      {
-        command: 'intro',
-        mod: false,
-        description: 'Update the intro message on your nametag'
-      },
-      {
-        command: 'title',
-        mod: true,
-        description: 'Update the room\'s title'
-      },
-      {
-        command: 'description',
-        mod: true,
-        description: 'Update the room\'s description'
-      },
-      {
-        command: 'topic',
-        mod: true,
-        description: 'Update the current topic of discussion'
-      }
-    ]
-
-    const {welcome, topic, mod} = this.props
+    const {welcome, topic, mod, myNametag, setDefaultMessage} = this.props
     const {showEmoji, message, showComposeMenu, posted} = this.state
     const prompt = posted ? topic : welcome
     return <div style={styles.container}>
@@ -228,30 +205,28 @@ class Compose extends Component {
               } />
         </form>
         <Popover
-          open={!!showComposeMenu}
+          open={showComposeMenu === 'mention'}
           anchorEl={document.getElementById('compose')}
           anchorOrigin={{horizontal: 'middle', vertical: 'top'}}
           targetOrigin={{horizontal: 'middle', vertical: 'bottom'}}
-          onRequestClose={() => this.setState({showComposeMenu: false})} >
+          onRequestClose={this.closeMenus} >
           <Menu>
             {
-              showComposeMenu === 'mention' && this.nametagList().map(name =>
+              this.nametagList().map(name =>
                 <MenuItem
                   key={name}
                   primaryText={`@${name}`}
                   onClick={this.addMention(`@${name} `)} />
               )
             }
-            {
-              showComposeMenu === 'command' && commands.map(({command, description}) =>
-                <MenuItem
-                  key={command}
-                  primaryText={`/${command} ${description}`}
-                  onClick={this.addCommand(`/${command} `)} />
-              )
-            }
           </Menu>
         </Popover>
+        <CommandMenu
+          isMod={myNametag.id === mod.id}
+          open={showComposeMenu === 'command'}
+          anchor={document.getElementById('compose')}
+          onRequestClose={this.closeMenus}
+          setDefaultMessage={setDefaultMessage} />
       </div>
     </div>
   }
@@ -268,6 +243,7 @@ Compose.propTypes = {
   createMessage: func.isRequired,
   updateRoom: func.isRequired,
   defaultMessage: string,
+  setDefaultMessage: func.isRequired,
   welcome: string,
   posted: bool,
   mod: shape({
