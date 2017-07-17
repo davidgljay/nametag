@@ -251,7 +251,7 @@ class Compose extends Component {
                 <MenuItem
                   key={command}
                   primaryText={`/${command} ${description}`}
-                  onClick={this.addMention(`\${command} `)} />
+                  onClick={this.addCommand(`/${command} `)} />
               )
             }
           </Menu>
