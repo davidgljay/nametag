@@ -1,0 +1,8 @@
+mutation AddReaction ($messageId: ID!, $emoji: String!, $nametagId: ID!) {
+  addReaction(messageId: $messageId, emoji: $emoji, $nametagId: nametagId) {
+    errors {
+      translation_key
+      message
+    }
+  }
+}

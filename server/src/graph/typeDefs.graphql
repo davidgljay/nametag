@@ -137,11 +137,24 @@ type Message {
   # The id of the room that where the message was created
   room: Room!
 
+  # Emoji reactions to the message
+  reactions: [EmojiReaction]
+
   # Indicates whether the message has been saved for viewing after the room has closed
   saved: Boolean
 
   # Time when the message was created
   createdAt: Date!
+
+}
+
+# Emoji reactions to a message
+type EmojiReaction {
+  # The emoji of the reaction
+  emoji: String!
+
+  # The nametags who have provided this reaction
+  nametags: [ID!]
 
 }
 
@@ -657,6 +670,9 @@ type RootMutation {
 
   # Creates a badge granter
   createGranter(granter: CreateGranterInput!): CreateGranterResponse
+
+  # Adds a reaction to a message
+  addReaction(messageId: ID!, emoji: String!, nametagId: ID!): BasicResponse
 
   # Saves a message
   toggleSaved(messageId: ID!, saved: Boolean!): BasicResponse

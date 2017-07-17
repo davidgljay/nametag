@@ -208,6 +208,21 @@ const mentionNotif = ({models: {Users, Rooms, Nametags}}, to, message, reason) =
     : null
   )
 
+  /**
+   * Adds an emoji reaction to a message
+   *
+   * @param {Object} context     graph context
+   * @param {String} messageId   the message being reacted to
+   * @param {String} emoji      the emoji of the reaction
+   * @param {String} nametagId  the id of the nametag who created the reaction
+   *
+   **/
+
+const addReaction = ({conn}, messageId, emoji, nametagId) =>
+  messagesTable.get(messageId)
+    .update(message => ({reactions: message('reactions').append({emoji, nametagId})}))
+    .run(conn)
+
 module.exports = (context) => ({
   Messages: {
     get: (id) => get(context, id),
@@ -215,6 +230,7 @@ module.exports = (context) => ({
     getNametagMessages: (nametag) => getNametagMessages(context, nametag),
     create: (message) => create(context, message),
     delete: (messageId) => deleteMessage(context, messageId),
+    addReaction: (messageId, emoji, nametagId) => addReaction(context, messageId, emoji, nametagId),
     toggleSaved: (id, saved) => toggleSaved(context, id, saved)
   }
 })

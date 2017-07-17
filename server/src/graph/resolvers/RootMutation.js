@@ -86,13 +86,19 @@ const RootMutation = {
           ? Messages.delete(messageId)
           : Promise.reject(ErrNotInRoom)
         )
-      .then(wrapResponse('messageDelete'))
+      .then(wrapResponse('deleteMessage'))
+  },
+  addReaction: {
+    requires: 'LOGIN',
+    resolve: (obj, {messageId, emoji, nametagId}, {models: {Messages}}) =>
+      Messages.addReaction(messageId, emoji, nametagId)
+      .then(wrapResponse('addReaction'))
   },
   toggleSaved: {
     requires: 'LOGIN',
-    resolve: (obj, {messageId, saved}, {user, models: {Messages}}) =>
+    resolve: (obj, {messageId, saved}, {models: {Messages}}) =>
     Messages.toggleSaved(messageId, saved)
-    .then(wrapResponse('toggleSaved'))
+      .then(wrapResponse('toggleSaved'))
   },
   createNametag: {
     requires: 'LOGIN',
