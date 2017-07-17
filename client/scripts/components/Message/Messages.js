@@ -2,18 +2,23 @@ import React, { Component, PropTypes} from 'react'
 import Message from './Message'
 import {mobile} from '../../../styles/sizes'
 import radium from 'radium'
+import Popover from 'material-ui/Popover'
+import {Picker} from 'emoji-mart'
 
 class Messages extends Component {
 
   constructor (props) {
     super(props)
 
+    this.state = {
+      showEmoji: ''
+    }
+
     this.mapMessage = (message) => {
       const {
         norms,
         roomId,
         myNametag,
-        toggleSaved,
         mod,
         createMessage,
         setDefaultMessage,
@@ -25,11 +30,11 @@ class Messages extends Component {
         roomId={roomId}
         key={message.id}
         hideDMs={hideDMs}
+        toggleEmoji={this.toggleEmoji}
         deleteMessage={deleteMessage}
         setDefaultMessage={setDefaultMessage}
         norms={norms}
         mod={mod}
-        toggleSaved={toggleSaved}
         createMessage={createMessage}
         myNametag={myNametag} />
     }
@@ -48,6 +53,10 @@ class Messages extends Component {
         }, 0)
       }
     }
+
+    this.toggleEmoji = (id) => (e) => {
+      this.setState({showEmoji: id})
+    }
   }
 
   componentDidMount () {
@@ -63,7 +72,19 @@ class Messages extends Component {
 
   render () {
     const {messages} = this.props
+    const {showEmoji} = this.state
     return <div style={styles.messages}>
+      <Popover
+        open={!!showEmoji}
+        anchorEl={document.getElementById('compose')}
+        overlayStyle={{opacity: 0}}
+        onRequestClose={this.toggleEmoji('')}>
+        <Picker
+          set='emojione'
+          autoFocus
+          emoji='dancer'
+          title='' />
+      </Popover>
       <table style={styles.msgContainer}>
         <tbody>
           {

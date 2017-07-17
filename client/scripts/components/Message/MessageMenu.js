@@ -15,9 +15,8 @@ class MessageMenu extends Component {
   }
 
   render () {
-    const {id, saved, showModAction, showActions, toggleSaved, isDM} = this.props
-    const isMobile = window.innerWidth < 800
-    const pinStyle = saved ? {...styles.actionIcon, ...styles.savedIcon} : styles.actionIcon
+    const {id, showModAction, toggleEmoji, showActions, isDM} = this.props
+    const isMobile = false
     return <div style={styles.actionsContainer}>
       {
         !isMobile || showActions
@@ -25,10 +24,11 @@ class MessageMenu extends Component {
           {
             !isDM &&
             <FontIcon
-              key='pinIcon'
-              className='fa fa-thumb-tack'
-              onClick={() => toggleSaved(id, !saved)}
-              style={pinStyle} />
+              style={styles.actionIcon}
+              onClick={toggleEmoji(id)}
+              className='material-icons'>
+              tag_faces
+            </FontIcon>
           }
           <FontIcon
             key='flagIcon'
@@ -51,13 +51,13 @@ class MessageMenu extends Component {
   }
 }
 
+const {func, bool, string} = PropTypes
 MessageMenu.propTypes = {
-  showModAction: PropTypes.func.isRequired,
-  showActions: PropTypes.bool.isRequired,
-  isDM: PropTypes.bool.isRequired,
-  toggleSaved: PropTypes.func.isRequired,
-  saved: PropTypes.bool,
-  id: PropTypes.string.isRequired
+  showModAction: func.isRequired,
+  showActions: bool.isRequired,
+  isDM: bool.isRequired,
+  toggleEmoji: func.isRequired,
+  id: string.isRequired
 }
 
 export default radium(MessageMenu)
@@ -84,11 +84,6 @@ const styles = {
   actions: {
     height: 22,
     display: 'inline-block',
-    fontSize: 14,
-    [mobile]: {
-      fontSize: 32,
-      display: 'block',
-      height: 36
-    }
+    fontSize: 16
   }
 }

@@ -47,13 +47,12 @@ class Message extends Component {
         author,
         createdAt,
         text,
-        recipient,
-        saved
+        recipient
       },
       norms,
       roomId,
       mod,
-      toggleSaved,
+      toggleEmoji,
       myNametag,
       createMessage,
       deleteMessage,
@@ -108,8 +107,8 @@ class Message extends Component {
             {author.name}
           </div>
           {
-              callout
-            }
+            callout
+          }
           <div style={styles.text} className='messageText'>
             <ReactMarkdown
               containerTagName={'span'}
@@ -131,8 +130,7 @@ class Message extends Component {
                 showModAction={this.showModAction}
                 showActions={showActions}
                 isDM={recipient !== null}
-                toggleSaved={toggleSaved}
-                saved={saved}
+                toggleEmoji={toggleEmoji}
                 id={id} />
             }
             <div style={styles.date}>
