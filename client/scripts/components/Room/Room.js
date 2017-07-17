@@ -154,7 +154,6 @@ class Room extends Component {
               roomId={room.id}
               norms={room.norms}
               createMessage={createMessage}
-              toggleSaved={toggleSaved}
               myNametag={myNametag}
               hideDMs={!!hideDMs}
               addReaction={addReaction}

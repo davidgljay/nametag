@@ -5,10 +5,10 @@ import MessageMenu from './MessageMenu'
 import MentionMenu from './MentionMenu'
 import ModAction from './ModAction'
 import NametagIcon from '../Nametag/NametagIcon'
-import {grey500, grey800, lightBlue100, yellow100} from 'material-ui/styles/colors'
 import ReactMarkdown from 'react-markdown'
 import EmojiText from './EmojiText'
-import {primary, white} from '../../../styles/colors'
+import EmojiReactions from './EmojiReactions'
+import {primary, white, grey} from '../../../styles/colors'
 
 class Message extends Component {
 
@@ -47,13 +47,15 @@ class Message extends Component {
         author,
         createdAt,
         text,
-        recipient
+        recipient,
+        reactions
       },
       norms,
       roomId,
       mod,
       toggleEmoji,
       myNametag,
+      addReaction,
       createMessage,
       deleteMessage,
       hideDMs,
@@ -125,14 +127,18 @@ class Message extends Component {
           </div>
           {media}
           <div style={styles.below}>
-            {
-              <MessageMenu
-                showModAction={this.showModAction}
-                showActions={showActions}
-                isDM={recipient !== null}
-                toggleEmoji={toggleEmoji}
-                id={id} />
-            }
+            <EmojiReactions
+              reactions={reactions}
+              addReaction={addReaction}
+              myNametagId={myNametag.id}
+              messageId={id}
+              />
+            <MessageMenu
+              showModAction={this.showModAction}
+              showActions={showActions}
+              isDM={recipient !== null}
+              toggleEmoji={toggleEmoji}
+              id={id} />
             <div style={styles.date}>
               {moment(createdAt).format('h:mm A, ddd MMM DD YYYY')}
             </div>
@@ -186,6 +192,7 @@ Message.propTypes = {
     id: string.isRequired
   }).isRequired,
   createMessage: func.isRequired,
+  addReaction: func.isRequired,
   mod: object.isRequired,
   deleteMessage: func.isRequired,
   hideDMs: bool.isRequired,
@@ -202,13 +209,13 @@ const styles = {
     marginBottom: 10
   },
   directMessageIncoming: {
-    backgroundColor: lightBlue100
+    backgroundColor: grey
   },
   directMessageOutgoing: {
-    backgroundColor: yellow100
+    backgroundColor: grey
   },
   dmCallout: {
-    color: grey800,
+    color: grey,
     fontStyle: 'italic',
     display: 'inline-block',
     marginLeft: 10
@@ -232,6 +239,9 @@ const styles = {
     verticalAlign: 'top',
     cursor: 'pointer'
   },
+  below: {
+    display: 'flex'
+  },
   imageImg: {
     borderRadius: 25,
     width: 50,
@@ -249,15 +259,14 @@ const styles = {
     fontWeight: 'bold',
     fontSize: 14,
     marginBottom: 5,
-    display: 'inline-block',
     cursor: 'pointer'
   },
   date: {
     fontSize: 10,
     fontStyle: 'italic',
-    color: grey500,
+    color: grey,
     height: 22,
-    display: 'inline-block'
+    lineHeight: '22px'
   },
   text: {
     fontSize: 16
