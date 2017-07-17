@@ -220,7 +220,7 @@ const mentionNotif = ({models: {Users, Rooms, Nametags}}, to, message, reason) =
 
 const addReaction = ({conn}, messageId, emoji, nametagId) =>
   messagesTable.get(messageId)
-    .update(message => ({reactions: message('reactions').append({emoji, nametagId})}))
+    .update(message => ({reactions: message('reactions').setInsert({emoji, nametagId})}))
     .run(conn)
 
 module.exports = (context) => ({

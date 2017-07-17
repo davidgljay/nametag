@@ -100,10 +100,6 @@ class Compose extends Component {
       this.setState({showEmoji: open})
     }
 
-    this.handleEmoji = (emoji) => {
-      this.setState({message: this.state.message + ':' + emoji + ':'})
-    }
-
     this.nametagList = () => {
       const query = /@\S*/.exec(this.state.message)
       return query ? this.props.nametags.filter(n => n.name.match(query[0].slice(1)))

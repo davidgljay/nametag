@@ -99,6 +99,7 @@ class Room extends Component {
       updateRoom,
       updateNametag,
       deleteMessage,
+      addReaction,
       toggleSaved
     } = this.props
 
@@ -128,7 +129,6 @@ class Room extends Component {
        </FontIcon>
     </IconButton>
 
-    // TODO: Add swipe to show bar, remove bar icon on desktop mode
     return <div style={styles.roomContainer}>
       {
         !loading
@@ -157,6 +157,7 @@ class Room extends Component {
               toggleSaved={toggleSaved}
               myNametag={myNametag}
               hideDMs={!!hideDMs}
+              addReaction={addReaction}
               deleteMessage={deleteMessage}
               setDefaultMessage={this.setDefaultMessage}
               mod={room.mod}
@@ -202,6 +203,7 @@ Room.propTypes = {
   updateRoom: func.isRequired,
   createMessage: func.isRequired,
   toggleSaved: func.isRequired,
+  addReaction: func.isRequired,
   updateToken: func.isRequired
 }
 

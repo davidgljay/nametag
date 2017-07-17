@@ -57,6 +57,13 @@ class Messages extends Component {
     this.toggleEmoji = (id) => (e) => {
       this.setState({showEmoji: id})
     }
+
+    this.addReaction = (emoji) => {
+      const {addReaction, myNametag} = this.props
+      const {showEmoji} = this.state
+      addReaction(showEmoji, emoji.colons, myNametag.id)
+      this.setState({showEmoji: ''})
+    }
   }
 
   componentDidMount () {
@@ -83,7 +90,8 @@ class Messages extends Component {
           set='emojione'
           autoFocus
           emoji='dancer'
-          title='' />
+          title=''
+          onClick={this.addReaction} />
       </Popover>
       <table style={styles.msgContainer}>
         <tbody>
@@ -96,16 +104,19 @@ class Messages extends Component {
   }
 }
 
-const {string, arrayOf, object, func, bool} = PropTypes
+const {string, arrayOf, object, func, bool, shape} = PropTypes
 
 Messages.propTypes = {
   roomId: string.isRequired,
   messages: arrayOf(object).isRequired,
   createMessage: func.isRequired,
   toggleSaved: func.isRequired,
-  myNametag: object.isRequired,
+  myNametag: shape({
+    id: string.isRequired
+  }).isRequired,
   hideDMs: bool.isRequired,
   deleteMessage: func.isRequired,
+  addReaction: func.isRequired,
   setDefaultMessage: func.isRequired
 }
 

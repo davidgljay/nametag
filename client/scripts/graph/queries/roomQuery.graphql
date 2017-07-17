@@ -27,6 +27,10 @@ query roomQuery($id: ID!){
         image
         name
       }
+      reactions {
+        emoji
+        nametagId
+      }
       recipient {
         id
         image

@@ -153,8 +153,8 @@ type EmojiReaction {
   # The emoji of the reaction
   emoji: String!
 
-  # The nametags who have provided this reaction
-  nametags: [ID!]
+  # The nametag of the person who provided this reaction
+  nametagId: ID!
 
 }
 

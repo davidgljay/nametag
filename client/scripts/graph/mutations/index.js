@@ -5,6 +5,7 @@ import CREATE_MESSAGE from './createMessage.graphql'
 import CREATE_BADGE from './createBadge.graphql'
 import CREATE_BADGE_TEMPLATE from './createTemplate.graphql'
 import TOGGLE_SAVED from './toggleSaved.graphql'
+import ADD_REACTION from './addReaction.graphql'
 import UPDATE_ROOM from './updateRoom.graphql'
 import UPDATE_NAMETAG from './updateNametag.graphql'
 import UPDATE_LATEST_VISIT from './updateLatestVisit.graphql'
@@ -252,6 +253,18 @@ export const createMessage = graphql(CREATE_MESSAGE, {
             }
           }
         }
+      }
+    })
+  })
+})
+
+export const addReaction = graphql(ADD_REACTION, {
+  props: ({ownProps, mutate}) => ({
+    addReaction: (messageId, emoji, nametagId) => mutate({
+      variables: {
+        messageId,
+        emoji,
+        nametagId
       }
     })
   })

@@ -9,7 +9,8 @@ import {
   updateToken,
   updateRoom,
   updateNametag,
-  deleteMessage
+  deleteMessage,
+  addReaction
 } from '../../graph/mutations'
 import {requestNotifPermissions} from '../../actions/NotificationActions'
 
@@ -29,6 +30,7 @@ const Room = compose(
   updateLatestVisit,
   updateToken,
   deleteMessage,
+  addReaction,
   roomQuery
 )(component)
 
