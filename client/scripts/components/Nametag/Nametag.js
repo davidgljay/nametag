@@ -2,6 +2,7 @@ import React, {PropTypes, Component} from 'react'
 import Badges from '../Badge/Badges'
 import MentionMenu from '../Message/MentionMenu'
 import NametagIcon from './NametagIcon'
+import EmojiText from '../Message/EmojiText'
 
 class Nametag extends Component {
 
@@ -41,7 +42,9 @@ class Nametag extends Component {
         </div>
         <div style={styles.details}>
           <div style={styles.name} onClick={this.toggleMenu}>{name}</div>
-          <div style={styles.bio}>{bio}</div>
+          <div style={styles.bio}>
+            <EmojiText text={bio} />
+          </div>
         </div>
         {ismod}
       </div>

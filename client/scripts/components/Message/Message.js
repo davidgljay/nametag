@@ -7,6 +7,7 @@ import ModAction from './ModAction'
 import NametagIcon from '../Nametag/NametagIcon'
 import {grey500, grey800, lightBlue100, yellow100} from 'material-ui/styles/colors'
 import ReactMarkdown from 'react-markdown'
+import EmojiText from './EmojiText'
 import {primary, white} from '../../../styles/colors'
 
 class Message extends Component {
@@ -85,9 +86,10 @@ class Message extends Component {
     } else if (recipient.id === myNametag.id) {
       messageStyle = {...styles.messageText, ...styles.directMessageIncoming}
       callout = <div style={styles.dmCallout}>Private Message</div>
-    } else {
-
     }
+
+    // Getting around Markdown's splitting of the '_' character in a hacky way for now
+    const emojiText = text.replace(/(?=\S+)_(?=\S+:)/g, '~@~A~')
 
     return <div>
       <tr
@@ -113,7 +115,13 @@ class Message extends Component {
               containerTagName={'span'}
               className={'messageText'}
               style={styles.text}
-              source={text}
+              renderers={{
+                text: ({literal}) => {
+                  const text = literal.replace(/~@~A~/g, '_')
+                  return <EmojiText text={text} />
+                }
+              }}
+              source={emojiText}
               escapeHtml />
           </div>
           {media}

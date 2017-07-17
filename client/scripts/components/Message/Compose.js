@@ -9,8 +9,9 @@ import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
 import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
+import {Picker} from 'emoji-mart'
+import emojiText from 'emoji-text'
 import MenuItem from 'material-ui/MenuItem'
-import Emojis from '../Utils/Emojis'
 import key from 'keymaster'
 
 class Compose extends Component {
@@ -50,12 +51,12 @@ class Compose extends Component {
       e.preventDefault()
       if (message.length > 0) {
         let msg = {
-          text: message,
+          text: emojiText.convert(message, {delimiter: ':'}),
           author: myNametag.id,
           room: roomId
         }
         if (!posted) {
-          updateNametag(myNametag.id, {bio: message})
+          updateNametag(myNametag.id, {bio: emojiText.convert(message, {delimiter: ':'})})
         }
         this.setState({message: '', showEmoji: false, showMentionMenu: false, posted: true})
         this.slashCommand(message)
@@ -121,7 +122,7 @@ class Compose extends Component {
     this.addCommand = command => e => {
       e.preventDefault()
       this.setState({
-        message: this.state.message.replace(/\/\S*(?=[^\/]*$)/, command),
+        message: this.state.message.replace(/\/\S*(?=[^/]*$)/, command),
         showComposeMenu: false
       })
     }
@@ -191,10 +192,18 @@ class Compose extends Component {
         </div>
       }
       <div style={styles.compose} id='compose'>
-        <Emojis
+        <Popover
           open={showEmoji}
-          closeModal={this.toggleEmoji(false)}
-          onEmojiClick={emoji => this.setState({message: message + emoji})} />
+          anchorEl={document.getElementById('compose')}
+          overlayStyle={{opacity: 0}}
+          onRequestClose={this.toggleEmoji(false)}>
+          <Picker
+            set='emojione'
+            autoFocus
+            emoji='dancer'
+            title=''
+            onClick={emoji => this.setState({message: message + emoji.colons})} />
+        </Popover>
         <IconButton
           onClick={this.toggleEmoji(!showEmoji)}>
           <FontIcon
@@ -291,6 +300,10 @@ const styles = {
       marginLeft: 20,
       width: 'calc(100% - 40px)'
     }
+  },
+  emojiSelector: {
+    background: 'none',
+    boxShadow: 'none'
   },
   nametagIconContainer: {
     marginRight: 5
