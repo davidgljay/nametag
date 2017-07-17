@@ -211,7 +211,8 @@ export const createMessage = graphql(CREATE_MESSAGE, {
               id: author.id,
               name: author.name
             },
-            recipient: null
+            recipient: null,
+            reactions: []
           },
           errors: null
         }

@@ -2,6 +2,9 @@ import React, {PropTypes} from 'react'
 import {Emoji} from 'emoji-mart'
 
 const EmojiText = ({text}) => {
+  if (!text) {
+    return null
+  }
   const emojiMatches = text.match(/:[^: ]+:/g)
   let textArray = text.split(/:[^: ]+:/g)
   if (emojiMatches) {
@@ -23,7 +26,7 @@ const EmojiText = ({text}) => {
 
 const {string} = PropTypes
 EmojiText.propTypes = {
-  text: string.isRequired
+  text: string
 }
 
 export default EmojiText

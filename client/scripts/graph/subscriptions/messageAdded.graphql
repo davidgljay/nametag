@@ -14,5 +14,9 @@ subscription messageAdded ($roomId: ID!, $nametagId: ID!) {
       name
       image
     }
+    reactions {
+      emoji
+      nametagId
+    }
   }
 }
