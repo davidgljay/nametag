@@ -265,6 +265,43 @@ export const addReaction = graphql(ADD_REACTION, {
         messageId,
         emoji,
         nametagId
+      },
+      optimisticResponse: {
+        addReaction: {
+          errors: null,
+          __typename: 'BasicResponse'
+        }
+      },
+      updateQueries: {
+        roomQuery: (oldData, {mutationResult: {data: {addReaction: {errors}}}}) => {
+          if (errors) {
+            errorLog('Error adding reaction')(errors)
+            return oldData
+          }
+          return {
+            ...oldData,
+            room: {
+              ...oldData.room,
+              messages: oldData.room.messages.map(
+                message => {
+                  if (message.id !== messageId) {
+                    return message
+                  }
+                  if (message.reactions.filter(reaction =>
+                      reaction.emoji === emoji && reaction.nametagId === nametagId
+                    ).length === 0) {
+                    message.reactions.push({
+                      emoji,
+                      nametagId,
+                      __typename: 'EmojiReaction'
+                    })
+                  }
+                  return message
+                }
+              )
+            }
+          }
+        }
       }
     })
   })

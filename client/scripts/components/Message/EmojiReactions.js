@@ -41,7 +41,7 @@ EmojiReactions.propTypes = {
     nametagId: string.isRequired
   })),
   addReaction: func.isRequired,
-  messageId: func.isRequired,
+  messageId: string.isRequired,
   myNametagId: string.isRequired
 }
 export default EmojiReactions

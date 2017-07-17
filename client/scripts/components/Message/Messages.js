@@ -111,7 +111,6 @@ Messages.propTypes = {
   roomId: string.isRequired,
   messages: arrayOf(object).isRequired,
   createMessage: func.isRequired,
-  toggleSaved: func.isRequired,
   myNametag: shape({
     id: string.isRequired
   }).isRequired,
