@@ -27,11 +27,11 @@ class Compose extends Component {
 
     this.onChange = (e) => {
       const text = e.target.value
-      if (text.slice(-1) === '@') {
+      if (/^@\S*$/.test(text)) {
         this.setState({showComposeMenu: 'mention'})
-      } else if (text.slice(-1) === '/') {
+      } else if (/^\/\S*$/.test(text)) {
         this.setState({showComposeMenu: 'command'})
-      } else if (text.slice(-1) === ' ') {
+      } else {
         this.setState({showComposeMenu: ''})
       }
       if (text.slice(-1) === '\n') {
@@ -135,8 +135,14 @@ class Compose extends Component {
     if (this.props.defaultMessage !== prevProps.defaultMessage) {
       this.setState({message: this.props.defaultMessage})
     }
-    if (this.state.showMentionMenu) {
+
+    // The menu popovers seem like to steal focus from the compose box
+    // This is a hack to take focus back, there is probably a better solution
+    if (this.state.showComposeMenu || prevState.showComposeMenu) {
       document.getElementById('composeTextInput').focus()
+      setTimeout(() => document.getElementById('composeTextInput').focus(), 0)
+      setTimeout(() => document.getElementById('composeTextInput').focus(), 250)
+      setTimeout(() => document.getElementById('composeTextInput').focus(), 400)
     }
   }
 
@@ -148,7 +154,7 @@ class Compose extends Component {
     // TODO: Add GIFs, image upload
 
     const {welcome, topic, mod, myNametag, setDefaultMessage, posted} = this.props
-    const {showEmoji, message, showComposeMenu} = this.state
+    const {showEmoji, message, showComposeMenu, nametagList} = this.state
     const prompt = posted ? topic : welcome
     return <div style={styles.container}>
       {
@@ -203,14 +209,14 @@ class Compose extends Component {
               } />
         </form>
         <Popover
-          open={showComposeMenu === 'mention'}
+          open={showComposeMenu === 'mention' && nametagList.length > 0}
           anchorEl={document.getElementById('compose')}
           anchorOrigin={{horizontal: 'middle', vertical: 'top'}}
           targetOrigin={{horizontal: 'middle', vertical: 'bottom'}}
           onRequestClose={this.closeMenus} >
           <Menu>
             {
-              this.nametagList().map(name =>
+              nametagList.map(name =>
                 <MenuItem
                   key={name}
                   primaryText={`@${name}`}
