@@ -14,7 +14,7 @@ module.exports = {
   'custom_assertions_path': '',
   'selenium': {
     'start_process': true,
-    'server_path': 'node_modules/selenium-standalone/.selenium/selenium-server/3.3.1-server.jar',
+    'server_path': 'node_modules/selenium-standalone/.selenium/selenium-server/3.4.0-server.jar',
     'log_path': E2E_REPORT_PATH,
     'host': '127.0.0.1',
     'port': 6666,

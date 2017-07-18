@@ -27,7 +27,7 @@ class Nametag extends Component {
   }
 
   render () {
-    const {mod, nametag: {id, name, image, bio, badges}, setDefaultMessage, hideDMs} = this.props
+    const {mod, nametag: {id, name, image, bio, badges}, setDefaultMessage, hideDMs, myNametagId} = this.props
     const {showMenu} = this.state
     let ismod = ''
 
@@ -65,6 +65,7 @@ class Nametag extends Component {
             setDefaultMessage={setDefaultMessage} />
           <CommandMenu
             open={showMenu === 'commands'}
+            isMod={mod === myNametagId}
             anchor={document.getElementById(id)}
             onRequestClose={this.toggleMenu}
             setDefaultMessage={setDefaultMessage} />

@@ -5,8 +5,7 @@ const RootSubscription = {
   nametagAdded: nametag => nametag,
   badgeRequestAdded: badgeRequest => badgeRequest,
   roomUpdated: room => room,
-  nametagUpdated: nametagUpdate => nametagUpdate,
-  reactionAdded: reaction => reaction
+  nametagUpdated: nametagUpdate => nametagUpdate
 }
 
 module.exports = RootSubscription

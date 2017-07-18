@@ -15,6 +15,10 @@ mutation CreateMessage($message: CreateMessageInput!) {
         id
         name
       }
+      reactions {
+        emoji
+        nametagId
+      }
     }
     errors {
       translation_key
