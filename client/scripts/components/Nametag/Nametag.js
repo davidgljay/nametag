@@ -46,7 +46,7 @@ class Nametag extends Component {
         </div>
         <div style={styles.details}>
           <div style={styles.name} onClick={this.toggleMenu}>{name}</div>
-          <div style={styles.bio}>
+          <div style={styles.bio} onClick={this.toggleMenu}>
             <EmojiText text={bio} />
           </div>
         </div>
@@ -108,7 +108,8 @@ const styles = {
   bio: {
     fontSize: 12,
     fontStyle: 'italic',
-    marginTop: 4
+    marginTop: 4,
+    cursor: 'pointer'
   },
   name: {
     fontWeight: 'bold',

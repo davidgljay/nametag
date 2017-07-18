@@ -22,9 +22,7 @@ class Compose extends Component {
       message: '',
       showEmoji: false,
       showComposeMenu: '',
-      nametagList: [],
-      // TODO: lastMessage in nametag
-      posted: false
+      nametagList: []
     }
 
     this.onChange = (e) => {
@@ -47,8 +45,8 @@ class Compose extends Component {
     }
 
     this.post = (e) => {
-      const {myNametag, roomId, updateNametag, createMessage} = this.props
-      const {message, posted} = this.state
+      const {myNametag, roomId, updateNametag, createMessage, posted} = this.props
+      const {message} = this.state
       e.preventDefault()
       if (message.length > 0) {
         let msg = {
@@ -149,8 +147,8 @@ class Compose extends Component {
   render () {
     // TODO: Add GIFs, image upload
 
-    const {welcome, topic, mod, myNametag, setDefaultMessage} = this.props
-    const {showEmoji, message, showComposeMenu, posted} = this.state
+    const {welcome, topic, mod, myNametag, setDefaultMessage, posted} = this.props
+    const {showEmoji, message, showComposeMenu} = this.state
     const prompt = posted ? topic : welcome
     return <div style={styles.container}>
       {

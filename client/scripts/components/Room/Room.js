@@ -105,6 +105,7 @@ class Room extends Component {
     const {defaultMessage} = this.state
 
     let myNametag
+    let userHasPosted
 
     // If the user is not logged in, return to the homepage
     if (!loading && !me) {
@@ -114,6 +115,9 @@ class Room extends Component {
     let hideDMs
     if (!loading) {
       myNametag = this.getMyNametag()
+      userHasPosted = room.messages.reduce(
+        (bool, msg) => msg.author.id === myNametag.id ? true : bool, false
+      )
     }
 
     const isMobile = window.innerWidth < 800
@@ -167,6 +171,7 @@ class Room extends Component {
             welcome={room.welcome}
             topic={room.topic}
             mod={room.mod}
+            posted={userHasPosted}
             setDefaultMessage={this.setDefaultMessage}
             updateRoom={updateRoom}
             updateNametag={updateNametag}
