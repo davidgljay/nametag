@@ -20,7 +20,6 @@ export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeT
       return oldData
     }
     const message = subscriptionData.data.messageAdded
-        console.log('Message added', message)
 
     // Check to see if the message has already been posted
     // If so, update to the new version of the message

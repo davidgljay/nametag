@@ -39,6 +39,7 @@ const styles = {
   defaultImage: {
     backgroundColor: primary,
     textAlign: 'center',
-    color: white
+    color: white,
+    cursor: 'inherit'
   }
 }

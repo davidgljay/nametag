@@ -30,6 +30,7 @@ class Nametag extends Component {
     const {mod, nametag: {id, name, image, bio, badges}, setDefaultMessage, hideDMs, myNametagId} = this.props
     const {showMenu} = this.state
     let ismod = ''
+    const clickableStyle = setDefaultMessage ? styles.clickable : styles.notClickable
 
     // Show if user is a mod.
     if (mod === id) {
@@ -41,10 +42,10 @@ class Nametag extends Component {
       id={id}
       style={styles.nametag}>
       <div style={styles.main}>
-        <div style={styles.iconContainer} onClick={this.toggleMenu}>
+        <div style={{...styles.iconContainer, ...clickableStyle}} onClick={this.toggleMenu}>
           <NametagIcon name={name} image={image} diameter={50} />
         </div>
-        <div style={styles.details}>
+        <div style={{...styles.details, ...clickableStyle}}>
           <div style={styles.name} onClick={this.toggleMenu}>{name}</div>
           <div style={styles.bio} onClick={this.toggleMenu}>
             <EmojiText text={bio} />
@@ -101,6 +102,12 @@ const styles = {
     margin: 3,
     cursor: 'default'
   },
+  clickable: {
+    cursor: 'pointer'
+  },
+  notClickable: {
+    cursor: 'default'
+  },
   details: {
     flex: 1,
     cursor: 'default'
@@ -108,19 +115,16 @@ const styles = {
   bio: {
     fontSize: 12,
     fontStyle: 'italic',
-    marginTop: 4,
-    cursor: 'pointer'
+    marginTop: 4
   },
   name: {
     fontWeight: 'bold',
     fontSize: 14,
-    marginTop: 5,
-    cursor: 'pointer'
+    marginTop: 5
   },
   iconContainer: {
     marginLeft: 8,
-    marginRight: 8,
-    cursor: 'pointer'
+    marginRight: 8
   },
   nametag: {
     padding: 5,
