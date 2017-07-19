@@ -64,15 +64,16 @@ const getVisible = ({conn, user, models: {Users}}, id) =>
  * @param {Array<String>} granterCode  urlCode of the granter to be returned
  */
 
-const getGranterRooms = ({conn, user, models: {Users}}, granterCode) =>
-  user
-  ? db.table('granters').getAll('nametag', {index: 'urlCode'})
-    .eqJoin('id', r.db('nametag').table('templates'), {index: 'granter'})
+const getGranterRooms = ({conn, user, models: {Users}}, granterCode) => {
+  return user
+  ? db.table('granters').getAll(granterCode, {index: 'urlCode'})
+    .eqJoin('id', r.db(granterCode).table('templates'), {index: 'granter'})
     .map(join => join('right'))
     .pluck('id')
     .run(conn)
     .then(cursor => cursor.toArray())
     .then(templateIds => {
+      console.log()
       const userTemplateIds = templateIds.map(t => t.id).filter(id => !!user.badges[id])
       if (userTemplateIds.length === 0) {
         return Promise.resolve([])
@@ -83,6 +84,7 @@ const getGranterRooms = ({conn, user, models: {Users}}, granterCode) =>
         .then(cursor => cursor.toArray())
     })
   : Promise.resolve([])
+}
 
 /**
 * Returns active rooms based on a query.
