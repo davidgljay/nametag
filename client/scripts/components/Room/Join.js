@@ -14,19 +14,15 @@ class Join extends Component {
     this.state = {alert: null}
 
     this.onJoinClick = () => {
-      const {room, nametag, createNametag, normsChecked} = this.props
-      if (normsChecked) {
-        const nametagForPost = {
-          ...nametag,
-          badges: nametag.badges ? nametag.badges.map(badge => badge.id) : []
-        }
-        createNametag(nametagForPost)
-          .then(() => {
-            window.location = `/rooms/${room}`
-          })
-      } else {
-        this.setState({alert: 'You must agree to this room\'s norms.'})
+      const {room, nametag, createNametag} = this.props
+      const nametagForPost = {
+        ...nametag,
+        badges: nametag.badges ? nametag.badges.map(badge => badge.id) : []
       }
+      createNametag(nametagForPost)
+        .then(() => {
+          window.location = `/rooms/${room}`
+        })
     }
   }
 
@@ -65,7 +61,7 @@ class Join extends Component {
             primary
             labelStyle={styles.button}
             onClick={this.onJoinClick}
-            label='JOIN' />
+            label='AGREE & JOIN' />
         </div>
     } else {
       join = <Login />
@@ -96,7 +92,6 @@ const styles = {
     width: 240,
     display: 'flex',
     flexWrap: 'wrap',
-    minHeight: 100,
     verticalAlign: 'top',
     justifyContent: 'center',
     padding: 5,

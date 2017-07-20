@@ -27,19 +27,16 @@ class UserBadges extends Component {
           }
         </div>
       }
-      return <div>
-        {
-          selectedBadges.length < badges.length &&
-          <p style={styles.userBadgeText}>
-            <FontIcon
-              style={styles.userBadgeIcon}
-              className='material-icons'>arrow_upward</FontIcon>
-            Drag to Share
-            <FontIcon
-              style={styles.userBadgeIcon}
-              className='material-icons'>arrow_upward</FontIcon>
-          </p>
-        }
+      return selectedBadges.length < badges.length && <div>
+        <p style={styles.userBadgeText}>
+          <FontIcon
+            style={styles.userBadgeIcon}
+            className='material-icons'>arrow_upward</FontIcon>
+          Drag to Share
+          <FontIcon
+            style={styles.userBadgeIcon}
+            className='material-icons'>arrow_upward</FontIcon>
+        </p>
         <div style={styles.badgesContainer}>
           {
             badges

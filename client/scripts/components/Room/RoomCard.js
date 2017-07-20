@@ -5,9 +5,7 @@ import Join from './Join'
 import NametagIcon from '../Nametag/NametagIcon'
 import constants from '../../constants'
 import {Card, CardTitle, CardMedia} from 'material-ui/Card'
-import Checkbox from 'material-ui/Checkbox'
 import {grey} from '../../../styles/colors'
-import TimeAgo from 'react-timeago'
 import Badges from '../Badge/Badges'
 
 class RoomCard extends Component {
@@ -17,12 +15,7 @@ class RoomCard extends Component {
 
     this.state = {
       flipped: false,
-      flipping: false,
-      normsChecked: false
-    }
-
-    this.onNormsCheck = (e) => {
-      this.setState({normsChecked: e.target.checked})
+      flipping: false
     }
 
     this.flip = () => {
@@ -69,17 +62,17 @@ class RoomCard extends Component {
       {
         room.image
         ? <CardMedia
-          id='roomImage'
-          onClick={this.flip}>
+          id='roomImage'>
           <img
             style={styles.roomImage}
+            onClick={this.flip}
             src={room.image} />
         </CardMedia>
         : null
       }
       <div style={styles.roomInfo}>
-        <div style={styles.greyText}>
-          Ends <TimeAgo date={new Date(room.closedAt)} />
+        <div style={styles.greyText} onClick={this.flip}>
+          Click to Join
         </div>
         {
           room.templates && room.templates.length > 0 &&
@@ -88,12 +81,12 @@ class RoomCard extends Component {
         <Badges
           badges={room.templates.map(template => ({id: template.id, notes: [], template}))} />
         <CardTitle
+          onClick={this.flip}
           title={room.title}
-          style={styles.roomName}
-          onClick={this.flip} />
+          style={styles.roomName} />
         <div
-          style={styles.roomDescription}
-          onClick={this.flip}>
+          onClick={this.flip}
+          style={styles.roomDescription}>
           {room.description}
         </div>
         <p style={styles.greyText}>
@@ -125,17 +118,9 @@ class RoomCard extends Component {
             name={room.mod.name}
             marginRight={5}
             diameter={30} />
-          Has Set These Norms:
+          Norms In This Room:
         </div>
         <Norms norms={room.norms} showChecks />
-        {
-          me &&
-          <Checkbox
-            className='agreeToNorms'
-            style={styles.checkbox}
-            label='I agree to these norms'
-            onClick={this.onNormsCheck} />
-        }
       </div>
       {
         !creating &&
@@ -266,7 +251,8 @@ const styles = {
     textAlign: 'right',
     fontSize: 11,
     fontStyle: 'italic',
-    color: grey
+    color: grey,
+    cursor: 'pointer'
   },
   privateText: {
     textAlign: 'center',
@@ -287,7 +273,8 @@ const styles = {
     float: 'left',
     paddingRight: 10
   },
-  checkbox: {
-    textAlign: 'left'
+  button: {
+    color: '#fff',
+    fontWeight: 'bold'
   }
 }
