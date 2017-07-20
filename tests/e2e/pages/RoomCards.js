@@ -39,8 +39,6 @@ const commands = {
       .waitForElementVisible('@roomCard')
       .click('@roomCard')
       .waitForElementVisible('.roomCard.notFlipping')
-      .waitForElementVisible('.agreeToNorms')
-      .click('.agreeToNorms input')
       .setValue('@editNametagName', name)
       .waitForElementVisible('@joinRoomButton')
       .click('@joinRoomButton')
