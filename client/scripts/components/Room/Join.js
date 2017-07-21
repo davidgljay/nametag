@@ -70,11 +70,10 @@ class Join extends Component {
   }
 }
 
-const {string, bool, object, func, arrayOf} = PropTypes
+const {string, object, func, arrayOf} = PropTypes
 
 Join.propTypes = {
   room: string.isRequired,
-  normsChecked: bool.isRequired,
   nametag: object,
   addNametagEditBadge: func.isRequired,
   removeNametagEditBadge: func.isRequired,
