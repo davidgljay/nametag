@@ -342,13 +342,12 @@ const badgesFromAuth = (badge, provider) => {
  * @param {String} password  Hashed password from the user
  *
  */
-
 const createLocal = ({conn}, email, password) => {
   const emailHash = MD5(email.trim().toLowerCase())
   return fetch(`https://gravatar.com/${emailHash}.json`)
   .then(res => res.ok ? res.json() : null)
   .then(gravatarInfo => {
-    let displayNames = []
+    let displayNames = [email.match(/^[^@]+/)[0]]
     let images = []
     if (gravatarInfo) {
       const {entry: [{preferredUsername, thumbnailUrl, displayName}]} = gravatarInfo
@@ -362,12 +361,16 @@ const createLocal = ({conn}, email, password) => {
         images.push(thumbnailUrl)
       }
     }
+    // Make displayNames unique
+    displayNames = displayNames.reduce(
+      (arr, item) => arr.indexOf(item) === -1 ? arr.concat(item) : arr, []
+    )
     return r.branch(
       usersTable.getAll(email, {index: 'email'}).count().eq(0),
       usersTable.insert({
         email,
         createdAt: new Date(),
-        displayNames: displayNames,
+        displayNames,
         images: images,
         badges: {}
       }),
