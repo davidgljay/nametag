@@ -273,7 +273,7 @@ const addDefaultsFromAuth = (context, authProfile) => {
 const addBadgesFromAuth = ({conn, user, models: {Templates, Granters}}, {badges = [], provider}) => {
   return Promise.all([
     user.badges ? Templates.getAll(Object.keys(user.badges)) : [],
-    Granters.getByUrlCode('nametag')
+    Granters.getByUrlCode('nametagauth')
   ])
 
     // Check to see if the a badge has already been granted. If not, grant one.
