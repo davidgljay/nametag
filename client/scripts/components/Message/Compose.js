@@ -286,7 +286,7 @@ const styles = {
   },
   topic: {
     fontStyle: 'italic',
-    fontSize: 14,
+    fontSize: 18,
     color: grey
   },
   topicContainer: {
