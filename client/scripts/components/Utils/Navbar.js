@@ -107,7 +107,10 @@ class Navbar extends Component {
     </div>
     return <div>
       <AppBar
-        title='Nametag'
+        title={<div>
+          <div style={styles.title}>Nametag</div>
+          <div style={styles.tagline}>Private conversations about ideas that matter.</div>
+        </div>}
         style={styles.appBar}
         onTitleTouchTap={onHomeClick}
         iconElementRight={mobile || empty ? null : auth}
@@ -151,5 +154,13 @@ const styles = {
   },
   drawerTitle: {
     marginLeft: 15
+  },
+  title: {
+    lineHeight: '46px'
+  },
+  tagline: {
+    lineHeight: '5px',
+    fontSize: 14,
+    fontStyle: 'italic'
   }
 }
