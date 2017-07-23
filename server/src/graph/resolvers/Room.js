@@ -2,18 +2,14 @@ const {ErrNotInRoom, ErrNotLoggedIn} = require('../../errors')
 
 const Room = {
   messages: ({id}, _, {user, models: {Messages}}) => {
-    if (!user) {
-      return Promise.reject(ErrNotLoggedIn)
-    } else if (!user.nametags || !user.nametags[id]) {
-      return Promise.reject(ErrNotInRoom)
+    if (!user || !user.nametags || !user.nametags[id]) {
+      return null
     }
     return Messages.getRoomMessages(id, user.nametags[id])
   },
   nametags: ({id}, _, {user, models: {Nametags}}) => {
-    if (!user) {
-      return Promise.reject(ErrNotLoggedIn)
-    } else if (!user.nametags || !user.nametags[id]) {
-      return Promise.reject(ErrNotInRoom)
+    if (!user || !user.nametags || !user.nametags[id]) {
+      return null
     }
     return Nametags.getRoomNametags(id)
   },

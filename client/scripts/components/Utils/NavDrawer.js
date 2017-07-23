@@ -1,10 +1,10 @@
-import React from 'react'
+import React, {PropTypes} from 'react'
 import Drawer from 'material-ui/Drawer'
 import MenuItem from 'material-ui/MenuItem'
 
 const NavDrawer = ({me, empty, toggleLogin, open, setOpen}) => {
   let items = null
-  if (me) {
+  if (me && !empty) {
     items = <div>
       <MenuItem href='/rooms/create'>Create Room</MenuItem>
       {
@@ -31,6 +31,21 @@ const NavDrawer = ({me, empty, toggleLogin, open, setOpen}) => {
     <MenuItem href='/'>Home</MenuItem>
     {items}
   </Drawer>
+}
+
+const {func, shape, bool, string} = PropTypes
+
+NavDrawer.propTypes = {
+  me: shape({
+    granter: shape({
+      id: string.isRequired,
+      name: string.isRequired
+    })
+  }),
+  empty: bool,
+  toggleLogin: func.isRequired,
+  open: bool.isRequired,
+  setOpen: func.isRequired
 }
 
 export default NavDrawer

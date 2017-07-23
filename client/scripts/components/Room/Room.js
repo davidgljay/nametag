@@ -7,6 +7,7 @@ import AppBar from 'material-ui/AppBar'
 import radium, {keyframes} from 'radium'
 import Messages from '../../components/Message/Messages'
 import Compose from '../Message/Compose'
+import JoinRoom from './JoinRoom'
 
 class Room extends Component {
 
@@ -94,6 +95,13 @@ class Room extends Component {
         room,
         me
       },
+      nametagEdits,
+      updateNametagEdit,
+      addNametagEditBadge,
+      removeNametagEditBadge,
+      registerUser,
+      loginUser,
+      createNametag,
       latestMessageUpdatedSubscription,
       createMessage,
       updateRoom,
@@ -104,21 +112,31 @@ class Room extends Component {
 
     const {defaultMessage} = this.state
 
-    let myNametag
-    let userHasPosted
+    if (loading) {
+      return <div style={styles.spinner}>
+        <CircularProgress />
+      </div>
+    }
 
     // If the user is not logged in, return to the homepage
-    if (!loading && !me) {
-      window.location = '/'
-      return
+    if (!me || !room.nametags) {
+      console.log(room)
+      return <JoinRoom
+        createNametag={createNametag}
+        addNametagEditBadge={addNametagEditBadge}
+        removeNametagEditBadge={removeNametagEditBadge}
+        updateNametagEdit={updateNametagEdit}
+        nametagEdits={nametagEdits}
+        registerUser={registerUser}
+        loginUser={loginUser}
+        room={room}
+        me={me} />
     }
     let hideDMs
-    if (!loading) {
-      myNametag = this.getMyNametag()
-      userHasPosted = room.messages.reduce(
-        (bool, msg) => msg.author.id === myNametag.id ? true : bool, false
-      )
-    }
+    const myNametag = this.getMyNametag()
+    const userHasPosted = room.messages.reduce(
+      (bool, msg) => msg.author.id === myNametag.id ? true : bool, false
+    )
 
     const isMobile = window.innerWidth < 800
 
@@ -133,56 +151,50 @@ class Room extends Component {
     </IconButton>
 
     return <div style={styles.roomContainer}>
-      {
-        !loading
-        ? <div id='room'>
-          <AppBar
-            id='roomTitle'
-            title={room.title}
-            style={styles.appBar}
-            iconElementRight={backIcon}
-            onLeftIconButtonTouchTap={this.toggleLeftBar}
-            iconStyleLeft={isMobile ? {display: 'inline-block'} : {display: 'none'}} />
-          <div>
-            <RoomLeftBar
-              room={room}
-              me={me}
-              latestMessageUpdatedSubscription={latestMessageUpdatedSubscription}
-              updateRoom={updateRoom}
-              myNametag={myNametag}
-              setDefaultMessage={this.setDefaultMessage}
-              expanded={this.state.leftBarExpanded}
-              toggleLeftBar={this.toggleLeftBar} />
-            <Messages
-              roomId={room.id}
-              norms={room.norms}
-              createMessage={createMessage}
-              myNametag={myNametag}
-              hideDMs={!!hideDMs}
-              addReaction={addReaction}
-              deleteMessage={deleteMessage}
-              setDefaultMessage={this.setDefaultMessage}
-              mod={room.mod}
-              messages={room.messages} />
-          </div>
-          <Compose
-            createMessage={createMessage}
-            roomId={room.id}
-            welcome={room.welcome}
-            topic={room.topic}
-            mod={room.mod}
-            posted={userHasPosted}
-            setDefaultMessage={this.setDefaultMessage}
+      <div id='room'>
+        <AppBar
+          id='roomTitle'
+          title={room.title}
+          style={styles.appBar}
+          iconElementRight={backIcon}
+          onLeftIconButtonTouchTap={this.toggleLeftBar}
+          iconStyleLeft={isMobile ? {display: 'inline-block'} : {display: 'none'}} />
+        <div>
+          <RoomLeftBar
+            room={room}
+            me={me}
+            latestMessageUpdatedSubscription={latestMessageUpdatedSubscription}
             updateRoom={updateRoom}
-            updateNametag={updateNametag}
-            nametags={room.nametags}
-            defaultMessage={defaultMessage}
-            myNametag={myNametag} />
+            myNametag={myNametag}
+            setDefaultMessage={this.setDefaultMessage}
+            expanded={this.state.leftBarExpanded}
+            toggleLeftBar={this.toggleLeftBar} />
+          <Messages
+            roomId={room.id}
+            norms={room.norms}
+            createMessage={createMessage}
+            myNametag={myNametag}
+            hideDMs={!!hideDMs}
+            addReaction={addReaction}
+            deleteMessage={deleteMessage}
+            setDefaultMessage={this.setDefaultMessage}
+            mod={room.mod}
+            messages={room.messages} />
         </div>
-          : <div style={styles.spinner}>
-            <CircularProgress />
-          </div>
-        }
+        <Compose
+          createMessage={createMessage}
+          roomId={room.id}
+          welcome={room.welcome}
+          topic={room.topic}
+          mod={room.mod}
+          posted={userHasPosted}
+          setDefaultMessage={this.setDefaultMessage}
+          updateRoom={updateRoom}
+          updateNametag={updateNametag}
+          nametags={room.nametags}
+          defaultMessage={defaultMessage}
+          myNametag={myNametag} />
+      </div>
     </div>
   }
 }
@@ -195,8 +207,8 @@ Room.propTypes = {
     room: shape({
       id: string.isRequired,
       norms: arrayOf(string).isRequired,
-      messages: arrayOf(object).isRequired,
-      nametags: arrayOf(object).isRequired,
+      messages: arrayOf(object),
+      nametags: arrayOf(object),
       modOnlyDMs: bool
     }),
     me: object
@@ -205,6 +217,7 @@ Room.propTypes = {
     roomId: string.isRequired
   }),
   updateRoom: func.isRequired,
+  createNametag: func.isRequired,
   createMessage: func.isRequired,
   toggleSaved: func.isRequired,
   addReaction: func.isRequired,

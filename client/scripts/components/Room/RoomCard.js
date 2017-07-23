@@ -130,7 +130,6 @@ class RoomCard extends Component {
           me={me}
           templates={room.templates.map(t => t.id)}
           createNametag={createNametag}
-          normsChecked={this.state.normsChecked}
           addNametagEditBadge={addNametagEditBadge}
           removeNametagEditBadge={removeNametagEditBadge}
           updateNametagEdit={updateNametagEdit}

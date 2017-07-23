@@ -27,7 +27,14 @@ class Nametag extends Component {
   }
 
   render () {
-    const {mod, nametag: {id, name, image, bio, badges}, setDefaultMessage, hideDMs, myNametagId} = this.props
+    const {
+      mod,
+      nametag: {id, name, image, bio, badges},
+      setDefaultMessage,
+      hideDMs,
+      myNametagId,
+      style
+    } = this.props
     const {showMenu} = this.state
     let ismod = ''
     const clickableStyle = setDefaultMessage ? styles.clickable : styles.notClickable
@@ -40,7 +47,7 @@ class Nametag extends Component {
     return <div
       key={id}
       id={id}
-      style={styles.nametag}>
+      style={{...styles.nametag, ...style}}>
       <div style={styles.main}>
         <div style={{...styles.iconContainer, ...clickableStyle}} onClick={this.toggleMenu}>
           <NametagIcon name={name} image={image} diameter={50} />

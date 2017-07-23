@@ -40,7 +40,14 @@ class Join extends Component {
     if (me) {
       join =
         <div style={styles.join}>
-          <h4>How Would You Like To Appear In This Conversation?</h4>
+          <Alert alert={this.state.alert} />
+          <RaisedButton
+            id='joinRoomButton'
+            primary
+            labelStyle={styles.button}
+            onClick={this.onJoinClick}
+            label='AGREE & JOIN' />
+          <h4>Edit How You Appear In This Room:</h4>
           <EditNametag
             nametagEdit={nametag}
             me={me}
@@ -55,13 +62,6 @@ class Join extends Component {
               badges={me.badges} />
           </div>
           <br />
-          <Alert alert={this.state.alert} />
-          <RaisedButton
-            id='joinRoomButton'
-            primary
-            labelStyle={styles.button}
-            onClick={this.onJoinClick}
-            label='AGREE & JOIN' />
         </div>
     } else {
       join = <Login />
@@ -88,7 +88,6 @@ const styles = {
     textAlign: 'center'
   },
   userBadges: {
-    width: 240,
     display: 'flex',
     flexWrap: 'wrap',
     verticalAlign: 'top',
