@@ -22,38 +22,36 @@ class JoinRoom extends Component {
     return <div id='room'>
       <Navbar me={me} empty />
       <div id='roomInfoContainer' style={styles.roomInfoContainer}>
-        <div id='roomImage'>
-          <img
-            style={styles.roomImage}
-            onClick={this.flip}
-            src={image} />
-        </div>
-        <div id='roomInfo' style={styles.roomInfo}>
-          {
-            templates && templates.length > 0 &&
-            <div style={styles.privateText}>Conversation Requires:</div>
-          }
-          <Badges
-            badges={templates.map(template => ({id: template.id, notes: [], template}))} />
-          <div id='roomTitle' style={styles.title}>
-            {title}
+        <Card>
+          <div style={styles.roomCard}>
+            <div id='roomImage' style={styles.roomImageContainer}>
+              <img
+                style={styles.roomImage}
+                onClick={this.flip}
+                src={image} />
+            </div>
+            <div id='roomInfo' style={styles.roomInfo}>
+              {
+                templates && templates.length > 0 &&
+                <div style={styles.privateText}>Conversation Requires:</div>
+              }
+              <Badges
+                badges={templates.map(template => ({id: template.id, notes: [], template}))} />
+              <div id='roomTitle' style={styles.title}>
+                {title}
+              </div>
+              <div id='roomDescription' style={styles.description}>
+                {description}
+              </div>
+              <div style={styles.count}>
+                {nametagCount || 0} participant
+                  {nametagCount === 1 ? '' : 's'}
+              </div>
+            </div>
           </div>
-          <div id='roomDescription' style={styles.description}>
-            {description}
-          </div>
-          <div style={styles.count}>
-            {nametagCount || 0} participant
-              {nametagCount === 1 ? '' : 's'}
-          </div>
-        </div>
+        </Card>
       </div>
       <div id='normsContainer' style={styles.normsContainer}>
-        <div style={styles.norms}>
-          <h3>
-            Norms In This Room
-          </h3>
-          <h1><Norms norms={norms} showChecks /></h1>
-        </div>
         <div style={styles.modContainer}>
           <h3>Moderator</h3>
           <Card>
@@ -62,6 +60,12 @@ class JoinRoom extends Component {
               mod={mod.id}
               nametag={mod} />
           </Card>
+        </div>
+        <div style={styles.norms}>
+          <h3>
+            Norms In This Room
+          </h3>
+          <h1><Norms norms={norms} showChecks /></h1>
         </div>
       </div>
       <Join
@@ -104,6 +108,12 @@ JoinRoom.propTypes = {
 export default JoinRoom
 
 const styles = {
+  roomCard: {
+    display: 'flex'
+  },
+  roomImageContainer: {
+    height: 200
+  },
   roomImage: {
     width: 300,
     height: 200,
@@ -120,7 +130,8 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     marginLeft: 20,
-    width: 300
+    width: 300,
+    padding: 10
   },
   title: {
     fontSize: 24,

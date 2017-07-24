@@ -157,7 +157,6 @@ class Login extends Component {
       emailAlert,
       passwordAlert,
       alert,
-      loading,
       message,
       state
     } = this.state
@@ -256,26 +255,28 @@ class Login extends Component {
         }
         <input type='submit' style={styles.hiddenSubmit} />
       </form>
-      <div style={styles.authProviders}>
-        {
-          loading
-          ? <CircularProgress />
-        : <div>
-          <img
-            style={styles.loginImg}
-            src='/public/images/twitter.jpg'
-            onClick={this.providerAuth('twitter')} />
-          <img
-            style={styles.loginImg}
-            src='/public/images/fb.jpg'
-            onClick={this.providerAuth('facebook')} />
-          <img
-            style={styles.loginImg}
-            src='/public/images/google.png'
-            onClick={this.providerAuth('google')} />
-        </div>
-        }
-      </div>
+      {
+          // <div style={styles.authProviders}>
+          //   {
+          //     loading
+          //     ? <CircularProgress />
+          //   : <div>
+          //     <img
+          //       style={styles.loginImg}
+          //       src='/public/images/twitter.jpg'
+          //       onClick={this.providerAuth('twitter')} />
+          //     <img
+          //       style={styles.loginImg}
+          //       src='/public/images/fb.jpg'
+          //       onClick={this.providerAuth('facebook')} />
+          //     <img
+          //       style={styles.loginImg}
+          //       src='/public/images/google.png'
+          //       onClick={this.providerAuth('google')} />
+          //   </div>
+          //   }
+          // </div>
+      }
     </div>
   }
 }

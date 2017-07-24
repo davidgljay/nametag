@@ -160,7 +160,6 @@ const styles = {
   },
   tagline: {
     lineHeight: '5px',
-    fontSize: 14,
-    fontStyle: 'italic'
+    fontSize: 14
   }
 }
