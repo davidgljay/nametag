@@ -107,9 +107,9 @@ class Navbar extends Component {
     </div>
     return <div>
       <AppBar
-        title={<div>
+        title={<div style={styles.titleContainer}>
+          <img src='http://s3.amazonaws.com/nametag_images/logo-inverted30.png' />
           <div style={styles.title}>Nametag</div>
-          <div style={styles.tagline}>Private conversations about ideas that matter.</div>
         </div>}
         style={styles.appBar}
         onTitleTouchTap={onHomeClick}
@@ -155,8 +155,14 @@ const styles = {
   drawerTitle: {
     marginLeft: 15
   },
+  titleContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    marginTop: 10
+  },
   title: {
-    lineHeight: '46px'
+    lineHeight: '46px',
+    marginLeft: 10
   },
   tagline: {
     lineHeight: '5px',
