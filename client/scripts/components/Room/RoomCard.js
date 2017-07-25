@@ -115,11 +115,6 @@ class RoomCard extends Component {
         title={room.title} />
       <div style={styles.norms}>
         <div style={styles.normsTitle}>
-          <NametagIcon
-            image={room.mod.image}
-            name={room.mod.name}
-            marginRight={5}
-            diameter={30} />
           To keep the conversation respectful, {mod.name} has set these norms:
         </div>
         <Norms norms={room.norms} showChecks />
