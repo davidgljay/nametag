@@ -5,8 +5,17 @@ import Norms from './Norms'
 import Join from './Join'
 import Navbar from '../Utils/Navbar'
 import {Card} from 'material-ui/Card'
+import {track} from '../../utils/analytics'
 
 class JoinRoom extends Component {
+
+  componentDidMount () {
+    if (this.props.me) {
+      track('JOIN_ROOM_LOGGED_IN')
+    } else {
+      track('JOIN_ROOM_LOGGED_OUT')
+    }
+  }
 
   render () {
     const {
@@ -62,9 +71,9 @@ class JoinRoom extends Component {
           </Card>
         </div>
         <div style={styles.norms}>
-          <h3>
-            Norms In This Room
-          </h3>
+          <h4>
+            To keep the conversation respectful, {mod.name} has set these norms:
+          </h4>
           <h1><Norms norms={norms} showChecks /></h1>
         </div>
       </div>
@@ -154,8 +163,9 @@ const styles = {
   },
   normsContainer: {
     display: 'flex',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
+    flexDirection: 'column',
+    alignItems: 'center',
+    textAlign: 'center',
     marginBottom: 20
   },
   norms: {

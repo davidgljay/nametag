@@ -47,6 +47,7 @@ query roomQuery($id: ID!){
     }
   }
   me {
+    id
     images
     displayNames
     nametags {

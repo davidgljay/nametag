@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import hashPassword from '../../utils/pwHash'
 import CircularProgress from 'material-ui/CircularProgress'
 import {red} from '../../../styles/colors'
+import {track} from '../../utils/analytics'
 
 class PasswordReset extends Component {
   constructor (props) {
@@ -37,6 +38,7 @@ class PasswordReset extends Component {
 
     this.passwordReset = () => {
       const {password, confirm} = this.state
+      track('PASSWORD_RESET')
       if (this.validatePassword(password, confirm)) {
         this.props.passwordReset(this.props.params.token, hashPassword(password))
           .then(res => {

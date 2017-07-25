@@ -6,6 +6,7 @@ import NametagIcon from '../Nametag/NametagIcon'
 import constants from '../../constants'
 import {Card, CardTitle, CardMedia} from 'material-ui/Card'
 import {grey} from '../../../styles/colors'
+import {track} from '../../utils/analytics'
 import Badges from '../Badge/Badges'
 
 class RoomCard extends Component {
@@ -19,6 +20,7 @@ class RoomCard extends Component {
     }
 
     this.flip = () => {
+      track('FLIP_CARD', {id: this.props.room.id, title: this.props.room.title})
       this.setState({flipped: !this.state.flipped, flipping: 0.01})
 
       // Run the flipping animation. This needs to be done w/ JS b/c Radium doesn't support it.

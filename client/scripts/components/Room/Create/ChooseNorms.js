@@ -7,7 +7,7 @@ import TextField from 'material-ui/TextField'
 const defaultNorms = [
   'Refrain from personal attacks',
   'Respect the experiences of others',
-  'Keep it on topic',
+  'Stay on topic',
   'Take time to welcome newcomers',
   'Keep comments brief and to the point',
   'Personal experience > personal opinion'

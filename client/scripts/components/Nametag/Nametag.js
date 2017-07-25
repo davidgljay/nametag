@@ -4,6 +4,7 @@ import MentionMenu from '../Message/MentionMenu'
 import CommandMenu from '../Message/CommandMenu'
 import NametagIcon from './NametagIcon'
 import EmojiText from '../Message/EmojiText'
+import {track} from '../../utils/analytics'
 
 class Nametag extends Component {
 
@@ -16,6 +17,9 @@ class Nametag extends Component {
 
     this.toggleMenu = e => {
       const {nametag: {id}, myNametagId} = this.props
+      if (!this.state.showMenu) {
+        track('NAMETAG_MENU_OPEN')
+      }
       if (e && e.preventDefault) {
         e.preventDefault()
       }

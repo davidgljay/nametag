@@ -5,6 +5,7 @@ import UserBadges from '../Badge/UserBadges'
 import RaisedButton from 'material-ui/RaisedButton'
 import Alert from '../Utils/Alert'
 import {grey} from '../../../styles/colors'
+import {track, increment} from '../../utils/analytics'
 
 class Join extends Component {
 
@@ -14,7 +15,9 @@ class Join extends Component {
     this.state = {alert: null}
 
     this.onJoinClick = () => {
-      const {room, nametag, createNametag} = this.props
+      const {room, nametag, templates, createNametag} = this.props
+      track('JOIN_ROOM', {id: room, public: templates.length === 0})
+      increment('ROOMS_JOINED')
       const nametagForPost = {
         ...nametag,
         badges: nametag.badges ? nametag.badges.map(badge => badge.id) : []
