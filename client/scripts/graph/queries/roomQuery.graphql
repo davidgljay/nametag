@@ -12,6 +12,7 @@ query roomQuery($id: ID!){
     mod {
       id
       name
+      bio
       image
     }
 		nametags {
