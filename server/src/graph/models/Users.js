@@ -377,24 +377,24 @@ const createLocal = ({conn}, email, password) => {
       {exists: true}
     )
    .run(conn)
- })
+  })
  .then(res => {
-     if (res.errors) {
-       return Promise.reject(new Error('Could not insert user', res.error))
-     }
-     if (res.exists) {
-       return Promise.reject(ErrEmailTaken)
-     }
-     const id = res.generated_keys[0]
-     return Promise.all([
-       id,
-       emailConfirmationRequest({conn}, email),
-       usersTable.get(id).update({
-         password: hashPassword(`${password}${passwordsalt}`)
-       }).run(conn)
-     ])
+   if (res.errors) {
+     return Promise.reject(new Error('Could not insert user', res.error))
+   }
+   if (res.exists) {
+     return Promise.reject(ErrEmailTaken)
+   }
+   const id = res.generated_keys[0]
+   return Promise.all([
+     id,
+     emailConfirmationRequest({conn}, email),
+     usersTable.get(id).update({
+       password: hashPassword(`${password}${passwordsalt}`)
+     }).run(conn)
+   ])
      .then(([id]) => id)
-   })
+ })
 }
 
 /**

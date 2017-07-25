@@ -120,7 +120,7 @@ class RoomCard extends Component {
             name={room.mod.name}
             marginRight={5}
             diameter={30} />
-          Norms In This Room:
+          To keep the conversation respectful, {mod.name} has set these norms:
         </div>
         <Norms norms={room.norms} showChecks />
       </div>

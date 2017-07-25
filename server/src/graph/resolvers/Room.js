@@ -1,5 +1,3 @@
-const {ErrNotInRoom, ErrNotLoggedIn} = require('../../errors')
-
 const Room = {
   messages: ({id}, _, {user, models: {Messages}}) => {
     if (!user || !user.nametags || !user.nametags[id]) {
