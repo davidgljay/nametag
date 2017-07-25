@@ -126,12 +126,14 @@ const styles = {
   bio: {
     fontSize: 12,
     fontStyle: 'italic',
-    marginTop: 4
+    marginTop: 4,
+    textAlign: 'left'
   },
   name: {
     fontWeight: 'bold',
     fontSize: 14,
-    marginTop: 5
+    marginTop: 5,
+    textAlign: 'left'
   },
   iconContainer: {
     marginLeft: 8,
