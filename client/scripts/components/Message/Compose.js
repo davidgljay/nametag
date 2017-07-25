@@ -184,7 +184,7 @@ class Compose extends Component {
             set='emojione'
             autoFocus
             emoji='dancer'
-            title=''
+            title='Skin Tone'
             onClick={emoji => this.setState({message: message + emoji.colons})} />
         </Popover>
         <IconButton

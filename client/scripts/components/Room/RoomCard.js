@@ -115,7 +115,7 @@ class RoomCard extends Component {
         title={room.title} />
       <div style={styles.norms}>
         <div style={styles.normsTitle}>
-          To keep the conversation respectful, {mod.name} has set these norms:
+          {room.mod.name} would like you to agree to these norms before joining:
         </div>
         <Norms norms={room.norms} showChecks />
       </div>
@@ -213,11 +213,15 @@ const styles = {
     backfaceVisibility: 'hidden',
     transformStyle: 'preserve-3d'
   },
+  norms: {
+    paddingTop: 10,
+    paddingBottom: 20
+  },
   normsTitle: {
     display: 'flex',
     justifyContent: 'center',
     fontWeight: 'bold',
-    lineHeight: '30px',
+    fontSize: 14,
     margin: 5
   },
   front: {

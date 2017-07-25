@@ -72,7 +72,7 @@ class JoinRoom extends Component {
         </div>
         <div style={styles.norms}>
           <h4>
-            To keep the conversation respectful, {mod.name} has set these norms:
+            {mod.name} would like you to agree to these norms before joining:
           </h4>
           <h1><Norms norms={norms} showChecks /></h1>
         </div>
