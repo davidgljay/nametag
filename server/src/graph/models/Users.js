@@ -1,6 +1,7 @@
 const {db} = require('../../db')
 const r = require('rethinkdb')
 const uuid = require('uuid')
+const fetch = require('node-fetch')
 const {fromUrl} = require('../../routes/images/imageUpload')
 const {
   ErrBadAuth,
@@ -11,7 +12,7 @@ const {
   APIError
 } = require('../../errors')
 const {passwordsalt} = require('../../secrets.json')
-const {enc, SHA3} = require('crypto-js')
+const {enc, SHA3, MD5} = require('crypto-js')
 const sendEmail = require('../../email')
 
 const usersTable = db.table('users')
@@ -272,7 +273,7 @@ const addDefaultsFromAuth = (context, authProfile) => {
 const addBadgesFromAuth = ({conn, user, models: {Templates, Granters}}, {badges = [], provider}) => {
   return Promise.all([
     user.badges ? Templates.getAll(Object.keys(user.badges)) : [],
-    Granters.getByUrlCode('nametag')
+    Granters.getByUrlCode('nametagauth')
   ])
 
     // Check to see if the a badge has already been granted. If not, grant one.
@@ -334,43 +335,67 @@ const badgesFromAuth = (badge, provider) => {
 }
 
 /**
- * Finds or creates a user based from local auth.
+ * Finds or creates a user based from email auth.
  *
  * @param {Object} context   graph context
  * @param {String} email     E-mail address of the user
  * @param {String} password  Hashed password from the user
  *
  */
-
-const createLocal = ({conn}, email, password) =>
- r.branch(
-   usersTable.getAll(email, {index: 'email'}).count().eq(0),
-   usersTable.insert({
-     email,
-     createdAt: new Date(),
-     displayNames: [],
-     images: [],
-     badges: {}
-   }),
-   {exists: true}
- )
-  .run(conn).then(res => {
-    if (res.errors) {
-      return Promise.reject(new Error('Could not insert user', res.error))
+const createLocal = ({conn}, email, password) => {
+  const emailHash = MD5(email.trim().toLowerCase())
+  return fetch(`https://gravatar.com/${emailHash}.json`)
+  .then(res => res.ok ? res.json() : null)
+  .then(gravatarInfo => {
+    let displayNames = [email.match(/^[^@]+/)[0]]
+    let images = []
+    if (gravatarInfo) {
+      const {entry: [{preferredUsername, thumbnailUrl, displayName}]} = gravatarInfo
+      if (displayName) {
+        displayNames.push(displayName)
+      }
+      if (preferredUsername) {
+        displayNames.push(preferredUsername)
+      }
+      if (thumbnailUrl) {
+        images.push(thumbnailUrl)
+      }
     }
-    if (res.exists) {
-      return Promise.reject(ErrEmailTaken)
-    }
-    const id = res.generated_keys[0]
-    return Promise.all([
-      id,
-      emailConfirmationRequest({conn}, email),
-      usersTable.get(id).update({
-        password: hashPassword(`${password}${passwordsalt}`)
-      }).run(conn)
-    ])
-    .then(([id]) => id)
+    // Make displayNames unique
+    displayNames = displayNames.reduce(
+      (arr, item) => arr.indexOf(item) === -1 ? arr.concat(item) : arr, []
+    )
+    return r.branch(
+      usersTable.getAll(email, {index: 'email'}).count().eq(0),
+      usersTable.insert({
+        email,
+        createdAt: new Date(),
+        displayNames,
+        images: images,
+        badges: {}
+      }),
+      {exists: true}
+    )
+   .run(conn)
   })
+ .then(res => {
+   if (res.errors) {
+     return Promise.reject(new Error('Could not insert user', res.error))
+   }
+   if (res.exists) {
+     return Promise.reject(ErrEmailTaken)
+   }
+   const id = res.generated_keys[0]
+   return Promise.all([
+     id,
+     emailConfirmationRequest({conn}, email),
+     usersTable.get(id).update({
+       password: hashPassword(`${password}${passwordsalt}`)
+     }).run(conn)
+   ])
+     .then(([id]) => id)
+ })
+}
 
 /**
  * Sets a forgot password token.

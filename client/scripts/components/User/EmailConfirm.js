@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import Navbar from '../Utils/Navbar'
 import CircularProgress from 'material-ui/CircularProgress'
 import {red} from '../../../styles/colors'
+import {track} from '../../utils/analytics'
 
 class EmailConfirm extends Component {
   constructor (props) {
@@ -15,7 +16,7 @@ class EmailConfirm extends Component {
 
   componentWillMount () {
     const {params, emailConfirmation} = this.props
-
+    track('EMAIL_CONFIRMATION')
     emailConfirmation(params.token)
       .then(res => {
         this.setState({complete: true})

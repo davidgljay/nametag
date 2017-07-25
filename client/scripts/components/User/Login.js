@@ -2,8 +2,8 @@ import React, {Component, PropTypes} from 'react'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
-import CircularProgress from 'material-ui/CircularProgress'
 import {grey} from '../../../styles/colors'
+import {track} from '../../utils/analytics'
 import key from 'keymaster'
 
 /* Function to Log in users via an auth provider or e-mail.
@@ -78,6 +78,7 @@ class Login extends Component {
         this.setState({emailAlert: 'Please enter a valid e-mail address'})
         return
       }
+      track('REGISTER_USER')
       this.props.registerUser(email.trim().toLowerCase(), password)
         .then(res => {
           if (res.error) {
@@ -91,6 +92,7 @@ class Login extends Component {
 
     this.login = () => {
       const {email, password} = this.state
+      track('LOGIN_USER')
       this.props.loginUser(email.trim().toLowerCase(), password)
         .then(res => {
           if (res.error) {
@@ -157,7 +159,6 @@ class Login extends Component {
       emailAlert,
       passwordAlert,
       alert,
-      loading,
       message,
       state
     } = this.state
@@ -256,26 +257,28 @@ class Login extends Component {
         }
         <input type='submit' style={styles.hiddenSubmit} />
       </form>
-      <div style={styles.authProviders}>
-        {
-          loading
-          ? <CircularProgress />
-        : <div>
-          <img
-            style={styles.loginImg}
-            src='/public/images/twitter.jpg'
-            onClick={this.providerAuth('twitter')} />
-          <img
-            style={styles.loginImg}
-            src='/public/images/fb.jpg'
-            onClick={this.providerAuth('facebook')} />
-          <img
-            style={styles.loginImg}
-            src='/public/images/google.png'
-            onClick={this.providerAuth('google')} />
-        </div>
-        }
-      </div>
+      {
+          // <div style={styles.authProviders}>
+          //   {
+          //     loading
+          //     ? <CircularProgress />
+          //   : <div>
+          //     <img
+          //       style={styles.loginImg}
+          //       src='/public/images/twitter.jpg'
+          //       onClick={this.providerAuth('twitter')} />
+          //     <img
+          //       style={styles.loginImg}
+          //       src='/public/images/fb.jpg'
+          //       onClick={this.providerAuth('facebook')} />
+          //     <img
+          //       style={styles.loginImg}
+          //       src='/public/images/google.png'
+          //       onClick={this.providerAuth('google')} />
+          //   </div>
+          //   }
+          // </div>
+      }
     </div>
   }
 }

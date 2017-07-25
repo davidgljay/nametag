@@ -5,6 +5,7 @@ import { dragTypes } from '../../constants'
 import {Card} from 'material-ui/Card'
 import AutoComplete from 'material-ui/AutoComplete'
 import NTIconMenu from './IconMenu'
+import {track} from '../../utils/analytics'
 
 const nametagTarget = {
   drop (props, monitor) {
@@ -28,11 +29,18 @@ class EditNametag extends Component {
       alert: null,
       alertType: null,
       loading: false,
-      showMenu: false
+      showMenu: false,
+      nameEdited: false
     }
 
     this.updateNametagProperty = (property) => {
       const {room, template, updateNametagEdit} = this.props
+      if (property === 'name' && !this.state.nameEdited) {
+        this.setState({nameEdited: true})
+        track('NAMETAG_EDITED', 'name')
+      } else if (property === 'image') {
+        track('NAMETAG_EDITED', 'image')
+      }
       return (e) => {
         updateNametagEdit(
           room || template,

@@ -4,6 +4,7 @@ import MentionMenu from '../Message/MentionMenu'
 import CommandMenu from '../Message/CommandMenu'
 import NametagIcon from './NametagIcon'
 import EmojiText from '../Message/EmojiText'
+import {track} from '../../utils/analytics'
 
 class Nametag extends Component {
 
@@ -16,6 +17,9 @@ class Nametag extends Component {
 
     this.toggleMenu = e => {
       const {nametag: {id}, myNametagId} = this.props
+      if (!this.state.showMenu) {
+        track('NAMETAG_MENU_OPEN')
+      }
       if (e && e.preventDefault) {
         e.preventDefault()
       }
@@ -27,7 +31,14 @@ class Nametag extends Component {
   }
 
   render () {
-    const {mod, nametag: {id, name, image, bio, badges}, setDefaultMessage, hideDMs, myNametagId} = this.props
+    const {
+      mod,
+      nametag: {id, name, image, bio, badges},
+      setDefaultMessage,
+      hideDMs,
+      myNametagId,
+      style
+    } = this.props
     const {showMenu} = this.state
     let ismod = ''
     const clickableStyle = setDefaultMessage ? styles.clickable : styles.notClickable
@@ -40,7 +51,7 @@ class Nametag extends Component {
     return <div
       key={id}
       id={id}
-      style={styles.nametag}>
+      style={{...styles.nametag, ...style}}>
       <div style={styles.main}>
         <div style={{...styles.iconContainer, ...clickableStyle}} onClick={this.toggleMenu}>
           <NametagIcon name={name} image={image} diameter={50} />

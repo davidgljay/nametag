@@ -14,6 +14,7 @@ import emojiText from 'emoji-text'
 import MenuItem from 'material-ui/MenuItem'
 import CommandMenu from './CommandMenu'
 import key from 'keymaster'
+import {track, increment} from '../../utils/analytics'
 
 class Compose extends Component {
   constructor (props) {
@@ -47,6 +48,8 @@ class Compose extends Component {
     this.post = (e) => {
       const {myNametag, roomId, updateNametag, createMessage, posted} = this.props
       const {message} = this.state
+      track('POST_MESSAGE', {room: roomId})
+      increment('MESSAGES_POSTED')
       e.preventDefault()
       if (message.length > 0) {
         let msg = {
@@ -96,6 +99,9 @@ class Compose extends Component {
     }
 
     this.toggleEmoji = (open) => () => {
+      if (open) {
+        track('EMOJI_MENU_OPEN')
+      }
       this.setState({showEmoji: open})
     }
 
@@ -178,7 +184,7 @@ class Compose extends Component {
             set='emojione'
             autoFocus
             emoji='dancer'
-            title=''
+            title='Skin Tone'
             onClick={emoji => this.setState({message: message + emoji.colons})} />
         </Popover>
         <IconButton
@@ -286,7 +292,7 @@ const styles = {
   },
   topic: {
     fontStyle: 'italic',
-    fontSize: 14,
+    fontSize: 18,
     color: grey
   },
   topicContainer: {

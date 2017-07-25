@@ -10,6 +10,7 @@ import ReactMarkdown from 'react-markdown'
 import EmojiText from './EmojiText'
 import EmojiReactions from './EmojiReactions'
 import {primary, white, grey} from '../../../styles/colors'
+import {track} from '../../utils/analytics'
 
 class Message extends Component {
 
@@ -32,6 +33,9 @@ class Message extends Component {
 
     this.toggleMenu = e => {
       const {myNametag, message: {author}} = this.props
+      if (!this.state.showMenu) {
+        track('MESSAGE_MENU_OPEN')
+      }
       if (e && e.preventDefault) {
         e.preventDefault()
       }

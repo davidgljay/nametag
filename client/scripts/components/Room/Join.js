@@ -5,6 +5,7 @@ import UserBadges from '../Badge/UserBadges'
 import RaisedButton from 'material-ui/RaisedButton'
 import Alert from '../Utils/Alert'
 import {grey} from '../../../styles/colors'
+import {track, increment} from '../../utils/analytics'
 
 class Join extends Component {
 
@@ -14,7 +15,9 @@ class Join extends Component {
     this.state = {alert: null}
 
     this.onJoinClick = () => {
-      const {room, nametag, createNametag} = this.props
+      const {room, nametag, templates, createNametag} = this.props
+      track('JOIN_ROOM', {id: room, public: templates.length === 0})
+      increment('ROOMS_JOINED')
       const nametagForPost = {
         ...nametag,
         badges: nametag.badges ? nametag.badges.map(badge => badge.id) : []
@@ -40,7 +43,14 @@ class Join extends Component {
     if (me) {
       join =
         <div style={styles.join}>
-          <h4>How Would You Like To Appear In This Conversation?</h4>
+          <Alert alert={this.state.alert} />
+          <RaisedButton
+            id='joinRoomButton'
+            primary
+            labelStyle={styles.button}
+            onClick={this.onJoinClick}
+            label='AGREE & JOIN' />
+          <h4>Edit How You Appear In This Room:</h4>
           <EditNametag
             nametagEdit={nametag}
             me={me}
@@ -55,13 +65,6 @@ class Join extends Component {
               badges={me.badges} />
           </div>
           <br />
-          <Alert alert={this.state.alert} />
-          <RaisedButton
-            id='joinRoomButton'
-            primary
-            labelStyle={styles.button}
-            onClick={this.onJoinClick}
-            label='AGREE & JOIN' />
         </div>
     } else {
       join = <Login />
@@ -70,11 +73,10 @@ class Join extends Component {
   }
 }
 
-const {string, bool, object, func, arrayOf} = PropTypes
+const {string, object, func, arrayOf} = PropTypes
 
 Join.propTypes = {
   room: string.isRequired,
-  normsChecked: bool.isRequired,
   nametag: object,
   addNametagEditBadge: func.isRequired,
   removeNametagEditBadge: func.isRequired,
@@ -89,7 +91,6 @@ const styles = {
     textAlign: 'center'
   },
   userBadges: {
-    width: 240,
     display: 'flex',
     flexWrap: 'wrap',
     verticalAlign: 'top',

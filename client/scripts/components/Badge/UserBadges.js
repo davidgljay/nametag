@@ -108,7 +108,7 @@ const styles = {
     color: grey
   },
   container: {
-    width: '100%'
+    width: 240
   },
   badgesContainer: {
     display: 'flex',
