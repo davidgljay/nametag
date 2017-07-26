@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Radium, {StyleRoot} from 'radium'
+import Raven from 'raven-js'
 
 import constants from './constants'
 import Room from './containers/Room/RoomContainer'
