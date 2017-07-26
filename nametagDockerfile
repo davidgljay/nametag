@@ -19,7 +19,6 @@ RUN pip install rethinkdb
 RUN pip install s3cmd
 
 LABEL yarnUpdated="5/25/17"
-COPY $PWD/server/package.json /usr/server/package.json
-WORKDIR usr/server
+WORKDIR /usr/nametag/server
 RUN yarn install
 CMD ./starthz.sh

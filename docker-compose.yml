@@ -7,10 +7,8 @@ nametag:
     - ./dist:/usr/client/
     - ./.keys:/usr/.keys
     - ./.hz:/usr/client/.hz
-    - ./server/src:/usr/server/src
-    - ./server/starthz.sh:/usr/server/starthz.sh
-    - ./server/backup.sh:/usr/server/backup.sh
-    - ./server/backup:/usr/server/backup
+    - .:/usr/nametag/
+    - ./server/backup:/usr/nametag/server/backup
   links:
     - rethinkdb
     - redis
