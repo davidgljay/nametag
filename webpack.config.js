@@ -98,7 +98,7 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': {
         'VERSION': `"${require('./package.json').version}"`,
-        'CLIENT_GIT_HASH': GIT_HASH ? JSON.stringify(GIT_HASH) : null
+        'CLIENT_GIT_HASH': JSON.stringify(GIT_HASH)
       }
     }),
     new webpack.ExtendedAPIPlugin()
