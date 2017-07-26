@@ -28,7 +28,9 @@ class Compose extends Component {
 
     this.onChange = (e) => {
       const text = e.target.value
-      if (/^@\S*$/.test(text)) {
+      console.log(text)
+      if (/@\S*$/.test(text)) {
+        console.log('Mention triggered')
         this.setState({showComposeMenu: 'mention'})
       } else if (/^\/\S*$/.test(text)) {
         this.setState({showComposeMenu: 'command'})
@@ -107,9 +109,10 @@ class Compose extends Component {
 
     this.nametagList = () => {
       const query = /@\S*/.exec(this.state.message)
-      return query ? this.props.nametags.filter(n => n.name.match(query[0].slice(1)))
+      const {nametags} = this.props
+      return query ? nametags.filter(n => n.name.match(query[0].slice(1)))
         .map(n => n.name)
-        : []
+        : nametags.map(n => n.name)
     }
 
     this.addMention = mention => e => {
