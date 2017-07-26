@@ -22,6 +22,7 @@ module.exports = {
     path: path.join(__dirname, 'dist', 'public', 'scripts'),
     publicPath: '/public/',
     filename: '[name].js',
+    sourceMapFilename: '[name].js.map',
     library: 'Nametag'
   },
   module: {
