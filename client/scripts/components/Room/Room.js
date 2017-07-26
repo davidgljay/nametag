@@ -6,7 +6,7 @@ import radium, {keyframes} from 'radium'
 import Messages from '../../components/Message/Messages'
 import Compose from '../Message/Compose'
 import JoinRoom from './JoinRoom'
-import {track, register} from '../../utils/analytics'
+import {track, register, setTimer} from '../../utils/analytics'
 
 class Room extends Component {
 
@@ -95,6 +95,7 @@ class Room extends Component {
         messageAddedSubscription(room.id, myNametag.id)
         messageDeletedSubscription(room.id)
         track('ROOM_VIEW', {id: room.id, title: room.title})
+        setTimer('POST_MESSAGE')
       }
     }
   }

@@ -5,15 +5,17 @@ import Norms from './Norms'
 import Join from './Join'
 import Navbar from '../Utils/Navbar'
 import {Card} from 'material-ui/Card'
-import {track} from '../../utils/analytics'
+import {track, setTimer} from '../../utils/analytics'
 
 class JoinRoom extends Component {
 
   componentDidMount () {
     if (this.props.me) {
-      track('JOIN_ROOM_LOGGED_IN')
+      track('JOIN_ROOM_VIEW_LOGGED_IN')
+      setTimer('JOIN_ROOM')
     } else {
-      track('JOIN_ROOM_LOGGED_OUT')
+      track('JOIN_ROOM_VIEW_LOGGED_OUT')
+      setTimer('LOGIN')
     }
   }
 
