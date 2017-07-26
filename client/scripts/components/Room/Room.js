@@ -156,7 +156,7 @@ class Room extends Component {
 
     const isMobile = window.innerWidth < 800
 
-    const backIcon = <img style={styles.backIcon} src='http://s3.amazonaws.com/nametag_images/logo-inverted30.png' />
+    const backIcon = <img style={styles.backIcon} src='https://s3.amazonaws.com/nametag_images/logo-inverted30.png' />
 
     return <div style={styles.roomContainer}>
       <div id='room'>

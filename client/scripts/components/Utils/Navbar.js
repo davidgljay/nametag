@@ -115,7 +115,7 @@ class Navbar extends Component {
     return <div>
       <AppBar
         title={<div style={styles.titleContainer}>
-          <img src='http://s3.amazonaws.com/nametag_images/logo-inverted30.png' />
+          <img src='https://s3.amazonaws.com/nametag_images/logo-inverted30.png' />
           <div style={styles.title}>Nametag</div>
         </div>}
         style={styles.appBar}
