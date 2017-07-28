@@ -92,7 +92,7 @@ class Messages extends Component {
           set='emojione'
           autoFocus
           emoji='dancer'
-          title=''
+          title='Skin Tone'
           onClick={this.addReaction} />
       </Popover>
       <table style={styles.msgContainer}>

@@ -59,6 +59,7 @@ const styles = {
     borderRadius: 3,
     color: grey,
     padding: 3,
+    display: 'flex',
     height: 17,
     marginRight: 4,
     fontSize: 10,
