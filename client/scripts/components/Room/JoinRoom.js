@@ -9,6 +9,20 @@ import {track, setTimer} from '../../utils/analytics'
 
 class JoinRoom extends Component {
 
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      showNorms: false
+    }
+
+    this.showNorms = e => {
+      e.preventDefault()
+      track('NORMS_CLICK')
+      this.setState({showNorms: !this.state.showNorms})
+    }
+  }
+
   componentDidMount () {
     const {me, room} = this.props
     if (me) {
@@ -31,6 +45,8 @@ class JoinRoom extends Component {
       removeNametagEditBadge,
       updateNametagEdit
     } = this.props
+
+    const {showNorms} = this.state
 
     return <div id='room'>
       <Navbar me={me} empty />
@@ -75,22 +91,24 @@ class JoinRoom extends Component {
           </Card>
         </div>
         <div style={styles.norms}>
-          <h4>
-            {mod.name} would like you to agree to these norms before joining:
-          </h4>
-          <h1><Norms norms={norms} showChecks /></h1>
+          <div>
+            {mod.name} would like you to agree to <a href='#' onClick={this.showNorms}> norms of respect</a> before joining.
+          </div>
+          {
+            showNorms && <Norms norms={norms} showChecks />
+          }
         </div>
+        <Join
+          room={id}
+          nametag={nametagEdits[id]}
+          me={me}
+          templates={templates.map(t => t.id)}
+          createNametag={createNametag}
+          addNametagEditBadge={addNametagEditBadge}
+          removeNametagEditBadge={removeNametagEditBadge}
+          updateNametagEdit={updateNametagEdit}
+          />
       </div>
-      <Join
-        room={id}
-        nametag={nametagEdits[id]}
-        me={me}
-        templates={templates.map(t => t.id)}
-        createNametag={createNametag}
-        addNametagEditBadge={addNametagEditBadge}
-        removeNametagEditBadge={removeNametagEditBadge}
-        updateNametagEdit={updateNametagEdit}
-        />
     </div>
   }
 }
@@ -173,6 +191,7 @@ const styles = {
     marginBottom: 20
   },
   norms: {
-    width: 300
+    width: 300,
+    margin: 20
   }
 }

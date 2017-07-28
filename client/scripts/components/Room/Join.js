@@ -50,7 +50,7 @@ class Join extends Component {
             labelStyle={styles.button}
             onClick={this.onJoinClick}
             label='AGREE & JOIN' />
-          <h4>Edit How You Appear In This Room:</h4>
+          <div style={styles.badgeEdit}>You can edit how you appear in this room:</div>
           <EditNametag
             nametagEdit={nametag}
             me={me}
@@ -99,6 +99,12 @@ const styles = {
     margin: 5
   },
   userBadgeText: {
+    fontStyle: 'italic',
+    fontSize: 16,
+    color: grey
+  },
+  badgeEdit: {
+    marginTop: 20,
     fontStyle: 'italic',
     fontSize: 16,
     color: grey
