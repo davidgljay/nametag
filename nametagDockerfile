@@ -6,7 +6,7 @@ FROM node
 MAINTAINER David Jay <davidgljay@gmail.com>
 
 LABEL description="Used to start the Nametag server"
-LABEL updated="3/16/17"
+LABEL updated="7/28/17"
 RUN echo "deb http://download.rethinkdb.com/apt jessie main" >> /etc/apt/sources.list
 RUN echo "deb http://dl.yarnpkg.com/debian/ stable main" >> /etc/apt/sources.list
 RUN wget -qO- https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -

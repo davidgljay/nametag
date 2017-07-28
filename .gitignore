@@ -10,6 +10,7 @@
 /server/src/secrets.json
 /server/secrets.json
 /server/node_modules/
+/server/backup
 /server/npm-debug.log
 /server/secrets.json
 /tests/e2e/reports/
