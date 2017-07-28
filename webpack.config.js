@@ -1,8 +1,12 @@
+const process = require('process')
+const execSync = require('child_process').execSync
 const path = require('path')
 const autoprefixer = require('autoprefixer')
 const Copy = require('copy-webpack-plugin')
 const LicenseWebpackPlugin = require('license-webpack-plugin')
 const webpack = require('webpack')
+
+const GIT_HASH = execSync('git rev-parse HEAD').toString().trim()
 
 // Edit the build targets and embeds below.
 
@@ -18,6 +22,7 @@ module.exports = {
     path: path.join(__dirname, 'dist', 'public', 'scripts'),
     publicPath: '/public/',
     filename: '[name].js',
+    sourceMapFilename: '[name].js.map',
     library: 'Nametag'
   },
   module: {
@@ -92,9 +97,11 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       'process.env': {
-        'VERSION': `"${require('./package.json').version}"`
+        'VERSION': `"${require('./package.json').version}"`,
+        'CLIENT_GIT_HASH': JSON.stringify(GIT_HASH)
       }
-    })
+    }),
+    new webpack.ExtendedAPIPlugin()
   ],
   resolve: {
     modules: [

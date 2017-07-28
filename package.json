@@ -32,6 +32,7 @@
     "moment": "^2.18.0",
     "qrcode.react": "^0.6.1",
     "radium": "^0.18.1",
+    "raven-js": "^3.17.0",
     "react": "^15.4.0",
     "react-addons-css-transition-group": "^15.3.2",
     "react-addons-update": "^15.4.2",

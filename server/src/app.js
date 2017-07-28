@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const execSync = require('child_process').execSync
 const https = require('https')
 const fs = require('fs')
 const r = require('rethinkdb')
@@ -20,12 +21,22 @@ const passport = require('passport')
 const RedisStore = require('connect-redis')(session)
 const redis = require('./redis')
 const elasticsearch = require('./elasticsearch')
+const Raven = require('raven')
 const startSubscriptionServer = require('./graph/subscriptions/SubscriptionServer')
 const PORT = 8181
+
+const GIT_HASH = execSync('git rev-parse HEAD', {
+  cwd: path.join(__dirname, '../..')
+}).toString().trim()
 
 process.env.AWS_ACCESS_KEY_ID = config.s3.accessKeyId
 process.env.AWS_SECRET_ACCESS_KEY = config.s3.secretAccessKey
 process.env.PRERENDER_TOKEN = config.prerender.token
+
+Raven.config(config.sentry.dsn, {
+  tags: {git_commit: GIT_HASH},
+  environment: process.env.NODE_ENV
+}).install()
 
 const app = express()
 
@@ -35,6 +46,9 @@ const server = https.createServer({
   cert: fs.readFileSync(path.join('/', 'usr', '.keys', 'cert.pem')),
   ca: fs.readFileSync(path.join('/', 'usr', '.keys', 'chain.pem'))
 }, app).listen(PORT)
+
+/* Send errors to Sentry */
+app.use(Raven.requestHandler())
 
 /* Use body parser middleware */
 app.use(bodyParser.json())
@@ -147,6 +161,7 @@ r.connect({host: 'rethinkdb'})
       res.sendFile(path.join('/usr', 'client', 'public', 'index.html'))
     })
 
+    app.use(Raven.errorHandler())
     app.use('/', (err, req, res, next) => {
       if (err instanceof errors.APIError) {
         res.status(err.status)

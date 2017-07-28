@@ -41,6 +41,7 @@
     "passport-local": "^1.0.0",
     "passport-twitter": "^1.0.4",
     "pem": "^1.8.1",
+    "raven": "^2.1.0",
     "prerender-node": "^2.7.2",
     "req-flash": "^0.0.3",
     "rethinkdb": "^2.1.1",
