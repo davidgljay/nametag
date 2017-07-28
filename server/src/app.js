@@ -45,7 +45,7 @@ const server = https.createServer({
   key: fs.readFileSync(path.join('/', 'usr', '.keys', 'privkey.pem')),
   cert: fs.readFileSync(path.join('/', 'usr', '.keys', 'cert.pem')),
   ca: fs.readFileSync(path.join('/', 'usr', '.keys', 'chain.pem'))
-}, app).listen(PORT)
+}, app)
 
 /* Send errors to Sentry */
 app.use(Raven.requestHandler())
@@ -77,7 +77,7 @@ if (app.get('env') === 'production') {
   sessionOptions.cookie.secure = true
 }
 
-elasticsearch.init()
+elasticsearch.init().catch(err => errrors.errorLog(err))
 
 app.use(session(sessionOptions))
 app.use(function (req, res, next) {
@@ -115,8 +115,6 @@ r.connect({host: 'rethinkdb'})
     app.use('/api/v1/graph/ql', apollo.graphqlExpress(graph.createGraphOptions(conn)))
 
     app.post('/register', local.register(conn))
-
-    dbInit(conn)
 
     /* Activate graphql subscriptions */
     subscriptions.activate(conn)
@@ -175,6 +173,13 @@ r.connect({host: 'rethinkdb'})
         })
       }
     })
+
+    //Now that the DB connection is established, start listening for connections
+    dbInit(conn)
+    .then(() => {
+      server.listen(PORT)
+      console.log(`Listening on port ${PORT}.`)
+    })
   })
   .catch(err => console.log(`Error connecting to rethinkdb: ${err}`))
 
@@ -186,9 +191,7 @@ app.get('/logout',
     req.session.destroy()
     req.logout()
     res.redirect('/')
-  }
-)
-
+  })
 // ==============================================================================
 // GraphQL Router
 // ==============================================================================
@@ -228,5 +231,3 @@ app.post('/api/image_url',
       .then(data => res.json(data))
       .catch(err => next(`Uploading image from URL ${err}`))
   })
-
-console.log(`Listening on port ${PORT}.`)

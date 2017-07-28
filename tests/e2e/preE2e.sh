@@ -8,4 +8,6 @@ docker-compose up -d
 # install selenium
 selenium-standalone install --config=./selenium.config.js
 
-sleep 8
+sleep 15
+
+echo 'Running tests'

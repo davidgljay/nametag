@@ -32,7 +32,7 @@ module.exports = (context) => {
 module.exports.init = (conn) => {
   const models = Object.keys(schema)
 
-  dbInit(conn)
+  return dbInit(conn)
     .then(() => {
       for (let i = 0; i < models.length; i++) {
         const table = models[i]
