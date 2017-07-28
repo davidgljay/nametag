@@ -10,13 +10,15 @@ import {track, setTimer} from '../../utils/analytics'
 class JoinRoom extends Component {
 
   componentDidMount () {
-    if (this.props.me) {
+    const {me, room} = this.props
+    if (me) {
       track('JOIN_ROOM_VIEW_LOGGED_IN')
       setTimer('JOIN_ROOM')
     } else {
       track('JOIN_ROOM_VIEW_LOGGED_OUT')
       setTimer('LOGIN')
     }
+    document.title = `${room.title}`
   }
 
   render () {

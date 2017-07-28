@@ -97,6 +97,7 @@ class Room extends Component {
         track('ROOM_VIEW', {id: room.id, title: room.title})
         setTimer('POST_MESSAGE')
       }
+      document.title = `${room.title}`
     }
   }
 
