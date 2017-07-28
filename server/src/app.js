@@ -77,7 +77,7 @@ if (app.get('env') === 'production') {
   sessionOptions.cookie.secure = true
 }
 
-elasticsearch.init().catch(err => errrors.errorLog(err))
+elasticsearch.init().catch(err => console.log(err))
 
 app.use(session(sessionOptions))
 app.use(function (req, res, next) {
