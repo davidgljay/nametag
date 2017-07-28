@@ -25,6 +25,7 @@ const PORT = 8181
 
 process.env.AWS_ACCESS_KEY_ID = config.s3.accessKeyId
 process.env.AWS_SECRET_ACCESS_KEY = config.s3.secretAccessKey
+process.env.PRERENDER_TOKEN = confic.prerender.token
 
 const app = express()
 
@@ -73,6 +74,8 @@ app.use(function (req, res, next) {
 })
 app.use(passport.initialize())
 app.use(passport.session())
+// Prerender pages for SEO optimization
+app.use(require('prerender-node').set('prerenderToken', ));
 
 /* Get rethinkdb connection */
 r.connect({host: 'rethinkdb'})

@@ -1748,6 +1748,12 @@ prepend-http@^1.0.0:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/prepend-http/-/prepend-http-1.0.4.tgz#d4f4562b0ce3696e41ac52d0e002e57a635dc6dc"
 
+prerender-node@^2.7.2:
+  version "2.7.2"
+  resolved "https://registry.yarnpkg.com/prerender-node/-/prerender-node-2.7.2.tgz#443773365b37e59eb9bd15ac930c36c8b97f3d48"
+  dependencies:
+    request "^2.40.0"
+
 preserve@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
@@ -1909,7 +1915,7 @@ req-flash@^0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/req-flash/-/req-flash-0.0.3.tgz#5e48b1a319879672a6339e0d603935a77879e470"
 
-request@^2.81.0:
+request@^2.40.0, request@^2.81.0:
   version "2.81.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.81.0.tgz#c6928946a0e06c5f8d6f8a9333469ffda46298a0"
   dependencies:
