@@ -25,7 +25,7 @@ const PORT = 8181
 
 process.env.AWS_ACCESS_KEY_ID = config.s3.accessKeyId
 process.env.AWS_SECRET_ACCESS_KEY = config.s3.secretAccessKey
-process.env.PRERENDER_TOKEN = confic.prerender.token
+process.env.PRERENDER_TOKEN = config.prerender.token
 
 const app = express()
 
