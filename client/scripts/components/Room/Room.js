@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react'
-import FontIcon from 'material-ui/FontIcon'
-import IconButton from 'material-ui/IconButton'
 import CircularProgress from 'material-ui/CircularProgress'
 import RoomLeftBar from './RoomLeftBar'
 import AppBar from 'material-ui/AppBar'
 import radium, {keyframes} from 'radium'
 import Messages from '../../components/Message/Messages'
 import Compose from '../Message/Compose'
+import JoinRoom from './JoinRoom'
+import {track, register, setTimer} from '../../utils/analytics'
 
 class Room extends Component {
 
@@ -41,19 +41,30 @@ class Room extends Component {
       })
     }
 
-    this.closeRoom = () => {
-      window.location = '/'
-    }
-
     this.getMyNametag = () => {
       const {me, room} = this.props.data
+      if (!room.nametags || !me) {
+        return null
+      }
       const myNtId = me.nametags.reduce(
         (val, nametag) => nametag.room && nametag.room.id === room.id ? nametag.id : val, null
       )
       return room.nametags.filter((nt) => nt.id === myNtId)[0]
     }
 
-    this.toggleLeftBar = () => this.setState({leftBarExpanded: !this.state.leftBarExpanded})
+    this.toggleLeftBar = () => {
+      const {leftBarExpanded} = this.state
+      if (!leftBarExpanded) {
+        track('ROOM_MENU_OPEN')
+      }
+      this.setState({leftBarExpanded: !leftBarExpanded})
+    }
+
+    this.showRooms = (e) => {
+      e.preventDefault()
+      track('SHOW_ROOMS')
+      window.location = '/rooms'
+    }
 
     this.setDefaultMessage = (defaultMessage) => this.setState({defaultMessage})
   }
@@ -73,11 +84,20 @@ class Room extends Component {
 
   componentDidUpdate (prevProps) {
     const {messageAddedSubscription, messageDeletedSubscription} = this.props
-    const {loading, room} = this.props.data
+    const {loading, room, me} = this.props.data
     if (prevProps.data.loading && !loading) {
-      this.showPresence()
-      messageAddedSubscription(room.id, this.getMyNametag().id)
-      messageDeletedSubscription(room.id)
+      const myNametag = this.getMyNametag()
+      if (me) {
+        register(me.id, {'$name': me.displayNames[0]})
+      }
+      if (me && myNametag) {
+        this.showPresence()
+        messageAddedSubscription(room.id, myNametag.id)
+        messageDeletedSubscription(room.id)
+        track('ROOM_VIEW', {id: room.id, title: room.title})
+        setTimer('POST_MESSAGE')
+      }
+      document.title = `${room.title}`
     }
   }
 
@@ -94,6 +114,13 @@ class Room extends Component {
         room,
         me
       },
+      nametagEdits,
+      updateNametagEdit,
+      addNametagEditBadge,
+      removeNametagEditBadge,
+      registerUser,
+      loginUser,
+      createNametag,
       latestMessageUpdatedSubscription,
       createMessage,
       updateRoom,
@@ -104,85 +131,81 @@ class Room extends Component {
 
     const {defaultMessage} = this.state
 
-    let myNametag
-    let userHasPosted
+    if (loading) {
+      return <div style={styles.spinner}>
+        <CircularProgress />
+      </div>
+    }
 
     // If the user is not logged in, return to the homepage
-    if (!loading && !me) {
-      window.location = '/'
-      return
+    if (!me || !room.nametags) {
+      return <JoinRoom
+        createNametag={createNametag}
+        addNametagEditBadge={addNametagEditBadge}
+        removeNametagEditBadge={removeNametagEditBadge}
+        updateNametagEdit={updateNametagEdit}
+        nametagEdits={nametagEdits}
+        registerUser={registerUser}
+        loginUser={loginUser}
+        room={room}
+        me={me} />
     }
     let hideDMs
-    if (!loading) {
-      myNametag = this.getMyNametag()
-      userHasPosted = room.messages.reduce(
-        (bool, msg) => msg.author.id === myNametag.id ? true : bool, false
-      )
-    }
+    const myNametag = this.getMyNametag()
+    const userHasPosted = room.messages.reduce(
+      (bool, msg) => msg.author.id === myNametag.id ? true : bool, false
+    )
 
     const isMobile = window.innerWidth < 800
 
-    const backIcon = <IconButton
-      style={styles.close}>
-      <FontIcon
-        className='material-icons'
-        onClick={this.closeRoom}
-        style={styles.closeIcon}>
-         arrow_back
-       </FontIcon>
-    </IconButton>
+    const backIcon = <img style={styles.backIcon} src='https://s3.amazonaws.com/nametag_images/logo-inverted30.png' />
 
     return <div style={styles.roomContainer}>
-      {
-        !loading
-        ? <div id='room'>
-          <AppBar
-            id='roomTitle'
-            title={room.title}
-            style={styles.appBar}
-            iconElementRight={backIcon}
-            onLeftIconButtonTouchTap={this.toggleLeftBar}
-            iconStyleLeft={isMobile ? {display: 'inline-block'} : {display: 'none'}} />
-          <div>
-            <RoomLeftBar
-              room={room}
-              me={me}
-              latestMessageUpdatedSubscription={latestMessageUpdatedSubscription}
-              updateRoom={updateRoom}
-              myNametag={myNametag}
-              setDefaultMessage={this.setDefaultMessage}
-              expanded={this.state.leftBarExpanded}
-              toggleLeftBar={this.toggleLeftBar} />
-            <Messages
-              roomId={room.id}
-              norms={room.norms}
-              createMessage={createMessage}
-              myNametag={myNametag}
-              hideDMs={!!hideDMs}
-              addReaction={addReaction}
-              deleteMessage={deleteMessage}
-              setDefaultMessage={this.setDefaultMessage}
-              mod={room.mod}
-              messages={room.messages} />
-          </div>
-          <Compose
-            createMessage={createMessage}
-            roomId={room.id}
-            welcome={room.welcome}
-            topic={room.topic}
-            mod={room.mod}
-            posted={userHasPosted}
-            setDefaultMessage={this.setDefaultMessage}
+      <div id='room'>
+        <AppBar
+          id='roomTitle'
+          title={room.title}
+          style={styles.appBar}
+          iconElementRight={backIcon}
+          onRightIconButtonTouchTap={this.showRooms}
+          onLeftIconButtonTouchTap={this.toggleLeftBar}
+          iconStyleLeft={isMobile ? {display: 'inline-block'} : {display: 'none'}} />
+        <div>
+          <RoomLeftBar
+            room={room}
+            me={me}
+            latestMessageUpdatedSubscription={latestMessageUpdatedSubscription}
             updateRoom={updateRoom}
-            updateNametag={updateNametag}
-            nametags={room.nametags}
-            defaultMessage={defaultMessage}
-            myNametag={myNametag} />
+            myNametag={myNametag}
+            setDefaultMessage={this.setDefaultMessage}
+            expanded={this.state.leftBarExpanded}
+            toggleLeftBar={this.toggleLeftBar} />
+          <Messages
+            roomId={room.id}
+            norms={room.norms}
+            createMessage={createMessage}
+            myNametag={myNametag}
+            hideDMs={!!hideDMs}
+            addReaction={addReaction}
+            deleteMessage={deleteMessage}
+            setDefaultMessage={this.setDefaultMessage}
+            mod={room.mod}
+            messages={room.messages} />
         </div>
-          : <div style={styles.spinner}>
-            <CircularProgress />
-          </div>
-        }
+        <Compose
+          createMessage={createMessage}
+          roomId={room.id}
+          welcome={room.welcome}
+          topic={room.topic}
+          mod={room.mod}
+          posted={userHasPosted}
+          setDefaultMessage={this.setDefaultMessage}
+          updateRoom={updateRoom}
+          updateNametag={updateNametag}
+          nametags={room.nametags}
+          defaultMessage={defaultMessage}
+          myNametag={myNametag} />
+      </div>
     </div>
   }
 }
@@ -195,8 +218,8 @@ Room.propTypes = {
     room: shape({
       id: string.isRequired,
       norms: arrayOf(string).isRequired,
-      messages: arrayOf(object).isRequired,
-      nametags: arrayOf(object).isRequired,
+      messages: arrayOf(object),
+      nametags: arrayOf(object),
       modOnlyDMs: bool
     }),
     me: object
@@ -205,6 +228,7 @@ Room.propTypes = {
     roomId: string.isRequired
   }),
   updateRoom: func.isRequired,
+  createNametag: func.isRequired,
   createMessage: func.isRequired,
   toggleSaved: func.isRequired,
   addReaction: func.isRequired,
@@ -269,5 +293,9 @@ const styles = {
   spinner: {
     marginLeft: '45%',
     marginTop: '40vh'
+  },
+  backIcon: {
+    margin: 8,
+    cursor: 'pointer'
   }
 }

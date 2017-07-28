@@ -4,14 +4,23 @@ query roomQuery($id: ID!){
   room(id:$id) {
     id
     title
+    image
     description
     norms
+    nametagCount
     welcome
     topic
+    templates {
+      id
+      image
+      name
+      description
+    }
     modOnlyDMs
     mod {
       id
       name
+      bio
       image
     }
 		nametags {
@@ -39,6 +48,9 @@ query roomQuery($id: ID!){
     }
   }
   me {
+    id
+    images
+    displayNames
     nametags {
       id
       mentions
@@ -50,6 +62,9 @@ query roomQuery($id: ID!){
         latestMessage
         closedAt
       }
+    }
+    badges {
+      ...badgeView
     }
   }
 }

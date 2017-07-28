@@ -2,10 +2,10 @@ import React, { Component, PropTypes } from 'react'
 import Nametag from '../Nametag/Nametag'
 import Norms from './Norms'
 import Join from './Join'
-import NametagIcon from '../Nametag/NametagIcon'
 import constants from '../../constants'
 import {Card, CardTitle, CardMedia} from 'material-ui/Card'
 import {grey} from '../../../styles/colors'
+import {track} from '../../utils/analytics'
 import Badges from '../Badge/Badges'
 
 class RoomCard extends Component {
@@ -19,6 +19,7 @@ class RoomCard extends Component {
     }
 
     this.flip = () => {
+      track('FLIP_CARD', {id: this.props.room.id, title: this.props.room.title})
       this.setState({flipped: !this.state.flipped, flipping: 0.01})
 
       // Run the flipping animation. This needs to be done w/ JS b/c Radium doesn't support it.
@@ -113,12 +114,7 @@ class RoomCard extends Component {
         title={room.title} />
       <div style={styles.norms}>
         <div style={styles.normsTitle}>
-          <NametagIcon
-            image={room.mod.image}
-            name={room.mod.name}
-            marginRight={5}
-            diameter={30} />
-          Norms In This Room:
+          {room.mod.name} would like you to agree to these norms before joining:
         </div>
         <Norms norms={room.norms} showChecks />
       </div>
@@ -130,7 +126,6 @@ class RoomCard extends Component {
           me={me}
           templates={room.templates.map(t => t.id)}
           createNametag={createNametag}
-          normsChecked={this.state.normsChecked}
           addNametagEditBadge={addNametagEditBadge}
           removeNametagEditBadge={removeNametagEditBadge}
           updateNametagEdit={updateNametagEdit}
@@ -217,11 +212,15 @@ const styles = {
     backfaceVisibility: 'hidden',
     transformStyle: 'preserve-3d'
   },
+  norms: {
+    paddingTop: 10,
+    paddingBottom: 20
+  },
   normsTitle: {
     display: 'flex',
     justifyContent: 'center',
     fontWeight: 'bold',
-    lineHeight: '30px',
+    fontSize: 14,
     margin: 5
   },
   front: {

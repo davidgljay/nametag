@@ -6,6 +6,7 @@ import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import {mobile} from '../../../styles/sizes'
+import {track} from '../../utils/analytics'
 import NavDrawer from './NavDrawer'
 
 const onCreateRoomClick = () => {
@@ -39,6 +40,12 @@ class Navbar extends Component {
         element: e.currentTarget
       })
     }
+
+    this.openMenu = (e) => {
+      e.preventDefault()
+      track('APPBAR_MENU_OPEN')
+      this.setState({open: 'true'})
+    }
   }
 
   render () {
@@ -54,7 +61,7 @@ class Navbar extends Component {
             id='homeButton'
             onClick={onHomeClick} label='HOME' />
           {
-            me.granters.length === 1 &&
+            me.granters && me.granters.length === 1 &&
             <FlatButton
               style={styles.button}
               id='granterButton'
@@ -62,7 +69,7 @@ class Navbar extends Component {
               label={me.granters[0].name} />
           }
           {
-            me.granters.length > 1 &&
+            me.granters && me.granters.length > 1 &&
               <FlatButton
                 style={styles.button}
                 id='granterButton'
@@ -70,7 +77,7 @@ class Navbar extends Component {
                 label={'ORGANIZATIONS'} />
           }
           {
-            me.granters.length > 1 &&
+            me.granters && me.granters.length > 1 &&
               <Popover
                 open={showGranters}
                 anchorEl={element}
@@ -107,11 +114,14 @@ class Navbar extends Component {
     </div>
     return <div>
       <AppBar
-        title='Nametag'
+        title={<div style={styles.titleContainer}>
+          <img src='https://s3.amazonaws.com/nametag_images/logo-inverted30.png' />
+          <div style={styles.title}>Nametag</div>
+        </div>}
         style={styles.appBar}
         onTitleTouchTap={onHomeClick}
         iconElementRight={mobile || empty ? null : auth}
-        onLeftIconButtonTouchTap={() => this.setState({open: true})} />
+        onLeftIconButtonTouchTap={this.openMenu} />
       <NavDrawer
         open={this.state.open}
         toggleLogin={toggleLogin}
@@ -151,5 +161,18 @@ const styles = {
   },
   drawerTitle: {
     marginLeft: 15
+  },
+  titleContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    marginTop: 10
+  },
+  title: {
+    lineHeight: '46px',
+    marginLeft: 10
+  },
+  tagline: {
+    lineHeight: '5px',
+    fontSize: 14
   }
 }
