@@ -70,7 +70,9 @@ class Nametag extends Component {
     // Attach user id to Sentry error reports
     client.watchQuery({query: USER_QUERY, fetchPolicy: 'cache-only'}).subscribe({
       next: ({data}) => {
-        Raven.setUserContext({id: data.me.id})
+        if (data.me) {
+          Raven.setUserContext({id: data.me.id})
+        }
       }
     })
   }

@@ -43,7 +43,7 @@ class Room extends Component {
 
     this.getMyNametag = () => {
       const {me, room} = this.props.data
-      if (!room.nametags || !me) {
+      if (!room.nametags || !me || !me.nametags) {
         return null
       }
       const myNtId = me.nametags.reduce(
@@ -137,8 +137,10 @@ class Room extends Component {
       </div>
     }
 
+    const myNametag = this.getMyNametag()
+
     // If the user is not logged in, return to the homepage
-    if (!me || !room.nametags) {
+    if (!me || !room.nametags || !myNametag) {
       return <JoinRoom
         createNametag={createNametag}
         addNametagEditBadge={addNametagEditBadge}
@@ -151,7 +153,6 @@ class Room extends Component {
         me={me} />
     }
     let hideDMs
-    const myNametag = this.getMyNametag()
     const userHasPosted = room.messages.reduce(
       (bool, msg) => msg.author.id === myNametag.id ? true : bool, false
     )

@@ -28,9 +28,7 @@ class Compose extends Component {
 
     this.onChange = (e) => {
       const text = e.target.value
-      console.log(text)
       if (/@\S*$/.test(text)) {
-        console.log('Mention triggered')
         this.setState({showComposeMenu: 'mention'})
       } else if (/^\/\S*$/.test(text)) {
         this.setState({showComposeMenu: 'command'})
