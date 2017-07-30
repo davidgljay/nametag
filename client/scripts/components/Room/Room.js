@@ -43,7 +43,7 @@ class Room extends Component {
 
     this.getMyNametag = () => {
       const {me, room} = this.props.data
-      if (!room.nametags || !me || !me.nametags) {
+      if (!room || !me || !room.nametags || !me.nametags) {
         return null
       }
       const myNtId = me.nametags.reduce(
