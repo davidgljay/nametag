@@ -102,13 +102,18 @@ class Message extends Component {
 
     const isMod = mod.id === author.id
 
+    // Compress messages if they are sequentally from the same author
+    messageStyle = hideAuthor ? {...messageStyle, ...styles.compressed} : messageStyle
+    const messageContainerStyle = hideAuthor ? {...styles.message, ...styles.compressed} : styles.message
+    const imageStyle = hideAuthor ? {...styles.image, ...styles.compressed} : styles.image
+
     return <div>
       <div
         className='message'
-        style={styles.message}
+        style={messageContainerStyle}
         id={id}
         onClick={() => this.setState({showActions: !showActions})}>
-        <div style={styles.image} onClick={this.toggleMenu}>
+        <div style={imageStyle} onClick={this.toggleMenu}>
           {
             !hideAuthor && <NametagIcon
               image={author.image}
@@ -309,5 +314,8 @@ const styles = {
     fontStyle: 'normal',
     color: white,
     cursor: 'default'
+  },
+  compressed: {
+    paddingTop: 0
   }
 }
