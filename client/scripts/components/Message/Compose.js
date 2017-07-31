@@ -108,7 +108,7 @@ class Compose extends Component {
     this.nametagList = () => {
       const query = /@\S*/.exec(this.state.message)
       const {nametags} = this.props
-      return query ? nametags.filter(n => n.name.match(query[0].slice(1)))
+      return query ? nametags.filter(n => n.name.toLowerCase().match(query[0].slice(1).toLowerCase()))
         .map(n => n.name)
         : nametags.map(n => n.name)
     }
@@ -221,7 +221,7 @@ class Compose extends Component {
           anchorOrigin={{horizontal: 'middle', vertical: 'top'}}
           targetOrigin={{horizontal: 'middle', vertical: 'bottom'}}
           onRequestClose={this.closeMenus} >
-          <Menu>
+          <Menu style={styles.mentionMenu}>
             {
               nametagList.map(name =>
                 <MenuItem
@@ -321,5 +321,8 @@ const styles = {
   form: {
     flex: 1,
     display: 'flex'
+  },
+  mentionMenu: {
+    maxHeight: '50vh'
   }
 }
