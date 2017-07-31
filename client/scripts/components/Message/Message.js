@@ -63,6 +63,7 @@ class Message extends Component {
       toggleEmoji,
       myNametag,
       addReaction,
+      hideAuthor,
       createMessage,
       deleteMessage,
       hideDMs,
@@ -108,15 +109,19 @@ class Message extends Component {
         id={id}
         onClick={() => this.setState({showActions: !showActions})}>
         <div style={styles.image} onClick={this.toggleMenu}>
-          <NametagIcon
-            image={author.image}
-            name={author.name}
-            diameter={50} />
+          {
+            !hideAuthor && <NametagIcon
+              image={author.image}
+              name={author.name}
+              diameter={50} />
+          }
         </div>
         <div style={messageStyle}>
-          <div style={styles.name} onClick={this.toggleMenu}>
-            {author.name}
-          </div>
+          {
+            !hideAuthor && <div style={styles.name} onClick={this.toggleMenu}>
+              {author.name}
+            </div>
+          }
           {
             callout
           }
@@ -140,8 +145,7 @@ class Message extends Component {
               reactions={reactions}
               addReaction={addReaction}
               myNametagId={myNametag.id}
-              messageId={id}
-              />
+              messageId={id} />
             <MessageMenu
               showModAction={this.showModAction}
               showActions={showActions}
@@ -212,6 +216,7 @@ Message.propTypes = {
   mod: object.isRequired,
   deleteMessage: func.isRequired,
   hideDMs: bool.isRequired,
+  hideAuthor: bool.isRequired,
   setDefaultMessage: func.isRequired
 }
 

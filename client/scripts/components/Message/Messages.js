@@ -14,23 +14,26 @@ class Messages extends Component {
       showEmoji: ''
     }
 
-    this.mapMessage = (message) => {
+    this.mapMessage = (message, i) => {
       const {
         norms,
         roomId,
         myNametag,
         mod,
         createMessage,
+        messages,
         addReaction,
         setDefaultMessage,
         hideDMs,
         deleteMessage
       } = this.props
+
       return <Message
         message={message}
         roomId={roomId}
         key={message.id}
         hideDMs={hideDMs}
+        hideAuthor={i > 0 && message.author.id === messages[i - 1].author.id}
         toggleEmoji={this.toggleEmoji}
         deleteMessage={deleteMessage}
         addReaction={addReaction}
