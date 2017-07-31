@@ -102,18 +102,18 @@ class Message extends Component {
     const isMod = mod.id === author.id
 
     return <div>
-      <tr
+      <div
         className='message'
         style={styles.message}
         id={id}
         onClick={() => this.setState({showActions: !showActions})}>
-        <td style={styles.image} onClick={this.toggleMenu}>
+        <div style={styles.image} onClick={this.toggleMenu}>
           <NametagIcon
             image={author.image}
             name={author.name}
             diameter={50} />
-        </td>
-        <td style={messageStyle}>
+        </div>
+        <div style={messageStyle}>
           <div style={styles.name} onClick={this.toggleMenu}>
             {author.name}
           </div>
@@ -165,8 +165,8 @@ class Message extends Component {
             anchor={document.getElementById(id)}
             onRequestClose={this.toggleMenu}
             open={showMenu === 'commands'} />
-        </td>
-      </tr>
+        </div>
+      </div>
       {
         this.state.modAction &&
         <ModAction
@@ -222,7 +222,8 @@ const styles = {
     paddingTop: 10,
     paddingBottom: 5,
     marginTop: 10,
-    marginBottom: 10
+    marginBottom: 10,
+    display: 'flex'
   },
   directMessageIncoming: {
     backgroundColor: grey

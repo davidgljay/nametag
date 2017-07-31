@@ -95,13 +95,11 @@ class Messages extends Component {
           title='Skin Tone'
           onClick={this.addReaction} />
       </Popover>
-      <table style={styles.msgContainer}>
-        <tbody>
-          {
-            messages.map(this.mapMessage)
-          }
-        </tbody>
-      </table>
+      <div style={styles.msgContainer}>
+        {
+          messages.map(this.mapMessage)
+        }
+      </div>
     </div>
   }
 }
@@ -129,12 +127,13 @@ const styles = {
     height: '100%',
     width: 'calc(100% - 275px)',
     display: 'flex',
+    flexDirection: 'column',
     paddingLeft: 275,
     paddingTop: 100,
     scrollBehavior: 'smooth',
     [mobile]: {
-      paddingLeft: 30,
-      width: 'calc(100% - 30px)'
+      paddingLeft: 0,
+      width: '100%'
     }
   },
   msgContainer: {
