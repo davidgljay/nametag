@@ -89,7 +89,7 @@ app.use(function (req, res, next) {
 app.use(passport.initialize())
 app.use(passport.session())
 // Prerender pages for SEO optimization
-app.use(require('prerender-node').set('prerenderToken', process.env.PRERENDER_TOKEN));
+app.use(require('prerender-node').set('prerenderToken', process.env.PRERENDER_TOKEN))
 
 /* Get rethinkdb connection */
 r.connect({host: 'rethinkdb'})
@@ -174,7 +174,7 @@ r.connect({host: 'rethinkdb'})
       }
     })
 
-    //Now that the DB connection is established, start listening for connections
+    // Now that the DB connection is established, start listening for connections
     dbInit(conn)
     .then(() => {
       server.listen(PORT)
