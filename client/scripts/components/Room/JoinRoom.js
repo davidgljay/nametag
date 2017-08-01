@@ -50,7 +50,7 @@ class JoinRoom extends Component {
 
     const {showNorms} = this.state
 
-    return <div id='room'>
+    return <div id='room' style={styles.container}>
       <Navbar me={me} empty />
       <div id='roomInfoContainer' style={styles.roomInfoContainer}>
         <Card>
@@ -94,7 +94,7 @@ class JoinRoom extends Component {
         </div>
         <div style={styles.norms}>
           <div>
-            {mod.name} would like you to agree to <a href='#' onClick={this.showNorms}> norms of respect</a> before joining.
+            {mod.name} would like you to agree to <a href='#' onClick={this.showNorms}> norms of respect</a>.
           </div>
           {
             showNorms && <Norms norms={norms} showChecks />
@@ -141,6 +141,9 @@ JoinRoom.propTypes = {
 export default radium(JoinRoom)
 
 const styles = {
+  container: {
+    marginBottom: 100
+  },
   roomCard: {
     display: 'flex',
     flexWrap: 'wrap',
