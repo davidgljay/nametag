@@ -6,7 +6,7 @@ import radium, {keyframes} from 'radium'
 import Messages from '../../components/Message/Messages'
 import Compose from '../Message/Compose'
 import JoinRoom from './JoinRoom'
-import {track, register, setTimer} from '../../utils/analytics'
+import {track, identify, setTimer} from '../../utils/analytics'
 
 class Room extends Component {
 
@@ -88,7 +88,7 @@ class Room extends Component {
     if (prevProps.data.loading && !loading) {
       const myNametag = this.getMyNametag()
       if (me) {
-        register(me.id, {'$name': me.displayNames[0]})
+        identify(me.id, {'$name': me.displayNames[0]})
       }
       if (me && myNametag) {
         this.showPresence()

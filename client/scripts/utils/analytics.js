@@ -1,9 +1,11 @@
 import {enc, SHA3} from 'crypto-js'
 let timers = {}
 
+const trackingEnabled = () => process.env.NODE_ENV !== 'test' && window.hasOwnProperty('mixpanel')
+
 export const track = (event, properties) => {
   // amplitude.getInstance().logEvent(event)
-  if (process.env.NODE_ENV !== 'test' && window.hasOwnProperty('mixpanel')) {
+  if (trackingEnabled()) {
     let data = {...properties, prod: process.env.NODE_ENV === 'production'}
     if (timers[event]) {
       data = {...data, time: new Date().getTime() - timers[event]}
@@ -13,23 +15,29 @@ export const track = (event, properties) => {
   }
 }
 
-export const register = (id, data) => {
-  if (process.env.NODE_ENV !== 'test' && window.hasOwnProperty('mixpanel')) {
+export const identify = (id, data) => {
+  if (trackingEnabled()) {
     mixpanel.identify(SHA3(id, {outputLength: 224}).toString(enc.Base64))
     mixpanel.people.set(data)
     mixpanel.register(data)
   }
 }
 
+export const register = (id) => {
+  if (trackingEnabled()) {
+    mixpanel.alias(id)
+  }
+}
+
 export const setMedatdata = (data) => {
-  if (process.env.NODE_ENV !== 'test' && window.hasOwnProperty('mixpanel')) {
+  if (trackingEnabled()) {
     mixpanel.register(data)
     mixpanel.people.set(data)
   }
 }
 
 export const increment = category => {
-  if (process.env.NODE_ENV !== 'test' && window.hasOwnProperty('mixpanel')) {
+  if (trackingEnabled()) {
     mixpanel.people.increment(category)
   }
 }

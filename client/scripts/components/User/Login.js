@@ -3,7 +3,7 @@ import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import {grey} from '../../../styles/colors'
-import {track} from '../../utils/analytics'
+import {track, register} from '../../utils/analytics'
 import key from 'keymaster'
 
 /* Function to Log in users via an auth provider or e-mail.
@@ -85,6 +85,7 @@ class Login extends Component {
             this.setState({alert: res.error.message})
           }
           if (res.id) {
+            register(res.id)
             this.login()
           }
         })

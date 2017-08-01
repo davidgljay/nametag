@@ -4,7 +4,7 @@ import Navbar from '../Utils/Navbar'
 import LoginDialog from '../User/LoginDialog'
 import SearchBar from './SearchBar'
 import Notifications from '../Room/Notifications'
-import {track, register} from '../../utils/analytics'
+import {track, identify} from '../../utils/analytics'
 
 class RoomCards extends Component {
 
@@ -32,7 +32,7 @@ class RoomCards extends Component {
     const {data: {loading, me}} = this.props
     if (oldProps.data.loading && !loading) {
       if (me) {
-        register(me.id, {'$name': me.displayNames[0]})
+        identify(me.id, {'$name': me.displayNames[0]})
       }
       track('ROOMCARDS_VIEW')
     }
