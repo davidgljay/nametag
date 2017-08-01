@@ -78,21 +78,23 @@ class Message extends Component {
       media = <Media url={this.checkImage(text)[0]} />
     }
 
-    // Get proper style if the this is a direct message
-    let messageStyle
+    // Compress messages if they are sequentally from the same author
+    let messageStyle = hideAuthor ? {...styles.messageText, ...styles.compressed} : styles.messageText
+    const messageContainerStyle = hideAuthor ? {...styles.message, ...styles.compressed} : styles.message
+    const imageStyle = hideAuthor ? {...styles.image, ...styles.compressed} : styles.image
+
     let callout
-    if (!recipient) {
-      messageStyle = styles.messageText
-    } else if (author.id === myNametag.id) {
+    if (author.id === myNametag.id && recipient) {
       messageStyle = {...styles.messageText, ...styles.directMessageOutgoing}
       callout = <div style={styles.dmCallout}>
       Private Message to {recipient.name}
         <NametagIcon
           image={author.image}
           name={author.name}
+          style={styles.tinyIconImg}
           diameter={20} />
       </div>
-    } else if (recipient.id === myNametag.id) {
+    } else if (recipient && recipient.id === myNametag.id) {
       messageStyle = {...styles.messageText, ...styles.directMessageIncoming}
       callout = <div style={styles.dmCallout}>Private Message</div>
     }
@@ -101,11 +103,6 @@ class Message extends Component {
     const emojiText = text.replace(/(?=\S+)_(?=\S+:)/g, '~@~A~')
 
     const isMod = mod.id === author.id
-
-    // Compress messages if they are sequentally from the same author
-    messageStyle = hideAuthor ? {...messageStyle, ...styles.compressed} : messageStyle
-    const messageContainerStyle = hideAuthor ? {...styles.message, ...styles.compressed} : styles.message
-    const imageStyle = hideAuthor ? {...styles.image, ...styles.compressed} : styles.image
 
     return <div>
       <div
@@ -236,15 +233,17 @@ const styles = {
     display: 'flex'
   },
   directMessageIncoming: {
-    backgroundColor: grey
+    paddingTop: 10,
+    backgroundColor: 'rgba(168, 168, 168, 0.15)'
   },
   directMessageOutgoing: {
-    backgroundColor: grey
+    paddingTop: 10,
+    backgroundColor: 'rgba(168, 168, 168, 0.15)'
   },
   dmCallout: {
     color: grey,
     fontStyle: 'italic',
-    display: 'inline-block',
+    display: 'flex',
     marginLeft: 10
   },
   messageText: {

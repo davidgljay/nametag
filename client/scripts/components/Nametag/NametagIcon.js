@@ -1,17 +1,19 @@
 import React, {PropTypes} from 'react'
 import {primary, white} from '../../../styles/colors'
 
-const NametagIcon = ({image, name, diameter, marginRight}) => {
+const NametagIcon = ({image, name, diameter, marginRight, style = {}}) => {
   const imageStyle = {
     width: diameter,
     height: diameter,
-    borderRadius: diameter / 2
+    borderRadius: diameter / 2,
+    ...style
   }
 
   const defaultImageStyle = {
     ...styles.defaultImage,
     lineHeight: `${diameter}px`,
-    fontSize: diameter / 2
+    fontSize: diameter / 2,
+    ...style
   }
   return <div style={{marginRight}}>
     {
