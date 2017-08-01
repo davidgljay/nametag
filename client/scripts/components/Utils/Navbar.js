@@ -18,6 +18,7 @@ const onHomeClick = () => {
 }
 
 const onLogoutClick = () => {
+  track('LOGOUT_USER')
   window.location = '/logout'
 }
 

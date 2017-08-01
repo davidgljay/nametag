@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react'
 import Drawer from 'material-ui/Drawer'
 import MenuItem from 'material-ui/MenuItem'
+import {track} from '../../../analytics'
 
 const NavDrawer = ({me, empty, toggleLogin, open, setOpen}) => {
   let items = null
@@ -16,6 +17,7 @@ const NavDrawer = ({me, empty, toggleLogin, open, setOpen}) => {
         )
       }
       <MenuItem
+        onClick={() => track('LOGOUT_USER')}
         href='/logout'>Log Out</MenuItem>
     </div>
   } else if (!empty) {
