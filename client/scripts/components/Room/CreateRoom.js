@@ -5,6 +5,7 @@ import CreateRoomForms from './Create/CreateRoomForms'
 import CircularProgress from 'material-ui/CircularProgress'
 import Stepper from './Create/Stepper'
 import RaisedButton from 'material-ui/RaisedButton'
+import {track} from '../../../analytics'
 
 class CreateRoom extends Component {
 
@@ -181,6 +182,7 @@ class CreateRoom extends Component {
     this.props.updateNametagEdit('new', 'name', '')
     this.props.updateNametagEdit('new', 'bio', '')
     this.props.updateNametagEdit('new', 'badges', [])
+    track('CREATE_ROOM_VIEW')
   }
 
   render () {

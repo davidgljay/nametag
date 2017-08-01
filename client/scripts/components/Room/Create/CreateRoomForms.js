@@ -6,6 +6,7 @@ import UserBadges from '../../Badge/UserBadges'
 import ChooseNorms from './ChooseNorms'
 import ImageSearch from './ImageSearch'
 import {grey400} from 'material-ui/styles/colors'
+import {track} from '../../../../analytics'
 
 const getForm = ({
     error,
@@ -50,6 +51,7 @@ const getForm = ({
           removeSelectedBadge={removeSelectedBadge} />
       </div>
     case 1:
+      track('CREATE_ROOM_TITLE')
       return <div>
         {
           !room.image && <h4>Please select an image for this conversation.</h4>
@@ -64,6 +66,7 @@ const getForm = ({
           updateRoom={updateRoom} />
       </div>
     case 2:
+      track('CREATE_ROOM_IMAGE')
       return <div>
         <h4>How would you like to appear in your room?</h4>
         <div style={styles.editNametagContainer}>
@@ -86,6 +89,7 @@ const getForm = ({
         </div>
       </div>
     case 3:
+      track('CREATE_ROOM_NAMETAG')
       return <div>
         <h4>Please set norms for this discussion.</h4>
         <ChooseNorms
@@ -96,6 +100,7 @@ const getForm = ({
           removeNorm={removeNorm} />
       </div>
     case 4:
+      track('CREATE_ROOM_NORMS')
       return <div>
         <h4>Ready to publish this conversation?</h4>
       </div>
