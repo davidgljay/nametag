@@ -4,6 +4,8 @@ import Nametag from '../Nametag/Nametag'
 import Norms from './Norms'
 import Join from './Join'
 import Navbar from '../Utils/Navbar'
+import radium from 'radium'
+import {mobile} from '../../../styles/sizes'
 import {Card} from 'material-ui/Card'
 import {track, setTimer} from '../../utils/analytics'
 
@@ -136,11 +138,16 @@ JoinRoom.propTypes = {
   updateNametagEdit: func.isRequired
 }
 
-export default JoinRoom
+export default radium(JoinRoom)
 
 const styles = {
   roomCard: {
-    display: 'flex'
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    [mobile]: {
+      width: 300
+    }
   },
   roomImageContainer: {
     height: 200
