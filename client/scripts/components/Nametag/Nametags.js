@@ -40,7 +40,7 @@ const styles = {
     paddingBottom: 5
   },
   absent: {
-    opacity: 0.4
+    opacity: 0.8
   },
   nametags: {
     marginBottom: 40,

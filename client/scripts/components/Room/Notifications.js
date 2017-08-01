@@ -107,7 +107,7 @@ const styles = {
     alignItems: 'stretch'
   },
   noNewMessages: {
-    opacity: 0.5
+    opacity: 0.8
   },
   notification: {
     margin: 5,
