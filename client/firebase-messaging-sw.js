@@ -93,7 +93,7 @@ firebase.messaging().setBackgroundMessageHandler((payload) => {
       }
       break
     case 'ROOM_NEW_MESSAGES':
-      notificationTitle = `New messages in ${params.roomName}.`
+      notificationTitle = `New messages in ${params.roomTitle}.`
       notificationOptions = {
         icon: params.image,
         body: 'Click to check it out',

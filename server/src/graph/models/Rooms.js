@@ -198,16 +198,17 @@ const setModOnlyDMs = ({conn}, roomId, modOnlyDMs) =>
 
 const notifyOfNewMessage = ({conn, models: {Nametags, Users}}, roomId) =>
   Promise.all([
-    roomsTable.get(roomId).pluck(['latestMessage', 'id', 'name']).run(conn),
+    roomsTable.get(roomId).pluck(['latestMessage', 'id', 'title', 'image']).run(conn),
     Nametags.getRoomNametags(roomId)
   ])
   .then(([room, nametags]) => {
-    const {latestMessage, name, id} = room
+    const {latestMessage, title, id, image} = room
     const notifData = {
       reason: 'ROOM_NEW_MESSAGES',
       params: {
         roomId: id,
-        roomName: name
+        roomTitle: title,
+        image
       }
     }
     const toNotify = nametags.filter(
