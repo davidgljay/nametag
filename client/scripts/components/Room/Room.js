@@ -88,6 +88,7 @@ class Room extends Component {
     if (prevProps.data.loading && !loading) {
       const myNametag = this.getMyNametag()
       if (me) {
+        console.log('Identifying')
         identify(me.id, {'$name': me.displayNames[0]})
       }
       if (me && myNametag) {

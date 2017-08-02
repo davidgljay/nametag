@@ -5,7 +5,7 @@ import CreateRoomForms from './Create/CreateRoomForms'
 import CircularProgress from 'material-ui/CircularProgress'
 import Stepper from './Create/Stepper'
 import RaisedButton from 'material-ui/RaisedButton'
-import {track} from '../../../analytics'
+import {track} from '../../utils/analytics'
 
 class CreateRoom extends Component {
 

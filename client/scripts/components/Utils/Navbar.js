@@ -45,7 +45,7 @@ class Navbar extends Component {
     this.openMenu = (e) => {
       e.preventDefault()
       track('APPBAR_MENU_OPEN')
-      this.setState({open: 'true'})
+      this.setState({open: true})
     }
   }
 

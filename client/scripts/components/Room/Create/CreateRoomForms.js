@@ -6,7 +6,7 @@ import UserBadges from '../../Badge/UserBadges'
 import ChooseNorms from './ChooseNorms'
 import ImageSearch from './ImageSearch'
 import {grey400} from 'material-ui/styles/colors'
-import {track} from '../../../../analytics'
+import {track} from '../../../utils/analytics'
 
 const getForm = ({
     error,

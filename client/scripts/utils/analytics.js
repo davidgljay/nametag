@@ -23,9 +23,9 @@ export const identify = (id, data) => {
   }
 }
 
-export const register = (id) => {
+export const alias = (id) => {
   if (trackingEnabled()) {
-    mixpanel.alias(id)
+    mixpanel.alias(SHA3(id, {outputLength: 224}).toString(enc.Base64))
   }
 }
 

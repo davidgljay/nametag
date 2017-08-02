@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react'
 import Drawer from 'material-ui/Drawer'
 import MenuItem from 'material-ui/MenuItem'
-import {track} from '../../../analytics'
+import {track} from '../../utils/analytics'
 
 const NavDrawer = ({me, empty, toggleLogin, open, setOpen}) => {
   let items = null
