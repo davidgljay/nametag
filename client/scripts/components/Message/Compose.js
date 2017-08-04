@@ -105,7 +105,7 @@ class Compose extends Component {
       // Make it so the back button closes emoji rather than leaving the room
       if (open) {
         window.location.hash = 'showEmoji'
-      } else {
+      } else if (window.location.hash === '#showEmoji') {
         window.history.back()
       }
       this.setState({showEmoji: open})
