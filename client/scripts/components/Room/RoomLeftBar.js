@@ -27,6 +27,12 @@ class RoomLeftBar extends Component {
     this.toggleLeftBarSection = (section) => () => {
       this.setState({toggles: {...this.state.toggles, [section]: !this.state.toggles[section]}})
     }
+
+    this.setDefaultMessage = (message) => {
+      const {setDefaultMessage, toggleLeftBar} = this.props
+      setDefaultMessage(message)
+      toggleLeftBar()
+    }
   }
 
   render () {
@@ -35,7 +41,6 @@ class RoomLeftBar extends Component {
       me,
       latestMessageUpdatedSubscription,
       updateRoom,
-      setDefaultMessage,
       myNametag,
       expanded,
       toggleLeftBar
@@ -118,7 +123,7 @@ class RoomLeftBar extends Component {
           this.state.toggles.nametags &&
           <Nametags
             mod={room.mod.id}
-            setDefaultMessage={setDefaultMessage}
+            setDefaultMessage={this.setDefaultMessage}
             nametags={room.nametags}
             hideDMs={hideDMs}
             myNametagId={myNametag.id} />
