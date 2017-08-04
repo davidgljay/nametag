@@ -102,6 +102,12 @@ class Compose extends Component {
       if (open) {
         track('EMOJI_MENU_OPEN')
       }
+      // Make it so the back button closes emoji rather than leaving the room
+      if (open) {
+        window.location.hash = 'showEmoji'
+      } else {
+        window.history.back()
+      }
       this.setState({showEmoji: open})
     }
 
@@ -136,6 +142,9 @@ class Compose extends Component {
 
   componentWillMount () {
     key('enter', 'compose', this.post)
+    window.onhashchange = () => {
+      this.setState({showEmoji: window.location.hash === '#showEmoji'})
+    }
   }
 
   componentDidUpdate (prevProps, prevState) {
@@ -183,7 +192,6 @@ class Compose extends Component {
           onRequestClose={this.toggleEmoji(false)}>
           <Picker
             set='emojione'
-            autoFocus
             emoji='dancer'
             title='Skin Tone'
             onClick={emoji => this.setState({message: message + emoji.colons})} />

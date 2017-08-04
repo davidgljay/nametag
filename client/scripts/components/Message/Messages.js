@@ -93,7 +93,6 @@ class Messages extends Component {
         onRequestClose={this.toggleEmoji('')}>
         <Picker
           set='emojione'
-          autoFocus
           emoji='dancer'
           title='Skin Tone'
           onClick={this.addReaction} />
