@@ -36,6 +36,7 @@ const Norms = (props) =>
             <ListItem
               key={i}
               primaryText={norm}
+              disabled
               innerDivStyle={
                 props.showChecks ? styles.normText
                 : {...styles.normText, padding: 7, fontSize: 14}
