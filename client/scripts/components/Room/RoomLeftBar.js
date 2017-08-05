@@ -49,7 +49,7 @@ class RoomLeftBar extends Component {
       nametag => nametag.room &&
       new Date(nametag.room.closedAt) > new Date() &&
       nametag.room.id !== this.props.roomId
-    )
+    ).length
     const isMod = me.nametags
       .reduce((isMod, nametag) => nametag.id === room.mod.id ? true : isMod, false)
     const hideDMs = !isMod && room.modOnlyDMs
