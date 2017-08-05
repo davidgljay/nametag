@@ -1,11 +1,10 @@
 import React, {Component, PropTypes} from 'react'
-// import {mobile} from '../../../styles/sizes'
 import RoomSettings from './RoomSettings'
 import Norms from './Norms'
 import Drawer from 'material-ui/Drawer'
 import Notifications from './Notifications'
-// import FontIcon from 'material-ui/FontIcon'
 import Nametags from '../../components/Nametag/Nametags'
+import ShareButtons from './ShareButtons'
 
 class RoomLeftBar extends Component {
   constructor (props) {
@@ -16,7 +15,8 @@ class RoomLeftBar extends Component {
         norms: true,
         settings: true,
         rooms: true,
-        nametags: true
+        nametags: true,
+        share: true
       }
     }
 
@@ -58,6 +58,12 @@ class RoomLeftBar extends Component {
 
     const leftBar = <div id='leftBar' style={leftBarStyle}>
       <div style={styles.leftBarContent}>
+        {
+          this.state.toggles.share &&
+          <div style={styles.share}>
+            <ShareButtons roomId={room.id} title={room.title} />
+          </div>
+        }
         <div
           style={styles.leftNavHeader}
           onClick={this.toggleLeftBarSection('norms')}>
@@ -98,7 +104,7 @@ class RoomLeftBar extends Component {
               style={styles.leftNavHeader}
               onClick={this.toggleLeftBarSection('settings')}>
               {
-                this.state.toggles.nametags ? '- ' : '+ '
+                this.state.toggles.settings ? '- ' : '+ '
               }
               Settings
             </div>
