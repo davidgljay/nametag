@@ -24,7 +24,7 @@ class Room extends Component {
       },
       presenceTime: null,
       defaultMessage: '',
-      showWelcome: true
+      showWelcome: false
     }
 
     this.showPresence = () => {
@@ -68,6 +68,15 @@ class Room extends Component {
       window.location = '/rooms'
     }
 
+    this.userHasPosted = (myNametag, messages) => {
+      for (let i = 0; i < messages.length; i++) {
+        if (myNametag.id === messages[i].author.id) {
+          return true
+        }
+      }
+      return false
+    }
+
     this.setDefaultMessage = (defaultMessage) => this.setState({defaultMessage})
   }
 
@@ -96,6 +105,7 @@ class Room extends Component {
         this.showPresence()
         messageAddedSubscription(room.id, myNametag.id)
         messageDeletedSubscription(room.id)
+        this.setState({showWelcome: !this.userHasPosted(myNametag, room.messages)})
         track('ROOM_VIEW', {id: room.id, title: room.title})
         setTimer('POST_MESSAGE')
       }
