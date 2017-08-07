@@ -4,7 +4,8 @@ import RoomLeftBar from './RoomLeftBar'
 import AppBar from 'material-ui/AppBar'
 import radium, {keyframes} from 'radium'
 import Messages from '../../components/Message/Messages'
-import Compose from '../Message/Compose'
+import WelcomeModal from './WelcomeModal'
+import ComposeWithMenus from '../Message/ComposeWithMenus'
 import JoinRoom from './JoinRoom'
 import {track, identify, setTimer} from '../../utils/analytics'
 
@@ -88,7 +89,6 @@ class Room extends Component {
     if (prevProps.data.loading && !loading) {
       const myNametag = this.getMyNametag()
       if (me) {
-        console.log('Identifying')
         identify(me.id, {'$name': me.displayNames[0]})
       }
       if (me && myNametag) {
@@ -154,9 +154,6 @@ class Room extends Component {
         me={me} />
     }
     let hideDMs
-    const userHasPosted = room.messages.reduce(
-      (bool, msg) => msg.author.id === myNametag.id ? true : bool, false
-    )
 
     const isMobile = window.innerWidth < 800
 
@@ -194,13 +191,12 @@ class Room extends Component {
             mod={room.mod}
             messages={room.messages} />
         </div>
-        <Compose
+        <ComposeWithMenus
           createMessage={createMessage}
           roomId={room.id}
           welcome={room.welcome}
           topic={room.topic}
           mod={room.mod}
-          posted={userHasPosted}
           setDefaultMessage={this.setDefaultMessage}
           updateRoom={updateRoom}
           updateNametag={updateNametag}
@@ -208,6 +204,17 @@ class Room extends Component {
           defaultMessage={defaultMessage}
           myNametag={myNametag} />
       </div>
+      {
+        // <WelcomeModal
+        //   postMessage={this.postMessage}
+        //   welcome={room.welcome}
+        //   nametags={room.nametags}
+        //   mod={room.mod}
+        //   myNametag={myNametag}
+        //   updateNametag={updateNametag}
+        //   toggleWelcome={() => {}}
+        //   />
+      }
     </div>
   }
 }

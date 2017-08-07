@@ -8,11 +8,8 @@ import IconButton from 'material-ui/IconButton'
 import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
 import Popover from 'material-ui/Popover'
-import Menu from 'material-ui/Menu'
 import {Picker} from 'emoji-mart'
 import emojiText from 'emoji-text'
-import MenuItem from 'material-ui/MenuItem'
-import CommandMenu from './CommandMenu'
 import key from 'keymaster'
 import {track, increment} from '../../utils/analytics'
 
@@ -21,33 +18,31 @@ class Compose extends Component {
     super(props)
     this.state = {
       message: '',
-      showEmoji: false,
-      showComposeMenu: '',
-      nametagList: []
+      showEmoji: false
     }
 
     this.onChange = (e) => {
       const text = e.target.value
-      if (/@\S*$/.test(text)) {
-        this.setState({showComposeMenu: 'mention'})
-      } else if (/^\/\S*$/.test(text)) {
-        this.setState({showComposeMenu: 'command'})
-      } else {
-        this.setState({showComposeMenu: ''})
+      const {onUpdateText} = this.props
+      if (onUpdateText) {
+        onUpdateText(text)
       }
+
       if (text.slice(-1) === '\n') {
         this.post(e)
         return
       }
       this.setState({
-        message: text,
-        nametagList: this.nametagList()
+        message: text
       })
     }
 
     this.post = (e) => {
-      const {myNametag, roomId, updateNametag, createMessage, posted} = this.props
+      const {myNametag, roomId, createMessage, onPost} = this.props
       const {message} = this.state
+      if (onPost) {
+        onPost(message)
+      }
       track('POST_MESSAGE', {room: roomId})
       increment('MESSAGES_POSTED')
       e.preventDefault()
@@ -57,44 +52,8 @@ class Compose extends Component {
           author: myNametag.id,
           room: roomId
         }
-        if (!posted) {
-          updateNametag(myNametag.id, {bio: emojiText.convert(message, {delimiter: ':'})})
-        }
-        this.setState({message: '', showEmoji: false, showMentionMenu: false, posted: true})
-        this.slashCommand(message)
+        this.setState({message: '', showEmoji: false, showMentionMenu: false})
         createMessage(msg, myNametag)
-      }
-    }
-
-    this.slashCommand = (message) => {
-      const {updateRoom, updateNametag, roomId, myNametag} = this.props
-      const commandRegex = /^\/(\S+)\s(.+)/.exec(message)
-      if (!commandRegex) {
-        return
-      }
-      const command = commandRegex[1]
-      const text = commandRegex[2]
-      switch (command) {
-        case 'welcome':
-          updateRoom(roomId, {welcome: text})
-          break
-        case 'intro':
-          updateNametag(myNametag.id, {bio: text})
-          break
-        case 'name':
-          updateNametag(myNametag.id, {name: text})
-          break
-        case 'title':
-          updateRoom(roomId, {title: text})
-          break
-        case 'description':
-          updateRoom(roomId, {description: text})
-          break
-        case 'topic':
-          updateRoom(roomId, {topic: text})
-          break
-        default:
-          return
       }
     }
 
@@ -110,34 +69,6 @@ class Compose extends Component {
       }
       this.setState({showEmoji: open})
     }
-
-    this.nametagList = () => {
-      const query = /@\S*/.exec(this.state.message)
-      const {nametags} = this.props
-      return query ? nametags.filter(n => n.name.toLowerCase().match(query[0].slice(1).toLowerCase()))
-        .map(n => n.name)
-        : nametags.map(n => n.name)
-    }
-
-    this.addMention = mention => e => {
-      e.preventDefault()
-      this.setState({
-        message: this.state.message.replace(/@\S*(?=[^@]*$)/, mention),
-        showComposeMenu: false
-      })
-    }
-
-    this.addCommand = command => e => {
-      e.preventDefault()
-      this.setState({
-        message: this.state.message.replace(/\/\S*(?=[^/]*$)/, command),
-        showComposeMenu: false
-      })
-    }
-
-    this.closeMenus = () => {
-      this.setState({showComposeMenu: false})
-    }
   }
 
   componentWillMount () {
@@ -151,15 +82,6 @@ class Compose extends Component {
     if (this.props.defaultMessage !== prevProps.defaultMessage) {
       this.setState({message: this.props.defaultMessage})
     }
-
-    // The menu popovers seem like to steal focus from the compose box
-    // This is a hack to take focus back, there is probably a better solution
-    if (this.state.showComposeMenu || prevState.showComposeMenu) {
-      document.getElementById('composeTextInput').focus()
-      setTimeout(() => document.getElementById('composeTextInput').focus(), 0)
-      setTimeout(() => document.getElementById('composeTextInput').focus(), 250)
-      setTimeout(() => document.getElementById('composeTextInput').focus(), 400)
-    }
   }
 
   componentWillUnmount () {
@@ -169,19 +91,18 @@ class Compose extends Component {
   render () {
     // TODO: Add GIFs, image upload
 
-    const {welcome, topic, mod, myNametag, setDefaultMessage, posted} = this.props
-    const {showEmoji, message, showComposeMenu, nametagList} = this.state
-    const prompt = posted ? topic : welcome
+    const {topic, mod} = this.props
+    const {showEmoji, message} = this.state
     return <div style={styles.container}>
       {
-        prompt && <div style={styles.topicContainer}>
+        topic && <div style={styles.topicContainer}>
           <div style={styles.nametagIconContainer}>
             <NametagIcon
               image={mod.image}
               name={mod.name}
               diameter={20} />
           </div>
-          <div id='topic' style={styles.topic}>{prompt}</div>
+          <div id='topic' style={styles.topic}>{topic}</div>
         </div>
       }
       <div style={styles.compose} id='compose'>
@@ -223,35 +144,12 @@ class Compose extends Component {
               </FontIcon>
               } />
         </form>
-        <Popover
-          open={showComposeMenu === 'mention' && nametagList.length > 0}
-          anchorEl={document.getElementById('compose')}
-          anchorOrigin={{horizontal: 'middle', vertical: 'top'}}
-          targetOrigin={{horizontal: 'middle', vertical: 'bottom'}}
-          onRequestClose={this.closeMenus} >
-          <Menu style={styles.mentionMenu}>
-            {
-              nametagList.map(name =>
-                <MenuItem
-                  key={name}
-                  primaryText={`@${name}`}
-                  onClick={this.addMention(`@${name} `)} />
-              )
-            }
-          </Menu>
-        </Popover>
-        <CommandMenu
-          isMod={myNametag.id === mod.id}
-          open={showComposeMenu === 'command'}
-          anchor={document.getElementById('compose')}
-          onRequestClose={this.closeMenus}
-          setDefaultMessage={setDefaultMessage} />
       </div>
     </div>
   }
 }
 
-const {string, func, shape, bool} = PropTypes
+const {string, func, shape} = PropTypes
 
 Compose.propTypes = {
   roomId: string.isRequired,
@@ -260,15 +158,14 @@ Compose.propTypes = {
     name: string.isRequired
   }).isRequired,
   createMessage: func.isRequired,
-  updateRoom: func.isRequired,
   defaultMessage: string,
-  setDefaultMessage: func.isRequired,
-  welcome: string,
-  posted: bool,
+  topic: string,
   mod: shape({
     name: string.isRequired,
     image: string.isRequired
-  })
+  }),
+  onUpdateText: func,
+  onPost: func
 }
 
 export default radium(Compose)
