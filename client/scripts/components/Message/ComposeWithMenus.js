@@ -4,6 +4,8 @@ import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import CommandMenu from './CommandMenu'
+import {mobile} from '../../../styles/sizes'
+import radium from 'radium'
 
 class ComposeWithMenu extends Component {
 
@@ -116,7 +118,7 @@ class ComposeWithMenu extends Component {
   render () {
     const {roomId, myNametag, createMessage, defaultMessage, mod, topic, setDefaultMessage} = this.props
     const {nametagList, showComposeMenu} = this.state
-    return <div>
+    return <div style={styles.container}>
       <Compose
         roomId={roomId}
         myNametag={myNametag}
@@ -166,6 +168,28 @@ ComposeWithMenu.propTypes = {
   mod: object.isRequired
 }
 
-export default ComposeWithMenu
+export default radium(ComposeWithMenu)
 
-const styles = {}
+const styles = {
+  mentionMenu: {
+    maxHeight: '50vh'
+  },
+  container: {
+    display: 'flex',
+    position: 'fixed',
+    bottom: 0,
+    flexDirection: 'column',
+    borderCollapse: 'separate',
+    paddingBottom: 20,
+    paddingTop: 10,
+    background: '#FFF',
+    width: 'calc(100% - 300px)',
+    paddingRight: 15,
+    zIndex: 40,
+    marginLeft: 290,
+    [mobile]: {
+      marginLeft: 20,
+      width: 'calc(100% - 40px)'
+    }
+  },
+}

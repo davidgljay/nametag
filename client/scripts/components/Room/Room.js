@@ -23,7 +23,8 @@ class Room extends Component {
         settings: true
       },
       presenceTime: null,
-      defaultMessage: ''
+      defaultMessage: '',
+      showWelcome: true
     }
 
     this.showPresence = () => {
@@ -130,7 +131,7 @@ class Room extends Component {
       addReaction
     } = this.props
 
-    const {defaultMessage} = this.state
+    const {defaultMessage, showWelcome} = this.state
 
     if (loading) {
       return <div style={styles.spinner}>
@@ -204,17 +205,17 @@ class Room extends Component {
           defaultMessage={defaultMessage}
           myNametag={myNametag} />
       </div>
-      {
-        // <WelcomeModal
-        //   postMessage={this.postMessage}
-        //   welcome={room.welcome}
-        //   nametags={room.nametags}
-        //   mod={room.mod}
-        //   myNametag={myNametag}
-        //   updateNametag={updateNametag}
-        //   toggleWelcome={() => {}}
-        //   />
-      }
+      <WelcomeModal
+        createMessage={createMessage}
+        welcome={room.welcome}
+        roomId={room.id}
+        nametags={room.nametags}
+        mod={room.mod}
+        showWelcome={showWelcome}
+        myNametag={myNametag}
+        updateNametag={updateNametag}
+        toggleWelcome={() => this.setState({showWelcome: false})}
+        />
     </div>
   }
 }

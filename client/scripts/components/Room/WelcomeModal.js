@@ -4,11 +4,18 @@ import Nametag from '../Nametag/Nametag'
 import {Card} from 'material-ui/Card'
 import Compose from '../Message/Compose'
 
+const onPost = (updateNametag, toggleWelcome, myNametagId) => (post) => {
+  updateNametag(myNametagId, {bio: post})
+  toggleWelcome()
+}
+
 const WelcomeModal = ({
   createMessage,
   welcome,
   nametags,
   mod,
+  defaultMessage,
+  roomId,
   myNametag,
   showWelcome,
   toggleWelcome,
@@ -19,6 +26,16 @@ const WelcomeModal = ({
     contentStyle={styles.dialog}
     open={showWelcome}
     onRequestClose={() => toggleWelcome()}>
+    <h3>{welcome}</h3>
+    <Compose
+      roomId={roomId}
+      myNametag={myNametag}
+      createMessage={createMessage}
+      defaultMessage={defaultMessage}
+      mod={mod}
+      topic=''
+      onPost={onPost(updateNametag, myNametag.id)}
+      />
     <div style={styles.cardsContainer}>
       {
         nametags.map(nametag =>
@@ -33,7 +50,6 @@ const WelcomeModal = ({
         )
       }
     </div>
-    <h3>{welcome}</h3>
   </Dialog>
 
 const {func, string, arrayOf, object, bool, shape} = PropTypes
@@ -67,6 +83,7 @@ const styles = {
     flexWrap: 'wrap',
     maxHeight: '50vh',
     overflowY: 'auto',
-    paddingBottom: 30
+    paddingBottom: 30,
+    marginTop: 20
   }
 }

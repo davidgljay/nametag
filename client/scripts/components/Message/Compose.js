@@ -1,6 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import radium from 'radium'
-import {mobile} from '../../../styles/sizes'
 import {grey} from '../../../styles/colors'
 import FontIcon from 'material-ui/FontIcon'
 import NametagIcon from '../Nametag/NametagIcon'
@@ -93,7 +91,7 @@ class Compose extends Component {
 
     const {topic, mod} = this.props
     const {showEmoji, message} = this.state
-    return <div style={styles.container}>
+    return <div>
       {
         topic && <div style={styles.topicContainer}>
           <div style={styles.nametagIconContainer}>
@@ -168,27 +166,9 @@ Compose.propTypes = {
   onPost: func
 }
 
-export default radium(Compose)
+export default Compose
 
 const styles = {
-  container: {
-    display: 'flex',
-    position: 'fixed',
-    bottom: 0,
-    flexDirection: 'column',
-    borderCollapse: 'separate',
-    paddingBottom: 20,
-    paddingTop: 10,
-    background: '#FFF',
-    width: 'calc(100% - 300px)',
-    paddingRight: 15,
-    zIndex: 40,
-    marginLeft: 290,
-    [mobile]: {
-      marginLeft: 20,
-      width: 'calc(100% - 40px)'
-    }
-  },
   emojiSelector: {
     background: 'none',
     boxShadow: 'none'
@@ -226,8 +206,5 @@ const styles = {
   form: {
     flex: 1,
     display: 'flex'
-  },
-  mentionMenu: {
-    maxHeight: '50vh'
   }
 }
