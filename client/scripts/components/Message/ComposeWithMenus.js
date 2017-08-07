@@ -12,11 +12,11 @@ class ComposeWithMenu extends Component {
 
     this.state = {
       showComposeMenu: '',
-      nametagList: []
+      nametagList: [],
+      message: ''
     }
 
     this.onUpdateText = (text) => {
-      console.log('onUpdateText', text)
       if (/@\S*$/.test(text)) {
         this.setState({showComposeMenu: 'mention'})
       } else if (/^\/\S*$/.test(text)) {
@@ -25,7 +25,8 @@ class ComposeWithMenu extends Component {
         this.setState({showComposeMenu: ''})
       }
       this.setState({
-        nametagList: this.nametagList()
+        nametagList: this.nametagList(text),
+        message: text
       })
     }
 
@@ -72,8 +73,8 @@ class ComposeWithMenu extends Component {
       }
     }
 
-    this.nametagList = () => {
-      const query = /@\S*/.exec(this.state.message)
+    this.nametagList = (text) => {
+      const query = /@\S*/.exec(text)
       const {nametags} = this.props
       return query ? nametags.filter(n => n.name.toLowerCase().match(query[0].slice(1).toLowerCase()))
         .map(n => n.name)
@@ -82,16 +83,16 @@ class ComposeWithMenu extends Component {
 
     this.addMention = mention => e => {
       e.preventDefault()
+      this.props.setDefaultMessage(this.state.message.replace(/@\S*(?=[^@]*$)/, mention))
       this.setState({
-        message: this.state.message.replace(/@\S*(?=[^@]*$)/, mention),
         showComposeMenu: false
       })
     }
 
     this.addCommand = command => e => {
       e.preventDefault()
+      this.props.setDefaultMessage(this.state.message.replace(/\/\S*(?=[^/]*$)/, command))
       this.setState({
-        message: this.state.message.replace(/\/\S*(?=[^/]*$)/, command),
         showComposeMenu: false
       })
     }
