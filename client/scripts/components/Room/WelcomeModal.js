@@ -34,7 +34,7 @@ const WelcomeModal = ({
       defaultMessage={defaultMessage}
       mod={mod}
       topic=''
-      onPost={onPost(updateNametag, myNametag.id)}
+      onPost={onPost(updateNametag, toggleWelcome, myNametag.id)}
       />
     <div style={styles.cardsContainer}>
       {

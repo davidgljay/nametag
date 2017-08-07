@@ -34,7 +34,7 @@ const TitleForm = ({badges, selectedBadges, desc, title, welcome, updateRoom, se
       onChange={(e) => updateRoom('welcome', e.target.value)}
       floatingLabelText='Welcome Prompt' />
     <div style={styles.helpText}>
-      (Optional) Users will be given this prompt when they enter the room.
+      Users will be given this prompt when they enter the room.
     </div>
     <div
       style={styles.textfield}>

@@ -141,19 +141,21 @@ class CreateRoom extends Component {
     }
 
     this.validate = (stepIndex) => {
+      const {room} = this.state
       switch (stepIndex) {
         case 0:
           return {
-            valid: this.state.room.title && this.state.room.description,
+            valid: room.title && room.description,
             error: {
-              titleError: this.state.room.title ? '' : 'Please add a title',
-              descriptionError: this.state.room.description ? '' : 'Please add a description'
+              titleError: room.title ? '' : 'Please add a title',
+              descriptionError: room.description ? '' : 'Please add a description',
+              welcomeError: room.welcome ? '' : 'Please add a welcome prompt'
             }
           }
         case 1:
           return {
-            valid: this.state.room.image,
-            error: this.state.room.image ? '' : 'Please provide an image'
+            valid: room.image,
+            error: room.image ? '' : 'Please provide an image'
           }
         case 2:
           return {
@@ -164,8 +166,8 @@ class CreateRoom extends Component {
           }
         case 3:
           return {
-            valid: this.state.room.norms && this.state.room.norms.length > 0,
-            error: this.state.room.norms && this.state.room.norms.length > 0 ? ''
+            valid: room.norms && room.norms.length > 0,
+            error: room.norms && room.norms.length > 0 ? ''
             : 'Please select at least one norm'
           }
         default:
