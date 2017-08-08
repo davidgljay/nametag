@@ -59,7 +59,7 @@ class RoomCards extends Component {
         return hash
       }, {})
     }
-    return <div>
+    return <div id='roomCards'>
       <Navbar
         me={me}
         toggleLogin={this.toggleLogin} />

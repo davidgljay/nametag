@@ -52,7 +52,6 @@ module.exports = {
       .assertLoaded(room, users.mod)
       .postMessage(messages[1])
   },
-  // TODO: Exit room, re-enter it, and post another message
   after: client => {
     client.end()
   }

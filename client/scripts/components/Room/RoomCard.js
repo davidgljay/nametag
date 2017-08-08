@@ -59,7 +59,7 @@ class RoomCard extends Component {
     let card
     let flipping = {}
 
-    let front = <Card key='front' style={styles.front}>
+    let front = <Card key='front' style={styles.front} className='roomCard'>
       {
         room.image
         ? <CardMedia
@@ -147,6 +147,7 @@ class RoomCard extends Component {
     }
 
     return <div
+      data-id={room.id}
       className={`roomCard ${this.state.flipping ? 'flipping' : 'notFlipping'}`}
       style={{...styles.roomCard, ...flipping, ...style}}>
       {card}

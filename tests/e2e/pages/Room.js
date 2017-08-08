@@ -2,6 +2,18 @@ const commands = {
   ready () {
     return this.waitForElementVisible('body', 3000)
   },
+  roomJoin (user) {
+    return this.waitForElementVisible('@loginForm')
+    .click('@enableRegisterButton')
+    .waitForElementVisible('@registerButton')
+    .setValue('@emailForm', user.email)
+    .setValue('@passForm', user.pass)
+    .setValue('@confForm', user.pass)
+    .click('@registerButton')
+    .waitForElementVisible('@joinRoomButton')
+    .click('@joinRoomButton')
+    .waitForElementVisible('@messages')
+  },
   assertLoaded ({title, description, norm}, {bio, name}) {
     return this.waitForElementVisible('#roomTitle')
     .assert.containsText('#roomTitle', title)
@@ -14,6 +26,7 @@ const commands = {
     .click('@welcomeModalSend')
     .waitForElementVisible('@messageText')
     .assert.containsText('@messages', message)
+    .waitForElementVisible('.bio')
     .assert.containsText('@nametags', message)
   },
   postMessage (message) {
@@ -26,6 +39,7 @@ const commands = {
   exitRoom () {
     return this.waitForElementVisible('@close')
     .click('@close')
+    .waitForElementVisible('#roomCards')
   }
 }
 
@@ -61,6 +75,30 @@ module.exports = {
     },
     close: {
       selector: '#backButton'
+    },
+    loginForm: {
+      selector: '#loginForm'
+    },
+    enableRegisterButton: {
+      selector: '#enableRegisterButton'
+    },
+    submitLoginButton: {
+      selector: '#submitLoginButton'
+    },
+    registerButton: {
+      selector: '#registerButton'
+    },
+    joinRoomButton: {
+      selector: '#joinRoomButton'
+    },
+    emailForm: {
+      selector: '#loginEmail'
+    },
+    passForm: {
+      selector: '#loginPassword'
+    },
+    confForm: {
+      selector: '#loginConfirm'
     }
   }
 }

@@ -58,9 +58,11 @@ class Nametag extends Component {
         </div>
         <div style={{...styles.details, ...clickableStyle}}>
           <div style={styles.name} onClick={this.toggleMenu}>{name}</div>
-          <div style={styles.bio} onClick={this.toggleMenu}>
-            <EmojiText text={bio} />
-          </div>
+          {
+            bio && <div className='bio' style={styles.bio} onClick={this.toggleMenu}>
+              <EmojiText text={bio} />
+            </div>
+          }
         </div>
         {ismod}
       </div>

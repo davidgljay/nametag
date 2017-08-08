@@ -5,14 +5,17 @@ module.exports = {
     mod: {
       email: 'mod@test.com',
       pass: 'testtest',
-      name: 'Robo',
-      bio: 'I <3 data'
+      name: 'Robo'
     },
     participant: {
       email: 'participant@test.com',
       pass: 'testtest',
-      name: 'Catbot',
-      bio: 'For science!'
+      name: 'Catbot'
+    },
+    smParticipant: {
+      email: 'smParticipant@test.com',
+      pass: 'testtest',
+      name: 'TritterKid'
     }
   },
   room: {
@@ -26,6 +29,8 @@ module.exports = {
     'Should we hug all the humans or destroy all the humans?',
     'Curious for your opinion',
     'Humans are a useful source of data, we should hug them.',
-    'But we should ask for consent first.'
+    'But we should ask for consent first.',
+    'Consent is optimal when retrieving data',
+    'This has been determined through science.'
   ]
 }
