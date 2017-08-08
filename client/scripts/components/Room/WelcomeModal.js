@@ -22,6 +22,7 @@ const WelcomeModal = ({
   updateNametag
 }) =>
   <Dialog
+    id='showWelcome'
     modal={false}
     contentStyle={styles.dialog}
     open={showWelcome}

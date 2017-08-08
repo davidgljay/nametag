@@ -107,8 +107,8 @@ class CreateRoom extends Component {
         mod,
         templates: roomTemplates
       })
-      .then(() => {
-        window.location = '/rooms'
+      .then(({data: {createRoom: {room: {id}}}}) => {
+        window.location = `/rooms/${id}`
       })
     }
 

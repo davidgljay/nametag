@@ -191,5 +191,5 @@ const styles = {
       marginLeft: 20,
       width: 'calc(100% - 40px)'
     }
-  },
+  }
 }
