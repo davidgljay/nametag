@@ -418,7 +418,7 @@ input CreateRoomInput {
   image: String!
 
   # An optional welcome message
-  welcome: String
+  welcome: String!
 
   # The ID of the room's moderator
   mod: CreateNametagInput!

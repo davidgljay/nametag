@@ -22,34 +22,35 @@ const WelcomeModal = ({
   updateNametag
 }) =>
   <Dialog
-    id='showWelcome'
     modal={false}
     contentStyle={styles.dialog}
     open={showWelcome}
     onRequestClose={() => toggleWelcome()}>
-    <h3>{welcome}</h3>
-    <Compose
-      roomId={roomId}
-      myNametag={myNametag}
-      createMessage={createMessage}
-      defaultMessage={defaultMessage}
-      mod={mod}
-      topic=''
-      onPost={onPost(updateNametag, toggleWelcome, myNametag.id)}
-      />
-    <div style={styles.cardsContainer}>
-      {
-        nametags.map(nametag =>
-          <Card key={nametag.id} id={nametag.id} style={styles.card}>
-            <Nametag
-              nametag={nametag}
-              hideDMs
-              myNametagId={myNametag.id}
-              mod={mod}
-              />
-          </Card>
-        )
-      }
+    <div className='welcome'>
+      <h3>{welcome}</h3>
+      <Compose
+        roomId={roomId}
+        myNametag={myNametag}
+        createMessage={createMessage}
+        defaultMessage={defaultMessage}
+        mod={mod}
+        topic=''
+        onPost={onPost(updateNametag, toggleWelcome, myNametag.id)}
+        />
+      <div style={styles.cardsContainer}>
+        {
+          nametags.map(nametag =>
+            <Card key={nametag.id} id={nametag.id} style={styles.card}>
+              <Nametag
+                nametag={nametag}
+                hideDMs
+                myNametagId={myNametag.id}
+                mod={mod}
+                />
+            </Card>
+          )
+        }
+      </div>
     </div>
   </Dialog>
 

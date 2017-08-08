@@ -3,12 +3,13 @@ const commands = {
     return this
       .waitForElementVisible('body', 3000)
   },
-  fillTitle (title, description) {
+  fillTitle (title, description, welcome) {
     return this
       .waitForElementVisible('@roomPreview')
       .getLocationInView('@descriptionField')
       .setValue('@titleField', title)
       .setValue('@descriptionField', description)
+      .setValue('@welcomeField', welcome)
       .getLocationInView('@nextButton')
       .click('@nextButton')
   },
@@ -36,9 +37,9 @@ const commands = {
       .getLocationInView('@nextButton')
       .click('@nextButton')
   },
-  createRoom ({title, description, imageSearch, norm}, {name, bio}) {
+  createRoom ({title, description, imageSearch, norm, welcome}, {name, bio}) {
     return this
-      .fillTitle(title, description)
+      .fillTitle(title, description, welcome)
       .chooseImage(imageSearch)
       .makeModNametag(name, bio)
       .addNorms(norm)
@@ -55,6 +56,9 @@ module.exports = {
     },
     descriptionField: {
       selector: '#descriptionField'
+    },
+    welcomeField: {
+      selector: '#welcomeField'
     },
     roomPreview: {
       selector: '#roomPreview'

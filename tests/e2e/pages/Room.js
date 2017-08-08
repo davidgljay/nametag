@@ -8,12 +8,24 @@ const commands = {
     .assert.containsText('@nametags', name)
     .assert.containsText('#norms', norm)
   },
+  postWelcome (message) {
+    return this.waitForElementVisible('@welcomeModalInput')
+    .setValue('@welcomeModalInput', message)
+    .click('@welcomeModalSend')
+    .waitForElementVisible('@messageText')
+    .assert.containsText('@messages', message)
+    .assert.containsText('@nametags', message)
+  },
   postMessage (message) {
     return this.waitForElementVisible('@compose')
     .setValue('@composeTextInput', message)
     .click('@sendMessageButton')
     .waitForElementVisible('@messageText')
     .assert.containsText('body', message)
+  },
+  exitRoom () {
+    return this.waitForElementVisible('@close')
+    .click('@close')
   }
 }
 
@@ -26,6 +38,15 @@ module.exports = {
     compose: {
       selector: '#compose'
     },
+    welcome: {
+      selector: '.welcome'
+    },
+    welcomeModalInput: {
+      selector: '.welcome #composeTextInput'
+    },
+    welcomeModalSend: {
+      selector: '.welcome #sendMessageButton'
+    },
     composeTextInput: {
       selector: '#composeTextInput'
     },
@@ -34,6 +55,12 @@ module.exports = {
     },
     messageText: {
       selector: '.messageText'
+    },
+    messages: {
+      selector: '#messages'
+    },
+    close: {
+      selector: '#backButton'
     }
   }
 }

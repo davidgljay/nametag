@@ -28,7 +28,7 @@ module.exports = {
 
     page
       .assertLoaded(room, users.participant)
-      .postMessage(messages[1])
+      .postWelcome(messages[1])
       .postMessage(messages[2])
   },
   after: client => {

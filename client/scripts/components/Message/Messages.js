@@ -85,7 +85,7 @@ class Messages extends Component {
   render () {
     const {messages} = this.props
     const {showEmoji} = this.state
-    return <div style={styles.messages}>
+    return <div style={styles.messages} id='messages'>
       <Popover
         open={!!showEmoji}
         anchorEl={document.getElementById('compose')}

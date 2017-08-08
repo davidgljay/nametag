@@ -24,19 +24,35 @@ module.exports = {
     page
       .click('#createRoomButton')
       .createRoom(room, users.mod)
-      .waitForElementVisible('.roomNotif')
-      .assert.containsText('.roomTitle', room.title)
+      .waitForElementVisible('#room')
   },
   'Moderator enters a room and posts a message': client => {
     const page = client.page.Room()
     const {room, messages, users} = client.globals
 
     page
-      .waitForElementVisible('.roomNotif')
-      .click('.roomNotif')
       .assertLoaded(room, users.mod)
-      .postMessage(messages[0])
+      .postWelcome(messages[0])
   },
+  'Moderator exits and re-enters the room': client => {
+    const page = client.page.Room()
+    const {room} = client.globals
+
+    page
+      .exitRoom()
+      .waitForElementVisible('.roomNotif')
+      .assert.containsText('.roomTitle', room.title)
+      .click('.roomNotif')
+  },
+  'Moderator posts a message': client => {
+    const page = client.page.Room()
+    const {room, messages, users} = client.globals
+
+    page
+      .assertLoaded(room, users.mod)
+      .postMessage(messages[1])
+  },
+  // TODO: Exit room, re-enter it, and post another message
   after: client => {
     client.end()
   }
