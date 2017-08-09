@@ -100,7 +100,12 @@ class Message extends Component {
     }
 
     // Getting around Markdown's splitting of the '_' character in a hacky way for now
-    const emojiText = text.replace(/(?=\S+)_(?=\S+:)/g, '~@~A~')
+    // Also, wrapping urls in brackets
+    const emojiText = text
+      .replace(/(?=\S+)_(?=\S+:)/g, '~@~A~')
+      .replace(
+        /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/,
+        (url) => `[${url}](${url})`)
 
     const isMod = mod.id === author.id
 
@@ -136,7 +141,8 @@ class Message extends Component {
                 text: ({literal}) => {
                   const text = literal.replace(/~@~A~/g, '_')
                   return <EmojiText text={text} />
-                }
+                },
+                link: ({href}) => <a href={href} target='_blank'>{href}</a>
               }}
               source={emojiText}
               escapeHtml />
