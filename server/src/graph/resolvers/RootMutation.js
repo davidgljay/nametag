@@ -191,6 +191,11 @@ const RootMutation = {
     requires: null,
     resolve: (obj, {token}, {models: {Users}}) =>
       Users.emailConfirmation(token)
+  },
+  unsubscribe: {
+    requires: null,
+    resolve: (obj, {email, roomId}, {models: {Users}}) =>
+      Users.unsubscribe(email, roomId)
   }
 }
 

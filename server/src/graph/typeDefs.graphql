@@ -701,6 +701,9 @@ type RootMutation {
   # Confirms an email
   emailConfirmation(token: String!): BasicResponse
 
+  # Unsubscribes from a room
+  unsubscribe(email: String!, roomId: String!): BasicResponse
+
 }
 
 ################################################################################
