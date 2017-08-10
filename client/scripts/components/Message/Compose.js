@@ -36,7 +36,7 @@ class Compose extends Component {
     }
 
     this.post = (e) => {
-      const {myNametag, roomId, createMessage, onPost} = this.props
+      const {myNametag, roomId, createMessage, onPost, setDefaultMessage} = this.props
       const {message} = this.state
       if (onPost) {
         onPost(message)
@@ -52,6 +52,9 @@ class Compose extends Component {
         }
         this.setState({message: '', showEmoji: false, showMentionMenu: false})
         createMessage(msg, myNametag)
+        if (setDefaultMessage) {
+          setDefaultMessage('')
+        }
       }
     }
 
@@ -157,6 +160,7 @@ Compose.propTypes = {
   }).isRequired,
   createMessage: func.isRequired,
   defaultMessage: string,
+  setDefaultMessage: func,
   topic: string,
   mod: shape({
     name: string.isRequired,
