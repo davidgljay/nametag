@@ -1,6 +1,7 @@
 const {db} = require('../../db')
 const errors = require('../../errors')
 const notification = require('../../notifications')
+const email = require('../../email')
 
 const messagesTable = db.table('messages')
 
@@ -145,6 +146,7 @@ const checkMentions = (context, nametags, message) => {
         promises.push(
           Nametags.addMention(id)
           .then(() => mentionNotif(context, id, message, 'MENTION'))
+          .then(() => mentionEmail(message, id))
         )
       }
     }
@@ -211,6 +213,37 @@ const mentionNotif = ({models: {Users, Rooms, Nametags}}, to, message, reason) =
     }, token)
     : null
   )
+
+  /**
+   * Sends an email based on a mention
+   *
+   * @param {Object} context     graph context
+   * @param {String} id        the nametag id of the user being mentioned
+   * @param {Object} message   the message to be checked
+   *
+   **/
+
+   const mentionEmail = ({models: {Rooms, Users}}, id, message) =>
+     Promise.all([
+       Users.getEmail(id),
+       Rooms.get(message.room),
+       Nametags.get(message.author),
+       message
+     ])
+     .then((email, room, author, message) => email ?
+        email({
+          to: email,
+          from: 'noreply@nametag.chat',
+          template: 'mention',
+          params: {
+            roomId: room.id,
+            roomName: room.title,
+            message: message.text,
+            author: author.name
+          }
+        })
+        : null
+      )
 
   /**
    * Adds an emoji reaction to a message
