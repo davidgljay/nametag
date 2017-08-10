@@ -702,7 +702,7 @@ type RootMutation {
   emailConfirmation(token: String!): BasicResponse
 
   # Unsubscribes from a room
-  unsubscribe(email: String!, roomId: String!): BasicResponse
+  unsubscribe(userToken: String!, roomId: String!): BasicResponse
 
 }
 

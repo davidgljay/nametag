@@ -500,13 +500,13 @@ const emailConfirmation = ({conn}, token) =>
  * Unsubscribes to a room or to all email.
  *
  * @param {Object} context   graph context
- * @param {String} email     E-mail address of the user
+ * @param {String} userToken     Unique token identifying the user
  * @param {String} roomId    Id of the room to be unsubscribed from
  *
  */
 
-const unsubscribe = ({conn}, email, roomId) =>
-  usersTable.getAll(email, {index: 'email'}).update({unsubscribe: {[roomId]: true}}).run(conn)
+const unsubscribe = ({conn}, userToken, roomId) =>
+  usersTable.getAll(userToken, {index: 'userToken'}).update({unsubscribe: {[roomId]: true}}).run(conn)
     .then(res => res.replaced === 0 ? ErrNotFound : null)
 
 /**
@@ -547,6 +547,6 @@ module.exports = (context) => ({
     passwordReset: (token, password) => passwordReset(context, token, password),
     emailConfirmationRequest: (email) => emailConfirmationRequest(context, email),
     emailConfirmation: (token) => emailConfirmation(context, token),
-    unsubscribe: (email, roomId) => unsubscribe(context, email, roomId)
+    unsubscribe: (userToken, roomId) => unsubscribe(context, userToken, roomId)
   }
 })

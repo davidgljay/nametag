@@ -25,6 +25,7 @@ module.exports = {
       'facebook',
       'twitter',
       'google',
+      'userToken',
       'forgotPassToken',
       'confirmation',
       {name: 'nametags', fields: {values: 'nametags'}, multi: true}
