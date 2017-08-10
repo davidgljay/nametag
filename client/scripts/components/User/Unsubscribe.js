@@ -37,7 +37,9 @@ class Unsubscribe extends Component {
       <Navbar empty />
       {
         this.state.unsubscribed
-        ? <h2 style={styles.header}>You have been unsubscribed.</h2>
+        ? <div style={styles.container}>
+          <h2 style={styles.header}>You have been unsubscribed.</h2>
+        </div>
         : <div style={styles.container}>
           <h2 style={styles.header}>Would you like to stop receiving notifications from {roomName}?</h2>
           <RaisedButton

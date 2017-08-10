@@ -194,8 +194,8 @@ const RootMutation = {
   },
   unsubscribe: {
     requires: null,
-    resolve: (obj, {email, roomId}, {models: {Users}}) =>
-      Users.unsubscribe(email, roomId)
+    resolve: (obj, {userToken, roomId}, {models: {Users}}) =>
+      Users.unsubscribe(userToken, roomId)
   }
 }
 
