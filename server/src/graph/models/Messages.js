@@ -146,7 +146,7 @@ const checkMentions = (context, nametags, message) => {
         promises.push(
           Nametags.addMention(id)
           .then(() => mentionNotif(context, id, message, 'MENTION'))
-          .then(() => mentionEmail(message, id))
+          .then(() => mentionEmail(context, id, message))
         )
       }
     }
@@ -223,17 +223,18 @@ const mentionNotif = ({models: {Users, Rooms, Nametags}}, to, message, reason) =
    *
    **/
 
-   const mentionEmail = ({models: {Rooms, Users}}, id, message) =>
+   const mentionEmail = ({models: {Rooms, Users, Nametags}}, id, message) =>
      Promise.all([
-       Users.getEmail(id),
+       Users.getByNametag(id),
        Rooms.get(message.room),
        Nametags.get(message.author),
        message
      ])
-     .then((email, room, author, message) => email ?
-        email({
-          to: email,
-          from: 'noreply@nametag.chat',
+     .then(([user, room, author, message]) =>
+     user.email && !user.unsubscribe.all && !user.unsubscribe[room.id]
+     ? email({
+          to: user.email,
+          from: {name: 'Nametag', email: 'noreply@nametag.chat'},
           template: 'mention',
           params: {
             roomId: room.id,

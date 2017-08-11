@@ -6,6 +6,8 @@ const sg = require('sendgrid')(sendgrid.key)
 module.exports = ({to, from, template, params}) => {
   const {subject, txt, html} = templates[template](params)
 
+  console.log('Emailing')
+
   const mail = {
     personalizations: [
       {
@@ -43,6 +45,8 @@ module.exports = ({to, from, template, params}) => {
     path: '/v3/mail/send',
     body: mail
   })
+
+  console.log('sending', mail)
 
   return sg.API(request)
     .catch(err => {

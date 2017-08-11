@@ -99,7 +99,7 @@ const addToken = ({user, conn}, token) =>
  * track people from room to room! A nice, elegant solution has been planned for this later.
  *
  * @param {Object} context     graph context
- * @param {String} nametagId   the nametagId which need to be sent a message
+ * @param {Array} nametagIds   the nametagId which need to be sent a message
  *
  */
 
@@ -115,13 +115,27 @@ const getTokens = ({conn}, nametagIds) =>
  * track people from room to room! A nice, elegant solution has been planned for this later.
  *
  * @param {Object} context     graph context
- * @param {String} nametagIds   the nametagIds which need to be sent an email
+ * @param {Array} nametagIds   the nametagIds which need to be sent an email
  *
  */
 
 const getEmails = ({conn}, nametagIds) =>
   usersTable.getAll(...nametagIds, {index: 'nametags'})('email').run(conn)
   .then(cursor => cursor.toArray())
+
+/**
+ * Gets an array of e-mail addresses based on an array of nametags
+ * NOTE: This is temporary, and breaks a core promise to our users: we shouldn't be able to
+ * track people from room to room! A nice, elegant solution has been planned for this later.
+ *
+ * @param {Object} context     graph context
+ * @param {String} nametagId   the nametagId which need to be sent an email
+ *
+ */
+
+const getByNametag = ({conn}, nametagId) =>
+  usersTable.getAll(nametagId, {index: 'nametags'}).run(conn)
+  .then(cursor => cursor.next())
 
 /**
  * Adds a nametag to the user.
@@ -530,6 +544,7 @@ module.exports = (context) => ({
   Users: {
     get: (id) => get(context, id),
     getByEmail: (email) => getByEmail(context, email),
+    getByNametag: (nametagId) => getByNametag(context, nametagId),
     addEmail: (userId, email) => addEmail(context, userId, email),
     getAdminTemplates: () => getAdminTemplates(context),
     findOrCreateFromAuth: (profile, provider) => findOrCreateFromAuth(context, profile, provider),

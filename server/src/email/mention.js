@@ -10,7 +10,7 @@ module.exports = ({roomId, roomName, message, author, userToken}) => ({
       https://nametag.chat/rooms/${roomId}\n
   \n\n
   You can also unsubscribe:\n
-  https://nametag.chat/unsubscribe/${userToken}?roomid=${roomId}&roomname=${urlEncode(roomName)}\n\n`
+  https://nametag.chat/unsubscribe/${userToken}?roomid=${roomId}&roomname=${encodeURIComponent(roomName)}\n\n`
   ,
   html: `<table style="padding: 20px; margin-left: auto; margin-right: auto;">
     <tr><td>
@@ -28,14 +28,14 @@ module.exports = ({roomId, roomName, message, author, userToken}) => ({
     <tr>
     <td style="text-align: center">
         <a href="https://nametag.chat/rooms/${roomId}" target='_blank'>
-            <div style="margin-top: 10px; margin-left: auto; margin-right: auto; padding: 10px; font-size: 20px; background: #12726a; color: #FFF; border-radius: 3px; font-style: none; max-width: 150px; text-align: center;">
+            <div style="margin-top: 10px; margin-left: auto; margin-right: auto; padding: 10px; font-size: 20px; background: #12726a; color: #FFF; border-radius: 3px; text-decoration: none; max-width: 150px; text-align: center;">
                 Reply
             </div>
         </a>
 	</td>
 </tr>
 
-    <div style='text-align:center; color: grey; font-style: none; font-size: 10px; margin-top: 40px;'>
-        <a href="https://nametag.chat/unsubscribe/${userToken}?roomid=${roomId}&roomname=${urlEncode(roomName)}">Unsubscribe</a>
+    <div style='text-align:center; font-size: 10px; margin-top: 40px;'>
+        <a style='color: grey; text-decoration: none;' href="https://nametag.chat/unsubscribe/${userToken}?roomid=${roomId}&roomname=${encodeURIComponent(roomName)}">Unsubscribe</a>
     </div>`
 })
