@@ -387,7 +387,7 @@ const createLocal = ({conn}, email, password) => {
         displayNames,
         images: images,
         badges: {},
-        userToken: uuid.v4().replace(/-/g,'').slice(0,15)
+        userToken: uuid.v4().replace(/-/g, '').slice(0, 15)
       }),
       {exists: true}
     )

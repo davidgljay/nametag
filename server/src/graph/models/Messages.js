@@ -223,7 +223,7 @@ const mentionNotif = ({models: {Users, Rooms, Nametags}}, to, message, reason) =
    *
    **/
 
-   const mentionEmail = ({models: {Rooms, Users, Nametags}}, id, message) =>
+const mentionEmail = ({models: {Rooms, Users, Nametags}}, id, message) =>
      Promise.all([
        Users.getByNametag(id),
        Rooms.get(message.room),
@@ -233,16 +233,16 @@ const mentionNotif = ({models: {Users, Rooms, Nametags}}, to, message, reason) =
      .then(([user, room, author, message]) =>
      user.email && !user.unsubscribe.all && !user.unsubscribe[room.id]
      ? email({
-          to: user.email,
-          from: {name: 'Nametag', email: 'noreply@nametag.chat'},
-          template: 'mention',
-          params: {
-            roomId: room.id,
-            roomName: room.title,
-            message: message.text,
-            author: author.name
-          }
-        })
+       to: user.email,
+       from: {name: 'Nametag', email: 'noreply@nametag.chat'},
+       template: 'mention',
+       params: {
+         roomId: room.id,
+         roomName: room.title,
+         message: message.text,
+         author: author.name
+       }
+     })
         : null
       )
 

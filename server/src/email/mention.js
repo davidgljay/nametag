@@ -10,11 +10,10 @@ module.exports = ({roomId, roomName, message, author, userToken}) => ({
       https://nametag.chat/rooms/${roomId}\n
   \n\n
   You can also unsubscribe:\n
-  https://nametag.chat/unsubscribe/${userToken}?roomid=${roomId}&roomname=${encodeURIComponent(roomName)}\n\n`
-  ,
+  https://nametag.chat/unsubscribe/${userToken}?roomid=${roomId}&roomname=${encodeURIComponent(roomName)}\n\n`,
   html: `<table style="padding: 20px; margin-left: auto; margin-right: auto;">
     <tr><td>
-    	<img src="https://s3.amazonaws.com/nametag_images/nametagLogoBlack55.png">
+      <img src="https://s3.amazonaws.com/nametag_images/nametagLogoBlack55.png">
     </td></tr>
 <tr>
     <td style="text-align: center;"><h2>You have been mentioned in ${roomName}</h2></td>
@@ -32,7 +31,7 @@ module.exports = ({roomId, roomName, message, author, userToken}) => ({
                 Reply
             </div>
         </a>
-	</td>
+  </td>
 </tr>
 
     <div style='text-align:center; font-size: 10px; margin-top: 40px;'>
