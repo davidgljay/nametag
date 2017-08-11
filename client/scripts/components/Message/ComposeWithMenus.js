@@ -124,6 +124,7 @@ class ComposeWithMenu extends Component {
         myNametag={myNametag}
         createMessage={createMessage}
         defaultMessage={defaultMessage}
+        setDefaultMessage={setDefaultMessage}
         mod={mod}
         topic={topic}
         onPost={this.onPost}
