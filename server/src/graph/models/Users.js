@@ -218,7 +218,9 @@ const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
         images: [],
         [provider]: authProfile.id,
         createdAt: new Date(),
-        badges: {}
+        badges: {},
+        userToken: uuid.v4().replace(/-/g, '').slice(0, 15),
+        unsubscribe: {}
       }
 
       // Load an image if one exists, otherwise just insert the user
@@ -387,7 +389,8 @@ const createLocal = ({conn}, email, password) => {
         displayNames,
         images: images,
         badges: {},
-        userToken: uuid.v4().replace(/-/g, '').slice(0, 15)
+        userToken: uuid.v4().replace(/-/g, '').slice(0, 15),
+        unsubscribe: {}
       }),
       {exists: true}
     )
