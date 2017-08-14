@@ -82,8 +82,8 @@ class JoinRoom extends Component {
           </div>
         </Card>
       </div>
-      <div id='normsContainer' style={styles.normsContainer}>
-        <div style={styles.modContainer}>
+      <div style={styles.modContainer}>
+        <div>
           <h3>Moderator</h3>
           <Card>
             <Nametag
@@ -92,13 +92,12 @@ class JoinRoom extends Component {
               nametag={mod} />
           </Card>
         </div>
-        <div style={styles.norms}>
-          <div>
-            {mod.name} would like you to agree to <a href='#' onClick={this.showNorms}> norms of respect</a>.
+      </div>
+      <div style={styles.joinContainer}>
+        <div id='normsContainer' style={styles.normsContainer}>
+          <div style={styles.norms}>
+            <Norms norms={norms} showChecks />
           </div>
-          {
-            showNorms && <Norms norms={norms} showChecks />
-          }
         </div>
         <Join
           room={id}
@@ -108,8 +107,7 @@ class JoinRoom extends Component {
           createNametag={createNametag}
           addNametagEditBadge={addNametagEditBadge}
           removeNametagEditBadge={removeNametagEditBadge}
-          updateNametagEdit={updateNametagEdit}
-          />
+          updateNametagEdit={updateNametagEdit} />
       </div>
     </div>
   }
@@ -190,18 +188,34 @@ const styles = {
     fontStyle: 'italic',
     color: 'rgb(168, 168, 168)'
   },
+  modContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    textAlign: 'center',
+    marginBottom: 50
+  },
   mod: {
     width: 300
+  },
+  joinContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    alignItems: 'flex-start'
   },
   normsContainer: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     textAlign: 'center',
-    marginBottom: 20
+    marginRight: 50,
+    paddingTop: 10,
+    [mobile]: {
+      marginRight: 0
+    }
   },
   norms: {
     width: 300,
-    margin: 20
+    marginRight: 20
   }
 }

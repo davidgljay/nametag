@@ -49,7 +49,7 @@ class Join extends Component {
             primary
             labelStyle={styles.button}
             onClick={this.onJoinClick}
-            label='AGREE & JOIN' />
+            label='JOIN' />
           <div style={styles.badgeEdit}>You can edit how you appear in this room:</div>
           <EditNametag
             nametagEdit={nametag}
@@ -88,7 +88,8 @@ export default Join
 
 const styles = {
   join: {
-    textAlign: 'center'
+    textAlign: 'center',
+    paddingTop: 20
   },
   userBadges: {
     display: 'flex',
