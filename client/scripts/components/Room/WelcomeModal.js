@@ -72,7 +72,7 @@ export default WelcomeModal
 
 const styles = {
   dialog: {
-    maxWidth: 800
+    maxWidth: 820
   },
   card: {
     width: 240,
