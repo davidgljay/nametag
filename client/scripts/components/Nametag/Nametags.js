@@ -9,7 +9,7 @@ const Nametags = ({nametags, mod, myNametagId, setDefaultMessage, hideDMs}) =>
         const cardStyle = nametag.present || nametag.id === myNametagId
         ? styles.nametag : {...styles.nametag, ...styles.absent}
 
-        return <Card key={nametag.id} style={cardStyle}>
+        return <Card key={nametag.id} id={nametag.id === myNametagId && 'myNametag'} style={cardStyle}>
           <Nametag
             nametag={nametag}
             hideDMs={hideDMs}

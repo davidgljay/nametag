@@ -10,10 +10,7 @@ module.exports = {
     page
     .ready()
     .waitForElementVisible('#roomCards')
-    .getAttribute('.roomCard', 'data-id', (result) => {
-      console.log('data-id', result)
-      client.url(`${launchUrl}/rooms/${result.value}`)
-    })
+    .getAttribute('.roomCard', 'data-id', (result) => client.url(`${launchUrl}/rooms/${result.value}`))
   },
   'Participant joins a room via social media': client => {
     const {users, room} = client.globals
