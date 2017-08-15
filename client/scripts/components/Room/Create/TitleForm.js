@@ -85,7 +85,7 @@ const styles = {
     fontSize: 20,
     padding: 0,
     textAlign: 'left',
-    margin: '20px 20px 0px 20px'
+    margin: '20px 20px 10px 10px'
   },
   titleForm: {
     display: 'flex',

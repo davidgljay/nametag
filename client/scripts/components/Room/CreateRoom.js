@@ -145,7 +145,7 @@ class CreateRoom extends Component {
       switch (stepIndex) {
         case 0:
           return {
-            valid: room.title && room.description,
+            valid: room.title && room.description && room.welcome,
             error: {
               titleError: room.title ? '' : 'Please add a title',
               descriptionError: room.description ? '' : 'Please add a description',
