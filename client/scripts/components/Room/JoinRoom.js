@@ -76,13 +76,18 @@ class JoinRoom extends Component {
           </div>
         </Card>
       </div>
-      {
-        templates && templates.length > 0 &&
-        <div style={styles.privateText}>Private Conversation For:</div>
-      }
-      <Badges
-        badges={templates.map(template => ({id: template.id, notes: [], template}))} />
       <div style={styles.modContainer}>
+        {
+          templates &&
+          <div id='badgeContainer' style={styles.badgeContainer}>
+            {
+              templates.length > 0 &&
+              <div style={styles.privateText}><h3>Private Conversation For:</h3></div>
+            }
+            <Badges
+              badges={templates.map(template => ({id: template.id, notes: [], template}))} />
+          </div>
+        }
         <div>
           <h3>Moderator</h3>
           <Card>
@@ -172,9 +177,11 @@ const styles = {
     width: 300,
     padding: 10
   },
+  badgeContainer: {
+    minWidth: 300
+  },
   privateText: {
-    textAlign: 'center',
-    marginTop: 30
+    textAlign: 'center'
   },
   title: {
     fontSize: 24,
@@ -196,6 +203,7 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     textAlign: 'center',
+    flexWrap: 'wrap',
     marginBottom: 50
   },
   mod: {
