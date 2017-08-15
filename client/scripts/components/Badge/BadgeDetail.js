@@ -100,7 +100,7 @@ class BadgeDetail extends Component {
             style={styles.claimInfo}
             labelStyle={styles.buttonLabel}
             primary
-            onClick={() => { window.location = template.approvalRequired ? `/?granter=${template.granter.name}` : '/' }}
+            onClick={() => { window.location = template.approvalRequired ? `/` : `/?granter=${template.granter.urlCode}` }}
             label={template.approvalRequired ? 'RETURN TO HOMEPAGE' : 'SEE CONVERSATIONS'} />
         </div>
       </div>
