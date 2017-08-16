@@ -446,6 +446,9 @@ input CreateMessageInput {
   # The ID of the room where the message takes place
   room: ID!
 
+  # The recipient of the message if it is a DM
+  recipient: ID
+
 }
 
 # Input required to update a room

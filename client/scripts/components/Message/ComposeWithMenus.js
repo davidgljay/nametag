@@ -116,15 +116,31 @@ class ComposeWithMenu extends Component {
   }
 
   render () {
-    const {roomId, myNametag, createMessage, defaultMessage, mod, topic, setDefaultMessage} = this.props
+    const {
+      roomId,
+      myNametag,
+      createMessage,
+      defaultMessage,
+      mod,
+      topic,
+      recipient,
+      nametags,
+      setDefaultMessage,
+      setRecipient
+    } = this.props
     const {nametagList, showComposeMenu} = this.state
-    return <div style={styles.container}>
+
+    const containerStyle = recipient ? {...styles.container, ...styles.privMessageContainer} : styles.container
+    return <div style={containerStyle}>
       <Compose
         roomId={roomId}
+        recipient={recipient}
         myNametag={myNametag}
+        nametags={nametags}
         createMessage={createMessage}
         defaultMessage={defaultMessage}
         setDefaultMessage={setDefaultMessage}
+        setRecipient={setRecipient}
         mod={mod}
         topic={topic}
         onPost={this.onPost}
@@ -165,7 +181,9 @@ ComposeWithMenu.propTypes = {
   createMessage: func.isRequired,
   defaultMessage: string,
   setDefaultMessage: func.isRequired,
+  setRecipient: func.isRequired,
   topic: string,
+  recipient: string,
   mod: object.isRequired
 }
 
@@ -183,14 +201,18 @@ const styles = {
     borderCollapse: 'separate',
     paddingBottom: 20,
     paddingTop: 10,
-    background: '#FFF',
     width: 'calc(100% - 300px)',
     paddingRight: 15,
     zIndex: 40,
     marginLeft: 290,
+    background: '#FFF',
     [mobile]: {
       marginLeft: 20,
       width: 'calc(100% - 40px)'
     }
+  },
+  privMessageContainer: {
+    background: '#f3f3f3',
+    borderTop: '2px solid rgba(168, 168, 168, 0.75)'
   }
 }

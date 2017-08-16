@@ -35,6 +35,7 @@ class Nametag extends Component {
       mod,
       nametag: {id, name, image, bio, badges},
       setDefaultMessage,
+      setRecipient,
       hideDMs,
       myNametagId,
       style
@@ -72,11 +73,13 @@ class Nametag extends Component {
         <div>
           <MentionMenu
             name={name}
+            nametagId={id}
             hideDMs={hideDMs && mod !== id}
             open={showMenu === 'mentions'}
             anchor={document.getElementById(id)}
             toggleMenu={this.toggleMenu}
-            setDefaultMessage={setDefaultMessage} />
+            setDefaultMessage={setDefaultMessage}
+            setRecipient={setRecipient} />
           <CommandMenu
             open={showMenu === 'commands'}
             isMod={mod === myNametagId}
@@ -103,6 +106,7 @@ Nametag.PropTypes = {
     badges: arrayOf(object).isRequired
   }).isRequired,
   setDefaultMessage: func,
+  setRecipient: func,
   hideDMs: bool
 }
 

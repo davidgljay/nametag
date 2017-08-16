@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react'
 import Nametag from './Nametag'
 import {Card} from 'material-ui/Card'
 
-const Nametags = ({nametags, mod, myNametagId, setDefaultMessage, hideDMs}) =>
+const Nametags = ({nametags, mod, myNametagId, setDefaultMessage, setRecipient, hideDMs}) =>
   <div id='nametags' style={styles.nametags}>
     {
       nametags.map((nametag) => {
@@ -14,6 +14,7 @@ const Nametags = ({nametags, mod, myNametagId, setDefaultMessage, hideDMs}) =>
             nametag={nametag}
             hideDMs={hideDMs}
             myNametagId={myNametagId}
+            setRecipient={setRecipient}
             setDefaultMessage={setDefaultMessage}
             mod={mod} />
         </Card>
@@ -27,7 +28,8 @@ Nametags.propTypes = {
   mod: string.isRequired,
   myNametagId: string,
   hideDMs: bool,
-  setDefaultMessage: func
+  setDefaultMessage: func,
+  setRecipient: func
 }
 
 export default Nametags

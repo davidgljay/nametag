@@ -33,6 +33,12 @@ class RoomLeftBar extends Component {
       setDefaultMessage(message)
       toggleLeftBar()
     }
+
+    this.setRecipient = (id) => {
+      const {setRecipient, toggleLeftBar} = this.props
+      setRecipient(id)
+      toggleLeftBar()
+    }
   }
 
   render () {
@@ -130,6 +136,7 @@ class RoomLeftBar extends Component {
           <Nametags
             mod={room.mod.id}
             setDefaultMessage={this.setDefaultMessage}
+            setRecipient={this.setRecipient}
             nametags={room.nametags}
             hideDMs={hideDMs}
             myNametagId={myNametag.id} />
@@ -166,6 +173,8 @@ RoomLeftBar.propTypes = {
     nametags: arrayOf(object.isRequired).isRequired
   }),
   latestMessageUpdatedSubscription: func.isRequired,
+  setDefaultMessage: func.isRequired,
+  setRecipient: func.isRequired,
   updateRoom: func.isRequired,
   myNametag: shape({
     id: string.isRequired
