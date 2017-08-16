@@ -47,7 +47,9 @@ query roomsQuery($query: String, $granter: String) {
        title
        image
        latestMessage
-       closedAt
+       mod {
+        id
+       }
      }
    }
  }

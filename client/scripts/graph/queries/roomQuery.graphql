@@ -63,7 +63,9 @@ query roomQuery($id: ID!){
         title
         image
         latestMessage
-        closedAt
+        mod {
+          id
+        }
       }
     }
     badges {

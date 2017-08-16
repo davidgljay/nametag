@@ -7,8 +7,16 @@ class Notifications extends Component {
     super(props)
 
     this.visitedRooms = (nametags) => nametags.filter(
-      nametag => nametag.room &&
-      new Date(nametag.room.closedAt) > new Date() &&
+      nametag =>
+      // Make sure data for the room exists
+      nametag.room &&
+      (
+        // Show if a message has been posted in the past week OR
+        new Date(nametag.room.latestMessage) > new Date(Date.now() - 604800000) ||
+        // Show if it is a room with no messages and the current user is the mod
+        (!nametag.room.latestMessage && nametag.room.mod.id === nametag.id)
+      ) &&
+      // Don't show if you are currently in this room
       nametag.room.id !== this.props.roomId
     )
   }
@@ -81,7 +89,10 @@ Notifications.propTypes = {
       id: string.isRequired,
       title: string.isRequired,
       image: string.isRequired,
-      closedAt: string.isRequired
+      latestMessage: string,
+      mod: shape({
+        id: string.isRequired
+      })
     })
   })).isRequired,
   latestMessageUpdatedSubscription: func.isRequired,
