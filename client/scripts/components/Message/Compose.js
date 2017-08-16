@@ -53,7 +53,6 @@ class Compose extends Component {
         if (recipient) {
           msg.recipient = recipient
         }
-        console.log('msg', msg)
         this.setState({message: '', showEmoji: false, showMentionMenu: false})
         createMessage(msg, myNametag)
         if (setDefaultMessage) {
@@ -99,7 +98,7 @@ class Compose extends Component {
   render () {
     // TODO: Add GIFs, image upload
 
-    const {topic, mod, nametags, recipient} = this.props
+    const {topic, mod, nametags, recipient, setRecipient} = this.props
     const {showEmoji, message} = this.state
     let calloutImage
     let calloutName
@@ -123,7 +122,15 @@ class Compose extends Component {
               name={calloutName}
               diameter={20} />
           </div>
-          <div id='topic' style={styles.topic}>{calloutMsg}</div>
+          <div id='topic' style={styles.topic}>
+            {calloutMsg}
+          </div>
+          {
+            recipient &&
+            <div style={styles.dmCancelContainer}>
+              <a href='#' style={styles.dmCancel} onClick={() => setRecipient(null)}>Cancel</a>
+            </div>
+          }
         </div>
       }
       <div style={styles.compose} id='compose'>
@@ -237,5 +244,14 @@ const styles = {
   form: {
     flex: 1,
     display: 'flex'
+  },
+  dmCancelContainer: {
+    flex: 1,
+    textAlign: 'right'
+  },
+  dmCancel: {
+    textDecoration: 'none',
+    fontStyle: 'italic',
+    fontSize: 12
   }
 }
