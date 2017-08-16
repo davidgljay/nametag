@@ -31,7 +31,6 @@ function getQueryVariable (variable) {
 export const roomsQuery = graphql(ROOMS_QUERY, {
   options: () => ({
     variables: {
-      id: getQueryVariable('id'),
       granter: getQueryVariable('granter')
     }
   }),

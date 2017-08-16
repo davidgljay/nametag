@@ -379,7 +379,7 @@ type RootQuery {
   room(id:ID!): Room
 
   # Retrieves all active rooms in the system. May optionally include a specific id.
-  rooms(id:ID, query: String, granter: String): [Room]
+  rooms(query: String, granter: String): [Room]
 
   # Retrieves the current user
   me: User
