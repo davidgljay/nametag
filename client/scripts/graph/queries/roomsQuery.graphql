@@ -8,7 +8,6 @@ query roomsQuery($query: String, $granter: String) {
     image
     norms
     createdAt
-    closedAt
     nametagCount
     latestMessage
     templates {

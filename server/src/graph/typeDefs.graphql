@@ -82,9 +82,6 @@ type Room {
   # The date when the room was created
   createdAt: Date!
 
-  # The date when the room closes
-  closedAt: Date!
-
   # The messages sent in the room
   messages: [Message]
 
@@ -426,9 +423,6 @@ input CreateRoomInput {
   # An array of the room's norms
   norms: [String!]
 
-  # The date when the room will be closed
-  closedAt: Date!
-
   # An array of templates required to view and enter the room
   templates:[ID!]
 
@@ -463,9 +457,6 @@ input UpdateRoomInput {
 
   # An array of the room's norms
   norms: [String!]
-
-  # The date when the room will be closed
-  closedAt: Date
 
   # The welcome given for the room
   welcome: String
@@ -750,9 +741,6 @@ type UpdateRoom {
 
   # Sets whether or not DMing is limited to models
   modOnlyDMs: Boolean
-
-  # The date when the room will be closed
-  closedAt: Date
 
   # The welcome given for the room
   welcome: String
