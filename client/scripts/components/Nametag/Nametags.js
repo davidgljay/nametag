@@ -15,7 +15,7 @@ const Nametags = ({nametags, mod, myNametagId, setDefaultMessage, hideDMs}) =>
             hideDMs={hideDMs}
             myNametagId={myNametagId}
             setDefaultMessage={setDefaultMessage}
-            mod={mod} />
+            modId={mod} />
         </Card>
       })
     }
