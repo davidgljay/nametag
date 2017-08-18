@@ -29,29 +29,18 @@ class Room extends Component {
 
     this.showPresence = () => {
       if (this.state.presenceTimer) { return }
-      const {updateLatestVisit} = this.props
-      updateLatestVisit(this.getMyNametag().id)
+      const {updateLatestVisit, myNametag} = this.props
+      updateLatestVisit(myNametag.id)
       this.setState((prevState) => {
         clearInterval(prevState.presenceTimer)
         const presenceTimer = setInterval(() => {
-          updateLatestVisit(this.getMyNametag().id)
+          updateLatestVisit(myNametag.id)
         }, 10000)
         return {
           ...prevState,
           presenceTimer
         }
       })
-    }
-
-    this.getMyNametag = () => {
-      const {me, room} = this.props.data
-      if (!room || !me || !room.nametags || !me.nametags) {
-        return null
-      }
-      const myNtId = me.nametags.reduce(
-        (val, nametag) => nametag.room && nametag.room.id === room.id ? nametag.id : val, null
-      )
-      return room.nametags.filter((nt) => nt.id === myNtId)[0]
     }
 
     this.toggleLeftBar = () => {
@@ -95,9 +84,8 @@ class Room extends Component {
 
   componentDidUpdate (prevProps) {
     const {messageAddedSubscription, messageDeletedSubscription} = this.props
-    const {loading, room, me} = this.props.data
+    const {loading, room, me, myNametag} = this.props.data
     if (prevProps.data.loading && !loading) {
-      const myNametag = this.getMyNametag()
       if (me) {
         identify(me.id, {'$name': me.displayNames[0]})
       }
@@ -126,6 +114,7 @@ class Room extends Component {
         room,
         me
       },
+      myNametag,
       nametagEdits,
       updateNametagEdit,
       addNametagEditBadge,
@@ -148,8 +137,6 @@ class Room extends Component {
         <CircularProgress />
       </div>
     }
-
-    const myNametag = this.getMyNametag()
 
     // If the user is not logged in, return to the homepage
     if (!me || !room.nametags || !myNametag) {
