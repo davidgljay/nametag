@@ -25,7 +25,8 @@ class Room extends Component {
       },
       presenceTime: null,
       defaultMessage: '',
-      showWelcomeModal: false
+      hasPosted: false,
+      dismissedWelcomeModal: false
     }
 
     this.showPresence = () => {
@@ -94,7 +95,7 @@ class Room extends Component {
         this.showPresence()
         messageAddedSubscription(room.id, myNametag.id)
         messageDeletedSubscription(room.id)
-        this.setState({showWelcomeModal: !this.userHasPosted(myNametag, room.messages)})
+        this.setState({hasPosted: this.userHasPosted(myNametag, room.messages)})
         track('ROOM_VIEW', {id: room.id, title: room.title})
         setTimer('POST_MESSAGE')
       }
@@ -131,7 +132,7 @@ class Room extends Component {
       addReaction
     } = this.props
 
-    const {defaultMessage, showWelcomeModal} = this.state
+    const {defaultMessage, hasPosted, dismissedWelcomeModal} = this.state
 
     if (loading) {
       return <div style={styles.spinner}>
@@ -206,8 +207,8 @@ class Room extends Component {
       <Dialog
         modal={false}
         contentStyle={styles.dialog}
-        open={showWelcomeModal}
-        onRequestClose={() => this.setState({showWelcomeModal: false})}>
+        open={!hasPosted && !dismissedWelcomeModal}
+        onRequestClose={() => this.setState({dismissedWelcomeModal: true})}>
         <WelcomeForm
           createMessage={createMessage}
           welcome={room.welcome}
@@ -216,7 +217,7 @@ class Room extends Component {
           mod={room.mod}
           myNametag={myNametag}
           updateNametag={updateNametag}
-          onWelcomeMsgSent={() => this.setState({showWelcomeModal: false})}
+          onWelcomeMsgSent={() => this.setState({hasPosted: true})}
           />
       </Dialog>
     </div>
