@@ -26,10 +26,10 @@ function getMyNametag ({data}) {
   if (!room || !me || !room.nametags || !me.nametags) {
     return null
   }
-  const myNtId = me.nametags.reduce(
-    (val, nametag) => nametag.room && nametag.room.id === room.id ? nametag.id : val, null
+  const myNt = me.nametags.find(
+    (nametag) => nametag.room && nametag.room.id === room.id
   )
-  return room.nametags.filter((nt) => nt.id === myNtId)[0]
+  return room.nametags.filter((nt) => nt.id === myNt.id)[0]
 }
 
 const mapStateToProps = (state, ownProps) => {
