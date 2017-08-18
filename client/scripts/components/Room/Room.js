@@ -2,9 +2,10 @@ import React, { Component, PropTypes } from 'react'
 import CircularProgress from 'material-ui/CircularProgress'
 import RoomLeftBar from './RoomLeftBar'
 import AppBar from 'material-ui/AppBar'
+import Dialog from 'material-ui/Dialog'
 import radium, {keyframes} from 'radium'
 import Messages from '../../components/Message/Messages'
-import WelcomeModal from './WelcomeModal'
+import WelcomeForm from './WelcomeForm'
 import ComposeWithMenus from '../Message/ComposeWithMenus'
 import JoinRoom from './JoinRoom'
 import {track, identify, setTimer} from '../../utils/analytics'
@@ -24,7 +25,7 @@ class Room extends Component {
       },
       presenceTime: null,
       defaultMessage: '',
-      showWelcome: false
+      showWelcomeModal: false
     }
 
     this.showPresence = () => {
@@ -93,7 +94,7 @@ class Room extends Component {
         this.showPresence()
         messageAddedSubscription(room.id, myNametag.id)
         messageDeletedSubscription(room.id)
-        this.setState({showWelcome: !this.userHasPosted(myNametag, room.messages)})
+        this.setState({showWelcomeModal: !this.userHasPosted(myNametag, room.messages)})
         track('ROOM_VIEW', {id: room.id, title: room.title})
         setTimer('POST_MESSAGE')
       }
@@ -130,7 +131,7 @@ class Room extends Component {
       addReaction
     } = this.props
 
-    const {defaultMessage, showWelcome} = this.state
+    const {defaultMessage, showWelcomeModal} = this.state
 
     if (loading) {
       return <div style={styles.spinner}>
@@ -202,17 +203,22 @@ class Room extends Component {
           defaultMessage={defaultMessage}
           myNametag={myNametag} />
       </div>
-      <WelcomeModal
-        createMessage={createMessage}
-        welcome={room.welcome}
-        roomId={room.id}
-        nametags={room.nametags}
-        mod={room.mod}
-        showWelcome={showWelcome}
-        myNametag={myNametag}
-        updateNametag={updateNametag}
-        toggleWelcome={() => this.setState({showWelcome: false})}
-        />
+      <Dialog
+        modal={false}
+        contentStyle={styles.dialog}
+        open={showWelcomeModal}
+        onRequestClose={() => this.setState({showWelcomeModal: false})}>
+        <WelcomeForm
+          createMessage={createMessage}
+          welcome={room.welcome}
+          roomId={room.id}
+          nametags={room.nametags}
+          mod={room.mod}
+          myNametag={myNametag}
+          updateNametag={updateNametag}
+          onWelcomeMsgSent={() => this.setState({showWelcomeModal: false})}
+          />
+      </Dialog>
     </div>
   }
 }
@@ -255,6 +261,9 @@ const slideIn = keyframes({
 }, 'slideIn')
 
 const styles = {
+  dialog: {
+    maxWidth: 820
+  },
   roomContainer: {
     overflowX: 'hidden'
   },
