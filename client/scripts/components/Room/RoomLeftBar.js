@@ -45,7 +45,7 @@ class RoomLeftBar extends Component {
       expanded,
       toggleLeftBar
     } = this.props
-    const notifCount = me.nametags.filter(
+    const notifCount = !myNametag ? 0 : me.nametags.filter(
       nametag => nametag.room &&
       new Date(nametag.room.closedAt) > new Date() &&
       nametag.room.id !== this.props.roomId
@@ -90,7 +90,7 @@ class RoomLeftBar extends Component {
             </div>
         }
         {
-          this.state.toggles.rooms &&
+          myNametag && this.state.toggles.rooms &&
           <Notifications
             latestMessageUpdatedSubscription={latestMessageUpdatedSubscription}
             nametags={me.nametags}
@@ -117,22 +117,27 @@ class RoomLeftBar extends Component {
             }
           </div>
         }
-        <div
-          style={styles.leftNavHeader}
-          onClick={this.toggleLeftBarSection('nametags')}>
-          {
-            this.state.toggles.nametags ? '- ' : '+ '
-          }
-          Nametags
-        </div>
         {
-          this.state.toggles.nametags &&
-          <Nametags
-            mod={room.mod.id}
-            setDefaultMessage={this.setDefaultMessage}
-            nametags={room.nametags}
-            hideDMs={hideDMs}
-            myNametagId={myNametag.id} />
+          myNametag &&
+          <div>
+            <div
+              style={styles.leftNavHeader}
+              onClick={this.toggleLeftBarSection('nametags')}>
+              {
+                this.state.toggles.nametags ? '- ' : '+ '
+              }
+              Nametags
+            </div>
+            {
+              this.state.toggles.nametags &&
+              <Nametags
+                mod={room.mod.id}
+                setDefaultMessage={this.setDefaultMessage}
+                nametags={room.nametags}
+                hideDMs={hideDMs}
+                myNametagId={myNametag.id} />
+            }
+          </div>
         }
       </div>
     </div>
@@ -159,7 +164,7 @@ RoomLeftBar.propTypes = {
     mod: shape({
       id: string.isRequired
     }),
-    nametags: arrayOf(object.isRequired).isRequired,
+    nametags: arrayOf(object.isRequired),
     modOnlyDMs: bool
   }),
   me: shape({
@@ -169,7 +174,7 @@ RoomLeftBar.propTypes = {
   updateRoom: func.isRequired,
   myNametag: shape({
     id: string.isRequired
-  }).isRequired,
+  }),
   expanded: bool.isRequired,
   toggleLeftBar: func.isRequired
 }

@@ -51,11 +51,11 @@ WelcomeForm.propTypes = {
   createMessage: func.isRequired,
   welcome: string.isRequired,
   onWelcomeMsgSent: func.isRequired,
-  nametags: arrayOf(object).isRequired,
+  nametags: arrayOf(object),
   mod: object.isRequired,
   roomId: string.isRequired,
   updateNametag: func.isRequired,
-  myNametag: shape({id: string.isRequired}).isRequired
+  myNametag: shape({id: string.isRequired})
 }
 
 export default WelcomeForm

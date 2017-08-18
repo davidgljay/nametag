@@ -148,7 +148,7 @@ class ComposeWithMenu extends Component {
         </Menu>
       </Popover>
       <CommandMenu
-        isMod={myNametag.id === mod.id}
+        isMod={!!myNametag && myNametag.id === mod.id}
         open={showComposeMenu === 'command'}
         anchor={document.getElementById('compose')}
         onRequestClose={this.closeMenus}
@@ -161,7 +161,7 @@ const {object, string, func} = PropTypes
 
 ComposeWithMenu.propTypes = {
   roomId: string.isRequired,
-  myNametag: object.isRequired,
+  myNametag: object,
   createMessage: func.isRequired,
   defaultMessage: string,
   setDefaultMessage: func.isRequired,

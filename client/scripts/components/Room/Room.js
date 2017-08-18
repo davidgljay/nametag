@@ -141,7 +141,7 @@ class Room extends Component {
     }
 
     // If the user is not logged in, return to the homepage
-    if (!me || !room.nametags || !myNametag) {
+    if (!me) {
       return <JoinRoom
         createNametag={createNametag}
         addNametagEditBadge={addNametagEditBadge}
