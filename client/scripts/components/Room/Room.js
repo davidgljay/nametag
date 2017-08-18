@@ -83,8 +83,8 @@ class Room extends Component {
   }
 
   componentDidUpdate (prevProps) {
-    const {messageAddedSubscription, messageDeletedSubscription} = this.props
-    const {loading, room, me, myNametag} = this.props.data
+    const {messageAddedSubscription, messageDeletedSubscription, myNametag} = this.props
+    const {loading, room, me} = this.props.data
     if (prevProps.data.loading && !loading) {
       if (me) {
         identify(me.id, {'$name': me.displayNames[0]})
