@@ -64,7 +64,6 @@ class Join extends Component {
               selectedBadges={nametag && nametag.badges}
               badges={me.badges} />
           </div>
-          <br />
         </div>
     } else {
       join = <Login />
