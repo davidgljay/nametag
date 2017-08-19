@@ -73,19 +73,17 @@ class Messages extends Component {
 
   componentDidMount () {
     const {messages} = this.props
-    if (messages && messages.length > 0) {
+    if (messages.length > 0) {
       document.getElementById(messages[messages.length - 1].id).scrollIntoView()
     }
   }
 
   componentDidUpdate (prevProps) {
-    if (this.props.messages) {
-      this.scrollIfNeeded(prevProps.messages, this.props.messages)
-    }
+    this.scrollIfNeeded(prevProps.messages, this.props.messages)
   }
 
   render () {
-    const {messages, myNametag} = this.props
+    const {messages} = this.props
     const {showEmoji} = this.state
     return <div style={styles.messages} id='messages'>
       <Popover
@@ -101,7 +99,7 @@ class Messages extends Component {
       </Popover>
       <div style={styles.msgContainer}>
         {
-          myNametag && messages.map(this.mapMessage)
+          messages.map(this.mapMessage)
         }
       </div>
     </div>
@@ -112,7 +110,7 @@ const {string, arrayOf, object, func, bool, shape} = PropTypes
 
 Messages.propTypes = {
   roomId: string.isRequired,
-  messages: arrayOf(object),
+  messages: arrayOf(object).isRequired,
   createMessage: func.isRequired,
   myNametag: shape({
     id: string.isRequired

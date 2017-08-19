@@ -1,13 +1,13 @@
 const Room = {
   messages: ({id}, _, {user, models: {Messages}}) => {
     if (!user || !user.nametags || !user.nametags[id]) {
-      return null
+      return []
     }
     return Messages.getRoomMessages(id, user.nametags[id])
   },
   nametags: ({id}, _, {user, models: {Nametags}}) => {
     if (!user || !user.nametags || !user.nametags[id]) {
-      return null
+      return []
     }
     return Nametags.getRoomNametags(id)
   },
