@@ -40,12 +40,7 @@ class JoinRoom extends Component {
   render () {
     const {
       me,
-      room: {id, title, image, templates, norms, description, nametagCount, mod},
-      nametagEdits,
-      createNametag,
-      addNametagEditBadge,
-      removeNametagEditBadge,
-      updateNametagEdit
+      room: {id, title, image, templates, norms, description, nametagCount, mod}
     } = this.props
 
     return <div id='room' style={styles.container}>
@@ -104,19 +99,13 @@ class JoinRoom extends Component {
         </div>
         <Join
           room={id}
-          nametag={nametagEdits[id]}
-          me={me}
-          templates={templates.map(t => t.id)}
-          createNametag={createNametag}
-          addNametagEditBadge={addNametagEditBadge}
-          removeNametagEditBadge={removeNametagEditBadge}
-          updateNametagEdit={updateNametagEdit} />
+          me={me} />
       </div>
     </div>
   }
 }
 
-const {shape, string, object, arrayOf, func} = PropTypes
+const {shape, string, object} = PropTypes
 
 JoinRoom.propTypes = {
   me: object,
@@ -128,15 +117,7 @@ JoinRoom.propTypes = {
       id: string.isRequired,
       image: string.isRequired
     })
-  }).isRequired,
-  templates: arrayOf(shape({
-    id: string.isRequired
-  })),
-  nametagEdits: object.isRequired,
-  createNametag: func.isRequired,
-  addNametagEditBadge: func.isRequired,
-  removeNametagEditBadge: func.isRequired,
-  updateNametagEdit: func.isRequired
+  }).isRequired
 }
 
 export default radium(JoinRoom)

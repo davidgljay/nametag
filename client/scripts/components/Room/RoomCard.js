@@ -49,12 +49,7 @@ class RoomCard extends Component {
       room,
       creating,
       style,
-      me,
-      nametagEdits,
-      addNametagEditBadge,
-      removeNametagEditBadge,
-      updateNametagEdit,
-      createNametag
+      me
     } = this.props
     let card
     let flipping = {}
@@ -122,13 +117,7 @@ class RoomCard extends Component {
         !creating &&
         <Join
           room={room.id}
-          nametag={nametagEdits[room.id]}
           me={me}
-          templates={room.templates.map(t => t.id)}
-          createNametag={createNametag}
-          addNametagEditBadge={addNametagEditBadge}
-          removeNametagEditBadge={removeNametagEditBadge}
-          updateNametagEdit={updateNametagEdit}
           />
       }
     </Card>
@@ -168,11 +157,6 @@ RoomCard.propTypes = {
     id: PropTypes.string.isRequired,
     badges: PropTypes.arrayOf(PropTypes.object).isRequired
   }),
-  nametagEdits: PropTypes.object.isRequired,
-  addNametagEditBadge: PropTypes.func.isRequired,
-  removeNametagEditBadge: PropTypes.func.isRequired,
-  updateNametagEdit: PropTypes.func.isRequired,
-  createNametag: PropTypes.func,
   creating: PropTypes.bool
 }
 

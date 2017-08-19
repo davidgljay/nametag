@@ -41,13 +41,8 @@ class RoomCards extends Component {
   render () {
     const {
       data: {me, rooms, loading},
-      updateNametagEdit,
       latestMessageUpdatedSubscription,
-      search,
-      addNametagEditBadge,
-      removeNametagEditBadge,
-      nametagEdits,
-      createNametag
+      search
     } = this.props
     let nametagHash = {}
     if (me) {
@@ -84,12 +79,7 @@ class RoomCards extends Component {
               <RoomCard
                 key={room.id}
                 room={room}
-                me={me}
-                nametagEdits={nametagEdits}
-                createNametag={createNametag}
-                updateNametagEdit={updateNametagEdit}
-                addNametagEditBadge={addNametagEditBadge}
-                removeNametagEditBadge={removeNametagEditBadge} />
+                me={me} />
             )
           }
         </div>

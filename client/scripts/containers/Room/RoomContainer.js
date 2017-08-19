@@ -29,6 +29,10 @@ function getMyNametag ({data}) {
   const myNt = me.nametags.find(
     (nametag) => nametag.room && nametag.room.id === room.id
   )
+  if (!myNt) {
+    // The user's nametag will not exist when they join the room for the first time.
+    return null
+  }
   return room.nametags.filter((nt) => nt.id === myNt.id)[0]
 }
 

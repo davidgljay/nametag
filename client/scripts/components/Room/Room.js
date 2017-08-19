@@ -6,6 +6,7 @@ import Dialog from 'material-ui/Dialog'
 import radium, {keyframes} from 'radium'
 import Messages from '../../components/Message/Messages'
 import WelcomeForm from './WelcomeForm'
+import ConfirmNametagForm from './ConfirmNametagForm'
 import ComposeWithMenus from '../Message/ComposeWithMenus'
 import JoinRoom from './JoinRoom'
 import {track, identify, setTimer} from '../../utils/analytics'
@@ -143,11 +144,6 @@ class Room extends Component {
     // If the user is not logged in, return to the homepage
     if (!me) {
       return <JoinRoom
-        createNametag={createNametag}
-        addNametagEditBadge={addNametagEditBadge}
-        removeNametagEditBadge={removeNametagEditBadge}
-        updateNametagEdit={updateNametagEdit}
-        nametagEdits={nametagEdits}
         registerUser={registerUser}
         loginUser={loginUser}
         room={room}
@@ -207,18 +203,32 @@ class Room extends Component {
       <Dialog
         modal={false}
         contentStyle={styles.dialog}
-        open={!hasPosted && !dismissedWelcomeModal}
+        open={!myNametag || (!hasPosted && !dismissedWelcomeModal)}
         onRequestClose={() => this.setState({dismissedWelcomeModal: true})}>
-        <WelcomeForm
-          createMessage={createMessage}
-          welcome={room.welcome}
-          roomId={room.id}
-          nametags={room.nametags}
-          mod={room.mod}
-          myNametag={myNametag}
-          updateNametag={updateNametag}
-          onWelcomeMsgSent={() => this.setState({hasPosted: true})}
-          />
+        {!myNametag &&
+          <ConfirmNametagForm
+            roomId={room.id}
+            templates={room.templates.map(t => t.id)}
+            nametag={nametagEdits[room.id]}
+            me={me}
+            createNametag={createNametag}
+            addNametagEditBadge={addNametagEditBadge}
+            removeNametagEditBadge={removeNametagEditBadge}
+            updateNametagEdit={updateNametagEdit}
+            // Reload me.nametags after room nametag created.
+            onCreateNametag={() => this.props.data.refetch()} />
+        }
+        {myNametag && !hasPosted &&
+          <WelcomeForm
+            createMessage={createMessage}
+            welcome={room.welcome}
+            roomId={room.id}
+            nametags={room.nametags}
+            mod={room.mod}
+            myNametag={myNametag}
+            updateNametag={updateNametag}
+            onWelcomeMsgSent={() => this.setState({hasPosted: true})} />
+        }
       </Dialog>
     </div>
   }
