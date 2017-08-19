@@ -26,7 +26,7 @@ class Room extends Component {
       },
       presenceTime: null,
       defaultMessage: '',
-      hasPosted: false,
+      hasPosted: null,
       dismissedWelcomeModal: false
     }
 
@@ -203,7 +203,7 @@ class Room extends Component {
       <Dialog
         modal={false}
         contentStyle={styles.dialog}
-        open={!myNametag || (!hasPosted && !dismissedWelcomeModal)}
+        open={!myNametag || (hasPosted === false && !dismissedWelcomeModal)}
         onRequestClose={() => this.setState({dismissedWelcomeModal: true})}>
         {!myNametag &&
           <ConfirmNametagForm
@@ -218,7 +218,7 @@ class Room extends Component {
             // Reload me.nametags after room nametag created.
             onCreateNametag={() => this.props.data.refetch()} />
         }
-        {myNametag && !hasPosted &&
+        {myNametag && hasPosted === false &&
           <WelcomeForm
             createMessage={createMessage}
             welcome={room.welcome}
