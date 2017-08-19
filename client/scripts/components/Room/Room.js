@@ -69,6 +69,12 @@ class Room extends Component {
       return false
     }
 
+    this.dismissWelcomeModal = () => {
+      if (this.props.myNametag) {
+        this.setState({dismissWelcomeModal: true})
+      }
+    }
+
     this.setDefaultMessage = (defaultMessage) => this.setState({defaultMessage})
   }
 
@@ -204,7 +210,7 @@ class Room extends Component {
         modal={false}
         contentStyle={styles.dialog}
         open={!myNametag || (hasPosted === false && !dismissedWelcomeModal)}
-        onRequestClose={() => this.setState({dismissedWelcomeModal: true})}>
+        onRequestClose={this.dismissWelcomeModal}>
         {!myNametag &&
           <ConfirmNametagForm
             roomId={room.id}
