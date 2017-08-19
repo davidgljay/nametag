@@ -58,7 +58,7 @@ class Join extends Component {
             addNametagEditBadge={addNametagEditBadge}
             removeNametagEditBadge={removeNametagEditBadge}
             updateNametagEdit={updateNametagEdit}
-            room={room} />
+            roomId={room} />
           <div style={styles.userBadges}>
             <UserBadges
               selectedBadges={nametag && nametag.badges}
