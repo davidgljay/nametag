@@ -20,7 +20,7 @@ const WelcomeForm = ({
   onWelcomeMsgSent
 }) =>
   <div className='welcome'>
-    <h3>{welcome}</h3>
+    <h3 style={styles.header}>{welcome}</h3>
     <Compose
       roomId={roomId}
       myNametag={myNametag}
@@ -61,6 +61,9 @@ WelcomeForm.propTypes = {
 export default WelcomeForm
 
 const styles = {
+  header: {
+    marginTop: 0
+  },
   card: {
     width: 240,
     minHeight: 60,
