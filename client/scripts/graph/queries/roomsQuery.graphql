@@ -46,9 +46,6 @@ query roomsQuery($query: String, $granter: String) {
        title
        image
        latestMessage
-       mod {
-        id
-       }
      }
    }
  }

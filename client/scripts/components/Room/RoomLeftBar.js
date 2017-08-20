@@ -47,10 +47,7 @@ class RoomLeftBar extends Component {
     } = this.props
     const notifCount = me.nametags.filter(
       nametag => nametag.room &&
-      (
-        new Date(nametag.room.latestMessage) > new Date(Date.now() - 604800000) ||
-        (!nametag.room.latestMessage && nametag.room.mod.id === nametag.id)
-      ) &&
+      new Date(nametag.room.latestMessage) > new Date(Date.now() - 604800000) &&
       nametag.room.id !== this.props.roomId
     ).length
     const isMod = me.nametags
@@ -97,6 +94,7 @@ class RoomLeftBar extends Component {
           <Notifications
             latestMessageUpdatedSubscription={latestMessageUpdatedSubscription}
             nametags={me.nametags}
+            myNametag={myNametag}
             roomId={room.id} />
         }
         {
