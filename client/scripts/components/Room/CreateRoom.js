@@ -17,7 +17,6 @@ class CreateRoom extends Component {
         title: '',
         description: '',
         image: '',
-        closedAt: new Date(86400000 * 2 + Date.now()).toISOString(),
         templates: []
       },
       closedIn: {
@@ -54,26 +53,6 @@ class CreateRoom extends Component {
         if (prevState.stepIndex > 0) {
           prevState.stepIndex --
         }
-        return prevState
-      })
-    }
-
-    this.setClosed = (type, unit) => {
-      this.setState((prevState) => {
-        prevState.closedIn[type] = unit
-        let unitTime
-        switch (prevState.closedIn.unit) {
-          case 'Hours':
-            unitTime = 3600000
-            break
-          case 'Days':
-            unitTime = 86400000
-            break
-          default:
-            unitTime = 0
-        }
-        const closedAt = new Date(Date.now() + prevState.closedIn.quantity * unitTime).toISOString()
-        prevState.room.closedAt = closedAt
         return prevState
       })
     }

@@ -54,13 +54,13 @@ module.exports = {
                 bool: {
                       // Temporarily only showing active rooms in search
                   must: [
-                    {
-                      range: {
-                        closedAt: {
-                          gt: 'now'
-                        }
-                      }
-                    }
+                    // {
+                    //   range: {
+                    //     closedAt: {
+                    //       gt: 'now'
+                    //     }
+                    //   }
+                    // }
                   ],
                   should: [
                     {

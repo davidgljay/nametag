@@ -25,7 +25,7 @@ const get = ({conn}, id) => roomsTable.get(id).run(conn)
 *
 */
 
-const getVisible = ({conn, user, models: {Users}}, id) =>
+const getVisible = ({conn, user, models: {Users}}) =>
 
   // First, get templates that the user can access as an admin
   Users.getAdminTemplates()
@@ -34,27 +34,20 @@ const getVisible = ({conn, user, models: {Users}}, id) =>
         ? Object.keys(user.badges).concat(adminTemplates.map(t => t.id))
         : []
 
-      // If an id is passed, return that room if it's visible
-      if (id) {
-        return get(id)
-          .then(room => {
-            const visible = visibleTemplates.reduce(
-              (template, visible) => room.templates.indexOf(template) > -1 || visible, false)
-            return room.templates.length === 0 || visible ? [room] : []
-          })
-      }
-
       // Otherwise, return all public rooms and rooms that the user can see based on their templates
       // TODO: Add pagination
-      return roomsTable
-        .between(new Date(), new Date(Date.now() * 100), {index: 'closedAt'})
-        .filter(room => r.or(
-          r.eq(room('templates').count(), 0),
-          room('templates').setIntersection(visibleTemplates).count().ge(1)
-        ))
+      return roomsTable.between(new Date(Date.now() - 604800000),  new Date(), {index: 'latestMessage'})
+        .orderBy({index:'latestMessage'})
+        .filter(room =>
+          room('templates').count().eq(0)
+          ||
+          room('templates')
+            .setIntersection(visibleTemplates)
+            .count().gt(0)
+         )
+        .limit(10)
         .run(conn)
-        .then(rooms => rooms.toArray())
-        .then(arr => arr.sort((a, b) => a.createdAt - b.createdAt))
+        .then(cursor => cursor.toArray())
     })
 
 /**
@@ -77,8 +70,13 @@ const getGranterRooms = ({conn, user, models: {Users}}, granterCode) => {
       if (userTemplateIds.length === 0) {
         return Promise.resolve([])
       }
-      return roomsTable.getAll(...userTemplateIds, {index: 'templates'})
-        .filter(r => r('closedAt').gt(new Date()))
+      return roomsTable.between(new Date(Date.now() - 604800000),  new Date(), {index: 'latestMessage'})
+        .orderBy({index:'latestMessage'})
+        .filter(room =>
+          room('templates')
+            .setIntersection(userTemplateIds)
+            .count().gt(0)
+         )
         .run(conn)
         .then(cursor => cursor.toArray())
     })
@@ -228,7 +226,7 @@ const notifyOfNewMessage = ({conn, models: {Nametags, Users}}, roomId) =>
 module.exports = (context) => ({
   Rooms: {
     get: (id) => get(context, id),
-    getVisible: (id) => getVisible(context, id),
+    getVisible: () => getVisible(context),
     getQuery: (query) => getQuery(context, query),
     create: (room) => create(context, room),
     update: (roomId, roomUpdate) => update(context, roomId, roomUpdate),

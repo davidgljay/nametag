@@ -8,7 +8,7 @@ class Notifications extends Component {
 
     this.visitedRooms = (nametags) => nametags.filter(
       nametag => nametag.room &&
-      new Date(nametag.room.closedAt) > new Date() &&
+      new Date(nametag.room.latestMessage) > new Date(Date.now() - 604800000) &&
       nametag.room.id !== this.props.roomId
     )
   }
@@ -80,8 +80,7 @@ Notifications.propTypes = {
     room: shape({
       id: string.isRequired,
       title: string.isRequired,
-      image: string.isRequired,
-      closedAt: string.isRequired
+      image: string.isRequired
     })
   })).isRequired,
   latestMessageUpdatedSubscription: func.isRequired,

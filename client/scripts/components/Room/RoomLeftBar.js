@@ -47,7 +47,7 @@ class RoomLeftBar extends Component {
     } = this.props
     const notifCount = me.nametags.filter(
       nametag => nametag.room &&
-      new Date(nametag.room.closedAt) > new Date() &&
+      new Date(nametag.room.latestMessage) > new Date(Date.now() - 604800000) &&
       nametag.room.id !== this.props.roomId
     ).length
     const isMod = me.nametags
