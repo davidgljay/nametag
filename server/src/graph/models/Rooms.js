@@ -36,12 +36,11 @@ const getVisible = ({conn, user, models: {Users}}) =>
 
       // Otherwise, return all public rooms and rooms that the user can see based on their templates
       // TODO: Add pagination
-      return roomsTable.between(new Date(Date.now() - 604800000),  new Date(), {index: 'latestMessage'})
-        .orderBy({index:'latestMessage'})
+      return roomsTable.between(new Date(Date.now() - 604800000), new Date(), {index: 'latestMessage'})
+        .orderBy({index: 'latestMessage'})
         .filter(room =>
           room('templates').count().eq(0)
-          ||
-          room('templates')
+          || room('templates')
             .setIntersection(visibleTemplates)
             .count().gt(0)
          )
@@ -70,8 +69,8 @@ const getGranterRooms = ({conn, user, models: {Users}}, granterCode) => {
       if (userTemplateIds.length === 0) {
         return Promise.resolve([])
       }
-      return roomsTable.between(new Date(Date.now() - 604800000),  new Date(), {index: 'latestMessage'})
-        .orderBy({index:'latestMessage'})
+      return roomsTable.between(new Date(Date.now() - 604800000), new Date(), {index: 'latestMessage'})
+        .orderBy({index: 'latestMessage'})
         .filter(room =>
           room('templates')
             .setIntersection(userTemplateIds)
