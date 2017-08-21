@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import {withRouter} from 'react-router'
 import Login from '../../containers/User/LoginContainer'
 import RaisedButton from 'material-ui/RaisedButton'
 import Alert from '../Utils/Alert'
@@ -11,8 +12,11 @@ class Join extends Component {
     this.state = {alert: null}
 
     this.onJoinClick = () => {
-      const {room} = this.props
-      window.location = `/rooms/${room}`
+      const {room, router} = this.props
+      router.push({
+        pathname: `/rooms/${room}`,
+        state: {isJoining: true}
+      })
     }
   }
 
@@ -44,7 +48,7 @@ Join.propTypes = {
   me: object
 }
 
-export default Join
+export default withRouter(Join)
 
 const styles = {
   join: {

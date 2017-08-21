@@ -76,6 +76,19 @@ class Room extends Component {
       }
     }
 
+    this.handleRoomJoin = () => {
+      // FIXME: We set hasPosted=false because there's a gap in between nametag
+      // creation and messages loading where hasPosted=null, causing the
+      // welcome dialog to hide. We want hasPosted to default to null in
+      // general, so users who've posted before don't see a flash of the modal
+      // when loading the room. Moving hasPosted to a connected prop which is
+      // set at the same time as myNametag is set would avoid this.
+      this.setState({hasPosted: false}, () => {
+        // Reload me.nametags after room nametag created.
+        this.props.data.refetch()
+      })
+    }
+
     this.setDefaultMessage = (defaultMessage) => this.setState({defaultMessage})
 
     this.setRecipient = (recipient) => this.setState({recipient})
@@ -101,15 +114,15 @@ class Room extends Component {
       if (me) {
         identify(me.id, {'$name': me.displayNames[0]})
       }
-      if (me && myNametag) {
-        this.showPresence()
-        messageAddedSubscription(room.id, myNametag.id)
-        messageDeletedSubscription(room.id)
-        this.setState({hasPosted: this.userHasPosted(myNametag, room.messages)})
-        track('ROOM_VIEW', {id: room.id, title: room.title})
-        setTimer('POST_MESSAGE')
-      }
       document.title = `${room.title}`
+    }
+    if (!prevProps.myNametag && myNametag) {
+      this.showPresence()
+      messageAddedSubscription(room.id, myNametag.id)
+      messageDeletedSubscription(room.id)
+      this.setState({hasPosted: this.userHasPosted(myNametag, room.messages)})
+      track('ROOM_VIEW', {id: room.id, title: room.title})
+      setTimer('POST_MESSAGE')
     }
   }
 
@@ -139,10 +152,13 @@ class Room extends Component {
       updateRoom,
       updateNametag,
       deleteMessage,
-      addReaction
+      addReaction,
+      location: {state: locationState}
     } = this.props
 
     const {defaultMessage, recipient, hasPosted, dismissedWelcomeModal} = this.state
+
+    const isJoining = locationState && locationState.isJoining
 
     if (loading) {
       return <div style={styles.spinner}>
@@ -150,8 +166,8 @@ class Room extends Component {
       </div>
     }
 
-    // If the user is not logged in, return to the homepage
-    if (!me) {
+    // If the user is not logged in and hasn't clicked "join room", return to the homepage
+    if (!me || (!myNametag && !isJoining)) {
       return <JoinRoom
         registerUser={registerUser}
         loginUser={loginUser}
@@ -228,8 +244,7 @@ class Room extends Component {
             addNametagEditBadge={addNametagEditBadge}
             removeNametagEditBadge={removeNametagEditBadge}
             updateNametagEdit={updateNametagEdit}
-            // Reload me.nametags after room nametag created.
-            onCreateNametag={() => this.props.data.refetch()} />
+            onCreateNametag={this.handleRoomJoin} />
         }
         {myNametag && hasPosted === false &&
           <WelcomeForm
