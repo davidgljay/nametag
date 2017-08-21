@@ -36,11 +36,7 @@ class Compose extends Component {
     }
 
     this.post = (e) => {
-<<<<<<< HEAD
-      const {myNametag, roomId, createMessage, onPost, setDefaultMessage} = this.props
-=======
       const {myNametag, roomId, createMessage, setDefaultMessage, setRecipient, onPost, recipient} = this.props
->>>>>>> master
       const {message} = this.state
       if (onPost) {
         onPost(message)
