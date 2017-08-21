@@ -124,7 +124,6 @@ CreateRoomForms.propTypes = {
   stepIndex: number.isRequired,
   updateRoom: func.isRequired,
   updateNametagEdit: func.isRequired,
-  setClosed: func.isRequired,
   closedIn: shape({
     unit: string.isRequired,
     quantity: number.isRequired

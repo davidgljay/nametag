@@ -149,8 +149,7 @@ RoomCard.propTypes = {
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    closedAt: PropTypes.string.isRequired
+    description: PropTypes.string.isRequired
   }).isRequired,
   style: PropTypes.object,
   me: PropTypes.shape({

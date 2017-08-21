@@ -1,4 +1,4 @@
-
+/* global __webpack_hash__ */
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'

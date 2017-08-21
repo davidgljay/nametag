@@ -24,6 +24,7 @@ class Messages extends Component {
         messages,
         addReaction,
         setDefaultMessage,
+        setRecipient,
         hideDMs,
         deleteMessage
       } = this.props
@@ -38,6 +39,7 @@ class Messages extends Component {
         deleteMessage={deleteMessage}
         addReaction={addReaction}
         setDefaultMessage={setDefaultMessage}
+        setRecipient={setRecipient}
         norms={norms}
         mod={mod}
         createMessage={createMessage}
@@ -118,7 +120,8 @@ Messages.propTypes = {
   hideDMs: bool.isRequired,
   deleteMessage: func.isRequired,
   addReaction: func.isRequired,
-  setDefaultMessage: func.isRequired
+  setDefaultMessage: func.isRequired,
+  setRecipient: func.isRequired
 }
 
 export default radium(Messages)

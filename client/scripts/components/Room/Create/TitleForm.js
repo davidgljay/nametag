@@ -73,7 +73,6 @@ TitleForm.propTypes = {
     quantity: number.isRequired
   }).isRequired,
   updateRoom: func.isRequired,
-  setClosed: func.isRequired,
   desc: string.isRequired,
   error: object
 }
