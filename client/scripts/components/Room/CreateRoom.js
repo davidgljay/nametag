@@ -19,10 +19,6 @@ class CreateRoom extends Component {
         image: '',
         templates: []
       },
-      closedIn: {
-        unit: 'Days',
-        quantity: 2
-      },
       image: '',
       norms: {},
       error: null,

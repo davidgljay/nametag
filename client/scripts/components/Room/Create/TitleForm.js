@@ -85,9 +85,5 @@ const styles = {
   unitSelector: {
     width: 100,
     margin: 10
-  },
-  closedAtHeader: {
-    color: grey,
-    fontSize: 14
   }
 }
