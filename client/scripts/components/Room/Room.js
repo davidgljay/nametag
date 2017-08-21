@@ -72,7 +72,7 @@ class Room extends Component {
 
     this.dismissWelcomeModal = () => {
       if (this.props.myNametag) {
-        this.setState({dismissWelcomeModal: true})
+        this.setState({dismissedWelcomeModal: true})
       }
     }
 
