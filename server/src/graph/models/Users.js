@@ -99,7 +99,7 @@ const addToken = ({user, conn}, token) =>
  * track people from room to room! A nice, elegant solution has been planned for this later.
  *
  * @param {Object} context     graph context
- * @param {String} nametagId   the nametagId which need to be sent a message
+ * @param {Array} nametagIds   the nametagId which need to be sent a message
  *
  */
 
@@ -115,13 +115,27 @@ const getTokens = ({conn}, nametagIds) =>
  * track people from room to room! A nice, elegant solution has been planned for this later.
  *
  * @param {Object} context     graph context
- * @param {String} nametagIds   the nametagIds which need to be sent an email
+ * @param {Array} nametagIds   the nametagIds which need to be sent an email
  *
  */
 
 const getEmails = ({conn}, nametagIds) =>
   usersTable.getAll(...nametagIds, {index: 'nametags'})('email').run(conn)
   .then(cursor => cursor.toArray())
+
+/**
+ * Gets an array of e-mail addresses based on an array of nametags
+ * NOTE: This is temporary, and breaks a core promise to our users: we shouldn't be able to
+ * track people from room to room! A nice, elegant solution has been planned for this later.
+ *
+ * @param {Object} context     graph context
+ * @param {String} nametagId   the nametagId which need to be sent an email
+ *
+ */
+
+const getByNametag = ({conn}, nametagId) =>
+  usersTable.getAll(nametagId, {index: 'nametags'}).run(conn)
+  .then(cursor => cursor.next())
 
 /**
  * Adds a nametag to the user.
@@ -204,7 +218,9 @@ const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
         images: [],
         [provider]: authProfile.id,
         createdAt: new Date(),
-        badges: {}
+        badges: {},
+        userToken: uuid.v4().replace(/-/g, '').slice(0, 15),
+        unsubscribe: {}
       }
 
       // Load an image if one exists, otherwise just insert the user
@@ -372,7 +388,9 @@ const createLocal = ({conn}, email, password) => {
         createdAt: new Date(),
         displayNames,
         images: images,
-        badges: {}
+        badges: {},
+        userToken: uuid.v4().replace(/-/g, '').slice(0, 15),
+        unsubscribe: {}
       }),
       {exists: true}
     )
@@ -487,12 +505,25 @@ const emailConfirmationRequest = ({conn}, email) => {
  * Confirms an e-mail.
  *
  * @param {Object} context   graph context
- * @param {String} email     E-mail address of the user
+ * @param {String} Token     Token confirming the user's e-mail
  *
  */
 
 const emailConfirmation = ({conn}, token) =>
   usersTable.getAll(token, {index: 'confirmation'}).update({confirmation: 'confirmed'}).run(conn)
+    .then(res => res.replaced === 0 ? ErrNotFound : null)
+
+/**
+ * Unsubscribes to a room or to all email.
+ *
+ * @param {Object} context   graph context
+ * @param {String} userToken     Unique token identifying the user
+ * @param {String} roomId    Id of the room to be unsubscribed from
+ *
+ */
+
+const unsubscribe = ({conn}, userToken, roomId) =>
+  usersTable.getAll(userToken, {index: 'userToken'}).update({unsubscribe: {[roomId]: true}}).run(conn)
     .then(res => res.replaced === 0 ? ErrNotFound : null)
 
 /**
@@ -516,6 +547,7 @@ module.exports = (context) => ({
   Users: {
     get: (id) => get(context, id),
     getByEmail: (email) => getByEmail(context, email),
+    getByNametag: (nametagId) => getByNametag(context, nametagId),
     addEmail: (userId, email) => addEmail(context, userId, email),
     getAdminTemplates: () => getAdminTemplates(context),
     findOrCreateFromAuth: (profile, provider) => findOrCreateFromAuth(context, profile, provider),
@@ -532,6 +564,7 @@ module.exports = (context) => ({
     passwordResetRequest: (email) => passwordResetRequest(context, email),
     passwordReset: (token, password) => passwordReset(context, token, password),
     emailConfirmationRequest: (email) => emailConfirmationRequest(context, email),
-    emailConfirmation: (token) => emailConfirmation(context, token)
+    emailConfirmation: (token) => emailConfirmation(context, token),
+    unsubscribe: (userToken, roomId) => unsubscribe(context, userToken, roomId)
   }
 })

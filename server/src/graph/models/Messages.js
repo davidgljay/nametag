@@ -1,6 +1,7 @@
 const {db} = require('../../db')
 const errors = require('../../errors')
 const notification = require('../../notifications')
+const email = require('../../email')
 
 const messagesTable = db.table('messages')
 
@@ -65,7 +66,8 @@ const create = (context, msg) => {
   const messageObj = Object.assign(
     {},
     msg,
-    {createdAt: new Date(), recipient: false, reactions: []}
+    {createdAt: new Date(), reactions: []},
+    {recipient: msg.recipient ? msg.recipient : false}
   )
   return messagesTable.insert(messageObj).run(conn)
   .then((res) => {
@@ -76,7 +78,7 @@ const create = (context, msg) => {
     return message
   })
   .then(message => Promise.all([
-    checkMentionsAndDMs(context, message),
+    checkMentions(context, message),
     message,
     Rooms.updateLatestMessage(message.room)
   ])
@@ -102,86 +104,101 @@ const deleteMessage = (context, messageId) => messagesTable.get(messageId).delet
  *
  **/
 
-const checkMentionsAndDMs = (context, message) => {
+const checkMentions = (context, message) => {
   const {Nametags, Rooms} = context.models
-  const dm = message.text.toLowerCase().slice(0, 2) === 'd '
   const mentions = message.text.indexOf('@') > -1
-  if (!dm && !mentions) {
+  if (!mentions) {
     return null
   }
+
+  const splitMsg = message.text.split('@')
 
   return Promise.all([
     Nametags.getRoomNametags(message.room),
     Rooms.get(message.room)
   ])
   .then(([nametags, room]) => {
-    if (dm) {
-      return setDm(context, nametags, message, room)
-    } else if (mentions) {
-      return checkMentions(context, nametags, message)
+    let newText = message.text
+    let promises = []
+    for (let i = 0; i < splitMsg.length; i++) {
+      const section = splitMsg[i]
+      for (let j = 0; j < nametags.length; j++) {
+        const {name, id} = nametags[j]
+        if (section.slice(0, name.length).toLowerCase() === name.toLowerCase()) {
+          newText = newText.replace(new RegExp(`@${name}+`, 'g'), (mention) => `*${mention}*`)
+          promises.push(
+              Nametags.addMention(id)
+              .then(() => mentionNotif(context, id, message, 'MENTION'))
+              .then(() => mentionEmail(context, id, message))
+            )
+        }
+      }
     }
+    promises.push(messagesTable.get(message.id).update({text: newText}).run(context.conn))
+    return Promise.all(promises).then(() => ({text: newText}))
   })
 }
 
-/**
- * Checks a message for mentions and dms
- *
- * @param {Object} nametags     the room's nametags
- * @param {Object} text         the text of the message to be checked
- *
- **/
-const checkMentions = (context, nametags, message) => {
-  const splitMsg = message.text.split('@')
-  const {Nametags} = context.models
-  let newText = message.text
-  let promises = []
-  // For every mention, check every nametag in the room to see if it matches the name.
-  for (let i = 0; i < splitMsg.length; i++) {
-    const section = splitMsg[i]
-    for (let j = 0; j < nametags.length; j++) {
-      const {name, id} = nametags[j]
-      if (section.slice(0, name.length).toLowerCase() === name.toLowerCase()) {
-        newText = newText.replace(new RegExp(`@${name}+`, 'g'), (mention) => `*${mention}*`)
-        promises.push(
-          Nametags.addMention(id)
-          .then(() => mentionNotif(context, id, message, 'MENTION'))
-        )
-      }
-    }
-  }
-  promises.push(messagesTable.get(message.id).update({text: newText}).run(context.conn))
-  return Promise.all(promises).then(() => ({text: newText}))
-}
+// /**
+//  * Checks a message for mentions and dms
+//  *
+//  * @param {Object} nametags     the room's nametags
+//  * @param {Object} text         the text of the message to be checked
+//  *
+//  **/
+// const checkMentions = (context, nametags, message) => {
+//   const splitMsg = message.text.split('@')
+//   const {Nametags} = context.models
+//   let newText = message.text
+//   let promises = []
+//   // For every mention, check every nametag in the room to see if it matches the name.
+//   for (let i = 0; i < splitMsg.length; i++) {
+//     const section = splitMsg[i]
+//     for (let j = 0; j < nametags.length; j++) {
+//       const {name, id} = nametags[j]
+//       if (section.slice(0, name.length).toLowerCase() === name.toLowerCase()) {
+//         newText = newText.replace(new RegExp(`@${name}+`, 'g'), (mention) => `*${mention}*`)
+//         promises.push(
+//           Nametags.addMention(id)
+//           .then(() => mentionNotif(context, id, message, 'MENTION'))
+//           .then(() => mentionEmail(context, id, message))
+//         )
+//       }
+//     }
+//   }
+//   promises.push(messagesTable.get(message.id).update({text: newText}).run(context.conn))
+//   return Promise.all(promises).then(() => ({text: newText}))
+// }
 
-/**
- * Checks sets a message recipient if the message is a dm
- *
- * @param {Object} nametags     the room's nametags
- * @param {Object} text         the text of the message to be checked
- *
- **/
-const setDm = (context, nametags, message, room) => {
-  const Nametags = context.models.Nametags
-  // For every mention, check every nametag in the room to see if it matches the name.
-  for (let i = 0; i < nametags.length; i++) {
-    const {name, id} = nametags[i]
-    if (message.text.slice(2, name.length + 2).toLowerCase() === name.toLowerCase()) {
-      // If the room allows mod-only DMing, return if the message is not to or from a mod
-      if (id !== room.mod && message.author !== room.mod && room.modOnlyDMs) {
-        return
-      }
-
-      const newText = message.text.slice(name.length + 2)
-      return Promise.all([
-        Nametags.addMention(id)
-        .then(() => mentionNotif(context, id, Object.assign({}, message, {text: newText}), 'DM')),
-        messagesTable.get(message.id).update({recipient: id, text: newText}).run(context.conn)
-      ])
-      .then(() => ({recipient: id, text: newText}))
-    }
-  }
-  return
-}
+// /**
+//  * Checks sets a message recipient if the message is a dm
+//  *
+//  * @param {Object} nametags     the room's nametags
+//  * @param {Object} text         the text of the message to be checked
+//  *
+//  **/
+// const setDm = (context, nametags, message, room) => {
+//   const Nametags = context.models.Nametags
+//   // For every mention, check every nametag in the room to see if it matches the name.
+//   for (let i = 0; i < nametags.length; i++) {
+//     const {name, id} = nametags[i]
+//     if (message.text.slice(2, name.length + 2).toLowerCase() === name.toLowerCase()) {
+//       // If the room allows mod-only DMing, return if the message is not to or from a mod
+//       if (id !== room.mod && message.author !== room.mod && room.modOnlyDMs) {
+//         return
+//       }
+//
+//       const newText = message.text.slice(name.length + 2)
+//       return Promise.all([
+//         Nametags.addMention(id)
+//         .then(() => mentionNotif(context, id, Object.assign({}, message, {text: newText}), 'DM')),
+//         messagesTable.get(message.id).update({recipient: id, text: newText}).run(context.conn)
+//       ])
+//       .then(() => ({recipient: id, text: newText}))
+//     }
+//   }
+//   return
+// }
 
 /**
  * Sends a notification based on a mention
@@ -211,6 +228,38 @@ const mentionNotif = ({models: {Users, Rooms, Nametags}}, to, message, reason) =
     }, token)
     : null
   )
+
+  /**
+   * Sends an email based on a mention
+   *
+   * @param {Object} context     graph context
+   * @param {String} id        the nametag id of the user being mentioned
+   * @param {Object} message   the message to be checked
+   *
+   **/
+
+const mentionEmail = ({models: {Rooms, Users, Nametags}}, id, message) =>
+     Promise.all([
+       Users.getByNametag(id),
+       Rooms.get(message.room),
+       Nametags.get(message.author),
+       message
+     ])
+     .then(([user, room, author, message]) =>
+     user.email && !user.unsubscribe.all && !user.unsubscribe[room.id]
+     ? email({
+       to: user.email,
+       from: {name: 'Nametag', email: 'noreply@nametag.chat'},
+       template: 'mention',
+       params: {
+         roomId: room.id,
+         roomName: room.title,
+         message: message.text,
+         author: author.name
+       }
+     })
+        : null
+      )
 
   /**
    * Adds an emoji reaction to a message

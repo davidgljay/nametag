@@ -121,6 +121,7 @@ const RootMutation = {
         return Promise.reject(ErrNotInRoom)
       }
       return Nametags.updateLatestVisit(nametagId)
+      .then(wrapResponse('updateLatestVisit'))
     }
   },
   createBadge: {
@@ -191,6 +192,11 @@ const RootMutation = {
     requires: null,
     resolve: (obj, {token}, {models: {Users}}) =>
       Users.emailConfirmation(token)
+  },
+  unsubscribe: {
+    requires: null,
+    resolve: (obj, {userToken, roomId}, {models: {Users}}) =>
+      Users.unsubscribe(userToken, roomId)
   }
 }
 

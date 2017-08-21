@@ -1,53 +1,44 @@
 const templates = require('./templates')
-const {sendgrid} = require('../secrets.json')
+const {sparkpost} = require('../secrets.json')
+const {SPARKPOST_URL} = require('../constants')
 const {APIError} = require('../errors')
-const sg = require('sendgrid')(sendgrid.key)
+const fetch = require('node-fetch')
 
 module.exports = ({to, from, template, params}) => {
-  const {subject, txt, html} = templates[template](params)
+  const {subject, html} = templates[template](params)
 
   const mail = {
-    personalizations: [
+    campaign_id: template,
+    recipients: [
       {
-        to: [
-          {
-            email: to
-          }
-        ],
-        subject
+        address: to
       }
     ],
-    from: {
-      name: from.name,
-      email: from.email
-    },
-    content: [
-      {
-        type: 'text/plain',
-        value: txt
+    content: {
+      from: {
+        email: from.email,
+        name: from.name
       },
-      {
-        type: 'text/html',
-        value: html
-      }
-    ]
+      subject,
+      html
+    }
   }
 
-  if (!sendgrid.key) {
-    console.log(`No sendgrid API key set. Skipping sending email to ${to}: ${JSON.stringify(mail)}`)
-    return Promise.resolve()
+  if (!sparkpost.key || process.env.NODE_ENV === 'test') {
+    console.log('No Sparkpost key defined, skipping sending e-mail.')
   }
 
-  const request = sg.emptyRequest({
+  return fetch(SPARKPOST_URL, {
     method: 'POST',
-    path: '/v3/mail/send',
-    body: mail
+    headers: {
+      'Authorization': sparkpost.key,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(mail)
   })
-
-  return sg.API(request)
-    .catch(err => {
-      const errors = err.response.body.errors.reduce((text, err) =>
-        text.concat(` ${err.message}`), '')
-      return Promise.reject(new APIError(errors))
-    })
+  .catch(err => {
+    const errors = err.response.body.errors.reduce((text, err) =>
+      text.concat(` ${err.message}`), '')
+    return Promise.reject(new APIError(errors))
+  })
 }

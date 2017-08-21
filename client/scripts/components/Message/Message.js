@@ -67,7 +67,8 @@ class Message extends Component {
       createMessage,
       deleteMessage,
       hideDMs,
-      setDefaultMessage
+      setDefaultMessage,
+      setRecipient
     } = this.props
 
     const {showMenu, showActions} = this.state
@@ -165,12 +166,14 @@ class Message extends Component {
             </div>
           </div>
           <MentionMenu
+            nametagId={author.id}
             name={author.name}
             hideDMs={hideDMs && !isMod}
             open={showMenu === 'mentions'}
             anchor={document.getElementById(id)}
             toggleMenu={this.toggleMenu}
-            setDefaultMessage={setDefaultMessage} />
+            setDefaultMessage={setDefaultMessage}
+            setRecipient={setRecipient} />
           <CommandMenu
             isMod={isMod}
             setDefaultMessage={setDefaultMessage}
@@ -225,7 +228,8 @@ Message.propTypes = {
   deleteMessage: func.isRequired,
   hideDMs: bool.isRequired,
   hideAuthor: bool.isRequired,
-  setDefaultMessage: func.isRequired
+  setDefaultMessage: func.isRequired,
+  setRecipient: func.isRequired
 }
 
 export default Message
@@ -240,11 +244,13 @@ const styles = {
   },
   directMessageIncoming: {
     paddingTop: 10,
-    backgroundColor: 'rgba(168, 168, 168, 0.15)'
+    backgroundColor: 'rgba(168, 168, 168, 0.05)',
+    border: '1px solid rgba(168, 168, 168, 0.25)'
   },
   directMessageOutgoing: {
     paddingTop: 10,
-    backgroundColor: 'rgba(168, 168, 168, 0.15)'
+    backgroundColor: 'rgba(168, 168, 168, 0.05)',
+    border: '1px solid rgba(168, 168, 168, 0.25)'
   },
   dmCallout: {
     color: grey,

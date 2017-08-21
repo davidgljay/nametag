@@ -13,6 +13,7 @@ import UPDATE_BADGE_REQUEST_STATUS from './updateBadgeRequestStatus.graphql'
 import UPDATE_TOKEN from './updateToken.graphql'
 import DELETE_MESSAGE from './deleteMessage.graphql'
 import PASSWORD_RESET from './passwordReset.graphql'
+import UNSUBSCRIBE from './unsubscribe.graphql'
 import SET_MOD_ONLY_DMS from './setModOnlyDMs.graphql'
 import PASSWORD_RESET_REQ from './passwordResetRequest.graphql'
 import EMAIL_CONF_REQ from './emailConfirmationRequest.graphql'
@@ -130,6 +131,17 @@ export const passwordReset = graphql(PASSWORD_RESET, {
       variables: {
         token,
         password
+      }
+    })
+  })
+})
+
+export const unsubscribe = graphql(UNSUBSCRIBE, {
+  props: ({ownProps, mutate}) => ({
+    unsubscribe: (userToken, roomId) => mutate({
+      variables: {
+        userToken,
+        roomId
       }
     })
   })

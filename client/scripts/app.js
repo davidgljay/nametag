@@ -1,4 +1,4 @@
-
+/* global __webpack_hash__ */
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
@@ -14,6 +14,7 @@ import Badge from './containers/Badge/BadgeContainer'
 import ShareBadge from './containers/Badge/ShareBadgeContainer'
 import Granter from './containers/Granter/GranterContainer'
 import PasswordReset from './containers/User/PasswordReset'
+import Unsubscribe from './containers/User/UnsubscribeContainer'
 import EmailConfirm from './containers/User/EmailConfirm'
 import {registerServiceWorker, firebaseInit} from './actions/NotificationActions'
 
@@ -28,11 +29,13 @@ import store from './graph/store'
 import {primary, secondary} from '../styles/colors'
 import { Router, Route, browserHistory } from 'react-router'
 
-Raven.config(constants.SENTRY_DSN, {
-  release: __webpack_hash__,
-  tags: {git_commit: process.env.CLIENT_GIT_HASH},
-  environment: process.env.NODE_ENV
-}).install()
+if (process.env.NODE_ENV === 'production') {
+  Raven.config(constants.SENTRY_DSN, {
+    release: __webpack_hash__,
+    tags: {git_commit: process.env.CLIENT_GIT_HASH},
+    environment: process.env.NODE_ENV
+  }).install()
+}
 
 injectTapEventPlugin()
 
@@ -93,6 +96,7 @@ class Nametag extends Component {
             <Route path='/badges/:templateId/qrcode' component={ShareBadge} />
             <Route path='/passwordreset/:token' component={PasswordReset} />
             <Route path='/emailconfirm/:token' component={EmailConfirm} />
+            <Route path='/unsubscribe/:userToken' component={Unsubscribe} />
           </Router>
         </MuiThemeProvider>
       </StyleRoot>

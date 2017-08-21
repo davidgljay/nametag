@@ -12,6 +12,7 @@ query templateQuery($id: ID!){
       name
       description
       type
+      urlCode
     }
   }
   me {

@@ -14,7 +14,7 @@ module.exports = {
   },
   rooms: {
     indexes: [
-      'closedAt',
+      'latestMessage',
       {name: 'templates', multi: true},
       {name: 'isPublic', fields: {countEq: ['templates', 0]}}
     ]
@@ -25,6 +25,7 @@ module.exports = {
       'facebook',
       'twitter',
       'google',
+      'userToken',
       'forgotPassToken',
       'confirmation',
       {name: 'nametags', fields: {values: 'nametags'}, multi: true}

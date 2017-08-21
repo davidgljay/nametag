@@ -48,8 +48,6 @@ class JoinRoom extends Component {
       updateNametagEdit
     } = this.props
 
-    const {showNorms} = this.state
-
     return <div id='room' style={styles.container}>
       <Navbar me={me} empty />
       <div id='roomInfoContainer' style={styles.roomInfoContainer}>
@@ -62,12 +60,6 @@ class JoinRoom extends Component {
                 src={image} />
             </div>
             <div id='roomInfo' style={styles.roomInfo}>
-              {
-                templates && templates.length > 0 &&
-                <div style={styles.privateText}>Conversation Requires:</div>
-              }
-              <Badges
-                badges={templates.map(template => ({id: template.id, notes: [], template}))} />
               <div id='roomTitle' style={styles.title}>
                 {title}
               </div>
@@ -82,8 +74,19 @@ class JoinRoom extends Component {
           </div>
         </Card>
       </div>
-      <div id='normsContainer' style={styles.normsContainer}>
-        <div style={styles.modContainer}>
+      <div style={styles.modContainer}>
+        {
+          templates &&
+          <div id='badgeContainer' style={styles.badgeContainer}>
+            {
+              templates.length > 0 &&
+              <div style={styles.privateText}><h3>Private Conversation For:</h3></div>
+            }
+            <Badges
+              badges={templates.map(template => ({id: template.id, notes: [], template}))} />
+          </div>
+        }
+        <div>
           <h3>Moderator</h3>
           <Card>
             <Nametag
@@ -92,13 +95,12 @@ class JoinRoom extends Component {
               nametag={mod} />
           </Card>
         </div>
-        <div style={styles.norms}>
-          <div>
-            {mod.name} would like you to agree to <a href='#' onClick={this.showNorms}> norms of respect</a>.
+      </div>
+      <div style={styles.joinContainer}>
+        <div id='normsContainer' style={styles.normsContainer}>
+          <div style={styles.norms}>
+            <Norms norms={norms} showChecks />
           </div>
-          {
-            showNorms && <Norms norms={norms} showChecks />
-          }
         </div>
         <Join
           room={id}
@@ -108,8 +110,7 @@ class JoinRoom extends Component {
           createNametag={createNametag}
           addNametagEditBadge={addNametagEditBadge}
           removeNametagEditBadge={removeNametagEditBadge}
-          updateNametagEdit={updateNametagEdit}
-          />
+          updateNametagEdit={updateNametagEdit} />
       </div>
     </div>
   }
@@ -174,6 +175,12 @@ const styles = {
     width: 300,
     padding: 10
   },
+  badgeContainer: {
+    minWidth: 300
+  },
+  privateText: {
+    textAlign: 'center'
+  },
   title: {
     fontSize: 24,
     lineHeight: '34px',
@@ -190,18 +197,35 @@ const styles = {
     fontStyle: 'italic',
     color: 'rgb(168, 168, 168)'
   },
+  modContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    textAlign: 'center',
+    flexWrap: 'wrap',
+    marginBottom: 50
+  },
   mod: {
     width: 300
+  },
+  joinContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    alignItems: 'flex-start'
   },
   normsContainer: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     textAlign: 'center',
-    marginBottom: 20
+    marginRight: 50,
+    paddingTop: 10,
+    [mobile]: {
+      marginRight: 0
+    }
   },
   norms: {
     width: 300,
-    margin: 20
+    marginRight: 20
   }
 }

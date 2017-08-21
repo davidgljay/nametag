@@ -45,8 +45,7 @@ const WelcomeModal = ({
                 nametag={nametag}
                 hideDMs
                 myNametagId={myNametag.id}
-                mod={mod}
-                />
+                modId={mod.id} />
             </Card>
           )
         }
@@ -72,7 +71,7 @@ export default WelcomeModal
 
 const styles = {
   dialog: {
-    maxWidth: 800
+    maxWidth: 820
   },
   card: {
     width: 240,

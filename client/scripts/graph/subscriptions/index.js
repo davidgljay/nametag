@@ -156,7 +156,11 @@ export const nametagUpdated = subscribeToMore => (roomId) => subscribeToMore({
         ? {...n, ...clearObjectNulls(nametagUpdated), __typename: 'Nametag'}
         : n)
     } else {
-      newNametags = nametags.concat({...nametagUpdated, __typename: 'Nametag'})
+      newNametags = nametags.concat({
+        ...nametagUpdated,
+        createdAt: new Date(),
+        present: true,
+        __typename: 'Nametag'})
     }
 
     return {

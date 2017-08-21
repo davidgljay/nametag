@@ -36,7 +36,11 @@ class Compose extends Component {
     }
 
     this.post = (e) => {
+<<<<<<< HEAD
       const {myNametag, roomId, createMessage, onPost, setDefaultMessage} = this.props
+=======
+      const {myNametag, roomId, createMessage, setDefaultMessage, setRecipient, onPost, recipient} = this.props
+>>>>>>> master
       const {message} = this.state
       if (onPost) {
         onPost(message)
@@ -50,10 +54,16 @@ class Compose extends Component {
           author: myNametag.id,
           room: roomId
         }
+        if (recipient) {
+          msg.recipient = recipient
+        }
         this.setState({message: '', showEmoji: false, showMentionMenu: false})
         createMessage(msg, myNametag)
         if (setDefaultMessage) {
           setDefaultMessage('')
+        }
+        if (setRecipient) {
+          setRecipient(null)
         }
       }
     }
@@ -92,18 +102,39 @@ class Compose extends Component {
   render () {
     // TODO: Add GIFs, image upload
 
-    const {topic, mod} = this.props
+    const {topic, mod, nametags, recipient, setRecipient} = this.props
     const {showEmoji, message} = this.state
+    let calloutImage
+    let calloutName
+    let calloutMsg
+    if (recipient) {
+      const nametag = nametags.filter(n => n.id === recipient)[0]
+      calloutImage = nametag.image
+      calloutName = nametag.name
+      calloutMsg = `Private message to ${nametag.name}:`
+    } else if (topic) {
+      calloutImage = mod.image
+      calloutName = mod.name
+      calloutMsg = topic
+    }
     return <div>
       {
-        topic && <div style={styles.topicContainer}>
+        calloutMsg && <div style={styles.topicContainer}>
           <div style={styles.nametagIconContainer}>
             <NametagIcon
-              image={mod.image}
-              name={mod.name}
+              image={calloutImage}
+              name={calloutName}
               diameter={20} />
           </div>
-          <div id='topic' style={styles.topic}>{topic}</div>
+          <div id='topic' style={styles.topic}>
+            {calloutMsg}
+          </div>
+          {
+            recipient &&
+            <div style={styles.dmCancelContainer}>
+              <a href='#' style={styles.dmCancel} onClick={() => setRecipient(null)}>Cancel</a>
+            </div>
+          }
         </div>
       }
       <div style={styles.compose} id='compose'>
@@ -150,7 +181,7 @@ class Compose extends Component {
   }
 }
 
-const {string, func, shape} = PropTypes
+const {string, func, shape, arrayOf} = PropTypes
 
 Compose.propTypes = {
   roomId: string.isRequired,
@@ -159,6 +190,7 @@ Compose.propTypes = {
     name: string.isRequired
   }).isRequired,
   createMessage: func.isRequired,
+  recipient: string,
   defaultMessage: string,
   setDefaultMessage: func,
   topic: string,
@@ -166,8 +198,15 @@ Compose.propTypes = {
     name: string.isRequired,
     image: string.isRequired
   }),
+  nametags: arrayOf(shape({
+    id: string.isRequired,
+    name: string.isRequired,
+    image: string
+  })),
   onUpdateText: func,
-  onPost: func
+  onPost: func,
+  setDefaultMessage: func,
+  setRecipient: func
 }
 
 export default Compose
@@ -182,7 +221,7 @@ const styles = {
   },
   topic: {
     fontStyle: 'italic',
-    fontSize: 18,
+    fontSize: 14,
     color: grey
   },
   topicContainer: {
@@ -210,5 +249,14 @@ const styles = {
   form: {
     flex: 1,
     display: 'flex'
+  },
+  dmCancelContainer: {
+    flex: 1,
+    textAlign: 'right'
+  },
+  dmCancel: {
+    textDecoration: 'none',
+    fontStyle: 'italic',
+    fontSize: 12
   }
 }

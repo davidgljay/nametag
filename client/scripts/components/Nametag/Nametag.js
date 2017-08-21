@@ -32,9 +32,10 @@ class Nametag extends Component {
 
   render () {
     const {
-      mod,
+      modId,
       nametag: {id, name, image, bio, badges},
       setDefaultMessage,
+      setRecipient,
       hideDMs,
       myNametagId,
       style
@@ -44,7 +45,7 @@ class Nametag extends Component {
     const clickableStyle = setDefaultMessage ? styles.clickable : styles.notClickable
 
     // Show if user is a mod.
-    if (mod === id) {
+    if (modId === id) {
       ismod = <div style={styles.ismod}>Host</div>
     }
 
@@ -72,14 +73,16 @@ class Nametag extends Component {
         <div>
           <MentionMenu
             name={name}
-            hideDMs={hideDMs && mod !== id}
+            nametagId={id}
+            hideDMs={hideDMs && modId !== id}
             open={showMenu === 'mentions'}
             anchor={document.getElementById(id)}
             toggleMenu={this.toggleMenu}
-            setDefaultMessage={setDefaultMessage} />
+            setDefaultMessage={setDefaultMessage}
+            setRecipient={setRecipient} />
           <CommandMenu
             open={showMenu === 'commands'}
-            isMod={mod === myNametagId}
+            isMod={modId === myNametagId}
             anchor={document.getElementById(id)}
             onRequestClose={this.toggleMenu}
             setDefaultMessage={setDefaultMessage} />
@@ -93,7 +96,7 @@ class Nametag extends Component {
 const {string, shape, arrayOf, bool, object, func} = PropTypes
 
 Nametag.PropTypes = {
-  mod: string,
+  modId: string,
   nametag: shape({
     id: string.isRequired,
     name: string.isRequired,
@@ -103,6 +106,7 @@ Nametag.PropTypes = {
     badges: arrayOf(object).isRequired
   }).isRequired,
   setDefaultMessage: func,
+  setRecipient: func,
   hideDMs: bool
 }
 

@@ -117,35 +117,31 @@ const CreateRoomForms = (props) => {
   </div>
 }
 
+const {string, number, func, shape, object, arrayOf} = PropTypes
+
 CreateRoomForms.propTypes = {
-  error: PropTypes.string,
-  stepIndex: PropTypes.number.isRequired,
-  updateRoom: PropTypes.func.isRequired,
-  updateNametagEdit: PropTypes.func.isRequired,
-  setClosed: PropTypes.func.isRequired,
-  closedIn: PropTypes.shape({
-    unit: PropTypes.string.isRequired,
-    quantity: PropTypes.number.isRequired
-  }),
-  room: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    closedAt: PropTypes.string.isRequired
+  error: object,
+  stepIndex: number.isRequired,
+  updateRoom: func.isRequired,
+  updateNametagEdit: func.isRequired,
+  room: shape({
+    title: string.isRequired,
+    image: string.isRequired,
+    description: string.isRequired
   }).isRequired,
-  searchImage: PropTypes.func.isRequired,
-  setImageFromUrl: PropTypes.func.isRequired,
-  nametagEdits: PropTypes.object.isRequired,
-  addNametagEditBadge: PropTypes.func.isRequired,
-  removeNametagEditBadge: PropTypes.func.isRequired,
-  me: PropTypes.shape({
-    badges: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string.isRequired
+  searchImage: func.isRequired,
+  setImageFromUrl: func.isRequired,
+  nametagEdits: object.isRequired,
+  addNametagEditBadge: func.isRequired,
+  removeNametagEditBadge: func.isRequired,
+  me: shape({
+    badges: arrayOf(shape({
+      id: string.isRequired
     })).isRequired
   }).isRequired,
-  norms: PropTypes.object.isRequired,
-  addNorm: PropTypes.func.isRequired,
-  removeNorm: PropTypes.func.isRequired
+  norms: object.isRequired,
+  addNorm: func.isRequired,
+  removeNorm: func.isRequired
 }
 
 export default CreateRoomForms

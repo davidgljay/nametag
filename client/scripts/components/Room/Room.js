@@ -24,6 +24,7 @@ class Room extends Component {
       },
       presenceTime: null,
       defaultMessage: '',
+      recipient: null,
       showWelcome: false
     }
 
@@ -78,6 +79,8 @@ class Room extends Component {
     }
 
     this.setDefaultMessage = (defaultMessage) => this.setState({defaultMessage})
+
+    this.setRecipient = (recipient) => this.setState({recipient})
   }
 
   componentDidMount () {
@@ -141,7 +144,7 @@ class Room extends Component {
       addReaction
     } = this.props
 
-    const {defaultMessage, showWelcome} = this.state
+    const {defaultMessage, showWelcome, recipient} = this.state
 
     if (loading) {
       return <div style={styles.spinner}>
@@ -188,6 +191,7 @@ class Room extends Component {
             updateRoom={updateRoom}
             myNametag={myNametag}
             setDefaultMessage={this.setDefaultMessage}
+            setRecipient={this.setRecipient}
             expanded={this.state.leftBarExpanded}
             toggleLeftBar={this.toggleLeftBar} />
           <Messages
@@ -199,6 +203,7 @@ class Room extends Component {
             addReaction={addReaction}
             deleteMessage={deleteMessage}
             setDefaultMessage={this.setDefaultMessage}
+            setRecipient={this.setRecipient}
             mod={room.mod}
             messages={room.messages} />
         </div>
@@ -208,7 +213,9 @@ class Room extends Component {
           welcome={room.welcome}
           topic={room.topic}
           mod={room.mod}
+          recipient={recipient}
           setDefaultMessage={this.setDefaultMessage}
+          setRecipient={this.setRecipient}
           updateRoom={updateRoom}
           updateNametag={updateNametag}
           nametags={room.nametags}
