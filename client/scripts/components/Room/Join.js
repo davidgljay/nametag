@@ -37,10 +37,10 @@ class Join extends Component {
   }
 }
 
-const {object} = PropTypes
+const {object, string} = PropTypes
 
 Join.propTypes = {
-  room: object,
+  room: string,
   me: object
 }
 
