@@ -1,9 +1,6 @@
 import React, {PropTypes} from 'react'
 import TextField from 'material-ui/TextField'
-import SelectField from 'material-ui/SelectField'
-import MenuItem from 'material-ui/MenuItem'
 import {grey} from '../../../../styles/colors'
-import _ from 'lodash'
 
 const TitleForm = ({badges, selectedBadges, desc, title, welcome, updateRoom, setClosed, closedIn, error}) =>
   <div style={styles.titleForm}>

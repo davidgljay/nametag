@@ -39,8 +39,8 @@ const getVisible = ({conn, user, models: {Users}}) =>
       return roomsTable.between(new Date(Date.now() - 604800000), new Date(), {index: 'latestMessage'})
         .orderBy({index: 'latestMessage'})
         .filter(room =>
-          room('templates').count().eq(0)
-          || room('templates')
+          room('templates').count().eq(0) ||
+          room('templates')
             .setIntersection(visibleTemplates)
             .count().gt(0)
          )

@@ -5,7 +5,7 @@ const {APIError} = require('../errors')
 const fetch = require('node-fetch')
 
 module.exports = ({to, from, template, params}) => {
-  const {subject, txt, html} = templates[template](params)
+  const {subject, html} = templates[template](params)
 
   const mail = {
     campaign_id: template,
@@ -25,7 +25,7 @@ module.exports = ({to, from, template, params}) => {
   }
 
   if (!sparkpost.key || process.env.NODE_ENV === 'test') {
-    console.log('No Sparkpost key defined, skipping sending e-mail.');
+    console.log('No Sparkpost key defined, skipping sending e-mail.')
   }
 
   return fetch(SPARKPOST_URL, {

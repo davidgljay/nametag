@@ -118,24 +118,24 @@ const checkMentions = (context, message) => {
     Rooms.get(message.room)
   ])
   .then(([nametags, room]) => {
-      let newText = message.text
-      let promises = []
-      for (let i = 0; i < splitMsg.length; i++) {
-        const section = splitMsg[i]
-        for (let j = 0; j < nametags.length; j++) {
-          const {name, id} = nametags[j]
-          if (section.slice(0, name.length).toLowerCase() === name.toLowerCase()) {
-            newText = newText.replace(new RegExp(`@${name}+`, 'g'), (mention) => `*${mention}*`)
-            promises.push(
+    let newText = message.text
+    let promises = []
+    for (let i = 0; i < splitMsg.length; i++) {
+      const section = splitMsg[i]
+      for (let j = 0; j < nametags.length; j++) {
+        const {name, id} = nametags[j]
+        if (section.slice(0, name.length).toLowerCase() === name.toLowerCase()) {
+          newText = newText.replace(new RegExp(`@${name}+`, 'g'), (mention) => `*${mention}*`)
+          promises.push(
               Nametags.addMention(id)
               .then(() => mentionNotif(context, id, message, 'MENTION'))
               .then(() => mentionEmail(context, id, message))
             )
-          }
         }
       }
-      promises.push(messagesTable.get(message.id).update({text: newText}).run(context.conn))
-      return Promise.all(promises).then(() => ({text: newText}))
+    }
+    promises.push(messagesTable.get(message.id).update({text: newText}).run(context.conn))
+    return Promise.all(promises).then(() => ({text: newText}))
   })
 }
 
