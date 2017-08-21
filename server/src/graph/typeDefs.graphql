@@ -82,9 +82,6 @@ type Room {
   # The date when the room was created
   createdAt: Date!
 
-  # The date when the room closes
-  closedAt: Date!
-
   # The messages sent in the room
   messages: [Message]
 
@@ -379,7 +376,7 @@ type RootQuery {
   room(id:ID!): Room
 
   # Retrieves all active rooms in the system. May optionally include a specific id.
-  rooms(id:ID, query: String, granter: String): [Room]
+  rooms(query: String, granter: String): [Room]
 
   # Retrieves the current user
   me: User
@@ -426,9 +423,6 @@ input CreateRoomInput {
   # An array of the room's norms
   norms: [String!]
 
-  # The date when the room will be closed
-  closedAt: Date!
-
   # An array of templates required to view and enter the room
   templates:[ID!]
 
@@ -466,9 +460,6 @@ input UpdateRoomInput {
 
   # An array of the room's norms
   norms: [String!]
-
-  # The date when the room will be closed
-  closedAt: Date
 
   # The welcome given for the room
   welcome: String
@@ -753,9 +744,6 @@ type UpdateRoom {
 
   # Sets whether or not DMing is limited to models
   modOnlyDMs: Boolean
-
-  # The date when the room will be closed
-  closedAt: Date
 
   # The welcome given for the room
   welcome: String

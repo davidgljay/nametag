@@ -1,13 +1,13 @@
 const {ErrNotAuthorized, ErrNotLoggedIn} = require('../../errors')
 
 const RootQuery = {
-  rooms: (obj, {id, query, granter}, {user, models: {Rooms}}) => {
+  rooms: (obj, {query, granter}, {user, models: {Rooms}}) => {
     if (granter) {
       return Rooms.getGranterRooms(granter)
     } else if (query) {
       return Rooms.getQuery(query)
     }
-    return Rooms.getVisible(id)
+    return Rooms.getVisible()
   },
   room: (obj, {id}, {models: {Rooms}}) => Rooms.get(id),
   me: (obj, args, {user}) => Promise.resolve(user),

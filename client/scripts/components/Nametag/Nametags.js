@@ -16,7 +16,7 @@ const Nametags = ({nametags, mod, myNametagId, setDefaultMessage, setRecipient, 
             myNametagId={myNametagId}
             setRecipient={setRecipient}
             setDefaultMessage={setDefaultMessage}
-            mod={mod} />
+            modId={mod} />
         </Card>
       })
     }
