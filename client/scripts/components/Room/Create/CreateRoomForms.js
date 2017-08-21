@@ -124,15 +124,10 @@ CreateRoomForms.propTypes = {
   stepIndex: number.isRequired,
   updateRoom: func.isRequired,
   updateNametagEdit: func.isRequired,
-  closedIn: shape({
-    unit: string.isRequired,
-    quantity: number.isRequired
-  }),
   room: shape({
     title: string.isRequired,
     image: string.isRequired,
-    description: string.isRequired,
-    closedAt: string.isRequired
+    description: string.isRequired
   }).isRequired,
   searchImage: func.isRequired,
   setImageFromUrl: func.isRequired,
