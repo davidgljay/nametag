@@ -1,4 +1,3 @@
-const process = require('process')
 const execSync = require('child_process').execSync
 const path = require('path')
 const autoprefixer = require('autoprefixer')
