@@ -3,15 +3,15 @@ jest.mock('uuid')
 jest.dontMock('../Users')
 jest.mock('../../../db')
 
-const mockRdb = require('../../../../../tests/mockRdb')
+// const mockRdb = require('../../../../../tests/mockRdb')
 const UserModel = require('../Users')
 jest.mock('../../../db').returnValue({
   db: 'stuff'
 })
 
-const makeCursor = objects => ({
-  toArray: () => objects
-})
+// const makeCursor = objects => ({
+//   toArray: () => objects
+// })
 
 describe('User loader', () => {
   let Users
@@ -21,7 +21,7 @@ describe('User loader', () => {
   describe(('findOrCreateFromAuth', () => {
     // Mocks not working as advertised, timeboxing for now
     xit('should return a user if one already exists', () => {
-      let calls = []
+      // let calls = []
       let mockProfile = {
         displayName: 'Stampisaur',
         photos: [{value: 'http://profile.photo.com'}],

@@ -26,8 +26,8 @@ const commands = {
     .click('@welcomeModalSend')
     .waitForElementVisible('@messageText')
     .assert.containsText('@messages', message)
-    .waitForElementVisible('.bio')
-    .assert.containsText('@nametags', message)
+    .waitForElementVisible('#myNametag .bio')
+    .assert.containsText('#myNametag .bio', message)
   },
   postMessage (message) {
     return this.waitForElementVisible('@compose')

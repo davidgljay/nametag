@@ -48,8 +48,6 @@ class JoinRoom extends Component {
       updateNametagEdit
     } = this.props
 
-    const {showNorms} = this.state
-
     return <div id='room' style={styles.container}>
       <Navbar me={me} empty />
       <div id='roomInfoContainer' style={styles.roomInfoContainer}>

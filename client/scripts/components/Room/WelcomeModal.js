@@ -45,8 +45,7 @@ const WelcomeModal = ({
                 nametag={nametag}
                 hideDMs
                 myNametagId={myNametag.id}
-                mod={mod}
-                />
+                modId={mod.id} />
             </Card>
           )
         }
