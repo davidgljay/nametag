@@ -9,6 +9,7 @@ module.exports = ({to, from, template, params}) => {
 
   const mail = {
     campaign_id: template,
+    transactional: true,
     recipients: [
       {
         address: to
