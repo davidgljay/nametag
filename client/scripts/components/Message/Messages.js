@@ -116,7 +116,7 @@ Messages.propTypes = {
   createMessage: func.isRequired,
   myNametag: shape({
     id: string.isRequired
-  }).isRequired,
+  }),
   hideDMs: bool.isRequired,
   deleteMessage: func.isRequired,
   addReaction: func.isRequired,

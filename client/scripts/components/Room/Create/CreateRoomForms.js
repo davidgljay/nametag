@@ -79,7 +79,7 @@ const getForm = ({
               removeNametagEditBadge={removeNametagEditBadge}
               updateNametagEdit={updateNametagEdit}
               me={me}
-              room='new' />
+              roomId='new' />
             <div style={styles.userBadges}>
               <UserBadges
                 badges={me.badges}

@@ -9,7 +9,7 @@ import {track} from '../../utils/analytics'
 
 const nametagTarget = {
   drop (props, monitor) {
-    props.addNametagEditBadge(monitor.getItem(), props.room || props.template)
+    props.addNametagEditBadge(monitor.getItem(), props.roomId || props.template)
   }
 }
 
@@ -34,7 +34,7 @@ class EditNametag extends Component {
     }
 
     this.updateNametagProperty = (property) => {
-      const {room, template, updateNametagEdit} = this.props
+      const {roomId, template, updateNametagEdit} = this.props
       if (property === 'name' && !this.state.nameEdited) {
         this.setState({nameEdited: true})
         track('NAMETAG_EDITED', 'name')
@@ -43,7 +43,7 @@ class EditNametag extends Component {
       }
       return (e) => {
         updateNametagEdit(
-          room || template,
+          roomId || template,
           property,
           e.target.value
           )
@@ -51,8 +51,8 @@ class EditNametag extends Component {
     }
 
     this.removeBadge = (badge) => {
-      const {removeNametagEditBadge, room, template} = this.props
-      removeNametagEditBadge(badge, room || template)
+      const {removeNametagEditBadge, roomId, template} = this.props
+      removeNametagEditBadge(badge, roomId || template)
     }
 
     this.requiredBadges = () =>
@@ -60,24 +60,24 @@ class EditNametag extends Component {
   }
 
   componentDidMount () {
-    const {nametagEdit = {}, updateNametagEdit, me = {}, room, template} = this.props
-    if (room) {
-      updateNametagEdit(room || template, 'room', room)
+    const {nametagEdit = {}, updateNametagEdit, me = {}, roomId, template} = this.props
+    if (roomId) {
+      updateNametagEdit(roomId || template, 'room', roomId)
     } else {
-      updateNametagEdit(room || template, 'template', template)
+      updateNametagEdit(roomId || template, 'template', template)
     }
 
     if (!nametagEdit.name &&
       me.displayNames &&
       me.displayNames.length >= 1) {
-      updateNametagEdit(room || template, 'name', me.displayNames[0])
+      updateNametagEdit(roomId || template, 'name', me.displayNames[0])
     }
     if (!nametagEdit.image &&
       me.images.length > 0) {
-      updateNametagEdit(room || template, 'image', me.images[0])
+      updateNametagEdit(roomId || template, 'image', me.images[0])
     }
 
-    updateNametagEdit(room || template, 'badges', this.requiredBadges())
+    updateNametagEdit(roomId || template, 'badges', this.requiredBadges())
   }
 
   render () {
@@ -85,7 +85,7 @@ class EditNametag extends Component {
       error,
       me = {},
       updateNametagEdit,
-      room,
+      roomId,
       template,
       nametagEdit
     } = this.props
@@ -108,7 +108,7 @@ class EditNametag extends Component {
           <NTIconMenu
             images={me.images}
             image={nametag.image}
-            about={room || template}
+            about={roomId || template}
             updateNametagEdit={updateNametagEdit} />
           <div style={{width: 190, flex: 1}}>
             <AutoComplete
@@ -119,7 +119,7 @@ class EditNametag extends Component {
               disableFocusRipple={false}
               dataSource={me.displayNames || []}
               errorText={error && error.nameError}
-              onUpdateInput={name => updateNametagEdit(room || template, 'name', name)}
+              onUpdateInput={name => updateNametagEdit(roomId || template, 'name', name)}
               animated
               style={nameStyle}
               textFieldStyle={nameTextfieldStyle}
@@ -155,7 +155,7 @@ EditNametag.propTypes = {
       id: string.isRequired
     })).isRequired
   }).isRequired,
-  room: string,
+  roomId: string,
   template: string,
   isOver: bool.isRequired,
   requiredTemplates: arrayOf(string).isRequired,
