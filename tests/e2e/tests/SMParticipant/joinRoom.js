@@ -13,22 +13,20 @@ module.exports = {
     .getAttribute('.roomCard', 'data-id', (result) => client.url(`${launchUrl}/rooms/${result.value}`))
   },
   'Participant joins a room via social media': client => {
-    const {users, room} = client.globals
+    const {users} = client.globals
     const roomPage = client.page.Room()
 
     roomPage
       .roomJoin(users.smParticipant)
-
-    roomPage
-      .assertLoaded(room, users.participant)
   },
   'Participant posts a message': client => {
     const {messages, room, users} = client.globals
     const page = client.page.Room()
 
     page
-      .assertLoaded(room, users.participant)
+      .updateNametag(users.smParticipant.name)
       .postWelcome(messages[3])
+      .assertLoaded(room, users.smParticipant)
       .postMessage(messages[4])
   },
   after: client => {

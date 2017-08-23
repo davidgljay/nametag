@@ -34,12 +34,11 @@ const commands = {
       .click('@registerButton')
       .waitForElementVisible('@logoutButton')
   },
-  joinRoom ({name, bio}) {
+  joinRoom () {
     return this
       .waitForElementVisible('@roomCard')
       .click('@roomCard')
       .waitForElementVisible('.roomCard.notFlipping')
-      .setValue('@editNametagName', name)
       .waitForElementVisible('@joinRoomButton')
       .click('@joinRoomButton')
   }
@@ -83,15 +82,6 @@ module.exports = {
     },
     createRoomButton: {
       selector: '#createRoomButton'
-    },
-    editNametag: {
-      selector: '#editNametag'
-    },
-    editNametagName: {
-      selector: '#editNametagName'
-    },
-    editNametagBio: {
-      selector: '#editNametagBio'
     },
     joinRoomButton: {
       selector: '#joinRoomButton'

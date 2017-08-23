@@ -11,24 +11,21 @@ module.exports = {
     .ready()
   },
   'Participant registers and joins a room': client => {
-    const {users, room} = client.globals
+    const {users} = client.globals
     const roomCardsPage = client.page.RoomCards()
-    const roomPage = client.page.Room()
 
     roomCardsPage
       .registerInRoom(users.participant)
       .joinRoom(users.participant)
-
-    roomPage
-      .assertLoaded(room, users.participant)
   },
   'Participant posts a message': client => {
     const {messages, room, users} = client.globals
     const page = client.page.Room()
 
     page
-      .assertLoaded(room, users.participant)
+      .updateNametag(users.participant.name)
       .postWelcome(messages[1])
+      .assertLoaded(room, users.participant)
       .postMessage(messages[2])
   },
   after: client => {

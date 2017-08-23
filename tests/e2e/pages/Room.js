@@ -20,6 +20,11 @@ const commands = {
     .assert.containsText('@nametags', name)
     .assert.containsText('#norms', norm)
   },
+  updateNametag (name) {
+    return this.waitForElementVisible('@editNametag')
+    .setValue('@editNametagName', name)
+    .click('@enterRoomButton')
+  },
   postWelcome (message) {
     return this.waitForElementVisible('@welcomeModalInput')
     .setValue('@welcomeModalInput', message)
@@ -54,6 +59,15 @@ module.exports = {
     },
     welcome: {
       selector: '.welcome'
+    },
+    editNametag: {
+      selector: '#editNametag'
+    },
+    editNametagName: {
+      selector: '#editNametagName'
+    },
+    enterRoomButton: {
+      selector: '#enterRoomButton'
     },
     welcomeModalInput: {
       selector: '.welcome #composeTextInput'
