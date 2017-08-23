@@ -2,9 +2,11 @@ import React, { Component, PropTypes } from 'react'
 import CircularProgress from 'material-ui/CircularProgress'
 import RoomLeftBar from './RoomLeftBar'
 import AppBar from 'material-ui/AppBar'
+import Dialog from 'material-ui/Dialog'
 import radium, {keyframes} from 'radium'
 import Messages from '../../components/Message/Messages'
-import WelcomeModal from './WelcomeModal'
+import WelcomeForm from './WelcomeForm'
+import ConfirmNametagForm from './ConfirmNametagForm'
 import ComposeWithMenus from '../Message/ComposeWithMenus'
 import JoinRoom from './JoinRoom'
 import {track, identify, setTimer} from '../../utils/analytics'
@@ -24,35 +26,25 @@ class Room extends Component {
       },
       presenceTime: null,
       defaultMessage: '',
-      recipient: null,
-      showWelcome: false
+      hasPosted: null,
+      dismissedWelcomeModal: false,
+      recipient: null
     }
 
     this.showPresence = () => {
       if (this.state.presenceTimer) { return }
-      const {updateLatestVisit} = this.props
-      updateLatestVisit(this.getMyNametag().id)
+      const {updateLatestVisit, myNametag} = this.props
+      updateLatestVisit(myNametag.id)
       this.setState((prevState) => {
         clearInterval(prevState.presenceTimer)
         const presenceTimer = setInterval(() => {
-          updateLatestVisit(this.getMyNametag().id)
+          updateLatestVisit(myNametag.id)
         }, 10000)
         return {
           ...prevState,
           presenceTimer
         }
       })
-    }
-
-    this.getMyNametag = () => {
-      const {me, room} = this.props.data
-      if (!room || !me || !room.nametags || !me.nametags) {
-        return null
-      }
-      const myNtId = me.nametags.reduce(
-        (val, nametag) => nametag.room && nametag.room.id === room.id ? nametag.id : val, null
-      )
-      return room.nametags.filter((nt) => nt.id === myNtId)[0]
     }
 
     this.toggleLeftBar = () => {
@@ -78,6 +70,25 @@ class Room extends Component {
       return false
     }
 
+    this.dismissWelcomeModal = () => {
+      if (this.props.myNametag) {
+        this.setState({dismissedWelcomeModal: true})
+      }
+    }
+
+    this.handleRoomJoin = () => {
+      // FIXME: We set hasPosted=false because there's a gap in between nametag
+      // creation and messages loading where hasPosted=null, causing the
+      // welcome dialog to hide. We want hasPosted to default to null in
+      // general, so users who've posted before don't see a flash of the modal
+      // when loading the room. Moving hasPosted to a connected prop which is
+      // set at the same time as myNametag is set would avoid this.
+      this.setState({hasPosted: false}, () => {
+        // Reload me.nametags after room nametag created.
+        this.props.data.refetch()
+      })
+    }
+
     this.setDefaultMessage = (defaultMessage) => this.setState({defaultMessage})
 
     this.setRecipient = (recipient) => this.setState({recipient})
@@ -97,22 +108,21 @@ class Room extends Component {
   }
 
   componentDidUpdate (prevProps) {
-    const {messageAddedSubscription, messageDeletedSubscription} = this.props
+    const {messageAddedSubscription, messageDeletedSubscription, myNametag} = this.props
     const {loading, room, me} = this.props.data
     if (prevProps.data.loading && !loading) {
-      const myNametag = this.getMyNametag()
       if (me) {
         identify(me.id, {'$name': me.displayNames[0]})
       }
-      if (me && myNametag) {
-        this.showPresence()
-        messageAddedSubscription(room.id, myNametag.id)
-        messageDeletedSubscription(room.id)
-        this.setState({showWelcome: !this.userHasPosted(myNametag, room.messages)})
-        track('ROOM_VIEW', {id: room.id, title: room.title})
-        setTimer('POST_MESSAGE')
-      }
       document.title = `${room.title}`
+    }
+    if (!prevProps.myNametag && myNametag) {
+      this.showPresence()
+      messageAddedSubscription(room.id, myNametag.id)
+      messageDeletedSubscription(room.id)
+      this.setState({hasPosted: this.userHasPosted(myNametag, room.messages)})
+      track('ROOM_VIEW', {id: room.id, title: room.title})
+      setTimer('POST_MESSAGE')
     }
   }
 
@@ -129,6 +139,7 @@ class Room extends Component {
         room,
         me
       },
+      myNametag,
       nametagEdits,
       updateNametagEdit,
       addNametagEditBadge,
@@ -141,10 +152,13 @@ class Room extends Component {
       updateRoom,
       updateNametag,
       deleteMessage,
-      addReaction
+      addReaction,
+      location: {state: locationState}
     } = this.props
 
-    const {defaultMessage, showWelcome, recipient} = this.state
+    const {defaultMessage, recipient, hasPosted, dismissedWelcomeModal} = this.state
+
+    const isJoining = locationState && locationState.isJoining
 
     if (loading) {
       return <div style={styles.spinner}>
@@ -152,16 +166,9 @@ class Room extends Component {
       </div>
     }
 
-    const myNametag = this.getMyNametag()
-
-    // If the user is not logged in, return to the homepage
-    if (!me || !room.nametags || !myNametag) {
+    // If the user is not logged in and hasn't clicked "join room", return to the homepage
+    if (!me || (!myNametag && !isJoining)) {
       return <JoinRoom
-        createNametag={createNametag}
-        addNametagEditBadge={addNametagEditBadge}
-        removeNametagEditBadge={removeNametagEditBadge}
-        updateNametagEdit={updateNametagEdit}
-        nametagEdits={nametagEdits}
         registerUser={registerUser}
         loginUser={loginUser}
         room={room}
@@ -222,17 +229,35 @@ class Room extends Component {
           defaultMessage={defaultMessage}
           myNametag={myNametag} />
       </div>
-      <WelcomeModal
-        createMessage={createMessage}
-        welcome={room.welcome}
-        roomId={room.id}
-        nametags={room.nametags}
-        mod={room.mod}
-        showWelcome={showWelcome}
-        myNametag={myNametag}
-        updateNametag={updateNametag}
-        toggleWelcome={() => this.setState({showWelcome: false})}
-        />
+      <Dialog
+        modal={false}
+        contentStyle={styles.dialog}
+        open={!myNametag || (hasPosted === false && !dismissedWelcomeModal)}
+        onRequestClose={this.dismissWelcomeModal}>
+        {!myNametag &&
+          <ConfirmNametagForm
+            roomId={room.id}
+            templates={room.templates.map(t => t.id)}
+            nametag={nametagEdits[room.id]}
+            me={me}
+            createNametag={createNametag}
+            addNametagEditBadge={addNametagEditBadge}
+            removeNametagEditBadge={removeNametagEditBadge}
+            updateNametagEdit={updateNametagEdit}
+            onCreateNametag={this.handleRoomJoin} />
+        }
+        {myNametag && hasPosted === false &&
+          <WelcomeForm
+            createMessage={createMessage}
+            welcome={room.welcome}
+            roomId={room.id}
+            nametags={room.nametags}
+            mod={room.mod}
+            myNametag={myNametag}
+            updateNametag={updateNametag}
+            onWelcomeMsgSent={() => this.setState({hasPosted: true})} />
+        }
+      </Dialog>
     </div>
   }
 }
@@ -275,6 +300,9 @@ const slideIn = keyframes({
 }, 'slideIn')
 
 const styles = {
+  dialog: {
+    maxWidth: 820
+  },
   roomContainer: {
     overflowX: 'hidden'
   },

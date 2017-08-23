@@ -21,8 +21,24 @@ import {
   removeNametagEditBadge
 } from '../../actions/NametagEditActions'
 
-const mapStateToProps = (state) => {
+function getMyNametag ({data}) {
+  const {me, room} = data
+  if (!room || !me || !room.nametags || !me.nametags) {
+    return null
+  }
+  const myNt = me.nametags.find(
+    (nametag) => nametag.room && nametag.room.id === room.id
+  )
+  if (!myNt) {
+    // The user's nametag will not exist when they join the room for the first time.
+    return null
+  }
+  return room.nametags.filter((nt) => nt.id === myNt.id)[0]
+}
+
+const mapStateToProps = (state, ownProps) => {
   return {
+    myNametag: getMyNametag(ownProps),
     nametagEdits: state.nametagEdits
   }
 }
@@ -40,7 +56,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const Room = compose(
-  connect(mapStateToProps, mapDispatchToProps),
   createMessage,
   createNametag,
   toggleSaved,
@@ -50,7 +65,8 @@ const Room = compose(
   updateToken,
   deleteMessage,
   addReaction,
-  roomQuery
+  roomQuery,
+  connect(mapStateToProps, mapDispatchToProps)
 )(component)
 
 export default Room

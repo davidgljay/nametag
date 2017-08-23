@@ -184,7 +184,7 @@ Compose.propTypes = {
   myNametag: shape({
     id: string.isRequired,
     name: string.isRequired
-  }).isRequired,
+  }),
   createMessage: func.isRequired,
   recipient: string,
   defaultMessage: string,
