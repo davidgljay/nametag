@@ -8,7 +8,7 @@ export const registerServiceWorker = () => (dispatch) => {
     console.log('Firebase not loaded, not in production')
     return Promise.resolve()
   }
-  if ('serviceWorker' in navigator) {
+  if ('serviceWorker' in navigator && navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
     return navigator.serviceWorker.register('/firebase-messaging-sw.js', {scope: './'})
       .catch(errorLog('Error registering serviceWorker'))
       // .then(reg => reg ? firebase.messaging().useServiceWorker(reg)
