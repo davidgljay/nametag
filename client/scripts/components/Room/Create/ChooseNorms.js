@@ -6,11 +6,15 @@ import TextField from 'material-ui/TextField'
 
 const defaultNorms = [
   'Refrain from personal attacks',
-  'Respect the experiences of others',
-  'Stay on topic',
+  'Avoid explicit language & content',
   'Take time to welcome newcomers',
+  'What\'s said here stays here',
   'Keep comments brief and to the point',
-  'Personal experience > personal opinion'
+  'Personal experience > personal opinion',
+  'Curiosity > judgement',
+  'Maintain an environment of safety and support',
+  'Maintain professionalism',
+  'Keep it light & fun'
 ]
 
 class ChooseNorms extends Component {
@@ -58,6 +62,10 @@ class ChooseNorms extends Component {
       prev.customNorms.push('')
       return prev
     })
+    // Make the first three norms checked by default
+    this.props.addNorm(defaultNorms[0], 0)
+    this.props.addNorm(defaultNorms[1], 1)
+    this.props.addNorm(defaultNorms[2], 2)
   }
 
   render () {
