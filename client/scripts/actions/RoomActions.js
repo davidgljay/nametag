@@ -1,5 +1,5 @@
 import errorLog from '../utils/errorLog'
-// import constants from '../constants'
+import constants from '../constants'
 
 /*
 * Search Images

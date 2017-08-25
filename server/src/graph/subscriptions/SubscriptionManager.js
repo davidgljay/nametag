@@ -45,6 +45,11 @@ module.exports = new SubscriptionManager({
       roomUpdated: {
         filter: updateRoom => args.roomId === updateRoom.id
       }
+    }),
+    typingPrompt: (options, args) => ({
+      typingPrompt: {
+        fitler: typingPrompt => args.roomId === typingPrompt.roomId
+      }
     })
   }
 })

@@ -1,0 +1,8 @@
+mutation TypingPrompt ($nametagId: ID!, $roomId: ID!) {
+  typingPrompt(nametagId: $nametagId, $roomId: ID!) {
+    errors {
+      translation_key
+      message
+    }
+  }
+}

@@ -103,7 +103,7 @@ type Room {
   # A message to welcome new users into the room
   welcome: String
 
-  # Topics of discussion in the room
+  # Topic of discussion in the room
   topic: String
 }
 
@@ -673,6 +673,9 @@ type RootMutation {
 
   # Updates the latest visit of a nametag
   updateLatestVisit(nametagId: ID!): BasicResponse
+
+  # Indicated that a user is typing in a particular room
+  typingPrompt(nametagId: ID!, roomId: ID!): BasicResponse
 
   # Updates the users's notification token
   updateToken(token: String!): BasicResponse
