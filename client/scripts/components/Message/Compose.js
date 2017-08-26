@@ -28,7 +28,7 @@ class Compose extends Component {
         onUpdateText(text)
       }
 
-      // Post a prompt that the user is typing at most once every 2 seconds
+      // Post a prompt that the user is typing once every 2 seconds at most
       if (showTypingPrompt && lastTypingPrompt < Date.now() - 2000) {
         this.setState({lastTypingPrompt: Date.now()})
         showTypingPrompt(myNametag.id, roomId)

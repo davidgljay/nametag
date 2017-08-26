@@ -6,6 +6,7 @@ import MenuItem from 'material-ui/MenuItem'
 import CommandMenu from './CommandMenu'
 import NametagIcon from '../Nametag/NametagIcon'
 import {mobile} from '../../../styles/sizes'
+import {grey} from '../../../styles/colors'
 import radium from 'radium'
 
 class ComposeWithMenu extends Component {
@@ -155,7 +156,10 @@ class ComposeWithMenu extends Component {
         onPost={this.onPost}
         onUpdateText={this.onUpdateText}
       />
-      <div>
+      <div style={styles.typingPrompts}>
+        {
+          typingPrompts.length > 0 && <div style={styles.typingPromptText}>Typing:</div>
+        }
         {
           typingPrompts.map(nametagId => {
             const prompt = this.getTypingPrompt(nametagId)
@@ -237,5 +241,16 @@ const styles = {
   privMessageContainer: {
     background: '#f3f3f3',
     borderTop: '2px solid rgba(168, 168, 168, 0.75)'
+  },
+  typingPrompts: {
+    minHeight: 20,
+    display: 'flex',
+    paddingLeft: 40
+  },
+  typingPromptText: {
+    color: grey,
+    fontStyle: 'italic',
+    fontSize: 12,
+    marginRight: 10
   }
 }
