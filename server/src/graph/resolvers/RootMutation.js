@@ -125,11 +125,12 @@ const RootMutation = {
       .then(wrapResponse('updateLatestVisit'))
     }
   },
-  typingPrompt: {
+  showTypingPrompt: {
     requires: 'MY_NAMETAG',
     resolve: (obj, prompt) => {
-      pubsub.publish('typingPrompt', prompt)
+      pubsub.publish('typingPromptAdded', prompt)
       return Promise.resolve()
+        .then(wrapResponse('typingPrompt'))
     }
   },
   createBadge: {
