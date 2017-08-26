@@ -226,7 +226,7 @@ const styles = {
     bottom: 0,
     flexDirection: 'column',
     borderCollapse: 'separate',
-    paddingBottom: 20,
+    paddingBottom: 10,
     paddingTop: 10,
     width: 'calc(100% - 300px)',
     paddingRight: 15,
@@ -251,6 +251,7 @@ const styles = {
     color: grey,
     fontStyle: 'italic',
     fontSize: 12,
+    lineHeight: '20px',
     marginRight: 10
   }
 }
