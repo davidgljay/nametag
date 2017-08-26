@@ -1,11 +1,15 @@
 import constants from '../constants'
 
-const addTypingPrompt = (state, action) =>
-  ({...state, [action.nametagId]: action.timer})
+const addTypingPrompt = (state, action) => {
+  clearTimeout(state[action.nametagId])
+  return {...state, [action.nametagId]: action.timer}
+}
 
 const removeTypingPrompt = (state, action) => {
-  delete state[action.nametagId]
-  return state
+  clearTimeout(state[action.nametagId])
+  return Object.keys(state).reduce((newState, key) => key === action.nametagId
+    ? newState
+    : {...newState, [key]: state[key]}, {})
 }
 
 const typingPromptReducer = (state = {}, action) => {
