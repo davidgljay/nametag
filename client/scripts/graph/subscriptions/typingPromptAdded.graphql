@@ -1,0 +1,5 @@
+subscription typingPromptAdded ($roomId: ID!) {
+  typingPromptAdded(roomId: $roomId) {
+    nametagId
+  }
+}

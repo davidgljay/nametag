@@ -4,7 +4,9 @@ import BADGE_REQUEST_ADDED from './badgeRequestAdded.graphql'
 import ROOM_UPDATED from './roomUpdated.graphql'
 import NAMETAG_UPDATED from './nametagUpdated.graphql'
 import LATEST_MESSAGE_UPDATED from './latestMessageUpdated.graphql'
+import TYPING_PROMPT_ADDED from './typingPromptAdded.graphql'
 import MESSAGE_DELETED from './messageDeleted.graphql'
+import {addTypingPrompt, removeTypingPrompt} from '../../actions/TypingPromptActions'
 
 const clearObjectNulls = (object) => Object.keys(object).reduce(
       (obj, key) => object[key] ? {...obj, [key]: object[key]} : obj, {})
@@ -48,7 +50,7 @@ export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeT
   }
 })
 
-export const messageDeleted = subscribeToMore => (roomId) => subscribeToMore({
+export const messageDeleted = subscribeToMore => roomId => subscribeToMore({
   document: MESSAGE_DELETED,
   variables: {
     roomId
@@ -89,7 +91,7 @@ export const badgeRequestAdded = subscribeToMore => (granterId) => subscribeToMo
   }
 })
 
-export const latestMessageUpdated = subscribeToMore => (roomIds) => subscribeToMore({
+export const latestMessageUpdated = subscribeToMore => roomIds => subscribeToMore({
   document: LATEST_MESSAGE_UPDATED,
   variables: {
     roomIds
@@ -118,7 +120,7 @@ export const latestMessageUpdated = subscribeToMore => (roomIds) => subscribeToM
   }
 })
 
-export const roomUpdated = subscribeToMore => (roomId) => subscribeToMore({
+export const roomUpdated = subscribeToMore => roomId => subscribeToMore({
   document: ROOM_UPDATED,
   variables: {
     roomId
@@ -139,7 +141,7 @@ export const roomUpdated = subscribeToMore => (roomId) => subscribeToMore({
   }
 })
 
-export const nametagUpdated = subscribeToMore => (roomId) => subscribeToMore({
+export const nametagUpdated = subscribeToMore => roomId => subscribeToMore({
   document: NAMETAG_UPDATED,
   variables: {
     roomId
@@ -170,5 +172,16 @@ export const nametagUpdated = subscribeToMore => (roomId) => subscribeToMore({
         nametags: newNametags
       }
     }
+  }
+})
+
+export const typingPromptAdded = subscribeToMore => dispatch => roomId => subscribeToMore({
+  document: TYPING_PROMPT_ADDED,
+  variables: {
+    roomId
+  },
+  updateQuery: (oldData, {subscriptionData: {data: {typingPromptAdded: {nametagId}}}}) => {
+    dispatch(addTypingPrompt(nametagId, setTimeout(() => dispatch(removeTypingPrompt(nametagId)), 5000)))
+    return oldData
   }
 })
