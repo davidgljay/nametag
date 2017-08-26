@@ -1,5 +1,5 @@
 mutation TypingPrompt ($nametagId: ID!, $roomId: ID!) {
-  typingPrompt(nametagId: $nametagId, $roomId: ID!) {
+  showTypingPrompt(nametagId: $nametagId, roomId: $roomId) {
     errors {
       translation_key
       message
