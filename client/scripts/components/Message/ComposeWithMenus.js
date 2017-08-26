@@ -127,7 +127,6 @@ class ComposeWithMenu extends Component {
       roomId,
       myNametag,
       showTypingPrompt,
-      typingPrompts,
       createMessage,
       defaultMessage,
       mod,
@@ -138,6 +137,7 @@ class ComposeWithMenu extends Component {
       setRecipient
     } = this.props
     const {nametagList, showComposeMenu} = this.state
+    const typingPrompts = this.props.typingPrompts.filter(nametagId => nametagId !== myNametag.id)
 
     const containerStyle = recipient ? {...styles.container, ...styles.privMessageContainer} : styles.container
     return <div style={containerStyle}>
