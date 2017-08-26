@@ -8,6 +8,7 @@ import {
   createNametag,
   toggleSaved,
   updateLatestVisit,
+  showTypingPrompt,
   updateToken,
   updateRoom,
   updateNametag,
@@ -39,13 +40,15 @@ function getMyNametag ({data}) {
 const mapStateToProps = (state, ownProps) => {
   return {
     myNametag: getMyNametag(ownProps),
-    nametagEdits: state.nametagEdits
+    nametagEdits: state.nametagEdits,
+    typingPrompts: Object.keys(state.typingPrompts)
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   const disp = (func) => (...args) => dispatch(func.apply(this, args))
   return {
+    dispatch,
     requestNotifPermissions: disp(requestNotifPermissions),
     updateNametagEdit: disp(updateNametagEdit),
     addNametagEditBadge: disp(addNametagEditBadge),
@@ -62,6 +65,7 @@ const Room = compose(
   updateRoom,
   updateNametag,
   updateLatestVisit,
+  showTypingPrompt,
   updateToken,
   deleteMessage,
   addReaction,

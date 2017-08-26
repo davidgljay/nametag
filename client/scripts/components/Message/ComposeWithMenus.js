@@ -4,6 +4,7 @@ import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import CommandMenu from './CommandMenu'
+import NametagIcon from '../Nametag/NametagIcon'
 import {mobile} from '../../../styles/sizes'
 import radium from 'radium'
 
@@ -83,6 +84,11 @@ class ComposeWithMenu extends Component {
         : nametags.map(n => n.name)
     }
 
+    this.getTypingPrompt = (nametagId) => {
+      const {nametags} = this.props
+      return nametags.filter((nametag) => nametag.id === nametagId)[0]
+    }
+
     this.addMention = mention => e => {
       e.preventDefault()
       this.props.setDefaultMessage(this.state.message.replace(/@\S*(?=[^@]*$)/, mention))
@@ -119,6 +125,8 @@ class ComposeWithMenu extends Component {
     const {
       roomId,
       myNametag,
+      showTypingPrompt,
+      typingPrompts,
       createMessage,
       defaultMessage,
       mod,
@@ -136,6 +144,7 @@ class ComposeWithMenu extends Component {
         roomId={roomId}
         recipient={recipient}
         myNametag={myNametag}
+        showTypingPrompt={showTypingPrompt}
         nametags={nametags}
         createMessage={createMessage}
         defaultMessage={defaultMessage}
@@ -146,6 +155,19 @@ class ComposeWithMenu extends Component {
         onPost={this.onPost}
         onUpdateText={this.onUpdateText}
       />
+      <div>
+        {
+          typingPrompts.map(nametagId => {
+            const prompt = this.getTypingPrompt(nametagId)
+            // TODO: Add style
+            return <NametagIcon
+              key={nametagId}
+              name={prompt.name}
+              image={prompt.image}
+              diameter={20} />
+          })
+        }
+      </div>
       <Popover
         open={showComposeMenu === 'mention' && nametagList.length > 0}
         anchorEl={document.getElementById('compose')}
@@ -181,6 +203,7 @@ ComposeWithMenu.propTypes = {
   createMessage: func.isRequired,
   defaultMessage: string,
   setDefaultMessage: func.isRequired,
+  showTypingPrompt: func.isRequired,
   setRecipient: func.isRequired,
   topic: string,
   recipient: string,

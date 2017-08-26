@@ -21,9 +21,14 @@ class Compose extends Component {
 
     this.onChange = (e) => {
       const text = e.target.value
-      const {onUpdateText} = this.props
+      const {onUpdateText, showTypingPrompt, myNametag, roomId} = this.props
       if (onUpdateText) {
         onUpdateText(text)
+      }
+
+      if (showTypingPrompt) {
+        //TODO: Avoid posting on every keystroke
+        showTypingPrompt(myNametag.id, roomId)
       }
 
       if (text.slice(-1) === '\n') {
@@ -201,7 +206,7 @@ Compose.propTypes = {
   })),
   onUpdateText: func,
   onPost: func,
-  setDefaultMessage: func,
+  showTypingPrompt: func,
   setRecipient: func
 }
 
