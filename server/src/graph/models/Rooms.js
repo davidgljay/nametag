@@ -36,7 +36,7 @@ const getVisible = ({conn, user, models: {Users}}) =>
 
       // Otherwise, return all public rooms and rooms that the user can see based on their templates
       // TODO: Add pagination
-      return roomsTable.between(new Date(Date.now() - 604800000), new Date(), {index: 'latestMessage'})
+      return roomsTable.between(new Date(Date.now() - 2629746000), new Date(), {index: 'latestMessage'})
         .orderBy({index: 'latestMessage'})
         .filter(room =>
           room('templates').count().eq(0) ||
