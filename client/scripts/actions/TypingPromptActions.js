@@ -12,7 +12,7 @@ export const addTypingPrompt = (nametagId) => (dispatch) => {
   return {
     type: constants.ADD_TYPING_PROMPT,
     nametagId,
-    timer: setTimeout(() => dispatch(removeTypingPrompt(nametagId)), 5000)
+    timer: setTimeout(() => dispatch(removeTypingPrompt(nametagId)), constants.TYPING_PROMPT_DELAY)
   }
 }
 
