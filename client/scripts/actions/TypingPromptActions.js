@@ -8,11 +8,11 @@ import constants from '../constants'
 * Adds a typing prompt and sets a timer to remove that typing prompt unless
 * another one is received from the server.
 */
-export function addTypingPrompt (nametagId, timer) {
+export const addTypingPrompt = (nametagId) => (dispatch) => {
   return {
     type: constants.ADD_TYPING_PROMPT,
     nametagId,
-    timer
+    timer: setTimeout(() => dispatch(removeTypingPrompt(nametagId)), 5000)
   }
 }
 

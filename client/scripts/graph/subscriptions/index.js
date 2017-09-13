@@ -181,7 +181,7 @@ export const typingPromptAdded = subscribeToMore => dispatch => roomId => subscr
     roomId
   },
   updateQuery: (oldData, {subscriptionData: {data: {typingPromptAdded: {nametagId}}}}) => {
-    dispatch(addTypingPrompt(nametagId, setTimeout(() => dispatch(removeTypingPrompt(nametagId)), 5000)))
+    dispatch(addTypingPrompt(nametagId))
     return oldData
   }
 })
