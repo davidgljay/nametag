@@ -100,7 +100,20 @@ module.exports = {
         'CLIENT_GIT_HASH': JSON.stringify(GIT_HASH)
       }
     }),
-    new webpack.ExtendedAPIPlugin()
+    new webpack.ExtendedAPIPlugin(),
+    new UglifyJSPlugin({
+      sourceMap: true,
+      uglifyOptions: {
+        mangle: {
+          keep_classnames: true,
+          keep_fnames: true
+        },
+        compress: {
+          keep_fnames: true,
+          warnings: false
+        }
+      }
+    })
   ],
   resolve: {
     modules: [
