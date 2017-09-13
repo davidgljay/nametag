@@ -85,11 +85,6 @@ class ComposeWithMenu extends Component {
         : nametags.map(n => n.name)
     }
 
-    this.getTypingPrompt = (nametagId) => {
-      const {nametags} = this.props
-      return nametags.filter((nametag) => nametag.id === nametagId)[0]
-    }
-
     this.addMention = mention => e => {
       e.preventDefault()
       this.props.setDefaultMessage(this.state.message.replace(/@\S*(?=[^@]*$)/, mention))
@@ -161,15 +156,12 @@ class ComposeWithMenu extends Component {
           typingPrompts.length > 0 && <div style={styles.typingPromptText}>Typing:</div>
         }
         {
-          typingPrompts.map(nametagId => {
-            const prompt = this.getTypingPrompt(nametagId)
-            // TODO: Add style
-            return <NametagIcon
-              key={nametagId}
-              name={prompt.name}
-              image={prompt.image}
-              diameter={20} />
-          })
+          typingPrompts.map(nametag =>
+            <NametagIcon
+              key={nametag.id}
+              name={nametag.name}
+              image={nametag.image}
+              diameter={20} />)
         }
       </div>
       <Popover

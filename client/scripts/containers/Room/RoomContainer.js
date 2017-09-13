@@ -37,11 +37,21 @@ function getMyNametag ({data}) {
   return room.nametags.filter((nt) => nt.id === myNt.id)[0]
 }
 
+function getTypingPrompts (state) {
+  const {room} = state.data
+
+  if (!room) {
+    return []
+  }
+
+  return room.nametags.filter(nametag => state.typingPrompts[nametag.id])
+}
+
 const mapStateToProps = (state, ownProps) => {
   return {
     myNametag: getMyNametag(ownProps),
     nametagEdits: state.nametagEdits,
-    typingPrompts: Object.keys(state.typingPrompts)
+    typingPrompts: getTypingPrompts(state)
   }
 }
 
