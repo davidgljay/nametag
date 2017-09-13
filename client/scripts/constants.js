@@ -31,8 +31,9 @@ export default {
   WATCH_DIRECT_MESSAGE: 'WATCH_DIRECT_MESSAGE',
   SAVE_MESSAGE: 'SAVE_MESSAGE',
 
-  // Timers
+  // Times
   ANIMATION_LONG: 400,
+  ROOM_TIMEOUT: 2629746000,
 
   // URLs
   RESIZE_LAMBDA: 'https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/image_resize',
