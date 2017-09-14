@@ -6,7 +6,7 @@ import NAMETAG_UPDATED from './nametagUpdated.graphql'
 import LATEST_MESSAGE_UPDATED from './latestMessageUpdated.graphql'
 import TYPING_PROMPT_ADDED from './typingPromptAdded.graphql'
 import MESSAGE_DELETED from './messageDeleted.graphql'
-import {addTypingPrompt, removeTypingPrompt} from '../../actions/TypingPromptActions'
+import {addTypingPrompt} from '../../actions/TypingPromptActions'
 
 const clearObjectNulls = (object) => Object.keys(object).reduce(
       (obj, key) => object[key] ? {...obj, [key]: object[key]} : obj, {})
