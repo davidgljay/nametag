@@ -4,7 +4,6 @@ const autoprefixer = require('autoprefixer')
 const Copy = require('copy-webpack-plugin')
 const LicenseWebpackPlugin = require('license-webpack-plugin')
 const webpack = require('webpack')
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const GIT_HASH = execSync('git rev-parse HEAD').toString().trim()
 
 // Edit the build targets and embeds below.
@@ -100,20 +99,7 @@ module.exports = {
         'CLIENT_GIT_HASH': JSON.stringify(GIT_HASH)
       }
     }),
-    new webpack.ExtendedAPIPlugin(),
-    new UglifyJSPlugin({
-      sourceMap: true,
-      uglifyOptions: {
-        mangle: {
-          keep_classnames: true,
-          keep_fnames: true
-        },
-        compress: {
-          keep_fnames: true,
-          warnings: false
-        }
-      }
-    })
+    new webpack.ExtendedAPIPlugin()
   ],
   resolve: {
     modules: [
