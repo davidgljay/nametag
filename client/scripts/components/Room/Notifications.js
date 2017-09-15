@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import {List, ListItem} from 'material-ui/List'
 import Badge from 'material-ui/Badge'
+import constants from '../../constants'
 
 class Notifications extends Component {
   constructor (props) {
@@ -8,7 +9,7 @@ class Notifications extends Component {
 
     this.visitedRooms = (nametags) => nametags.filter(
       nametag => nametag.room &&
-      new Date(nametag.room.latestMessage) > new Date(Date.now() - 604800000) &&
+      new Date(nametag.room.latestMessage) > new Date(Date.now() - constants.ROOM_TIMEOUT) &&
       nametag.room.id !== this.props.roomId
     )
   }

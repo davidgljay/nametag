@@ -5,6 +5,7 @@ import Drawer from 'material-ui/Drawer'
 import Notifications from './Notifications'
 import Nametags from '../../components/Nametag/Nametags'
 import ShareButtons from './ShareButtons'
+import ROOM_TIMEOUT from '../../constants'
 
 class RoomLeftBar extends Component {
   constructor (props) {
@@ -53,7 +54,7 @@ class RoomLeftBar extends Component {
     } = this.props
     const notifCount = !myNametag ? 0 : me.nametags.filter(
       nametag => nametag.room &&
-      new Date(nametag.room.latestMessage) > new Date(Date.now() - 604800000) &&
+      new Date(nametag.room.latestMessage) > new Date(Date.now() - ROOM_TIMEOUT) &&
       nametag.room.id !== this.props.roomId
     ).length
     const isMod = me.nametags

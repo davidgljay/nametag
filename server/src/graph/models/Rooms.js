@@ -1,6 +1,7 @@
 const r = require('rethinkdb')
 const {db} = require('../../db')
 const errors = require('../../errors')
+const {ROOM_TIMEOUT} = require('../../constants')
 const {search} = require('../../elasticsearch')
 const pubsub = require('../subscriptions/pubsub')
 const notification = require('../../notifications')
@@ -36,7 +37,7 @@ const getVisible = ({conn, user, models: {Users}}) =>
 
       // Otherwise, return all public rooms and rooms that the user can see based on their templates
       // TODO: Add pagination
-      return roomsTable.between(new Date(Date.now() - 604800000), new Date(), {index: 'latestMessage'})
+      return roomsTable.between(new Date(Date.now() - ROOM_TIMEOUT), new Date(), {index: 'latestMessage'})
         .orderBy({index: 'latestMessage'})
         .filter(room =>
           room('templates').count().eq(0) ||
@@ -69,7 +70,7 @@ const getGranterRooms = ({conn, user, models: {Users}}, granterCode) => {
       if (userTemplateIds.length === 0) {
         return Promise.resolve([])
       }
-      return roomsTable.between(new Date(Date.now() - 604800000), new Date(), {index: 'latestMessage'})
+      return roomsTable.between(new Date(Date.now() - ROOM_TIMEOUT), new Date(), {index: 'latestMessage'})
         .orderBy({index: 'latestMessage'})
         .filter(room =>
           room('templates')

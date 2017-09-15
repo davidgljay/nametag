@@ -11,9 +11,10 @@ export default {
   ADD_TYPING_PROMPT: 'ADD_TYPING_PROMPT',
   REMOVE_TYPING_PROMPT: 'REMOVE_TYPING_PROMPT',
 
-  // Timers
+  // Times
   ANIMATION_LONG: 400,
   TYPING_PROMPT_DELAY: 5000,
+  ROOM_TIMEOUT: 2629746000,
 
   // URLs
   RESIZE_LAMBDA: 'https://cl3z6j4irk.execute-api.us-east-1.amazonaws.com/prod/image_resize',
