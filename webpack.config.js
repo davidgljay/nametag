@@ -2,7 +2,7 @@ const execSync = require('child_process').execSync
 const path = require('path')
 const autoprefixer = require('autoprefixer')
 const Copy = require('copy-webpack-plugin')
-const {LicenseWebpackPlugin} = require('license-webpack-plugin')
+const LicenseWebpackPlugin = require('license-webpack-plugin').LicenseWebpackPlugin
 const webpack = require('webpack')
 const GIT_HASH = execSync('git rev-parse HEAD').toString().trim()
 
