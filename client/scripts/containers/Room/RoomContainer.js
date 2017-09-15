@@ -8,6 +8,7 @@ import {
   createNametag,
   toggleSaved,
   updateLatestVisit,
+  showTypingPrompt,
   updateToken,
   updateRoom,
   updateNametag,
@@ -36,16 +37,26 @@ function getMyNametag ({data}) {
   return room.nametags.filter((nt) => nt.id === myNt.id)[0]
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    myNametag: getMyNametag(ownProps),
-    nametagEdits: state.nametagEdits
+function getTypingPrompts (state, {data}) {
+  const {room} = data
+
+  if (!room) {
+    return []
   }
+
+  return room.nametags.filter(nametag => state.typingPrompts[nametag.id])
 }
+
+const mapStateToProps = (state, ownProps) => ({
+  myNametag: getMyNametag(ownProps),
+  nametagEdits: state.nametagEdits,
+  typingPrompts: getTypingPrompts(state, ownProps)
+})
 
 const mapDispatchToProps = (dispatch) => {
   const disp = (func) => (...args) => dispatch(func.apply(this, args))
   return {
+    dispatch,
     requestNotifPermissions: disp(requestNotifPermissions),
     updateNametagEdit: disp(updateNametagEdit),
     addNametagEditBadge: disp(addNametagEditBadge),
@@ -62,6 +73,7 @@ const Room = compose(
   updateRoom,
   updateNametag,
   updateLatestVisit,
+  showTypingPrompt,
   updateToken,
   deleteMessage,
   addReaction,

@@ -9,6 +9,7 @@ import ADD_REACTION from './addReaction.graphql'
 import UPDATE_ROOM from './updateRoom.graphql'
 import UPDATE_NAMETAG from './updateNametag.graphql'
 import UPDATE_LATEST_VISIT from './updateLatestVisit.graphql'
+import SHOW_TYPING_PROMPT from './showTypingPrompt.graphql'
 import UPDATE_BADGE_REQUEST_STATUS from './updateBadgeRequestStatus.graphql'
 import UPDATE_TOKEN from './updateToken.graphql'
 import DELETE_MESSAGE from './deleteMessage.graphql'
@@ -68,6 +69,17 @@ export const updateLatestVisit = graphql(UPDATE_LATEST_VISIT, {
     updateLatestVisit: (nametagId) => mutate({
       variables: {
         nametagId
+      }
+    })
+  })
+})
+
+export const showTypingPrompt = graphql(SHOW_TYPING_PROMPT, {
+  props: ({ownProps, mutate}) => ({
+    showTypingPrompt: (nametagId, roomId) => mutate({
+      variables: {
+        nametagId,
+        roomId
       }
     })
   })

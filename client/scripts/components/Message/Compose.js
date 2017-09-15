@@ -16,14 +16,22 @@ class Compose extends Component {
     super(props)
     this.state = {
       message: '',
-      showEmoji: false
+      showEmoji: false,
+      lastTypingPrompt: 0
     }
 
     this.onChange = (e) => {
       const text = e.target.value
-      const {onUpdateText} = this.props
+      const {onUpdateText, showTypingPrompt, myNametag, roomId} = this.props
+      const {lastTypingPrompt} = this.state
       if (onUpdateText) {
         onUpdateText(text)
+      }
+
+      // Post a prompt that the user is typing once every 2 seconds at most
+      if (showTypingPrompt && lastTypingPrompt < Date.now() - 2000) {
+        this.setState({lastTypingPrompt: Date.now()})
+        showTypingPrompt(myNametag.id, roomId)
       }
 
       if (text.slice(-1) === '\n') {
@@ -201,7 +209,7 @@ Compose.propTypes = {
   })),
   onUpdateText: func,
   onPost: func,
-  setDefaultMessage: func,
+  showTypingPrompt: func,
   setRecipient: func
 }
 

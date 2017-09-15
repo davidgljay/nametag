@@ -4,7 +4,9 @@ import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import CommandMenu from './CommandMenu'
+import NametagIcon from '../Nametag/NametagIcon'
 import {mobile} from '../../../styles/sizes'
+import {grey} from '../../../styles/colors'
 import radium from 'radium'
 
 class ComposeWithMenu extends Component {
@@ -119,6 +121,7 @@ class ComposeWithMenu extends Component {
     const {
       roomId,
       myNametag,
+      showTypingPrompt,
       createMessage,
       defaultMessage,
       mod,
@@ -129,6 +132,7 @@ class ComposeWithMenu extends Component {
       setRecipient
     } = this.props
     const {nametagList, showComposeMenu} = this.state
+    const typingPrompts = this.props.typingPrompts.filter(nametag => nametag.id !== myNametag.id)
 
     const containerStyle = recipient ? {...styles.container, ...styles.privMessageContainer} : styles.container
     return <div style={containerStyle}>
@@ -136,6 +140,7 @@ class ComposeWithMenu extends Component {
         roomId={roomId}
         recipient={recipient}
         myNametag={myNametag}
+        showTypingPrompt={showTypingPrompt}
         nametags={nametags}
         createMessage={createMessage}
         defaultMessage={defaultMessage}
@@ -146,6 +151,19 @@ class ComposeWithMenu extends Component {
         onPost={this.onPost}
         onUpdateText={this.onUpdateText}
       />
+      <div style={styles.typingPrompts}>
+        {
+          typingPrompts.length > 0 && <div style={styles.typingPromptText}>Typing:</div>
+        }
+        {
+          typingPrompts.map(nametag =>
+            <NametagIcon
+              key={nametag.id}
+              name={nametag.name}
+              image={nametag.image}
+              diameter={20} />)
+        }
+      </div>
       <Popover
         open={showComposeMenu === 'mention' && nametagList.length > 0}
         anchorEl={document.getElementById('compose')}
@@ -181,6 +199,7 @@ ComposeWithMenu.propTypes = {
   createMessage: func.isRequired,
   defaultMessage: string,
   setDefaultMessage: func.isRequired,
+  showTypingPrompt: func.isRequired,
   setRecipient: func.isRequired,
   topic: string,
   recipient: string,
@@ -199,7 +218,7 @@ const styles = {
     bottom: 0,
     flexDirection: 'column',
     borderCollapse: 'separate',
-    paddingBottom: 20,
+    paddingBottom: 10,
     paddingTop: 10,
     width: 'calc(100% - 300px)',
     paddingRight: 15,
@@ -214,5 +233,17 @@ const styles = {
   privMessageContainer: {
     background: '#f3f3f3',
     borderTop: '2px solid rgba(168, 168, 168, 0.75)'
+  },
+  typingPrompts: {
+    minHeight: 20,
+    display: 'flex',
+    paddingLeft: 40
+  },
+  typingPromptText: {
+    color: grey,
+    fontStyle: 'italic',
+    fontSize: 12,
+    lineHeight: '20px',
+    marginRight: 10
   }
 }

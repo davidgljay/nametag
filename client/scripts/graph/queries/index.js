@@ -3,6 +3,7 @@ import {
   messageAdded,
   badgeRequestAdded,
   latestMessageUpdated,
+  typingPromptAdded,
   roomUpdated,
   messageDeleted,
   nametagUpdated
@@ -63,6 +64,7 @@ export const roomQuery = graphql(ROOM_QUERY, {
     messageAddedSubscription: messageAdded(data.subscribeToMore),
     messageDeletedSubscription: messageDeleted(data.subscribeToMore),
     latestMessageUpdatedSubscription: latestMessageUpdated(data.subscribeToMore),
+    typingPromptAdded: typingPromptAdded(data.subscribeToMore),
     roomUpdatedSubscription: roomUpdated(data.subscribeToMore),
     nametagUpdatedSubscription: nametagUpdated(data.subscribeToMore)
   })
