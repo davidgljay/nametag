@@ -99,12 +99,15 @@ class Room extends Component {
       requestNotifPermissions,
       roomUpdatedSubscription,
       nametagUpdatedSubscription,
+      typingPromptAdded,
       updateToken,
+      dispatch,
       params
     } = this.props
     requestNotifPermissions(updateToken)
     roomUpdatedSubscription(params.roomId)
     nametagUpdatedSubscription(params.roomId)
+    typingPromptAdded(dispatch)(params.roomId)
   }
 
   componentDidUpdate (prevProps) {
@@ -141,6 +144,8 @@ class Room extends Component {
       },
       myNametag,
       nametagEdits,
+      typingPrompts,
+      showTypingPrompt,
       updateNametagEdit,
       addNametagEditBadge,
       removeNametagEditBadge,
@@ -227,6 +232,8 @@ class Room extends Component {
           updateNametag={updateNametag}
           nametags={room.nametags}
           defaultMessage={defaultMessage}
+          showTypingPrompt={showTypingPrompt}
+          typingPrompts={typingPrompts}
           myNametag={myNametag} />
       </div>
       <Dialog
@@ -262,7 +269,7 @@ class Room extends Component {
   }
 }
 
-const {func, string, arrayOf, object, shape, bool} = PropTypes
+const {func, string, arrayOf, array, object, shape, bool} = PropTypes
 
 Room.propTypes = {
   data: shape({
@@ -279,6 +286,7 @@ Room.propTypes = {
   params: shape({
     roomId: string.isRequired
   }),
+  typingPrompts: array.isRequired,
   updateRoom: func.isRequired,
   createNametag: func.isRequired,
   createMessage: func.isRequired,

@@ -103,7 +103,7 @@ type Room {
   # A message to welcome new users into the room
   welcome: String
 
-  # Topics of discussion in the room
+  # Topic of discussion in the room
   topic: String
 }
 
@@ -674,6 +674,9 @@ type RootMutation {
   # Updates the latest visit of a nametag
   updateLatestVisit(nametagId: ID!): BasicResponse
 
+  # Indicated that a user is typing in a particular room
+  showTypingPrompt(nametagId: ID!, roomId: ID!): BasicResponse
+
   # Updates the users's notification token
   updateToken(token: String!): BasicResponse
 
@@ -785,6 +788,12 @@ type IDOnly {
   id: ID!
 }
 
+# Typing Prompt
+type typingPrompt {
+  # The ID of the nametag currently typing
+  nametagId: ID!
+}
+
 
 type RootSubscription {
 
@@ -799,6 +808,9 @@ type RootSubscription {
 
   # Fired when a nametag's presence changes in a room
   nametagPresence(roomId: ID!): NametagPresence
+
+  # Fired when a user is typing
+  typingPromptAdded(roomId: ID!): typingPrompt
 
   # Fired when a new badgeRequest is created
   badgeRequestAdded(granterId: ID!): BadgeRequest

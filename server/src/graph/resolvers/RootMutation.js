@@ -6,6 +6,7 @@ const {
   ErrNotMod,
   ErrNotYourNametag
 } = require('../../errors')
+const pubsub = require('../subscriptions/pubsub')
 
 /**
  * Wraps up a promise to return an object with the resolution of the promise
@@ -113,7 +114,7 @@ const RootMutation = {
         .then(wrapResponse('updateNametag'))
   },
   updateLatestVisit: {
-    requires: 'LOGIN',
+    requires: 'MY_NAMETAG',
     resolve: (obj, {nametagId}, {user, models: {Nametags}}) => {
       // Confirm that the user is in the room
       if (Object.keys(user.nametags)
@@ -122,6 +123,14 @@ const RootMutation = {
       }
       return Nametags.updateLatestVisit(nametagId)
       .then(wrapResponse('updateLatestVisit'))
+    }
+  },
+  showTypingPrompt: {
+    requires: 'MY_NAMETAG',
+    resolve: (obj, prompt) => {
+      pubsub.publish('typingPromptAdded', prompt)
+      return Promise.resolve()
+        .then(wrapResponse('typingPrompt'))
     }
   },
   createBadge: {
