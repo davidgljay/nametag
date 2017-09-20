@@ -18,8 +18,9 @@ const MessageSubscription = ({conn, models: {Rooms, Messages}}) => db.table('mes
               author:  "9b3177dd-778b-4032-a306-c902fcec20df" ,
               room:  "40bed376-768c-4a03-8e62-285f5a426b13" ,
               text:  "Thanks for joining! I think many of us can relate to that experience."
-            }), 3000})
+            }), 3000
           }
+        })
       }
       if (!message.new_val) {
         pubsub.publish('messageDeleted', message.old_val)
