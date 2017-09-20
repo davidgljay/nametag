@@ -213,7 +213,7 @@ const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
         usersTable.insert(user).run(conn),
         user
       ])
-      const userObj = {
+      let userObj = {
         displayNames: authProfile.displayNames.filter(name => name),
         images: [],
         [provider]: authProfile.id,
@@ -221,6 +221,10 @@ const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
         badges: {},
         userToken: uuid.v4().replace(/-/g, '').slice(0, 15),
         unsubscribe: {}
+      }
+
+      if (authProfile.email) {
+        userObj.email = authProfile.email
       }
 
       // Load an image if one exists, otherwise just insert the user

@@ -17,15 +17,20 @@ module.exports = conn => new FacebookStrategy({
     'link',
     'picture',
     'gender',
+    'email',
     'displayName'
   ],
   passReqToCallback: true
 },
   (req, accessToken, refreshToken, profile, done) => {
+
     const authProfile = {
       provider: 'facebook',
       displayNames: [profile.displayName],
       providerPhotoUrl: profile.photos[0].value,
+
+      // TODO: Handle multiple e-mails
+      email: profile.emails.length > 0 && profile.emails[0].value,
       id: profile.id,
       badges: [{
         name: profile.displayName
