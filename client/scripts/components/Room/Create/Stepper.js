@@ -11,16 +11,13 @@ const CreateRoomStepper = (props) => <Stepper
   orientation='horizontal'
   style={display}>
   <Step>
-    <StepLabel>Choose a topic</StepLabel>
+    <StepLabel>Set Conversation Norms</StepLabel>
   </Step>
   <Step>
-    <StepLabel>Find an image</StepLabel>
+    <StepLabel>Log In Or Register</StepLabel>
   </Step>
   <Step>
-    <StepLabel>Build your nametag</StepLabel>
-  </Step>
-  <Step>
-    <StepLabel>Set the norms</StepLabel>
+    <StepLabel>Introduce Yourself</StepLabel>
   </Step>
 </Stepper>
 

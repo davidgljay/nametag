@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {green500, red500} from 'material-ui/styles/colors'
+import {grey, primary, red} from '../../../../styles/colors'
 import {List, ListItem} from 'material-ui/List'
 import Check from 'material-ui/svg-icons/navigation/check'
 import TextField from 'material-ui/TextField'
@@ -69,7 +69,21 @@ class ChooseNorms extends Component {
   }
 
   render () {
+
+    const {error, room: {welcome}, updateRoom} = this.props
     return <div style={this.props.style}>
+      <TextField
+        style={styles.textfield}
+        value={welcome}
+        id='welcomeField'
+        multiLine
+        errorText={error && error.welcomeError}
+        inputStyle={styles.welcomeField}
+        onChange={(e) => updateRoom('welcome', e.target.value)}
+        floatingLabelText='Welcome Prompt' />
+      <div style={styles.helpText}>
+        Participants will be given this prompt when they enter the room.
+      </div>
       {
           this.props.error &&
           <div style={styles.error}>
@@ -118,6 +132,26 @@ ChooseNorms.propTypes = {
 }
 
 const styles = {
+  textfield: {
+    fontSize: 20,
+    padding: 0,
+    textAlign: 'left',
+    margin: '20px 20px 10px 10px'
+  },
+  titleForm: {
+    display: 'flex',
+    width: '100%',
+    alignItems: 'center',
+    flexDirection: 'column'
+  },
+  descriptionField: {
+    fontSize: 16
+  },
+  helpText: {
+    color: grey,
+    fontSize: 14,
+    fontStyle: 'italic'
+  },
   norms: {
     textAlign: 'center',
     padding: 0,
@@ -135,16 +169,16 @@ const styles = {
     height: 25,
     marginRight: 10,
     marginTop: 5,
-    fill: green500
+    fill: primary
   },
   formCheck: {
     height: 25,
     marginRight: 10,
     marginTop: 16,
-    fill: green500
+    fill: primary
   },
   error: {
-    color: red500
+    color: red
   }
 }
 

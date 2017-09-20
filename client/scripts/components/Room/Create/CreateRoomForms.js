@@ -3,6 +3,7 @@ import TitleForm from './TitleForm'
 import ChoosePrivacy from './ChoosePrivacy'
 import EditNametag from '../../Nametag/EditNametag'
 import UserBadges from '../../Badge/UserBadges'
+import Login from '../../User/Login'
 import ChooseNorms from './ChooseNorms'
 import ImageSearch from './ImageSearch'
 import {grey400} from 'material-ui/styles/colors'
@@ -35,38 +36,50 @@ const getForm = ({
   switch (stepIndex) {
     case 0:
       return <div>
-        <h4>What would you like to talk about?</h4>
-        <TitleForm
+        <h4>Please set norms for this discussion.</h4>
+        <ChooseNorms
           error={error}
+          style={styles.chooseNorms}
+          addNorm={addNorm}
+          normsObj={norms}
           updateRoom={updateRoom}
-          setClosed={setClosed}
-          closedIn={closedIn}
-          title={room.title}
-          desc={room.description} />
-        <ChoosePrivacy
-          badges={badges}
-          adminTemplates={me.adminTemplates}
-          selectedBadges={selectedBadges}
-          addSelectedBadge={addSelectedBadge}
-          removeSelectedBadge={removeSelectedBadge} />
+          room={room}
+          removeNorm={removeNorm} />
       </div>
+      // return <div>
+      //   <h4>What would you like to talk about?</h4>
+      //   <TitleForm
+      //     error={error}
+      //     updateRoom={updateRoom}
+      //     setClosed={setClosed}
+      //     closedIn={closedIn}
+      //     title={room.title}
+      //     desc={room.description} />
+      //   <ChoosePrivacy
+      //     badges={badges}
+      //     adminTemplates={me.adminTemplates}
+      //     selectedBadges={selectedBadges}
+      //     addSelectedBadge={addSelectedBadge}
+      //     removeSelectedBadge={removeSelectedBadge} />
+      // </div>
     case 1:
-      track('CREATE_ROOM_TITLE')
-      return <div>
-        {
-          !room.image && <h4>Please select an image for this conversation.</h4>
-        }
-        <ImageSearch
-          error={error}
-          style={styles.imageSearch}
-          handleNext={handleNext}
-          handlePrev={handlePrev}
-          setImageFromUrl={setImageFromUrl}
-          searchImage={searchImage}
-          updateRoom={updateRoom} />
-      </div>
+      // track('CREATE_ROOM_TITLE')
+      return <h1>Login</h1>
+      //TODO: Add Login
+      // return <div>
+      //   {
+      //     !room.image && <h4>Please select an image for this conversation.</h4>
+      //   }
+      //   <ImageSearch
+      //     error={error}
+      //     style={styles.imageSearch}
+      //     handleNext={handleNext}
+      //     handlePrev={handlePrev}
+      //     setImageFromUrl={setImageFromUrl}
+      //     searchImage={searchImage}
+      //     updateRoom={updateRoom} />
+      // </div>
     case 2:
-      track('CREATE_ROOM_IMAGE')
       return <div>
         <h4>How would you like to appear in your room?</h4>
         <div style={styles.editNametagContainer}>
@@ -90,15 +103,6 @@ const getForm = ({
       </div>
     case 3:
       track('CREATE_ROOM_NAMETAG')
-      return <div>
-        <h4>Please set norms for this discussion.</h4>
-        <ChooseNorms
-          error={error}
-          style={styles.chooseNorms}
-          addNorm={addNorm}
-          normsObj={norms}
-          removeNorm={removeNorm} />
-      </div>
     case 4:
       track('CREATE_ROOM_NORMS')
       return <div>

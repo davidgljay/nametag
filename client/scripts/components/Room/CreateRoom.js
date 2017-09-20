@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import RoomCard from './RoomCard'
+// import RoomCard from './RoomCard'
 import Navbar from '../Utils/Navbar'
 import CreateRoomForms from './Create/CreateRoomForms'
 import CircularProgress from 'material-ui/CircularProgress'
@@ -17,7 +17,8 @@ class CreateRoom extends Component {
         title: '',
         description: '',
         image: '',
-        templates: []
+        templates: [],
+        welcome: 'What brings you to this conversation?'
       },
       image: '',
       norms: {},
@@ -90,6 +91,7 @@ class CreateRoom extends Component {
     this.updateRoom = (prop, val) => {
       this.setState((prevState) => {
         prevState.room[prop] = val
+        window.localStorage.setItem('room', JSON.stringify(prevState.room))
         return prevState
       })
     }
@@ -120,30 +122,19 @@ class CreateRoom extends Component {
       switch (stepIndex) {
         case 0:
           return {
-            valid: room.title && room.description && room.welcome,
-            error: {
-              titleError: room.title ? '' : 'Please add a title',
-              descriptionError: room.description ? '' : 'Please add a description',
-              welcomeError: room.welcome ? '' : 'Please add a welcome prompt'
-            }
+            valid: room.norms && room.norms.length > 0 && room.welcome,
+            error: room.norms && room.norms.length > 0 ? ''
+            : 'Please select at least one norm',
+            welcomeError: room.welcome ? '' : 'Please add a welcome prompt'
           }
         case 1:
           return {
-            valid: room.image,
-            error: room.image ? '' : 'Please provide an image'
-          }
-        case 2:
-          return {
-            valid: this.props.nametagEdits.new.name,
+            valid: this.props.nametagEdits.new.name && this.props.nametagEdits.new.image && this.props.nametagEdits.new.bio,
             error: {
-              nameError: this.props.nametagEdits.new.name ? '' : 'Please choose a name for this room'
+              nameError: this.props.nametagEdits.new.name ? '' : 'Please choose a name for this room',
+              imageError: this.props.nametagEdits.new.image ? '' : 'Please choose an image',
+              bioError: this.props.nametagEdits.new.bio ? '' : 'Please introduce yourself'
             }
-          }
-        case 3:
-          return {
-            valid: room.norms && room.norms.length > 0,
-            error: room.norms && room.norms.length > 0 ? ''
-            : 'Please select at least one norm'
           }
         default:
           return {
@@ -155,11 +146,19 @@ class CreateRoom extends Component {
   }
 
   componentDidMount () {
-    this.props.updateNametagEdit('new', 'image', '')
-    this.props.updateNametagEdit('new', 'name', '')
-    this.props.updateNametagEdit('new', 'bio', '')
-    this.props.updateNametagEdit('new', 'badges', [])
-    track('CREATE_ROOM_VIEW')
+    const storedRoom = window.localStorage.getItem('room')
+    const {location: {state: locationState}} = this.props
+    const title = locationState && locationState.title
+    if (storedRoom) {
+      this.setState({room: JSON.parge(storedRoom), stepIndex: 2})
+      this.props.updateNametagEdit('new', 'image', '')
+      this.props.updateNametagEdit('new', 'name', '')
+      this.props.updateNametagEdit('new', 'bio', '')
+      this.props.updateNametagEdit('new', 'badges', [])
+    } else if (title) {
+      this.updateRoom('title', title)
+      track('CREATE_ROOM_VIEW', {title})
+    }
   }
 
   render () {
@@ -189,22 +188,25 @@ class CreateRoom extends Component {
         <Stepper stepIndex={stepIndex} />
       </div>
       <div style={styles.roomPreview} id='roomPreview'>
-        <RoomCard
-          room={{
-            ...room,
-            id: 'new',
-            mod: {
-              ...nametagEdits.new,
-              id: 'newMod'
-            }
-          }}
-          style={styles.previewCard}
-          creating
-          flipped={stepIndex === 3}
-          nametagEdits={nametagEdits}
-          updateNametagEdit={updateNametagEdit}
-          addNametagEditBadge={addNametagEditBadge}
-          removeNametagEditBadge={removeNametagEditBadge} />
+
+        {
+          // <RoomCard
+          //   room={{
+          //     ...room,
+          //     id: 'new',
+          //     mod: {
+          //       ...nametagEdits.new,
+          //       id: 'newMod'
+          //     }
+          //   }}
+          //   style={styles.previewCard}
+          //   creating
+          //   flipped={stepIndex === 3}
+          //   nametagEdits={nametagEdits}
+          //   updateNametagEdit={updateNametagEdit}
+          //   addNametagEditBadge={addNametagEditBadge}
+          //   removeNametagEditBadge={removeNametagEditBadge} />
+        }
       </div>
       <div style={styles.createRoom}>
         {
