@@ -18,7 +18,7 @@ class CreateRoom extends Component {
         description: '',
         image: '',
         templates: [],
-        welcome: 'What brings you to this conversation?'
+        welcome: ''
       },
       image: '',
       norms: {},
@@ -40,7 +40,7 @@ class CreateRoom extends Component {
           return prevState
         })
       } else {
-        this.setState({error: validation.error})
+        this.setState({error: validation})
       }
     }
 
@@ -119,21 +119,31 @@ class CreateRoom extends Component {
 
     this.validate = (stepIndex) => {
       const {room} = this.state
+      const {nametagEdits, data: {me}} = this.props
       switch (stepIndex) {
         case 0:
           return {
-            valid: room.norms && room.norms.length > 0 && room.welcome,
-            error: room.norms && room.norms.length > 0 ? ''
-            : 'Please select at least one norm',
-            welcomeError: room.welcome ? '' : 'Please add a welcome prompt'
+            valid: room.welcome,
+            welcomeError: !room.welcome && 'Please add a welcome prompt'
           }
         case 1:
           return {
-            valid: this.props.nametagEdits.new.name && this.props.nametagEdits.new.image && this.props.nametagEdits.new.bio,
+            valid: room.norms && room.norms.length > 0,
+            normsError: !room.norms || !room.norms.length > 0 && 'Please select at least one norm'
+          }
+        case 2: {
+          return {
+            valid: me,
+            loginError: me && 'Please Log In'
+          }
+        }
+        case 3:
+          return {
+            valid: nametagEdits.new.name && nametagEdits.new.image && nametagEdits.new.bio,
             error: {
-              nameError: this.props.nametagEdits.new.name ? '' : 'Please choose a name for this room',
-              imageError: this.props.nametagEdits.new.image ? '' : 'Please choose an image',
-              bioError: this.props.nametagEdits.new.bio ? '' : 'Please introduce yourself'
+              nameError: nametagEdits.new.name ? '' : 'Please choose a name for this room',
+              imageError: nametagEdits.new.image ? '' : 'Please choose an image',
+              bioError: nametagEdits.new.bio ? '' : 'Please introduce yourself'
             }
           }
         default:
@@ -146,24 +156,37 @@ class CreateRoom extends Component {
   }
 
   componentDidMount () {
-    const storedRoom = window.localStorage.getItem('room')
     const {location: {state: locationState}} = this.props
     const title = locationState && locationState.title
-    if (storedRoom) {
-      this.setState({room: JSON.parge(storedRoom), stepIndex: 2})
-      this.props.updateNametagEdit('new', 'image', '')
-      this.props.updateNametagEdit('new', 'name', '')
-      this.props.updateNametagEdit('new', 'bio', '')
-      this.props.updateNametagEdit('new', 'badges', [])
-    } else if (title) {
+    this.props.updateNametagEdit('new', 'image', '')
+    this.props.updateNametagEdit('new', 'name', '')
+    this.props.updateNametagEdit('new', 'bio', '')
+    this.props.updateNametagEdit('new', 'badges', [])
+    if (title) {
       this.updateRoom('title', title)
       track('CREATE_ROOM_VIEW', {title})
     }
   }
 
+  componentDidUpdate (oldProps) {
+    const {data: {me, loading}} = this.props
+    if (oldProps.loading && !loading) {
+      const storedRoom = window.localStorage.getItem('room')
+      if (storedRoom) {
+        const room = JSON.parse(storedRoom)
+        if (room.welcome && me) {
+          console.log('Fast forwarding')
+          this.setState({room, stepIndex: 3})
+        } else {
+          this.setState({room})
+        }
+      }
+    }
+  }
+
   render () {
     const {
-      data,
+      data: {me, loading},
       searchImage,
       setImageFromUrl,
       nametagEdits,
@@ -171,11 +194,6 @@ class CreateRoom extends Component {
       addNametagEditBadge,
       removeNametagEditBadge
     } = this.props
-    const {me, loading} = data
-    if (!me && !loading) {
-      window.location = '/'
-      return null
-    }
     const {room, stepIndex} = this.state
     const selectedBadges = room.templates.map(template => ({id: template.id, notes: [], template}))
     return !loading
@@ -184,7 +202,9 @@ class CreateRoom extends Component {
         me={me}
         toggleLogin={() => {}} />
       <div style={styles.title}>
-        <h1>Start a Conversation</h1>
+        <h2>Get People Talking</h2>
+        <div>Hosting a conversation on Nametag is a great way to pull people in your community
+        into meaningful conversation.</div>
         <Stepper stepIndex={stepIndex} />
       </div>
       <div style={styles.roomPreview} id='roomPreview'>

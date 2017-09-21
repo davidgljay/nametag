@@ -69,20 +69,10 @@ class ChooseNorms extends Component {
   }
 
   render () {
-
-    const {error, room: {welcome}, updateRoom} = this.props
     return <div style={this.props.style}>
-      <TextField
-        style={styles.textfield}
-        value={welcome}
-        id='welcomeField'
-        multiLine
-        errorText={error && error.welcomeError}
-        inputStyle={styles.welcomeField}
-        onChange={(e) => updateRoom('welcome', e.target.value)}
-        floatingLabelText='Welcome Prompt' />
+      <h3>Set Conversation Norms</h3>
       <div style={styles.helpText}>
-        Participants will be given this prompt when they enter the room.
+        As a host, you will be able to hold people accountable to these norms.
       </div>
       {
           this.props.error &&

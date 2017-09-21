@@ -11,6 +11,9 @@ const CreateRoomStepper = (props) => <Stepper
   orientation='horizontal'
   style={display}>
   <Step>
+    <StepLabel>Choose Welcome Prompt</StepLabel>
+  </Step>
+  <Step>
     <StepLabel>Set Conversation Norms</StepLabel>
   </Step>
   <Step>

@@ -1,11 +1,9 @@
 import React, {PropTypes} from 'react'
-import TitleForm from './TitleForm'
-import ChoosePrivacy from './ChoosePrivacy'
-import EditNametag from '../../Nametag/EditNametag'
-import UserBadges from '../../Badge/UserBadges'
+import WelcomeForm from './WelcomeForm'
+// import ChoosePrivacy from './ChoosePrivacy'
+import HostIntro from './HostIntro'
 import Login from '../../User/Login'
 import ChooseNorms from './ChooseNorms'
-import ImageSearch from './ImageSearch'
 import {grey400} from 'material-ui/styles/colors'
 import {track} from '../../../utils/analytics'
 
@@ -36,7 +34,13 @@ const getForm = ({
   switch (stepIndex) {
     case 0:
       return <div>
-        <h4>Please set norms for this discussion.</h4>
+        <WelcomeForm
+          error={error}
+          updateRoom={updateRoom}
+          welcome={room.welcome} />
+      </div>
+    case 1:
+      return <div>
         <ChooseNorms
           error={error}
           style={styles.chooseNorms}
@@ -62,7 +66,7 @@ const getForm = ({
       //     addSelectedBadge={addSelectedBadge}
       //     removeSelectedBadge={removeSelectedBadge} />
       // </div>
-    case 1:
+    case 2:
       // track('CREATE_ROOM_TITLE')
       return <h1>Login</h1>
       //TODO: Add Login
@@ -79,27 +83,17 @@ const getForm = ({
       //     searchImage={searchImage}
       //     updateRoom={updateRoom} />
       // </div>
-    case 2:
+    case 3:
       return <div>
-        <h4>How would you like to appear in your room?</h4>
-        <div style={styles.editNametagContainer}>
-          <div>
-            <EditNametag
-              error={error}
-              nametagEdit={nametagEdits.new}
-              addNametagEditBadge={addNametagEditBadge}
-              requiredTemplates={selectedBadges.map(b => b.template.id)}
-              removeNametagEditBadge={removeNametagEditBadge}
-              updateNametagEdit={updateNametagEdit}
-              me={me}
-              roomId='new' />
-            <div style={styles.userBadges}>
-              <UserBadges
-                badges={me.badges}
-                selectedBadges={nametagEdits.new && nametagEdits.new.badges} />
-            </div>
-          </div>
-        </div>
+        <HostIntro
+          nametagEdits={nametagEdits}
+          selectedBadges={selectedBadges}
+          addNametagEditBadge={addNametagEditBadge}
+          removeNametagEditBadge={removeNametagEditBadge}
+          updateNametagEdit={updateNametagEdit}
+          me={me}
+          error={error}
+          />
       </div>
     case 3:
       track('CREATE_ROOM_NAMETAG')
