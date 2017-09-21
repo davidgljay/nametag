@@ -19,7 +19,7 @@ const MessageSubscription = ({conn, models: {Rooms, Messages}}) => db.table('mes
               room:  "40bed376-768c-4a03-8e62-285f5a426b13" ,
               text:  "Thanks for joining! I think many of us can relate to that experience."
             })
-          }, 4000)
+          }, 5000)
         }
       }
       if (!message.new_val) {
