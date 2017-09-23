@@ -70,16 +70,13 @@ class ChooseNorms extends Component {
 
   render () {
     return <div style={this.props.style}>
-      <h3>Set Conversation Norms</h3>
+      <h2>Set Conversation Norms</h2>
       <div style={styles.helpText}>
         As a host, you will be able to hold people accountable to these norms.
       </div>
-      {
-          this.props.error &&
-          <div style={styles.error}>
-            {this.props.error}
-          </div>
-        }
+      <div style={styles.error}>
+        {this.props.error}
+      </div>
       <List style={styles.norms}>
         {
             defaultNorms.map((norm, i) => {

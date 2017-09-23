@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react'
 import EditNametag from '../../Nametag/EditNametag'
 import UserBadges from '../../Badge/UserBadges'
 import TextField from 'material-ui/TextField'
-import {grey} from '../../../../styles/colors'
+import {grey, red} from '../../../../styles/colors'
 
 const HostIntro = ({
   nametagEdits,
@@ -13,7 +13,7 @@ const HostIntro = ({
   me,
   error}) =>
     <div>
-      <h3>Introduce Yourself</h3>
+      <h2>Introduce Yourself</h2>
       <div style={styles.helpText}>
           Give participants a sense of who you are and why this topic matters to you.
       </div>
@@ -23,9 +23,15 @@ const HostIntro = ({
         value={nametagEdits.new.bio}
         id='bioField'
         multiLine
-        errorText={error && error.welcomeError}
-        onChange={(e) => updateNametagEdit('bio', e.target.value)}
-        floatingLabelText='Introduction' />
+        errorText={error && error.bioError}
+        onChange={(e) => updateNametagEdit('new', 'bio', e.target.value)}
+        floatingLabelText='Introduce Yourself' />
+      <div style={{...styles.helpText, ...styles.nametagHelpText}}>
+          Customize how you will appear in this room. You must provide an image.
+      </div>
+      <div style={styles.error}>
+        {error}
+      </div>
       <div style={styles.editNametagContainer}>
         <div>
           <EditNametag
@@ -66,7 +72,7 @@ const styles = {
     padding: 0,
     textAlign: 'left',
     width: 374,
-    margin: '20px 20px 10px 10px'
+    margin: 10
   },
   textFieldInput: {
     width: '100%'
@@ -75,5 +81,30 @@ const styles = {
     color: grey,
     fontSize: 14,
     fontStyle: 'italic'
+  },
+  nametagHelpText: {
+    marginTop: 40,
+    marginBottom: 20
+  },
+  userBadges: {
+    width: 270,
+    display: 'flex',
+    flexWrap: 'wrap',
+    minHeight: 100,
+    verticalAlign: 'top',
+    padding: 5,
+    margin: 5
+  },
+  userBadgeText: {
+    fontStyle: 'italic',
+    fontSize: 12,
+    color: grey
+  },
+  editNametagContainer: {
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  error: {
+    color: red
   }
 }

@@ -4,8 +4,9 @@ import WelcomeForm from './WelcomeForm'
 import HostIntro from './HostIntro'
 import Login from '../../User/Login'
 import ChooseNorms from './ChooseNorms'
-import {grey400} from 'material-ui/styles/colors'
+import Toggle from 'material-ui/Toggle'
 import {track} from '../../../utils/analytics'
+import {grey} from '../../../../styles/colors'
 
 const getForm = ({
     error,
@@ -95,12 +96,25 @@ const getForm = ({
           error={error}
           />
       </div>
-    case 3:
-      track('CREATE_ROOM_NAMETAG')
     case 4:
       track('CREATE_ROOM_NORMS')
-      return <div>
-        <h4>Ready to publish this conversation?</h4>
+      return <div style={styles.container}>
+        <h2>You're done!</h2>
+        <Toggle
+          style={styles.toggleStyle}
+          label={room.public ? 'Make Discoverable' : 'Keep Private'}
+          toggled={room.public}
+          labelStyle={{textAlign: 'left'}}
+          thumbStyle={{backgroundColor: grey}}
+          onToggle={(e, isChecked) => updateRoom('public', isChecked)}
+          />
+        <div style={styles.helpText}>
+          {
+            room.public
+            ? 'Once approved, your conversation will be discoverable on Nametag.'
+            : 'Your conversation will only be visible if you share a link.'
+          }
+        </div>
       </div>
     default:
       return 'Something has gone wrong!'
@@ -145,30 +159,25 @@ CreateRoomForms.propTypes = {
 export default CreateRoomForms
 
 const styles = {
-  imageSearch: {
-    maxWidth: 600
-  },
-  userBadges: {
-    width: 270,
+  container: {
     display: 'flex',
-    flexWrap: 'wrap',
-    minHeight: 100,
-    verticalAlign: 'top',
-    padding: 5,
-    margin: 5
-  },
-  userBadgeText: {
-    fontStyle: 'italic',
-    fontSize: 12,
-    color: grey400
-  },
-  editNametagContainer: {
-    display: 'flex',
-    justifyContent: 'center'
+    alignItems: 'center',
+    flexDirection: 'column'
   },
   chooseNorms: {
-    width: 350,
+    width: 400,
     marginLeft: 'auto',
     marginRight: 'auto'
+  },
+  helpText: {
+    color: grey,
+    fontSize: 14,
+    width: 450,
+    fontStyle: 'italic',
+    marginTop: 20,
+    marginBottom: 40
+  },
+  toggleStyle: {
+    width: 200
   }
 }

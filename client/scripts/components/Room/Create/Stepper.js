@@ -22,6 +22,9 @@ const CreateRoomStepper = (props) => <Stepper
   <Step>
     <StepLabel>Introduce Yourself</StepLabel>
   </Step>
+  <Step>
+    <StepLabel>Done!</StepLabel>
+  </Step>
 </Stepper>
 
 export default CreateRoomStepper

@@ -4,10 +4,9 @@ import {grey} from '../../../../styles/colors'
 
 const WelcomeForm = ({welcome, updateRoom, error}) =>
   <div style={styles.titleForm}>
-    <h3>Choose Welcome Prompt</h3>
-    <div style={styles.helpText}>
-      Users will be asked this question when they enter the room.
-    </div>
+    <h1>Get People Talking</h1>
+    <h2>Start by choosing a welcome prompt.</h2>
+    <div style={styles.helpText}>Users will be asked this question when they enter the room.</div>
     <TextField
       style={styles.textfield}
       inputStyle={styles.textFieldInput}
@@ -39,10 +38,5 @@ const styles = {
   },
   textFieldInput: {
     width: '100%'
-  },
-  helpText: {
-    color: grey,
-    fontSize: 14,
-    fontStyle: 'italic'
   }
 }

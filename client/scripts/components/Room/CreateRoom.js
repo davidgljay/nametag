@@ -5,7 +5,9 @@ import CreateRoomForms from './Create/CreateRoomForms'
 import CircularProgress from 'material-ui/CircularProgress'
 import Stepper from './Create/Stepper'
 import RaisedButton from 'material-ui/RaisedButton'
+import FlatButton from 'material-ui/FlatButton'
 import {track} from '../../utils/analytics'
+import {grey, white} from '../../../styles/colors'
 
 class CreateRoom extends Component {
 
@@ -18,7 +20,8 @@ class CreateRoom extends Component {
         description: '',
         image: '',
         templates: [],
-        welcome: ''
+        welcome: '',
+        public: true
       },
       image: '',
       norms: {},
@@ -140,11 +143,8 @@ class CreateRoom extends Component {
         case 3:
           return {
             valid: nametagEdits.new.name && nametagEdits.new.image && nametagEdits.new.bio,
-            error: {
-              nameError: nametagEdits.new.name ? '' : 'Please choose a name for this room',
-              imageError: nametagEdits.new.image ? '' : 'Please choose an image',
-              bioError: nametagEdits.new.bio ? '' : 'Please introduce yourself'
-            }
+            imageError: nametagEdits.new.image ? '' : 'Please choose an image',
+            bioError: nametagEdits.new.bio ? '' : 'Please introduce yourself'
           }
         default:
           return {
@@ -175,7 +175,6 @@ class CreateRoom extends Component {
       if (storedRoom) {
         const room = JSON.parse(storedRoom)
         if (room.welcome && me) {
-          console.log('Fast forwarding')
           this.setState({room, stepIndex: 3})
         } else {
           this.setState({room})
@@ -202,31 +201,7 @@ class CreateRoom extends Component {
         me={me}
         toggleLogin={() => {}} />
       <div style={styles.title}>
-        <h2>Get People Talking</h2>
-        <div>Hosting a conversation on Nametag is a great way to pull people in your community
-        into meaningful conversation.</div>
         <Stepper stepIndex={stepIndex} />
-      </div>
-      <div style={styles.roomPreview} id='roomPreview'>
-
-        {
-          // <RoomCard
-          //   room={{
-          //     ...room,
-          //     id: 'new',
-          //     mod: {
-          //       ...nametagEdits.new,
-          //       id: 'newMod'
-          //     }
-          //   }}
-          //   style={styles.previewCard}
-          //   creating
-          //   flipped={stepIndex === 3}
-          //   nametagEdits={nametagEdits}
-          //   updateNametagEdit={updateNametagEdit}
-          //   addNametagEditBadge={addNametagEditBadge}
-          //   removeNametagEditBadge={removeNametagEditBadge} />
-        }
       </div>
       <div style={styles.createRoom}>
         {
@@ -258,10 +233,9 @@ class CreateRoom extends Component {
         <div>
           {
             this.state.stepIndex > 0 &&
-            <RaisedButton
+            <FlatButton
               style={styles.button}
-              labelStyle={styles.buttonLabel}
-              primary
+              labelStyle={styles.backButtonLabel}
               id='backButton'
               onClick={this.handlePrev}
               label='BACK' />
@@ -274,7 +248,7 @@ class CreateRoom extends Component {
               primary
               id='publishButton'
               onClick={this.createRoom}
-              label='PUBLISH' />
+              label='GO TO ROOM' />
             : <RaisedButton
               style={styles.button}
               labelStyle={styles.buttonLabel}
@@ -323,7 +297,11 @@ const styles = {
     margin: 0
   },
   buttonLabel: {
-    color: '#fff',
+    color: white,
+    margin: 20
+  },
+  backButtonLabel: {
+    color: grey,
     margin: 20
   },
   button: {
