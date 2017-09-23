@@ -1,6 +1,5 @@
 import React, {PropTypes} from 'react'
 import TextField from 'material-ui/TextField'
-import {grey} from '../../../../styles/colors'
 
 const WelcomeForm = ({welcome, updateRoom, error}) =>
   <div style={styles.titleForm}>

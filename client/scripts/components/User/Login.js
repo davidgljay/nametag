@@ -148,7 +148,8 @@ class Login extends Component {
   }
 
   componentWillMount () {
-    this.setState({message: this.props.message})
+    const {message, register} = this.props
+    this.setState({message, state: register ? 'REGISTER' : 'LOGIN'})
     key('enter', this.onEnter)
   }
 
@@ -167,10 +168,31 @@ class Login extends Component {
     } = this.state
 
     return <div style={styles.login} id='loginForm'>
-      <h4>{message || 'Log in to join'}</h4>
+      <h4>{message}</h4>
       <div style={styles.alert}>
         {alert}
       </div>
+      <div style={styles.authProviders}>
+        {
+          loading
+          ? <CircularProgress />
+        : <div>
+          <img
+            style={styles.loginImg}
+            src='/public/images/twitter.jpg'
+            onClick={this.providerAuth('twitter')} />
+          <img
+            style={styles.loginImg}
+            src='/public/images/fb.jpg'
+            onClick={this.providerAuth('facebook')} />
+          <img
+            style={styles.loginImg}
+            src='/public/images/google.png'
+            onClick={this.providerAuth('google')} />
+        </div>
+        }
+      </div>
+      <h4>OR</h4>
       <form className='localAuth' onSubmit={this.onEnter}>
         <TextField
           floatingLabelText='E-mail'
@@ -215,7 +237,7 @@ class Login extends Component {
         {
           state === 'REGISTER' && <div style={styles.buttonContainer}>
             <FlatButton
-              label='BACK'
+              label='LOG IN'
               style={styles.button}
               secondary
               onClick={() => this.setState({state: 'LOGIN', message: this.props.message})} />
@@ -260,34 +282,17 @@ class Login extends Component {
         }
         <input type='submit' style={styles.hiddenSubmit} />
       </form>
-      <div style={styles.authProviders}>
-        {
-          loading
-          ? <CircularProgress />
-        : <div>
-          <img
-            style={styles.loginImg}
-            src='/public/images/twitter.jpg'
-            onClick={this.providerAuth('twitter')} />
-          <img
-            style={styles.loginImg}
-            src='/public/images/fb.jpg'
-            onClick={this.providerAuth('facebook')} />
-          <img
-            style={styles.loginImg}
-            src='/public/images/google.png'
-            onClick={this.providerAuth('google')} />
-        </div>
-        }
-      </div>
     </div>
   }
 }
 
+const {func, string} = PropTypes
+
 Login.propTypes = {
-  registerUser: PropTypes.func.isRequired,
-  loginUser: PropTypes.func.isRequired,
-  passwordResetRequest: PropTypes.func.isRequired
+  registerUser: func.isRequired,
+  loginUser: func.isRequired,
+  passwordResetRequest: func.isRequired,
+  message: string
 }
 
 export default Login

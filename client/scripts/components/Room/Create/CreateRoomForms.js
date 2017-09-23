@@ -13,16 +13,18 @@ const getForm = ({
     stepIndex,
     updateRoom,
     nametagEdits,
+    selectedBadges,
     updateNametagEdit,
     setClosed,
     closedIn,
     room,
     badges,
-    selectedBadges,
-    searchImage,
     handleNext,
     handlePrev,
     setImageFromUrl,
+    loginUser,
+    passwordResetRequest,
+    registerUser,
     addNametagEditBadge,
     removeNametagEditBadge,
     addSelectedBadge,
@@ -51,39 +53,17 @@ const getForm = ({
           room={room}
           removeNorm={removeNorm} />
       </div>
-      // return <div>
-      //   <h4>What would you like to talk about?</h4>
-      //   <TitleForm
-      //     error={error}
-      //     updateRoom={updateRoom}
-      //     setClosed={setClosed}
-      //     closedIn={closedIn}
-      //     title={room.title}
-      //     desc={room.description} />
-      //   <ChoosePrivacy
-      //     badges={badges}
-      //     adminTemplates={me.adminTemplates}
-      //     selectedBadges={selectedBadges}
-      //     addSelectedBadge={addSelectedBadge}
-      //     removeSelectedBadge={removeSelectedBadge} />
-      // </div>
     case 2:
       // track('CREATE_ROOM_TITLE')
-      return <h1>Login</h1>
-      //TODO: Add Login
-      // return <div>
-      //   {
-      //     !room.image && <h4>Please select an image for this conversation.</h4>
-      //   }
-      //   <ImageSearch
-      //     error={error}
-      //     style={styles.imageSearch}
-      //     handleNext={handleNext}
-      //     handlePrev={handlePrev}
-      //     setImageFromUrl={setImageFromUrl}
-      //     searchImage={searchImage}
-      //     updateRoom={updateRoom} />
-      // </div>
+      return <div>
+        <h2>Create Account</h2>
+        <Login
+          registerUser={registerUser}
+          loginUser={loginUser}
+          message=''
+          register
+          passwordResetRequest={passwordResetRequest} />
+      </div>
     case 3:
       return <div>
         <HostIntro
@@ -112,7 +92,7 @@ const getForm = ({
           {
             room.public
             ? 'Once approved, your conversation will be discoverable on Nametag.'
-            : 'Your conversation will only be visible if you share a link.'
+            : 'Your conversation will only be visible if you share its link.'
           }
         </div>
       </div>
@@ -141,8 +121,9 @@ CreateRoomForms.propTypes = {
     image: string.isRequired,
     description: string.isRequired
   }).isRequired,
-  searchImage: func.isRequired,
-  setImageFromUrl: func.isRequired,
+  registerUser: func.isRequired,
+  loginUser: func.isRequired,
+  passwordResetRequest: func.isRequired,
   nametagEdits: object.isRequired,
   addNametagEditBadge: func.isRequired,
   removeNametagEditBadge: func.isRequired,
@@ -150,7 +131,7 @@ CreateRoomForms.propTypes = {
     badges: arrayOf(shape({
       id: string.isRequired
     })).isRequired
-  }).isRequired,
+  }),
   norms: object.isRequired,
   addNorm: func.isRequired,
   removeNorm: func.isRequired
@@ -165,7 +146,7 @@ const styles = {
     flexDirection: 'column'
   },
   chooseNorms: {
-    width: 400,
+    width: 450,
     marginLeft: 'auto',
     marginRight: 'auto'
   },
