@@ -127,7 +127,7 @@ class CreateRoom extends Component {
 
     this.validate = (stepIndex) => {
       const {room} = this.state
-      const {nametagEdits, data: {me}} = this.props
+      const {nametagEdits} = this.props
       switch (stepIndex) {
         case 0:
           return {
@@ -141,16 +141,11 @@ class CreateRoom extends Component {
           }
         case 2: {
           return {
-            valid: me,
-            loginError: me && 'Please Log In'
-          }
-        }
-        case 3:
-          return {
             valid: nametagEdits.new.name && nametagEdits.new.image && nametagEdits.new.bio,
             imageError: nametagEdits.new.image ? '' : 'Please choose an image',
             bioError: nametagEdits.new.bio ? '' : 'Please introduce yourself'
           }
+        }
         default:
           return {
             valid: true,
