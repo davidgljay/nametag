@@ -56,28 +56,29 @@ const getForm = ({
     case 2:
       // track('CREATE_ROOM_TITLE')
       return <div>
-        <h2>Create Account</h2>
-        <Login
-          registerUser={registerUser}
-          loginUser={loginUser}
-          message=''
-          register
-          passwordResetRequest={passwordResetRequest} />
+        {
+          me
+          ? <HostIntro
+            nametagEdits={nametagEdits}
+            selectedBadges={selectedBadges}
+            addNametagEditBadge={addNametagEditBadge}
+            removeNametagEditBadge={removeNametagEditBadge}
+            updateNametagEdit={updateNametagEdit}
+            me={me}
+            error={error} />
+        : <div>
+          <h2>Create Account</h2>
+          <Login
+            registerUser={registerUser}
+            loginUser={loginUser}
+            message=''
+            register
+            passwordResetRequest={passwordResetRequest} />
+        </div>
+        }
       </div>
     case 3:
-      return <div>
-        <HostIntro
-          nametagEdits={nametagEdits}
-          selectedBadges={selectedBadges}
-          addNametagEditBadge={addNametagEditBadge}
-          removeNametagEditBadge={removeNametagEditBadge}
-          updateNametagEdit={updateNametagEdit}
-          me={me}
-          error={error}
-          />
-      </div>
-    case 4:
-      track('CREATE_ROOM_NORMS')
+      track('ROOM_PRIVACY')
       return <div style={styles.container}>
         <h2>You're done!</h2>
         <Toggle

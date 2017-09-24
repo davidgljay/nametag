@@ -8,7 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import {track} from '../../utils/analytics'
 import {grey, white} from '../../../styles/colors'
-import pwHash from '../../utils/pwHash'
+import {getQueryVariable} from '../../utils/queryVars'
 
 class CreateRoom extends Component {
 
@@ -163,10 +163,9 @@ class CreateRoom extends Component {
   componentDidMount () {
     const {location: {state: locationState}} = this.props
     const title = locationState && locationState.title
-    const hashStep = pwHash('step')
-    if (hashStep) {
-      console.log('hashSTep', hashStep)
-      this.setState({stepIndex: parseInt(hashStep)})
+    const stepIndex = getQueryVariable('step')
+    if (stepIndex) {
+      this.setState({stepIndex: parseInt(stepIndex)})
     }
     this.props.updateNametagEdit('new', 'image', '')
     this.props.updateNametagEdit('new', 'name', '')
@@ -249,8 +248,8 @@ class CreateRoom extends Component {
               label='BACK' />
           }
           {
-            this.state.stepIndex < 4 &&
-            !(this.state.stepIndex === 2 && me) &&
+            this.state.stepIndex < 3 &&
+            !(this.state.stepIndex === 2 && !me) &&
             <RaisedButton
               style={styles.button}
               labelStyle={styles.buttonLabel}
