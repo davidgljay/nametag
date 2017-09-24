@@ -8,6 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import {track} from '../../utils/analytics'
 import {grey, white} from '../../../styles/colors'
+import pwHash from '../../utils/pwHash'
 
 class CreateRoom extends Component {
 
@@ -37,7 +38,7 @@ class CreateRoom extends Component {
       const {stepIndex} = this.state
       const validation = this.validate(stepIndex)
       if (validation.valid) {
-        // history.pushState('', document.title, `${window.location.pathname}?step=${stepIndex + 1}`)
+        history.pushState('', document.title, `${window.location.pathname}?step=${stepIndex + 1}`)
         this.setState((prevState) => {
           prevState.error = null
           prevState.stepIndex ++
@@ -53,7 +54,7 @@ class CreateRoom extends Component {
       this.setState((prevState) => {
         const {stepIndex} = this.state
         delete prevState.error
-        // history.pushState('', document.title, `${window.location.pathname}?step=${stepIndex - 1}`)
+        history.pushState('', document.title, `${window.location.pathname}?step=${stepIndex - 1}`)
         if (prevState.stepIndex > 0) {
           prevState.stepIndex --
         }
@@ -162,6 +163,11 @@ class CreateRoom extends Component {
   componentDidMount () {
     const {location: {state: locationState}} = this.props
     const title = locationState && locationState.title
+    const hashStep = pwHash('step')
+    if (hashStep) {
+      console.log('hashSTep', hashStep)
+      this.setState({stepIndex: parseInt(hashStep)})
+    }
     this.props.updateNametagEdit('new', 'image', '')
     this.props.updateNametagEdit('new', 'name', '')
     this.props.updateNametagEdit('new', 'bio', '')
@@ -173,16 +179,12 @@ class CreateRoom extends Component {
   }
 
   componentDidUpdate (oldProps) {
-    const {data: {me, loading}} = this.props
-    if (oldProps.loading && !loading) {
+    const {data: {loading}} = this.props
+    if (oldProps.data.loading && !loading) {
       const storedRoom = window.localStorage.getItem('room')
       if (storedRoom) {
         const room = JSON.parse(storedRoom)
-        if (room.welcome && me) {
-          this.setState({room, stepIndex: 3})
-        } else {
-          this.setState({room})
-        }
+        this.setState({room})
       }
     }
   }
