@@ -54,7 +54,9 @@ export default RoomCard
 
 const styles = {
   cardContainer: {
-    display: 'flex'
+    display: 'flex',
+    textAlign: 'left',
+    marginBottom: 60
   },
   modContainer: {
     display: 'flex',
