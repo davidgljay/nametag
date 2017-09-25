@@ -61,33 +61,29 @@ class Room extends Component {
       window.location = '/rooms'
     }
 
-    this.userHasPosted = (myNametag, messages) => {
-      for (let i = 0; i < messages.length; i++) {
-        if (myNametag.id === messages[i].author.id) {
-          return true
-        }
-      }
-      return false
-    }
+    // this.userHasPosted = (myNametag, messages) => {
+    //   for (let i = 0; i < messages.length; i++) {
+    //     if (myNametag.id === messages[i].author.id) {
+    //       return true
+    //     }
+    //   }
+    //   return false
+    // }
 
-    this.dismissWelcomeModal = () => {
-      if (this.props.myNametag && this.state.hasPosted) {
-        this.setState({dismissedWelcomeModal: true})
-      }
-    }
+    this.onCreateNametag = () => this.props.data.refetch()
 
-    this.handleRoomJoin = () => {
-      // FIXME: We set hasPosted=false because there's a gap in between nametag
-      // creation and messages loading where hasPosted=null, causing the
-      // welcome dialog to hide. We want hasPosted to default to null in
-      // general, so users who've posted before don't see a flash of the modal
-      // when loading the room. Moving hasPosted to a connected prop which is
-      // set at the same time as myNametag is set would avoid this.
-      this.setState({hasPosted: false}, () => {
-        // Reload me.nametags after room nametag created.
-        this.props.data.refetch()
-      })
-    }
+    // this.handleRoomJoin = () => {
+    //   // FIXME: We set hasPosted=false because there's a gap in between nametag
+    //   // creation and messages loading where hasPosted=null, causing the
+    //   // welcome dialog to hide. We want hasPosted to default to null in
+    //   // general, so users who've posted before don't see a flash of the modal
+    //   // when loading the room. Moving hasPosted to a connected prop which is
+    //   // set at the same time as myNametag is set would avoid this.
+    //   this.setState({hasPosted: false}, () => {
+    //     // Reload me.nametags after room nametag created.
+    //     this.props.data.refetch()
+    //   })
+    // }
 
     this.setDefaultMessage = (defaultMessage) => this.setState({defaultMessage})
 
@@ -123,7 +119,6 @@ class Room extends Component {
       this.showPresence()
       messageAddedSubscription(room.id, myNametag.id)
       messageDeletedSubscription(room.id)
-      this.setState({hasPosted: this.userHasPosted(myNametag, room.messages)})
       track('ROOM_VIEW', {id: room.id, title: room.title})
       setTimer('POST_MESSAGE')
     }
@@ -161,7 +156,7 @@ class Room extends Component {
       location: {state: locationState}
     } = this.props
 
-    const {defaultMessage, recipient, hasPosted, dismissedWelcomeModal} = this.state
+    const {defaultMessage, recipient, dismissedWelcomeModal} = this.state
 
     const isJoining = locationState && locationState.isJoining
 
@@ -183,7 +178,10 @@ class Room extends Component {
 
     const isMobile = window.innerWidth < 800
 
-    const backIcon = <img id='backButton' style={styles.backIcon} src='https://s3.amazonaws.com/nametag_images/logo-inverted30.png' />
+    const backIcon = <img
+      id='backButton'
+      style={styles.backIcon}
+      src='https://s3.amazonaws.com/nametag_images/logo-inverted30.png' />
 
     return <div style={styles.roomContainer}>
       <div id='room'>
@@ -239,7 +237,7 @@ class Room extends Component {
       <Dialog
         modal={false}
         contentStyle={styles.dialog}
-        open={!myNametag || (hasPosted === false && !dismissedWelcomeModal)}
+        open={!myNametag || !myNametag.bio}
         onRequestClose={this.dismissWelcomeModal}>
         {!myNametag &&
           <ConfirmNametagForm
@@ -251,9 +249,10 @@ class Room extends Component {
             addNametagEditBadge={addNametagEditBadge}
             removeNametagEditBadge={removeNametagEditBadge}
             updateNametagEdit={updateNametagEdit}
-            onCreateNametag={this.handleRoomJoin} />
+            onCreateNametag={this.onCreateNametag} />
         }
-        {myNametag && hasPosted === false &&
+        {
+          myNametag && !myNametag.bio &&
           <WelcomeForm
             createMessage={createMessage}
             welcome={room.welcome}

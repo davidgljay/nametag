@@ -48,22 +48,9 @@ class JoinRoom extends Component {
       <div id='roomInfoContainer' style={styles.roomInfoContainer}>
         <Card>
           <div style={styles.roomCard}>
-            <div id='roomImage' style={styles.roomImageContainer}>
-              <img
-                style={styles.roomImage}
-                onClick={this.flip}
-                src={image} />
-            </div>
             <div id='roomInfo' style={styles.roomInfo}>
               <div id='roomTitle' style={styles.title}>
                 {title}
-              </div>
-              <div id='roomDescription' style={styles.description}>
-                {description}
-              </div>
-              <div style={styles.count}>
-                {nametagCount || 0} participant
-                  {nametagCount === 1 ? '' : 's'}
               </div>
             </div>
           </div>
@@ -111,8 +98,6 @@ JoinRoom.propTypes = {
   me: object,
   room: shape({
     title: string.isRequired,
-    image: string.isRequired,
-    description: string.isRequired,
     mod: shape({
       id: string.isRequired,
       image: string.isRequired
