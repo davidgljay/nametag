@@ -5,6 +5,7 @@ import HostIntro from './HostIntro'
 import Login from '../../User/Login'
 import ChooseNorms from './ChooseNorms'
 import Toggle from 'material-ui/Toggle'
+import RoomCard from '../RoomCard'
 import {track} from '../../../utils/analytics'
 import {grey} from '../../../../styles/colors'
 
@@ -80,21 +81,26 @@ const getForm = ({
     case 3:
       track('ROOM_PRIVACY')
       return <div style={styles.container}>
+        <div style={styles.preview}>
+          <RoomCard room={{...room, mod: nametagEdits.new}} />
+        </div>
         <h2>You're done!</h2>
-        <Toggle
-          style={styles.toggleStyle}
-          label={room.public ? 'Make Discoverable' : 'Keep Private'}
-          toggled={room.public}
-          labelStyle={{textAlign: 'left'}}
-          thumbStyle={{backgroundColor: grey}}
-          onToggle={(e, isChecked) => updateRoom('public', isChecked)}
-          />
-        <div style={styles.helpText}>
-          {
-            room.public
-            ? 'Once approved, your conversation will be discoverable on Nametag.'
-            : 'Your conversation will only be visible if you share its link.'
-          }
+        <div style={styles.privacyContainer}>
+          <Toggle
+            style={styles.toggleStyle}
+            label={room.public ? 'Make Discoverable' : 'Keep Private'}
+            toggled={room.public}
+            labelStyle={{textAlign: 'left'}}
+            thumbStyle={{backgroundColor: grey}}
+            onToggle={(e, isChecked) => updateRoom('public', isChecked)}
+            />
+          <div style={styles.helpText}>
+            {
+              room.public
+              ? 'Once approved, your conversation will be discoverable on Nametag.'
+              : 'Your conversation will only be visible if you share its link.'
+            }
+          </div>
         </div>
       </div>
     default:
@@ -140,7 +146,7 @@ CreateRoomForms.propTypes = {
 export default CreateRoomForms
 
 const styles = {
-  container: {
+  privacyContainer: {
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column'
@@ -160,5 +166,10 @@ const styles = {
   },
   toggleStyle: {
     width: 200
+  },
+  preview: {
+    maxWidth: 800,
+    marginLeft: 'auto',
+    marginRight: 'auto'
   }
 }
