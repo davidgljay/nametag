@@ -42,7 +42,7 @@ class RoomCard extends Component {
           <RaisedButton
             primary
             id='JoinButton'
-            label={'Join'}
+            label='JOIN'
             onClick={this.onJoinClick} />
         </div>
       </div>
