@@ -52,12 +52,12 @@ class RoomLeftBar extends Component {
       expanded,
       toggleLeftBar
     } = this.props
-    const notifCount = !myNametag ? 0 : me.nametags.filter(
+    const notifCount = !myNametag || !me ? 0 : me.nametags.filter(
       nametag => nametag.room &&
       new Date(nametag.room.latestMessage) > new Date(Date.now() - ROOM_TIMEOUT) &&
       nametag.room.id !== this.props.roomId
     ).length
-    const isMod = me.nametags
+    const isMod = me && me.nametags
       .reduce((isMod, nametag) => nametag.id === room.mod.id ? true : isMod, false)
     const hideDMs = !isMod && room.modOnlyDMs
     const mobile = window.innerWidth < 800

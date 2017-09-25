@@ -4,6 +4,7 @@ import RoomLeftBar from './RoomLeftBar'
 import AppBar from 'material-ui/AppBar'
 import Dialog from 'material-ui/Dialog'
 import radium, {keyframes} from 'radium'
+import Login from '../User/Login'
 import Messages from '../../components/Message/Messages'
 import WelcomeForm from './WelcomeForm'
 import ConfirmNametagForm from './ConfirmNametagForm'
@@ -61,29 +62,7 @@ class Room extends Component {
       window.location = '/rooms'
     }
 
-    // this.userHasPosted = (myNametag, messages) => {
-    //   for (let i = 0; i < messages.length; i++) {
-    //     if (myNametag.id === messages[i].author.id) {
-    //       return true
-    //     }
-    //   }
-    //   return false
-    // }
-
     this.onCreateNametag = () => this.props.data.refetch()
-
-    // this.handleRoomJoin = () => {
-    //   // FIXME: We set hasPosted=false because there's a gap in between nametag
-    //   // creation and messages loading where hasPosted=null, causing the
-    //   // welcome dialog to hide. We want hasPosted to default to null in
-    //   // general, so users who've posted before don't see a flash of the modal
-    //   // when loading the room. Moving hasPosted to a connected prop which is
-    //   // set at the same time as myNametag is set would avoid this.
-    //   this.setState({hasPosted: false}, () => {
-    //     // Reload me.nametags after room nametag created.
-    //     this.props.data.refetch()
-    //   })
-    // }
 
     this.setDefaultMessage = (defaultMessage) => this.setState({defaultMessage})
 
@@ -146,6 +125,7 @@ class Room extends Component {
       removeNametagEditBadge,
       registerUser,
       loginUser,
+      passwordResetRequest,
       createNametag,
       latestMessageUpdatedSubscription,
       createMessage,
@@ -156,7 +136,7 @@ class Room extends Component {
       location: {state: locationState}
     } = this.props
 
-    const {defaultMessage, recipient, dismissedWelcomeModal} = this.state
+    const {defaultMessage, recipient} = this.state
 
     const isJoining = locationState && locationState.isJoining
 
@@ -167,7 +147,7 @@ class Room extends Component {
     }
 
     // If the user is not logged in and hasn't clicked "join room", return to the homepage
-    if (!me || (!myNametag && !isJoining)) {
+    if (!myNametag && !isJoining) {
       return <JoinRoom
         registerUser={registerUser}
         loginUser={loginUser}
@@ -237,9 +217,18 @@ class Room extends Component {
       <Dialog
         modal={false}
         contentStyle={styles.dialog}
-        open={!myNametag || !myNametag.bio}
+        open={!me || !myNametag || !myNametag.bio}
         onRequestClose={this.dismissWelcomeModal}>
-        {!myNametag &&
+        {
+          !me && <Login
+            registerUser={registerUser}
+            loginUser={loginUser}
+            message='Create account to Join'
+            register
+            passwordResetRequest={passwordResetRequest} />
+        }
+        {
+          me && !myNametag &&
           <ConfirmNametagForm
             roomId={room.id}
             templates={room.templates.map(t => t.id)}
@@ -285,6 +274,9 @@ Room.propTypes = {
   params: shape({
     roomId: string.isRequired
   }),
+  loginUser: func.isRequired,
+  registerUser: func.isRequired,
+  passwordResetRequest: func.isRequired,
   typingPrompts: array.isRequired,
   updateRoom: func.isRequired,
   createNametag: func.isRequired,
@@ -308,7 +300,8 @@ const slideIn = keyframes({
 
 const styles = {
   dialog: {
-    maxWidth: 820
+    maxWidth: 820,
+    width: 'fit-content'
   },
   roomContainer: {
     overflowX: 'hidden'

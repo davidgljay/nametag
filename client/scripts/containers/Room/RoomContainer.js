@@ -2,7 +2,7 @@ import {connect} from 'react-redux'
 import component from '../../components/Room/Room'
 import {compose} from 'react-apollo'
 import {roomQuery} from '../../graph/queries'
-import {registerUser, loginUser} from '../../actions/UserActions'
+import {registerUser, loginUser, passwordResetRequest} from '../../actions/UserActions'
 import {
   createMessage,
   createNametag,
@@ -62,7 +62,8 @@ const mapDispatchToProps = (dispatch) => {
     addNametagEditBadge: disp(addNametagEditBadge),
     removeNametagEditBadge: disp(removeNametagEditBadge),
     registerUser: disp(registerUser),
-    loginUser: disp(loginUser)
+    loginUser: disp(loginUser),
+    passwordResetRequest: disp(passwordResetRequest)
   }
 }
 
