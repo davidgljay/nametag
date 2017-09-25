@@ -119,8 +119,7 @@ CreateRoomForms.propTypes = {
   updateNametagEdit: func.isRequired,
   room: shape({
     title: string.isRequired,
-    image: string.isRequired,
-    description: string.isRequired
+    welcome: string.isRequired
   }).isRequired,
   registerUser: func.isRequired,
   loginUser: func.isRequired,

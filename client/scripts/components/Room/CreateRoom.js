@@ -18,8 +18,6 @@ class CreateRoom extends Component {
     this.state = {
       room: {
         title: '',
-        description: '',
-        image: '',
         templates: [],
         welcome: '',
         public: true
@@ -252,6 +250,16 @@ class CreateRoom extends Component {
               id='nextButton'
               onClick={this.handleNext}
               label='NEXT' />
+          }
+          {
+            this.state.stepIndex === 3 &&
+            <RaisedButton
+              style={styles.button}
+              labelStyle={styles.buttonLabel}
+              primary
+              id='doneButton'
+              onClick={this.createRoom}
+              label='GO TO ROOM' />
             }
         </div>
       </div>
