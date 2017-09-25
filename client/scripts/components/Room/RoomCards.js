@@ -2,9 +2,9 @@ import React, {Component, PropTypes} from 'react'
 import RoomCard from './RoomCard'
 import Navbar from '../Utils/Navbar'
 import LoginDialog from '../User/LoginDialog'
-import SearchBar from './SearchBar'
-import Notifications from '../Room/Notifications'
+import StartRoomForm from './StartRoomForm'
 import {track, identify} from '../../utils/analytics'
+import {white} from '../../../styles/colors'
 
 class RoomCards extends Component {
 
@@ -59,15 +59,12 @@ class RoomCards extends Component {
         me={me}
         toggleLogin={this.toggleLogin} />
       <div style={styles.background}>
-        {
-          me &&
-          <Notifications
-            nametags={me.nametags}
-            latestMessageUpdatedSubscription={latestMessageUpdatedSubscription}
-            homepage />
-        }
-        <SearchBar
-          search={search} />
+        <div style={styles.header}>
+          <div style={styles.headerText}>
+            Online conversation that feels like an intimate dinner party.
+          </div>
+        </div>
+        <StartRoomForm />
         <div style={styles.roomCards}>
           {
             !loading &&
@@ -118,15 +115,27 @@ export default RoomCards
 const styles = {
   background: {
     background: '#fbfbfb',
-    paddingTop: 30,
     minHeight: '100vh'
   },
   roomCards: {
     paddingBottom: 50,
-    paddingTop: 20,
+    paddingTop: 50,
     maxWidth: 800,
     marginLeft: 'auto',
     marginRight: 'auto'
-
+  },
+  header: {
+    width: '100%',
+    height: window.innerWidth * 494 / 1023,
+    background: 'url(http://s3.amazonaws.com/nametag_images/site/nametag-header.jpg)',
+    backgroundSize: 'cover',
+    marginBottom: 40
+  },
+  headerText: {
+    color: white,
+    textAlign: 'center',
+    fontSize: 32,
+    padding: 10,
+    paddingTop: window.innerWidth * 494 / 1023 - 80
   }
 }

@@ -74,7 +74,7 @@ const styles = {
     marginLeft: 10
   },
   joinContainer: {
-    margin: 40
+    margin: 30
   },
   roomInfo: {
     flex: 1
@@ -85,7 +85,7 @@ const styles = {
     fontStyle: 'italic'
   },
   title: {
-    fontSize: 26,
+    fontSize: 24,
     marginTop: 20
   }
 }
