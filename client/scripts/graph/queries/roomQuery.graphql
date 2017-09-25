@@ -4,7 +4,6 @@ query roomQuery($id: ID!){
   room(id:$id) {
     id
     title
-    description
     norms
     nametagCount
     welcome
