@@ -1,39 +1,54 @@
-import React, {PropTypes} from 'react'
+import React, {PropTypes, Component} from 'react'
 import {Card} from 'material-ui/Card'
-import {browserHistory} from 'react-router'
+import {withRouter} from 'react-router'
 import NametagIcon from '../Nametag/NametagIcon'
 import Badges from '../Badge/Badges'
 import RaisedButton from 'material-ui/RaisedButton'
 
-const onJoinClick = (roomId) => {
-  browserHistory.push(`/rooms/${roomId}`)
-}
+class RoomCard extends Component {
 
-const RoomCard = ({room}) => <Card key={room.id} style={styles.front} className='roomCard'>
-  <div style={styles.cardContainer}>
-    <div className='cardMod' style={styles.modContainer}>
-      <div style={styles.modIcon}>
-        <NametagIcon
-          image={room.mod.image}
-          name={room.mod.name}
-          diameter={80} />
+  constructor (props) {
+    super(props)
+
+    this.onJoinClick = () => {
+      const {room, router} = this.props
+      router.push({
+        pathname: `/rooms/${room.id}`,
+        state: {isJoining: true}
+      })
+    }
+  }
+
+  render () {
+    const {room} = this.props
+
+    return <Card key={room.id} style={styles.front} className='roomCard'>
+      <div style={styles.cardContainer}>
+        <div className='cardMod' style={styles.modContainer}>
+          <div style={styles.modIcon}>
+            <NametagIcon
+              image={room.mod.image}
+              name={room.mod.name}
+              diameter={80} />
+          </div>
+          <div style={styles.modName}>{room.mod.name}</div>
+          <Badges badges={room.mod.badges} />
+        </div>
+        <div style={styles.roomInfo}>
+          <div style={styles.title}>{room.title}</div>
+          <div style={styles.bio}>"{room.mod.bio}"</div>
+        </div>
+        <div style={styles.joinContainer}>
+          <RaisedButton
+            primary
+            id='JoinButton'
+            label={'Join'}
+            onClick={this.onJoinClick} />
+        </div>
       </div>
-      <div style={styles.modName}>{room.mod.name}</div>
-      <Badges badges={room.mod.badges} />
-    </div>
-    <div style={styles.roomInfo}>
-      <div style={styles.title}>{room.title}</div>
-      <div style={styles.bio}>"{room.mod.bio}"</div>
-    </div>
-    <div style={styles.joinContainer}>
-      <RaisedButton
-        primary
-        id='JoinButton'
-        label={'Join'}
-        onClick={() => onJoinClick(room.id)} />
-    </div>
-  </div>
-</Card>
+    </Card>
+  }
+}
 
 const {string, shape, arrayOf, object} = PropTypes
 
@@ -50,7 +65,7 @@ RoomCard.proptypes = {
   }).isRequired
 }
 
-export default RoomCard
+export default withRouter(RoomCard)
 
 const styles = {
   cardContainer: {
