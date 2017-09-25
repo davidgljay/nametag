@@ -74,7 +74,7 @@ class RoomCards extends Component {
             rooms &&
             rooms.length > 0 &&
             rooms
-            .filter(room => !nametagHash[room.id])
+            // .filter(room => !nametagHash[room.id])
             .map(room =>
               <RoomCard
                 key={room.id}
@@ -118,14 +118,15 @@ export default RoomCards
 const styles = {
   background: {
     background: '#fbfbfb',
-    paddingTop: 30
+    paddingTop: 30,
+    minHeight: '100vh'
   },
   roomCards: {
     paddingBottom: 50,
     paddingTop: 20,
-    minHeight: '100vh',
-    display: 'flex',
-    justifyContent: 'flex-start',
-    flexWrap: 'wrap'
+    maxWidth: 800,
+    marginLeft: 'auto',
+    marginRight: 'auto'
+
   }
 }

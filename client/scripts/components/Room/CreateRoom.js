@@ -17,7 +17,6 @@ class CreateRoom extends Component {
 
     this.state = {
       room: {
-        title: '',
         templates: [],
         welcome: '',
         public: true

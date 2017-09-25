@@ -67,12 +67,6 @@ type Room {
   # The title of the room
   title: String!
 
-  # The description of the room
-  description: String!
-
-  # The url of the room's image
-  image: String!
-
   # The norms of the room
   norms: [String!]
 

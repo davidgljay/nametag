@@ -4,8 +4,6 @@ query roomsQuery($query: String, $granter: String) {
   rooms(query: $query, granter: $granter) {
     id
     title
-    description
-    image
     norms
     createdAt
     nametagCount
@@ -44,7 +42,6 @@ query roomsQuery($query: String, $granter: String) {
      room {
        id
        title
-       image
        latestMessage
      }
    }

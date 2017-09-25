@@ -4,7 +4,6 @@ query roomQuery($id: ID!){
   room(id:$id) {
     id
     title
-    image
     description
     norms
     nametagCount
@@ -61,7 +60,6 @@ query roomQuery($id: ID!){
       room {
         id
         title
-        image
         latestMessage
       }
     }

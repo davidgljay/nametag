@@ -80,8 +80,7 @@ Notifications.propTypes = {
   nametags: arrayOf(shape({
     room: shape({
       id: string.isRequired,
-      title: string.isRequired,
-      image: string.isRequired
+      title: string.isRequired
     })
   })).isRequired,
   latestMessageUpdatedSubscription: func.isRequired,
