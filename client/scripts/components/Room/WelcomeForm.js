@@ -13,8 +13,8 @@ class WelcomeForm extends Component {
     }
 
     this.onPost = (post) => {
-      const {updateNametag, onWelcomeMsgSent, myNametagId} = this.props
-      updateNametag(myNametagId, {bio: post})
+      const {updateNametag, onWelcomeMsgSent, myNametag} = this.props
+      updateNametag(myNametag.id, {bio: post})
       onWelcomeMsgSent()
     }
 
