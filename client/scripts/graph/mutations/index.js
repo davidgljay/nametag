@@ -32,17 +32,6 @@ export const createNametag = graphql(CREATE_NAMETAG, {
   })
 })
 
-export const updateNametag = graphql(UPDATE_NAMETAG, {
-  props: ({ownProps, mutate}) => ({
-    updateNametag: (nametagId, nametagUpdate) => mutate({
-      variables: {
-        nametagId,
-        nametagUpdate
-      }
-    })
-  })
-})
-
 export const createRoom = graphql(CREATE_ROOM, {
   props: ({ownProps, mutate}) => ({
     createRoom: (room) => mutate({
@@ -197,6 +186,40 @@ export const updateBadgeRequestStatus = graphql(UPDATE_BADGE_REQUEST_STATUS, {
             granter: {
               ...oldData.granter,
               badgeRequests: oldData.granter.badgeRequests.filter(br => br.id !== badgeRequest)
+            }
+          }
+        }
+      }
+    })
+  })
+})
+
+export const updateNametag = graphql(UPDATE_NAMETAG, {
+  props: ({ownProps, mutate}) => ({
+    updateNametag: (nametagId, nametagUpdate) => mutate({
+      variables: {
+        nametagId,
+        nametagUpdate
+      },
+      optimisticResponse: {
+        updateNametag: {
+          errors: null
+        }
+      },
+      updateQueries: {
+        roomQuery: (oldData, {mutationResult: {data: {updateNametag: {errors}}}}) => {
+          if (errors) {
+            errorLog('Error updating nametag')(errors)
+            return oldData
+          }
+
+          return {
+            ...oldData,
+            room: {
+              ...oldData.room,
+              nametags: oldData.room.nametags
+                .map(nametag => nametag.Id === nametagId
+                  ? {...nametag, ...nametagUpdate} : nametag)
             }
           }
         }
