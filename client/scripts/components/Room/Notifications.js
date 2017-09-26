@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import {List, ListItem} from 'material-ui/List'
 import Badge from 'material-ui/Badge'
 import constants from '../../constants'
+import NametagIcon from '../Nametag/NametagIcon'
 
 class Notifications extends Component {
   constructor (props) {
@@ -45,14 +46,12 @@ class Notifications extends Component {
               style={styles.badgeStyle}
               badgeStyle={styles.innerBadgeStyle} />
           }
-
           <div>
-            <img
-              src={room.image}
-              style={
-                homepage ? {...styles.roomImage, ...styles.homepageRoomImage}
-                : styles.roomImage
-              } />
+            <NametagIcon
+              name={room.mod.name}
+              image={room.mod.image}
+              diameter={40}
+              marginRight={10} />
           </div>
           <div className='roomTitle'>{room.title}</div>
         </a>

@@ -60,6 +60,11 @@ query roomQuery($id: ID!){
         id
         title
         latestMessage
+        mod {
+          id
+          image
+          name
+        }
       }
     }
     badges {

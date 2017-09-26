@@ -43,6 +43,11 @@ query roomsQuery($query: String, $granter: String) {
        id
        title
        latestMessage
+       mod {
+        id
+        image
+        name
+       }
      }
    }
  }
