@@ -32,8 +32,9 @@ class StartRoomForm extends Component {
   }
 
   render () {
+    const {loggedIn} = this.props
     const {title, error} = this.state
-    return <div>
+    return <div style={loggedIn ? styles.loggedInContainer : {}}>
       <div style={styles.inputContainer}>
         <input
           type='text'
@@ -42,12 +43,12 @@ class StartRoomForm extends Component {
           value={title}
           placeholder='What would you like to talk about?'
           onChange={this.onTitleChange} />
+        <div style={styles.error}>{error}</div>
       </div>
       <div style={styles.buttonContainer}>
-        <div style={styles.error}>{error}</div>
         <RaisedButton
           primary
-          label='Try It Out'
+          label={loggedIn ? 'Start Conversation' : 'Try It Out'}
           onClick={this.startRoom}
           />
       </div>
@@ -66,16 +67,27 @@ StartRoomForm.propTypes = {
 export default withRouter(StartRoomForm)
 
 const styles = {
+  loggedInContainer: {
+    display: 'flex',
+    maxWidth: 800,
+    justifyContent: 'center',
+    marginLeft: 'auto',
+    marginRight: 'auto'
+  },
   buttonContainer: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: 15
   },
   inputContainer: {
     maxWidth: 800,
+    flex: 1,
     marginLeft: 'auto',
     marginRight: 'auto',
     display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'stretch',
     padding: 10
   },
   input: {

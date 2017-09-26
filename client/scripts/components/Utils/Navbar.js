@@ -99,10 +99,6 @@ class Navbar extends Component {
           }
           <FlatButton
             style={styles.button}
-            id='createRoomButton'
-            onClick={onCreateRoomClick} label='CREATE ROOM' />
-          <FlatButton
-            style={styles.button}
             id='logoutButton'
             onClick={onLogoutClick} label='LOG OUT' />
         </div>

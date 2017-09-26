@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import RoomCard from './RoomCard'
 import Navbar from '../Utils/Navbar'
 import LoginDialog from '../User/LoginDialog'
+import JoinedRoomCard from './JoinedRoomCard'
 import StartRoomForm from './StartRoomForm'
 import {track, identify} from '../../utils/analytics'
 import {white} from '../../../styles/colors'
@@ -59,31 +60,58 @@ class RoomCards extends Component {
         me={me}
         toggleLogin={this.toggleLogin} />
       <div style={styles.background}>
-        <div style={styles.header}>
-          <div style={styles.headerText}>
-            Online conversation that feels like an intimate dinner party.
-          </div>
-        </div>
-        <StartRoomForm />
-        <div style={styles.roomCards}>
+        <div style={styles.container}>
+          {
+            !me || me.nametags.length === 0 &&
+            <div style={styles.header}>
+              <div style={styles.headerText}>
+                Online conversation that feels like an intimate dinner party.
+              </div>
+            </div>
+          }
+          {
+            !loading && <StartRoomForm loggedIn={!!me && me.nametags.length > 0} />
+          }
           {
             !loading &&
-            rooms &&
-            rooms.length > 0 &&
-            rooms
-            // .filter(room => !nametagHash[room.id])
-            .map(room =>
-              <RoomCard
-                key={room.id}
-                room={room}
-                me={me} />
-            )
+            me && me.nametags.length > 0 &&
+            <div style={styles.joinedRooms}>
+              <h3>Your Conversations</h3>
+              <div style={styles.joinedRoomContainer}>
+                {
+                  me.nametags
+                  .filter(nametag => !!nametag.room)
+                  .map(nametag => {
+                    console.log(nametag.room)
+                    return <JoinedRoomCard
+                      key={nametag.id}
+                      room={nametag.room}
+                      latestVisit={nametag.latestVisit} />
+                  })
+                }
+              </div>
+            </div>
           }
+          <div style={styles.roomCards}>
+            {
+              !loading &&
+              rooms &&
+              rooms.length > 0 &&
+              rooms
+              .filter(room => !nametagHash[room.id])
+              .map(room =>
+                <RoomCard
+                  key={room.id}
+                  room={room}
+                  me={me} />
+              )
+            }
+          </div>
+          <LoginDialog
+            showLogin={this.state.showLogin}
+            toggleLogin={this.toggleLogin}
+            message='Log In or Register' />
         </div>
-        <LoginDialog
-          showLogin={this.state.showLogin}
-          toggleLogin={this.toggleLogin}
-          message='Log In or Register' />
       </div>
     </div>
   }
@@ -98,7 +126,13 @@ RoomCards.propTypes = {
       nametags: arrayOf(shape({
         id: string.isRequired,
         room: shape({
-          id: string
+          id: string.isRequired,
+          title: string.isRequired,
+          mod: shape({
+            id: string.isRequired,
+            image: string,
+            name: string.isRequired
+          })
         })
       })).isRequired
     }),
@@ -117,12 +151,19 @@ const styles = {
     background: '#fbfbfb',
     minHeight: '100vh'
   },
-  roomCards: {
-    paddingBottom: 50,
-    paddingTop: 50,
+  container: {
     maxWidth: 800,
     marginLeft: 'auto',
     marginRight: 'auto'
+  },
+  joinedRoomContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center'
+  },
+  roomCards: {
+    paddingBottom: 50,
+    paddingTop: 50
   },
   header: {
     width: '100%',

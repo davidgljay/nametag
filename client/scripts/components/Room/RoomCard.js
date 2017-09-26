@@ -22,7 +22,7 @@ class RoomCard extends Component {
   render () {
     const {room} = this.props
 
-    return <Card key={room.id} style={styles.front} className='roomCard'>
+    return <Card key={room.id} className='roomCard'>
       <div style={styles.cardContainer}>
         <div className='cardMod' style={styles.modContainer}>
           <div style={styles.modIcon}>
@@ -36,7 +36,7 @@ class RoomCard extends Component {
         </div>
         <div style={styles.roomInfo}>
           <div style={styles.title}>{room.title}</div>
-          <div style={styles.bio}>"{room.mod.bio}"</div>
+          <div style={styles.bio}>{room.mod.bio}</div>
         </div>
         <div style={styles.joinContainer}>
           <RaisedButton
