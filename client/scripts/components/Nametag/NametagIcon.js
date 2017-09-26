@@ -1,6 +1,18 @@
 import React, {PropTypes} from 'react'
 import {primary, white} from '../../../styles/colors'
 
+const colorFromString = (string) => {
+  let hash = 0
+  for (var i = 0; i < string.length; i++) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash)
+  }
+  var c = (hash & 0x00FFFFFF)
+     .toString(16)
+     .toUpperCase()
+
+  return '00000'.substring(0, 6 - c.length) + c
+}
+
 const NametagIcon = ({image, name, diameter, marginRight, style = {}}) => {
   const imageStyle = {
     width: diameter,
@@ -13,8 +25,10 @@ const NametagIcon = ({image, name, diameter, marginRight, style = {}}) => {
     ...styles.defaultImage,
     lineHeight: `${diameter}px`,
     fontSize: diameter / 2,
+    backgroundColor: `#${colorFromString(name)}`,
     ...style
   }
+
   return <div style={{marginRight}}>
     {
       image
