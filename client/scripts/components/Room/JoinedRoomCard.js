@@ -1,10 +1,16 @@
 import React, {PropTypes} from 'react'
 import NametagIcon from '../Nametag/NametagIcon'
 import {Card} from 'material-ui/Card'
+import {browserHistory} from 'react-router'
 import {primary} from '../../../styles/colors'
+import FontIcon from 'material-ui/FontIcon'
 
 const JoinedRoomCard = ({room}) =>
-  <Card key={room.id} className='JoinedRoomCard' style={styles.cardContainer}>
+  <Card
+    key={room.id}
+    className='JoinedRoomCard'
+    style={styles.cardContainer}
+    onClick={() => browserHistory.push(`/rooms/${room.id}`)}>
     <div className='cardMod' style={styles.modContainer}>
       <div style={styles.modIcon}>
         <NametagIcon
@@ -13,18 +19,28 @@ const JoinedRoomCard = ({room}) =>
           diameter={80} />
       </div>
       <div style={styles.newCounts}>
-        <div style={styles.newCount}>
-          {
-            room.newMessageCount > 0 &&
-            `+${room.newMessageCount} M`
-          }
-        </div>
-        <div style={styles.newCount}>
-          {
-            room.newNametagCount > 0 &&
-            `+${room.newNametagCount} P`
-          }
-        </div>
+        {
+          room.newMessageCount > 0 &&
+          <div style={styles.newCountContainer}>
+            <div style={styles.newCount}>{room.newMessageCount}</div>
+            <FontIcon
+              className='material-icons'
+              style={styles.newCount}>
+                  chat_bubble
+            </FontIcon>
+          </div>
+        }
+        {
+          room.newNametagCount > 0 &&
+          <div style={styles.newCountContainer}>
+            <div style={styles.newCount}>{room.newNametagCount}</div>
+            <FontIcon
+              className='material-icons'
+              style={styles.newCount}>
+                  person
+            </FontIcon>
+          </div>
+        }
       </div>
     </div>
     <div style={styles.title}>{room.title}</div>
@@ -51,11 +67,12 @@ const styles = {
     flexDirection: 'column',
     textAlign: 'left',
     margin: '40px 15px 20px 15px',
-    width: 350
+    width: 350,
+    cursor: 'pointer'
   },
   modContainer: {
     display: 'flex',
-    margin: '0px 20px 0px 20px'
+    margin: '0px 5px 0px 20px'
   },
   modIcon: {
     position: 'relative',
@@ -66,11 +83,17 @@ const styles = {
     display: 'flex',
     flex: 1,
     justifyContent: 'flex-end',
-    color: primary,
     marginTop: 5
   },
   newCount: {
-    margin: 5
+    margin: 1,
+    color: primary,
+    lineHeight: '18px',
+    fontSize: '16px'
+  },
+  newCountContainer: {
+    display: 'flex',
+    margin: '5px 3px'
   },
   title: {
     fontSize: 24,
