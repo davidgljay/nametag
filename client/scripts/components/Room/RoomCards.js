@@ -81,13 +81,12 @@ class RoomCards extends Component {
                 {
                   me.nametags
                   .filter(nametag => !!nametag.room)
-                  .map(nametag => {
-                    console.log(nametag.room)
-                    return <JoinedRoomCard
-                      key={nametag.id}
-                      room={nametag.room}
-                      latestVisit={nametag.latestVisit} />
-                  })
+                  .sort((a, b) => new Date(b.latestVisit).getTime() - new Date(a.latestVisit).getTime())
+                  .sort((a, b) => b.room.newMessageCount - a.room.newMessageCount)
+                  .map(nametag => <JoinedRoomCard
+                    key={nametag.id}
+                    room={nametag.room}
+                    latestVisit={nametag.latestVisit} />)
                 }
               </div>
             </div>
