@@ -20,7 +20,7 @@ class RoomCard extends Component {
   }
 
   render () {
-    const {room} = this.props
+    const {room, disableJoin} = this.props
 
     return <Card key={room.id} className='roomCard'>
       <div style={styles.cardContainer}>
@@ -43,14 +43,14 @@ class RoomCard extends Component {
             primary
             id='JoinButton'
             label='JOIN'
-            onClick={this.onJoinClick} />
+            onClick={disableJoin ? () => {} : this.onJoinClick} />
         </div>
       </div>
     </Card>
   }
 }
 
-const {string, shape, arrayOf, object} = PropTypes
+const {string, shape, arrayOf, object, bool} = PropTypes
 
 RoomCard.proptypes = {
   room: shape({
@@ -62,7 +62,8 @@ RoomCard.proptypes = {
       image: string,
       badges: arrayOf(object)
     }).isRequired
-  }).isRequired
+  }).isRequired,
+  disableJoin: bool
 }
 
 export default withRouter(RoomCard)

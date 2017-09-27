@@ -82,7 +82,7 @@ const getForm = ({
       track('ROOM_PRIVACY')
       return <div style={styles.container}>
         <div style={styles.preview}>
-          <RoomCard room={{...room, mod: nametagEdits.new}} />
+          <RoomCard room={{...room, mod: nametagEdits.new}} disableJoin />
         </div>
         <h2>You're done!</h2>
         <div style={styles.privacyContainer}>
