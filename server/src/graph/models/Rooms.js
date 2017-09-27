@@ -115,14 +115,17 @@ const getQuery = ({conn, user, models: {Users}}, query) =>
  **/
 
 const create = ({conn, models: {Nametags, Users}}, rm) => {
-  const room = Object.assign({}, rm, {createdAt: new Date(), modOnlyDMs: false})
-  return roomsTable.insert(room).run(conn)
-  .then((res) => {
+  const room = Object.assign({}, rm, {createdAt: new Date(), modOnlyDMs: false, mod: null})
+  return Promise.all([
+    roomsTable.insert(room).run(conn),
+    rm.mod
+  ])
+  .then(([res, mod]) => {
     if (res.errors > 0) {
       return new errors.APIError('Error creating room')
     }
     const id = res.generated_keys[0]
-    const nametag = Object.assign({}, room.mod, {room: id})
+    const nametag = Object.assign({}, mod, {room: id})
     return Promise.all([
       Nametags.create(nametag),
       id,
