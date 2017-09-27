@@ -32,11 +32,11 @@ class RoomCard extends Component {
               diameter={80} />
           </div>
           <div style={styles.modName}>{room.mod.name}</div>
-          <Badges badges={room.mod.badges} />
         </div>
         <div style={styles.roomInfo}>
           <div style={styles.title}>{room.title}</div>
           <div style={styles.bio}>{room.mod.bio}</div>
+          <Badges badges={room.mod.badges} style={styles.badges} />
         </div>
         <div style={styles.joinContainer}>
           <RaisedButton
@@ -91,7 +91,7 @@ const styles = {
     marginLeft: 10
   },
   joinContainer: {
-    margin: 30
+    margin: '30px 30px 0px 30px'
   },
   roomInfo: {
     flex: 1
@@ -104,5 +104,13 @@ const styles = {
   title: {
     fontSize: 24,
     marginTop: 20
+  },
+  badges: {
+    justifyContent: 'flex-start',
+    position: 'relative',
+    right: 110,
+    width: 'calc(100% + 110px)',
+    paddingBottom: 5,
+    marginTop: 5
   }
 }

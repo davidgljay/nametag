@@ -1,8 +1,8 @@
 import React, {PropTypes} from 'react'
 import Badge from './Badge'
 
-const Badges = ({badges = [], draggable, removeFromSource, requiredBadges = []}) =>
-  <div id='badges' style={styles.badgesContainer}>
+const Badges = ({badges = [], draggable, removeFromSource, requiredBadges = [], style = {}}) =>
+  <div id='badges' style={{...styles.badgesContainer, ...style}}>
     {
       badges.map((badge) => {
         return <Badge
@@ -14,14 +14,15 @@ const Badges = ({badges = [], draggable, removeFromSource, requiredBadges = []})
     }
   </div>
 
-const {arrayOf, string, shape, bool, func} = PropTypes
+const {arrayOf, string, shape, bool, func, object} = PropTypes
 Badges.propTypes = {
   badges: arrayOf(shape({
     id: string.isRequired
   })),
   requiredBadges: arrayOf(string),
   draggable: bool,
-  removeItem: func
+  removeItem: func,
+  style: object
 }
 
 export default Badges
