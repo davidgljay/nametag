@@ -5,7 +5,7 @@ import LoginDialog from '../User/LoginDialog'
 import JoinedRoomCard from './JoinedRoomCard'
 import StartRoomForm from './StartRoomForm'
 import {track, identify} from '../../utils/analytics'
-import {white} from '../../../styles/colors'
+import {white, grey} from '../../../styles/colors'
 
 class RoomCards extends Component {
 
@@ -13,7 +13,8 @@ class RoomCards extends Component {
     super(props)
 
     this.state = {
-      showLogin: false
+      showLogin: false,
+      showAllJoined: false
     }
 
     this.toggleLogin = () => {
@@ -41,10 +42,9 @@ class RoomCards extends Component {
 
   render () {
     const {
-      data: {me, rooms, loading},
-      latestMessageUpdatedSubscription,
-      search
+      data: {me, rooms, loading}
     } = this.props
+    const {showAllJoined} = this.state
     let nametagHash = {}
     if (me) {
       nametagHash = me.nametags.reduce((hash, nametag) => {
@@ -60,15 +60,15 @@ class RoomCards extends Component {
         me={me}
         toggleLogin={this.toggleLogin} />
       <div style={styles.background}>
-        <div style={styles.container}>
-          {
-            !me || me.nametags.length === 0 &&
-            <div style={styles.header}>
-              <div style={styles.headerText}>
-                Online conversation that feels like an intimate dinner party.
-              </div>
+        {
+          (!me || me.nametags.length === 0) &&
+          <div style={styles.header}>
+            <div style={styles.headerText}>
+              Online conversation that feels like an intimate dinner party.
             </div>
-          }
+          </div>
+        }
+        <div style={styles.container}>
           {
             !loading && <StartRoomForm loggedIn={!!me && me.nametags.length > 0} />
           }
@@ -83,12 +83,21 @@ class RoomCards extends Component {
                   .filter(nametag => !!nametag.room)
                   .sort((a, b) => new Date(b.latestVisit).getTime() - new Date(a.latestVisit).getTime())
                   .sort((a, b) => b.room.newMessageCount - a.room.newMessageCount)
+                  .slice(0, showAllJoined ? me.nametags.length : 4)
                   .map(nametag => <JoinedRoomCard
                     key={nametag.id}
                     room={nametag.room}
                     latestVisit={nametag.latestVisit} />)
                 }
               </div>
+              {
+                !showAllJoined &&
+                <div
+                  style={styles.showMore}
+                  onClick={() => this.setState({showAllJoined: true})}>
+                  Show More
+                </div>
+              }
             </div>
           }
           <div style={styles.roomCards}>
@@ -177,5 +186,12 @@ const styles = {
     fontSize: 32,
     padding: 10,
     paddingTop: window.innerWidth * 494 / 1023 - 80
+  },
+  showMore: {
+    textAlign: 'center',
+    fontSize: 14,
+    fontStyle: 'italic',
+    color: grey,
+    cursor: 'pointer'
   }
 }
