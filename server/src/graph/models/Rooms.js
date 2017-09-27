@@ -12,7 +12,7 @@ const roomsTable = db.table('rooms')
  * Returns a particular room.
  *
  * @param {Object} context     graph context
- * @param {Array<String>} id   the id of the room to be retrieved
+ * @param {String} id   the id of the room to be retrieved
  *
  */
 

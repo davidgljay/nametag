@@ -14,6 +14,12 @@ const Room = {
   nametagCount: ({id}, _, {models: {Nametags}}) => {
     return Nametags.getNametagCount(id)
   },
+  newNametagCount: ({id}, _, {user, models: {Nametags}}) => {
+    return user ? Nametags.newNametagCount(id) : 0
+  },
+  newMessageCount: ({id}, _, {user, models: {Messages}}) => {
+    return user ? Messages.newMessageCount(id) : 0
+  },
   mod: ({mod}, _, {models: {Nametags}}) => Nametags.get(mod),
   templates: ({templates}, _, {models: {Templates}}) => Templates.getAll(templates)
 }

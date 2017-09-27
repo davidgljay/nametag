@@ -7,6 +7,21 @@ const notification = require('../../notifications')
 const nametagsTable = db.table('nametags')
 
 /**
+ * Returns the number of new nametags since a particular date.
+ *
+ * @param {Object} context     graph context
+ * @param {String} roomId   the id of the room to be checked
+ * @param {Date} date the date to be checked against
+ *
+ */
+
+const newNametagCount = ({conn, user}, roomId, date) =>
+  nametagsTable.getAll(roomId, {index: 'room'})
+  .filter(msg => msg('createdAt').gt(nametagsTable.get(user.nametags[roomId])('latestVisit')))
+  .count()
+  .run(conn)
+
+/**
  * Returns the nametags from a particular room.
  *
  * @param {Object} context     graph context
@@ -211,6 +226,7 @@ module.exports = (context) => ({
   Nametags: {
     get: (id) => get(context, id),
     getAll: (ids) => getAll(context, ids),
+    newNametagCount: (room, date) => newNametagCount(context, room, date),
     getRoomNametags: (room) => getRoomNametags(context, room),
     getByBadge: (badgeId) => getByBadge(context, badgeId),
     create: (nametag, createBadgeRequest) => create(context, nametag, createBadgeRequest),

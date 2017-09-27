@@ -88,6 +88,12 @@ type Room {
   # The latest message in this room
   latestMessage: Date
 
+  # Count of new nametags
+  newNametagCount: Int!
+
+  # Count of new messages
+  newMessageCount: Int!
+
   # Templates required to view and enter the room
   templates: [Template]
 
