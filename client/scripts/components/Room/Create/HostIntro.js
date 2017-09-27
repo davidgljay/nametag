@@ -30,7 +30,7 @@ const HostIntro = ({
           Customize how you will appear in this room. You must provide an image.
       </div>
       <div style={styles.error}>
-        {error}
+        {error && error.imageError}
       </div>
       <div style={styles.editNametagContainer}>
         <div>
