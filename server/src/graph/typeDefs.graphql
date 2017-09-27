@@ -695,6 +695,9 @@ type RootMutation {
   # Unsubscribes from a room
   unsubscribe(userToken: String!, roomId: String!): BasicResponse
 
+  # Approves a public room
+  approveRoom(roomId: ID!): BasicResponse
+
 }
 
 ################################################################################

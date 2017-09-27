@@ -20,6 +20,7 @@ import PASSWORD_RESET_REQ from './passwordResetRequest.graphql'
 import EMAIL_CONF_REQ from './emailConfirmationRequest.graphql'
 import EMAIL_CONF from './emailConfirmation.graphql'
 import ADD_NOTE from './addNote.graphql'
+import APPROVE_ROOM from './approveRoom.graphql'
 import errorLog from '../../utils/errorLog'
 
 export const createNametag = graphql(CREATE_NAMETAG, {
@@ -163,6 +164,16 @@ export const emailConfirmation = graphql(EMAIL_CONF, {
     emailConfirmation: (token) => mutate({
       variables: {
         token
+      }
+    })
+  })
+})
+
+export const approveRoom = graphql(APPROVE_ROOM, {
+  props: ({ownProps, mutate}) => ({
+    approveRoom: (roomId) => mutate({
+      variables: {
+        roomId
       }
     })
   })

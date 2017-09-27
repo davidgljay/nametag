@@ -4,7 +4,8 @@ const {
   ErrNotLoggedIn,
   ErrNotAuthorized,
   ErrNotMod,
-  ErrNotYourNametag
+  ErrNotYourNametag,
+  ErrNotNametagAdmin
 } = require('../../errors')
 const pubsub = require('../subscriptions/pubsub')
 
@@ -30,30 +31,54 @@ const catchErrors = (err) => {
 }
 
 const wrap = (mutation, requires, key = 'result') => (obj, args, context) => {
-  if (requires === 'LOGIN' && !context.user) {
-    return Promise.reject(ErrNotLoggedIn)
-  }
-  if (requires === 'ROOM_MOD') {
-    return context.models.Rooms.get(args.roomId)
+  let promise
+  switch (requires) {
+
+  case 'LOGIN':
+    promise = !context.user ?
+      Promise.reject(ErrNotLoggedIn)
+      : mutation(obj, args, context)
+    break
+  case 'ROOM_MOD':
+    promise = context.models.Rooms.get(args.roomId)
       .then(room => room.mod === context.user.nametags[room.id]
         ? mutation(obj, args, context)
-          .catch(catchErrors)
         : Promise.reject(ErrNotMod)
       )
-  }
-  if (requires === 'MY_NAMETAG') {
+    break
+
+  case 'MY_NAMETAG':
     if (!context.user) {
-      return Promise.reject(ErrNotLoggedIn)
+      promise = Promise.reject(ErrNotLoggedIn)
+    } else {
+      const myNametagIds = Object.keys(context.user.nametags)
+        .map(roomId => context.user.nametags[roomId])
+      promise = myNametagIds.indexOf(args.nametagId) > -1
+      ? mutation(obj, args, context)
+      : Promise.reject(ErrNotYourNametag)
     }
-    const myNametagIds = Object.keys(context.user.nametags)
-      .map(roomId => context.user.nametags[roomId])
-    return myNametagIds.indexOf(args.nametagId) > -1
-    ? mutation(obj, args, context)
-      .catch(catchErrors)
-    : Promise.reject(ErrNotYourNametag)
+    break
+  case 'NAMETAG_ADMIN':
+    const {user, models: {Granters, Templates}} = context
+    if (!user) {
+      promise = Promise.reject(ErrNotLoggedIn)
+    } else {
+      promise = Granters.getByUrlCode('nametag')
+        .then(({id}) => {
+          return Templates.getGranterTemplates(id)
+        })
+        .then((templates) => {
+          const adminTemplate = templates.find(template => template.name === 'Admin')
+          return user.badges[adminTemplate.id]
+          ? mutation(obj, args, context)
+          : Promise.reject(ErrNotNametagAdmin)
+        })
+    }
+    break
+  default:
+    promise = mutation(obj, args, context)
   }
-  return mutation(obj, args, context)
-    .catch(catchErrors)
+  return promise.catch(catchErrors)
 }
 
 const RootMutation = {
@@ -206,6 +231,12 @@ const RootMutation = {
     requires: null,
     resolve: (obj, {userToken, roomId}, {models: {Users}}) =>
       Users.unsubscribe(userToken, roomId)
+  },
+  approveRoom: {
+    requires: 'NAMETAG_ADMIN',
+    resolve: (obj, {roomId}, {models: {Rooms}}) =>
+      Rooms.approveRoom(roomId)
+      .then(wrapResponse('approveRoom'))
   }
 }
 

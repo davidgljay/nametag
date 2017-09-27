@@ -115,7 +115,10 @@ const getQuery = ({conn, user, models: {Users}}, query) =>
  **/
 
 const create = ({conn, models: {Nametags, Users}}, rm) => {
-  const room = Object.assign({}, rm, {createdAt: new Date(), modOnlyDMs: false, mod: null})
+  const room = Object.assign(
+    {},
+    rm,
+    {createdAt: new Date(), modOnlyDMs: false, mod: null, public: rm.public ? 'PENDING' : false})
   return Promise.all([
     roomsTable.insert(room).run(conn),
     rm.mod
@@ -226,6 +229,17 @@ const notifyOfNewMessage = ({conn, models: {Nametags, Users}}, roomId) =>
   })
   .catch(errors.errorLog('notifyOfNewMessage'))
 
+/**
+ * Approves a room for public display
+ *
+ * @param {Object} context     graph context
+ * @param {Object} roomId   the room to be updated
+ *
+ **/
+
+ const approveRoom = ({conn}, roomId) =>
+  roomsTable.get(roomId).update({public: 'APPROVED'}).run(conn)
+
 module.exports = (context) => ({
   Rooms: {
     get: (id) => get(context, id),
@@ -236,6 +250,7 @@ module.exports = (context) => ({
     setModOnlyDMs: (roomId, modOnlyDMs) => setModOnlyDMs(context, roomId, modOnlyDMs),
     getGranterRooms: (granterCode) => getGranterRooms(context, granterCode),
     updateLatestMessage: (roomId) => updateLatestMessage(context, roomId),
-    notifyOfNewMessage: (roomId) => notifyOfNewMessage(context, roomId)
+    notifyOfNewMessage: (roomId) => notifyOfNewMessage(context, roomId),
+    approveRoom: (roomId) => approveRoom(context, roomId)
   }
 })
