@@ -9,10 +9,6 @@ import {mobile} from '../../../styles/sizes'
 import {track} from '../../utils/analytics'
 import NavDrawer from './NavDrawer'
 
-const onCreateRoomClick = () => {
-  window.location = '/rooms/create'
-}
-
 const onHomeClick = () => {
   window.location = '/rooms'
 }
@@ -166,7 +162,8 @@ const styles = {
   },
   title: {
     lineHeight: '46px',
-    marginLeft: 10
+    marginLeft: 10,
+    fontWeight: 300
   },
   tagline: {
     lineHeight: '5px',

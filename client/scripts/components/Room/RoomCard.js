@@ -85,6 +85,7 @@ const styles = {
   modName: {
     fontSize: 16,
     marginTop: 10,
+    fontWeight: 700,
     textAlign: 'center',
     wordWrap: 'break-word'
   },
@@ -104,7 +105,8 @@ const styles = {
   },
   title: {
     fontSize: 24,
-    marginTop: 20
+    marginTop: 20,
+    fontWeight: 300
   },
   badges: {
     justifyContent: 'flex-start',

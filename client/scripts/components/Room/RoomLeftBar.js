@@ -189,7 +189,6 @@ export default RoomLeftBar
 
 const styles = {
   leftNavHeader: {
-    fontWeight: 800,
     fontSize: 16,
     color: '#FFF',
     marginTop: 15,

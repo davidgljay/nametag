@@ -294,7 +294,7 @@ const styles = {
     marginLeft: 5
   },
   name: {
-    fontWeight: 'bold',
+    fontWeight: 700,
     fontSize: 14,
     marginBottom: 5,
     cursor: 'pointer'
@@ -307,7 +307,8 @@ const styles = {
     lineHeight: '22px'
   },
   text: {
-    fontSize: 16
+    fontSize: 16,
+    fontWeight: 300
   },
   defaultImage: {
     backgroundColor: primary,

@@ -128,6 +128,7 @@ const styles = {
   link: {
     color: 'inherit',
     textDecoration: 'none',
+    fontWeight: 300,
     display: 'flex',
     alignItems: 'center'
   },
@@ -149,7 +150,8 @@ const styles = {
     fontWeight: 'bold'
   },
   showMore: {
-    fontSize: 12,
+    fontSize: 11,
+    fontWeight: 300,
     cursor: 'pointer',
     fontStyle: 'italic',
     color: white,

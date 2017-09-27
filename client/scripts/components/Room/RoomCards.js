@@ -4,6 +4,8 @@ import Navbar from '../Utils/Navbar'
 import LoginDialog from '../User/LoginDialog'
 import JoinedRoomCard from './JoinedRoomCard'
 import StartRoomForm from './StartRoomForm'
+import radium from 'radium'
+import {mobile} from '../../../styles/sizes'
 import {track, identify} from '../../utils/analytics'
 import {white, grey} from '../../../styles/colors'
 
@@ -152,7 +154,7 @@ RoomCards.propTypes = {
   })
 }
 
-export default RoomCards
+export default radium(RoomCards)
 
 const styles = {
   background: {
@@ -183,9 +185,13 @@ const styles = {
   headerText: {
     color: white,
     textAlign: 'center',
-    fontSize: 32,
+    fontSize: 36,
+    fontWeight: 300,
     padding: 10,
-    paddingTop: window.innerWidth * 494 / 1023 - 80
+    paddingTop: window.innerWidth * 494 / 1023 - 90,
+    [mobile]: {
+      fontSize: 26
+    }
   },
   showMore: {
     textAlign: 'center',

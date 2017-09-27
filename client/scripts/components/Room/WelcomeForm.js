@@ -80,7 +80,8 @@ export default WelcomeForm
 
 const styles = {
   header: {
-    marginTop: 0
+    marginTop: 0,
+    fontWeight: 300
   },
   card: {
     width: 240,

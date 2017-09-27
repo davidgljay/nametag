@@ -99,6 +99,7 @@ const styles = {
     fontSize: 24,
     margin: '0px 20px',
     position: 'relative',
-    bottom: 20
+    bottom: 20,
+    fontWeight: 300
   }
 }

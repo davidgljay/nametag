@@ -114,8 +114,8 @@ export default Nametag
 
 const styles = {
   ismod: {
-    fontSize: 12,
-    fontStyle: 'italic',
+    fontSize: 10,
+    fontWeight: 700,
     margin: 3,
     cursor: 'default'
   },
@@ -131,7 +131,6 @@ const styles = {
   },
   bio: {
     fontSize: 12,
-    fontStyle: 'italic',
     marginTop: 4,
     textAlign: 'left'
   },

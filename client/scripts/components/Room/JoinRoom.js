@@ -44,7 +44,7 @@ class JoinRoom extends Component {
     return <div id='room' style={styles.container}>
       <Navbar me={me} empty />
       <div id='roomInfoContainer' style={styles.roomInfoContainer}>
-        <h2 style={styles.introText}>You've been invited to a conversation on Nametag.</h2>
+        <h3 style={styles.introText}>You've been invited to a conversation:</h3>
         <RoomCard room={room} />
       </div>
       <div style={styles.joinContainer}>
@@ -86,7 +86,8 @@ const styles = {
     marginTop: 40
   },
   introText: {
-    marginBottom: 60
+    marginBottom: 60,
+    fontWeight: 300
   },
   roomInfo: {
     display: 'flex',

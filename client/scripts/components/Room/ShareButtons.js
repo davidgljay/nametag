@@ -9,7 +9,7 @@ const fbLink = (roomId, title) => `https://www.facebook.com/dialog/share?app_id=
 const emailLink = (roomId, title) => `mailto:?subject=${encodeURI(title)}&body=${encodeURI('There\'s an interesting conversation going on, want to join?\n\n')}${getUrl(roomId)}`
 
 const ShareButtons = ({roomId, title}) => <div style={styles.container}>
-  <div style={{color: '#fff', verticalAlign: 'middle', flex: 1, fontWeight: 'bold'}}>Share</div>
+  <div style={styles.header}>Share</div>
   <div id='twitterShare' style={styles.share}>
     <a href={twitterLink(roomId, title)} target='_blank'><img style={styles.image} src='https://s3.amazonaws.com/nametag_images/white-twitter-30.png' /></a>
   </div>
@@ -31,6 +31,11 @@ ShareButtons.proptypes = {
 export default ShareButtons
 
 const styles = {
+  header: {
+    color: '#fff',
+    verticalAlign: 'middle',
+    flex: 1
+  },
   container: {
     display: 'flex',
     alignItems: 'center'

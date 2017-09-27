@@ -168,6 +168,7 @@ class Room extends Component {
         <AppBar
           id='roomTitle'
           title={room.title}
+          titleStyle={styles.title}
           style={styles.appBar}
           iconElementRight={backIcon}
           onRightIconButtonTouchTap={this.showRooms}
@@ -308,11 +309,11 @@ const styles = {
   },
   appBar: {
     position: 'fixed',
-    boxShadow: 'none'
+    boxShadow: 'none',
+    fontWeight: 300
   },
   title: {
-    marginTop: 10,
-    marginBottom: 5
+    fontWeight: 300
   },
   close: {
     float: 'right',
