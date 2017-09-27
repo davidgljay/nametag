@@ -74,9 +74,6 @@ class RoomLeftBar extends Component {
         <div
           style={styles.leftNavHeader}
           onClick={this.toggleLeftBarSection('norms')}>
-          {
-            this.state.toggles.norms ? '- ' : '+ '
-          }
           Norms
         </div>
         {
@@ -85,6 +82,11 @@ class RoomLeftBar extends Component {
             <Norms norms={room.norms} />
           </div>
         }
+        <div
+          style={styles.leftNavHeader}
+          onClick={this.toggleLeftBarSection('norms')}>
+          Rooms
+        </div>
         {
           notifCount > 0 &&
             <div
@@ -110,9 +112,6 @@ class RoomLeftBar extends Component {
             <div
               style={styles.leftNavHeader}
               onClick={this.toggleLeftBarSection('settings')}>
-              {
-                this.state.toggles.settings ? '- ' : '+ '
-              }
               Settings
             </div>
             {
@@ -130,9 +129,6 @@ class RoomLeftBar extends Component {
             <div
               style={styles.leftNavHeader}
               onClick={this.toggleLeftBarSection('nametags')}>
-              {
-                this.state.toggles.nametags ? '- ' : '+ '
-              }
               Nametags
             </div>
             {

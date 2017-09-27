@@ -1,18 +1,24 @@
 import React, {Component, PropTypes} from 'react'
 import {List, ListItem} from 'material-ui/List'
 import Badge from 'material-ui/Badge'
-import constants from '../../constants'
+import {white} from '../../../styles/colors'
 import NametagIcon from '../Nametag/NametagIcon'
 
 class Notifications extends Component {
   constructor (props) {
     super(props)
 
+    this.state = {
+      showMore: false
+    }
+
     this.visitedRooms = (nametags) => nametags.filter(
       nametag => nametag.room &&
-      new Date(nametag.room.latestMessage) > new Date(Date.now() - constants.ROOM_TIMEOUT) &&
       nametag.room.id !== this.props.roomId
     )
+    .sort((a, b) => new Date(b.latestVisit).getTime() - new Date(a.latestVisit).getTime())
+    .sort((a, b) => b.room.newMessageCount - a.room.newMessageCount)
+    .slice(0, this.state.showMore ? nametags.length : 2)
   }
 
   componentWillMount () {
@@ -21,9 +27,7 @@ class Notifications extends Component {
   }
 
   render () {
-    const {nametags, homepage} = this.props
-    const flexDisplay = window.innerWidth > 800 ? styles.flexDisplay
-      : {...styles.flexDisplay, ...styles.flexDisplayMobile}
+    const {nametags} = this.props
 
     const listItems = this.visitedRooms(nametags).map(nametag => {
       const room = nametag.room
@@ -34,9 +38,7 @@ class Notifications extends Component {
       const newMessages = room.latestMessage > nametag.latestVisit
       const notificationStyle = newMessages ? styles.notification
       : {...styles.notification, ...styles.noNewMessages}
-      const homepageNotif = homepage ? {...notificationStyle, ...styles.homepageNotif}
-      : notificationStyle
-      return <ListItem innerDivStyle={homepageNotif} key={room.id} className='roomNotif'>
+      return <ListItem innerDivStyle={notificationStyle} key={room.id} className='roomNotif'>
         <a href={`/rooms/${room.id}`} style={styles.link}>
           {
             mentions > 0 &&
@@ -58,21 +60,27 @@ class Notifications extends Component {
       </ListItem>
     })
 
-    return <div style={homepage ? styles.container : {}}>
+    return <div>
       {
         listItems.length > 0 &&
         <div>
-          {homepage && <div style={styles.activeRooms}>Your Active Rooms</div>}
-          <List style={homepage ? flexDisplay : {}}
+          <List
             children={listItems} />
         </div>
-
+      }
+      {
+        !this.state.showMore &&
+        <div
+          style={styles.showMore}
+          onClick={() => this.setState({showMore: true})}>
+          Show More
+        </div>
       }
     </div>
   }
 }
 
-const {string, arrayOf, shape, func, bool} = PropTypes
+const {string, arrayOf, shape, func} = PropTypes
 
 Notifications.propTypes = {
   roomId: string,
@@ -82,16 +90,12 @@ Notifications.propTypes = {
       title: string.isRequired
     })
   })).isRequired,
-  latestMessageUpdatedSubscription: func.isRequired,
-  homepage: bool
+  latestMessageUpdatedSubscription: func.isRequired
 }
 
 export default Notifications
 
 const styles = {
-  container: {
-    padding: '0px 30px 0px 30px'
-  },
   listStyle: {
     width: '100%'
   },
@@ -105,7 +109,7 @@ const styles = {
     alignItems: 'stretch'
   },
   noNewMessages: {
-    opacity: 0.8
+    color: 'rgb(210, 210, 210)'
   },
   notification: {
     margin: 5,
@@ -114,23 +118,12 @@ const styles = {
     borderRadius: 2,
     fontSize: 13
   },
-  homepageNotif: {
-    backgroundColor: '#FFF',
-    color: '#000',
-    fontSize: 18,
-    lineHeight: '22px'
-  },
   roomImage: {
     width: 30,
     height: 30,
     marginRight: 10,
     objectFit: 'cover',
     borderRadius: 15
-  },
-  homepageRoomImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20
   },
   link: {
     color: 'inherit',
@@ -154,5 +147,12 @@ const styles = {
   activeRooms: {
     fontSize: 14,
     fontWeight: 'bold'
+  },
+  showMore: {
+    fontSize: 12,
+    cursor: 'pointer',
+    fontStyle: 'italic',
+    color: white,
+    textAlign: 'center'
   }
 }

@@ -60,6 +60,7 @@ query roomQuery($id: ID!){
         id
         title
         latestMessage
+        newMessageCount
         mod {
           id
           image
