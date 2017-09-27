@@ -160,7 +160,6 @@ const styles = {
     color: grey,
     fontSize: 14,
     width: 450,
-    fontStyle: 'italic',
     marginTop: 20,
     marginBottom: 40
   },

@@ -3,7 +3,6 @@ import Norms from './Norms'
 import Navbar from '../Utils/Navbar'
 import RoomCard from './RoomCard'
 import radium from 'radium'
-import {grey} from '../../../styles/colors'
 import {mobile} from '../../../styles/sizes'
 import {track, setTimer} from '../../utils/analytics'
 

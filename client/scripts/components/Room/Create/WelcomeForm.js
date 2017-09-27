@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react'
 import TextField from 'material-ui/TextField'
+import {grey} from '../../../../styles/colors'
 
 const WelcomeForm = ({welcome, updateRoom, error}) =>
   <div style={styles.titleForm}>
@@ -37,5 +38,9 @@ const styles = {
   },
   textFieldInput: {
     width: '100%'
+  },
+  helpText: {
+    color: grey,
+    fontSize: 14
   }
 }

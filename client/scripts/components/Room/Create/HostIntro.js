@@ -79,8 +79,7 @@ const styles = {
   },
   helpText: {
     color: grey,
-    fontSize: 14,
-    fontStyle: 'italic'
+    fontSize: 14
   },
   nametagHelpText: {
     marginTop: 40,

@@ -136,15 +136,13 @@ const styles = {
   },
   helpText: {
     color: grey,
-    fontSize: 14,
-    fontStyle: 'italic'
+    fontSize: 14
   },
   norms: {
     textAlign: 'center',
     padding: 0,
     listStyle: 'none'
   },
-
   norm: {
     textAlign: 'left'
   },

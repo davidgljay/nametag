@@ -8,6 +8,14 @@ a {
   color: #12726a;
 }
 
+h1 {
+  font-weight: 300
+}
+
+h2 {
+  font-weight: 300
+}
+
 #emojiButton {
   display: none;
 }

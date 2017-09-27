@@ -47,6 +47,7 @@ class StartRoomForm extends Component {
       </div>
       <div style={styles.buttonContainer}>
         <RaisedButton
+          id='startConvoButton'
           primary
           label={loggedIn ? 'Start Conversation' : 'Try It Out'}
           onClick={this.startRoom}

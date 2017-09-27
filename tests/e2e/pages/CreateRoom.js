@@ -3,24 +3,15 @@ const commands = {
     return this
       .waitForElementVisible('body', 3000)
   },
-  fillTitle (title, description, welcome) {
-    return this
-      .waitForElementVisible('@roomPreview')
-      .getLocationInView('@descriptionField')
-      .setValue('@titleField', title)
-      .setValue('@descriptionField', description)
-      .setValue('@welcomeField', welcome)
-      .getLocationInView('@nextButton')
-      .click('@nextButton')
+  setTitle (title) {
+    return this.waitForElementVisible('@startConvo')
+    .setValue('@startConvo', title)
+    .click('@tryThis')
   },
-  chooseImage (imageSearch) {
+  setWelcome (welcome) {
     return this
-      .waitForElementVisible('@imageSearchInput')
-      .setValue('@imageSearchInput', imageSearch)
-      .click('@findImageButton')
-      .waitForElementVisible('.imageSearchResult')
-      .click('.imageSearchResult')
-      .waitForElementVisible('@roomImage')
+      .waitForElementVisible('@welcomeField')
+      .setValue('@welcomeField', welcome)
       .click('@nextButton')
   },
   makeModNametag (name, bio) {
@@ -37,11 +28,10 @@ const commands = {
       .getLocationInView('@nextButton')
       .click('@nextButton')
   },
-  createRoom ({title, description, imageSearch, norm, welcome}, {name, bio}) {
+  createRoom ({title, norm, welcome}, {name, bio}) {
     return this
-      .fillTitle(title, description, welcome)
-      .chooseImage(imageSearch)
-      .makeModNametag(name, bio)
+      .setTitle(title)
+      .setWelcome(welcome)
       .addNorms(norm)
       .waitForElementVisible('@publishButton')
       .click('@publishButton')
