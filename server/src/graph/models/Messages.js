@@ -27,7 +27,6 @@ const newMessageCount = ({conn, user}, roomId) =>
     .count()
     .run(conn)
 
-
 /**
  * Returns the messages from a particular room to display to a user. Also displays
  * direct messages to that user.

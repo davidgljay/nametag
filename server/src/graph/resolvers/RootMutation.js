@@ -34,36 +34,36 @@ const wrap = (mutation, requires, key = 'result') => (obj, args, context) => {
   let promise
   switch (requires) {
 
-  case 'LOGIN':
-    promise = !context.user ?
-      Promise.reject(ErrNotLoggedIn)
+    case 'LOGIN':
+      promise = !context.user
+      ? Promise.reject(ErrNotLoggedIn)
       : mutation(obj, args, context)
-    break
-  case 'ROOM_MOD':
-    promise = context.models.Rooms.get(args.roomId)
+      break
+    case 'ROOM_MOD':
+      promise = context.models.Rooms.get(args.roomId)
       .then(room => room.mod === context.user.nametags[room.id]
         ? mutation(obj, args, context)
         : Promise.reject(ErrNotMod)
       )
-    break
+      break
 
-  case 'MY_NAMETAG':
-    if (!context.user) {
-      promise = Promise.reject(ErrNotLoggedIn)
-    } else {
-      const myNametagIds = Object.keys(context.user.nametags)
+    case 'MY_NAMETAG':
+      if (!context.user) {
+        promise = Promise.reject(ErrNotLoggedIn)
+      } else {
+        const myNametagIds = Object.keys(context.user.nametags)
         .map(roomId => context.user.nametags[roomId])
-      promise = myNametagIds.indexOf(args.nametagId) > -1
+        promise = myNametagIds.indexOf(args.nametagId) > -1
       ? mutation(obj, args, context)
       : Promise.reject(ErrNotYourNametag)
-    }
-    break
-  case 'NAMETAG_ADMIN':
-    const {user, models: {Granters, Templates}} = context
-    if (!user) {
-      promise = Promise.reject(ErrNotLoggedIn)
-    } else {
-      promise = Granters.getByUrlCode('nametag')
+      }
+      break
+    case 'NAMETAG_ADMIN':
+      const {user, models: {Granters, Templates}} = context
+      if (!user) {
+        promise = Promise.reject(ErrNotLoggedIn)
+      } else {
+        promise = Granters.getByUrlCode('nametag')
         .then(({id}) => {
           return Templates.getGranterTemplates(id)
         })
@@ -73,10 +73,10 @@ const wrap = (mutation, requires, key = 'result') => (obj, args, context) => {
           ? mutation(obj, args, context)
           : Promise.reject(ErrNotNametagAdmin)
         })
-    }
-    break
-  default:
-    promise = mutation(obj, args, context)
+      }
+      break
+    default:
+      promise = mutation(obj, args, context)
   }
   return promise.catch(catchErrors)
 }

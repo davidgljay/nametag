@@ -23,7 +23,6 @@ module.exports = conn => new FacebookStrategy({
   passReqToCallback: true
 },
   (req, accessToken, refreshToken, profile, done) => {
-
     const authProfile = {
       provider: 'facebook',
       displayNames: [profile.displayName],

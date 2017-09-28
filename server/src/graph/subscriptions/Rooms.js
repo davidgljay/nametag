@@ -44,12 +44,11 @@ const RoomSubscription = ({conn, models: {Nametags, Users}}) => db.table('rooms'
               params: {
                 roomId: room.new_val.id,
                 roomTitle: room.new_val.title,
-                modName: mod.name
+                modName: mod.name,
                 userToken: user.userToken
               }
             })
           })
-      }
       }
       const roomForIndex = room.new_val.templates.length === 0
         ? Object.assign({}, room.new_val, {templates: ['public']})

@@ -140,5 +140,6 @@ module.exports = {
   ErrAuthentication,
   ErrNotAuthorized,
   ErrInvalidToken,
+  ErrNotNametagAdmin,
   errorLog
 }

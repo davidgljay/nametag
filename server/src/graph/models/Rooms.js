@@ -242,7 +242,7 @@ const notifyOfNewMessage = ({conn, models: {Nametags, Users}}, roomId) =>
  *
  **/
 
- const approveRoom = ({conn}, roomId) =>
+const approveRoom = ({conn}, roomId) =>
   roomsTable.get(roomId).update({public: 'APPROVED'}).run(conn)
 
 module.exports = (context) => ({
