@@ -167,6 +167,10 @@ class CreateRoom extends Component {
       this.updateRoom('title', title)
       track('CREATE_ROOM_VIEW', {title})
     }
+    window.addEventListener('popstate', (event) => {
+      const step = getQueryVariable('step')
+      this.setState({stepIndex: step ? parseInt(step) : 0})
+    })
   }
 
   componentDidUpdate (oldProps) {
