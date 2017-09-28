@@ -178,7 +178,7 @@ const styles = {
   header: {
     width: '100%',
     height: window.innerWidth * 494 / 1023,
-    background: 'url(http://s3.amazonaws.com/nametag_images/site/nametag-header.jpg)',
+    background: 'url(http://s3.amazonaws.com/nametag_images/site/nametag-header.png)',
     backgroundSize: 'cover',
     marginBottom: 40
   },
