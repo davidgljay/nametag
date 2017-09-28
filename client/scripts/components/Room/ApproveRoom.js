@@ -17,7 +17,7 @@ class ApproveRoom extends Component {
     const {params: {roomId}, approveRoom} = this.props
     approveRoom(roomId)
       .then(({data: {approveRoom: {errors}}}) => {
-        if (errors[0]) {
+        if (errors && errors[0]) {
           this.setState({error: errors[0].message})
         } else {
           this.setState({approved: true})
