@@ -35,7 +35,8 @@ module.exports = {
         'webStorageEnabled': true,
         'databaseEnabled': true,
         'applicationCacheEnabled': false,
-        'nativeEvents': true
+        'nativeEvents': true,
+        'elementScrollBehavior': 1
       },
       'screenshots': {
         'enabled': true,

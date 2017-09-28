@@ -3,11 +3,6 @@ const commands = {
     return this
       .waitForElementVisible('body', 3000)
   },
-  setTitle (title) {
-    return this.waitForElementVisible('@startConvo')
-    .setValue('@startConvo', title)
-    .click('@tryThis')
-  },
   setWelcome (welcome) {
     return this
       .waitForElementVisible('@welcomeField')
@@ -28,13 +23,30 @@ const commands = {
       .getLocationInView('@nextButton')
       .click('@nextButton')
   },
-  createRoom ({title, norm, welcome}, {name, bio}) {
+  addBio (bio, name) {
     return this
-      .setTitle(title)
+      .waitForElementVisible('@bioField')
+      .setValue('@editNametagName', name)
+      .setValue('@bioField', bio)
+      .getLocationInView('@nextButton')
+      .click('@nextButton')
+  },
+  createRoom ({title, norm, welcome}, user) {
+    return this
       .setWelcome(welcome)
       .addNorms(norm)
-      .waitForElementVisible('@publishButton')
-      .click('@publishButton')
+      .register(user)
+      .addBio(user.bio, user.name)
+      .waitForElementVisible('@doneButton')
+      .click('@doneButton')
+  },
+  register (user) {
+    return this
+    .waitForElementVisible('@registerButton')
+    .setValue('@emailForm', user.email)
+    .setValue('@passForm', user.pass)
+    .setValue('@confForm', user.pass)
+    .click('@registerButton')
   }
 }
 
@@ -59,8 +71,8 @@ module.exports = {
     nextButton: {
       selector: '#nextButton'
     },
-    publishButton: {
-      selector: '#publishButton'
+    doneButton: {
+      selector: '#doneButton'
     },
     findImageButton: {
       selector: '#findImageButton'
@@ -79,6 +91,21 @@ module.exports = {
     },
     addCustomNorm: {
       selector: '#addCustomNorm'
+    },
+    registerButton: {
+      selector: '#registerButton'
+    },
+    emailForm: {
+      selector: '#loginEmail'
+    },
+    passForm: {
+      selector: '#loginPassword'
+    },
+    confForm: {
+      selector: '#loginConfirm'
+    },
+    bioField: {
+      selector: '#bioField'
     }
   }
 }

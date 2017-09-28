@@ -5,8 +5,11 @@ const commands = {
   },
   startConvo (title) {
     return this.waitForElementVisible('@convoInput')
-      .setValue('@convoInput')
+      .setValue('@convoInput', title)
+      .getLocationInView('@startConvo')
+      .assert.visible('@startConvo')
       .click('@startConvo')
+      .waitForElementVisible('#welcomeField')
   },
   clickRoom () {
     return this.waitForElementVisible('@title')
