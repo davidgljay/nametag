@@ -97,7 +97,7 @@ const styles = {
     padding: 10
   },
   error: {
-    color: 'red',
+    color: red,
     fontStyle: 'italic',
     fontSize: 12,
     margin: 10
