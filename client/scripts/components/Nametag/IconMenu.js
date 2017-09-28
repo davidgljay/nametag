@@ -33,7 +33,7 @@ class NTIconMenu extends Component {
     const uploadIcon = <ImageUpload
       onChooseFile={() => this.setState({showMenu: false, loadingImage: true})}
       onUploadFile={this.onUpload}
-      width={50} />
+      width={80} />
 
     let render
     if (loadingImage) {

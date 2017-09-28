@@ -229,7 +229,7 @@ const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
 
       // Load an image if one exists, otherwise just insert the user
       const insertUserPromise = authProfile.providerPhotoUrl
-        ? fromUrl(50, 50, authProfile.providerPhotoUrl)
+        ? fromUrl(80, 80, authProfile.providerPhotoUrl)
         .then(({url}) => {
           if (!url) {
             return insertUser(userObj)
@@ -270,7 +270,7 @@ const addDefaultsFromAuth = (context, authProfile) => {
       ? arr.concat(appendUserArray(context, 'displayNames', name)) : arr, [])
   : []
 
-  return fromUrl(50, 50, authProfile.providerPhotoUrl)
+  return fromUrl(80, 80, authProfile.providerPhotoUrl)
     .then(({url}) => Promise.all(
       userUpdates
       .concat(
