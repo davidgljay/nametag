@@ -18,7 +18,6 @@ class Notifications extends Component {
     )
     .sort((a, b) => new Date(b.latestVisit).getTime() - new Date(a.latestVisit).getTime())
     .sort((a, b) => b.room.newMessageCount - a.room.newMessageCount)
-    .slice(0, this.state.showMore ? nametags.length : 2)
   }
 
   componentWillMount () {
@@ -28,37 +27,40 @@ class Notifications extends Component {
 
   render () {
     const {nametags} = this.props
+    const visitedRooms = this.visitedRooms(nametags)
 
-    const listItems = this.visitedRooms(nametags).map(nametag => {
-      const room = nametag.room
-      const mentions = nametag.mentions ? nametag.mentions.filter(
-        time => new Date(time) > new Date(nametag.latestVisit)
-      ).length : 0
+    const listItems = visitedRooms
+        .slice(0, this.state.showMore ? nametags.length : 2)
+        .map(nametag => {
+          const room = nametag.room
+          const mentions = nametag.mentions ? nametag.mentions.filter(
+            time => new Date(time) > new Date(nametag.latestVisit)
+          ).length : 0
 
-      const newMessages = room.latestMessage > nametag.latestVisit
-      const notificationStyle = newMessages ? styles.notification
-      : {...styles.notification, ...styles.noNewMessages}
-      return <ListItem innerDivStyle={notificationStyle} key={room.id} className='roomNotif'>
-        <a href={`/rooms/${room.id}`} style={styles.link}>
-          {
-            mentions > 0 &&
-            <Badge
-              badgeContent={mentions}
-              secondary
-              style={styles.badgeStyle}
-              badgeStyle={styles.innerBadgeStyle} />
-          }
-          <div>
-            <NametagIcon
-              name={room.mod.name}
-              image={room.mod.image}
-              diameter={40}
-              marginRight={10} />
-          </div>
-          <div className='roomTitle'>{room.title}</div>
-        </a>
-      </ListItem>
-    })
+          const newMessages = room.latestMessage > nametag.latestVisit
+          const notificationStyle = newMessages ? styles.notification
+          : {...styles.notification, ...styles.noNewMessages}
+          return <ListItem innerDivStyle={notificationStyle} key={room.id} className='roomNotif'>
+            <a href={`/rooms/${room.id}`} style={styles.link}>
+              {
+                mentions > 0 &&
+                <Badge
+                  badgeContent={mentions}
+                  secondary
+                  style={styles.badgeStyle}
+                  badgeStyle={styles.innerBadgeStyle} />
+              }
+              <div>
+                <NametagIcon
+                  name={room.mod.name}
+                  image={room.mod.image}
+                  diameter={40}
+                  marginRight={10} />
+              </div>
+              <div className='roomTitle'>{room.title}</div>
+            </a>
+          </ListItem>
+        })
 
     return <div>
       {
@@ -70,6 +72,7 @@ class Notifications extends Component {
       }
       {
         !this.state.showMore &&
+        visitedRooms.count() > 2 &&
         <div
           style={styles.showMore}
           onClick={() => this.setState({showMore: true})}>

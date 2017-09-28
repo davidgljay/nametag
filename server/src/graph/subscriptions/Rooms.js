@@ -4,32 +4,52 @@ const pubsub = require('./pubsub')
 const {index} = require('../../elasticsearch')
 const email = require('../../email')
 
-const RoomSubscription = ({conn, models: {Nametags}}) => db.table('rooms').changes().run(conn)
+const RoomSubscription = ({conn, models: {Nametags, Users}}) => db.table('rooms').changes().run(conn)
   .then(feed => {
     feed.each((err, room) => {
       if (err) {
         errorLog(new APIError('Error in room subscription feed'))
         return
       }
-      if (!room.new_val) {
+      if (!room.new_val || !room.old_val) {
         return
       }
-      if (room.old_val && !room.old_val.mod && room.new_val.public === 'PENDING') {
+      if (!room.old_val.mod && room.new_val.public === 'PENDING') {
         Nametags.get(room.new_val.mod)
           .then(mod => {
             email({
-                to: 'david@nametag.chat',
-                from: {name: 'Nametag', email: 'noreply@nametag.chat'},
-                template: 'publicRoom',
-                params: {
-                  roomId: room.new_val.id,
-                  roomTitle: room.new_val.title,
-                  modImage: mod.image,
-                  modName: mod.name,
-                  modBio: mod.bio
-                }
-              })
+              to: 'david@nametag.chat',
+              from: {name: 'Nametag', email: 'noreply@nametag.chat'},
+              template: 'publicRoom',
+              params: {
+                roomId: room.new_val.id,
+                roomTitle: room.new_val.title,
+                modImage: mod.image,
+                modName: mod.name,
+                modBio: mod.bio
+              }
+            })
           })
+      }
+      if (room.old_val.public === 'PENDING' && room.new_val.public === 'APPROVED') {
+        Users.getByNametag(room.new_val.mod)
+          .then(user => {
+            if (!user.email) {
+              return
+            }
+            email({
+              to: user.email,
+              from: {name: 'Nametag', email: 'noreply@nametag.chat'},
+              template: 'approvedRoom',
+              params: {
+                roomId: room.new_val.id,
+                roomTitle: room.new_val.title,
+                modName: mod.name
+                userToken: user.userToken
+              }
+            })
+          })
+      }
       }
       const roomForIndex = room.new_val.templates.length === 0
         ? Object.assign({}, room.new_val, {templates: ['public']})
