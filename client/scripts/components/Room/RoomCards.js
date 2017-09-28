@@ -94,7 +94,7 @@ class RoomCards extends Component {
               </div>
               {
                 !showAllJoined &&
-                me.nametags.filter(nametag => !!nametag.room).count > 4 &&
+                me.nametags.filter(nametag => !!nametag.room).length > 4 &&
                 <div
                   style={styles.showMore}
                   onClick={() => this.setState({showAllJoined: true})}>

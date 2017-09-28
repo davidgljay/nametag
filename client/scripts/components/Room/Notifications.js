@@ -72,7 +72,7 @@ class Notifications extends Component {
       }
       {
         !this.state.showMore &&
-        visitedRooms.count() > 2 &&
+        visitedRooms.length > 2 &&
         <div
           style={styles.showMore}
           onClick={() => this.setState({showMore: true})}>
