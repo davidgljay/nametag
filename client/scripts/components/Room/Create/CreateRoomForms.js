@@ -44,6 +44,7 @@ const getForm = ({
           welcome={room.welcome} />
       </div>
     case 1:
+      track('WELCOME_FORMS')
       return <div>
         <ChooseNorms
           error={error}
@@ -55,7 +56,7 @@ const getForm = ({
           removeNorm={removeNorm} />
       </div>
     case 2:
-      // track('CREATE_ROOM_TITLE')
+      track('CHOOSE_NORMS')
       return <div>
         {
           me
@@ -79,7 +80,7 @@ const getForm = ({
         }
       </div>
     case 3:
-      track('ROOM_PRIVACY')
+      track('HOST_INTRO')
       return <div style={styles.container}>
         <div style={styles.preview}>
           <RoomCard room={{...room, mod: nametagEdits.new}} disableJoin />

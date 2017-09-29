@@ -77,6 +77,7 @@ class CreateRoom extends Component {
 
     this.createRoom = () => {
       const {room} = this.state
+      track('CREATE_ROOM', {title: room.title})
       const {nametagEdits} = this.props
       const roomTemplates = room.templates.map(t => t.id)
       const mod = {
