@@ -2,6 +2,7 @@ import React, { Component, PropTypes} from 'react'
 import Message from './Message'
 import {mobile} from '../../../styles/sizes'
 import radium from 'radium'
+import HelpMessage from './HelpMessage'
 import Popover from 'material-ui/Popover'
 import {Picker} from 'emoji-mart'
 
@@ -46,19 +47,15 @@ class Messages extends Component {
         myNametag={myNametag} />
     }
 
-    this.scrollIfNeeded = (oldMessages, newMessages) => {
-      const numNewMessages = newMessages.length
-      const numPrevMessages = oldMessages.length
-      if (numNewMessages > numPrevMessages && numNewMessages > 3) {
-        let counter = 0
-        let timer = setInterval(() => {
-          window.scrollBy(0, 2)
-          if (counter >= 50) {
-            clearInterval(timer)
-          }
-          counter++
-        }, 0)
-      }
+    this.scroll = () => {
+      let counter = 0
+      let timer = setInterval(() => {
+        window.scrollBy(0, 2)
+        if (counter >= 50) {
+          clearInterval(timer)
+        }
+        counter++
+      }, 0)
     }
 
     this.toggleEmoji = (id) => (e) => {
@@ -81,11 +78,11 @@ class Messages extends Component {
   }
 
   componentDidUpdate (prevProps) {
-    this.scrollIfNeeded(prevProps.messages, this.props.messages)
+    this.scroll()
   }
 
   render () {
-    const {messages} = this.props
+    const {messages, myNametag, mod} = this.props
     const {showEmoji} = this.state
     return <div style={styles.messages} id='messages'>
       <Popover
@@ -100,6 +97,12 @@ class Messages extends Component {
           onClick={this.addReaction} />
       </Popover>
       <div style={styles.msgContainer}>
+        {
+          mod && myNametag &&
+          mod.id === myNametag.id &&
+          <HelpMessage
+            text='Leave a few messages to set the tone, then invite a few people in to get things started. Just share a link to this room.' />
+        }
         {
           messages.map(this.mapMessage)
         }
@@ -133,6 +136,7 @@ const styles = {
     width: 'calc(100% - 275px)',
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'flex-end',
     paddingLeft: 275,
     paddingTop: 100,
     scrollBehavior: 'smooth',
