@@ -56,14 +56,13 @@ class ModAction extends Component {
       }
 
       const checkedNorms = norms.filter((norm, i) => normChecks[i])
-
-      let message
-      if (isMod) {
-        message = isPublic ? `@${author.name} \n` : `d ${author.name} \n`
-      } else {
-        message = `d ${mod.name} \n`
+      let recipient
+      if (isMod && !isPublic) {
+        recipient = author.id
+      } else if (!isMod) {
+        recipient = mod.id
       }
-      message += isMod ? '### Note from the Moderator\n\n'
+      let message = isMod ? `@${author.name} \n### Note from the Moderator\n\n`
         : `### Message Report\n\n`
       message += `\n> ${text}\n`
       message += `${checkedNorms.reduce((msg, norm) => `${msg}* **${norm}** \n`, '')}\n`
@@ -72,6 +71,9 @@ class ModAction extends Component {
         text: message,
         author: myNametag.id,
         room: roomId
+      }
+      if (recipient) {
+        modAction.recipient = recipient
       }
       createMessage(modAction, myNametag)
       .catch((err) => {
