@@ -119,7 +119,7 @@ const getQuery = ({conn, user, models: {Users}}, query) =>
  *
  **/
 
-const create = ({conn, models: {Nametags, Users}}, rm) => {
+const create = ({conn, models: {Nametags, Users, Messages}}, rm) => {
   const room = Object.assign(
     {},
     rm,
@@ -137,16 +137,19 @@ const create = ({conn, models: {Nametags, Users}}, rm) => {
     return Promise.all([
       Nametags.create(nametag),
       id,
-      room
+      room,
+      nametag
     ])
   })
   .then(([nametag, id, room]) => {
     const modId = nametag.id
+    const message = {text: nametag.bio, author: modId, room: id}
     return Promise.all([
       roomsTable.get(id).update({mod: modId}).run(conn),
       id,
       modId,
-      room
+      room,
+      Messages.create(message)
     ])
   })
   // Return room
