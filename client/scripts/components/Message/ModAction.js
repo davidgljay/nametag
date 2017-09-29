@@ -57,12 +57,15 @@ class ModAction extends Component {
 
       const checkedNorms = norms.filter((norm, i) => normChecks[i])
       let recipient
-      if (isMod && !isPublic) {
+      let message = ''
+      if (isMod && isPublic) {
+        message = `@${author.name} \n`
+      } else if (isMod) {
         recipient = author.id
-      } else if (!isMod) {
+      } else {
         recipient = mod.id
       }
-      let message = isMod ? `@${author.name} \n### Note from the Moderator\n\n`
+      message += isMod ? `### Note from the Moderator\n\n`
         : `### Message Report\n\n`
       message += `\n> ${text}\n`
       message += `${checkedNorms.reduce((msg, norm) => `${msg}* **${norm}** \n`, '')}\n`
