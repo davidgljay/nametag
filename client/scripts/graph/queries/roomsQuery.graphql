@@ -39,6 +39,7 @@ query roomsQuery($query: String, $granter: String) {
    nametags {
      id
      latestVisit
+     banned
      room {
        id
        title

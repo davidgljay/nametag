@@ -13,7 +13,7 @@ class Notifications extends Component {
     }
 
     this.visitedRooms = (nametags) => nametags.filter(
-      nametag => nametag.room &&
+      nametag => nametag.room && !nametag.banned &&
       nametag.room.id !== this.props.roomId
     )
     .sort((a, b) => new Date(b.latestVisit).getTime() - new Date(a.latestVisit).getTime())

@@ -82,7 +82,7 @@ class RoomCards extends Component {
               <div style={styles.joinedRoomContainer}>
                 {
                   me.nametags
-                  .filter(nametag => !!nametag.room)
+                  .filter(nametag => !!nametag.room && !nametag.banned)
                   .sort((a, b) => new Date(b.latestVisit).getTime() - new Date(a.latestVisit).getTime())
                   .sort((a, b) => b.room.newMessageCount - a.room.newMessageCount)
                   .slice(0, showAllJoined ? me.nametags.length : 4)
@@ -94,7 +94,7 @@ class RoomCards extends Component {
               </div>
               {
                 !showAllJoined &&
-                me.nametags.filter(nametag => !!nametag.room).length > 4 &&
+                me.nametags.filter(nametag => !!nametag.room && !nametag.banned).length > 4 &&
                 <div
                   style={styles.showMore}
                   onClick={() => this.setState({showAllJoined: true})}>
