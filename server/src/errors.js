@@ -87,6 +87,10 @@ const ErrNotNametagAdmin = new APIError('you must be a nametag administrator to 
   status: 400
 })
 
+const ErrBanned = new APIError('you have been banned from this room', {
+  status: 400
+})
+
 /**
  * ErrAuthentication is returned when there is an error authenticating and the
  * message is provided.
@@ -141,5 +145,6 @@ module.exports = {
   ErrNotAuthorized,
   ErrInvalidToken,
   ErrNotNametagAdmin,
+  ErrBanned,
   errorLog
 }

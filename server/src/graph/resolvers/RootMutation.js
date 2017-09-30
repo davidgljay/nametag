@@ -4,6 +4,7 @@ const {
   ErrNotLoggedIn,
   ErrNotAuthorized,
   ErrNotMod,
+  ErrBanned,
   ErrNotYourNametag,
   ErrNotNametagAdmin
 } = require('../../errors')
@@ -39,6 +40,15 @@ const wrap = (mutation, requires, key = 'result') => (obj, args, context) => {
       ? Promise.reject(ErrNotLoggedIn)
       : mutation(obj, args, context)
       break
+    case 'IN_ROOM':
+      if (!context.user) {
+        promise = Promise.reject(ErrNotLoggedIn)
+      } else {
+        promise = context.models.Nametags.get(context.user.nametags[args.roomId])
+          .then(nametag => nametag.banned ? Promise.reject(ErrBanned)
+          : mutation(obj, args. context))
+      }
+
     case 'ROOM_MOD':
       promise = context.models.Rooms.get(args.roomId)
       .then(room => room.mod === context.user.nametags[room.id]
@@ -95,14 +105,10 @@ const RootMutation = {
         .then(wrapResponse('updateRoom'))
   },
   createMessage: {
-    requires: 'LOGIN',
-    resolve: (obj, {message}, {user, models: {Messages}}) => {
-      if (!user.nametags[message.room]) {
-        return Promise.reject(ErrNotInRoom)
-      }
-      return Messages.create(message)
-      .then(wrapResponse('message'))
-    }
+    requires: 'IN_ROOM',
+    resolve: (obj, {message}, {user, models: {Messages}}) =>
+      Messages.create(message)
+        .then(wrapResponse('message'))
   },
   deleteMessage: {
     requires: 'ROOM_MOD',

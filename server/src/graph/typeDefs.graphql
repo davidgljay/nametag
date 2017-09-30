@@ -105,9 +105,6 @@ type Room {
 
   # Topic of discussion in the room
   topic: String
-
-  # Indicated whether the user is blocked from entering this room
-  blocked: Boolean
 }
 
 # A topic of discussion in a room
@@ -197,6 +194,9 @@ type Nametag {
 
   # Latest visit to this nametag's room by the nametag holder
   latestVisit: Date
+
+  # Indicates whether a user has been banned from a room
+  banned: Boolean
 
 }
 
