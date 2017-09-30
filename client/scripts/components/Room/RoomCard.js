@@ -93,7 +93,7 @@ const styles = {
     marginLeft: 10
   },
   joinContainer: {
-    margin: '30px 30px 0px 30px'
+    margin: '30px 30px 0px 15px'
   },
   roomInfo: {
     flex: 1
