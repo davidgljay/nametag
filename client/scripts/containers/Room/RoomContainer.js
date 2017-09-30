@@ -13,7 +13,8 @@ import {
   updateRoom,
   updateNametag,
   deleteMessage,
-  addReaction
+  addReaction,
+  banNametag
 } from '../../graph/mutations'
 import {requestNotifPermissions} from '../../actions/NotificationActions'
 import {
@@ -77,6 +78,7 @@ const Room = compose(
   showTypingPrompt,
   updateToken,
   deleteMessage,
+  banNametag,
   addReaction,
   roomQuery,
   connect(mapStateToProps, mapDispatchToProps)

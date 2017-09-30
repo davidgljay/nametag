@@ -102,6 +102,11 @@ class ModAction extends Component {
       deleteMessage(msgId, roomId)
     }
 
+    this.ban = () => {
+      const {banNametag, author: {id}, roomId} = this.props
+      banNametag(roomId, id)
+    }
+
     this.addNote = (e) => {
       e.preventDefault()
       this.setState({note: e.target.value})
@@ -151,6 +156,7 @@ class ModAction extends Component {
         isMod={isMod}
         remindOfNorms={this.remindOfNorms}
         removeUser={this.removeUser}
+        ban={this.ban}
         notifyBadge={this.notifyBadge}
         authorName={author.name}
         removeMessage={this.removeMessage} />
@@ -173,6 +179,7 @@ ModAction.propTypes = {
     id: string.isRequired
   }).isRequired,
   deleteMessage: func.isRequired,
+  banNametag: func.isRequired,
   createMessage: func.isRequired
 }
 

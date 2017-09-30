@@ -27,7 +27,8 @@ class Messages extends Component {
         setDefaultMessage,
         setRecipient,
         hideDMs,
-        deleteMessage
+        deleteMessage,
+        banNametag
       } = this.props
 
       return <Message
@@ -38,6 +39,7 @@ class Messages extends Component {
         hideAuthor={i > 0 && message.author.id === messages[i - 1].author.id}
         toggleEmoji={this.toggleEmoji}
         deleteMessage={deleteMessage}
+        banNametag={banNametag}
         addReaction={addReaction}
         setDefaultMessage={setDefaultMessage}
         setRecipient={setRecipient}
@@ -122,6 +124,7 @@ Messages.propTypes = {
   }),
   hideDMs: bool.isRequired,
   deleteMessage: func.isRequired,
+  banNametag: func.isRequired,
   addReaction: func.isRequired,
   setDefaultMessage: func.isRequired,
   setRecipient: func.isRequired

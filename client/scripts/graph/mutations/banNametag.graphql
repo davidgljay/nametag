@@ -1,0 +1,8 @@
+mutation BanNametag($roomId:ID!, $nametagId: ID!) {
+  banNametag(roomId:$roomId, nametagId:$nametagId) {
+    errors {
+      translation_key
+      message
+    }
+  }
+}

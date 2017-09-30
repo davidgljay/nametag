@@ -132,6 +132,7 @@ class Room extends Component {
       updateRoom,
       updateNametag,
       deleteMessage,
+      banNametag,
       addReaction,
       location: {state: locationState}
     } = this.props
@@ -193,6 +194,7 @@ class Room extends Component {
             hideDMs={!!hideDMs}
             addReaction={addReaction}
             deleteMessage={deleteMessage}
+            banNametag={banNametag}
             setDefaultMessage={this.setDefaultMessage}
             setRecipient={this.setRecipient}
             mod={room.mod}
@@ -284,7 +286,8 @@ Room.propTypes = {
   createMessage: func.isRequired,
   toggleSaved: func.isRequired,
   addReaction: func.isRequired,
-  updateToken: func.isRequired
+  updateToken: func.isRequired,
+  banNametag: func.isRequired
 }
 
 export default radium(Room)

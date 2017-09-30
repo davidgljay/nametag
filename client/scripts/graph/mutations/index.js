@@ -21,6 +21,7 @@ import EMAIL_CONF_REQ from './emailConfirmationRequest.graphql'
 import EMAIL_CONF from './emailConfirmation.graphql'
 import ADD_NOTE from './addNote.graphql'
 import APPROVE_ROOM from './approveRoom.graphql'
+import BAN_NAMETAG from './banNametag.graphql'
 import errorLog from '../../utils/errorLog'
 
 export const createNametag = graphql(CREATE_NAMETAG, {
@@ -174,6 +175,17 @@ export const approveRoom = graphql(APPROVE_ROOM, {
     approveRoom: (roomId) => mutate({
       variables: {
         roomId
+      }
+    })
+  })
+})
+
+export const banNametag = graphql(BAN_NAMETAG, {
+  props: ({ownProps, mutate}) => ({
+    banNametag: (roomId, nametagId) => mutate({
+      variables: {
+        roomId,
+        nametagId
       }
     })
   })

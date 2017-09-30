@@ -66,6 +66,7 @@ class Message extends Component {
       hideAuthor,
       createMessage,
       deleteMessage,
+      banNametag,
       hideDMs,
       setDefaultMessage,
       setRecipient
@@ -191,6 +192,7 @@ class Message extends Component {
           text={text}
           mod={mod}
           deleteMessage={deleteMessage}
+          banNametag={banNametag}
           myNametag={myNametag}
           close={this.showModAction(false)}
           roomId={roomId}
@@ -226,6 +228,7 @@ Message.propTypes = {
   addReaction: func.isRequired,
   mod: object.isRequired,
   deleteMessage: func.isRequired,
+  banNametag: func.isRequired,
   hideDMs: bool.isRequired,
   hideAuthor: bool.isRequired,
   setDefaultMessage: func.isRequired,
