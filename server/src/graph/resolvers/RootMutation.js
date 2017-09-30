@@ -237,6 +237,12 @@ const RootMutation = {
     resolve: (obj, {roomId}, {models: {Rooms}}) =>
       Rooms.approveRoom(roomId)
       .then(wrapResponse('approveRoom'))
+  },
+  banNametag: {
+    requires: 'ROOM_MOD',
+    resolve: (obj, {roomId, nametagId}, {models: {Nametags}}) =>
+      Nametags.ban(nametagId)
+      .then(wrapResponse('banNametag'))
   }
 }
 

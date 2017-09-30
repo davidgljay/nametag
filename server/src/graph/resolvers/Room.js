@@ -1,15 +1,26 @@
+const checkIfBanned = (nametagId, Nametags) =>
+  Nametags.get(nametagId).then(nametag => nametag.banned)
+
 const Room = {
-  messages: ({id}, _, {user, models: {Messages}}) => {
+  messages: ({id}, _, {user, models: {Messages, Nametags}}) => {
     if (!user || !user.nametags || !user.nametags[id]) {
       return []
     }
-    return Messages.getRoomMessages(id, user.nametags[id])
+    return checkIfBanned(user.nametags[id], Nametags)
+      .then(banned =>
+        banned ? []
+        :  Messages.getRoomMessages(id, user.nametags[id])
+      )
   },
   nametags: ({id}, _, {user, models: {Nametags}}) => {
     if (!user || !user.nametags || !user.nametags[id]) {
       return []
     }
-    return Nametags.getRoomNametags(id)
+    return checkIfBanned(user.nametags[id], Nametags)
+      .then(banned =>
+        banned ? []
+        :  Nametags.getRoomNametags(id)
+      )
   },
   nametagCount: ({id}, _, {models: {Nametags}}) => {
     return Nametags.getNametagCount(id)

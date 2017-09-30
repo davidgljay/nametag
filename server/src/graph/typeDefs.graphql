@@ -105,6 +105,9 @@ type Room {
 
   # Topic of discussion in the room
   topic: String
+
+  # Indicated whether the user is blocked from entering this room
+  blocked: Boolean
 }
 
 # A topic of discussion in a room
@@ -697,6 +700,9 @@ type RootMutation {
 
   # Approves a public room
   approveRoom(roomId: ID!): BasicResponse
+
+  # Bans a user from a room
+  banNametag(roomId: ID!, nametagId: ID!): BasicResponse
 
 }
 

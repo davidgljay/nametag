@@ -222,6 +222,16 @@ const updateLatestVisit = ({conn}, nametagId) => nametagsTable
     }, 30000)
   })
 
+  /**
+   * Bans a nametag from a room
+   *
+   * @param {Object} context     graph context
+   * @param {String} id   the id of the nametag to be updated
+   */
+
+const ban = ({conn}, id) =>
+  nametagsTable.get(id).update({banned: true}).run(conn)
+
 module.exports = (context) => ({
   Nametags: {
     get: (id) => get(context, id),
@@ -234,6 +244,7 @@ module.exports = (context) => ({
     addMention: (nametag) => addMention(context, nametag),
     getNametagCount: (room) => getNametagCount(context, room),
     updateLatestVisit: (nametagId) => updateLatestVisit(context, nametagId),
-    grantBadge: (id, badgeId) => grantBadge(context, id, badgeId)
+    grantBadge: (id, badgeId) => grantBadge(context, id, badgeId),
+    ban: (id) => ban(context, id)
   }
 })
