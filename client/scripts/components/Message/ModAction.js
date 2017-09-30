@@ -93,27 +93,19 @@ class ModAction extends Component {
       }
     }
 
-    this.removeUser = () => {
-      // TODO: Add functionality to remove user.
-    }
-
     this.removeMessage = () => {
-      const {deleteMessage, msgId, roomId} = this.props
-      deleteMessage(msgId, roomId)
+      const {deleteMessage, msgId, roomId, close} = this.props
+      deleteMessage(msgId, roomId).then(() => close)
     }
 
     this.ban = () => {
-      const {banNametag, author: {id}, roomId} = this.props
-      banNametag(roomId, id)
+      const {banNametag, author: {id}, roomId, close} = this.props
+      banNametag(roomId, id).then(() => close)
     }
 
     this.addNote = (e) => {
       e.preventDefault()
       this.setState({note: e.target.value})
-    }
-
-    this.notifyBadge = () => {
-      // TODO:Notify badge granters
     }
   }
 

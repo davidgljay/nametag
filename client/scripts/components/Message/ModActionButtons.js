@@ -22,10 +22,6 @@ const ModActionButtons = (props) => <CardActions>
           style={styles.severe}
           onClick={props.ban}
           label='EXPEL AUTHOR' />
-        <FlatButton
-          style={styles.severe}
-          onClick={props.notifyBadge}
-          label='REPORT AUTHOR' />
       </div>
     }
 </CardActions>
