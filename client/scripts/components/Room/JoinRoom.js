@@ -50,7 +50,11 @@ class JoinRoom extends Component {
     return <div id='room' style={styles.container}>
       <Navbar me={me} empty />
       <div id='roomInfoContainer' style={styles.roomInfoContainer}>
-        <h3 style={styles.introText}>You've been invited to a conversation:</h3>
+        <h3 style={styles.introText}>{
+            banned
+            ? 'You have been banned from this conversation:'
+            : 'You\'ve been invited to a conversation:'
+          }</h3>
         <RoomCard room={room} banned={banned} />
       </div>
       <div style={styles.joinContainer}>

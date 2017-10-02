@@ -151,6 +151,14 @@ export const nametagUpdated = subscribeToMore => roomId => subscribeToMore({
       return oldData
     }
 
+    // Reload the page if the user is banned
+    if (
+      oldData.me &&
+      oldData.me.nametags.find(nt => nt.id === nametagUpdated.id) &&
+      nametagUpdated.banned) {
+      window.location.reload()
+    }
+
     let newNametags
     const nametags = oldData.room.nametags
     if (nametags.filter(n => n.id === nametagUpdated.id).length > 0) {

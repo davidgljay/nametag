@@ -148,7 +148,7 @@ class Room extends Component {
     }
 
     // If the user is not logged in and hasn't clicked "join room", return to the homepage
-    if (!myNametag && !isJoining) {
+    if ((!myNametag && !isJoining) || (myNametag && myNametag.banned)) {
       return <JoinRoom
         registerUser={registerUser}
         loginUser={loginUser}
