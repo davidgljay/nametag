@@ -114,6 +114,10 @@ class RoomCards extends Component {
                 <RoomCard
                   key={room.id}
                   room={room}
+                  banned={
+                    !!me &&
+                    !!me.nametags.find(nt => nt.room.id === room.id) &&
+                    !!me.nametags.find(nt => nt.room.id === room.id).banned}
                   me={me} />
               )
             }

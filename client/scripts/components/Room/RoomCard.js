@@ -20,7 +20,7 @@ class RoomCard extends Component {
   }
 
   render () {
-    const {room, disableJoin} = this.props
+    const {room, disableJoin, banned} = this.props
 
     return <Card key={room.id} className='roomCard'>
       <div style={styles.cardContainer}>
@@ -43,7 +43,8 @@ class RoomCard extends Component {
             primary
             id='JoinButton'
             label='JOIN'
-            onClick={disableJoin ? () => {} : this.onJoinClick} />
+            disabled={banned}
+            onClick={disableJoin || banned ? () => {} : this.onJoinClick} />
         </div>
       </div>
     </Card>
@@ -63,7 +64,8 @@ RoomCard.proptypes = {
       badges: arrayOf(object)
     }).isRequired
   }).isRequired,
-  disableJoin: bool
+  disableJoin: bool,
+  banned: bool
 }
 
 export default withRouter(RoomCard)

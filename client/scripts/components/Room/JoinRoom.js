@@ -40,11 +40,18 @@ class JoinRoom extends Component {
       room
     } = this.props
 
+    let banned = false
+    // Check to see if the user is banned
+    if (me) {
+      const myNametag = me.nametags.find(nt => nt.room.id === room.id)
+      banned = !!myNametag && myNametag.banned
+    }
+
     return <div id='room' style={styles.container}>
       <Navbar me={me} empty />
       <div id='roomInfoContainer' style={styles.roomInfoContainer}>
         <h3 style={styles.introText}>You've been invited to a conversation:</h3>
-        <RoomCard room={room} />
+        <RoomCard room={room} banned={banned} />
       </div>
       <div style={styles.joinContainer}>
         <div id='normsContainer' style={styles.normsContainer}>
