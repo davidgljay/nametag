@@ -40,7 +40,7 @@ class Room extends Component {
         clearInterval(prevState.presenceTimer)
         const presenceTimer = setInterval(() => {
           updateLatestVisit(myNametag.id)
-        }, 10000)
+        }, 30000)
         return {
           ...prevState,
           presenceTimer
