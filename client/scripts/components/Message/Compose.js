@@ -22,16 +22,17 @@ class Compose extends Component {
 
     this.onChange = (e) => {
       const text = e.target.value
-      const {onUpdateText, showTypingPrompt, myNametag, roomId} = this.props
+      const {onUpdateText, showTypingPrompt} = this.props
       const {lastTypingPrompt} = this.state
       if (onUpdateText) {
         onUpdateText(text)
       }
 
       // Post a prompt that the user is typing once every 2 seconds at most
-      if (showTypingPrompt && lastTypingPrompt < Date.now() - 2000) {
+      // Temporarily disabling, as this seems to slow down typing noticably
+      if (showTypingPrompt && Date.now() - lastTypingPrompt > 4000) {
         this.setState({lastTypingPrompt: Date.now()})
-        showTypingPrompt(myNametag.id, roomId)
+        // showTypingPrompt(myNametag.id, roomId)
       }
 
       if (text.slice(-1) === '\n') {
@@ -44,8 +45,11 @@ class Compose extends Component {
     }
 
     this.post = (e) => {
-      const {myNametag, roomId, createMessage, setDefaultMessage, setRecipient, onPost, recipient} = this.props
+      const {myNametag, roomId, createMessage, setDefaultMessage, setRecipient, onPost, recipient, closed} = this.props
       const {message} = this.state
+      if (closed) {
+        return
+      }
       if (onPost) {
         onPost(message)
       }
@@ -106,7 +110,7 @@ class Compose extends Component {
   render () {
     // TODO: Add GIFs, image upload
 
-    const {topic, mod, nametags, recipient, setRecipient} = this.props
+    const {topic, mod, nametags, recipient, setRecipient, closed} = this.props
     const {showEmoji, message} = this.state
     let calloutImage
     let calloutName
@@ -167,25 +171,30 @@ class Compose extends Component {
             style={styles.textfield}
             onChange={this.onChange}
             autoComplete='off'
+            hintText={closed ? 'This discussion has closed.' : ''}
+            disabled={closed}
             multiLine
             value={this.state.message} />
-          <FlatButton
-            style={styles.sendButton}
-            id='sendMessageButton'
-            type='submit'
-            icon={
-              <FontIcon
-                className='material-icons'>
-                send
-              </FontIcon>
-              } />
+          {
+            !closed &&
+            <FlatButton
+              style={styles.sendButton}
+              id='sendMessageButton'
+              type='submit'
+              icon={
+                <FontIcon
+                  className='material-icons'>
+                  send
+                </FontIcon>
+                } />
+          }
         </form>
       </div>
     </div>
   }
 }
 
-const {string, func, shape, arrayOf} = PropTypes
+const {string, func, shape, arrayOf, bool} = PropTypes
 
 Compose.propTypes = {
   roomId: string.isRequired,
@@ -210,7 +219,8 @@ Compose.propTypes = {
   onUpdateText: func,
   onPost: func,
   showTypingPrompt: func,
-  setRecipient: func
+  setRecipient: func,
+  closed: bool.isRequired
 }
 
 export default Compose

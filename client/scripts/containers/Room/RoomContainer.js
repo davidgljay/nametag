@@ -2,7 +2,7 @@ import {connect} from 'react-redux'
 import component from '../../components/Room/Room'
 import {compose} from 'react-apollo'
 import {roomQuery} from '../../graph/queries'
-import {registerUser, loginUser} from '../../actions/UserActions'
+import {registerUser, loginUser, passwordResetRequest} from '../../actions/UserActions'
 import {
   createMessage,
   createNametag,
@@ -13,7 +13,8 @@ import {
   updateRoom,
   updateNametag,
   deleteMessage,
-  addReaction
+  addReaction,
+  banNametag
 } from '../../graph/mutations'
 import {requestNotifPermissions} from '../../actions/NotificationActions'
 import {
@@ -62,7 +63,8 @@ const mapDispatchToProps = (dispatch) => {
     addNametagEditBadge: disp(addNametagEditBadge),
     removeNametagEditBadge: disp(removeNametagEditBadge),
     registerUser: disp(registerUser),
-    loginUser: disp(loginUser)
+    loginUser: disp(loginUser),
+    passwordResetRequest: disp(passwordResetRequest)
   }
 }
 
@@ -76,6 +78,7 @@ const Room = compose(
   showTypingPrompt,
   updateToken,
   deleteMessage,
+  banNametag,
   addReaction,
   roomQuery,
   connect(mapStateToProps, mapDispatchToProps)

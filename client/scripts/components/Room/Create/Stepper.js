@@ -6,21 +6,27 @@ import {
 } from 'material-ui/Stepper'
 
 const display = window.innerWidth < 650 ? {display: 'none'} : {}
-const CreateRoomStepper = (props) => <Stepper
-  activeStep={props.stepIndex}
+const CreateRoomStepper = ({stepIndex, loggedIn}) => <Stepper
+  activeStep={stepIndex}
   orientation='horizontal'
   style={display}>
   <Step>
-    <StepLabel>Choose a topic</StepLabel>
+    <StepLabel>Choose Welcome Prompt</StepLabel>
   </Step>
   <Step>
-    <StepLabel>Find an image</StepLabel>
+    <StepLabel>Set Conversation Norms</StepLabel>
+  </Step>
+  {
+    loggedIn ? []
+    : <Step>
+      <StepLabel>Create Account</StepLabel>
+    </Step>
+  }
+  <Step>
+    <StepLabel>Introduce Yourself</StepLabel>
   </Step>
   <Step>
-    <StepLabel>Build your nametag</StepLabel>
-  </Step>
-  <Step>
-    <StepLabel>Set the norms</StepLabel>
+    <StepLabel>Done!</StepLabel>
   </Step>
 </Stepper>
 

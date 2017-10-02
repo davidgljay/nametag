@@ -52,12 +52,12 @@ class RoomLeftBar extends Component {
       expanded,
       toggleLeftBar
     } = this.props
-    const notifCount = !myNametag ? 0 : me.nametags.filter(
+    const notifCount = !myNametag || !me ? 0 : me.nametags.filter(
       nametag => nametag.room &&
       new Date(nametag.room.latestMessage) > new Date(Date.now() - ROOM_TIMEOUT) &&
       nametag.room.id !== this.props.roomId
     ).length
-    const isMod = me.nametags
+    const isMod = me && me.nametags
       .reduce((isMod, nametag) => nametag.id === room.mod.id ? true : isMod, false)
     const hideDMs = !isMod && room.modOnlyDMs
     const mobile = window.innerWidth < 800
@@ -74,9 +74,6 @@ class RoomLeftBar extends Component {
         <div
           style={styles.leftNavHeader}
           onClick={this.toggleLeftBarSection('norms')}>
-          {
-            this.state.toggles.norms ? '- ' : '+ '
-          }
           Norms
         </div>
         {
@@ -85,6 +82,11 @@ class RoomLeftBar extends Component {
             <Norms norms={room.norms} />
           </div>
         }
+        <div
+          style={styles.leftNavHeader}
+          onClick={this.toggleLeftBarSection('norms')}>
+          Rooms
+        </div>
         {
           notifCount > 0 &&
             <div
@@ -110,15 +112,13 @@ class RoomLeftBar extends Component {
             <div
               style={styles.leftNavHeader}
               onClick={this.toggleLeftBarSection('settings')}>
-              {
-                this.state.toggles.settings ? '- ' : '+ '
-              }
               Settings
             </div>
             {
               this.state.toggles.settings &&
               <RoomSettings
                 updateRoom={updateRoom}
+                closed={room.closed}
                 roomId={room.id}
                 modOnlyDMs={room.modOnlyDMs} />
             }
@@ -130,9 +130,6 @@ class RoomLeftBar extends Component {
             <div
               style={styles.leftNavHeader}
               onClick={this.toggleLeftBarSection('nametags')}>
-              {
-                this.state.toggles.nametags ? '- ' : '+ '
-              }
               Nametags
             </div>
             {
@@ -193,7 +190,6 @@ export default RoomLeftBar
 
 const styles = {
   leftNavHeader: {
-    fontWeight: 800,
     fontSize: 16,
     color: '#FFF',
     marginTop: 15,

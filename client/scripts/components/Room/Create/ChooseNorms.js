@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {green500, red500} from 'material-ui/styles/colors'
+import {grey, primary, red} from '../../../../styles/colors'
 import {List, ListItem} from 'material-ui/List'
 import Check from 'material-ui/svg-icons/navigation/check'
 import TextField from 'material-ui/TextField'
@@ -70,12 +70,13 @@ class ChooseNorms extends Component {
 
   render () {
     return <div style={this.props.style}>
-      {
-          this.props.error &&
-          <div style={styles.error}>
-            {this.props.error}
-          </div>
-        }
+      <h2>Set Conversation Norms</h2>
+      <div style={styles.helpText}>
+        As a host, you will be able to hold people accountable to these norms.
+      </div>
+      <div style={styles.error}>
+        {this.props.error}
+      </div>
       <List style={styles.norms}>
         {
             defaultNorms.map((norm, i) => {
@@ -118,12 +119,30 @@ ChooseNorms.propTypes = {
 }
 
 const styles = {
+  textfield: {
+    fontSize: 20,
+    padding: 0,
+    textAlign: 'left',
+    margin: '20px 20px 10px 10px'
+  },
+  titleForm: {
+    display: 'flex',
+    width: '100%',
+    alignItems: 'center',
+    flexDirection: 'column'
+  },
+  descriptionField: {
+    fontSize: 16
+  },
+  helpText: {
+    color: grey,
+    fontSize: 14
+  },
   norms: {
     textAlign: 'center',
     padding: 0,
     listStyle: 'none'
   },
-
   norm: {
     textAlign: 'left'
   },
@@ -135,16 +154,16 @@ const styles = {
     height: 25,
     marginRight: 10,
     marginTop: 5,
-    fill: green500
+    fill: primary
   },
   formCheck: {
     height: 25,
     marginRight: 10,
     marginTop: 16,
-    fill: green500
+    fill: primary
   },
   error: {
-    color: red500
+    color: red
   }
 }
 

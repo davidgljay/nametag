@@ -16,6 +16,7 @@ module.exports = conn => new GoogleStrategy(
       provider: 'google',
       displayNames: [profile.displayName],
       providerPhotoUrl: profile.photos[0].value,
+      email: profile.emails.length > 0 && profile.emails[0].value,
       id: profile.id
     }
     return req.user

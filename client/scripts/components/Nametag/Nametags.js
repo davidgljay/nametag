@@ -5,11 +5,10 @@ import {Card} from 'material-ui/Card'
 const Nametags = ({nametags, mod, myNametagId, setDefaultMessage, setRecipient, hideDMs}) =>
   <div id='nametags' style={styles.nametags}>
     {
-      nametags.map((nametag) => {
-        const cardStyle = nametag.present || nametag.id === myNametagId
-        ? styles.nametag : {...styles.nametag, ...styles.absent}
-
-        return <Card key={nametag.id} id={nametag.id === myNametagId && 'myNametag'} style={cardStyle}>
+      nametags
+      .filter(nametag => !nametag.banned)
+      .map((nametag) =>
+        <Card key={nametag.id} id={nametag.id === myNametagId && 'myNametag'} style={styles.nametag}>
           <Nametag
             nametag={nametag}
             hideDMs={hideDMs}
@@ -17,8 +16,7 @@ const Nametags = ({nametags, mod, myNametagId, setDefaultMessage, setRecipient, 
             setRecipient={setRecipient}
             setDefaultMessage={setDefaultMessage}
             modId={mod} />
-        </Card>
-      })
+        </Card>)
     }
   </div>
 

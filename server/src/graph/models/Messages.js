@@ -13,6 +13,21 @@ const messagesTable = db.table('messages')
 const get = ({conn}, id) => messagesTable.get(id).run(conn)
 
 /**
+ * Returns the number of messages since a particular date.
+ *
+ * @param {Object} context     graph context
+ * @param {String} roomId   the id of the room to be checked
+ * @param {Date} date the date to be checked against
+ *
+ */
+
+const newMessageCount = ({conn, user}, roomId) =>
+  messagesTable.getAll([roomId, false], {index: 'room_recipient'})
+    .filter(msg => msg('createdAt').gt(db.table('nametags').get(user.nametags[roomId])('latestVisit')))
+    .count()
+    .run(conn)
+
+/**
  * Returns the messages from a particular room to display to a user. Also displays
  * direct messages to that user.
  * @param {Object} context     graph context
@@ -279,7 +294,8 @@ const addReaction = ({conn}, messageId, emoji, nametagId) =>
 module.exports = (context) => ({
   Messages: {
     get: (id) => get(context, id),
-    getRoomMessages: (room, nametag) => getRoomMessages(context, room, nametag),
+    newMessageCount: (roomId) => newMessageCount(context, roomId),
+    getRoomMessages: (roomId, nametag) => getRoomMessages(context, roomId, nametag),
     getNametagMessages: (nametag) => getNametagMessages(context, nametag),
     create: (message) => create(context, message),
     delete: (messageId) => deleteMessage(context, messageId),

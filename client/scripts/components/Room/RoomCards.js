@@ -2,9 +2,12 @@ import React, {Component, PropTypes} from 'react'
 import RoomCard from './RoomCard'
 import Navbar from '../Utils/Navbar'
 import LoginDialog from '../User/LoginDialog'
-import SearchBar from './SearchBar'
-import Notifications from '../Room/Notifications'
+import JoinedRoomCard from './JoinedRoomCard'
+import StartRoomForm from './StartRoomForm'
+import radium from 'radium'
+import {mobile} from '../../../styles/sizes'
 import {track, identify} from '../../utils/analytics'
+import {white, grey} from '../../../styles/colors'
 
 class RoomCards extends Component {
 
@@ -12,7 +15,8 @@ class RoomCards extends Component {
     super(props)
 
     this.state = {
-      showLogin: false
+      showLogin: false,
+      showAllJoined: false
     }
 
     this.toggleLogin = () => {
@@ -40,10 +44,9 @@ class RoomCards extends Component {
 
   render () {
     const {
-      data: {me, rooms, loading},
-      latestMessageUpdatedSubscription,
-      search
+      data: {me, rooms, loading}
     } = this.props
+    const {showAllJoined} = this.state
     let nametagHash = {}
     if (me) {
       nametagHash = me.nametags.reduce((hash, nametag) => {
@@ -60,33 +63,73 @@ class RoomCards extends Component {
         toggleLogin={this.toggleLogin} />
       <div style={styles.background}>
         {
-          me &&
-          <Notifications
-            nametags={me.nametags}
-            latestMessageUpdatedSubscription={latestMessageUpdatedSubscription}
-            homepage />
+          (!me || me.nametags.length === 0) &&
+          <div style={styles.header}>
+            <div style={styles.headerText}>
+              Online conversation that feels like an intimate dinner party.
+            </div>
+          </div>
         }
-        <SearchBar
-          search={search} />
-        <div style={styles.roomCards}>
+        <div style={styles.container}>
+          {
+            !loading && <StartRoomForm loggedIn={!!me && me.nametags.length > 0} />
+          }
           {
             !loading &&
-            rooms &&
-            rooms.length > 0 &&
-            rooms
-            .filter(room => !nametagHash[room.id])
-            .map(room =>
-              <RoomCard
-                key={room.id}
-                room={room}
-                me={me} />
-            )
+            me && me.nametags.length > 0 &&
+            <div style={styles.joinedRooms}>
+              <h3>Your Conversations</h3>
+              <div style={styles.joinedRoomContainer}>
+                {
+                  me.nametags
+                  .filter(nametag => !!nametag.room && !nametag.banned)
+                  .sort((a, b) => new Date(b.latestVisit).getTime() - new Date(a.latestVisit).getTime())
+                  .sort((a, b) => b.room.newMessageCount - a.room.newMessageCount)
+                  .slice(0, showAllJoined ? me.nametags.length : 4)
+                  .map(nametag => <JoinedRoomCard
+                    key={nametag.id}
+                    room={nametag.room}
+                    latestVisit={nametag.latestVisit} />)
+                }
+              </div>
+              {
+                !showAllJoined &&
+                me.nametags.filter(nametag => !!nametag.room && !nametag.banned).length > 4 &&
+                <div
+                  style={styles.showMore}
+                  onClick={() => this.setState({showAllJoined: true})}>
+                  Show More
+                </div>
+              }
+            </div>
           }
+          <div style={styles.roomCards}>
+            {
+              !loading &&
+              rooms &&
+              rooms.length > 0 &&
+              rooms
+              .filter(room => !nametagHash[room.id])
+              .map(room => {
+                let banned = false
+                if (me) {
+                  const myNametag = me.nametags.find(nt => nt.room && nt.room.id === room.id)
+                  banned = !!myNametag && myNametag.banned
+                }
+                return <RoomCard
+                  key={room.id}
+                  room={room}
+                  disabled={banned || room.closed}
+                  me={me} />
+              }
+              )
+            }
+          </div>
+          <LoginDialog
+            showLogin={this.state.showLogin}
+            toggleLogin={this.toggleLogin}
+            message='Log In or Register' />
         </div>
-        <LoginDialog
-          showLogin={this.state.showLogin}
-          toggleLogin={this.toggleLogin}
-          message='Log In or Register' />
       </div>
     </div>
   }
@@ -101,7 +144,13 @@ RoomCards.propTypes = {
       nametags: arrayOf(shape({
         id: string.isRequired,
         room: shape({
-          id: string
+          id: string.isRequired,
+          title: string.isRequired,
+          mod: shape({
+            id: string.isRequired,
+            image: string,
+            name: string.isRequired
+          })
         })
       })).isRequired
     }),
@@ -113,19 +162,50 @@ RoomCards.propTypes = {
   })
 }
 
-export default RoomCards
+export default radium(RoomCards)
 
 const styles = {
   background: {
     background: '#fbfbfb',
-    paddingTop: 30
+    minHeight: '100vh'
+  },
+  container: {
+    maxWidth: 800,
+    marginLeft: 'auto',
+    marginRight: 'auto'
+  },
+  joinedRoomContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center'
   },
   roomCards: {
     paddingBottom: 50,
-    paddingTop: 20,
-    minHeight: '100vh',
-    display: 'flex',
-    justifyContent: 'flex-start',
-    flexWrap: 'wrap'
+    paddingTop: 50
+  },
+  header: {
+    width: '100%',
+    height: window.innerWidth * 494 / 1023,
+    background: 'url(https://s3.amazonaws.com/nametag_images/site/nametag-header.png)',
+    backgroundSize: 'cover',
+    marginBottom: 40
+  },
+  headerText: {
+    color: white,
+    textAlign: 'center',
+    fontSize: 36,
+    fontWeight: 300,
+    padding: 10,
+    paddingTop: window.innerWidth * 494 / 1023 - 90,
+    [mobile]: {
+      fontSize: 26
+    }
+  },
+  showMore: {
+    textAlign: 'center',
+    fontSize: 14,
+    fontStyle: 'italic',
+    color: grey,
+    cursor: 'pointer'
   }
 }

@@ -20,6 +20,8 @@ import PASSWORD_RESET_REQ from './passwordResetRequest.graphql'
 import EMAIL_CONF_REQ from './emailConfirmationRequest.graphql'
 import EMAIL_CONF from './emailConfirmation.graphql'
 import ADD_NOTE from './addNote.graphql'
+import APPROVE_ROOM from './approveRoom.graphql'
+import BAN_NAMETAG from './banNametag.graphql'
 import errorLog from '../../utils/errorLog'
 
 export const createNametag = graphql(CREATE_NAMETAG, {
@@ -32,33 +34,11 @@ export const createNametag = graphql(CREATE_NAMETAG, {
   })
 })
 
-export const updateNametag = graphql(UPDATE_NAMETAG, {
-  props: ({ownProps, mutate}) => ({
-    updateNametag: (nametagId, nametagUpdate) => mutate({
-      variables: {
-        nametagId,
-        nametagUpdate
-      }
-    })
-  })
-})
-
 export const createRoom = graphql(CREATE_ROOM, {
   props: ({ownProps, mutate}) => ({
     createRoom: (room) => mutate({
       variables: {
         room
-      }
-    })
-  })
-})
-
-export const updateRoom = graphql(UPDATE_ROOM, {
-  props: ({ownProps, mutate}) => ({
-    updateRoom: (roomId, roomUpdate) => mutate({
-      variables: {
-        roomId,
-        roomUpdate
       }
     })
   })
@@ -179,6 +159,27 @@ export const emailConfirmation = graphql(EMAIL_CONF, {
   })
 })
 
+export const approveRoom = graphql(APPROVE_ROOM, {
+  props: ({ownProps, mutate}) => ({
+    approveRoom: (roomId) => mutate({
+      variables: {
+        roomId
+      }
+    })
+  })
+})
+
+export const banNametag = graphql(BAN_NAMETAG, {
+  props: ({ownProps, mutate}) => ({
+    banNametag: (roomId, nametagId) => mutate({
+      variables: {
+        roomId,
+        nametagId
+      }
+    })
+  })
+})
+
 export const updateBadgeRequestStatus = graphql(UPDATE_BADGE_REQUEST_STATUS, {
   props: ({ownProps, mutate}) => ({
     updateBadgeRequestStatus: (badgeRequest, status) => mutate({
@@ -197,6 +198,40 @@ export const updateBadgeRequestStatus = graphql(UPDATE_BADGE_REQUEST_STATUS, {
             granter: {
               ...oldData.granter,
               badgeRequests: oldData.granter.badgeRequests.filter(br => br.id !== badgeRequest)
+            }
+          }
+        }
+      }
+    })
+  })
+})
+
+export const updateNametag = graphql(UPDATE_NAMETAG, {
+  props: ({ownProps, mutate}) => ({
+    updateNametag: (nametagId, nametagUpdate) => mutate({
+      variables: {
+        nametagId,
+        nametagUpdate
+      },
+      optimisticResponse: {
+        updateNametag: {
+          errors: null
+        }
+      },
+      updateQueries: {
+        roomQuery: (oldData, {mutationResult: {data: {updateNametag: {errors}}}}) => {
+          if (errors) {
+            errorLog('Error updating nametag')(errors)
+            return oldData
+          }
+
+          return {
+            ...oldData,
+            room: {
+              ...oldData.room,
+              nametags: oldData.room.nametags
+                .map(nametag => nametag.Id === nametagId
+                  ? {...nametag, ...nametagUpdate} : nametag)
             }
           }
         }
@@ -366,6 +401,37 @@ export const setModOnlyDMs = graphql(SET_MOD_ONLY_DMS, {
             room: {
               ...oldData.room,
               modOnlyDMs
+            }
+          }
+        }
+      }
+    })
+  })
+})
+
+export const updateRoom = graphql(UPDATE_ROOM, {
+  props: ({ownProps, mutate}) => ({
+    updateRoom: (roomId, roomUpdate) => mutate({
+      variables: {
+        roomId,
+        roomUpdate
+      },
+      optimisticResponse: {
+        updateRoom: {
+          errors: null
+        }
+      },
+      updateQueries: {
+        roomQuery: (oldData, {mutationResult: {data: {updateRoom: {errors}}}}) => {
+          if (errors) {
+            errorLog('Error updating room')(errors)
+            return oldData
+          }
+          return {
+            ...oldData,
+            room: {
+              ...oldData.room,
+              ...roomUpdate
             }
           }
         }

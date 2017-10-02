@@ -3,6 +3,14 @@ const commands = {
     return this
       .waitForElementVisible('body', 3000)
   },
+  startConvo (title) {
+    return this.waitForElementVisible('@convoInput')
+      .setValue('@convoInput', title)
+      .getLocationInView('@startConvo')
+      .assert.visible('@startConvo')
+      .click('@startConvo')
+      .waitForElementVisible('#welcomeField')
+  },
   clickRoom () {
     return this.waitForElementVisible('@title')
     .click('@title')
@@ -85,6 +93,12 @@ module.exports = {
     },
     joinRoomButton: {
       selector: '#joinRoomButton'
+    },
+    convoInput: {
+      selector: '#convoInput'
+    },
+    startConvo: {
+      selector: '#startConvoButton'
     }
   }
 }

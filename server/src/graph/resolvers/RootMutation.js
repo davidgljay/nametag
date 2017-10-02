@@ -4,7 +4,9 @@ const {
   ErrNotLoggedIn,
   ErrNotAuthorized,
   ErrNotMod,
-  ErrNotYourNametag
+  ErrBanned,
+  ErrNotYourNametag,
+  ErrNotNametagAdmin
 } = require('../../errors')
 const pubsub = require('../subscriptions/pubsub')
 
@@ -30,30 +32,65 @@ const catchErrors = (err) => {
 }
 
 const wrap = (mutation, requires, key = 'result') => (obj, args, context) => {
-  if (requires === 'LOGIN' && !context.user) {
-    return Promise.reject(ErrNotLoggedIn)
-  }
-  if (requires === 'ROOM_MOD') {
-    return context.models.Rooms.get(args.roomId)
+  let promise
+  switch (requires) {
+
+    case 'LOGIN':
+      promise = !context.user
+      ? Promise.reject(ErrNotLoggedIn)
+      : mutation(obj, args, context)
+      break
+    case 'IN_ROOM':
+      if (!context.user) {
+        promise = Promise.reject(ErrNotLoggedIn)
+      } else if (!context.user.nametags[args.message.room]){
+        promise = Promise.reject(ErrNotInRoom)
+      } else {
+        promise = context.models.Nametags.get(context.user.nametags[args.message.room])
+          .then(nametag => nametag.banned ? Promise.reject(ErrBanned)
+          : mutation(obj, args, context))
+      }
+      break
+    case 'ROOM_MOD':
+      promise = context.models.Rooms.get(args.roomId)
       .then(room => room.mod === context.user.nametags[room.id]
         ? mutation(obj, args, context)
-          .catch(catchErrors)
         : Promise.reject(ErrNotMod)
       )
+      break
+
+    case 'MY_NAMETAG':
+      if (!context.user) {
+        promise = Promise.reject(ErrNotLoggedIn)
+      } else {
+        const myNametagIds = Object.keys(context.user.nametags)
+        .map(roomId => context.user.nametags[roomId])
+        promise = myNametagIds.indexOf(args.nametagId) > -1
+      ? mutation(obj, args, context)
+      : Promise.reject(ErrNotYourNametag)
+      }
+      break
+    case 'NAMETAG_ADMIN':
+      const {user, models: {Granters, Templates}} = context
+      if (!user) {
+        promise = Promise.reject(ErrNotLoggedIn)
+      } else {
+        promise = Granters.getByUrlCode('nametag')
+        .then(({id}) => {
+          return Templates.getGranterTemplates(id)
+        })
+        .then((templates) => {
+          const adminTemplate = templates.find(template => template.name === 'Admin')
+          return user.badges[adminTemplate.id]
+          ? mutation(obj, args, context)
+          : Promise.reject(ErrNotNametagAdmin)
+        })
+      }
+      break
+    default:
+      promise = mutation(obj, args, context)
   }
-  if (requires === 'MY_NAMETAG') {
-    if (!context.user) {
-      return Promise.reject(ErrNotLoggedIn)
-    }
-    const myNametagIds = Object.keys(context.user.nametags)
-      .map(roomId => context.user.nametags[roomId])
-    return myNametagIds.indexOf(args.nametagId) > -1
-    ? mutation(obj, args, context)
-      .catch(catchErrors)
-    : Promise.reject(ErrNotYourNametag)
-  }
-  return mutation(obj, args, context)
-    .catch(catchErrors)
+  return promise.catch(catchErrors)
 }
 
 const RootMutation = {
@@ -70,14 +107,10 @@ const RootMutation = {
         .then(wrapResponse('updateRoom'))
   },
   createMessage: {
-    requires: 'LOGIN',
-    resolve: (obj, {message}, {user, models: {Messages}}) => {
-      if (!user.nametags[message.room]) {
-        return Promise.reject(ErrNotInRoom)
-      }
-      return Messages.create(message)
-      .then(wrapResponse('message'))
-    }
+    requires: 'IN_ROOM',
+    resolve: (obj, {message}, {user, models: {Messages}}) =>
+      Messages.create(message)
+        .then(wrapResponse('message'))
   },
   deleteMessage: {
     requires: 'ROOM_MOD',
@@ -206,6 +239,18 @@ const RootMutation = {
     requires: null,
     resolve: (obj, {userToken, roomId}, {models: {Users}}) =>
       Users.unsubscribe(userToken, roomId)
+  },
+  approveRoom: {
+    requires: 'NAMETAG_ADMIN',
+    resolve: (obj, {roomId}, {models: {Rooms}}) =>
+      Rooms.approveRoom(roomId)
+      .then(wrapResponse('approveRoom'))
+  },
+  banNametag: {
+    requires: 'ROOM_MOD',
+    resolve: (obj, {roomId, nametagId}, {models: {Nametags}}) =>
+      Nametags.ban(nametagId, roomId)
+      .then(wrapResponse('banNametag'))
   }
 }
 

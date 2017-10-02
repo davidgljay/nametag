@@ -20,12 +20,8 @@ const ModActionButtons = (props) => <CardActions>
           label='REMOVE MESSAGE' />
         <FlatButton
           style={styles.severe}
-          onClick={props.removeUser}
-          label='EXPEL AUTHOR' />
-        <FlatButton
-          style={styles.severe}
-          onClick={props.notifyBadge}
-          label='REPORT AUTHOR' />
+          onClick={props.ban}
+          label='BAN AUTHOR' />
       </div>
     }
 </CardActions>

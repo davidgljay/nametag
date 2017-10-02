@@ -1,12 +1,9 @@
 import React, {Component, PropTypes} from 'react'
-import Badges from '../Badge/Badges'
-import Nametag from '../Nametag/Nametag'
 import Norms from './Norms'
-import Join from './Join'
 import Navbar from '../Utils/Navbar'
+import RoomCard from './RoomCard'
 import radium from 'radium'
 import {mobile} from '../../../styles/sizes'
-import {Card} from 'material-ui/Card'
 import {track, setTimer} from '../../utils/analytics'
 
 class JoinRoom extends Component {
@@ -40,66 +37,33 @@ class JoinRoom extends Component {
   render () {
     const {
       me,
-      room: {id, title, image, templates, norms, description, nametagCount, mod}
+      room
     } = this.props
+
+    let banned = false
+    // Check to see if the user is banned
+    if (me) {
+      const myNametag = me.nametags.find(nt => nt.room && nt.room.id === room.id)
+      banned = !!myNametag && myNametag.banned
+    }
 
     return <div id='room' style={styles.container}>
       <Navbar me={me} empty />
       <div id='roomInfoContainer' style={styles.roomInfoContainer}>
-        <Card>
-          <div style={styles.roomCard}>
-            <div id='roomImage' style={styles.roomImageContainer}>
-              <img
-                style={styles.roomImage}
-                onClick={this.flip}
-                src={image} />
-            </div>
-            <div id='roomInfo' style={styles.roomInfo}>
-              <div id='roomTitle' style={styles.title}>
-                {title}
-              </div>
-              <div id='roomDescription' style={styles.description}>
-                {description}
-              </div>
-              <div style={styles.count}>
-                {nametagCount || 0} participant
-                  {nametagCount === 1 ? '' : 's'}
-              </div>
-            </div>
-          </div>
-        </Card>
-      </div>
-      <div style={styles.modContainer}>
-        {
-          templates &&
-          <div id='badgeContainer' style={styles.badgeContainer}>
-            {
-              templates.length > 0 &&
-              <div style={styles.privateText}><h3>Private Conversation For:</h3></div>
-            }
-            <Badges
-              badges={templates.map(template => ({id: template.id, notes: [], template}))} />
-          </div>
-        }
-        <div>
-          <h3>Moderator</h3>
-          <Card>
-            <Nametag
-              style={styles.mod}
-              mod={mod.id}
-              nametag={mod} />
-          </Card>
-        </div>
+        <h3 style={styles.introText}>{
+            banned
+            ? 'You have been banned from this conversation:'
+            : 'You\'ve been invited to a conversation:'
+          }</h3>
+        <RoomCard room={room} disabled={room.closed || banned} />
       </div>
       <div style={styles.joinContainer}>
         <div id='normsContainer' style={styles.normsContainer}>
           <div style={styles.norms}>
-            <Norms norms={norms} showChecks />
+            <h3>Norms</h3>
+            <Norms norms={room.norms} showChecks />
           </div>
         </div>
-        <Join
-          room={id}
-          me={me} />
       </div>
     </div>
   }
@@ -111,8 +75,6 @@ JoinRoom.propTypes = {
   me: object,
   room: shape({
     title: string.isRequired,
-    image: string.isRequired,
-    description: string.isRequired,
     mod: shape({
       id: string.isRequired,
       image: string.isRequired
@@ -126,28 +88,16 @@ const styles = {
   container: {
     marginBottom: 100
   },
-  roomCard: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    [mobile]: {
-      width: 300
-    }
-  },
-  roomImageContainer: {
-    height: 200
-  },
-  roomImage: {
-    width: 300,
-    height: 200,
-    objectFit: 'cover',
-    borderRadius: 3
-  },
   roomInfoContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: 20,
-    flexWrap: 'wrap'
+    maxWidth: 800,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    textAlign: 'center',
+    marginTop: 40
+  },
+  introText: {
+    marginBottom: 60,
+    fontWeight: 300
   },
   roomInfo: {
     display: 'flex',
@@ -155,44 +105,6 @@ const styles = {
     marginLeft: 20,
     width: 300,
     padding: 10
-  },
-  badgeContainer: {
-    minWidth: 300
-  },
-  privateText: {
-    textAlign: 'center'
-  },
-  title: {
-    fontSize: 24,
-    lineHeight: '34px',
-    marginTop: 5,
-    marginBottom: 5
-  },
-  description: {
-    flex: 1,
-    marginTop: 20
-  },
-  count: {
-    textAlign: 'right',
-    fontSize: 11,
-    fontStyle: 'italic',
-    color: 'rgb(168, 168, 168)'
-  },
-  modContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    textAlign: 'center',
-    flexWrap: 'wrap',
-    marginBottom: 50
-  },
-  mod: {
-    width: 300
-  },
-  joinContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    alignItems: 'flex-start'
   },
   normsContainer: {
     display: 'flex',

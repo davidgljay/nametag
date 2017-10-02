@@ -12,7 +12,7 @@ const roomsTable = db.table('rooms')
  * Returns a particular room.
  *
  * @param {Object} context     graph context
- * @param {Array<String>} id   the id of the room to be retrieved
+ * @param {String} id   the id of the room to be retrieved
  *
  */
 
@@ -38,14 +38,17 @@ const getVisible = ({conn, user, models: {Users}}) =>
       // Otherwise, return all public rooms and rooms that the user can see based on their templates
       // TODO: Add pagination
       return roomsTable.between(new Date(Date.now() - ROOM_TIMEOUT), new Date(), {index: 'latestMessage'})
-        .orderBy({index: 'latestMessage'})
+        .orderBy({index: r.desc('latestMessage')})
         .filter(room =>
-          room('templates').count().eq(0) ||
-          room('templates')
-            .setIntersection(visibleTemplates)
-            .count().gt(0)
+          room('public').eq('APPROVED').and(
+            room('templates').count().eq(0).or(
+              room('templates')
+                .setIntersection(visibleTemplates)
+                .count().gt(0)
+            )
+          )
          )
-        .limit(10)
+        .limit(20)
         .run(conn)
         .then(cursor => cursor.toArray())
     })
@@ -71,11 +74,13 @@ const getGranterRooms = ({conn, user, models: {Users}}, granterCode) => {
         return Promise.resolve([])
       }
       return roomsTable.between(new Date(Date.now() - ROOM_TIMEOUT), new Date(), {index: 'latestMessage'})
-        .orderBy({index: 'latestMessage'})
+        .orderBy({index: r.desc('latestMessage')})
         .filter(room =>
-          room('templates')
-            .setIntersection(userTemplateIds)
-            .count().gt(0)
+          room('public').eq('APPROVED').and(
+            room('templates')
+              .setIntersection(userTemplateIds)
+              .count().gt(0)
+          )
          )
         .run(conn)
         .then(cursor => cursor.toArray())
@@ -114,28 +119,37 @@ const getQuery = ({conn, user, models: {Users}}, query) =>
  *
  **/
 
-const create = ({conn, models: {Nametags, Users}}, rm) => {
-  const room = Object.assign({}, rm, {createdAt: new Date(), modOnlyDMs: false})
-  return roomsTable.insert(room).run(conn)
-  .then((res) => {
+const create = ({conn, models: {Nametags, Users, Messages}}, rm) => {
+  const room = Object.assign(
+    {},
+    rm,
+    {createdAt: new Date(), modOnlyDMs: false, mod: null, public: rm.public ? 'PENDING' : false})
+  return Promise.all([
+    roomsTable.insert(room).run(conn),
+    rm.mod
+  ])
+  .then(([res, mod]) => {
     if (res.errors > 0) {
       return new errors.APIError('Error creating room')
     }
     const id = res.generated_keys[0]
-    const nametag = Object.assign({}, room.mod, {room: id})
+    const nametag = Object.assign({}, mod, {room: id})
     return Promise.all([
       Nametags.create(nametag),
       id,
-      room
+      room,
+      nametag
     ])
   })
   .then(([nametag, id, room]) => {
     const modId = nametag.id
+    const message = {text: nametag.bio, author: modId, room: id}
     return Promise.all([
       roomsTable.get(id).update({mod: modId}).run(conn),
       id,
       modId,
-      room
+      room,
+      Messages.create(message)
     ])
   })
   // Return room
@@ -223,6 +237,17 @@ const notifyOfNewMessage = ({conn, models: {Nametags, Users}}, roomId) =>
   })
   .catch(errors.errorLog('notifyOfNewMessage'))
 
+/**
+ * Approves a room for public display
+ *
+ * @param {Object} context     graph context
+ * @param {Object} roomId   the room to be updated
+ *
+ **/
+
+const approveRoom = ({conn}, roomId) =>
+  roomsTable.get(roomId).update({public: 'APPROVED'}).run(conn)
+
 module.exports = (context) => ({
   Rooms: {
     get: (id) => get(context, id),
@@ -233,6 +258,7 @@ module.exports = (context) => ({
     setModOnlyDMs: (roomId, modOnlyDMs) => setModOnlyDMs(context, roomId, modOnlyDMs),
     getGranterRooms: (granterCode) => getGranterRooms(context, granterCode),
     updateLatestMessage: (roomId) => updateLatestMessage(context, roomId),
-    notifyOfNewMessage: (roomId) => notifyOfNewMessage(context, roomId)
+    notifyOfNewMessage: (roomId) => notifyOfNewMessage(context, roomId),
+    approveRoom: (roomId) => approveRoom(context, roomId)
   }
 })

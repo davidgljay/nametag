@@ -4,12 +4,11 @@ query roomsQuery($query: String, $granter: String) {
   rooms(query: $query, granter: $granter) {
     id
     title
-    description
-    image
     norms
     createdAt
     nametagCount
     latestMessage
+    closed
     templates {
       id
       name
@@ -41,11 +40,18 @@ query roomsQuery($query: String, $granter: String) {
    nametags {
      id
      latestVisit
+     banned
      room {
        id
        title
-       image
        latestMessage
+       newMessageCount
+       newNametagCount
+       mod {
+        id
+        image
+        name
+       }
      }
    }
  }

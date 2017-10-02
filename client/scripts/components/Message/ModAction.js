@@ -56,14 +56,16 @@ class ModAction extends Component {
       }
 
       const checkedNorms = norms.filter((norm, i) => normChecks[i])
-
-      let message
-      if (isMod) {
-        message = isPublic ? `@${author.name} \n` : `d ${author.name} \n`
+      let recipient
+      let message = ''
+      if (isMod && isPublic) {
+        message = `@${author.name} \n`
+      } else if (isMod) {
+        recipient = author.id
       } else {
-        message = `d ${mod.name} \n`
+        recipient = mod.id
       }
-      message += isMod ? '### Note from the Moderator\n\n'
+      message += isMod ? `### Note from the Moderator\n\n`
         : `### Message Report\n\n`
       message += `\n> ${text}\n`
       message += `${checkedNorms.reduce((msg, norm) => `${msg}* **${norm}** \n`, '')}\n`
@@ -72,6 +74,9 @@ class ModAction extends Component {
         text: message,
         author: myNametag.id,
         room: roomId
+      }
+      if (recipient) {
+        modAction.recipient = recipient
       }
       createMessage(modAction, myNametag)
       .catch((err) => {
@@ -88,22 +93,19 @@ class ModAction extends Component {
       }
     }
 
-    this.removeUser = () => {
-      // TODO: Add functionality to remove user.
+    this.removeMessage = () => {
+      const {deleteMessage, msgId, roomId, close} = this.props
+      deleteMessage(msgId, roomId).then(() => close)
     }
 
-    this.removeMessage = () => {
-      const {deleteMessage, msgId, roomId} = this.props
-      deleteMessage(msgId, roomId)
+    this.ban = () => {
+      const {banNametag, author: {id}, roomId, close} = this.props
+      banNametag(roomId, id).then(() => close)
     }
 
     this.addNote = (e) => {
       e.preventDefault()
       this.setState({note: e.target.value})
-    }
-
-    this.notifyBadge = () => {
-      // TODO:Notify badge granters
     }
   }
 
@@ -146,6 +148,7 @@ class ModAction extends Component {
         isMod={isMod}
         remindOfNorms={this.remindOfNorms}
         removeUser={this.removeUser}
+        ban={this.ban}
         notifyBadge={this.notifyBadge}
         authorName={author.name}
         removeMessage={this.removeMessage} />
@@ -168,6 +171,7 @@ ModAction.propTypes = {
     id: string.isRequired
   }).isRequired,
   deleteMessage: func.isRequired,
+  banNametag: func.isRequired,
   createMessage: func.isRequired
 }
 

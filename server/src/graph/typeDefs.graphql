@@ -67,12 +67,6 @@ type Room {
   # The title of the room
   title: String!
 
-  # The description of the room
-  description: String!
-
-  # The url of the room's image
-  image: String!
-
   # The norms of the room
   norms: [String!]
 
@@ -94,6 +88,12 @@ type Room {
   # The latest message in this room
   latestMessage: Date
 
+  # Count of new nametags
+  newNametagCount: Int!
+
+  # Count of new messages
+  newMessageCount: Int!
+
   # Templates required to view and enter the room
   templates: [Template]
 
@@ -105,6 +105,9 @@ type Room {
 
   # Topic of discussion in the room
   topic: String
+
+  # Indicates whether a room is closed
+  closed: Boolean
 }
 
 # A topic of discussion in a room
@@ -126,7 +129,7 @@ type Message {
   text: String!
 
   # The nametag ID of the message's author
-  author: Nametag!
+  author: Nametag
 
   # The nametag ID of the message's recipient. If this is defined then this is a direct message.
   recipient: Nametag
@@ -194,6 +197,9 @@ type Nametag {
 
   # Latest visit to this nametag's room by the nametag holder
   latestVisit: Date
+
+  # Indicates whether a user has been banned from a room
+  banned: Boolean
 
 }
 
@@ -408,12 +414,6 @@ input CreateRoomInput {
   # The room's title
   title: String!
 
-  # A description for the room
-  description: String!
-
-  # The image to be displayed on the room's card
-  image: String!
-
   # An optional welcome message
   welcome: String!
 
@@ -425,6 +425,9 @@ input CreateRoomInput {
 
   # An array of templates required to view and enter the room
   templates:[ID!]
+
+  # Indicates whether the room should be displayed on the homepage and in searches
+  public: Boolean!
 
 }
 
@@ -455,9 +458,6 @@ input UpdateRoomInput {
   # A description for the room
   description: String
 
-  # The image to be displayed on the room's card
-  image: String
-
   # An array of the room's norms
   norms: [String!]
 
@@ -466,6 +466,12 @@ input UpdateRoomInput {
 
   # The current topic in a room
   topic: String
+
+  # Indicates whether the room is closed
+  closed: Boolean
+
+  # Indicates whether users other than the mod can DM one another.
+  modOnlyDMs: Boolean
 
 }
 
@@ -701,6 +707,12 @@ type RootMutation {
   # Unsubscribes from a room
   unsubscribe(userToken: String!, roomId: String!): BasicResponse
 
+  # Approves a public room
+  approveRoom(roomId: ID!): BasicResponse
+
+  # Bans a user from a room
+  banNametag(roomId: ID!, nametagId: ID!): BasicResponse
+
 }
 
 ################################################################################
@@ -753,6 +765,9 @@ type UpdateRoom {
 
   # The current topic of discussion in the room
   topic: String
+
+  # Indicates whether a room has been closed
+  closed: Boolean
 
 }
 

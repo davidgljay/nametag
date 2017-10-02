@@ -4,6 +4,7 @@ import RoomLeftBar from './RoomLeftBar'
 import AppBar from 'material-ui/AppBar'
 import Dialog from 'material-ui/Dialog'
 import radium, {keyframes} from 'radium'
+import Login from '../User/Login'
 import Messages from '../../components/Message/Messages'
 import WelcomeForm from './WelcomeForm'
 import ConfirmNametagForm from './ConfirmNametagForm'
@@ -39,7 +40,7 @@ class Room extends Component {
         clearInterval(prevState.presenceTimer)
         const presenceTimer = setInterval(() => {
           updateLatestVisit(myNametag.id)
-        }, 10000)
+        }, 30000)
         return {
           ...prevState,
           presenceTimer
@@ -61,33 +62,7 @@ class Room extends Component {
       window.location = '/rooms'
     }
 
-    this.userHasPosted = (myNametag, messages) => {
-      for (let i = 0; i < messages.length; i++) {
-        if (myNametag.id === messages[i].author.id) {
-          return true
-        }
-      }
-      return false
-    }
-
-    this.dismissWelcomeModal = () => {
-      if (this.props.myNametag && this.state.hasPosted) {
-        this.setState({dismissedWelcomeModal: true})
-      }
-    }
-
-    this.handleRoomJoin = () => {
-      // FIXME: We set hasPosted=false because there's a gap in between nametag
-      // creation and messages loading where hasPosted=null, causing the
-      // welcome dialog to hide. We want hasPosted to default to null in
-      // general, so users who've posted before don't see a flash of the modal
-      // when loading the room. Moving hasPosted to a connected prop which is
-      // set at the same time as myNametag is set would avoid this.
-      this.setState({hasPosted: false}, () => {
-        // Reload me.nametags after room nametag created.
-        this.props.data.refetch()
-      })
-    }
+    this.onCreateNametag = () => this.props.data.refetch()
 
     this.setDefaultMessage = (defaultMessage) => this.setState({defaultMessage})
 
@@ -123,7 +98,6 @@ class Room extends Component {
       this.showPresence()
       messageAddedSubscription(room.id, myNametag.id)
       messageDeletedSubscription(room.id)
-      this.setState({hasPosted: this.userHasPosted(myNametag, room.messages)})
       track('ROOM_VIEW', {id: room.id, title: room.title})
       setTimer('POST_MESSAGE')
     }
@@ -151,17 +125,19 @@ class Room extends Component {
       removeNametagEditBadge,
       registerUser,
       loginUser,
+      passwordResetRequest,
       createNametag,
       latestMessageUpdatedSubscription,
       createMessage,
       updateRoom,
       updateNametag,
       deleteMessage,
+      banNametag,
       addReaction,
       location: {state: locationState}
     } = this.props
 
-    const {defaultMessage, recipient, hasPosted, dismissedWelcomeModal} = this.state
+    const {defaultMessage, recipient} = this.state
 
     const isJoining = locationState && locationState.isJoining
 
@@ -172,7 +148,7 @@ class Room extends Component {
     }
 
     // If the user is not logged in and hasn't clicked "join room", return to the homepage
-    if (!me || (!myNametag && !isJoining)) {
+    if ((!myNametag && !isJoining) || (myNametag && myNametag.banned)) {
       return <JoinRoom
         registerUser={registerUser}
         loginUser={loginUser}
@@ -183,13 +159,17 @@ class Room extends Component {
 
     const isMobile = window.innerWidth < 800
 
-    const backIcon = <img id='backButton' style={styles.backIcon} src='https://s3.amazonaws.com/nametag_images/logo-inverted30.png' />
+    const backIcon = <img
+      id='backButton'
+      style={styles.backIcon}
+      src='https://s3.amazonaws.com/nametag_images/logo-inverted30.png' />
 
     return <div style={styles.roomContainer}>
       <div id='room'>
         <AppBar
           id='roomTitle'
           title={room.title}
+          titleStyle={styles.title}
           style={styles.appBar}
           iconElementRight={backIcon}
           onRightIconButtonTouchTap={this.showRooms}
@@ -214,6 +194,7 @@ class Room extends Component {
             hideDMs={!!hideDMs}
             addReaction={addReaction}
             deleteMessage={deleteMessage}
+            banNametag={banNametag}
             setDefaultMessage={this.setDefaultMessage}
             setRecipient={this.setRecipient}
             mod={room.mod}
@@ -225,6 +206,7 @@ class Room extends Component {
           welcome={room.welcome}
           topic={room.topic}
           mod={room.mod}
+          closed={!!room.closed}
           recipient={recipient}
           setDefaultMessage={this.setDefaultMessage}
           setRecipient={this.setRecipient}
@@ -239,9 +221,18 @@ class Room extends Component {
       <Dialog
         modal={false}
         contentStyle={styles.dialog}
-        open={!myNametag || (hasPosted === false && !dismissedWelcomeModal)}
+        open={!me || !myNametag || !myNametag.bio}
         onRequestClose={this.dismissWelcomeModal}>
-        {!myNametag &&
+        {
+          !me && <Login
+            registerUser={registerUser}
+            loginUser={loginUser}
+            message='Create account to Join'
+            register
+            passwordResetRequest={passwordResetRequest} />
+        }
+        {
+          me && !myNametag &&
           <ConfirmNametagForm
             roomId={room.id}
             templates={room.templates.map(t => t.id)}
@@ -251,9 +242,10 @@ class Room extends Component {
             addNametagEditBadge={addNametagEditBadge}
             removeNametagEditBadge={removeNametagEditBadge}
             updateNametagEdit={updateNametagEdit}
-            onCreateNametag={this.handleRoomJoin} />
+            onCreateNametag={this.onCreateNametag} />
         }
-        {myNametag && hasPosted === false &&
+        {
+          myNametag && !myNametag.bio &&
           <WelcomeForm
             createMessage={createMessage}
             welcome={room.welcome}
@@ -279,20 +271,25 @@ Room.propTypes = {
       norms: arrayOf(string).isRequired,
       messages: arrayOf(object),
       nametags: arrayOf(object),
-      modOnlyDMs: bool
+      modOnlyDMs: bool,
+      closed: bool
     }),
     me: object
   }).isRequired,
   params: shape({
     roomId: string.isRequired
   }),
+  loginUser: func.isRequired,
+  registerUser: func.isRequired,
+  passwordResetRequest: func.isRequired,
   typingPrompts: array.isRequired,
   updateRoom: func.isRequired,
   createNametag: func.isRequired,
   createMessage: func.isRequired,
   toggleSaved: func.isRequired,
   addReaction: func.isRequired,
-  updateToken: func.isRequired
+  updateToken: func.isRequired,
+  banNametag: func.isRequired
 }
 
 export default radium(Room)
@@ -309,18 +306,19 @@ const slideIn = keyframes({
 
 const styles = {
   dialog: {
-    maxWidth: 820
+    maxWidth: 820,
+    width: 'fit-content'
   },
   roomContainer: {
     overflowX: 'hidden'
   },
   appBar: {
     position: 'fixed',
-    boxShadow: 'none'
+    boxShadow: 'none',
+    fontWeight: 300
   },
   title: {
-    marginTop: 10,
-    marginBottom: 5
+    fontWeight: 300
   },
   close: {
     float: 'right',

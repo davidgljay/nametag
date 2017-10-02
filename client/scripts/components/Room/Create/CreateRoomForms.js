@@ -1,28 +1,31 @@
 import React, {PropTypes} from 'react'
-import TitleForm from './TitleForm'
-import ChoosePrivacy from './ChoosePrivacy'
-import EditNametag from '../../Nametag/EditNametag'
-import UserBadges from '../../Badge/UserBadges'
+import WelcomeForm from './WelcomeForm'
+// import ChoosePrivacy from './ChoosePrivacy'
+import HostIntro from './HostIntro'
+import Login from '../../User/Login'
 import ChooseNorms from './ChooseNorms'
-import ImageSearch from './ImageSearch'
-import {grey400} from 'material-ui/styles/colors'
+import Toggle from 'material-ui/Toggle'
+import RoomCard from '../RoomCard'
 import {track} from '../../../utils/analytics'
+import {grey} from '../../../../styles/colors'
 
 const getForm = ({
     error,
     stepIndex,
     updateRoom,
     nametagEdits,
+    selectedBadges,
     updateNametagEdit,
     setClosed,
     closedIn,
     room,
     badges,
-    selectedBadges,
-    searchImage,
     handleNext,
     handlePrev,
     setImageFromUrl,
+    loginUser,
+    passwordResetRequest,
+    registerUser,
     addNametagEditBadge,
     removeNametagEditBadge,
     addSelectedBadge,
@@ -35,74 +38,71 @@ const getForm = ({
   switch (stepIndex) {
     case 0:
       return <div>
-        <h4>What would you like to talk about?</h4>
-        <TitleForm
+        <WelcomeForm
           error={error}
           updateRoom={updateRoom}
-          setClosed={setClosed}
-          closedIn={closedIn}
-          title={room.title}
-          desc={room.description} />
-        <ChoosePrivacy
-          badges={badges}
-          adminTemplates={me.adminTemplates}
-          selectedBadges={selectedBadges}
-          addSelectedBadge={addSelectedBadge}
-          removeSelectedBadge={removeSelectedBadge} />
+          welcome={room.welcome} />
       </div>
     case 1:
-      track('CREATE_ROOM_TITLE')
+      track('WELCOME_FORMS')
       return <div>
-        {
-          !room.image && <h4>Please select an image for this conversation.</h4>
-        }
-        <ImageSearch
-          error={error}
-          style={styles.imageSearch}
-          handleNext={handleNext}
-          handlePrev={handlePrev}
-          setImageFromUrl={setImageFromUrl}
-          searchImage={searchImage}
-          updateRoom={updateRoom} />
-      </div>
-    case 2:
-      track('CREATE_ROOM_IMAGE')
-      return <div>
-        <h4>How would you like to appear in your room?</h4>
-        <div style={styles.editNametagContainer}>
-          <div>
-            <EditNametag
-              error={error}
-              nametagEdit={nametagEdits.new}
-              addNametagEditBadge={addNametagEditBadge}
-              requiredTemplates={selectedBadges.map(b => b.template.id)}
-              removeNametagEditBadge={removeNametagEditBadge}
-              updateNametagEdit={updateNametagEdit}
-              me={me}
-              roomId='new' />
-            <div style={styles.userBadges}>
-              <UserBadges
-                badges={me.badges}
-                selectedBadges={nametagEdits.new && nametagEdits.new.badges} />
-            </div>
-          </div>
-        </div>
-      </div>
-    case 3:
-      track('CREATE_ROOM_NAMETAG')
-      return <div>
-        <h4>Please set norms for this discussion.</h4>
         <ChooseNorms
           error={error}
           style={styles.chooseNorms}
           addNorm={addNorm}
           normsObj={norms}
+          updateRoom={updateRoom}
+          room={room}
           removeNorm={removeNorm} />
       </div>
-    case 4:
-      track('CREATE_ROOM_NORMS')
+    case 2:
+      track('CHOOSE_NORMS')
       return <div>
-        <h4>Ready to publish this conversation?</h4>
+        {
+          me
+          ? <HostIntro
+            nametagEdits={nametagEdits}
+            selectedBadges={selectedBadges}
+            addNametagEditBadge={addNametagEditBadge}
+            removeNametagEditBadge={removeNametagEditBadge}
+            updateNametagEdit={updateNametagEdit}
+            me={me}
+            error={error} />
+        : <div>
+          <h2>Create Account</h2>
+          <Login
+            registerUser={registerUser}
+            loginUser={loginUser}
+            message=''
+            register
+            passwordResetRequest={passwordResetRequest} />
+        </div>
+        }
+      </div>
+    case 3:
+      track('HOST_INTRO')
+      return <div style={styles.container}>
+        <div style={styles.preview}>
+          <RoomCard room={{...room, mod: nametagEdits.new}} disableJoin />
+        </div>
+        <h2>You're done!</h2>
+        <div style={styles.privacyContainer}>
+          <Toggle
+            style={styles.toggleStyle}
+            label={room.public ? 'Make Discoverable' : 'Keep Private'}
+            toggled={room.public}
+            labelStyle={{textAlign: 'left'}}
+            thumbStyle={{backgroundColor: grey}}
+            onToggle={(e, isChecked) => updateRoom('public', isChecked)}
+            />
+          <div style={styles.helpText}>
+            {
+              room.public
+              ? 'Once approved, your conversation will be discoverable on Nametag.'
+              : 'Your conversation will only be visible if you share its link.'
+            }
+          </div>
+        </div>
       </div>
     default:
       return 'Something has gone wrong!'
@@ -126,11 +126,11 @@ CreateRoomForms.propTypes = {
   updateNametagEdit: func.isRequired,
   room: shape({
     title: string.isRequired,
-    image: string.isRequired,
-    description: string.isRequired
+    welcome: string.isRequired
   }).isRequired,
-  searchImage: func.isRequired,
-  setImageFromUrl: func.isRequired,
+  registerUser: func.isRequired,
+  loginUser: func.isRequired,
+  passwordResetRequest: func.isRequired,
   nametagEdits: object.isRequired,
   addNametagEditBadge: func.isRequired,
   removeNametagEditBadge: func.isRequired,
@@ -138,7 +138,7 @@ CreateRoomForms.propTypes = {
     badges: arrayOf(shape({
       id: string.isRequired
     })).isRequired
-  }).isRequired,
+  }),
   norms: object.isRequired,
   addNorm: func.isRequired,
   removeNorm: func.isRequired
@@ -147,29 +147,28 @@ CreateRoomForms.propTypes = {
 export default CreateRoomForms
 
 const styles = {
-  imageSearch: {
-    maxWidth: 600
-  },
-  userBadges: {
-    width: 270,
+  privacyContainer: {
     display: 'flex',
-    flexWrap: 'wrap',
-    minHeight: 100,
-    verticalAlign: 'top',
-    padding: 5,
-    margin: 5
-  },
-  userBadgeText: {
-    fontStyle: 'italic',
-    fontSize: 12,
-    color: grey400
-  },
-  editNametagContainer: {
-    display: 'flex',
-    justifyContent: 'center'
+    alignItems: 'center',
+    flexDirection: 'column'
   },
   chooseNorms: {
-    width: 350,
+    width: 450,
+    marginLeft: 'auto',
+    marginRight: 'auto'
+  },
+  helpText: {
+    color: grey,
+    fontSize: 14,
+    width: 450,
+    marginTop: 20,
+    marginBottom: 40
+  },
+  toggleStyle: {
+    width: 200
+  },
+  preview: {
+    maxWidth: 800,
     marginLeft: 'auto',
     marginRight: 'auto'
   }

@@ -1,11 +1,14 @@
 import React, {Component, PropTypes} from 'react'
-import RoomCard from './RoomCard'
+// import RoomCard from './RoomCard'
 import Navbar from '../Utils/Navbar'
 import CreateRoomForms from './Create/CreateRoomForms'
 import CircularProgress from 'material-ui/CircularProgress'
 import Stepper from './Create/Stepper'
 import RaisedButton from 'material-ui/RaisedButton'
+import FlatButton from 'material-ui/FlatButton'
 import {track} from '../../utils/analytics'
+import {grey, white} from '../../../styles/colors'
+import {getQueryVariable} from '../../utils/queryVars'
 
 class CreateRoom extends Component {
 
@@ -14,10 +17,9 @@ class CreateRoom extends Component {
 
     this.state = {
       room: {
-        title: '',
-        description: '',
-        image: '',
-        templates: []
+        templates: [],
+        welcome: '',
+        public: true
       },
       image: '',
       norms: {},
@@ -30,8 +32,10 @@ class CreateRoom extends Component {
     }
 
     this.handleNext = () => {
-      const validation = this.validate(this.state.stepIndex)
+      const {stepIndex} = this.state
+      const validation = this.validate(stepIndex)
       if (validation.valid) {
+        history.pushState('', document.title, `${window.location.pathname}?step=${stepIndex + 1}`)
         this.setState((prevState) => {
           prevState.error = null
           prevState.stepIndex ++
@@ -39,13 +43,15 @@ class CreateRoom extends Component {
           return prevState
         })
       } else {
-        this.setState({error: validation.error})
+        this.setState({error: validation})
       }
     }
 
     this.handlePrev = () => {
       this.setState((prevState) => {
+        const {stepIndex} = this.state
         delete prevState.error
+        history.pushState('', document.title, `${window.location.pathname}?step=${stepIndex - 1}`)
         if (prevState.stepIndex > 0) {
           prevState.stepIndex --
         }
@@ -71,6 +77,7 @@ class CreateRoom extends Component {
 
     this.createRoom = () => {
       const {room} = this.state
+      track('CREATE_ROOM', {title: room.title})
       const {nametagEdits} = this.props
       const roomTemplates = room.templates.map(t => t.id)
       const mod = {
@@ -90,6 +97,7 @@ class CreateRoom extends Component {
     this.updateRoom = (prop, val) => {
       this.setState((prevState) => {
         prevState.room[prop] = val
+        window.localStorage.setItem('room', JSON.stringify(prevState.room))
         return prevState
       })
     }
@@ -117,34 +125,25 @@ class CreateRoom extends Component {
 
     this.validate = (stepIndex) => {
       const {room} = this.state
+      const {nametagEdits} = this.props
       switch (stepIndex) {
         case 0:
           return {
-            valid: room.title && room.description && room.welcome,
-            error: {
-              titleError: room.title ? '' : 'Please add a title',
-              descriptionError: room.description ? '' : 'Please add a description',
-              welcomeError: room.welcome ? '' : 'Please add a welcome prompt'
-            }
+            valid: room.welcome,
+            welcomeError: !room.welcome && 'Please add a welcome prompt'
           }
         case 1:
           return {
-            valid: room.image,
-            error: room.image ? '' : 'Please provide an image'
-          }
-        case 2:
-          return {
-            valid: this.props.nametagEdits.new.name,
-            error: {
-              nameError: this.props.nametagEdits.new.name ? '' : 'Please choose a name for this room'
-            }
-          }
-        case 3:
-          return {
             valid: room.norms && room.norms.length > 0,
-            error: room.norms && room.norms.length > 0 ? ''
-            : 'Please select at least one norm'
+            normsError: !room.norms || !room.norms.length > 0 && 'Please select at least one norm'
           }
+        case 2: {
+          return {
+            valid: nametagEdits.new.name && nametagEdits.new.image && nametagEdits.new.bio,
+            imageError: nametagEdits.new.image ? '' : 'Please choose an image',
+            bioError: nametagEdits.new.bio ? '' : 'Please introduce yourself'
+          }
+        }
         default:
           return {
             valid: true,
@@ -155,28 +154,48 @@ class CreateRoom extends Component {
   }
 
   componentDidMount () {
+    const {location: {state: locationState}} = this.props
+    const title = locationState && locationState.title
+    const stepIndex = getQueryVariable('step')
+    if (stepIndex) {
+      this.setState({stepIndex: parseInt(stepIndex)})
+    }
     this.props.updateNametagEdit('new', 'image', '')
     this.props.updateNametagEdit('new', 'name', '')
     this.props.updateNametagEdit('new', 'bio', '')
     this.props.updateNametagEdit('new', 'badges', [])
-    track('CREATE_ROOM_VIEW')
+    if (title) {
+      this.updateRoom('title', title)
+      track('CREATE_ROOM_VIEW', {title})
+    }
+    window.addEventListener('popstate', (event) => {
+      const step = getQueryVariable('step')
+      this.setState({stepIndex: step ? parseInt(step) : 0})
+    })
+  }
+
+  componentDidUpdate (oldProps) {
+    const {data: {loading}} = this.props
+    if (oldProps.data.loading && !loading) {
+      const storedRoom = window.localStorage.getItem('room')
+      if (storedRoom) {
+        const room = JSON.parse(storedRoom)
+        this.setState({room})
+      }
+    }
   }
 
   render () {
     const {
-      data,
-      searchImage,
-      setImageFromUrl,
+      data: {me, loading},
       nametagEdits,
       updateNametagEdit,
       addNametagEditBadge,
-      removeNametagEditBadge
+      removeNametagEditBadge,
+      registerUser,
+      loginUser,
+      passwordResetRequest
     } = this.props
-    const {me, loading} = data
-    if (!me && !loading) {
-      window.location = '/'
-      return null
-    }
     const {room, stepIndex} = this.state
     const selectedBadges = room.templates.map(template => ({id: template.id, notes: [], template}))
     return !loading
@@ -185,26 +204,7 @@ class CreateRoom extends Component {
         me={me}
         toggleLogin={() => {}} />
       <div style={styles.title}>
-        <h1>Start a Conversation</h1>
-        <Stepper stepIndex={stepIndex} />
-      </div>
-      <div style={styles.roomPreview} id='roomPreview'>
-        <RoomCard
-          room={{
-            ...room,
-            id: 'new',
-            mod: {
-              ...nametagEdits.new,
-              id: 'newMod'
-            }
-          }}
-          style={styles.previewCard}
-          creating
-          flipped={stepIndex === 3}
-          nametagEdits={nametagEdits}
-          updateNametagEdit={updateNametagEdit}
-          addNametagEditBadge={addNametagEditBadge}
-          removeNametagEditBadge={removeNametagEditBadge} />
+        <Stepper stepIndex={stepIndex} loggedIn={!!me} />
       </div>
       <div style={styles.createRoom}>
         {
@@ -212,7 +212,7 @@ class CreateRoom extends Component {
             stepIndex={this.state.stepIndex}
             updateNametagEdit={updateNametagEdit}
             room={this.state.room}
-            badges={me.badges}
+            badges={me ? me.badges : []}
             handleNext={this.handleNext}
             handlePrev={this.handlePrev}
             selectedBadges={selectedBadges}
@@ -220,8 +220,9 @@ class CreateRoom extends Component {
             removeSelectedBadge={this.removeSelectedBadge}
             nametagEdits={nametagEdits}
             updateRoom={this.updateRoom}
-            searchImage={searchImage}
-            setImageFromUrl={setImageFromUrl}
+            loginUser={loginUser}
+            registerUser={registerUser}
+            passwordResetRequest={passwordResetRequest}
             addNametagEditBadge={addNametagEditBadge}
             removeNametagEditBadge={removeNametagEditBadge}
             addNorm={this.addNorm}
@@ -236,30 +237,33 @@ class CreateRoom extends Component {
         <div>
           {
             this.state.stepIndex > 0 &&
-            <RaisedButton
+            <FlatButton
               style={styles.button}
-              labelStyle={styles.buttonLabel}
-              primary
+              labelStyle={styles.backButtonLabel}
               id='backButton'
               onClick={this.handlePrev}
               label='BACK' />
           }
           {
-            this.state.stepIndex >= 4
-            ? <RaisedButton
-              style={styles.button}
-              labelStyle={styles.buttonLabel}
-              primary
-              id='publishButton'
-              onClick={this.createRoom}
-              label='PUBLISH' />
-            : <RaisedButton
+            this.state.stepIndex < 3 &&
+            !(this.state.stepIndex === 2 && !me) &&
+            <RaisedButton
               style={styles.button}
               labelStyle={styles.buttonLabel}
               primary
               id='nextButton'
               onClick={this.handleNext}
               label='NEXT' />
+          }
+          {
+            this.state.stepIndex === 3 &&
+            <RaisedButton
+              style={styles.button}
+              labelStyle={styles.buttonLabel}
+              primary
+              id='doneButton'
+              onClick={this.createRoom}
+              label='GO TO ROOM' />
             }
         </div>
       </div>
@@ -272,9 +276,7 @@ class CreateRoom extends Component {
 
 const {func, object, shape, arrayOf} = PropTypes
 CreateRoom.propTypes = {
-  searchImage: func.isRequired,
   createRoom: func.isRequired,
-  setImageFromUrl: func.isRequired,
   nametagEdits: object.isRequired,
   data: shape({
     me: shape({
@@ -301,7 +303,11 @@ const styles = {
     margin: 0
   },
   buttonLabel: {
-    color: '#fff',
+    color: white,
+    margin: 20
+  },
+  backButtonLabel: {
+    color: grey,
     margin: 20
   },
   button: {

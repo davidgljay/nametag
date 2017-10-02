@@ -4,12 +4,11 @@ query roomQuery($id: ID!){
   room(id:$id) {
     id
     title
-    image
-    description
     norms
     nametagCount
     welcome
     topic
+    closed
     templates {
       id
       image
@@ -58,11 +57,17 @@ query roomQuery($id: ID!){
       id
       mentions
       latestVisit
+      banned
       room {
         id
         title
-        image
         latestMessage
+        newMessageCount
+        mod {
+          id
+          image
+          name
+        }
       }
     }
     badges {

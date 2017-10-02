@@ -127,8 +127,8 @@ r.connect({host: 'rethinkdb'})
       {
         display: 'popup',
         authType: 'rerequest',
-        scope: ['public_profile'],
-        profileFields: ['id', 'displayName', 'email', 'picture']
+        scope: ['public_profile', 'email'],
+        profileFields: ['id', 'displayName', 'picture']
       }))
     app.get('/auth/facebook/callback', (req, res, next) =>
       passport.authenticate('facebook',
@@ -144,7 +144,7 @@ r.connect({host: 'rethinkdb'})
 
     /* Google auth */
     app.get('/auth/google', passport.authenticate('google', {
-      scope: ['https://www.googleapis.com/auth/plus.login']
+      scope: ['openid', 'profile', 'email']
     }))
     app.get('/auth/google/callback', (req, res, next) =>
       passport.authenticate('google',

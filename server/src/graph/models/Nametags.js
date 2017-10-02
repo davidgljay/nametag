@@ -7,6 +7,21 @@ const notification = require('../../notifications')
 const nametagsTable = db.table('nametags')
 
 /**
+ * Returns the number of new nametags since a particular date.
+ *
+ * @param {Object} context     graph context
+ * @param {String} roomId   the id of the room to be checked
+ * @param {Date} date the date to be checked against
+ *
+ */
+
+const newNametagCount = ({conn, user}, roomId, date) =>
+  nametagsTable.getAll(roomId, {index: 'room'})
+  .filter(msg => msg('createdAt').gt(nametagsTable.get(user.nametags[roomId])('latestVisit')))
+  .count()
+  .run(conn)
+
+/**
  * Returns the nametags from a particular room.
  *
  * @param {Object} context     graph context
@@ -207,10 +222,35 @@ const updateLatestVisit = ({conn}, nametagId) => nametagsTable
     }, 30000)
   })
 
+  /**
+   * Bans a nametag from a room
+   *
+   * @param {Object} context     graph context
+   * @param {String} id   the id of the nametag to be updated
+   * @param {String} roomId the id of the room where the nametag is located
+   */
+
+const ban = ({conn, models:{Messages}}, id, roomId) =>
+  nametagsTable.get(id).run(conn)
+    .then(nametag => {
+      if (nametag.room !== roomId) {
+        return Promise.reject(errors.ErrNotAuthorized)
+      }
+      const message = {
+        text: `${nametag.name} has been banned from this room.`,
+        room: roomId
+      }
+      return Promise.all([
+        Messages.create(message),
+        nametagsTable.get(id).update({banned: true}).run(conn)
+      ])
+    })
+
 module.exports = (context) => ({
   Nametags: {
     get: (id) => get(context, id),
     getAll: (ids) => getAll(context, ids),
+    newNametagCount: (room, date) => newNametagCount(context, room, date),
     getRoomNametags: (room) => getRoomNametags(context, room),
     getByBadge: (badgeId) => getByBadge(context, badgeId),
     create: (nametag, createBadgeRequest) => create(context, nametag, createBadgeRequest),
@@ -218,6 +258,7 @@ module.exports = (context) => ({
     addMention: (nametag) => addMention(context, nametag),
     getNametagCount: (room) => getNametagCount(context, room),
     updateLatestVisit: (nametagId) => updateLatestVisit(context, nametagId),
-    grantBadge: (id, badgeId) => grantBadge(context, id, badgeId)
+    grantBadge: (id, badgeId) => grantBadge(context, id, badgeId),
+    ban: (id, roomId) => ban(context, id, roomId)
   }
 })

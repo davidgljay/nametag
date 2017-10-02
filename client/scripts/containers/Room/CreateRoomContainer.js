@@ -1,8 +1,8 @@
 import {connect} from 'react-redux'
 import {compose} from 'react-apollo'
 import component from '../../components/Room/CreateRoom'
-import {searchImage, setImageFromUrl} from '../../actions/RoomActions'
-import {updateNametagEdit, addNametagEditBadge, removeNametagEditBadge} from '../../actions/NametagEditActions'
+import {loginUser, registerUser} from '../../actions/UserActions'
+import {updateNametagEdit, addNametagEditBadge, removeNametagEditBadge, passwordResetRequest} from '../../actions/NametagEditActions'
 import {userQuery} from '../../graph/queries'
 import {createRoom} from '../../graph/mutations'
 
@@ -17,8 +17,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   const disp = (func) => (...args) => dispatch(func.apply(this, args))
   return {
-    searchImage: disp(searchImage),
-    setImageFromUrl: disp(setImageFromUrl),
+    registerUser: disp(registerUser),
+    loginUser: disp(loginUser),
+    passwordResetRequest: disp(passwordResetRequest),
     updateNametagEdit: disp(updateNametagEdit),
     addNametagEditBadge: disp(addNametagEditBadge),
     removeNametagEditBadge: disp(removeNametagEditBadge)

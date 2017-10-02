@@ -7,7 +7,8 @@ const styles = {
   norms: {
     textAlign: 'center',
     padding: 0,
-    listStyle: 'none'
+    listStyle: 'none',
+    fontWeight: 300
   },
 
   norm: {

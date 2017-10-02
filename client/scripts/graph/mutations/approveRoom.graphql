@@ -1,0 +1,8 @@
+mutation ApproveRoom($roomId:ID!) {
+  approveRoom(roomId:$roomId) {
+    errors {
+      translation_key
+      message
+    }
+  }
+}
