@@ -80,7 +80,9 @@ class Messages extends Component {
   }
 
   componentDidUpdate (prevProps) {
-    this.scroll()
+    if (prevProps.messages.length !== this.props.messages.length) {
+      this.scroll()
+    }
   }
 
   render () {
