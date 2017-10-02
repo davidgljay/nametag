@@ -22,16 +22,17 @@ class Compose extends Component {
 
     this.onChange = (e) => {
       const text = e.target.value
-      const {onUpdateText, showTypingPrompt, myNametag, roomId} = this.props
+      const {onUpdateText, showTypingPrompt} = this.props
       const {lastTypingPrompt} = this.state
       if (onUpdateText) {
         onUpdateText(text)
       }
 
       // Post a prompt that the user is typing once every 2 seconds at most
-      if (showTypingPrompt && lastTypingPrompt < Date.now() - 2000) {
+      // Temporarily disabling, as this seems to slow down typing noticably
+      if (showTypingPrompt && Date.now() - lastTypingPrompt > 4000) {
         this.setState({lastTypingPrompt: Date.now()})
-        showTypingPrompt(myNametag.id, roomId)
+        // showTypingPrompt(myNametag.id, roomId)
       }
 
       if (text.slice(-1) === '\n') {
