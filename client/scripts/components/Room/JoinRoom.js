@@ -43,7 +43,7 @@ class JoinRoom extends Component {
     let banned = false
     // Check to see if the user is banned
     if (me) {
-      const myNametag = me.nametags.find(nt => nt.room.id === room.id)
+      const myNametag = me.nametags.find(nt => nt.room && nt.room.id === room.id)
       banned = !!myNametag && myNametag.banned
     }
 

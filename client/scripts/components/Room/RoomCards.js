@@ -116,8 +116,8 @@ class RoomCards extends Component {
                   room={room}
                   banned={
                     !!me &&
-                    !!me.nametags.find(nt => nt.room.id === room.id) &&
-                    !!me.nametags.find(nt => nt.room.id === room.id).banned}
+                    !!me.nametags.find(nt => nt.room && nt.room.id === room.id) &&
+                    !!me.nametags.find(nt => nt.room && nt.room.id === room.id).banned}
                   me={me} />
               )
             }
