@@ -4,33 +4,13 @@ import Navbar from '../Utils/Navbar'
 import RoomCard from './RoomCard'
 import radium from 'radium'
 import {mobile} from '../../../styles/sizes'
-import {track, setTimer} from '../../utils/analytics'
+import {track} from '../../utils/analytics'
 
 class JoinRoom extends Component {
 
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      showNorms: false
-    }
-
-    this.showNorms = e => {
-      e.preventDefault()
-      track('NORMS_CLICK')
-      this.setState({showNorms: !this.state.showNorms})
-    }
-  }
-
   componentDidMount () {
-    const {me, room} = this.props
-    if (me) {
-      track('JOIN_ROOM_VIEW_LOGGED_IN')
-      setTimer('JOIN_ROOM')
-    } else {
-      track('JOIN_ROOM_VIEW_LOGGED_OUT')
-      setTimer('LOGIN')
-    }
+    const {room, me} = this.props
+    track('JOIN_ROOM_VIEW', {loggedIn: !!me})
     document.title = `${room.title}`
   }
 

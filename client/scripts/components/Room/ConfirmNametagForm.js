@@ -3,7 +3,7 @@ import EditNametag from '../Nametag/EditNametag'
 import UserBadges from '../Badge/UserBadges'
 import RaisedButton from 'material-ui/RaisedButton'
 import {grey} from '../../../styles/colors'
-import {track, increment} from '../../utils/analytics'
+import {track, increment, setTimer} from '../../utils/analytics'
 
 class ConfirmNametagForm extends Component {
 
@@ -21,6 +21,10 @@ class ConfirmNametagForm extends Component {
       createNametag(nametagForPost)
         .then(this.props.onCreateNametag)
     }
+  }
+
+  componentDidMount () {
+    setTimer('JOIN_ROOM')
   }
 
   render () {

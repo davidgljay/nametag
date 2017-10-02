@@ -9,7 +9,7 @@ const Room = {
     return checkIfBanned(user.nametags[id], Nametags)
       .then(banned =>
         banned ? []
-        :  Messages.getRoomMessages(id, user.nametags[id])
+        : Messages.getRoomMessages(id, user.nametags[id])
       )
   },
   nametags: ({id}, _, {user, models: {Nametags}}) => {
@@ -19,7 +19,7 @@ const Room = {
     return checkIfBanned(user.nametags[id], Nametags)
       .then(banned =>
         banned ? []
-        :  Nametags.getRoomNametags(id)
+        : Nametags.getRoomNametags(id)
       )
   },
   nametagCount: ({id}, _, {models: {Nametags}}) => {

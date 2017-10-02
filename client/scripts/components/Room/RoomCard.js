@@ -3,6 +3,7 @@ import {Card} from 'material-ui/Card'
 import {withRouter} from 'react-router'
 import NametagIcon from '../Nametag/NametagIcon'
 import Badges from '../Badge/Badges'
+import {track} from '../../../analytics'
 import RaisedButton from 'material-ui/RaisedButton'
 
 class RoomCard extends Component {
@@ -12,6 +13,7 @@ class RoomCard extends Component {
 
     this.onJoinClick = () => {
       const {room, router} = this.props
+      track('CREATE_NAMETAG')
       router.push({
         pathname: `/rooms/${room.id}`,
         state: {isJoining: true}

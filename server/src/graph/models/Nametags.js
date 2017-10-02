@@ -230,7 +230,7 @@ const updateLatestVisit = ({conn}, nametagId) => nametagsTable
    * @param {String} roomId the id of the room where the nametag is located
    */
 
-const ban = ({conn, models:{Messages}}, id, roomId) =>
+const ban = ({conn, models: {Messages}}, id, roomId) =>
   nametagsTable.get(id).run(conn)
     .then(nametag => {
       if (nametag.room !== roomId) {
