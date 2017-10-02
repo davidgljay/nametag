@@ -3,7 +3,7 @@ import {Card} from 'material-ui/Card'
 import {withRouter} from 'react-router'
 import NametagIcon from '../Nametag/NametagIcon'
 import Badges from '../Badge/Badges'
-import {track} from '../../../analytics'
+import {track} from '../../utils/analytics'
 import RaisedButton from 'material-ui/RaisedButton'
 
 class RoomCard extends Component {

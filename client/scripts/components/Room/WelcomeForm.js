@@ -2,7 +2,7 @@ import React, {PropTypes, Component} from 'react'
 import Nametag from '../Nametag/Nametag'
 import {Card} from 'material-ui/Card'
 import Compose from '../Message/Compose'
-import {track, setTimer, increment} from '../../../analytics'
+import {track, setTimer, increment} from '../../utils/analytics'
 
 class WelcomeForm extends Component {
 
