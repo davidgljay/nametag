@@ -227,10 +227,24 @@ const updateLatestVisit = ({conn}, nametagId) => nametagsTable
    *
    * @param {Object} context     graph context
    * @param {String} id   the id of the nametag to be updated
+   * @param {String} roomId the id of the room where the nametag is located
    */
 
-const ban = ({conn}, id) =>
-  nametagsTable.get(id).update({banned: true}).run(conn)
+const ban = ({conn, models:{Messages}}, id, roomId) =>
+  nametagsTable.get(id).run(conn)
+    .then(nametag => {
+      if (nametag.room !== roomId) {
+        return Promise.reject(errors.ErrNotAuthorized)
+      }
+      const message = {
+        text: `${nametag.name} has been banned from this room.`,
+        room: roomId
+      }
+      return Promise.all([
+        Messages.create(message),
+        nametagsTable.get(id).update({banned: true}).run(conn)
+      ])
+    })
 
 module.exports = (context) => ({
   Nametags: {
@@ -245,6 +259,6 @@ module.exports = (context) => ({
     getNametagCount: (room) => getNametagCount(context, room),
     updateLatestVisit: (nametagId) => updateLatestVisit(context, nametagId),
     grantBadge: (id, badgeId) => grantBadge(context, id, badgeId),
-    ban: (id) => ban(context, id)
+    ban: (id, roomId) => ban(context, id, roomId)
   }
 })

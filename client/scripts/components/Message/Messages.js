@@ -36,7 +36,7 @@ class Messages extends Component {
         roomId={roomId}
         key={message.id}
         hideDMs={hideDMs}
-        hideAuthor={i > 0 && message.author.id === messages[i - 1].author.id}
+        hideAuthor={i > 0 && !!message.author && message.author.id === messages[i - 1].author.id}
         toggleEmoji={this.toggleEmoji}
         deleteMessage={deleteMessage}
         banNametag={banNametag}

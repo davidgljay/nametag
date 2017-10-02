@@ -43,12 +43,14 @@ const wrap = (mutation, requires, key = 'result') => (obj, args, context) => {
     case 'IN_ROOM':
       if (!context.user) {
         promise = Promise.reject(ErrNotLoggedIn)
+      } else if (!context.user.nametags[args.message.room]){
+        promise = Promise.reject(ErrNotInRoom)
       } else {
-        promise = context.models.Nametags.get(context.user.nametags[args.roomId])
+        promise = context.models.Nametags.get(context.user.nametags[args.message.room])
           .then(nametag => nametag.banned ? Promise.reject(ErrBanned)
-          : mutation(obj, args. context))
+          : mutation(obj, args, context))
       }
-
+      break
     case 'ROOM_MOD':
       promise = context.models.Rooms.get(args.roomId)
       .then(room => room.mod === context.user.nametags[room.id]
@@ -247,7 +249,7 @@ const RootMutation = {
   banNametag: {
     requires: 'ROOM_MOD',
     resolve: (obj, {roomId, nametagId}, {models: {Nametags}}) =>
-      Nametags.ban(nametagId)
+      Nametags.ban(nametagId, roomId)
       .then(wrapResponse('banNametag'))
   }
 }

@@ -86,7 +86,9 @@ class Message extends Component {
     const imageStyle = hideAuthor ? {...styles.image, ...styles.compressed} : styles.image
 
     let callout
-    if (author.id === myNametag.id && recipient) {
+    if (!author) {
+      messageStyle = {...styles.messageText, ...styles.helpMessage}
+    } else if (author.id === myNametag.id && recipient) {
       messageStyle = {...styles.messageText, ...styles.directMessageOutgoing}
       callout = <div style={styles.dmCallout}>
       Private Message to {recipient.name}
@@ -109,7 +111,7 @@ class Message extends Component {
         /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/,
         (url) => `[${url}](${url})`)
 
-    const isMod = mod.id === author.id
+    const isMod = author && mod.id === author.id
 
     return <div>
       <div
@@ -119,7 +121,7 @@ class Message extends Component {
         onClick={() => this.setState({showActions: !showActions})}>
         <div style={imageStyle} onClick={this.toggleMenu}>
           {
-            !hideAuthor && <NametagIcon
+            author && !hideAuthor && <NametagIcon
               image={author.image}
               name={author.name}
               diameter={50} />
@@ -127,7 +129,7 @@ class Message extends Component {
         </div>
         <div style={messageStyle}>
           {
-            !hideAuthor && <div style={styles.name} onClick={this.toggleMenu}>
+            author && !hideAuthor && <div style={styles.name} onClick={this.toggleMenu}>
               {author.name}
             </div>
           }
@@ -150,37 +152,45 @@ class Message extends Component {
               escapeHtml />
           </div>
           {media}
-          <div style={styles.below}>
-            <EmojiReactions
-              reactions={reactions}
-              addReaction={addReaction}
-              myNametagId={myNametag.id}
-              messageId={id} />
-            <MessageMenu
-              showModAction={this.showModAction}
-              showActions={showActions}
-              isDM={recipient !== null}
-              toggleEmoji={toggleEmoji}
-              id={id} />
-            <div style={styles.date}>
-              {moment(createdAt).format('h:mm A, ddd MMM DD YYYY')}
+          {
+            author &&
+            <div style={styles.below}>
+              <EmojiReactions
+                reactions={reactions}
+                addReaction={addReaction}
+                myNametagId={myNametag.id}
+                messageId={id} />
+              <MessageMenu
+                showModAction={this.showModAction}
+                showActions={showActions}
+                isDM={recipient !== null}
+                toggleEmoji={toggleEmoji}
+                id={id} />
+              <div style={styles.date}>
+                {moment(createdAt).format('h:mm A, ddd MMM DD YYYY')}
+              </div>
             </div>
-          </div>
-          <MentionMenu
-            nametagId={author.id}
-            name={author.name}
-            hideDMs={hideDMs && !isMod}
-            open={showMenu === 'mentions'}
-            anchor={document.getElementById(id)}
-            toggleMenu={this.toggleMenu}
-            setDefaultMessage={setDefaultMessage}
-            setRecipient={setRecipient} />
-          <CommandMenu
-            isMod={isMod}
-            setDefaultMessage={setDefaultMessage}
-            anchor={document.getElementById(id)}
-            onRequestClose={this.toggleMenu}
-            open={showMenu === 'commands'} />
+          }
+          {
+            author &&
+            <div>
+              <MentionMenu
+                nametagId={author.id}
+                name={author.name}
+                hideDMs={hideDMs && !isMod}
+                open={showMenu === 'mentions'}
+                anchor={document.getElementById(id)}
+                toggleMenu={this.toggleMenu}
+                setDefaultMessage={setDefaultMessage}
+                setRecipient={setRecipient} />
+              <CommandMenu
+                isMod={isMod}
+                setDefaultMessage={setDefaultMessage}
+                anchor={document.getElementById(id)}
+                onRequestClose={this.toggleMenu}
+                open={showMenu === 'commands'} />
+            </div>
+          }
         </div>
       </div>
       {
@@ -212,7 +222,7 @@ Message.propTypes = {
     author: shape({
       image: string,
       name: string.isRequired
-    }).isRequired,
+    }),
     recipient: shape({
       image: string,
       name: string.isRequired
@@ -271,6 +281,11 @@ const styles = {
     overflowWrap: 'break-word',
     wordWrap: 'break-word',
     wordBreak: 'break-word'
+  },
+  helpMessage: {
+    color: grey,
+    textAlign: 'center',
+    fontStyle: 'italic'
   },
   image: {
     paddingRight: 10,

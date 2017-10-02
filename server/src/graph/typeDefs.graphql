@@ -126,7 +126,7 @@ type Message {
   text: String!
 
   # The nametag ID of the message's author
-  author: Nametag!
+  author: Nametag
 
   # The nametag ID of the message's recipient. If this is defined then this is a direct message.
   recipient: Nametag
