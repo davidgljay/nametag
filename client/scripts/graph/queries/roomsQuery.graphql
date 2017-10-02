@@ -8,6 +8,7 @@ query roomsQuery($query: String, $granter: String) {
     createdAt
     nametagCount
     latestMessage
+    closed
     templates {
       id
       name

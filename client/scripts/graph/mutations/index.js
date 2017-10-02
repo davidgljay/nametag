@@ -44,17 +44,6 @@ export const createRoom = graphql(CREATE_ROOM, {
   })
 })
 
-export const updateRoom = graphql(UPDATE_ROOM, {
-  props: ({ownProps, mutate}) => ({
-    updateRoom: (roomId, roomUpdate) => mutate({
-      variables: {
-        roomId,
-        roomUpdate
-      }
-    })
-  })
-})
-
 export const updateLatestVisit = graphql(UPDATE_LATEST_VISIT, {
   props: ({ownProps, mutate}) => ({
     updateLatestVisit: (nametagId) => mutate({
@@ -412,6 +401,37 @@ export const setModOnlyDMs = graphql(SET_MOD_ONLY_DMS, {
             room: {
               ...oldData.room,
               modOnlyDMs
+            }
+          }
+        }
+      }
+    })
+  })
+})
+
+export const updateRoom = graphql(UPDATE_ROOM, {
+  props: ({ownProps, mutate}) => ({
+    updateRoom: (roomId, roomUpdate) => mutate({
+      variables: {
+        roomId,
+        roomUpdate
+      },
+      optimisticResponse: {
+        updateRoom: {
+          errors: null
+        }
+      },
+      updateQueries: {
+        roomQuery: (oldData, {mutationResult: {data: {updateRoom: {errors}}}}) => {
+          if (errors) {
+            errorLog('Error updating room')(errors)
+            return oldData
+          }
+          return {
+            ...oldData,
+            room: {
+              ...oldData.room,
+              ...roomUpdate
             }
           }
         }

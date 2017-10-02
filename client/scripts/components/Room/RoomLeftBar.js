@@ -118,6 +118,7 @@ class RoomLeftBar extends Component {
               this.state.toggles.settings &&
               <RoomSettings
                 updateRoom={updateRoom}
+                closed={room.closed}
                 roomId={room.id}
                 modOnlyDMs={room.modOnlyDMs} />
             }

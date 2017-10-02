@@ -55,7 +55,7 @@ class JoinRoom extends Component {
             ? 'You have been banned from this conversation:'
             : 'You\'ve been invited to a conversation:'
           }</h3>
-        <RoomCard room={room} banned={banned} />
+        <RoomCard room={room} disabled={room.closed || banned} />
       </div>
       <div style={styles.joinContainer}>
         <div id='normsContainer' style={styles.normsContainer}>

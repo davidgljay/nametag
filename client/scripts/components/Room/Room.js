@@ -206,6 +206,7 @@ class Room extends Component {
           welcome={room.welcome}
           topic={room.topic}
           mod={room.mod}
+          closed={!!room.closed}
           recipient={recipient}
           setDefaultMessage={this.setDefaultMessage}
           setRecipient={this.setRecipient}
@@ -270,7 +271,8 @@ Room.propTypes = {
       norms: arrayOf(string).isRequired,
       messages: arrayOf(object),
       nametags: arrayOf(object),
-      modOnlyDMs: bool
+      modOnlyDMs: bool,
+      closed: bool
     }),
     me: object
   }).isRequired,

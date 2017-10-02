@@ -105,6 +105,9 @@ type Room {
 
   # Topic of discussion in the room
   topic: String
+
+  # Indicates whether a room is closed
+  closed: Boolean
 }
 
 # A topic of discussion in a room
@@ -464,6 +467,12 @@ input UpdateRoomInput {
   # The current topic in a room
   topic: String
 
+  # Indicates whether the room is closed
+  closed: Boolean
+
+  # Indicates whether users other than the mod can DM one another.
+  modOnlyDMs: Boolean
+
 }
 
 # Input required to create a nametag
@@ -756,6 +765,9 @@ type UpdateRoom {
 
   # The current topic of discussion in the room
   topic: String
+
+  # Indicates whether a room has been closed
+  closed: Boolean
 
 }
 

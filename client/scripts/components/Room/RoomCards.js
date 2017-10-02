@@ -110,15 +110,18 @@ class RoomCards extends Component {
               rooms.length > 0 &&
               rooms
               .filter(room => !nametagHash[room.id])
-              .map(room =>
-                <RoomCard
+              .map(room => {
+                let banned = false
+                if (me) {
+                  const myNametag = me.nametags.find(nt => nt.room && nt.room.id === room.id)
+                  banned = !!myNametag && myNametag.banned
+                }
+                return <RoomCard
                   key={room.id}
                   room={room}
-                  banned={
-                    !!me &&
-                    !!me.nametags.find(nt => nt.room && nt.room.id === room.id) &&
-                    !!me.nametags.find(nt => nt.room && nt.room.id === room.id).banned}
+                  disabled={banned || room.closed}
                   me={me} />
+              }
               )
             }
           </div>

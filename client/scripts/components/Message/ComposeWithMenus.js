@@ -120,6 +120,7 @@ class ComposeWithMenu extends Component {
   render () {
     const {
       roomId,
+      closed,
       myNametag,
       showTypingPrompt,
       createMessage,
@@ -142,6 +143,7 @@ class ComposeWithMenu extends Component {
         myNametag={myNametag}
         showTypingPrompt={showTypingPrompt}
         nametags={nametags}
+        closed={closed}
         createMessage={createMessage}
         defaultMessage={defaultMessage}
         setDefaultMessage={setDefaultMessage}
