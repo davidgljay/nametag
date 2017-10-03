@@ -11,7 +11,7 @@ class ConfirmNametagForm extends Component {
     super(props)
 
     this.onEnterClick = () => {
-      const {roomId, nametag, templates, createNametag} = this.props
+      const {roomId, nametag, templates, createNametag, onCreateNametag} = this.props
       track('JOIN_ROOM', {id: roomId, public: templates.length === 0})
       increment('ROOMS_JOINED')
       const nametagForPost = {
@@ -19,7 +19,7 @@ class ConfirmNametagForm extends Component {
         badges: nametag.badges ? nametag.badges.map(badge => badge.id) : []
       }
       createNametag(nametagForPost)
-        .then(this.props.onCreateNametag)
+        .then(onCreateNametag)
     }
   }
 

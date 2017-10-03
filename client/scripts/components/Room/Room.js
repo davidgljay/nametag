@@ -73,7 +73,6 @@ class Room extends Component {
     const {
       requestNotifPermissions,
       roomUpdatedSubscription,
-      nametagUpdatedSubscription,
       typingPromptAdded,
       updateToken,
       dispatch,
@@ -81,12 +80,16 @@ class Room extends Component {
     } = this.props
     requestNotifPermissions(updateToken)
     roomUpdatedSubscription(params.roomId)
-    nametagUpdatedSubscription(params.roomId)
     typingPromptAdded(dispatch)(params.roomId)
   }
 
   componentDidUpdate (prevProps) {
-    const {messageAddedSubscription, messageDeletedSubscription, myNametag} = this.props
+    const {messageAddedSubscription,
+      messageDeletedSubscription,
+      nametagUpdatedSubscription,
+      myNametag,
+      params
+    } = this.props
     const {loading, room, me} = this.props.data
     if (prevProps.data.loading && !loading) {
       if (me) {
@@ -96,6 +99,7 @@ class Room extends Component {
     }
     if (!prevProps.myNametag && myNametag) {
       this.showPresence()
+      nametagUpdatedSubscription(params.roomId)
       messageAddedSubscription(room.id, myNametag.id)
       messageDeletedSubscription(room.id)
       track('ROOM_VIEW', {id: room.id, title: room.title})
