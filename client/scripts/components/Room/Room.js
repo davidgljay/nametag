@@ -145,7 +145,7 @@ class Room extends Component {
 
     const isJoining = locationState && locationState.isJoining
 
-    if (loading || room) {
+    if (loading || !room) {
       return <div style={styles.spinner}>
         <CircularProgress />
       </div>
