@@ -199,14 +199,25 @@ const getAdminTemplates = ({user, conn, models: {Granters, Templates}}) => {
 const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
   // Either create the user or log them in
   return usersTable
-    .getAll(authProfile.id, {index: provider}).run(conn)
+    .getAll(authProfile.id, {index: provider})
+    .union(usersTable.getAll(authProfile.email, {index: 'email'}))
+    .run(conn)
     .then(cursor => cursor.toArray())
     .then(([user]) => {
       if (user) {
-        return {
+        return user[provider]
+        ? {
           user,
           authProfile
         }
+        : usersTable
+          .get(user.id)
+          .update({[provider]: authProfile.id})
+          .run(conn)
+          .then(() => ({
+            user,
+            authProfile
+          }))
       }
 
       const insertUser = (user) => Promise.all([
