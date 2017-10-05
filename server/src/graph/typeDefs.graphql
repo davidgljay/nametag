@@ -516,6 +516,9 @@ input UpdateNametagInput {
   # IDs of badges to include in this Nametag
   badges: [ID]
 
+  #Indicates whether the user has been banned
+  banned: Boolean
+
 }
 
 # Input required to create a badge
@@ -795,6 +798,8 @@ type UpdateNametag {
   # Indicates whether the owner of this nametag is present in the room
   present: Boolean
 
+  # Indicated whether the user is banned
+  banned: Boolean
 }
 
 # Id Only

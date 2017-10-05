@@ -7,6 +7,7 @@ subscription nametagUpdated ($roomId: ID!) {
     bio
     image
     present
+    banned
     badges {
       ...badgeView
     }
