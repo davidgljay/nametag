@@ -220,7 +220,7 @@ Compose.propTypes = {
   onPost: func,
   showTypingPrompt: func,
   setRecipient: func,
-  closed: bool.isRequired
+  closed: bool
 }
 
 export default Compose
