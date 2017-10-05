@@ -3,8 +3,10 @@ import {Card} from 'material-ui/Card'
 import {withRouter} from 'react-router'
 import NametagIcon from '../Nametag/NametagIcon'
 import Badges from '../Badge/Badges'
+import radium from 'radium'
 import {track} from '../../utils/analytics'
 import RaisedButton from 'material-ui/RaisedButton'
+import {mobile} from '../../../styles/sizes'
 
 class RoomCard extends Component {
 
@@ -70,7 +72,7 @@ RoomCard.proptypes = {
   disabled: bool
 }
 
-export default withRouter(RoomCard)
+export default withRouter(radium(RoomCard))
 
 const styles = {
   cardContainer: {
@@ -110,7 +112,11 @@ const styles = {
   title: {
     fontSize: 24,
     marginTop: 20,
-    fontWeight: 300
+    fontWeight: 300,
+    [mobile]: {
+      fontSize: 18,
+      wordWrap: 'break-word'
+    }
   },
   badges: {
     justifyContent: 'flex-start',

@@ -2,6 +2,8 @@ import React, {Component, PropTypes} from 'react'
 import {withRouter} from 'react-router'
 import RaisedButton from 'material-ui/RaisedButton'
 import {red} from '../../../styles/colors'
+import {mobile} from '../../../styles/sizes'
+import radium from 'radium'
 
 class StartRoomForm extends Component {
 
@@ -49,6 +51,7 @@ class StartRoomForm extends Component {
         <RaisedButton
           id='startConvoButton'
           primary
+          style={styles.button}
           label={loggedIn ? 'Start Conversation' : 'Try It Out'}
           onClick={this.startRoom}
           />
@@ -65,7 +68,7 @@ StartRoomForm.propTypes = {
   }).isRequired
 }
 
-export default withRouter(StartRoomForm)
+export default withRouter(radium(StartRoomForm))
 
 const styles = {
   loggedInContainer: {
@@ -73,16 +76,19 @@ const styles = {
     maxWidth: 800,
     justifyContent: 'center',
     marginLeft: 'auto',
-    marginRight: 'auto'
+    marginRight: 'auto',
+    [mobile]: {
+      flexDirection: 'column',
+      alignItems: 'center'
+    }
   },
   buttonContainer: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'stretch',
     marginTop: 15
   },
   inputContainer: {
-    maxWidth: 800,
     flex: 1,
     marginLeft: 'auto',
     marginRight: 'auto',

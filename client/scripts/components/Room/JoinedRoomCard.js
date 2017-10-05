@@ -4,6 +4,8 @@ import {Card} from 'material-ui/Card'
 import {browserHistory} from 'react-router'
 import {primary} from '../../../styles/colors'
 import FontIcon from 'material-ui/FontIcon'
+import {mobile} from '../../../styles/sizes'
+import radium from 'radium'
 
 const JoinedRoomCard = ({room}) =>
   <Card
@@ -59,7 +61,7 @@ JoinedRoomCard.proptypes = {
   }).isRequired
 }
 
-export default JoinedRoomCard
+export default radium(JoinedRoomCard)
 
 const styles = {
   cardContainer: {
@@ -100,6 +102,10 @@ const styles = {
     margin: '0px 20px',
     position: 'relative',
     bottom: 20,
-    fontWeight: 300
+    fontWeight: 300,
+    [mobile]: {
+      fontSize: 18,
+      wordWrap: 'break-word'
+    }
   }
 }
