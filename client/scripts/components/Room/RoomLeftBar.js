@@ -60,7 +60,7 @@ class RoomLeftBar extends Component {
         </div>
         {
           notifCount > 0 &&
-            <div>
+            <div style={styles.leftNavHeader}>
               Rooms
             </div>
         }
