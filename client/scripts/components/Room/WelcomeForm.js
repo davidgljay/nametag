@@ -2,6 +2,7 @@ import React, {PropTypes, Component} from 'react'
 import Nametag from '../Nametag/Nametag'
 import {Card} from 'material-ui/Card'
 import Compose from '../Message/Compose'
+import {track, setTimer, increment} from '../../utils/analytics'
 
 class WelcomeForm extends Component {
 
@@ -14,11 +15,17 @@ class WelcomeForm extends Component {
 
     this.onPost = (post) => {
       const {updateNametag, onWelcomeMsgSent, myNametag} = this.props
+      track('WELCOME_POST')
+      increment('ROOMS_POSTED')
       updateNametag(myNametag.id, {bio: post})
       onWelcomeMsgSent()
     }
 
     this.onUpdateText = (bio) => this.setState({bio})
+  }
+
+  componentDidMount () {
+    setTimer('WELCOME_POST')
   }
 
   render () {

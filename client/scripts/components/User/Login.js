@@ -4,7 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import CircularProgress from 'material-ui/CircularProgress'
 import {grey} from '../../../styles/colors'
-import {track, alias} from '../../utils/analytics'
+import {track, alias, setTimer} from '../../utils/analytics'
 import key from 'keymaster'
 
 /* Function to Log in users via an auth provider or e-mail.
@@ -107,6 +107,7 @@ class Login extends Component {
 
     this.providerAuth = provider => e => {
       e.preventDefault()
+      track('PROVIDER_AUTH', {provider})
       window.sessionStorage.setItem('postAuth', window.location)
       this.setState({loading: true})
       window.location = `/auth/${provider}`
@@ -150,6 +151,8 @@ class Login extends Component {
   componentWillMount () {
     const {message, register} = this.props
     this.setState({message, state: register ? 'REGISTER' : 'LOGIN'})
+    setTimer('LOGIN_USER')
+    setTimer('REGISTER_USER')
     key('enter', this.onEnter)
   }
 

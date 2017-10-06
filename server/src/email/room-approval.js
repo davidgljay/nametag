@@ -2,9 +2,7 @@ module.exports = ({roomId, roomTitle, userToken}) => ({
   subject: `Your Room Has Been Approved: ${roomTitle}`,
   txt: `Your room has been approved!:\n
   \n
-      ${modName}\n
       ${roomTitle}\n
-      ${modBio}\n
   \n
   Drop in and get your conversation started:\n
   \n

@@ -17,6 +17,8 @@ import Granter from './containers/Granter/GranterContainer'
 import PasswordReset from './containers/User/PasswordReset'
 import Unsubscribe from './containers/User/UnsubscribeContainer'
 import EmailConfirm from './containers/User/EmailConfirm'
+import Privacy from './components/Static/Privacy'
+import Tos from './components/Static/Tos'
 import {registerServiceWorker, firebaseInit} from './actions/NotificationActions'
 
 import { DragDropContext } from 'react-dnd'
@@ -99,6 +101,8 @@ class Nametag extends Component {
             <Route path='/passwordreset/:token' component={PasswordReset} />
             <Route path='/emailconfirm/:token' component={EmailConfirm} />
             <Route path='/unsubscribe/:userToken' component={Unsubscribe} />
+            <Route path='/privacy' component={Privacy} />
+            <Route path='/tos' component={Tos} />
           </Router>
         </MuiThemeProvider>
       </StyleRoot>

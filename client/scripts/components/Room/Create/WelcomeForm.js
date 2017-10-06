@@ -1,21 +1,31 @@
 import React, {PropTypes} from 'react'
-import TextField from 'material-ui/TextField'
+import AutoComplete from 'material-ui/AutoComplete'
 import {grey} from '../../../../styles/colors'
+
+const defaultPrompts = [
+  'What brings you to this conversation?',
+  'Why are you interested in this topic?',
+  'Briefly share your background.'
+]
 
 const WelcomeForm = ({welcome, updateRoom, error}) =>
   <div style={styles.titleForm}>
     <h1>Get People Talking</h1>
     <h2>Start by choosing a welcome prompt.</h2>
     <div style={styles.helpText}>Users will be asked this question when they enter the room.</div>
-    <TextField
+    <AutoComplete
       style={styles.textfield}
-      inputStyle={styles.textFieldInput}
-      value={welcome}
+      textFieldStyle={styles.textFieldInput}
+      searchText={welcome}
+      menuStyle={styles.menu}
+      listStyle={styles.menu}
       id='welcomeField'
       multiLine
       errorText={error && error.welcomeError}
-      onChange={(e) => updateRoom('welcome', e.target.value)}
-      hintText='e.g. What brings you to this conversation?'
+      onUpdateInput={(e) => updateRoom('welcome', e.target.value)}
+      openOnFocus
+      filter={(text) => text.length === 0}
+      dataSource={defaultPrompts}
       floatingLabelText='Welcome Prompt' />
   </div>
 
@@ -42,5 +52,8 @@ const styles = {
   helpText: {
     color: grey,
     fontSize: 14
+  },
+  menu: {
+    width: 350
   }
 }

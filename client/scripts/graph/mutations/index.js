@@ -258,6 +258,7 @@ export const createMessage = graphql(CREATE_MESSAGE, {
       },
       optimisticResponse: {
         createMessage: {
+          __typename: 'CreateMessageResponse',
           message: {
             __typename: 'Message',
             id: `tempMessage_${Date.now()}`,

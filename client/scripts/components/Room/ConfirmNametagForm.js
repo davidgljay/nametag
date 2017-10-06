@@ -3,7 +3,7 @@ import EditNametag from '../Nametag/EditNametag'
 import UserBadges from '../Badge/UserBadges'
 import RaisedButton from 'material-ui/RaisedButton'
 import {grey} from '../../../styles/colors'
-import {track, increment} from '../../utils/analytics'
+import {track, increment, setTimer} from '../../utils/analytics'
 
 class ConfirmNametagForm extends Component {
 
@@ -11,7 +11,7 @@ class ConfirmNametagForm extends Component {
     super(props)
 
     this.onEnterClick = () => {
-      const {roomId, nametag, templates, createNametag} = this.props
+      const {roomId, nametag, templates, createNametag, onCreateNametag} = this.props
       track('JOIN_ROOM', {id: roomId, public: templates.length === 0})
       increment('ROOMS_JOINED')
       const nametagForPost = {
@@ -19,8 +19,12 @@ class ConfirmNametagForm extends Component {
         badges: nametag.badges ? nametag.badges.map(badge => badge.id) : []
       }
       createNametag(nametagForPost)
-        .then(this.props.onCreateNametag)
+        .then(onCreateNametag)
     }
+  }
+
+  componentDidMount () {
+    setTimer('JOIN_ROOM')
   }
 
   render () {

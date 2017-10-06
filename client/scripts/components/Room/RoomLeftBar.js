@@ -5,28 +5,13 @@ import Drawer from 'material-ui/Drawer'
 import Notifications from './Notifications'
 import Nametags from '../../components/Nametag/Nametags'
 import ShareButtons from './ShareButtons'
-import ROOM_TIMEOUT from '../../constants'
 
 class RoomLeftBar extends Component {
   constructor (props) {
     super(props)
 
-    this.state = {
-      toggles: {
-        norms: true,
-        settings: true,
-        rooms: true,
-        nametags: true,
-        share: true
-      }
-    }
-
     this.toggleLeftBar = () => {
       this.setState({leftBarExpanded: !this.state.leftBarExpanded})
-    }
-
-    this.toggleLeftBarSection = (section) => () => {
-      this.setState({toggles: {...this.state.toggles, [section]: !this.state.toggles[section]}})
     }
 
     this.setDefaultMessage = (message) => {
@@ -54,7 +39,6 @@ class RoomLeftBar extends Component {
     } = this.props
     const notifCount = !myNametag || !me ? 0 : me.nametags.filter(
       nametag => nametag.room &&
-      new Date(nametag.room.latestMessage) > new Date(Date.now() - ROOM_TIMEOUT) &&
       nametag.room.id !== this.props.roomId
     ).length
     const isMod = me && me.nametags
@@ -65,41 +49,23 @@ class RoomLeftBar extends Component {
 
     const leftBar = <div id='leftBar' style={leftBarStyle}>
       <div style={styles.leftBarContent}>
-        {
-          this.state.toggles.share &&
-          <div style={styles.share}>
-            <ShareButtons roomId={room.id} title={room.title} />
-          </div>
-        }
-        <div
-          style={styles.leftNavHeader}
-          onClick={this.toggleLeftBarSection('norms')}>
+        <div style={styles.share}>
+          <ShareButtons roomId={room.id} title={room.title} />
+        </div>
+        <div style={styles.leftNavHeader}>
           Norms
         </div>
-        {
-          this.state.toggles.norms &&
-          <div style={styles.norms}>
-            <Norms norms={room.norms} />
-          </div>
-        }
-        <div
-          style={styles.leftNavHeader}
-          onClick={this.toggleLeftBarSection('norms')}>
-          Rooms
+        <div style={styles.norms}>
+          <Norms norms={room.norms} />
         </div>
         {
           notifCount > 0 &&
-            <div
-              style={styles.leftNavHeader}
-              onClick={this.toggleLeftBarSection('rooms')}>
-              {
-                this.state.toggles.rooms ? '- ' : '+ '
-              }
+            <div style={styles.leftNavHeader}>
               Rooms
             </div>
         }
         {
-          myNametag && this.state.toggles.rooms &&
+          myNametag &&
           <Notifications
             latestMessageUpdatedSubscription={latestMessageUpdatedSubscription}
             nametags={me.nametags}
@@ -109,39 +75,30 @@ class RoomLeftBar extends Component {
         {
           isMod &&
           <div>
-            <div
-              style={styles.leftNavHeader}
-              onClick={this.toggleLeftBarSection('settings')}>
+            <div style={styles.leftNavHeader}>
               Settings
             </div>
-            {
-              this.state.toggles.settings &&
-              <RoomSettings
-                updateRoom={updateRoom}
-                closed={room.closed}
-                roomId={room.id}
-                modOnlyDMs={room.modOnlyDMs} />
-            }
+            <RoomSettings
+              updateRoom={updateRoom}
+              closed={room.closed}
+              roomId={room.id}
+              modOnlyDMs={room.modOnlyDMs} />
           </div>
         }
         {
           myNametag &&
           <div>
             <div
-              style={styles.leftNavHeader}
-              onClick={this.toggleLeftBarSection('nametags')}>
+              style={styles.leftNavHeader}>
               Nametags
             </div>
-            {
-              this.state.toggles.nametags &&
-              <Nametags
-                mod={room.mod.id}
-                setDefaultMessage={this.setDefaultMessage}
-                setRecipient={this.setRecipient}
-                nametags={room.nametags}
-                hideDMs={hideDMs}
-                myNametagId={myNametag.id} />
-            }
+            <Nametags
+              mod={room.mod.id}
+              setDefaultMessage={this.setDefaultMessage}
+              setRecipient={this.setRecipient}
+              nametags={room.nametags}
+              hideDMs={hideDMs}
+              myNametagId={myNametag.id} />
           </div>
         }
       </div>

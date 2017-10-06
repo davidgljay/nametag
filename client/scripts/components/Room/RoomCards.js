@@ -83,13 +83,17 @@ class RoomCards extends Component {
                 {
                   me.nametags
                   .filter(nametag => !!nametag.room && !nametag.banned)
-                  .sort((a, b) => new Date(b.latestVisit).getTime() - new Date(a.latestVisit).getTime())
-                  .sort((a, b) => b.room.newMessageCount - a.room.newMessageCount)
+                  .sort((a, b) => {
+                    if (b.room.newMessageCount === a.room.newMessageCount) {
+                      return new Date(b.latestVisit).getTime() - new Date(a.latestVisit).getTime()
+                    } else {
+                      return b.room.newMessageCount - a.room.newMessageCount
+                    }
+                  })
                   .slice(0, showAllJoined ? me.nametags.length : 4)
                   .map(nametag => <JoinedRoomCard
                     key={nametag.id}
-                    room={nametag.room}
-                    latestVisit={nametag.latestVisit} />)
+                    room={nametag.room} />)
                 }
               </div>
               {
