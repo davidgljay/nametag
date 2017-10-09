@@ -200,9 +200,9 @@ const styles = {
     fontSize: 36,
     fontWeight: 300,
     padding: 10,
-    paddingTop: window.innerWidth * 494 / 1023 - 90,
+    paddingTop: window.innerWidth * 494 / 1023 - 80,
     [mobile]: {
-      fontSize: 26
+      fontSize: 24
     }
   },
   showMore: {
