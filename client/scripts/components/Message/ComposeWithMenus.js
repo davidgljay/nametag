@@ -34,47 +34,8 @@ class ComposeWithMenu extends Component {
       })
     }
 
-    this.onPost = (message) => {
-      this.slashCommand(message)
-    }
-
     this.closeMenus = () => {
       this.setState({showComposeMenu: ''})
-    }
-
-    this.slashCommand = (message) => {
-      const {updateRoom, updateNametag, roomId, myNametag, welcomeModal} = this.props
-      if (welcomeModal) {
-        return
-      }
-      const commandRegex = /^\/(\S+)\s(.+)/.exec(message)
-      if (!commandRegex) {
-        return
-      }
-      const command = commandRegex[1]
-      const text = commandRegex[2]
-      switch (command) {
-        case 'welcome':
-          updateRoom(roomId, {welcome: text})
-          break
-        case 'intro':
-          updateNametag(myNametag.id, {bio: text})
-          break
-        case 'name':
-          updateNametag(myNametag.id, {name: text})
-          break
-        case 'title':
-          updateRoom(roomId, {title: text})
-          break
-        case 'description':
-          updateRoom(roomId, {description: text})
-          break
-        case 'topic':
-          updateRoom(roomId, {topic: text})
-          break
-        default:
-          return
-      }
     }
 
     this.nametagList = (text) => {
@@ -150,7 +111,6 @@ class ComposeWithMenu extends Component {
         setRecipient={setRecipient}
         mod={mod}
         topic={topic}
-        onPost={this.onPost}
         onUpdateText={this.onUpdateText}
       />
       <div style={styles.typingPrompts}>
