@@ -16,7 +16,7 @@ class ModAction extends Component {
     super(props)
 
     this.state = {
-      normChecks: [],
+      normChecks: {},
       isPublic: false,
       note: '',
       escalated: false
@@ -24,24 +24,25 @@ class ModAction extends Component {
 
     this.showNorm = (norm, i) => {
       return <ListItem
-        leftCheckbox={<Checkbox checked={this.state.normChecks[i]} />}
+        leftCheckbox={
+          <Checkbox
+            checked={this.state.normChecks[i]}
+            onCheck={this.checkNorm(i)} />
+        }
         primaryText={norm}
-        key={i}
-        onClick={this.checkNorm(i)} />
+        key={i} />
     }
 
     this.checkNorm = (normIndex) => {
       let self = this
-      return (e) => {
-        e.preventDefault()
-        // Need to setTimeout so that preventDefault doesn't break checkboxes
-        // This is a React-recommended hack.
-        setTimeout(() => {
-          self.setState((previousState) => {
-            previousState.normChecks[normIndex] = !previousState.normChecks[normIndex]
-            return previousState
-          })
-        }, 1)
+      return (e, checked) => {
+        self.setState((previousState) => ({
+          ...previousState,
+          normChecks: {
+            ...previousState.normChecks,
+            [normIndex]: checked
+          }
+        }))
       }
     }
 
@@ -50,7 +51,7 @@ class ModAction extends Component {
       const {normChecks, isPublic, note} = this.state
       const isMod = mod.id === myNametag.id
 
-      if (normChecks.length === 0) {
+      if (Object.keys(normChecks).length === 0) {
         this.setState({alert: 'Please check at least one norm.'})
         return
       }
