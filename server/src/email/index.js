@@ -12,10 +12,10 @@ module.exports = ({to, from, template, params}) => {
     transactional: true,
     recipients: typeof to === 'string'
     ? [
-        {
-          address: to
-        }
-      ]
+      {
+        address: to
+      }
+    ]
     : to.map(address => ({address})),
     content: {
       from: {

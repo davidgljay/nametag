@@ -85,7 +85,7 @@ const create = (context, msg) => {
     {recipient: msg.recipient ? msg.recipient : false}
   )
   return checkForCommands(context, messageObj)
-  .then(msg =>  messagesTable.insert(msg).run(conn))
+  .then(msg => messagesTable.insert(msg).run(conn))
   .then((res) => {
     if (res.errors > 0) {
       return new errors.APIError('Error creating message')
@@ -162,17 +162,17 @@ const checkMentions = (context, message) => {
  *
  **/
 
- const checkForCommands = ({user, models:{Rooms, Nametags, Users}}, message) => {
+const checkForCommands = ({user, models: {Rooms, Nametags, Users}}, message) => {
   const commandRegex = /^\/(\S+)\s(.+)/.exec(message.text)
   const {ErrNotMod, ErrNotYourNametag} = errors
   if (!commandRegex) {
-   return Promise.resolve(message)
+    return Promise.resolve(message)
   }
   const command = commandRegex[1]
   const text = commandRegex[2]
   switch (command) {
-  case 'welcome':
-    return Rooms.get(message.room)
+    case 'welcome':
+      return Rooms.get(message.room)
       .then(room => room.mod === user.nametags[message.room]
         ? Rooms.update(message.room, {welcome: text})
         : Promise.reject(ErrNotMod))
@@ -180,8 +180,8 @@ const checkMentions = (context, message) => {
         text: `This room's welcome message has been updated to "${text}".`,
         author: null
       }))
-   case 'intro':
-     return user.nametags[message.room] === message.author
+    case 'intro':
+      return user.nametags[message.room] === message.author
      ? Nametags.update(message.author, {bio: text})
       .then(() => Nametags.get(message.author))
       .then(nametag => Object.assign({}, message, {
@@ -189,8 +189,8 @@ const checkMentions = (context, message) => {
         author: null
       }))
      : Promise.reject(ErrNotYourNametag)
-     case 'name':
-       return user.nametags[message.room] === message.author
+    case 'name':
+      return user.nametags[message.room] === message.author
        ? Nametags.get(message.author)
          .then(nametag =>
            Nametags.update(message.author, {name: text})
@@ -200,8 +200,8 @@ const checkMentions = (context, message) => {
            }))
          )
         : Promise.reject(ErrNotYourNametag)
-     case 'title':
-       return Rooms.get(message.room)
+    case 'title':
+      return Rooms.get(message.room)
          .then(room => room.mod === user.nametags[message.room]
            ? Rooms.update(message.room, {title: text})
            : Promise.reject(ErrNotMod))
@@ -209,11 +209,11 @@ const checkMentions = (context, message) => {
            text: `This room's title has been updated to "${text}".`,
            author: null
          }))
-      case 'announce':
-        return Promise.all([
-          Rooms.get(message.room),
-          Nametags.get(message.author)
-        ])
+    case 'announce':
+      return Promise.all([
+        Rooms.get(message.room),
+        Nametags.get(message.author)
+      ])
         .then(([room, author]) => room.mod === user.nametags[message.room]
           ? Nametags.getRoomNametags(message.room)
             .then(nametags => Users.getEmails(nametags.map(nt => nt.id)))
@@ -233,10 +233,10 @@ const checkMentions = (context, message) => {
             }))
           : Promise.reject(ErrNotMod)
         )
-     default:
-       return Promise.resolve(message)
-   }
- }
+    default:
+      return Promise.resolve(message)
+  }
+}
 
 // /**
 //  * Checks a message for mentions and dms
