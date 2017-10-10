@@ -84,13 +84,13 @@ const create = (context, msg) => {
     {createdAt: new Date(), reactions: []},
     {recipient: msg.recipient ? msg.recipient : false}
   )
-  return messagesTable.insert(messageObj).run(conn)
+  return checkForCommands(context, messageObj)
+  .then(msg => messagesTable.insert(msg).run(conn))
   .then((res) => {
     if (res.errors > 0) {
       return new errors.APIError('Error creating message')
     }
-    const message = Object.assign({}, messageObj, {id: res.generated_keys[0]})
-    return message
+    return Object.assign({}, messageObj, {id: res.generated_keys[0]})
   })
   .then(message => Promise.all([
     checkMentions(context, message),
@@ -152,6 +152,90 @@ const checkMentions = (context, message) => {
     promises.push(messagesTable.get(message.id).update({text: newText}).run(context.conn))
     return Promise.all(promises).then(() => ({text: newText}))
   })
+}
+
+/**
+ * Checks message for known commanes
+ *
+ * @param {Object} context      graph context
+ * @param {Object} message      the message to be checked
+ *
+ **/
+
+const checkForCommands = ({user, models: {Rooms, Nametags, Users}}, message) => {
+  const commandRegex = /^\/(\S+)\s(.+)/.exec(message.text)
+  const {ErrNotMod, ErrNotYourNametag} = errors
+  if (!commandRegex) {
+    return Promise.resolve(message)
+  }
+  const command = commandRegex[1]
+  const text = commandRegex[2]
+  switch (command) {
+    case 'welcome':
+      return Rooms.get(message.room)
+      .then(room => room.mod === user.nametags[message.room]
+        ? Rooms.update(message.room, {welcome: text})
+        : Promise.reject(ErrNotMod))
+      .then(() => Object.assign({}, message, {
+        text: `This room's welcome message has been updated to "${text}".`,
+        author: null
+      }))
+    case 'intro':
+      return user.nametags[message.room] === message.author
+     ? Nametags.update(message.author, {bio: text})
+      .then(() => Nametags.get(message.author))
+      .then(nametag => Object.assign({}, message, {
+        text: `${nametag.name} has updated their introduction to "${nametag.bio}"`,
+        author: null
+      }))
+     : Promise.reject(ErrNotYourNametag)
+    case 'name':
+      return user.nametags[message.room] === message.author
+       ? Nametags.get(message.author)
+         .then(nametag =>
+           Nametags.update(message.author, {name: text})
+           .then(() => Object.assign({}, message, {
+             text: `${nametag.name} has updated their name to "${text}"`,
+             author: null
+           }))
+         )
+        : Promise.reject(ErrNotYourNametag)
+    case 'title':
+      return Rooms.get(message.room)
+         .then(room => room.mod === user.nametags[message.room]
+           ? Rooms.update(message.room, {title: text})
+           : Promise.reject(ErrNotMod))
+         .then(() => Object.assign({}, message, {
+           text: `This room's title has been updated to "${text}".`,
+           author: null
+         }))
+    case 'announce':
+      return Promise.all([
+        Rooms.get(message.room),
+        Nametags.get(message.author)
+      ])
+        .then(([room, author]) => room.mod === user.nametags[message.room]
+          ? Nametags.getRoomNametags(message.room)
+            .then(nametags => Users.getEmails(nametags.map(nt => nt.id)))
+            .then(emails => email({
+              to: emails,
+              from: {name: 'Nametag', email: 'noreply@nametag.chat'},
+              template: 'announcement',
+              params: {
+                roomId: room.id,
+                roomName: room.title,
+                message: text,
+                author: author.name
+              }
+            }))
+            .then(() => Object.assign({}, message, {
+              text: `## Announcement\n${text}`
+            }))
+          : Promise.reject(ErrNotMod)
+        )
+    default:
+      return Promise.resolve(message)
+  }
 }
 
 // /**

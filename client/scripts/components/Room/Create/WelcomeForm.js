@@ -22,7 +22,7 @@ const WelcomeForm = ({welcome, updateRoom, error}) =>
       id='welcomeField'
       multiLine
       errorText={error && error.welcomeError}
-      onUpdateInput={(e) => updateRoom('welcome', e.target.value)}
+      onUpdateInput={(text) => updateRoom('welcome', text)}
       openOnFocus
       filter={(text) => text.length === 0}
       dataSource={defaultPrompts}

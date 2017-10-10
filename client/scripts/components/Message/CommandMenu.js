@@ -26,14 +26,9 @@ const CommandMenu = ({isMod, setDefaultMessage, onRequestClose, open, anchor}) =
       description: 'Update this room\'s title'
     },
     {
-      command: 'description',
+      command: 'announce',
       mod: true,
-      description: 'Update this room\'s description'
-    },
-    {
-      command: 'topic',
-      mod: true,
-      description: 'Update the current topic of discussion'
+      description: 'Send an e-mail to everyone in the room'
     }
   ]
 

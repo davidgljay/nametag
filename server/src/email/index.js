@@ -10,11 +10,13 @@ module.exports = ({to, from, template, params}) => {
   const mail = {
     campaign_id: template,
     transactional: true,
-    recipients: [
+    recipients: typeof to === 'string'
+    ? [
       {
         address: to
       }
-    ],
+    ]
+    : to.map(address => ({address})),
     content: {
       from: {
         email: from.email,
