@@ -162,8 +162,9 @@ const checkMentions = (context, message) => {
  *
  **/
 
- const checkForCommands = ({user, models:{Rooms, Nametags}}, message) => {
+ const checkForCommands = ({user, models:{Rooms, Nametags, Users}}, message) => {
   const commandRegex = /^\/(\S+)\s(.+)/.exec(message.text)
+  const {ErrNotMod, ErrNotYourNametag} = errors
   if (!commandRegex) {
    return Promise.resolve(message)
   }
@@ -208,6 +209,30 @@ const checkMentions = (context, message) => {
            text: `This room's title has been updated to "${text}".`,
            author: null
          }))
+      case 'announce':
+        return Promise.all([
+          Rooms.get(message.room),
+          Nametags.get(message.author)
+        ])
+        .then(([room, author]) => room.mod === user.nametags[message.room]
+          ? Nametags.getRoomNametags(message.room)
+            .then(nametags => Users.getEmails(nametags.map(nt => nt.id)))
+            .then(emails => email({
+              to: emails,
+              from: {name: 'Nametag', email: 'noreply@nametag.chat'},
+              template: 'announcement',
+              params: {
+                roomId: room.id,
+                roomName: room.title,
+                message: text,
+                author: author.name
+              }
+            }))
+            .then(() => Object.assign({}, message, {
+              text: `## Announcement\n${text}`
+            }))
+          : Promise.reject(ErrNotMod)
+        )
      default:
        return Promise.resolve(message)
    }

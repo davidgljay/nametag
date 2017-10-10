@@ -240,7 +240,7 @@ Message.propTypes = {
   deleteMessage: func.isRequired,
   banNametag: func.isRequired,
   hideDMs: bool.isRequired,
-  hideAuthor: bool.isRequired,
+  hideAuthor: bool,
   setDefaultMessage: func.isRequired,
   setRecipient: func.isRequired
 }
