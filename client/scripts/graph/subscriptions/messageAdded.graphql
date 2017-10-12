@@ -18,5 +18,16 @@ subscription messageAdded ($roomId: ID!, $nametagId: ID!) {
       emoji
       nametagId
     }
+    template {
+      id
+      name
+      image
+      description
+      granter {
+        id
+        name
+        image
+      }
+    }
   }
 }

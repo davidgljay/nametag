@@ -47,6 +47,17 @@ query roomQuery($id: ID!){
         image
         name
       }
+      template {
+        id
+        name
+        image
+        description
+        granter {
+          id
+          name
+          image
+        }
+      }
     }
   }
   me {

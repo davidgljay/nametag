@@ -146,6 +146,8 @@ type Message {
   # Time when the message was created
   createdAt: Date!
 
+  # Offers a badge in a message
+  template: Template
 }
 
 # Emoji reactions to a message

@@ -210,7 +210,8 @@ const styles = {
   },
   chipText: {
     display: 'flex',
-    paddingRight: 10
+    paddingRight: 10,
+    color: '#000'
   },
   spacer: {
     width: 10,

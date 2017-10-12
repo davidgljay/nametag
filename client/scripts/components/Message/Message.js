@@ -9,6 +9,7 @@ import NametagIcon from '../Nametag/NametagIcon'
 import ReactMarkdown from 'react-markdown'
 import EmojiText from './EmojiText'
 import EmojiReactions from './EmojiReactions'
+import BadgeOffer from './BadgeOffer'
 import {primary, white, grey} from '../../../styles/colors'
 import {track} from '../../utils/analytics'
 
@@ -55,7 +56,8 @@ class Message extends Component {
         createdAt,
         text,
         recipient,
-        reactions
+        reactions,
+        template
       },
       norms,
       roomId,
@@ -153,6 +155,10 @@ class Message extends Component {
           </div>
           {media}
           {
+            template &&
+            <BadgeOffer template={template} />
+          }
+          {
             author &&
             <div style={styles.below}>
               <EmojiReactions
@@ -227,7 +233,8 @@ Message.propTypes = {
       image: string,
       name: string.isRequired
     }),
-    saved: bool
+    saved: bool,
+    template: object
   }).isRequired,
   norms: arrayOf(string.isRequired).isRequired,
   roomId: string.isRequired,

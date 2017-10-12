@@ -19,6 +19,17 @@ mutation CreateMessage($message: CreateMessageInput!) {
         emoji
         nametagId
       }
+      template {
+        id
+        name
+        image
+        description
+        granter {
+          id
+          name
+          image
+        }
+      }
     }
     errors {
       translation_key

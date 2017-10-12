@@ -272,7 +272,8 @@ export const createMessage = graphql(CREATE_MESSAGE, {
               name: author.name
             },
             recipient: null,
-            reactions: []
+            reactions: [],
+            template: null
           },
           errors: null
         }
