@@ -1,38 +1,67 @@
-import React, {PropTypes} from 'react'
+import React, {PropTypes, Component} from 'react'
 import FlatButton from 'material-ui/FlatButton'
 import Badge from '../Badge/Badge'
+import radium from 'radium'
 import {grey} from '../../../styles/colors'
+import {mobile} from '../../../styles/sizes'
 
-const BadgeOffer = ({template}) => <div>
-  <div style={styles.badgeOffer}>
-    <div>You have been offered the</div>
-    <Badge badge={{
-      template,
-      notes: [],
-      id: 'temp'
-    }} />
-    <div>badge.</div>
-  </div>
-  <div style={styles.ask}>
-    {
-      `Now's a great time to show your support for ${template.granter.name},
-    would you like to make a suggested donation?`
+class BadgeOffer extends Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      selected: 1
     }
-  </div>
-  <div style={styles.donationContainer}>
-    <div id='donation' style={styles.donation}>
-      <div style={styles.donationOption}>$10</div>
-      <div style={{...styles.donationOption, ...styles.selected}}>$25</div>
-      <div style={styles.donationOption}>$50</div>
-      <div style={styles.donationOptionLast}>$__</div>
-    </div>
-    <FlatButton
-      primary
-      label='Sounds Great!' />
-  </div>
-</div>
+  }
 
-const {string, shape} = PropTypes
+  render () {
+    const {template, donationAmounts} = this.props
+    return <div>
+      <div style={styles.badgeOffer}>
+        <div>You have been offered the</div>
+        <Badge badge={{
+          template,
+          notes: [],
+          id: 'temp'
+        }} />
+        <div>badge, which will give you access to exclusive conversations.</div>
+      </div>
+      <div style={styles.ask}>
+        {
+          `Now's a great time to show your support for ${template.granter.name}, would you like to make a suggested donation?`
+        }
+      </div>
+      <div style={styles.donationContainer}>
+        <div id='donation' style={styles.donation}>
+          {
+            donationAmounts.map((amount, i) => {
+              let donationStyle = styles.donationOption
+              if (i === this.state.selected) {
+                donationStyle = {
+                  ...donationStyle,
+                  ...styles.selected
+                }
+              }
+              return <div
+                key={i}
+                style={donationStyle}
+                onClick={() => this.setState({selected: i})}
+                >
+                ${amount}
+              </div>
+            })
+        }
+          <div style={styles.donationOptionLast}>$__</div>
+        </div>
+        <FlatButton
+          primary
+          label='Sounds Great!' />
+      </div>
+    </div>
+  }
+}
+
+const {string, shape, arrayOf, number} = PropTypes
 
 BadgeOffer.proptypes = {
   template: shape({
@@ -41,10 +70,11 @@ BadgeOffer.proptypes = {
       id: string.isRequired,
       name: string.isRequired
     })
-  })
+  }),
+  donationAmounts: arrayOf(number).isRequired
 }
 
-export default BadgeOffer
+export default radium(BadgeOffer)
 
 const styles = {
   badgeOffer: {
@@ -52,16 +82,25 @@ const styles = {
     color: grey,
     display: 'flex',
     lineHeight: '30px',
-    marginTop: 10
+    marginTop: 10,
+    [mobile]: {
+      flexDirection: 'column',
+      alignItems: 'flex-start'
+    }
   },
   ask: {
     color: grey,
-    fontWeight: 300
+    fontWeight: 300,
+    marginTop: 15
   },
   donationContainer: {
     display: 'flex',
     justifyContent: 'flex-start',
-    marginTop: 20
+    marginTop: 20,
+    [mobile]: {
+      flexDirection: 'column',
+      alignItems: 'center'
+    }
   },
   donation: {
     borderRadius: 3,

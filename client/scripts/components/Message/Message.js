@@ -156,7 +156,10 @@ class Message extends Component {
           {media}
           {
             template &&
-            <BadgeOffer template={template} />
+            <BadgeOffer
+              template={template}
+              donationAmounts={[10, 25, 50]}
+              />
           }
           {
             author &&
