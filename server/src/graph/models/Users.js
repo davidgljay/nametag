@@ -200,7 +200,7 @@ const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
   // Either create the user or log them in
   return usersTable
     .getAll(authProfile.id, {index: provider})
-    .union(usersTable.getAll(authProfile.email, {index: 'email'}))
+    .union(usersTable.getAll(authProfile.email || '', {index: 'email'}))
     .run(conn)
     .then(cursor => cursor.toArray())
     .then(([user]) => {
