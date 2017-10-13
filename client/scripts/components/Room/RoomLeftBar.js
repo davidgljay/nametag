@@ -166,7 +166,7 @@ const styles = {
     position: 'fixed',
     top: 0,
     left: 0,
-    zIndex: 50
+    zIndex: 120
   },
   leftBarDesktop: {
     marginTop: 55

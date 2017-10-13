@@ -184,7 +184,7 @@ const styles = {
     paddingTop: 10,
     width: 'calc(100% - 300px)',
     paddingRight: 15,
-    zIndex: 40,
+    zIndex: 110,
     marginLeft: 290,
     background: '#FFF',
     [mobile]: {
