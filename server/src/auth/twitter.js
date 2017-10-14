@@ -1,4 +1,4 @@
-const TwitterStrategy = require('passport-twitter').Strategy
+const TwitterStrategy = require('passport-twitter-email').Strategy
 const UsersLoader = require('../graph/models/Users')
 const config = require('../secrets.json')
 const Context = require('../graph/context')
@@ -19,6 +19,7 @@ module.exports = conn => new TwitterStrategy(
       displayNames: [profile.displayName, profile.username],
       providerPhotoUrl: profile.photos[0].value,
       id: profile.id,
+      email: profile.email,
       badges: [{
         twitter: profile.username
       }]

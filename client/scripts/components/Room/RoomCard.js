@@ -27,8 +27,8 @@ class RoomCard extends Component {
   render () {
     const {room, example, disabled} = this.props
 
-    return <Card key={room.id} className='roomCard'>
-      <div style={styles.cardContainer}>
+    return <Card key={room.id} className='roomCard' style={styles.cardContainer}>
+      <div style={styles.firstLine}>
         <div className='cardMod' style={styles.modContainer}>
           <div style={styles.modIcon}>
             <NametagIcon
@@ -51,6 +51,13 @@ class RoomCard extends Component {
             disabled={disabled}
             onClick={example || disabled ? () => {} : this.onJoinClick} />
         </div>
+      </div>
+      <div style={styles.badgesMobile}>
+        <Badges badges={room.mod.badges} />
+      </div>
+      <div style={styles.roomInfoMobile}>
+        <div style={styles.title}>{room.title}</div>
+        <div style={styles.bio}>{room.mod.bio}</div>
       </div>
     </Card>
   }
@@ -77,9 +84,12 @@ export default withRouter(radium(RoomCard))
 
 const styles = {
   cardContainer: {
+    marginBottom: 60
+  },
+  firstLine: {
     display: 'flex',
     textAlign: 'left',
-    marginBottom: 60
+    justifyContent: 'space-between'
   },
   modContainer: {
     display: 'flex',
@@ -103,7 +113,10 @@ const styles = {
     margin: '30px 30px 0px 15px'
   },
   roomInfo: {
-    flex: 1
+    flex: 1,
+    [mobile]: {
+      display: 'none'
+    }
   },
   bio: {
     fontSize: 14,
@@ -125,6 +138,32 @@ const styles = {
     right: 110,
     width: 'calc(100% + 110px)',
     paddingBottom: 5,
-    marginTop: 5
+    marginTop: 5,
+    [mobile]: {
+      display: 'none'
+    }
+  },
+  badgesMobile: {
+    display: 'none',
+    [mobile]: {
+      display: 'flex',
+      justifyContent: 'flex-start',
+      position: 'relative',
+      bottom: 40,
+      width: '100%',
+      margin: '5px 5px 0px 5px'
+    }
+  },
+  roomInfoMobile: {
+    display: 'none',
+    textAlign: 'left',
+    [mobile]: {
+      display: 'flex',
+      flex: 1,
+      flexDirection: 'column',
+      padding: '0px 35px',
+      position: 'relative',
+      bottom: 40
+    }
   }
 }

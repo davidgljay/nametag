@@ -1688,9 +1688,9 @@ passport-strategy@1.x.x:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/passport-strategy/-/passport-strategy-1.0.0.tgz#b5539aa8fc225a3d1ad179476ddf236b440f52e4"
 
-passport-twitter@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/passport-twitter/-/passport-twitter-1.0.4.tgz#01a799e1f760bf2de49f2ba5fba32282f18932d7"
+passport-twitter-email@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/passport-twitter-email/-/passport-twitter-email-1.0.3.tgz#91332095cd8fdb91887bedb8ece420dd3b59c673"
   dependencies:
     passport-oauth1 "1.x.x"
     xtraverse "0.1.x"
