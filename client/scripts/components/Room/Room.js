@@ -10,6 +10,7 @@ import WelcomeForm from './WelcomeForm'
 import ConfirmNametagForm from './ConfirmNametagForm'
 import ComposeWithMenus from '../Message/ComposeWithMenus'
 import JoinRoom from './JoinRoom'
+import {getQueryVariable} from '../../utils/queryVars'
 import {track, identify, setTimer} from '../../utils/analytics'
 
 class Room extends Component {
@@ -78,6 +79,7 @@ class Room extends Component {
       dispatch,
       params
     } = this.props
+    this.setState({isJoining: getQueryVariable('isJoining')})
     requestNotifPermissions(updateToken)
     roomUpdatedSubscription(params.roomId)
     typingPromptAdded(dispatch)(params.roomId)
@@ -143,7 +145,7 @@ class Room extends Component {
 
     const {defaultMessage, recipient} = this.state
 
-    const isJoining = locationState && locationState.isJoining
+    const isJoining = locationState && locationState.isJoining || this.state.isJoining
 
     if (loading || !room) {
       return <div style={styles.spinner}>

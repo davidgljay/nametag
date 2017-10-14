@@ -18,6 +18,7 @@ class RoomCard extends Component {
       track('CREATE_NAMETAG')
       router.push({
         pathname: `/rooms/${room.id}`,
+        search: '?isJoining=true',
         state: {isJoining: true}
       })
     }
