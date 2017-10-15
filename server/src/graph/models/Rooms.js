@@ -44,6 +44,8 @@ const getVisible = ({conn, user, models: {Users}}) =>
               room('templates')
                 .setIntersection(visibleTemplates)
                 .count().gt(0)
+            ).and(
+              room('closed').ne(true)
             )
           )
          )
