@@ -153,7 +153,7 @@ const styles = {
     flexDirection: 'column'
   },
   chooseNorms: {
-    width: 450,
+    maxWidth: 450,
     marginLeft: 'auto',
     marginRight: 'auto'
   },

@@ -141,6 +141,7 @@ const styles = {
   norms: {
     textAlign: 'center',
     padding: 0,
+    marginTop: 20,
     listStyle: 'none'
   },
   norm: {
