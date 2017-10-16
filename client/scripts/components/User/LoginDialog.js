@@ -15,6 +15,7 @@ export default LoginDialog
 
 const styles = {
   dialog: {
-    width: 250
+    width: 250,
+    bottom: window.innerWidth < 800 ? '15vh' : 0
   }
 }
