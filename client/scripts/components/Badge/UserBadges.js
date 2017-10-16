@@ -113,6 +113,7 @@ const styles = {
   badgesContainer: {
     display: 'flex',
     justifyContent: 'center',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    maxHeight: 100
   }
 }
