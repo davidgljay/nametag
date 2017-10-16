@@ -311,7 +311,8 @@ const slideIn = keyframes({
 const styles = {
   dialog: {
     maxWidth: 820,
-    width: 'fit-content'
+    width: 'fit-content',
+    bottom: window.innerWidth < 800 ? '15vh' : 0
   },
   roomContainer: {
     overflowX: 'hidden'
