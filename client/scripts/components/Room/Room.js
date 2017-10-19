@@ -202,7 +202,7 @@ class Room extends Component {
             setDefaultMessage={this.setDefaultMessage}
             setRecipient={this.setRecipient}
             mod={room.mod}
-            messages={room.messages} />
+            messages={me && myNametag && myNametag.bio ? room.messages : []} />
         </div>
         <ComposeWithMenus
           createMessage={createMessage}
