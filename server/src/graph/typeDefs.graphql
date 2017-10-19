@@ -140,6 +140,9 @@ type Message {
   # The parent message if it is a reply
   parent: Message
 
+  # A reply link to display with this message, used for front end notifications
+  replyLink: ID
+
   # Replies to a message
   replies: [Message]
 

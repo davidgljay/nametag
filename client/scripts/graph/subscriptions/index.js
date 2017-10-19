@@ -38,6 +38,31 @@ export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeT
       }
     }
 
+    // Check to see if the new message is a reply.
+    // If so add it to the appropriate place in the graph
+    // and update the user that a reply has taken place.
+    if (message.parent) {
+      const addReply = (msg, reply) => ({
+        ...msg,
+        replies: msg.replies.concat(reply)
+      })
+      return {
+        ...oldData,
+        room: {
+          ...oldData.room,
+          messages: oldData.room.messages.map(
+            msg => msg.id === message.parent.id
+            ? addReply(msg, message)
+            : msg
+          ).concat({
+            text: `${message.author.name} has replied to ${message.parent.author.name}.`,
+            replyLink: message.parent.id,
+            room: message.room
+          })
+        }
+      }
+    }
+
     return {
       ...oldData,
       room: {
