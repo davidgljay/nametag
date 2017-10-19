@@ -6,7 +6,8 @@ module.exports = {
     indexes: [
       {name: 'room_recipient', fields: ['room', 'recipient']},
       {name: 'room_author_isDM', fields: ['room', 'author', {notEq: ['recipient', false]}]},
-      'author'
+      'author',
+      'parent'
     ]
   },
   nametags: {

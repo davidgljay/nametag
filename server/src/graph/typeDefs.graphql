@@ -137,6 +137,12 @@ type Message {
   # The id of the room that where the message was created
   room: Room!
 
+  # The parent message if it is a reply
+  parent: Message
+
+  # Replies to a message
+  replies: [Message]
+
   # Emoji reactions to the message
   reactions: [EmojiReaction]
 
@@ -442,6 +448,9 @@ input CreateMessageInput {
 
   # The ID of the room where the message takes place
   room: ID!
+
+  # The parent message of this message if it is a reply
+  parent: ID
 
   # The recipient of the message if it is a DM
   recipient: ID

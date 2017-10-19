@@ -13,6 +13,13 @@ const messagesTable = db.table('messages')
 const get = ({conn}, id) => messagesTable.get(id).run(conn)
 
 /**
+ * Gets replies to a message.
+ * @param {Object} context  graph context
+ * @param {String} id       the ID of the parent message
+ */
+const getReplies = ({conn}, id) => messagesTable.getAll(id, {index: 'parent'}).run(conn)
+
+/**
  * Returns the number of messages since a particular date.
  *
  * @param {Object} context     graph context
@@ -36,7 +43,9 @@ const newMessageCount = ({conn, user}, roomId) =>
  */
 
 const getRoomMessages = ({user, conn}, room, nametag) => Promise.all([
-  messagesTable.getAll([room, false], {index: 'room_recipient'}).run(conn),
+  messagesTable.getAll([room, false], {index: 'room_recipient'})
+    .filter(message => r.not(message('parent')))
+    .run(conn),
   messagesTable.getAll([room, nametag], {index: 'room_recipient'}).run(conn),
   messagesTable.getAll([room, user.nametags[room], true], {index: 'room_author_isDM'}).run(conn)
 ])
@@ -76,14 +85,19 @@ const toggleSaved = ({conn}, id, saved) =>
  *
  **/
 
-const create = (context, msg) => {
+const create = (context, m) => {
   const {conn, models: {Rooms}} = context
-  const messageObj = Object.assign(
+  let messageObj = Object.assign(
     {},
-    msg,
+    m,
     {createdAt: new Date(), reactions: []},
-    {recipient: msg.recipient ? msg.recipient : false}
+    {recipient: m.recipient ? m.recipient : false}
   )
+  if (msg.parent) {
+    return messagesTable.insert(messageObj)
+      .then(message => Promise.all([checkMentions(context, message), message]))
+      .then(([updates = {}, message]) => Object.assign({}, message, updates))
+  }
   return checkForCommands(context, messageObj)
   .then(msg => messagesTable.insert(msg).run(conn))
   .then((res) => {
@@ -378,6 +392,7 @@ const addReaction = ({conn}, messageId, emoji, nametagId) =>
 module.exports = (context) => ({
   Messages: {
     get: (id) => get(context, id),
+    getReplies: (id) => getReplies(context, id),
     newMessageCount: (roomId) => newMessageCount(context, roomId),
     getRoomMessages: (roomId, nametag) => getRoomMessages(context, roomId, nametag),
     getNametagMessages: (nametag) => getNametagMessages(context, nametag),
