@@ -19,11 +19,13 @@ class BadgeOffer extends Component {
     return <div>
       <div style={styles.badgeOffer}>
         <div>You have been offered the</div>
-        <Badge badge={{
-          template,
-          notes: [],
-          id: 'temp'
-        }} />
+        <div style={{width: 191}}>
+          <Badge badge={{
+            template,
+            notes: [],
+            id: 'temp'
+          }} />
+        </div>
         <div>badge, which will give you access to exclusive conversations.</div>
       </div>
       <div style={styles.ask}>
