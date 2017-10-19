@@ -543,7 +543,7 @@ const unsubscribe = ({conn}, userToken, roomId) =>
 
 /**
  * Determines whether a hashed password is valid
- * TODO: Make this once function with findemail.
+ * TODO: Make this one db call with findemail.
  * @param {Object} context   graph context
  * @param {String} id     E-mail address of the user
  * @param {String} password  Hashed password from the user
@@ -557,6 +557,32 @@ const hashPassword = (password) => {
   let hashedPassword = SHA3(password, {outputLength: 224})
   return hashedPassword.toString(enc.Base64)
 }
+
+/**
+ * Sends an e-mail digest to all valid users
+ * @param {Object} context   graph context
+ *
+ */
+
+const emailDigest = ({conn}) =>
+  usersTable.run(conn)
+  .then(results => {
+    for (var i=0; i < results.length; i++ ) {
+      const {user, rooms} = results[i]
+      if (!user.email || user.unsubscribe.digest) {
+        continue
+      }
+      sendEmail({
+        from: {
+          email: 'noreply@nametag.chat',
+          name: 'Nametag Update'
+        },
+        to: email,
+        template: 'digest',
+        params: {token: user.token, rooms}
+      })
+    }
+  })
 
 module.exports = (context) => ({
   Users: {
