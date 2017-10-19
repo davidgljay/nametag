@@ -567,20 +567,21 @@ const hashPassword = (password) => {
 const emailDigest = ({conn}) =>
   usersTable.run(conn)
   .then(results => {
+    console.log('Got results for e-mail digest,' results)
     for (var i=0; i < results.length; i++ ) {
       const {user, rooms} = results[i]
       if (!user.email || user.unsubscribe.digest) {
         continue
       }
-      sendEmail({
-        from: {
-          email: 'noreply@nametag.chat',
-          name: 'Nametag Update'
-        },
-        to: email,
-        template: 'digest',
-        params: {token: user.token, rooms}
-      })
+      // sendEmail({
+      //   from: {
+      //     email: 'noreply@nametag.chat',
+      //     name: 'Nametag Update'
+      //   },
+      //   to: email,
+      //   template: 'digest',
+      //   params: {token: user.token, rooms}
+      // })
     }
   })
 
@@ -606,6 +607,7 @@ module.exports = (context) => ({
     passwordReset: (token, password) => passwordReset(context, token, password),
     emailConfirmationRequest: (email) => emailConfirmationRequest(context, email),
     emailConfirmation: (token) => emailConfirmation(context, token),
-    unsubscribe: (userToken, roomId) => unsubscribe(context, userToken, roomId)
+    unsubscribe: (userToken, roomId) => unsubscribe(context, userToken, roomId),
+    emailDigest: () => emailDigest(context)
   }
 })
