@@ -110,7 +110,7 @@ class Compose extends Component {
   render () {
     // TODO: Add GIFs, image upload
 
-    const {topic, mod, nametags, recipient, setRecipient, closed} = this.props
+    const {topic, mod, nametags, recipient, setRecipient, closed, hintText} = this.props
     const {showEmoji, message} = this.state
     let calloutImage
     let calloutName
@@ -171,7 +171,7 @@ class Compose extends Component {
             style={styles.textfield}
             onChange={this.onChange}
             autoComplete='off'
-            hintText={closed ? 'This discussion has closed.' : ''}
+            hintText={hintText}
             disabled={closed}
             multiLine
             value={this.state.message} />
@@ -216,6 +216,7 @@ Compose.propTypes = {
     name: string.isRequired,
     image: string
   })),
+  hintText: string,
   onUpdateText: func,
   onPost: func,
   showTypingPrompt: func,
