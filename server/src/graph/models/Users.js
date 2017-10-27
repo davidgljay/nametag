@@ -564,10 +564,21 @@ const hashPassword = (password) => {
  *
  */
 
-const emailDigest = ({conn}) =>
-  usersTable.run(conn)
+const emailDigest = ({conn}) => {
+  let users
+  usersTable.filter(user => user('nametags').and(user('email')).and(user('userToken')))
+  .run(conn)
+  .then(cursor => {
+    users = cursor.toArray()
+    return Promise.all(
+      users.map(user =>
+        db.table('rooms').getAll(Object.keys('user')).run(conn)
+        .then(cursor => cursor.toArray())
+      )
+    )
+  })
   .then(results => {
-    console.log('Got results for e-mail digest,' results)
+    console.log('Got results for e-mail digest', results)
     for (var i=0; i < results.length; i++ ) {
       const {user, rooms} = results[i]
       if (!user.email || user.unsubscribe.digest) {
@@ -584,6 +595,7 @@ const emailDigest = ({conn}) =>
       // })
     }
   })
+}
 
 module.exports = (context) => ({
   Users: {
