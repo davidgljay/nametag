@@ -28,7 +28,7 @@ class Message extends Component {
     }
 
     this.checkImage = (message) => {
-      return /[^ ]+(\.gif|\.jpg|\.png)/.exec(message)
+      return /[^ (]+(\.gif|\.jpg|\.png)/.exec(message)
     }
 
     this.toggleMenu = e => {
