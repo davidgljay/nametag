@@ -146,6 +146,9 @@ type Message {
   # Time when the message was created
   createdAt: Date!
 
+  # Indicates when the message was last edited
+  editedAt: Date
+
 }
 
 # Emoji reactions to a message

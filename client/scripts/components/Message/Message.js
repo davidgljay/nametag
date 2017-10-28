@@ -53,6 +53,7 @@ class Message extends Component {
         id,
         author,
         createdAt,
+        editedAt,
         text,
         recipient,
         reactions
@@ -170,6 +171,12 @@ class Message extends Component {
               <div style={styles.date}>
                 {moment(createdAt).format('h:mm A, ddd MMM DD YYYY')}
               </div>
+              {
+                editedAt &&
+                <div style={styles.date}>
+                  Edited
+                </div>
+              }
             </div>
           }
           {
@@ -225,6 +232,7 @@ Message.propTypes = {
     id: string.isRequired,
     text: string.isRequired,
     createdAt: string.isRequired,
+    editedAt: string,
     author: shape({
       image: string,
       name: string.isRequired
@@ -329,7 +337,8 @@ const styles = {
     fontStyle: 'italic',
     color: grey,
     height: 22,
-    lineHeight: '22px'
+    lineHeight: '22px',
+    marginRight: 10
   },
   text: {
     fontSize: 16,
