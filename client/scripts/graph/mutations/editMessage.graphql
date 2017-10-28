@@ -1,0 +1,8 @@
+mutation editMessage($messageId: ID!, $roomId: ID!, $text: String!) {
+  editMessage(messageId: $messageId, roomId: $roomId, text: $text) {
+    errors {
+      translation_key
+      message
+    }
+  }
+}

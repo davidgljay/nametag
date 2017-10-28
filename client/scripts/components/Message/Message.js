@@ -69,7 +69,8 @@ class Message extends Component {
       banNametag,
       hideDMs,
       setDefaultMessage,
-      setRecipient
+      setRecipient,
+      setEditing
     } = this.props
 
     const {showMenu, showActions} = this.state
@@ -189,8 +190,10 @@ class Message extends Component {
                 anchor={document.getElementById(id)}
                 onRequestClose={this.toggleMenu}
                 messageId={id}
+                messageText={text}
                 roomId={roomId}
                 deleteMessage={deleteMessage}
+                setEditing={setEditing}
                 open={showMenu === 'commands'} />
             </div>
           }
@@ -245,7 +248,8 @@ Message.propTypes = {
   hideDMs: bool.isRequired,
   hideAuthor: bool,
   setDefaultMessage: func.isRequired,
-  setRecipient: func.isRequired
+  setRecipient: func.isRequired,
+  setEditing: func.isRequired
 }
 
 export default Message

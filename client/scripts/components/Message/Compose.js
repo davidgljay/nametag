@@ -45,9 +45,29 @@ class Compose extends Component {
     }
 
     this.post = (e) => {
-      const {myNametag, roomId, createMessage, setDefaultMessage, setRecipient, onPost, recipient, closed} = this.props
+      const {
+        myNametag,
+        roomId,
+        createMessage,
+        setDefaultMessage,
+        setRecipient,
+        onPost,
+        recipient,
+        closed,
+        editing,
+        editMessage,
+        setEditing
+      } = this.props
       const {message} = this.state
       if (closed) {
+        return
+      }
+      e.preventDefault()
+      if (editing) {
+        editMessage(editing, roomId, message)
+        setEditing(null)
+        setDefaultMessage('')
+        track('EDIT_MESSAGE', {room: roomId})
         return
       }
       if (onPost) {
@@ -55,7 +75,6 @@ class Compose extends Component {
       }
       track('POST_MESSAGE', {room: roomId})
       increment('MESSAGES_POSTED')
-      e.preventDefault()
       if (message.length > 0) {
         let msg = {
           text: emojiText.convert(message, {delimiter: ':'}),
@@ -110,7 +129,18 @@ class Compose extends Component {
   render () {
     // TODO: Add GIFs, image upload
 
-    const {topic, mod, nametags, recipient, setRecipient, closed, hintText} = this.props
+    const {
+      topic,
+      mod,
+      nametags,
+      recipient,
+      editing,
+      setRecipient,
+      setEditing,
+      setDefaultMessage,
+      closed,
+      hintText
+  } = this.props
     const {showEmoji, message} = this.state
     let calloutImage
     let calloutName
@@ -120,6 +150,8 @@ class Compose extends Component {
       calloutImage = nametag.image
       calloutName = nametag.name
       calloutMsg = `Private message to ${nametag.name}:`
+    } else if (editing) {
+      calloutMsg = 'Editing Message'
     } else if (topic) {
       calloutImage = mod.image
       calloutName = mod.name
@@ -128,19 +160,31 @@ class Compose extends Component {
     return <div>
       {
         calloutMsg && <div style={styles.topicContainer}>
-          <div style={styles.nametagIconContainer}>
-            <NametagIcon
-              image={calloutImage}
-              name={calloutName}
-              diameter={20} />
-          </div>
+          {
+            calloutImage &&
+            <div style={styles.nametagIconContainer}>
+              <NametagIcon
+                image={calloutImage}
+                name={calloutName}
+                diameter={20} />
+            </div>
+          }
           <div id='topic' style={styles.topic}>
             {calloutMsg}
           </div>
           {
             recipient &&
-            <div style={styles.dmCancelContainer}>
-              <a href='#' style={styles.dmCancel} onClick={() => setRecipient(null)}>Cancel</a>
+            <div style={styles.cancelContainer}>
+              <a href='#' style={styles.cancel} onClick={() => setRecipient(null)}>Cancel</a>
+            </div>
+          }
+          {
+            editing &&
+            <div style={styles.cancelContainer}>
+              <a href='#' style={styles.cancel} onClick={() => {
+                setEditing(null)
+                setDefaultMessage('')
+              }}>Cancel</a>
             </div>
           }
         </div>
@@ -203,6 +247,7 @@ Compose.propTypes = {
     name: string.isRequired
   }),
   createMessage: func.isRequired,
+  editMessage: func.isRequired,
   recipient: string,
   defaultMessage: string,
   setDefaultMessage: func,
@@ -216,11 +261,13 @@ Compose.propTypes = {
     name: string.isRequired,
     image: string
   })),
+  editing: string,
   hintText: string,
   onUpdateText: func,
   onPost: func,
   showTypingPrompt: func,
   setRecipient: func,
+  setEditing: func,
   closed: bool
 }
 
@@ -265,11 +312,11 @@ const styles = {
     flex: 1,
     display: 'flex'
   },
-  dmCancelContainer: {
+  cancelContainer: {
     flex: 1,
     textAlign: 'right'
   },
-  dmCancel: {
+  cancel: {
     textDecoration: 'none',
     fontStyle: 'italic',
     fontSize: 12

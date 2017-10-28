@@ -10,7 +10,9 @@ const CommandMenu = ({
   open,
   anchor,
   messageId,
+  messageText,
   deleteMessage = () => {},
+  setEditing = () => {},
   roomId
 }) => {
   const commands = [
@@ -53,6 +55,13 @@ const CommandMenu = ({
     onRequestClose()
   }
 
+  const onEditClick = e => {
+    e.preventDefault()
+    setEditing(messageId)
+    setDefaultMessage(messageText)
+    onRequestClose()
+  }
+
   return <Popover
     open={open}
     anchorEl={anchor}
@@ -72,11 +81,18 @@ const CommandMenu = ({
       }
       {
         messageId &&
-          <MenuItem
-            key='delete'
-            style={styles.commandMenu}
-            primaryText='Delete Message'
-            onClick={onDeleteClick} />
+          <div>
+            <MenuItem
+              key='edit'
+              style={styles.commandMenu}
+              primaryText='Edit Message'
+              onClick={onEditClick} />
+            <MenuItem
+              key='delete'
+              style={styles.commandMenu}
+              primaryText='Delete Message'
+              onClick={onDeleteClick} />
+          </div>
       }
     </Menu>
   </Popover>
@@ -90,7 +106,9 @@ CommandMenu.propTypes = {
   setDefaultMessage: func.isRequired,
   onRequestClose: func.isRequired,
   messageId: string,
+  messageText: string,
   deleteMessage: func,
+  setEditing: func,
   roomId: string
 }
 

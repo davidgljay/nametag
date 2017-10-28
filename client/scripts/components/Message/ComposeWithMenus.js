@@ -91,24 +91,30 @@ class ComposeWithMenu extends Component {
       recipient,
       nametags,
       setDefaultMessage,
-      setRecipient
+      editMessage,
+      setRecipient,
+      editing,
+      setEditing
     } = this.props
     const {nametagList, showComposeMenu} = this.state
     const typingPrompts = this.props.typingPrompts.filter(nametag => nametag.id !== myNametag.id)
 
-    const containerStyle = recipient ? {...styles.container, ...styles.privMessageContainer} : styles.container
+    const containerStyle = recipient || editing ? {...styles.container, ...styles.privMessageContainer} : styles.container
     return <div style={containerStyle}>
       <Compose
         roomId={roomId}
         recipient={recipient}
+        editing={editing}
         myNametag={myNametag}
         showTypingPrompt={showTypingPrompt}
         nametags={nametags}
         closed={closed}
         hintText={closed ? 'This discussion is closed.' : ''}
         createMessage={createMessage}
+        editMessage={editMessage}
         defaultMessage={defaultMessage}
         setDefaultMessage={setDefaultMessage}
+        setEditing={setEditing}
         setRecipient={setRecipient}
         mod={mod}
         topic={topic}
@@ -160,6 +166,7 @@ ComposeWithMenu.propTypes = {
   roomId: string.isRequired,
   myNametag: object,
   createMessage: func.isRequired,
+  editMessage: func.isRequired,
   defaultMessage: string,
   setDefaultMessage: func.isRequired,
   showTypingPrompt: func.isRequired,
