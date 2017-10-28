@@ -265,6 +265,7 @@ export const createMessage = graphql(CREATE_MESSAGE, {
             id: `tempMessage_${Date.now()}`,
             text: message.text,
             createdAt: new Date().toISOString(),
+            editedAt: null,
             saved: false,
             author: {
               __typename: 'Nametag',
