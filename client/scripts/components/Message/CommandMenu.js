@@ -3,7 +3,16 @@ import MenuItem from 'material-ui/MenuItem'
 import Menu from 'material-ui/Menu'
 import Popover from 'material-ui/Popover'
 
-const CommandMenu = ({isMod, setDefaultMessage, onRequestClose, open, anchor}) => {
+const CommandMenu = ({
+  isMod,
+  setDefaultMessage,
+  onRequestClose,
+  open,
+  anchor,
+  messageId,
+  deleteMessage = () => {},
+  roomId
+}) => {
   const commands = [
     {
       command: 'welcome',
@@ -38,6 +47,12 @@ const CommandMenu = ({isMod, setDefaultMessage, onRequestClose, open, anchor}) =
     onRequestClose()
   }
 
+  const onDeleteClick = e => {
+    e.preventDefault()
+    deleteMessage(messageId, roomId)
+    onRequestClose()
+  }
+
   return <Popover
     open={open}
     anchorEl={anchor}
@@ -54,18 +69,29 @@ const CommandMenu = ({isMod, setDefaultMessage, onRequestClose, open, anchor}) =
               primaryText={`/${command}: ${description}`}
               onClick={onMenuItemClick(command)} />
             )
-        }
+      }
+      {
+        messageId &&
+          <MenuItem
+            key='delete'
+            style={styles.commandMenu}
+            primaryText='Delete Message'
+            onClick={onDeleteClick} />
+      }
     </Menu>
   </Popover>
 }
 
-const {bool, func, object} = PropTypes
+const {bool, func, object, string} = PropTypes
 CommandMenu.propTypes = {
   isMod: bool.isRequired,
   open: bool.isRequired,
   anchor: object,
   setDefaultMessage: func.isRequired,
-  onRequestClose: func.isRequired
+  onRequestClose: func.isRequired,
+  messageId: string,
+  deleteMessage: func,
+  roomId: string
 }
 
 export default CommandMenu

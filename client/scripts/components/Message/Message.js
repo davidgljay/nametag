@@ -188,6 +188,9 @@ class Message extends Component {
                 setDefaultMessage={setDefaultMessage}
                 anchor={document.getElementById(id)}
                 onRequestClose={this.toggleMenu}
+                messageId={id}
+                roomId={roomId}
+                deleteMessage={deleteMessage}
                 open={showMenu === 'commands'} />
             </div>
           }
