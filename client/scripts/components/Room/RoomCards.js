@@ -202,7 +202,7 @@ const styles = {
     padding: 10,
     paddingTop: window.innerWidth * 494 / 1023 - 80,
     [mobile]: {
-      fontSize: 24
+      fontSize: 22
     }
   },
   showMore: {

@@ -105,6 +105,7 @@ class ComposeWithMenu extends Component {
         showTypingPrompt={showTypingPrompt}
         nametags={nametags}
         closed={closed}
+        hintText={closed ? 'This discussion is closed.' : ''}
         createMessage={createMessage}
         defaultMessage={defaultMessage}
         setDefaultMessage={setDefaultMessage}

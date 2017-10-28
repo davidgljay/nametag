@@ -44,6 +44,8 @@ const getVisible = ({conn, user, models: {Users}}) =>
               room('templates')
                 .setIntersection(visibleTemplates)
                 .count().gt(0)
+            ).and(
+              r.not(room('closed'))
             )
           )
          )
@@ -122,7 +124,13 @@ const create = ({conn, models: {Nametags, Users, Messages}}, rm) => {
   const room = Object.assign(
     {},
     rm,
-    {createdAt: new Date(), modOnlyDMs: false, mod: null, public: rm.public ? 'PENDING' : false})
+    {
+      createdAt: new Date(),
+      modOnlyDMs: false,
+      mod: null,
+      public: rm.public ? 'PENDING' : false,
+      closed: false
+    })
   return Promise.all([
     roomsTable.insert(room).run(conn),
     rm.mod

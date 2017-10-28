@@ -204,7 +204,7 @@ class Room extends Component {
             setDefaultMessage={this.setDefaultMessage}
             setRecipient={this.setRecipient}
             mod={room.mod}
-            messages={room.messages} />
+            messages={me && myNametag && myNametag.bio ? room.messages : []} />
         </div>
         <ComposeWithMenus
           createMessage={createMessage}
@@ -227,6 +227,7 @@ class Room extends Component {
       <Dialog
         modal={false}
         contentStyle={styles.dialog}
+        bodyStyle={styles.bodyStyle}
         open={!me || !myNametag || !myNametag.bio}
         onRequestClose={this.dismissWelcomeModal}>
         {
@@ -313,7 +314,11 @@ const slideIn = keyframes({
 const styles = {
   dialog: {
     maxWidth: 820,
-    width: 'fit-content'
+    width: 'fit-content',
+    bottom: window.innerWidth < 800 ? '15vh' : 0
+  },
+  bodyStyle: {
+    overflowY: 'auto'
   },
   roomContainer: {
     overflowX: 'hidden'

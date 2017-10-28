@@ -5,6 +5,7 @@ import RoomCard from './RoomCard'
 import radium from 'radium'
 import {mobile} from '../../../styles/sizes'
 import {track} from '../../utils/analytics'
+import {primary} from '../../../styles/colors'
 
 class JoinRoom extends Component {
 
@@ -29,11 +30,14 @@ class JoinRoom extends Component {
 
     return <div id='room' style={styles.container}>
       <Navbar me={me} empty />
+      <div style={styles.hintText}>
+        Small, private conversations with people you trust.
+      </div>
       <div id='roomInfoContainer' style={styles.roomInfoContainer}>
         <h3 style={styles.introText}>{
             banned
             ? 'You have been banned from this conversation:'
-            : 'You\'ve been invited to a conversation:'
+            : ''
           }</h3>
         <RoomCard room={room} disabled={room.closed || banned} />
       </div>
@@ -73,7 +77,17 @@ const styles = {
     marginLeft: 'auto',
     marginRight: 'auto',
     textAlign: 'center',
-    marginTop: 40
+    marginTop: 10
+  },
+  hintText: {
+    fontSize: 13,
+    color: primary,
+    textAlign: 'center',
+    fontStyle: 'italic',
+    marginTop: 10,
+    marginBottom: 10,
+    paddingLeft: 5,
+    paddingRight: 5
   },
   introText: {
     marginBottom: 60,

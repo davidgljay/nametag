@@ -10,6 +10,16 @@ switch (process.env.NODE_ENV) {
     init = (conn) => r.branch(r.dbList().contains('test'), r.dbDrop('test'), null).run(conn)
     .then(() => r.dbCreate('test').run(conn))
     break
+  case 'demo':
+    console.log('Using demo database')
+    db = r.db('demo')
+    init = (conn) => r.dbCreate('demo').run(conn).catch(err => {
+      if (err.msg !== 'Database `demo` already exists.') {
+        console.log('err', err)
+      }
+      return null
+    })
+    break
   default:
     console.log('Using dev/production database')
     db = r.db('nametag')

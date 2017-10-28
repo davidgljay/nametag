@@ -31,7 +31,8 @@ class Login extends Component {
       confirm: '',
       alert: '',
       loading: false,
-      state: 'LOGIN'
+      state: 'LOGIN',
+      emailClicked: false
     }
 
     this.updateField = fieldName => e => {
@@ -167,35 +168,38 @@ class Login extends Component {
       alert,
       message,
       state,
-      loading
+      loading,
+      emailClicked
     } = this.state
 
     return <div style={styles.login} id='loginForm'>
-      <h4>{message}</h4>
-      <div style={styles.alert}>
-        {alert}
-      </div>
-      <div style={styles.authProviders}>
-        {
-          loading
-          ? <CircularProgress />
-        : <div>
-          <img
-            style={styles.loginImg}
-            src='/public/images/twitter.jpg'
-            onClick={this.providerAuth('twitter')} />
-          <img
-            style={styles.loginImg}
-            src='/public/images/fb.jpg'
-            onClick={this.providerAuth('facebook')} />
-          <img
-            style={styles.loginImg}
-            src='/public/images/google.png'
-            onClick={this.providerAuth('google')} />
+      {
+        !emailClicked && <div style={styles.authProviders}>
+          <h4>{message}</h4>
+          <div style={styles.alert}>
+            {alert}
+          </div>
+          {
+            loading
+            ? <CircularProgress />
+          : <div>
+            <img
+              style={styles.loginImg}
+              src='/public/images/twitter.jpg'
+              onClick={this.providerAuth('twitter')} />
+            <img
+              style={styles.loginImg}
+              src='/public/images/fb.jpg'
+              onClick={this.providerAuth('facebook')} />
+            <img
+              style={styles.loginImg}
+              src='/public/images/google.png'
+              onClick={this.providerAuth('google')} />
+          </div>
+          }
+          <h4>OR</h4>
         </div>
-        }
-      </div>
-      <h4>OR</h4>
+      }
       <form className='localAuth' onSubmit={this.onEnter}>
         <TextField
           floatingLabelText='E-mail'
@@ -203,6 +207,7 @@ class Login extends Component {
           style={styles.field}
           errorText={emailAlert}
           onBlur={this.validateEmail}
+          onClick={() => this.setState({emailClicked: true})}
           onChange={this.updateField('email')} />
         <br />
         {
