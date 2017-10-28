@@ -659,6 +659,9 @@ type RootMutation {
   # Deletes a message
   deleteMessage(messageId: ID!, roomId: ID!): BasicResponse
 
+  # Edits a message
+  editMessage(messageId: ID!, text: String!, roomId: ID!): BasicResponse
+
   # Creates a nametag
   createNametag(nametag: CreateNametagInput!): CreateNametagResponse
 

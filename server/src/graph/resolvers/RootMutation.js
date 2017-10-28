@@ -6,7 +6,8 @@ const {
   ErrNotMod,
   ErrBanned,
   ErrNotYourNametag,
-  ErrNotNametagAdmin
+  ErrNotNametagAdmin,
+  ErrNotYourMessage
 } = require('../../errors')
 const pubsub = require('../subscriptions/pubsub')
 
@@ -56,6 +57,14 @@ const wrap = (mutation, requires, key = 'result') => (obj, args, context) => {
       .then(room => room.mod === context.user.nametags[room.id]
         ? mutation(obj, args, context)
         : Promise.reject(ErrNotMod)
+      )
+      break
+    case 'MY_MESSAGE':
+      promise = context.models.Messages.get(args.messageId)
+      .then(message => message.author === context.user.nametags[args.roomId]
+        && message.room === args.roomId
+        ? mutation(obj, args, context)
+        : Promise.reject(ErrNotYourMessage)
       )
       break
     case 'MOD_OR_MINE':
@@ -125,6 +134,12 @@ const RootMutation = {
     resolve: (obj, {message}, {user, models: {Messages}}) =>
       Messages.create(message)
         .then(wrapResponse('message'))
+  },
+  editMessage: {
+    requires: 'MY_MESSAGE',
+    resolve: (obj, {messageId, text}, {models: {Messages}}) =>
+      Messages.edit(messageId, text)
+      .then(wrapResponse('deleteMessage'))
   },
   deleteMessage: {
     requires: 'MOD_OR_MINE',
