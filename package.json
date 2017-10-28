@@ -14,7 +14,7 @@
     "postE2e": "docker-compose stop",
     "backup": "docker-compose run nametag sh backup.sh",
     "pull": "git pull origin demo && yarn install && yarn build && docker-compose build nametag && yarn backup && docker-compose stop && NODE_ENV=demo docker-compose up -d",
-    "reset-demo": "docker-compose run node ./server/src/demo/wipedb.js && docker-compose run nametag rethinkdb restore backup/demo-template.tar.gz -c rethinkdb --force"
+    "reset-demo": "docker-compose run node ./server/src/demo/wipedb.js && docker-compose run nametag rethinkdb restore backup/demo-template.tar.gz -c rethinkdb --force",
     "storybook": "start-storybook -p 9001 -c .storybook"
   },
   "dependencies": {
