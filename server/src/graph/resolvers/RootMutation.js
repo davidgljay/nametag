@@ -58,6 +58,20 @@ const wrap = (mutation, requires, key = 'result') => (obj, args, context) => {
         : Promise.reject(ErrNotMod)
       )
       break
+    case 'MOD_OR_MINE':
+      promise = Promise.all([
+        context.models.Rooms.get(args.roomId),
+        context.models.Messages.get(args.messageId)
+      ])
+      .then(([room, message]) =>
+        (
+          room.mod === context.user.nametags[room.id]
+          || message.author === context.user.nametags[room.id]
+        ) && message.room === room.id
+        ? mutation(obj, args, context)
+        : Promise.reject(ErrNotMod)
+      )
+      break
 
     case 'MY_NAMETAG':
       if (!context.user) {
@@ -113,13 +127,9 @@ const RootMutation = {
         .then(wrapResponse('message'))
   },
   deleteMessage: {
-    requires: 'ROOM_MOD',
+    requires: 'MOD_OR_MINE',
     resolve: (obj, {messageId, roomId}, {models: {Messages}}) =>
-      Messages.get(messageId)
-        .then(message => message.room === roomId
-          ? Messages.delete(messageId)
-          : Promise.reject(ErrNotInRoom)
-        )
+      Messages.delete(messageId)
       .then(wrapResponse('deleteMessage'))
   },
   addReaction: {
