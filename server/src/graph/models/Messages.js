@@ -123,7 +123,6 @@ const deleteMessage = (context, messageId) => messagesTable.get(messageId).delet
 const editMessage = (context, messageId, text) =>
   messagesTable.get(messageId).update({text, editedAt: new Date()}).run(context.conn)
 
-
 /**
  * Checks a message for mentions and dms
  *
