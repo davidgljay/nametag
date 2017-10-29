@@ -16,8 +16,7 @@
     "backup": "docker-compose run nametag sh backup.sh",
     "pull-demo": "git pull origin demo && yarn install && yarn build-demo && docker-compose build nametag && yarn backup && docker-compose stop && docker-compose up -d",
     "pull": "git pull origin master && yarn install && yarn build && docker-compose build nametag && yarn backup && docker-compose stop && docker-compose up -d",
-    "storybook": "start-storybook -p 9001 -c .storybook",
-    "reset-demo": "node ./server/src/demo/wipedemo.js && docker-compose run nametag rethinkdb restore backup/demo_template.tar.gz -c rethinkdb --force"
+    "storybook": "start-storybook -p 9001 -c .storybook"
   },
   "dependencies": {
     "apollo-client": "^1.0.0-rc.5",
