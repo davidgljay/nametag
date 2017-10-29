@@ -12,6 +12,7 @@ import {
   updateToken,
   updateRoom,
   updateNametag,
+  editMessage,
   deleteMessage,
   addReaction,
   banNametag
@@ -77,6 +78,7 @@ const Room = compose(
   updateLatestVisit,
   showTypingPrompt,
   updateToken,
+  editMessage,
   deleteMessage,
   banNametag,
   addReaction,

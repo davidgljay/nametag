@@ -28,7 +28,7 @@ class Message extends Component {
     }
 
     this.checkImage = (message) => {
-      return /[^ ]+(\.gif|\.jpg|\.png)/.exec(message)
+      return /[^ (]+(\.gif|\.jpg|\.png)/.exec(message)
     }
 
     this.toggleMenu = e => {
@@ -53,6 +53,7 @@ class Message extends Component {
         id,
         author,
         createdAt,
+        editedAt,
         text,
         recipient,
         reactions
@@ -69,7 +70,8 @@ class Message extends Component {
       banNametag,
       hideDMs,
       setDefaultMessage,
-      setRecipient
+      setRecipient,
+      setEditing
     } = this.props
 
     const {showMenu, showActions} = this.state
@@ -169,6 +171,12 @@ class Message extends Component {
               <div style={styles.date}>
                 {moment(createdAt).format('h:mm A, ddd MMM DD YYYY')}
               </div>
+              {
+                editedAt &&
+                <div style={styles.date}>
+                  Edited
+                </div>
+              }
             </div>
           }
           {
@@ -188,6 +196,11 @@ class Message extends Component {
                 setDefaultMessage={setDefaultMessage}
                 anchor={document.getElementById(id)}
                 onRequestClose={this.toggleMenu}
+                messageId={id}
+                messageText={text}
+                roomId={roomId}
+                deleteMessage={deleteMessage}
+                setEditing={setEditing}
                 open={showMenu === 'commands'} />
             </div>
           }
@@ -219,6 +232,7 @@ Message.propTypes = {
     id: string.isRequired,
     text: string.isRequired,
     createdAt: string.isRequired,
+    editedAt: string,
     author: shape({
       image: string,
       name: string.isRequired
@@ -242,7 +256,8 @@ Message.propTypes = {
   hideDMs: bool.isRequired,
   hideAuthor: bool,
   setDefaultMessage: func.isRequired,
-  setRecipient: func.isRequired
+  setRecipient: func.isRequired,
+  setEditing: func.isRequired
 }
 
 export default Message
@@ -322,7 +337,8 @@ const styles = {
     fontStyle: 'italic',
     color: grey,
     height: 22,
-    lineHeight: '22px'
+    lineHeight: '22px',
+    marginRight: 10
   },
   text: {
     fontSize: 16,

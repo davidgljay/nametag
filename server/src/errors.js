@@ -83,6 +83,10 @@ const ErrNotYourNametag = new APIError('that nametag is not part of your account
   status: 400
 })
 
+const ErrNotYourMessage = new APIError('you are not the author of this message', {
+  status: 400
+})
+
 const ErrNotNametagAdmin = new APIError('you must be a nametag administrator to perform this action', {
   status: 400
 })
@@ -138,6 +142,7 @@ module.exports = {
   ErrNotInRoom,
   ErrNotMod,
   ErrNotYourNametag,
+  ErrNotYourMessage,
   ErrNotLoggedIn,
   ErrEmailTaken,
   ErrNotFound,

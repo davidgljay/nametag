@@ -3,6 +3,7 @@ subscription messageAdded ($roomId: ID!, $nametagId: ID!) {
     id
     text
     createdAt
+    editedAt
     saved
     author {
       id

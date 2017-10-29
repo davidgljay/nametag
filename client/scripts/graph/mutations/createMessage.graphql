@@ -4,6 +4,7 @@ mutation CreateMessage($message: CreateMessageInput!) {
       id
       text
       createdAt
+      editedAt
       saved
       author {
         image
