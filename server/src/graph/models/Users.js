@@ -564,38 +564,68 @@ const hashPassword = (password) => {
  *
  */
 
-const emailDigest = ({conn}) => {
-  let users
-  usersTable.filter(user => user('nametags').and(user('email')).and(user('userToken')))
+const emailDigest = ({conn}) =>
+
+  /* Query will return results of the form:
+  * [{
+  *  group, -The email to be delivered to
+  *  reduction: [
+  *    room: {title}, - The title of the room
+  *    mod: {name, image}, - The name and image of the room's mod
+  *    newMessages,  - The number of new messages in the room
+  *    newNametags   - The number of new nametags in the room
+  *  ]}]
+  */
+
+  db.table('nametags')
+  .filter(n => n('room'))
+  .eqJoin('room', db.table('rooms'))
+  .map(join => ({
+    room: join('right').pluck('title', 'mod', 'id'),
+    nametag: join('left').pluck('latestVisit', 'user')
+  }))
+  .eqJoin(join => join('nametag')('user'), db.table('users'))
+  .filter(join => join('right')('email')
+    .and(r.not(join('right')('unsubscribe').keys().contains('digest'))))
+  .map(join =>
+      join('left').merge({
+        email: join('right')('email'),
+        userToken: join('right')('userToken')
+     }))
+  .eqJoin(join => join('room')('mod'), db.table('nametags'))
+  .map(join => ({
+      title: join('left')('room')('title'),
+      email: join('left')('email'),
+      userToken: join('left')('userToken'),
+      mod: join('right').pluck('name','image'),
+      newNametags: db.table('nametags')
+        .getAll(join('left')('room')('id'), {index: 'room'})
+        .filter(nt => nt('createdAt').gt(join('left')('nametag')('latestVisit')))
+        .count(),
+      newMessages: db.table('messages')
+        .getAll([join('left')('room')('id'), false], {index: 'room_recipient'})
+        .filter(msg => msg('createdAt').gt(join('left')('nametag')('latestVisit')))
+        .count()
+   }))
+	.filter(join => join('newMessages').gt(0))
+  .group('email')
   .run(conn)
-  .then(cursor => {
-    users = cursor.toArray()
-    return Promise.all(
-      users.map(user =>
-        db.table('rooms').getAll(Object.keys('user')).run(conn)
-        .then(cursor => cursor.toArray())
-      )
-    )
-  })
   .then(results => {
     console.log('Got results for e-mail digest', results)
     for (var i=0; i < results.length; i++ ) {
-      const {user, rooms} = results[i]
-      if (!user.email || user.unsubscribe.digest) {
-        continue
-      }
-      // sendEmail({
-      //   from: {
-      //     email: 'noreply@nametag.chat',
-      //     name: 'Nametag Update'
-      //   },
-      //   to: email,
-      //   template: 'digest',
-      //   params: {token: user.token, rooms}
-      // })
+      const {group, reduction} = results[i]
+      const userToken = reduction[0].userToken
+      sendEmail({
+        from: {
+          email: 'noreply@nametag.chat',
+          name: 'Nametag Update'
+        },
+        to: group,
+        template: 'digest',
+        params: {userToken, rooms: reduction}
+      })
     }
   })
-}
 
 module.exports = (context) => ({
   Users: {

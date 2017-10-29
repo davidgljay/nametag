@@ -1,4 +1,4 @@
-module.exports = ({rooms, token}) => {
+module.exports = ({rooms, userToken}) => {
 
   let html = `<table style="padding: 20px; margin-left: auto; margin-right: auto;">
     <tr><td>
@@ -40,10 +40,11 @@ module.exports = ({rooms, token}) => {
   html += `</table>
 
     <div style='text-align:center; font-size: 10px; margin-top: 40px;'>
-        <a style='color: grey; text-decoration: none;' href="https://nametag.chat/unsubscribe/${userToken}?roomid=digest&roomname=${encodeURIComponent(Nametag Updates)}">Unsubscribe</a>
+        <a style='color: grey; text-decoration: none;' href="https://nametag.chat/unsubscribe/${userToken}?roomid=digest&roomname=${encodeURIComponent('Nametag Updates')}">Unsubscribe</a>
     </div>`
 
   return {
-  subject: `Updates in ${rooms[0].title}`,
-  html
+    subject: `Updates in ${rooms[0].title}`,
+    html
+  }
 }

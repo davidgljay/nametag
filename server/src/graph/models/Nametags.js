@@ -93,7 +93,7 @@ const create = ({conn, user, models: {Users, BadgeRequests, Rooms, Templates, Ba
   const nametag = Object.assign(
     {},
     nt,
-    {createdAt: new Date()},
+    {createdAt: new Date(), user: user.id},
     nt.room ? {latestVisit: new Date()} : {}
   )
   return nametagsTable.insert(nametag).run(conn)
