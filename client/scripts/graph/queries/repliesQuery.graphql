@@ -1,0 +1,23 @@
+query repliesQuery($message: ID!) {
+  replies(message: $message) {
+    id
+    text
+    createdAt
+    editedAt
+    saved
+    author {
+      id
+      image
+      name
+    }
+    reactions {
+      emoji
+      nametagId
+    }
+    recipient {
+      id
+      image
+      name
+    }
+  }
+}
