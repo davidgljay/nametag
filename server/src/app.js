@@ -158,12 +158,15 @@ r.connect({host: 'rethinkdb'})
     })
 
     // Send an e-mail digest
-    app.get('/digest/send', (req, res, next) => {
-      // TODO: test for a secure key when triggering digest
-      const context = new Context({}, conn)
-      context.models.Users.emailDigest()
-        .then(res.end('Success!'))
-        .catch(err => next(err))
+    app.get('/send_digest', (req, res, next) => {
+      if (req.headers.authorization !== config.digest.key) {
+        next(errors.ErrNotAuthorized)
+      } else {
+        const context = new Context({}, conn)
+        context.models.Users.emailDigest()
+          .then(res.end('Success!'))
+          .catch(err => next(new errors.APIError(err)))
+      }
     })
 
     /* All others serve index.html */
