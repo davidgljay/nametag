@@ -1,5 +1,4 @@
 module.exports = ({rooms, userToken}) => {
-
   let html = `<table style="padding: 20px; margin-left: auto; margin-right: auto;">
     <tr><td>
       <a href="https://nametag.chat">
@@ -11,7 +10,7 @@ module.exports = ({rooms, userToken}) => {
   </tr>
   <tr>`
 
-  for (var i=0; i < rooms.length; i++ ) {
+  for (var i = 0; i < rooms.length; i++) {
     let room = rooms[i]
     html += `<tr>
 <td style="padding: 10px; border: 1px #a8a8a8 solid; width:100%; min-width: 250px; max-width: 500px; border-radius: 4px; box-shadow: 2px 2px 6px #888888;">

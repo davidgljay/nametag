@@ -591,35 +591,34 @@ const emailDigest = ({conn}) =>
       join('left').merge({
         email: join('right')('email'),
         userToken: join('right')('userToken')
-     }))
+      }))
   .eqJoin(join => join('room')('mod'), db.table('nametags'))
   .map(join => ({
-      id: join('left')('room')('id'),
-      title: join('left')('room')('title'),
-      email: join('left')('email'),
-      userToken: join('left')('userToken'),
-      mod: join('right').pluck('name','image'),
-      newNametags: db.table('nametags')
+    id: join('left')('room')('id'),
+    title: join('left')('room')('title'),
+    email: join('left')('email'),
+    userToken: join('left')('userToken'),
+    mod: join('right').pluck('name', 'image'),
+    newNametags: db.table('nametags')
         .getAll(join('left')('room')('id'), {index: 'room'})
         .filter(nt => nt('createdAt').gt(join('left')('nametag')('latestVisit')))
         .count(),
-      newMessages: db.table('messages')
+    newMessages: db.table('messages')
         .getAll([join('left')('room')('id'), false], {index: 'room_recipient'})
         .filter(msg => msg('createdAt').gt(join('left')('nametag')('latestVisit')))
         .count()
-   }))
-	.filter(join => join('newMessages').gt(0))
+  }))
+  .filter(join => join('newMessages').gt(0))
   .map(join => join.merge({
     latestMessage: db.table('messages')
       .getAll([join('id'), false], {index: 'room_recipient'})
       .orderBy(r.desc('createdAt'))
-      .nth(0)
-      ('text')
+      .nth(0)('text')
   }))
   .group('email')
   .run(conn)
   .then(results => {
-    for (var i=0; i < results.length; i++ ) {
+    for (var i = 0; i < results.length; i++) {
       const {group, reduction} = results[i]
       const userToken = reduction[0].userToken
       sendEmail({
