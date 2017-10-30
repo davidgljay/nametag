@@ -13,6 +13,7 @@ import SHOW_TYPING_PROMPT from './showTypingPrompt.graphql'
 import UPDATE_BADGE_REQUEST_STATUS from './updateBadgeRequestStatus.graphql'
 import UPDATE_TOKEN from './updateToken.graphql'
 import DELETE_MESSAGE from './deleteMessage.graphql'
+import EDIT_MESSAGE from './editMessage.graphql'
 import PASSWORD_RESET from './passwordReset.graphql'
 import UNSUBSCRIBE from './unsubscribe.graphql'
 import SET_MOD_ONLY_DMS from './setModOnlyDMs.graphql'
@@ -264,6 +265,7 @@ export const createMessage = graphql(CREATE_MESSAGE, {
             id: `tempMessage_${Date.now()}`,
             text: message.text,
             createdAt: new Date().toISOString(),
+            editedAt: null,
             saved: false,
             author: {
               __typename: 'Nametag',
@@ -374,6 +376,18 @@ export const deleteMessage = graphql(DELETE_MESSAGE, {
       variables: {
         messageId,
         roomId
+      }
+    })
+  })
+})
+
+export const editMessage = graphql(EDIT_MESSAGE, {
+  props: ({ownProps, mutate}) => ({
+    editMessage: (messageId, roomId, text) => mutate({
+      variables: {
+        messageId,
+        roomId,
+        text
       }
     })
   })

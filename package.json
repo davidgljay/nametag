@@ -6,6 +6,7 @@
     "test-watch": "jest --watch",
     "start": "docker-compose up -d && docker-compose logs -f nametag",
     "build": "NODE_ENV=production webpack --progress -p --config webpack.config.js --bail",
+    "build-demo": "NODE_ENV=demo webpack --progress -p --config webpack.config.js --bail",
     "build-watch": "NODE_ENV=development webpack --progress --config webpack.config.js --watch",
     "lint": "standard",
     "lint-fix": "standard --fix",
@@ -13,6 +14,7 @@
     "e2e": "nightwatch",
     "postE2e": "docker-compose stop",
     "backup": "docker-compose run nametag sh backup.sh",
+    "pull-demo": "git pull origin demo && yarn install && yarn build-demo && docker-compose build nametag && yarn backup && docker-compose stop && docker-compose up -d",
     "pull": "git pull origin master && yarn install && yarn build && docker-compose build nametag && yarn backup && docker-compose stop && docker-compose up -d",
     "storybook": "start-storybook -p 9001 -c .storybook"
   },

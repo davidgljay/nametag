@@ -126,6 +126,18 @@ const create = (context, m) => {
 const deleteMessage = (context, messageId) => messagesTable.get(messageId).delete().run(context.conn)
 
 /**
+ * Edits a message
+ *
+ * @param {Object} context     graph context
+ * @param {Object} messageId   the id of the message to be deleted
+ * @param {Object} text   the new text of the message
+ *
+ **/
+
+const editMessage = (context, messageId, text) =>
+  messagesTable.get(messageId).update({text, editedAt: new Date()}).run(context.conn)
+
+/**
  * Checks a message for mentions and dms
  *
  * @param {Object} context     graph context
@@ -397,6 +409,7 @@ module.exports = (context) => ({
     getRoomMessages: (roomId, nametag) => getRoomMessages(context, roomId, nametag),
     getNametagMessages: (nametag) => getNametagMessages(context, nametag),
     create: (message) => create(context, message),
+    edit: (messageId, text) => editMessage(context, messageId, text),
     delete: (messageId) => deleteMessage(context, messageId),
     addReaction: (messageId, emoji, nametagId) => addReaction(context, messageId, emoji, nametagId),
     toggleSaved: (id, saved) => toggleSaved(context, id, saved)

@@ -155,6 +155,9 @@ type Message {
   # Time when the message was created
   createdAt: Date!
 
+  # Indicates when the message was last edited
+  editedAt: Date
+
 }
 
 # Emoji reactions to a message
@@ -670,6 +673,9 @@ type RootMutation {
 
   # Deletes a message
   deleteMessage(messageId: ID!, roomId: ID!): BasicResponse
+
+  # Edits a message
+  editMessage(messageId: ID!, text: String!, roomId: ID!): BasicResponse
 
   # Creates a nametag
   createNametag(nametag: CreateNametagInput!): CreateNametagResponse

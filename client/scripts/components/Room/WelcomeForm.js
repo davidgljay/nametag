@@ -48,6 +48,7 @@ class WelcomeForm extends Component {
         defaultMessage={defaultMessage}
         mod={mod}
         topic=''
+        hintText='Introduce Yourself'
         onPost={this.onPost}
         onUpdateText={this.onUpdateText}
         />
@@ -100,7 +101,6 @@ const styles = {
     display: 'flex',
     flexWrap: 'wrap',
     maxHeight: '50vh',
-    overflowY: 'auto',
     paddingBottom: 30,
     marginTop: 20
   }

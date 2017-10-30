@@ -26,6 +26,7 @@ class Messages extends Component {
         addReaction,
         setDefaultMessage,
         setRecipient,
+        setEditing,
         hideDMs,
         deleteMessage,
         banNametag
@@ -47,6 +48,7 @@ class Messages extends Component {
         addReaction={addReaction}
         setDefaultMessage={setDefaultMessage}
         setRecipient={setRecipient}
+        setEditing={setEditing}
         norms={norms}
         mod={mod}
         createMessage={createMessage}
@@ -85,7 +87,7 @@ class Messages extends Component {
 
   componentDidUpdate (prevProps) {
     if (prevProps.messages.length !== this.props.messages.length) {
-      this.scroll()
+      // this.scroll()
     }
   }
 
@@ -133,7 +135,8 @@ Messages.propTypes = {
   banNametag: func.isRequired,
   addReaction: func.isRequired,
   setDefaultMessage: func.isRequired,
-  setRecipient: func.isRequired
+  setRecipient: func.isRequired,
+  setEditing: func.isRequired
 }
 
 export default radium(Messages)

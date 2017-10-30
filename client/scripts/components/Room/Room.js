@@ -29,7 +29,8 @@ class Room extends Component {
       defaultMessage: '',
       hasPosted: null,
       dismissedWelcomeModal: false,
-      recipient: null
+      recipient: null,
+      editing: null
     }
 
     this.showPresence = () => {
@@ -67,6 +68,8 @@ class Room extends Component {
     this.setDefaultMessage = (defaultMessage) => this.setState({defaultMessage})
 
     this.setRecipient = (recipient) => this.setState({recipient})
+
+    this.setEditing = (editing) => this.setState({editing})
   }
 
   componentDidMount () {
@@ -136,12 +139,13 @@ class Room extends Component {
       updateRoom,
       updateNametag,
       deleteMessage,
+      editMessage,
       banNametag,
       addReaction,
       location: {state: locationState}
     } = this.props
 
-    const {defaultMessage, recipient} = this.state
+    const {defaultMessage, recipient, editing} = this.state
 
     const isJoining = locationState && locationState.isJoining
 
@@ -201,8 +205,9 @@ class Room extends Component {
             banNametag={banNametag}
             setDefaultMessage={this.setDefaultMessage}
             setRecipient={this.setRecipient}
+            setEditing={this.setEditing}
             mod={room.mod}
-            messages={room.messages} />
+            messages={me && myNametag && myNametag.bio ? room.messages : []} />
         </div>
         <ComposeWithMenus
           createMessage={createMessage}
@@ -214,6 +219,9 @@ class Room extends Component {
           recipient={recipient}
           setDefaultMessage={this.setDefaultMessage}
           setRecipient={this.setRecipient}
+          editing={editing}
+          setEditing={this.setEditing}
+          editMessage={editMessage}
           updateRoom={updateRoom}
           updateNametag={updateNametag}
           nametags={room.nametags}
@@ -225,6 +233,7 @@ class Room extends Component {
       <Dialog
         modal={false}
         contentStyle={styles.dialog}
+        bodyStyle={styles.bodyStyle}
         open={!me || !myNametag || !myNametag.bio}
         onRequestClose={this.dismissWelcomeModal}>
         {
@@ -290,6 +299,8 @@ Room.propTypes = {
   updateRoom: func.isRequired,
   createNametag: func.isRequired,
   createMessage: func.isRequired,
+  deleteMessage: func.isRequired,
+  editMessage: func.isRequired,
   toggleSaved: func.isRequired,
   addReaction: func.isRequired,
   updateToken: func.isRequired,
@@ -313,6 +324,9 @@ const styles = {
     maxWidth: 820,
     width: 'fit-content',
     bottom: window.innerWidth < 800 ? '15vh' : 0
+  },
+  bodyStyle: {
+    overflowY: 'auto'
   },
   roomContainer: {
     overflowX: 'hidden'

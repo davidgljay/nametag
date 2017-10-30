@@ -6,7 +6,8 @@ const {
   ErrNotMod,
   ErrBanned,
   ErrNotYourNametag,
-  ErrNotNametagAdmin
+  ErrNotNametagAdmin,
+  ErrNotYourMessage
 } = require('../../errors')
 const pubsub = require('../subscriptions/pubsub')
 
@@ -54,6 +55,28 @@ const wrap = (mutation, requires, key = 'result') => (obj, args, context) => {
     case 'ROOM_MOD':
       promise = context.models.Rooms.get(args.roomId)
       .then(room => room.mod === context.user.nametags[room.id]
+        ? mutation(obj, args, context)
+        : Promise.reject(ErrNotMod)
+      )
+      break
+    case 'MY_MESSAGE':
+      promise = context.models.Messages.get(args.messageId)
+      .then(message => message.author === context.user.nametags[args.roomId] &&
+        message.room === args.roomId
+        ? mutation(obj, args, context)
+        : Promise.reject(ErrNotYourMessage)
+      )
+      break
+    case 'MOD_OR_MINE':
+      promise = Promise.all([
+        context.models.Rooms.get(args.roomId),
+        context.models.Messages.get(args.messageId)
+      ])
+      .then(([room, message]) =>
+        (
+          room.mod === context.user.nametags[room.id] ||
+          message.author === context.user.nametags[room.id]
+        ) && message.room === room.id
         ? mutation(obj, args, context)
         : Promise.reject(ErrNotMod)
       )
@@ -112,14 +135,16 @@ const RootMutation = {
       Messages.create(message)
         .then(wrapResponse('message'))
   },
+  editMessage: {
+    requires: 'MY_MESSAGE',
+    resolve: (obj, {messageId, text}, {models: {Messages}}) =>
+      Messages.edit(messageId, text)
+      .then(wrapResponse('deleteMessage'))
+  },
   deleteMessage: {
-    requires: 'ROOM_MOD',
+    requires: 'MOD_OR_MINE',
     resolve: (obj, {messageId, roomId}, {models: {Messages}}) =>
-      Messages.get(messageId)
-        .then(message => message.room === roomId
-          ? Messages.delete(messageId)
-          : Promise.reject(ErrNotInRoom)
-        )
+      Messages.delete(messageId)
       .then(wrapResponse('deleteMessage'))
   },
   addReaction: {
