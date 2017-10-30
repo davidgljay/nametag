@@ -144,7 +144,7 @@ type Message {
   replyLink: ID
 
   # Replies to a message
-  replies: [Message]
+  replies(limit: Int): [Message]
 
   # Emoji reactions to the message
   reactions: [EmojiReaction]

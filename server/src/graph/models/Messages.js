@@ -1,4 +1,5 @@
 const {db} = require('../../db')
+const r = require('rethinkdb')
 const errors = require('../../errors')
 const notification = require('../../notifications')
 const email = require('../../email')
@@ -17,7 +18,11 @@ const get = ({conn}, id) => messagesTable.get(id).run(conn)
  * @param {Object} context  graph context
  * @param {String} id       the ID of the parent message
  */
-const getReplies = ({conn}, id) => messagesTable.getAll(id, {index: 'parent'}).run(conn)
+const getReplies = ({conn}, id, limit = 9999999) =>
+  messagesTable.getAll(id, {index: 'parent'})
+  .limit(limit)
+  .run(conn)
+  .then(cursor => cursor.toArray())
 
 /**
  * Returns the number of messages since a particular date.
@@ -44,7 +49,7 @@ const newMessageCount = ({conn, user}, roomId) =>
 
 const getRoomMessages = ({user, conn}, room, nametag) => Promise.all([
   messagesTable.getAll([room, false], {index: 'room_recipient'})
-    .filter(message => r.not(message('parent')))
+    .filter(message => r.not(message.hasFields('parent')))
     .run(conn),
   messagesTable.getAll([room, nametag], {index: 'room_recipient'}).run(conn),
   messagesTable.getAll([room, user.nametags[room], true], {index: 'room_author_isDM'}).run(conn)
@@ -93,7 +98,7 @@ const create = (context, m) => {
     {createdAt: new Date(), reactions: []},
     {recipient: m.recipient ? m.recipient : false}
   )
-  if (msg.parent) {
+  if (m.parent) {
     return messagesTable.insert(messageObj)
       .then(message => Promise.all([checkMentions(context, message), message]))
       .then(([updates = {}, message]) => Object.assign({}, message, updates))
