@@ -13,28 +13,29 @@ module.exports = ({rooms, userToken}) => {
 
   for (var i=0; i < rooms.length; i++ ) {
     let room = rooms[i]
-    html += `<td style="padding: 10px; border: 1px #000 solid; width:100%; min-width: 250px; max-width: 500px; border-radius: 2px;">
+    html += `<tr>
+<td style="padding: 10px; border: 1px #a8a8a8 solid; width:100%; min-width: 250px; max-width: 500px; border-radius: 4px; box-shadow: 2px 2px 6px #888888;">
       <a href="https://nametag.chat/rooms/${room.id}" target='_blank' style="text-decoration: none; color: #000;">
       <table style="width: 100%; padding-bottom: 20px;">
-        <tr>
+        <tr style="vertical-align: top;">
           <td style="width: 80%;">
-            <div style="font-weight: bold;">${room.title}</div>
+            <img style="width: 60px; height: 60px; border-radius: 30px; display: inline-block;" src='${room.mod.image}'/>
+            <div style="font-weight: bold; font-size: 18px;">${room.title}</div>
           </td>
           <td>
-            <div style="color: green; display: inline-block">${room.newMessageCount}</div>
-            <img style="width: 20px, height: 20px" src=''/>
+            <div style="color: #12726a; display: inline-block; font-size: 20px;">${room.newMessages}</div>
+            <img style="display: inline-block;" src='http://s3.amazonaws.com/nametag_images/site/messageicon.png'/>
           </td>
           <td>
-            <div style="color:green">${room.newNametagCount}</div>
-            <img style="width: 20px, height: 20px" src=''/>
+            <div style="color: #12726a; display: inline-block; font-size: 20px;">${room.newNametags}</div>
+            <img style="display: inline-block;" src='http://s3.amazonaws.com/nametag_images/site/usericon.png'/>
           </td>
         </tr>
       </table>
         <div>"${room.latestMessage}"</div>
       </a>
     </td>
-  </tr>
-  <tr><td><div style="height: 20px"/></td></tr>`
+    </tr>`
   }
 
   html += `</table>
