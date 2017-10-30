@@ -17,16 +17,16 @@ module.exports = ({rooms, userToken}) => {
       <a href="https://nametag.chat/rooms/${room.id}" target='_blank' style="text-decoration: none; color: #000;">
       <table style="width: 100%; padding-bottom: 20px;">
         <tr style="vertical-align: top;">
-          <td style="width: 80%;">
+          <td style="width: 70%;">
             <img style="width: 60px; height: 60px; border-radius: 30px; display: inline-block;" src='${room.mod.image}'/>
             <div style="font-weight: bold; font-size: 18px;">${room.title}</div>
           </td>
-          <td>
-            <div style="color: #12726a; display: inline-block; font-size: 20px;">${room.newMessages}</div>
+          <td style="text-align: right;">
+            <div style="color: #12726a; display: inline-block; font-size: 18px;">${room.newMessages}</div>
             <img style="display: inline-block;" src='http://s3.amazonaws.com/nametag_images/site/messageicon.png'/>
           </td>
-          <td>
-            <div style="color: #12726a; display: inline-block; font-size: 20px;">${room.newNametags}</div>
+          <td style="text-align: right;">
+            <div style="color: #12726a; display: inline-block; font-size: 18px;">${room.newNametags}</div>
             <img style="display: inline-block;" src='http://s3.amazonaws.com/nametag_images/site/usericon.png'/>
           </td>
         </tr>
@@ -34,7 +34,8 @@ module.exports = ({rooms, userToken}) => {
         <div>"${room.latestMessage}"</div>
       </a>
     </td>
-    </tr>`
+    </tr>
+    <tr style="height: 20px;"><td/></tr>`
   }
 
   html += `</table>
