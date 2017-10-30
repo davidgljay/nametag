@@ -580,6 +580,7 @@ const emailDigest = ({conn}) =>
   db.table('nametags')
   .filter(n => n('room'))
   .eqJoin('room', db.table('rooms'))
+  .filter(join => r.not(join('right')('closed')))
   .map(join => ({
     room: join('right').pluck('title', 'mod', 'id'),
     nametag: join('left').pluck('latestVisit', 'user')
