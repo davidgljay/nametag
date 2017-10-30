@@ -30,7 +30,7 @@ module.exports = ({to, from, template, params}) => {
   if (!sparkpost.key || process.env.NODE_ENV === 'test') {
     console.log('No Sparkpost key defined, skipping sending e-mail.')
   }
-  
+
   return fetch(SPARKPOST_URL, {
     method: 'POST',
     headers: {

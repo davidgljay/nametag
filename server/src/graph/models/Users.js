@@ -594,6 +594,7 @@ const emailDigest = ({conn}) =>
      }))
   .eqJoin(join => join('room')('mod'), db.table('nametags'))
   .map(join => ({
+      id: join('left')('room')('id'),
       title: join('left')('room')('title'),
       email: join('left')('email'),
       userToken: join('left')('userToken'),
@@ -608,10 +609,16 @@ const emailDigest = ({conn}) =>
         .count()
    }))
 	.filter(join => join('newMessages').gt(0))
+  .map(join => join.merge({
+    latestMessage: db.table('messages')
+      .getAll([join('id'), false], {index: 'room_recipient'})
+      .orderBy(r.desc('createdAt'))
+      .nth(0)
+      ('text')
+  }))
   .group('email')
   .run(conn)
   .then(results => {
-    console.log('Got results for e-mail digest', results)
     for (var i=0; i < results.length; i++ ) {
       const {group, reduction} = results[i]
       const userToken = reduction[0].userToken
