@@ -396,6 +396,9 @@ type RootQuery {
   # Retrieves all active rooms in the system. May optionally include a specific id.
   rooms(query: String, granter: String): [Room]
 
+  # Retrieves replies to a particular message
+  replies(message: ID!): [Message]
+
   # Retrieves the current user
   me: User
 
