@@ -5,6 +5,7 @@ const mention = require('./mention')
 const announcement = require('./announcement')
 const publicRoom = require('./public-room')
 const roomApproval = require('./room-approval')
+const digest = require('./digest')
 
 module.exports = {
   passwordReset,
@@ -13,5 +14,6 @@ module.exports = {
   mention,
   publicRoom,
   roomApproval,
-  announcement
+  announcement,
+  digest
 }

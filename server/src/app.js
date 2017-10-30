@@ -15,6 +15,7 @@ const subscriptions = require('./graph/subscriptions')
 const apollo = require('graphql-server-express')
 const {local, facebook, twitter, google, authCallback} = require('./auth')
 const errors = require('./errors')
+const Context = require('./graph/context')
 const {db} = require('./db')
 const dbInit = require('./graph/models').init
 const passport = require('passport')
@@ -154,6 +155,18 @@ r.connect({host: 'rethinkdb'})
     app.post('/login', (req, res, next) => {
       passport.authenticate('local',
       local.handleLocalCallback(req, res, next))(req, res, next)
+    })
+
+    // Send an e-mail digest
+    app.get('/send_digest', (req, res, next) => {
+      if (req.headers.authorization !== config.digest.key) {
+        next(errors.ErrNotAuthorized)
+      } else {
+        const context = new Context({}, conn)
+        context.models.Users.emailDigest()
+          .then(res.end('Success!'))
+          .catch(err => next(new errors.APIError(err)))
+      }
     })
 
     /* All others serve index.html */
