@@ -8,6 +8,7 @@ import radium from 'radium'
 import {mobile} from '../../../styles/sizes'
 import {track, identify} from '../../utils/analytics'
 import {white, grey} from '../../../styles/colors'
+import CircularProgress from 'material-ui/CircularProgress'
 
 class RoomCards extends Component {
 
@@ -46,6 +47,17 @@ class RoomCards extends Component {
     const {
       data: {me, rooms, loading}
     } = this.props
+
+    if (loading) {
+      return <div id='roomCards'>
+        <Navbar
+          me={me}
+          toggleLogin={this.toggleLogin} />
+        <div style={styles.spinner}>
+          <CircularProgress />
+        </div>
+      </div>
+    }
     const {showAllJoined} = this.state
     let nametagHash = {}
     if (me) {
@@ -71,11 +83,8 @@ class RoomCards extends Component {
           </div>
         }
         <div style={styles.container}>
+        <StartRoomForm loggedIn={!!me && me.nametags.length > 0} />
           {
-            !loading && <StartRoomForm loggedIn={!!me && me.nametags.length > 0} />
-          }
-          {
-            !loading &&
             me && me.nametags.length > 0 &&
             <div style={styles.joinedRooms}>
               <h3>Your Conversations</h3>
@@ -109,7 +118,6 @@ class RoomCards extends Component {
           }
           <div style={styles.roomCards}>
             {
-              !loading &&
               rooms &&
               rooms.length > 0 &&
               rooms
@@ -211,5 +219,9 @@ const styles = {
     fontStyle: 'italic',
     color: grey,
     cursor: 'pointer'
+  },
+  spinner: {
+    marginLeft: '45%',
+    marginTop: '40vh'
   }
 }
