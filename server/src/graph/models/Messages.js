@@ -99,7 +99,7 @@ const create = (context, m) => {
     {recipient: m.recipient ? m.recipient : false}
   )
   if (m.parent) {
-    return messagesTable.insert(messageObj)
+    return messagesTable.insert(messageObj).run(conn)
       .then(message => Promise.all([checkMentions(context, message), message]))
       .then(([updates = {}, message]) => Object.assign({}, message, updates))
   }

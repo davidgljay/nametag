@@ -19,5 +19,8 @@ subscription messageAdded ($roomId: ID!, $nametagId: ID!) {
       emoji
       nametagId
     }
+    parent {
+      id
+    }
   }
 }

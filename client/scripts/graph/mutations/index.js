@@ -267,6 +267,7 @@ export const createMessage = graphql(CREATE_MESSAGE, {
             createdAt: new Date().toISOString(),
             editedAt: null,
             saved: false,
+            replies: [],
             author: {
               __typename: 'Nametag',
               image: author.image,

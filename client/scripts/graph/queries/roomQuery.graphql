@@ -48,6 +48,25 @@ query roomQuery($id: ID!){
         image
         name
       }
+      replies {
+        id
+        text
+        createdAt
+        editedAt
+        saved
+        author {
+          id
+          image
+          name
+        }
+        reactions {
+          emoji
+          nametagId
+        }
+        parent {
+          id
+        }
+      }
     }
   }
   me {

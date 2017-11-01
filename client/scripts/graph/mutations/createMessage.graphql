@@ -20,6 +20,9 @@ mutation CreateMessage($message: CreateMessageInput!) {
         emoji
         nametagId
       }
+      replies {
+        id
+      }
     }
     errors {
       translation_key
