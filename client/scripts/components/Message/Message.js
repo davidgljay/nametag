@@ -121,6 +121,9 @@ class Message extends Component {
     // Getting around Markdown's splitting of the '_' character in a hacky way for now
     // Also, wrapping urls in brackets
     const emojiText = text
+      .replace(/:\)/, ':grinning:')
+      .replace(/:[pP]/, ':stuck_out_tongue:')
+      .replace(/:\(/, ':white_frowning_face:')
       .replace(/(?=\S+)_(?=\S+:)/g, '~@~A~')
       .replace(
         /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/,
