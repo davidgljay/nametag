@@ -275,7 +275,17 @@ export const createMessage = graphql(CREATE_MESSAGE, {
               name: author.name
             },
             recipient: null,
-            reactions: []
+            reactions: [],
+            parent: message.parent ? {
+              __typename: 'Message',
+              id: message.parent,
+              author: {
+                __typename: 'Nametag',
+                id: 'tempAuthor',
+                name: ''
+              }
+            }
+            : null
           },
           errors: null
         }

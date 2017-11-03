@@ -20,6 +20,7 @@ const get = ({conn}, id) => messagesTable.get(id).run(conn)
  */
 const getReplies = ({conn}, id, limit = 9999999) =>
   messagesTable.getAll(id, {index: 'parent'})
+  .orderBy('createdAt')
   .limit(limit)
   .run(conn)
   .then(cursor => cursor.toArray())
@@ -100,6 +101,12 @@ const create = (context, m) => {
   )
   if (m.parent) {
     return messagesTable.insert(messageObj).run(conn)
+      .then((res) => {
+        if (res.errors > 0) {
+          return new errors.APIError('Error creating message')
+        }
+        return Object.assign({}, messageObj, {id: res.generated_keys[0]})
+      })
       .then(message => Promise.all([checkMentions(context, message), message]))
       .then(([updates = {}, message]) => Object.assign({}, message, updates))
   }

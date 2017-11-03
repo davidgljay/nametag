@@ -64,7 +64,7 @@ class Compose extends Component {
         return
       }
       e.preventDefault()
-      if (editing) {
+      if (editing && editMessage) {
         editMessage(editing, roomId, message)
         setEditing(null)
         setDefaultMessage('')
@@ -251,7 +251,7 @@ Compose.propTypes = {
     name: string.isRequired
   }),
   createMessage: func.isRequired,
-  editMessage: func.isRequired,
+  editMessage: func,
   recipient: string,
   parent: string,
   defaultMessage: string,

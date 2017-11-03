@@ -15,7 +15,7 @@ class MessageMenu extends Component {
   }
 
   render () {
-    const {id, showModAction, toggleEmoji, showActions, showReplies, isDM} = this.props
+    const {id, showModAction, toggleEmoji, showActions, showReplies, isDM, isReply} = this.props
     const isMobile = false
     return <div style={styles.actionsContainer}>
       {
@@ -37,13 +37,16 @@ class MessageMenu extends Component {
             onClick={showModAction(true)}>
             flag
           </FontIcon>
-          <FontIcon
-            key='replyIcon'
-            className='material-icons'
-            style={styles.actionIcon}
-            onClick={showReplies(true)}>
-            reply
-          </FontIcon>
+          {
+            !isReply &&
+            <FontIcon
+              key='replyIcon'
+              className='material-icons'
+              style={styles.actionIcon}
+              onClick={showReplies(true)}>
+              reply
+            </FontIcon>
+          }
         </div>
         : <div style={styles.actions} key='actions'>
           <FontIcon

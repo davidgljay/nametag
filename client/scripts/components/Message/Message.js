@@ -182,7 +182,8 @@ class Message extends Component {
                 showModAction={this.showModAction}
                 showActions={showActions}
                 showReplies={this.showReplies}
-                isDM={recipient !== null}
+                isDM={!!recipient}
+                isReply={!!parent}
                 toggleEmoji={toggleEmoji}
                 id={id} />
               <div style={styles.date}>
@@ -239,11 +240,12 @@ class Message extends Component {
           createMessage={createMessage} />
       }
       {
-        !parent && <Replies
+        !parent && author && <Replies
           createMessage={createMessage}
           replies={replies}
           roomId={roomId}
           parent={id}
+          parentAuthor={author}
           myNametag={myNametag}
           deleteMessage={deleteMessage}
           banNametag={banNametag}

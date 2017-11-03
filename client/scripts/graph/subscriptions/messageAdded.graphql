@@ -10,6 +10,9 @@ subscription messageAdded ($roomId: ID!, $nametagId: ID!) {
       name
       image
     }
+    replies {
+      id
+    }
     recipient {
       id
       name
@@ -21,6 +24,10 @@ subscription messageAdded ($roomId: ID!, $nametagId: ID!) {
     }
     parent {
       id
+      author {
+        id
+        name
+      }
     }
   }
 }
