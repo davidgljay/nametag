@@ -306,6 +306,11 @@ export const createMessage = graphql(CREATE_MESSAGE, {
               isNew = false
               newMessages[i] = message
             }
+            for (var j = 0; j < msg.replies.length; j++) {
+              if (msg.replies[j].id === message.id) {
+                isNew = false
+              }
+            }
           }
 
           // Check to see if the message has already been posted (for example, if the current user is the author.)
@@ -315,6 +320,24 @@ export const createMessage = graphql(CREATE_MESSAGE, {
               room: {
                 ...oldData.room,
                 messages: newMessages
+              }
+            }
+          }
+
+          if (message.parent) {
+            const addReply = (msg, reply) => ({
+              ...msg,
+              replies: msg.replies.concat(reply)
+            })
+            return {
+              ...oldData,
+              room: {
+                ...oldData.room,
+                messages: oldData.room.messages.map(
+                  msg => msg.id === message.parent.id
+                  ? addReply(msg, message)
+                  : msg
+                )
               }
             }
           }

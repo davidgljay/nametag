@@ -55,19 +55,20 @@ export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeT
             ? addReply(msg, message)
             : msg
           )
-          // .concat({
-          //   __typename: 'Message',
-          //   id: `replyNotif${Date.now()}`,
-          //   createdAt: new Date().toISOString(),
-          //   text: `${message.author.name} has replied to ${message.parent.author.name}.`,
-          //   replyLink: message.parent.id,
-          //   room: message.room,
-          //   editAt: null,
-          //   replies: [],
-          //   saved: false,
-          //   recipient: null,
-          //   reactions: []
-          // })
+          .concat({
+            __typename: 'Message',
+            id: `replyNotif_${message.id}`,
+            createdAt: new Date().toISOString(),
+            text: `${message.author.name} has replied to ${message.parent.author.name}.`,
+            replyLink: message.parent.id,
+            room: message.room,
+            editedAt: null,
+            replies: [],
+            saved: false,
+            recipient: null,
+            author: null,
+            reactions: []
+          })
         }
       }
     }
