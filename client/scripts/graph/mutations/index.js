@@ -267,6 +267,7 @@ export const createMessage = graphql(CREATE_MESSAGE, {
             createdAt: new Date().toISOString(),
             editedAt: null,
             saved: false,
+            replies: [],
             author: {
               __typename: 'Nametag',
               image: author.image,
@@ -274,7 +275,17 @@ export const createMessage = graphql(CREATE_MESSAGE, {
               name: author.name
             },
             recipient: null,
-            reactions: []
+            reactions: [],
+            parent: message.parent ? {
+              __typename: 'Message',
+              id: message.parent,
+              author: {
+                __typename: 'Nametag',
+                id: 'tempAuthor',
+                name: ''
+              }
+            }
+            : null
           },
           errors: null
         }
@@ -295,6 +306,11 @@ export const createMessage = graphql(CREATE_MESSAGE, {
               isNew = false
               newMessages[i] = message
             }
+            for (var j = 0; j < msg.replies.length; j++) {
+              if (msg.replies[j].id === message.id) {
+                isNew = false
+              }
+            }
           }
 
           // Check to see if the message has already been posted (for example, if the current user is the author.)
@@ -304,6 +320,24 @@ export const createMessage = graphql(CREATE_MESSAGE, {
               room: {
                 ...oldData.room,
                 messages: newMessages
+              }
+            }
+          }
+
+          if (message.parent) {
+            const addReply = (msg, reply) => ({
+              ...msg,
+              replies: msg.replies.concat(reply)
+            })
+            return {
+              ...oldData,
+              room: {
+                ...oldData.room,
+                messages: oldData.room.messages.map(
+                  msg => msg.id === message.parent.id
+                  ? addReply(msg, message)
+                  : msg
+                )
               }
             }
           }

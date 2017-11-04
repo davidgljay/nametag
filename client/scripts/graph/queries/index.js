@@ -10,6 +10,7 @@ import {
 } from '../subscriptions'
 import ROOMS_QUERY from './roomsQuery.graphql'
 import ROOM_QUERY from './roomQuery.graphql'
+import REPLIES_QUERY from './repliesQuery.graphql'
 import USER_QUERY from './userQuery.graphql'
 import GRANTER_QUERY from './granterQuery.graphql'
 import CREATE_BADGE_TEMPLATE_QUERY from './createTemplateQuery.graphql'
@@ -66,9 +67,29 @@ export const roomQuery = graphql(ROOM_QUERY, {
     latestMessageUpdatedSubscription: latestMessageUpdated(data.subscribeToMore),
     typingPromptAdded: typingPromptAdded(data.subscribeToMore),
     roomUpdatedSubscription: roomUpdated(data.subscribeToMore),
-    nametagUpdatedSubscription: nametagUpdated(data.subscribeToMore)
+    nametagUpdatedSubscription: nametagUpdated(data.subscribeToMore),
+    getReplies: repliesQuery(data.fetchMore)
   })
 })
+
+const repliesQuery = (fetchMore) => (messageId) =>
+  fetchMore({
+    query: REPLIES_QUERY,
+    variables: {
+      message: messageId
+    },
+    updateQuery: (oldData, {fetchMoreResult: {replies}}) => ({
+      ...oldData,
+      messages: oldData.messages.map(message =>
+        message.id === messageId
+        ? {
+          ...message,
+          replies
+        }
+        : message
+      )
+    })
+  })
 
 export const createTemplateQuery = graphql(CREATE_BADGE_TEMPLATE_QUERY, {
   options: (props) => ({

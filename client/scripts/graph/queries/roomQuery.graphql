@@ -1,4 +1,5 @@
 #import "../fragments/nametagView.graphql"
+#import "../fragments/messageView.graphql"
 
 query roomQuery($id: ID!){
   room(id:$id) {
@@ -29,24 +30,16 @@ query roomQuery($id: ID!){
       ...nametagView
     }
     messages {
-      id
-      text
-      createdAt
-      editedAt
-      saved
-      author {
-        id
-        image
-        name
-      }
-      reactions {
-        emoji
-        nametagId
-      }
-      recipient {
-        id
-        image
-        name
+      ...messageView
+      replies {
+        ...messageView
+        parent {
+          id
+          author {
+            id
+            name
+          }
+        }
       }
     }
   }

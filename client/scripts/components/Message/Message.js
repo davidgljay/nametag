@@ -5,6 +5,7 @@ import MessageMenu from './MessageMenu'
 import MentionMenu from './MentionMenu'
 import CommandMenu from './CommandMenu'
 import ModAction from './ModAction'
+import Replies from './Replies'
 import NametagIcon from '../Nametag/NametagIcon'
 import ReactMarkdown from 'react-markdown'
 import EmojiText from './EmojiText'
@@ -16,11 +17,21 @@ class Message extends Component {
 
   constructor (props) {
     super(props)
-    this.state = {modAction: false, showActions: false, showMenu: ''}
+    this.state = {
+      modAction: false,
+      showActions: false,
+      showMenu: '',
+      showReplies: false
+    }
 
     this.showModAction = (open) => (e) => {
       if (e) { e.preventDefault() }
       this.setState({modAction: open})
+    }
+
+    this.showReplies = (open) => (e) => {
+      if (e) { e.preventDefault() }
+      this.setState({showReplies: open})
     }
 
     this.checkYouTube = (message) => {
@@ -56,7 +67,9 @@ class Message extends Component {
         editedAt,
         text,
         recipient,
-        reactions
+        reactions,
+        parent,
+        replies
       },
       norms,
       roomId,
@@ -74,7 +87,7 @@ class Message extends Component {
       setEditing
     } = this.props
 
-    const {showMenu, showActions} = this.state
+    const {showMenu, showActions, showReplies} = this.state
 
     if (this.checkYouTube(text)) {
       media = <Media url={this.checkYouTube(text)[0]} />
@@ -108,6 +121,9 @@ class Message extends Component {
     // Getting around Markdown's splitting of the '_' character in a hacky way for now
     // Also, wrapping urls in brackets
     const emojiText = text
+      .replace(/:\)/, ':grinning:')
+      .replace(/:[pP]/, ':stuck_out_tongue:')
+      .replace(/:\(/, ':white_frowning_face:')
       .replace(/(?=\S+)_(?=\S+:)/g, '~@~A~')
       .replace(
         /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/,
@@ -165,7 +181,9 @@ class Message extends Component {
               <MessageMenu
                 showModAction={this.showModAction}
                 showActions={showActions}
-                isDM={recipient !== null}
+                showReplies={this.showReplies}
+                isDM={!!recipient}
+                isReply={!!parent}
                 toggleEmoji={toggleEmoji}
                 id={id} />
               <div style={styles.date}>
@@ -220,6 +238,26 @@ class Message extends Component {
           close={this.showModAction(false)}
           roomId={roomId}
           createMessage={createMessage} />
+      }
+      {
+        !parent && author && <Replies
+          createMessage={createMessage}
+          replies={replies}
+          roomId={roomId}
+          parent={id}
+          parentAuthor={author}
+          myNametag={myNametag}
+          deleteMessage={deleteMessage}
+          banNametag={banNametag}
+          toggleEmoji={toggleEmoji}
+          addReaction={addReaction}
+          setRecipient={setRecipient}
+          setEditing={setEditing}
+          norms={norms}
+          hideDMs={hideDMs}
+          showReplies={showReplies}
+          closeReply={this.showReplies(false)}
+          mod={mod} />
       }
     </div>
   }

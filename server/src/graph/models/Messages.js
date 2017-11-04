@@ -1,4 +1,5 @@
 const {db} = require('../../db')
+const r = require('rethinkdb')
 const errors = require('../../errors')
 const notification = require('../../notifications')
 const email = require('../../email')
@@ -11,6 +12,18 @@ const messagesTable = db.table('messages')
  * @param {String} id       the ID of the message to be retrieved
  */
 const get = ({conn}, id) => messagesTable.get(id).run(conn)
+
+/**
+ * Gets replies to a message.
+ * @param {Object} context  graph context
+ * @param {String} id       the ID of the parent message
+ */
+const getReplies = ({conn}, id, limit = 9999999) =>
+  messagesTable.getAll(id, {index: 'parent'})
+  .orderBy('createdAt')
+  .limit(limit)
+  .run(conn)
+  .then(cursor => cursor.toArray())
 
 /**
  * Returns the number of messages since a particular date.
@@ -36,7 +49,9 @@ const newMessageCount = ({conn, user}, roomId) =>
  */
 
 const getRoomMessages = ({user, conn}, room, nametag) => Promise.all([
-  messagesTable.getAll([room, false], {index: 'room_recipient'}).run(conn),
+  messagesTable.getAll([room, false], {index: 'room_recipient'})
+    .filter(message => r.not(message.hasFields('parent')))
+    .run(conn),
   messagesTable.getAll([room, nametag], {index: 'room_recipient'}).run(conn),
   messagesTable.getAll([room, user.nametags[room], true], {index: 'room_author_isDM'}).run(conn)
 ])
@@ -76,14 +91,25 @@ const toggleSaved = ({conn}, id, saved) =>
  *
  **/
 
-const create = (context, msg) => {
+const create = (context, m) => {
   const {conn, models: {Rooms}} = context
-  const messageObj = Object.assign(
+  let messageObj = Object.assign(
     {},
-    msg,
+    m,
     {createdAt: new Date(), reactions: []},
-    {recipient: msg.recipient ? msg.recipient : false}
+    {recipient: m.recipient ? m.recipient : false}
   )
+  if (m.parent) {
+    return messagesTable.insert(messageObj).run(conn)
+      .then((res) => {
+        if (res.errors > 0) {
+          return new errors.APIError('Error creating message')
+        }
+        return Object.assign({}, messageObj, {id: res.generated_keys[0]})
+      })
+      .then(message => Promise.all([checkMentions(context, message), message]))
+      .then(([updates = {}, message]) => Object.assign({}, message, updates))
+  }
   return checkForCommands(context, messageObj)
   .then(msg => messagesTable.insert(msg).run(conn))
   .then((res) => {
@@ -390,6 +416,7 @@ const addReaction = ({conn}, messageId, emoji, nametagId) =>
 module.exports = (context) => ({
   Messages: {
     get: (id) => get(context, id),
+    getReplies: (id) => getReplies(context, id),
     newMessageCount: (roomId) => newMessageCount(context, roomId),
     getRoomMessages: (roomId, nametag) => getRoomMessages(context, roomId, nametag),
     getNametagMessages: (nametag) => getNametagMessages(context, nametag),

@@ -1,0 +1,21 @@
+fragment messageView on Message {
+  id
+  text
+  createdAt
+  editedAt
+  saved
+  author {
+    image
+    id
+    name
+  }
+  recipient {
+    image
+    id
+    name
+  }
+  reactions {
+    emoji
+    nametagId
+  }
+}

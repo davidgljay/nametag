@@ -55,6 +55,7 @@ class Compose extends Component {
         recipient,
         closed,
         editing,
+        parent,
         editMessage,
         setEditing
       } = this.props
@@ -63,7 +64,7 @@ class Compose extends Component {
         return
       }
       e.preventDefault()
-      if (editing) {
+      if (editing && editMessage) {
         editMessage(editing, roomId, message)
         setEditing(null)
         setDefaultMessage('')
@@ -83,6 +84,9 @@ class Compose extends Component {
         }
         if (recipient) {
           msg.recipient = recipient
+        }
+        if (parent) {
+          msg.parent = parent
         }
         this.setState({message: '', showEmoji: false, showMentionMenu: false})
         createMessage(msg, myNametag)
@@ -247,8 +251,9 @@ Compose.propTypes = {
     name: string.isRequired
   }),
   createMessage: func.isRequired,
-  editMessage: func.isRequired,
+  editMessage: func,
   recipient: string,
+  parent: string,
   defaultMessage: string,
   setDefaultMessage: func,
   topic: string,
