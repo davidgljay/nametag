@@ -9,6 +9,7 @@ import Replies from './Replies'
 import NametagIcon from '../Nametag/NametagIcon'
 import ReactMarkdown from 'react-markdown'
 import EmojiText from './EmojiText'
+import FirstReply from './FirstReply'
 import EmojiReactions from './EmojiReactions'
 import {primary, white, grey} from '../../../styles/colors'
 import {track} from '../../utils/analytics'
@@ -195,6 +196,14 @@ class Message extends Component {
                   Edited
                 </div>
               }
+            </div>
+          }
+          {
+            !parent && replies.length > 0 &&
+            <div style={styles.firstReply}>
+              <FirstReply
+                reply={replies[0]}
+                showReplies={this.showReplies(true)} />
             </div>
           }
           {

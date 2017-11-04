@@ -60,7 +60,7 @@ class Replies extends Component {
           <FontIcon
             style={styles.close}
             className='material-icons'
-            onClick={this.closeReply}>
+            onClick={closeReply}>
                 close
               </FontIcon>
           <h3 style={styles.header}>
