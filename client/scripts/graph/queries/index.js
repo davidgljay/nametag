@@ -80,14 +80,17 @@ const repliesQuery = (fetchMore) => (messageId) =>
     },
     updateQuery: (oldData, {fetchMoreResult: {replies}}) => ({
       ...oldData,
-      messages: oldData.messages.map(message =>
-        message.id === messageId
-        ? {
-          ...message,
-          replies
-        }
-        : message
-      )
+      room: {
+        ...oldData.room,
+        messages: oldData.room.messages.map(message =>
+          message.id === messageId
+          ? {
+            ...message,
+            replies
+          }
+          : message
+        )
+      }
     })
   })
 

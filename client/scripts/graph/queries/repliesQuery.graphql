@@ -2,5 +2,12 @@
 query repliesQuery($message: ID!) {
   replies(message: $message) {
     ...messageView
+    parent {
+      id
+      author {
+        id
+        name
+      }
+    }
   }
 }

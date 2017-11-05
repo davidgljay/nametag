@@ -20,13 +20,11 @@ const get = ({conn}, id) => messagesTable.get(id).run(conn)
  * @param {Int} limit       the total number of replies to return
  */
 const getReplies = ({conn}, id, limit = 9999999) =>
-{
-  return messagesTable.getAll(id, {index: 'parent'})
+ messagesTable.getAll(id, {index: 'parent'})
     .orderBy('createdAt')
     .limit(limit)
     .run(conn)
     .then(cursor => cursor.toArray())
-}
 
 /**
  * Gets the number of replies to a message.
@@ -429,7 +427,7 @@ const addReaction = ({conn}, messageId, emoji, nametagId) =>
 module.exports = (context) => ({
   Messages: {
     get: (id) => get(context, id),
-    getReplies: (id) => getReplies(context, id),
+    getReplies: (id, limit) => getReplies(context, id, limit),
     getReplyCount: (id) => getReplyCount(context, id),
     newMessageCount: (roomId) => newMessageCount(context, roomId),
     getRoomMessages: (roomId, nametag) => getRoomMessages(context, roomId, nametag),

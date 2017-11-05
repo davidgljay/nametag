@@ -24,6 +24,7 @@ class Messages extends Component {
         createMessage,
         messages,
         addReaction,
+        getReplies,
         setDefaultMessage,
         setRecipient,
         setEditing,
@@ -45,6 +46,7 @@ class Messages extends Component {
         toggleEmoji={this.toggleEmoji}
         deleteMessage={deleteMessage}
         banNametag={banNametag}
+        getReplies={getReplies}
         addReaction={addReaction}
         setDefaultMessage={setDefaultMessage}
         setRecipient={setRecipient}
@@ -134,6 +136,7 @@ Messages.propTypes = {
   deleteMessage: func.isRequired,
   banNametag: func.isRequired,
   addReaction: func.isRequired,
+  getReplies: func.isRequired,
   setDefaultMessage: func.isRequired,
   setRecipient: func.isRequired,
   setEditing: func.isRequired

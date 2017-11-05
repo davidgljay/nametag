@@ -31,7 +31,11 @@ class Message extends Component {
     }
 
     this.showReplies = (open) => (e) => {
+      const {message: {id, replies, replyCount}, getReplies} = this.props
       if (e) { e.preventDefault() }
+      if (replies.length < replyCount) {
+        getReplies(id)
+      }
       this.setState({showReplies: open})
     }
 
@@ -306,7 +310,8 @@ Message.propTypes = {
   hideAuthor: bool,
   setDefaultMessage: func.isRequired,
   setRecipient: func.isRequired,
-  setEditing: func.isRequired
+  setEditing: func.isRequired,
+  getReplies: func
 }
 
 export default Message
