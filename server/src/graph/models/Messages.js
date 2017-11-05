@@ -17,13 +17,24 @@ const get = ({conn}, id) => messagesTable.get(id).run(conn)
  * Gets replies to a message.
  * @param {Object} context  graph context
  * @param {String} id       the ID of the parent message
+ * @param {Int} limit       the total number of replies to return
  */
 const getReplies = ({conn}, id, limit = 9999999) =>
+ messagesTable.getAll(id, {index: 'parent'})
+    .orderBy('createdAt')
+    .limit(limit)
+    .run(conn)
+    .then(cursor => cursor.toArray())
+
+/**
+ * Gets the number of replies to a message.
+ * @param {Object} context  graph context
+ * @param {String} id       the ID of the parent message
+ */
+const getReplyCount = ({conn}, id) =>
   messagesTable.getAll(id, {index: 'parent'})
-  .orderBy('createdAt')
-  .limit(limit)
+  .count()
   .run(conn)
-  .then(cursor => cursor.toArray())
 
 /**
  * Returns the number of messages since a particular date.
@@ -416,7 +427,8 @@ const addReaction = ({conn}, messageId, emoji, nametagId) =>
 module.exports = (context) => ({
   Messages: {
     get: (id) => get(context, id),
-    getReplies: (id) => getReplies(context, id),
+    getReplies: (id, limit) => getReplies(context, id, limit),
+    getReplyCount: (id) => getReplyCount(context, id),
     newMessageCount: (roomId) => newMessageCount(context, roomId),
     getRoomMessages: (roomId, nametag) => getRoomMessages(context, roomId, nametag),
     getNametagMessages: (nametag) => getNametagMessages(context, nametag),

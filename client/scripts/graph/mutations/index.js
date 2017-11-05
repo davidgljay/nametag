@@ -268,6 +268,7 @@ export const createMessage = graphql(CREATE_MESSAGE, {
             editedAt: null,
             saved: false,
             replies: [],
+            replyCount: 0,
             author: {
               __typename: 'Nametag',
               image: author.image,
@@ -297,6 +298,14 @@ export const createMessage = graphql(CREATE_MESSAGE, {
             return oldData
           }
 
+          const addReply = (msg, reply) => ({
+            ...msg,
+            replies: msg.replies
+              .concat(reply)
+              .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)),
+            replyCount: msg.replyCount + 1
+          })
+
           let isNew = true
           const oldMessages = oldData.room.messages
           let newMessages = oldMessages.slice()
@@ -309,6 +318,15 @@ export const createMessage = graphql(CREATE_MESSAGE, {
             for (var j = 0; j < msg.replies.length; j++) {
               if (msg.replies[j].id === message.id) {
                 isNew = false
+
+                newMessages[i] = {
+                  ...msg,
+                  replies: msg.replies.map(reply =>
+                    reply.id === message.id
+                    ? message
+                    : reply
+                  )
+                }
               }
             }
           }
@@ -325,10 +343,6 @@ export const createMessage = graphql(CREATE_MESSAGE, {
           }
 
           if (message.parent) {
-            const addReply = (msg, reply) => ({
-              ...msg,
-              replies: msg.replies.concat(reply)
-            })
             return {
               ...oldData,
               room: {

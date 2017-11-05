@@ -9,6 +9,7 @@ import Replies from './Replies'
 import NametagIcon from '../Nametag/NametagIcon'
 import ReactMarkdown from 'react-markdown'
 import EmojiText from './EmojiText'
+import FirstReply from './FirstReply'
 import EmojiReactions from './EmojiReactions'
 import {primary, white, grey} from '../../../styles/colors'
 import {track} from '../../utils/analytics'
@@ -20,8 +21,7 @@ class Message extends Component {
     this.state = {
       modAction: false,
       showActions: false,
-      showMenu: '',
-      showReplies: false
+      showMenu: ''
     }
 
     this.showModAction = (open) => (e) => {
@@ -30,8 +30,12 @@ class Message extends Component {
     }
 
     this.showReplies = (open) => (e) => {
+      const {message: {id, replies, replyCount}, getReplies, setVisibleReplies} = this.props
       if (e) { e.preventDefault() }
-      this.setState({showReplies: open})
+      if (replies.length < replyCount) {
+        getReplies(id)
+      }
+      setVisibleReplies(open ? id : '')
     }
 
     this.checkYouTube = (message) => {
@@ -69,16 +73,20 @@ class Message extends Component {
         recipient,
         reactions,
         parent,
-        replies
+        replies,
+        replyCount
       },
       norms,
       roomId,
       mod,
+      visibleReplies,
+      setVisibleReplies,
       toggleEmoji,
       myNametag,
       addReaction,
       hideAuthor,
       createMessage,
+      editMessage,
       deleteMessage,
       banNametag,
       hideDMs,
@@ -87,7 +95,7 @@ class Message extends Component {
       setEditing
     } = this.props
 
-    const {showMenu, showActions, showReplies} = this.state
+    const {showMenu, showActions} = this.state
 
     if (this.checkYouTube(text)) {
       media = <Media url={this.checkYouTube(text)[0]} />
@@ -130,13 +138,21 @@ class Message extends Component {
         (url) => `[${url}](${url})`)
 
     const isMod = author && mod.id === author.id
+    const isReplyNotif = id.split('_')[0] === 'replyNotif'
 
     return <div>
       <div
         className='message'
-        style={messageContainerStyle}
+        style={isReplyNotif
+          ? {
+            ...messageContainerStyle,
+            cursor: 'pointer'
+          }
+          : messageContainerStyle}
         id={id}
-        onClick={() => this.setState({showActions: !showActions})}>
+        onClick={() => isReplyNotif
+          ? setVisibleReplies(id.split('_')[1])
+          : this.setState({showActions: !showActions})}>
         <div style={imageStyle} onClick={this.toggleMenu}>
           {
             author && !hideAuthor && <NametagIcon
@@ -198,6 +214,15 @@ class Message extends Component {
             </div>
           }
           {
+            !parent && replies.length > 0 &&
+            <div style={styles.firstReply}>
+              <FirstReply
+                reply={replies[0]}
+                showReplies={this.showReplies(true)}
+                replyCount={replyCount} />
+            </div>
+          }
+          {
             author &&
             <div>
               <MentionMenu
@@ -252,10 +277,10 @@ class Message extends Component {
           toggleEmoji={toggleEmoji}
           addReaction={addReaction}
           setRecipient={setRecipient}
-          setEditing={setEditing}
+          editMessage={editMessage}
           norms={norms}
           hideDMs={hideDMs}
-          showReplies={showReplies}
+          open={visibleReplies === id}
           closeReply={this.showReplies(false)}
           mod={mod} />
       }
@@ -283,6 +308,7 @@ Message.propTypes = {
   }).isRequired,
   norms: arrayOf(string.isRequired).isRequired,
   roomId: string.isRequired,
+  visibleReplies: string,
   myNametag: shape({
     id: string.isRequired
   }).isRequired,
@@ -295,7 +321,10 @@ Message.propTypes = {
   hideAuthor: bool,
   setDefaultMessage: func.isRequired,
   setRecipient: func.isRequired,
-  setEditing: func.isRequired
+  setEditing: func.isRequired,
+  editMessage: func,
+  getReplies: func,
+  setVisibleReplies: func
 }
 
 export default Message

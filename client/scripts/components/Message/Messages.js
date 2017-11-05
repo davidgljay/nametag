@@ -24,9 +24,13 @@ class Messages extends Component {
         createMessage,
         messages,
         addReaction,
+        getReplies,
+        setVisibleReplies,
+        visibleReplies,
         setDefaultMessage,
         setRecipient,
         setEditing,
+        editMessage,
         hideDMs,
         deleteMessage,
         banNametag
@@ -45,10 +49,14 @@ class Messages extends Component {
         toggleEmoji={this.toggleEmoji}
         deleteMessage={deleteMessage}
         banNametag={banNametag}
+        getReplies={getReplies}
+        visibleReplies={visibleReplies}
         addReaction={addReaction}
+        setVisibleReplies={setVisibleReplies}
         setDefaultMessage={setDefaultMessage}
         setRecipient={setRecipient}
         setEditing={setEditing}
+        editMessage={editMessage}
         norms={norms}
         mod={mod}
         createMessage={createMessage}
@@ -131,9 +139,13 @@ Messages.propTypes = {
     id: string.isRequired
   }),
   hideDMs: bool.isRequired,
+  visibleReplies: string.isRequired,
   deleteMessage: func.isRequired,
   banNametag: func.isRequired,
   addReaction: func.isRequired,
+  editMessage: func.isRequired,
+  getReplies: func.isRequired,
+  setVisibleReplies: func.isRequired,
   setDefaultMessage: func.isRequired,
   setRecipient: func.isRequired,
   setEditing: func.isRequired

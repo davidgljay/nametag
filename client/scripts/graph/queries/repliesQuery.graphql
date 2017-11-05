@@ -1,23 +1,13 @@
+#import "../fragments/messageView.graphql"
 query repliesQuery($message: ID!) {
   replies(message: $message) {
-    id
-    text
-    createdAt
-    editedAt
-    saved
-    author {
+    ...messageView
+    parent {
       id
-      image
-      name
-    }
-    reactions {
-      emoji
-      nametagId
-    }
-    recipient {
-      id
-      image
-      name
+      author {
+        id
+        name
+      }
     }
   }
 }

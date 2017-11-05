@@ -11,12 +11,14 @@ class Replies extends Component {
   constructor (props) {
     super(props)
 
-    this.state = {defaultMessage: ''}
+    this.state = {defaultMessage: '', editingReply: ''}
 
     this.onPost = (post) => {
       track('REPLY_POST')
       increment('MESSAGES_POSTED')
     }
+
+    this.setEditing = (editingReply) => this.setState({editingReply})
 
     this.setDefaultMessage = (defaultMessage) => this.setState({defaultMessage})
   }
@@ -34,33 +36,33 @@ class Replies extends Component {
         deleteMessage,
         banNametag,
         addReaction,
-        setEditing,
+        editMessage,
         toggleEmoji,
         setRecipient,
         parent,
+        open,
         parentAuthor,
         norms,
         hideDMs,
-        showReplies,
         closeReply,
         mod
       } = this.props
 
-    const {defaultMessage} = this.state
+    const {defaultMessage, editingReply} = this.state
 
     return <div className='replies'>
       {
-        showReplies &&
+        open &&
         <Dialog
           modal={false}
           contentStyle={styles.dialog}
-          open={showReplies}
+          open={open}
           bodyStyle={styles.cardBody}
           onRequestClose={closeReply}>
           <FontIcon
             style={styles.close}
             className='material-icons'
-            onClick={this.closeReply}>
+            onClick={closeReply}>
                 close
               </FontIcon>
           <h3 style={styles.header}>
@@ -72,21 +74,25 @@ class Replies extends Component {
                 diameter={30} />
             </div>
           </h3>
-          <Compose
-            roomId={roomId}
-            myNametag={myNametag}
-            createMessage={createMessage}
-            defaultMessage={defaultMessage}
-            editMessage={() => {}}
-            mod={mod}
-            parent={parent}
-            topic=''
-            onPost={this.onPost}
-            />
+          <div style={editingReply ? styles.editingContainer : {}}>
+            <Compose
+              roomId={roomId}
+              myNametag={myNametag}
+              createMessage={createMessage}
+              defaultMessage={defaultMessage}
+              setDefaultMessage={this.setDefaultMessage}
+              editing={editingReply}
+              setEditing={this.setEditing}
+              editMessage={editMessage}
+              mod={mod}
+              parent={parent}
+              topic=''
+              onPost={this.onPost} />
+          </div>
           <div style={styles.cardsContainer}>
             {
-              replies.map((reply, i) => {
-                return <Message
+              replies.map((reply, i) =>
+                <Message
                   message={reply}
                   roomId={roomId}
                   key={reply.id}
@@ -104,12 +110,11 @@ class Replies extends Component {
                   addReaction={addReaction}
                   setDefaultMessage={this.setDefaultMessage}
                   setRecipient={setRecipient}
-                  setEditing={setEditing}
+                  setEditing={this.setEditing}
                   norms={norms}
                   mod={mod}
                   createMessage={createMessage}
                   myNametag={myNametag} />
-              }
               )
             }
           </div>
@@ -137,14 +142,14 @@ Replies.propTypes = {
   banNametag: func.isRequired,
   addReaction: func.isRequired,
   setRecipient: func.isRequired,
-  setEditing: func.isRequired,
+  editMessage: func.isRequired,
   toggleEmoji: func.isRequired,
   norms: arrayOf(
     string.isRequired
   ),
+  open: bool.isRequired,
   hideDMs: bool.isRequired,
   mod: object.isRequired,
-  showReplies: bool.isRequired,
   closeReply: func.isRequired
 }
 
@@ -187,5 +192,9 @@ const styles = {
   },
   nametagIconStyle: {
     marginLeft: 10
+  },
+  editingContainer: {
+    background: '#f3f3f3',
+    borderTop: '2px solid rgba(168, 168, 168, 0.75)'
   }
 }

@@ -1,4 +1,20 @@
 import errorLog from '../utils/errorLog'
+import constants from '../constants'
+
+/*
+* Show Replies
+* @params
+*   messageId
+*
+* @returns
+*   Action to display replies
+*/
+export function setVisibleReplies (messageId) {
+  return {
+    type: constants.SET_VISIBLE_REPLIES,
+    messageId
+  }
+}
 
 /*
 * Search Images
