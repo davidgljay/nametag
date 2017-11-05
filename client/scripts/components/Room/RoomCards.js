@@ -83,7 +83,7 @@ class RoomCards extends Component {
           </div>
         }
         <div style={styles.container}>
-        <StartRoomForm loggedIn={!!me && me.nametags.length > 0} />
+          <StartRoomForm loggedIn={!!me && me.nametags.length > 0} />
           {
             me && me.nametags.length > 0 &&
             <div style={styles.joinedRooms}>
