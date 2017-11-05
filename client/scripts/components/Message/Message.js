@@ -308,7 +308,7 @@ Message.propTypes = {
   }).isRequired,
   norms: arrayOf(string.isRequired).isRequired,
   roomId: string.isRequired,
-  visibleReplies: string.isRequired,
+  visibleReplies: string,
   myNametag: shape({
     id: string.isRequired
   }).isRequired,

@@ -845,7 +845,7 @@ type RootSubscription {
   messageAdded(roomId: ID!, nametagId: ID!): Message
 
   # Fired when a message is deleted from a room
-  messageDeleted(roomId: ID!): IDOnly
+  messageDeleted(roomId: ID!): Message
 
   # Fired when a nametag is added to a room
   nametagAdded(roomId: ID!): Nametag
