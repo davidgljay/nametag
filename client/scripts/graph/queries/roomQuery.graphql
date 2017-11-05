@@ -31,7 +31,8 @@ query roomQuery($id: ID!){
     }
     messages {
       ...messageView
-      replies {
+      replyCount
+      replies (limit: 1){
         ...messageView
         parent {
           id

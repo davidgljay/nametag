@@ -4,6 +4,7 @@ mutation CreateMessage($message: CreateMessageInput!) {
   createMessage(message: $message) {
     message {
       ...messageView
+      replyCount
       replies {
         id
       }

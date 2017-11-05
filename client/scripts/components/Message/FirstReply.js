@@ -4,7 +4,7 @@ import NametagIcon from '../Nametag/NametagIcon'
 import ReactMarkdown from 'react-markdown'
 import {grey} from '../../../styles/colors'
 
-const FirstReply = ({reply: {id, text, author}, showReplies}) => {
+const FirstReply = ({reply: {id, text, author}, showReplies, replyCount}) => {
   const replyText = text
     .replace(/:\)/, ':grinning:')
     .replace(/:[pP]/, ':stuck_out_tongue:')
@@ -44,12 +44,12 @@ const FirstReply = ({reply: {id, text, author}, showReplies}) => {
       </div>
     </div>
     <div style={styles.readMore}>
-      Read Replies
+      Read {replyCount} {replyCount > 1 ? 'Replies' : 'Reply'}
     </div>
   </div>
 }
 
-const {string, shape, func} = PropTypes
+const {string, shape, func, number} = PropTypes
 
 FirstReply.proptypes = {
   reply: shape({
@@ -60,7 +60,8 @@ FirstReply.proptypes = {
       image: string
     })
   }).isRequired,
-  showReplies: func.isRequired
+  showReplies: func.isRequired,
+  replyCount: number.isRequired
 }
 
 export default FirstReply

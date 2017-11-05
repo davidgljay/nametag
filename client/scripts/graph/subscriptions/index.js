@@ -23,16 +23,37 @@ export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeT
     }
     const message = subscriptionData.data.messageAdded
 
+    const addReply = (msg, reply) => ({
+      ...msg,
+      replies: msg.replies
+        .concat(reply)
+        .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)),
+      replyCount: msg.replyCount + 1
+    })
+
     // Check to see if the message has already been posted
     // If so, update to the new version of the message
-    const newMessage = oldData.room.messages.reduce((isNew, msg) => msg.id === message.id ? false : isNew, true)
+    const newMessage = oldData.room.messages.reduce((isNew, msg) =>
+      msg.id === message.id || (
+        msg.parent &&
+        msg.id === message.parent.id
+      )
+      ? false : isNew, true)
     if (!newMessage) {
       return {
         ...oldData,
         room: {
           ...oldData.room,
           messages: oldData.room.messages.map(
-            msg => msg.id === message.id ? message : msg
+            msg => {
+              if (msg.id === message.id) {
+                return message
+              }
+              if (msg.id === message.parent.id) {
+                return addReply(msg, message)
+              }
+              return msg
+            }
           )
         }
       }
@@ -42,10 +63,6 @@ export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeT
     // If so add it to the appropriate place in the graph
     // and update the user that a reply has taken place.
     if (message.parent) {
-      const addReply = (msg, reply) => ({
-        ...msg,
-        replies: msg.replies.concat(reply)
-      })
       return {
         ...oldData,
         room: {
@@ -64,6 +81,7 @@ export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeT
             room: message.room,
             editedAt: null,
             replies: [],
+            replyCount: 0,
             saved: false,
             recipient: null,
             author: null,

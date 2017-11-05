@@ -146,6 +146,9 @@ type Message {
   # Replies to a message
   replies(limit: Int): [Message]
 
+  # Number of replies to a message
+  replyCount: Int
+
   # Emoji reactions to the message
   reactions: [EmojiReaction]
 

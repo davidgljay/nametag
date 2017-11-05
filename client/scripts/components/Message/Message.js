@@ -70,7 +70,8 @@ class Message extends Component {
         recipient,
         reactions,
         parent,
-        replies
+        replies,
+        replyCount
       },
       norms,
       roomId,
@@ -203,7 +204,8 @@ class Message extends Component {
             <div style={styles.firstReply}>
               <FirstReply
                 reply={replies[0]}
-                showReplies={this.showReplies(true)} />
+                showReplies={this.showReplies(true)}
+                replyCount={replyCount} />
             </div>
           }
           {
@@ -252,6 +254,7 @@ class Message extends Component {
         !parent && author && <Replies
           createMessage={createMessage}
           replies={replies}
+          replyCount={replyCount}
           roomId={roomId}
           parent={id}
           parentAuthor={author}
