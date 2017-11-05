@@ -38,10 +38,10 @@ class Replies extends Component {
         toggleEmoji,
         setRecipient,
         parent,
+        open,
         parentAuthor,
         norms,
         hideDMs,
-        showReplies,
         closeReply,
         mod
       } = this.props
@@ -50,11 +50,11 @@ class Replies extends Component {
 
     return <div className='replies'>
       {
-        showReplies &&
+        open &&
         <Dialog
           modal={false}
           contentStyle={styles.dialog}
-          open={showReplies}
+          open={open}
           bodyStyle={styles.cardBody}
           onRequestClose={closeReply}>
           <FontIcon
@@ -142,9 +142,9 @@ Replies.propTypes = {
   norms: arrayOf(
     string.isRequired
   ),
+  open: bool.isRequired,
   hideDMs: bool.isRequired,
   mod: object.isRequired,
-  showReplies: bool.isRequired,
   closeReply: func.isRequired
 }
 

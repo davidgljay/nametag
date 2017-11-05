@@ -81,11 +81,9 @@ export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeT
           )
           .concat({
             __typename: 'Message',
-            id: `replyNotif_${message.id}`,
+            id: `replyNotif_${message.parent.id}_${message.id}`,
             createdAt: new Date().toISOString(),
             text: `${message.author.name} has replied to ${message.parent.author.name}.`,
-            replyLink: message.parent.id,
-            room: message.room,
             editedAt: null,
             replies: [],
             replyCount: 0,

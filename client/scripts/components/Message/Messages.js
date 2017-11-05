@@ -25,6 +25,8 @@ class Messages extends Component {
         messages,
         addReaction,
         getReplies,
+        setVisibleReplies,
+        visibleReplies,
         setDefaultMessage,
         setRecipient,
         setEditing,
@@ -47,7 +49,9 @@ class Messages extends Component {
         deleteMessage={deleteMessage}
         banNametag={banNametag}
         getReplies={getReplies}
+        visibleReplies={visibleReplies}
         addReaction={addReaction}
+        setVisibleReplies={setVisibleReplies}
         setDefaultMessage={setDefaultMessage}
         setRecipient={setRecipient}
         setEditing={setEditing}
@@ -133,10 +137,12 @@ Messages.propTypes = {
     id: string.isRequired
   }),
   hideDMs: bool.isRequired,
+  visibleReplies: string.isRequired,
   deleteMessage: func.isRequired,
   banNametag: func.isRequired,
   addReaction: func.isRequired,
   getReplies: func.isRequired,
+  setVisibleReplies: func.isRequired,
   setDefaultMessage: func.isRequired,
   setRecipient: func.isRequired,
   setEditing: func.isRequired

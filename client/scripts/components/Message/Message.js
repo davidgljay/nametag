@@ -21,8 +21,7 @@ class Message extends Component {
     this.state = {
       modAction: false,
       showActions: false,
-      showMenu: '',
-      showReplies: false
+      showMenu: ''
     }
 
     this.showModAction = (open) => (e) => {
@@ -31,12 +30,12 @@ class Message extends Component {
     }
 
     this.showReplies = (open) => (e) => {
-      const {message: {id, replies, replyCount}, getReplies} = this.props
+      const {message: {id, replies, replyCount}, getReplies, setVisibleReplies} = this.props
       if (e) { e.preventDefault() }
       if (replies.length < replyCount) {
         getReplies(id)
       }
-      this.setState({showReplies: open})
+      setVisibleReplies(open ? id : '')
     }
 
     this.checkYouTube = (message) => {
@@ -75,11 +74,14 @@ class Message extends Component {
         reactions,
         parent,
         replies,
-        replyCount
+        replyCount,
+        replyLink
       },
       norms,
       roomId,
       mod,
+      visibleReplies,
+      setVisibleReplies,
       toggleEmoji,
       myNametag,
       addReaction,
@@ -93,7 +95,7 @@ class Message extends Component {
       setEditing
     } = this.props
 
-    const {showMenu, showActions, showReplies} = this.state
+    const {showMenu, showActions} = this.state
 
     if (this.checkYouTube(text)) {
       media = <Media url={this.checkYouTube(text)[0]} />
@@ -136,13 +138,21 @@ class Message extends Component {
         (url) => `[${url}](${url})`)
 
     const isMod = author && mod.id === author.id
+    const isReplyNotif = id.split('_')[0] === 'replyNotif'
 
     return <div>
       <div
         className='message'
-        style={messageContainerStyle}
+        style={isReplyNotif
+          ? {
+            ...messageContainerStyle,
+            cursor: 'pointer'
+          }
+          : messageContainerStyle}
         id={id}
-        onClick={() => this.setState({showActions: !showActions})}>
+        onClick={() => isReplyNotif
+          ? setVisibleReplies(id.split('_')[1])
+          : this.setState({showActions: !showActions})}>
         <div style={imageStyle} onClick={this.toggleMenu}>
           {
             author && !hideAuthor && <NametagIcon
@@ -270,7 +280,7 @@ class Message extends Component {
           setEditing={setEditing}
           norms={norms}
           hideDMs={hideDMs}
-          showReplies={showReplies}
+          open={visibleReplies === id}
           closeReply={this.showReplies(false)}
           mod={mod} />
       }
@@ -298,6 +308,7 @@ Message.propTypes = {
   }).isRequired,
   norms: arrayOf(string.isRequired).isRequired,
   roomId: string.isRequired,
+  visibleReplies: string.isRequired,
   myNametag: shape({
     id: string.isRequired
   }).isRequired,
@@ -311,7 +322,8 @@ Message.propTypes = {
   setDefaultMessage: func.isRequired,
   setRecipient: func.isRequired,
   setEditing: func.isRequired,
-  getReplies: func
+  getReplies: func,
+  setVisibleReplies: func
 }
 
 export default Message

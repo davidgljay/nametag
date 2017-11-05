@@ -66,6 +66,7 @@ MessageMenu.propTypes = {
   showModAction: func.isRequired,
   showActions: bool.isRequired,
   isDM: bool.isRequired,
+  showReplies: func.isRequired,
   toggleEmoji: func.isRequired,
   id: string.isRequired
 }

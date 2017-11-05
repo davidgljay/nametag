@@ -143,6 +143,8 @@ class Room extends Component {
       banNametag,
       addReaction,
       getReplies,
+      visibleReplies,
+      setVisibleReplies,
       location: {state: locationState}
     } = this.props
 
@@ -205,6 +207,8 @@ class Room extends Component {
             deleteMessage={deleteMessage}
             banNametag={banNametag}
             getReplies={getReplies}
+            setVisibleReplies={setVisibleReplies}
+            visibleReplies={visibleReplies}
             setDefaultMessage={this.setDefaultMessage}
             setRecipient={this.setRecipient}
             setEditing={this.setEditing}
@@ -294,6 +298,7 @@ Room.propTypes = {
   params: shape({
     roomId: string.isRequired
   }),
+  visibleReplies: string.isRequired,
   loginUser: func.isRequired,
   registerUser: func.isRequired,
   passwordResetRequest: func.isRequired,
@@ -307,6 +312,7 @@ Room.propTypes = {
   addReaction: func.isRequired,
   updateToken: func.isRequired,
   getReplies: func.isRequired,
+  setVisibleReplies: func.isRequired,
   banNametag: func.isRequired
 }
 
