@@ -254,7 +254,6 @@ class Message extends Component {
         !parent && author && <Replies
           createMessage={createMessage}
           replies={replies}
-          replyCount={replyCount}
           roomId={roomId}
           parent={id}
           parentAuthor={author}
