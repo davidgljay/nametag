@@ -300,7 +300,9 @@ export const createMessage = graphql(CREATE_MESSAGE, {
 
           const addReply = (msg, reply) => ({
             ...msg,
-            replies: msg.replies.concat(reply),
+            replies: msg.replies
+              .concat(reply)
+              .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)),
             replyCount: msg.replyCount + 1
           })
 
@@ -316,7 +318,15 @@ export const createMessage = graphql(CREATE_MESSAGE, {
             for (var j = 0; j < msg.replies.length; j++) {
               if (msg.replies[j].id === message.id) {
                 isNew = false
-                newMessages[i] = addReply(msg, message)
+
+                newMessages[i] = {
+                  ...msg,
+                  replies: msg.replies.map(reply =>
+                    reply.id === message.id
+                    ? message
+                    : reply
+                  )
+                }
               }
             }
           }
