@@ -30,6 +30,7 @@ class Messages extends Component {
         setDefaultMessage,
         setRecipient,
         setEditing,
+        editMessage,
         hideDMs,
         deleteMessage,
         banNametag
@@ -55,6 +56,7 @@ class Messages extends Component {
         setDefaultMessage={setDefaultMessage}
         setRecipient={setRecipient}
         setEditing={setEditing}
+        editMessage={editMessage}
         norms={norms}
         mod={mod}
         createMessage={createMessage}
@@ -141,6 +143,7 @@ Messages.propTypes = {
   deleteMessage: func.isRequired,
   banNametag: func.isRequired,
   addReaction: func.isRequired,
+  editMessage: func.isRequired,
   getReplies: func.isRequired,
   setVisibleReplies: func.isRequired,
   setDefaultMessage: func.isRequired,

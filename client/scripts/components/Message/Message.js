@@ -74,8 +74,7 @@ class Message extends Component {
         reactions,
         parent,
         replies,
-        replyCount,
-        replyLink
+        replyCount
       },
       norms,
       roomId,
@@ -87,6 +86,7 @@ class Message extends Component {
       addReaction,
       hideAuthor,
       createMessage,
+      editMessage,
       deleteMessage,
       banNametag,
       hideDMs,
@@ -277,7 +277,7 @@ class Message extends Component {
           toggleEmoji={toggleEmoji}
           addReaction={addReaction}
           setRecipient={setRecipient}
-          setEditing={setEditing}
+          editMessage={editMessage}
           norms={norms}
           hideDMs={hideDMs}
           open={visibleReplies === id}
@@ -322,6 +322,7 @@ Message.propTypes = {
   setDefaultMessage: func.isRequired,
   setRecipient: func.isRequired,
   setEditing: func.isRequired,
+  editMessage: func,
   getReplies: func,
   setVisibleReplies: func
 }

@@ -207,6 +207,7 @@ class Room extends Component {
             deleteMessage={deleteMessage}
             banNametag={banNametag}
             getReplies={getReplies}
+            editMessage={editMessage}
             setVisibleReplies={setVisibleReplies}
             visibleReplies={visibleReplies}
             setDefaultMessage={this.setDefaultMessage}
