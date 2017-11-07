@@ -118,7 +118,7 @@ const create = (context, m) => {
         }
         return Object.assign({}, messageObj, {id: res.generated_keys[0]})
       })
-      .then(message => Promise.all([checkMentions(context, message), message, emailIfReply(context, message),]))
+      .then(message => Promise.all([checkMentions(context, message), message, emailIfReply(context, message)]))
       .then(([updates = {}, message]) => Object.assign({}, message, updates))
   }
   return checkForCommands(context, messageObj)
@@ -160,7 +160,6 @@ const deleteMessage = (context, messageId) => messagesTable.get(messageId).delet
 const editMessage = (context, messageId, text) =>
   messagesTable.get(messageId).update({text, editedAt: new Date()}).run(context.conn)
 
-
 /**
  * E-mails people in a reply thread if a comment is a reply
  *
@@ -169,10 +168,10 @@ const editMessage = (context, messageId, text) =>
  *
  **/
 
- const emailIfReply = ({conn, user}, message) =>
+const emailIfReply = ({conn, user}, message) =>
    message.parent
    ? messagesTable.getAll(message.parent)
-    .union(messagesTable.getAll(message.parent, {index:"parent"}))
+    .union(messagesTable.getAll(message.parent, {index: 'parent'}))
     .map(message => message.merge({messageId: message('id')}))
     .eqJoin('author', r.db('nametag').table('users'), {index: 'nametags'})
     .zip()
@@ -180,15 +179,15 @@ const editMessage = (context, messageId, text) =>
     .zip()
     .eqJoin('room', r.db('nametag').table('rooms'))
     .zip()
-    .pluck('email', 'text', 'name', 'image', 'messageId', 'room', 'id', 'userToken', 'title')
+    .pluck('email', 'text', 'name', 'messageId', 'room', 'userToken', 'title')
     .run(conn)
     .then(cursor => cursor.toArray())
     .then(replies => {
       const {messageId} = replies[0]
       let promises = []
       let notified = {[user.email]: true}
-      for (var i=0; i < replies.length; i++ ) {
-        const {text, name, image, room, id, userToken, title} = replies[i]
+      for (var i = 0; i < replies.length; i++) {
+        const {text, name, room, userToken, title} = replies[i]
         if (!notified[replies[i].email]) {
           notified[replies[i].email] = true
           promises.push(email({
@@ -196,7 +195,7 @@ const editMessage = (context, messageId, text) =>
             from: {name: 'Nametag', email: 'noreply@nametag.chat'},
             template: 'reply',
             params: {
-              roomId: id,
+              roomId: room,
               roomName: title,
               message: text,
               messageId,
@@ -209,7 +208,6 @@ const editMessage = (context, messageId, text) =>
       return Promise.all(promises)
     })
     : null
-
 
 /**
  * Checks a message for mentions and dms

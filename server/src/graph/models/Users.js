@@ -619,18 +619,22 @@ const emailDigest = ({conn}) =>
   .group('email')
   .run(conn)
   .then(results => {
+    let sent = {}
     for (var i = 0; i < results.length; i++) {
       const {group, reduction} = results[i]
       const userToken = reduction[0].userToken
-      sendEmail({
-        from: {
-          email: 'noreply@nametag.chat',
-          name: 'Nametag Update'
-        },
-        to: group,
-        template: 'digest',
-        params: {userToken, rooms: reduction}
-      })
+      if (!sent[group]) {
+        sent[group] = true
+        sendEmail({
+          from: {
+            email: 'noreply@nametag.chat',
+            name: 'Nametag Update'
+          },
+          to: group,
+          template: 'digest',
+          params: {userToken, rooms: reduction}
+        })
+      }
     }
   })
 
