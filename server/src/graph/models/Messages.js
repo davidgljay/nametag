@@ -118,7 +118,7 @@ const create = (context, m) => {
         }
         return Object.assign({}, messageObj, {id: res.generated_keys[0]})
       })
-      .then(message => Promise.all([checkMentions(context, message), message]))
+      .then(message => Promise.all([checkMentions(context, message), message, emailIfReply(context, message),]))
       .then(([updates = {}, message]) => Object.assign({}, message, updates))
   }
   return checkForCommands(context, messageObj)
@@ -159,6 +159,57 @@ const deleteMessage = (context, messageId) => messagesTable.get(messageId).delet
 
 const editMessage = (context, messageId, text) =>
   messagesTable.get(messageId).update({text, editedAt: new Date()}).run(context.conn)
+
+
+/**
+ * E-mails people in a reply thread if a comment is a reply
+ *
+ * @param {Object} context     graph context
+ * @param {Object} message   the reply in question
+ *
+ **/
+
+ const emailIfReply = ({conn, user}, message) =>
+   message.parent
+   ? messagesTable.getAll(message.parent)
+    .union(messagesTable.getAll(message.parent, {index:"parent"}))
+    .map(message => message.merge({messageId: message('id')}))
+    .eqJoin('author', r.db('nametag').table('users'), {index: 'nametags'})
+    .zip()
+    .eqJoin('author', r.db('nametag').table('nametags'))
+    .zip()
+    .eqJoin('room', r.db('nametag').table('rooms'))
+    .zip()
+    .pluck('email', 'text', 'name', 'image', 'messageId', 'room', 'id', 'userToken', 'title')
+    .run(conn)
+    .then(cursor => cursor.toArray())
+    .then(replies => {
+      const {messageId} = replies[0]
+      let promises = []
+      let notified = {[user.email]: true}
+      for (var i=0; i < replies.length; i++ ) {
+        const {text, name, image, room, id, userToken, title} = replies[i]
+        if (!notified[replies[i].email]) {
+          notified[replies[i].email] = true
+          promises.push(email({
+            to: replies[i].email,
+            from: {name: 'Nametag', email: 'noreply@nametag.chat'},
+            template: 'reply',
+            params: {
+              roomId: id,
+              roomName: title,
+              message: text,
+              messageId,
+              author: name,
+              userToken
+            }
+          }))
+        }
+      }
+      return Promise.all(promises)
+    })
+    : null
+
 
 /**
  * Checks a message for mentions and dms

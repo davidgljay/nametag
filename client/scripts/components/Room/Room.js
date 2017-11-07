@@ -10,6 +10,7 @@ import WelcomeForm from './WelcomeForm'
 import ConfirmNametagForm from './ConfirmNametagForm'
 import ComposeWithMenus from '../Message/ComposeWithMenus'
 import JoinRoom from './JoinRoom'
+import {getQueryVariable} from '../../utils/queryVars'
 import {track, identify, setTimer} from '../../utils/analytics'
 
 class Room extends Component {
@@ -79,8 +80,13 @@ class Room extends Component {
       typingPromptAdded,
       updateToken,
       dispatch,
+      setVisibleReplies,
       params
     } = this.props
+
+    if (getQueryVariable('showReplies')) {
+      setVisibleReplies(getQueryVariable('showReplies'))
+    }
     requestNotifPermissions(updateToken)
     roomUpdatedSubscription(params.roomId)
     typingPromptAdded(dispatch)(params.roomId)
