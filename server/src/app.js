@@ -6,6 +6,7 @@ const fs = require('fs')
 const r = require('rethinkdb')
 const express = require('express')
 const imageUpload = require('./routes/images/imageUpload')
+const imageRedirect = require('./routes/images/imageRedirect')
 const config = require('./secrets.json')
 const path = require('path')
 const bodyParser = require('body-parser')
@@ -236,6 +237,14 @@ app.post('/api/images',
     imageUpload.resize(req.query.width, req.query.height, req.files[0].filename)
       .then(data => res.json(data))
       .catch(err => console.error('Uploading image', err))
+  }
+)
+
+
+/* Redirect to an image (used to securely deliver images hosted via http) */
+app.get('/api/image_redirect',
+  (req, res) => {
+    imageRedirect.redirect(decodeURIComponent(req.query.url), res)
   }
 )
 
