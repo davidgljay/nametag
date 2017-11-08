@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import RoomCard from './RoomCard'
+import FeatureCallout from './FeatureCallout'
 import Navbar from '../Utils/Navbar'
 import LoginDialog from '../User/LoginDialog'
 import JoinedRoomCard from './JoinedRoomCard'
@@ -116,6 +117,20 @@ class RoomCards extends Component {
               }
             </div>
           }
+          <div id='FeatureCallouts' style={styles.featureCallouts} >
+            <FeatureCallout
+              image='https://s3.amazonaws.com/nametag_images/temp/intimate.jpg'
+              title='Intimate'
+              body='Conversations happen at a human scale, so you can feel seen and heard.' />
+            <FeatureCallout
+              image='https://s3.amazonaws.com/nametag_images/temp/welcoming.jpg'
+              title='Welcoming'
+              body='Everyone who enters a room introduces themselves, so you know what perspective they bring.' />
+            <FeatureCallout
+              image='https://s3.amazonaws.com/nametag_images/temp/supportive.jpg'
+              title='Supportive'
+              body='All conversations have a moderator and a shared set of norms, so you can talk about what matters.' />
+          </div>
           <div style={styles.roomCards}>
             {
               rooms &&
@@ -219,6 +234,11 @@ const styles = {
     fontStyle: 'italic',
     color: grey,
     cursor: 'pointer'
+  },
+  featureCallouts: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center'
   },
   spinner: {
     marginLeft: '45%',
