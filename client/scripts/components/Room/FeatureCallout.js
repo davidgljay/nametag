@@ -1,6 +1,5 @@
 import React, {PropTypes} from 'react'
 import {Card, CardMedia, CardTitle} from 'material-ui/Card'
-import {white} from '../../../styles/colors'
 
 const FeatureCallout = ({title, image, body}) => <div>
   <Card style={styles.card}>
@@ -29,8 +28,8 @@ export default FeatureCallout
 const styles = {
   card: {
     width: 260,
-    marginTop: 30,
-    marginBottom: 10,
+    marginTop: 20,
+    marginBottom: 20,
     marginLeft: 3,
     marginRight: 3
   },

@@ -60,6 +60,7 @@ class RoomCards extends Component {
       </div>
     }
     const {showAllJoined} = this.state
+    const showAbout = !me || me.nametags.length === 0
     let nametagHash = {}
     if (me) {
       nametagHash = me.nametags.reduce((hash, nametag) => {
@@ -76,7 +77,7 @@ class RoomCards extends Component {
         toggleLogin={this.toggleLogin} />
       <div style={styles.background}>
         {
-          (!me || me.nametags.length === 0) &&
+          showAbout &&
           <div style={styles.header}>
             <div style={styles.headerText}>
               Online conversation that feels like an intimate dinner party.
@@ -86,9 +87,9 @@ class RoomCards extends Component {
         <div style={styles.container}>
           <StartRoomForm loggedIn={!!me && me.nametags.length > 0} />
           {
-            me && me.nametags.length > 0 &&
+            !showAbout &&
             <div style={styles.joinedRooms}>
-              <h3>Your Conversations</h3>
+              <h3 style={styles.joinedRoomsHeader}>Your Conversations</h3>
               <div style={styles.joinedRoomContainer}>
                 {
                   me.nametags
@@ -117,26 +118,62 @@ class RoomCards extends Component {
               }
             </div>
           }
-          <div id='FeatureCallouts' style={styles.featureCallouts} >
-            <FeatureCallout
-              image='https://s3.amazonaws.com/nametag_images/temp/intimate.jpg'
-              title='Intimate'
-              body='Conversations happen at a human scale, so you can feel seen and heard.' />
-            <FeatureCallout
-              image='https://s3.amazonaws.com/nametag_images/temp/welcoming.jpg'
-              title='Welcoming'
-              body='Everyone who enters a room introduces themselves, so you know what perspective they bring.' />
-            <FeatureCallout
-              image='https://s3.amazonaws.com/nametag_images/temp/supportive.jpg'
-              title='Supportive'
-              body='All conversations have a moderator and a shared set of norms, so you can talk about what matters.' />
-          </div>
+          {
+            showAbout &&
+            <div>
+              <div id='firstRooms' style={styles.firstRooms}>
+                {
+                  rooms &&
+                  rooms.length > 0 &&
+                  rooms
+                  .filter(room => !nametagHash[room.id])
+                  .slice(0, 2)
+                  .map((room, i) => {
+                    let banned = false
+                    if (me) {
+                      const myNametag = me.nametags.find(nt => nt.room && nt.room.id === room.id)
+                      banned = !!myNametag && myNametag.banned
+                    }
+                    return <RoomCard
+                      key={room.id}
+                      room={room}
+                      disabled={banned || room.closed}
+                      me={me}
+                      style={i === 1 && showAbout ? {marginBottom: 10} : {}} />
+                  }
+                  )
+                }
+              </div>
+              <h2 style={styles.featureHeader}>Chat Built For Intimate Conversation</h2>
+              <div id='FeatureCallouts' style={styles.featureCallouts} >
+                <FeatureCallout
+                  image='https://s3.amazonaws.com/nametag_images/temp/intimate.jpg'
+                  title='Welcoming'
+                  body='Everyone who enters a room introduces themselves, so you know what perspective they bring.' />
+                <FeatureCallout
+                  image='https://s3.amazonaws.com/nametag_images/temp/kayak.jpg'
+                  title='Focused'
+                  body='All conversations have a moderator and a shared set of norms to keep them focused on what matters.' />
+                <FeatureCallout
+                  image='https://s3.amazonaws.com/nametag_images/temp/welcoming.jpg'
+                  title='Confidential'
+                  body={'Limit conversations to people you trust, we keep what you say and where you say it private.'} />
+              </div>
+              <div style={styles.featureFooter}>
+                Nametag is built by folks who want better ways to build trust on the internet.
+                <br />
+                <br />
+                <a href='https://medium.com/matter-driven-narrative/nametag-a-platform-for-building-relationships-fa977bca53ba' target='_blank'>Learn More</a>
+              </div>
+            </div>
+          }
           <div style={styles.roomCards}>
             {
               rooms &&
               rooms.length > 0 &&
               rooms
               .filter(room => !nametagHash[room.id])
+              .slice(showAbout ? 2 : 0)
               .map(room => {
                 let banned = false
                 if (me) {
@@ -201,10 +238,17 @@ const styles = {
     marginLeft: 'auto',
     marginRight: 'auto'
   },
+  joinedRoomsHeader: {
+    marginLeft: 10,
+    marginRight: 10
+  },
   joinedRoomContainer: {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'center'
+  },
+  firstRooms: {
+    paddingTop: 50
   },
   roomCards: {
     paddingBottom: 50,
@@ -235,10 +279,19 @@ const styles = {
     color: grey,
     cursor: 'pointer'
   },
+  featureHeader: {
+    margin: '40px 10px 0px 10px',
+    textAlign: 'center'
+  },
   featureCallouts: {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'center'
+  },
+  featureFooter: {
+    textAlign: 'center',
+    margin: '20px 10px',
+    fontWeight: 300
   },
   spinner: {
     marginLeft: '45%',
