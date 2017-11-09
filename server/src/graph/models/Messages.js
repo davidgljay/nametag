@@ -168,18 +168,21 @@ const editMessage = (context, messageId, text) =>
  *
  **/
 
-const emailIfReply = ({conn, user}, message) =>
-   message.parent
-   ? messagesTable.getAll(message.parent)
-    .union(messagesTable.getAll(message.parent, {index: 'parent'}))
-    .map(message => message.merge({messageId: message('id')}))
+const emailIfReply = ({conn, user}, msg) =>
+   msg.parent
+   ? messagesTable.getAll(msg.parent)
+    .union(messagesTable.getAll(msg.parent, {index: 'parent'}))
+    .map(message => message.merge({
+      messageId: message('id'),
+      messageAuthor: r.db('nametag').table('nametags').get(msg.author)('name')
+    }))
     .eqJoin('author', r.db('nametag').table('users'), {index: 'nametags'})
     .zip()
     .eqJoin('author', r.db('nametag').table('nametags'))
     .zip()
     .eqJoin('room', r.db('nametag').table('rooms'))
     .zip()
-    .pluck('email', 'text', 'name', 'messageId', 'room', 'userToken', 'title')
+    .pluck('email', 'messageText', 'messageAuthor', 'messageId', 'room', 'userToken', 'title')
     .run(conn)
     .then(cursor => cursor.toArray())
     .then(replies => {
@@ -187,7 +190,7 @@ const emailIfReply = ({conn, user}, message) =>
       let promises = []
       let notified = {[user.email]: true}
       for (var i = 0; i < replies.length; i++) {
-        const {text, name, room, userToken, title} = replies[i]
+        const {messageAuthor, room, userToken, title} = replies[i]
         if (!notified[replies[i].email]) {
           notified[replies[i].email] = true
           promises.push(email({
@@ -197,9 +200,9 @@ const emailIfReply = ({conn, user}, message) =>
             params: {
               roomId: room,
               roomName: title,
-              message: text,
+              message: msg.text,
               messageId,
-              author: name,
+              author: messageAuthor,
               userToken
             }
           }))

@@ -240,7 +240,6 @@ app.post('/api/images',
   }
 )
 
-
 /* Redirect to an image (used to securely deliver images hosted via http) */
 app.get('/api/image_redirect',
   (req, res) => {
