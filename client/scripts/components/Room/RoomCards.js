@@ -147,7 +147,7 @@ class RoomCards extends Component {
               <h2 style={styles.featureHeader}>Chat Built For Intimate Conversation</h2>
               <div id='FeatureCallouts' style={styles.featureCallouts} >
                 <FeatureCallout
-                  image='https://s3.amazonaws.com/nametag_images/temp/intimate.jpg'
+                  image='https://s3.amazonaws.com/nametag_images/temp/welcoming.jpg'
                   title='Welcoming'
                   body='Everyone who enters a room introduces themselves, so you know what perspective they bring.' />
                 <FeatureCallout
@@ -155,7 +155,7 @@ class RoomCards extends Component {
                   title='Focused'
                   body='All conversations have a moderator and a shared set of norms to keep them focused on what matters.' />
                 <FeatureCallout
-                  image='https://s3.amazonaws.com/nametag_images/temp/welcoming.jpg'
+                  image='https://s3.amazonaws.com/nametag_images/temp/intimate.jpg'
                   title='Confidential'
                   body={'Limit conversations to people you trust, we keep what you say and where you say it private.'} />
               </div>
