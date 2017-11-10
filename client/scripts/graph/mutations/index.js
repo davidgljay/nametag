@@ -13,6 +13,7 @@ import SHOW_TYPING_PROMPT from './showTypingPrompt.graphql'
 import UPDATE_BADGE_REQUEST_STATUS from './updateBadgeRequestStatus.graphql'
 import UPDATE_TOKEN from './updateToken.graphql'
 import DELETE_MESSAGE from './deleteMessage.graphql'
+import EDIT_MESSAGE from './editMessage.graphql'
 import PASSWORD_RESET from './passwordReset.graphql'
 import UNSUBSCRIBE from './unsubscribe.graphql'
 import SET_MOD_ONLY_DMS from './setModOnlyDMs.graphql'
@@ -264,7 +265,10 @@ export const createMessage = graphql(CREATE_MESSAGE, {
             id: `tempMessage_${Date.now()}`,
             text: message.text,
             createdAt: new Date().toISOString(),
+            editedAt: null,
             saved: false,
+            replies: [],
+            replyCount: 0,
             author: {
               __typename: 'Nametag',
               image: author.image,
@@ -273,7 +277,17 @@ export const createMessage = graphql(CREATE_MESSAGE, {
             },
             recipient: null,
             reactions: [],
-            template: null
+            template: null,
+            parent: message.parent ? {
+              __typename: 'Message',
+              id: message.parent,
+              author: {
+                __typename: 'Nametag',
+                id: 'tempAuthor',
+                name: ''
+              }
+            }
+            : null
           },
           errors: null
         }
@@ -285,6 +299,14 @@ export const createMessage = graphql(CREATE_MESSAGE, {
             return oldData
           }
 
+          const addReply = (msg, reply) => ({
+            ...msg,
+            replies: msg.replies
+              .concat(reply)
+              .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)),
+            replyCount: msg.replyCount + 1
+          })
+
           let isNew = true
           const oldMessages = oldData.room.messages
           let newMessages = oldMessages.slice()
@@ -293,6 +315,20 @@ export const createMessage = graphql(CREATE_MESSAGE, {
             if (msg.id === message.id) {
               isNew = false
               newMessages[i] = message
+            }
+            for (var j = 0; j < msg.replies.length; j++) {
+              if (msg.replies[j].id === message.id) {
+                isNew = false
+
+                newMessages[i] = {
+                  ...msg,
+                  replies: msg.replies.map(reply =>
+                    reply.id === message.id
+                    ? message
+                    : reply
+                  )
+                }
+              }
             }
           }
 
@@ -303,6 +339,20 @@ export const createMessage = graphql(CREATE_MESSAGE, {
               room: {
                 ...oldData.room,
                 messages: newMessages
+              }
+            }
+          }
+
+          if (message.parent) {
+            return {
+              ...oldData,
+              room: {
+                ...oldData.room,
+                messages: oldData.room.messages.map(
+                  msg => msg.id === message.parent.id
+                  ? addReply(msg, message)
+                  : msg
+                )
               }
             }
           }
@@ -375,6 +425,18 @@ export const deleteMessage = graphql(DELETE_MESSAGE, {
       variables: {
         messageId,
         roomId
+      }
+    })
+  })
+})
+
+export const editMessage = graphql(EDIT_MESSAGE, {
+  props: ({ownProps, mutate}) => ({
+    editMessage: (messageId, roomId, text) => mutate({
+      variables: {
+        messageId,
+        roomId,
+        text
       }
     })
   })

@@ -25,9 +25,9 @@ class RoomCard extends Component {
   }
 
   render () {
-    const {room, example, disabled} = this.props
+    const {room, example, disabled, style} = this.props
 
-    return <Card key={room.id} className='roomCard' style={styles.cardContainer}>
+    return <Card key={room.id} className='roomCard' style={{...styles.cardContainer, ...style}}>
       <div style={styles.firstLine}>
         <div className='cardMod' style={styles.modContainer}>
           <div style={styles.modIcon}>

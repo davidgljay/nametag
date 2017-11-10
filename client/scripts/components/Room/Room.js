@@ -30,7 +30,8 @@ class Room extends Component {
       defaultMessage: '',
       hasPosted: null,
       dismissedWelcomeModal: false,
-      recipient: null
+      recipient: null,
+      editing: null
     }
 
     this.showPresence = () => {
@@ -68,6 +69,8 @@ class Room extends Component {
     this.setDefaultMessage = (defaultMessage) => this.setState({defaultMessage})
 
     this.setRecipient = (recipient) => this.setState({recipient})
+
+    this.setEditing = (editing) => this.setState({editing})
   }
 
   componentDidMount () {
@@ -77,9 +80,14 @@ class Room extends Component {
       typingPromptAdded,
       updateToken,
       dispatch,
+      setVisibleReplies,
       params
     } = this.props
     this.setState({isJoining: getQueryVariable('isJoining')})
+
+    if (getQueryVariable('showReplies')) {
+      setVisibleReplies(getQueryVariable('showReplies'))
+    }
     requestNotifPermissions(updateToken)
     roomUpdatedSubscription(params.roomId)
     typingPromptAdded(dispatch)(params.roomId)
@@ -138,12 +146,16 @@ class Room extends Component {
       updateRoom,
       updateNametag,
       deleteMessage,
+      editMessage,
       banNametag,
       addReaction,
+      getReplies,
+      visibleReplies,
+      setVisibleReplies,
       location: {state: locationState}
     } = this.props
 
-    const {defaultMessage, recipient} = this.state
+    const {defaultMessage, recipient, editing} = this.state
 
     const isJoining = locationState && locationState.isJoining || this.state.isJoining
 
@@ -201,8 +213,13 @@ class Room extends Component {
             addReaction={addReaction}
             deleteMessage={deleteMessage}
             banNametag={banNametag}
+            getReplies={getReplies}
+            editMessage={editMessage}
+            setVisibleReplies={setVisibleReplies}
+            visibleReplies={visibleReplies}
             setDefaultMessage={this.setDefaultMessage}
             setRecipient={this.setRecipient}
+            setEditing={this.setEditing}
             mod={room.mod}
             messages={me && myNametag && myNametag.bio ? room.messages : []} />
         </div>
@@ -216,6 +233,9 @@ class Room extends Component {
           recipient={recipient}
           setDefaultMessage={this.setDefaultMessage}
           setRecipient={this.setRecipient}
+          editing={editing}
+          setEditing={this.setEditing}
+          editMessage={editMessage}
           updateRoom={updateRoom}
           updateNametag={updateNametag}
           nametags={room.nametags}
@@ -286,6 +306,7 @@ Room.propTypes = {
   params: shape({
     roomId: string.isRequired
   }),
+  visibleReplies: string.isRequired,
   loginUser: func.isRequired,
   registerUser: func.isRequired,
   passwordResetRequest: func.isRequired,
@@ -293,9 +314,13 @@ Room.propTypes = {
   updateRoom: func.isRequired,
   createNametag: func.isRequired,
   createMessage: func.isRequired,
+  deleteMessage: func.isRequired,
+  editMessage: func.isRequired,
   toggleSaved: func.isRequired,
   addReaction: func.isRequired,
   updateToken: func.isRequired,
+  getReplies: func.isRequired,
+  setVisibleReplies: func.isRequired,
   banNametag: func.isRequired
 }
 

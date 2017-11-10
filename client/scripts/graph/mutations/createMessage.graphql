@@ -1,23 +1,19 @@
+#import "../fragments/messageView.graphql"
+
 mutation CreateMessage($message: CreateMessageInput!) {
   createMessage(message: $message) {
     message {
-      id
-      text
-      createdAt
-      saved
-      author {
-        image
+      ...messageView
+      replyCount
+      replies {
         id
-        name
       }
-      recipient {
-        image
+      parent {
         id
-        name
-      }
-      reactions {
-        emoji
-        nametagId
+        author {
+          id
+          name
+        }
       }
       template {
         id

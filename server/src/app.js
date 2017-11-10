@@ -6,6 +6,7 @@ const fs = require('fs')
 const r = require('rethinkdb')
 const express = require('express')
 const imageUpload = require('./routes/images/imageUpload')
+const imageRedirect = require('./routes/images/imageRedirect')
 const config = require('./secrets.json')
 const path = require('path')
 const bodyParser = require('body-parser')
@@ -15,6 +16,7 @@ const subscriptions = require('./graph/subscriptions')
 const apollo = require('graphql-server-express')
 const {local, facebook, twitter, google, authCallback} = require('./auth')
 const errors = require('./errors')
+const Context = require('./graph/context')
 const {db} = require('./db')
 const dbInit = require('./graph/models').init
 const passport = require('passport')
@@ -156,6 +158,18 @@ r.connect({host: 'rethinkdb'})
       local.handleLocalCallback(req, res, next))(req, res, next)
     })
 
+    // Send an e-mail digest
+    app.get('/send_digest', (req, res, next) => {
+      if (req.headers.authorization !== config.digest.key) {
+        next(errors.ErrNotAuthorized)
+      } else {
+        const context = new Context({}, conn)
+        context.models.Users.emailDigest()
+          .then(res.end('Success!'))
+          .catch(err => next(new errors.APIError(err)))
+      }
+    })
+
     /* All others serve index.html */
     app.get('*', (req, res, next) => {
       res.sendFile(path.join('/usr', 'client', 'public', 'index.html'))
@@ -223,6 +237,13 @@ app.post('/api/images',
     imageUpload.resize(req.query.width, req.query.height, req.files[0].filename)
       .then(data => res.json(data))
       .catch(err => console.error('Uploading image', err))
+  }
+)
+
+/* Redirect to an image (used to securely deliver images hosted via http) */
+app.get('/api/image_redirect',
+  (req, res) => {
+    imageRedirect.redirect(decodeURIComponent(req.query.url), res)
   }
 )
 

@@ -1,22 +1,24 @@
+#import "../fragments/messageView.graphql"
 subscription messageAdded ($roomId: ID!, $nametagId: ID!) {
   messageAdded(roomId: $roomId, nametagId: $nametagId) {
-    id
-    text
-    createdAt
-    saved
-    author {
-      id
-      name
-      image
+    ...messageView
+    replyCount
+    replies(limit: 1) {
+      ...messageView
+      parent {
+        id
+        author {
+          id
+          name
+        }
+      }
     }
-    recipient {
+    parent {
       id
-      name
-      image
-    }
-    reactions {
-      emoji
-      nametagId
+      author {
+        id
+        name
+      }
     }
     template {
       id

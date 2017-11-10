@@ -1,4 +1,5 @@
 const {db} = require('../../db')
+const r = require('rethinkdb')
 const errors = require('../../errors')
 const notification = require('../../notifications')
 const email = require('../../email')
@@ -11,6 +12,29 @@ const messagesTable = db.table('messages')
  * @param {String} id       the ID of the message to be retrieved
  */
 const get = ({conn}, id) => messagesTable.get(id).run(conn)
+
+/**
+ * Gets replies to a message.
+ * @param {Object} context  graph context
+ * @param {String} id       the ID of the parent message
+ * @param {Int} limit       the total number of replies to return
+ */
+const getReplies = ({conn}, id, limit = 9999999) =>
+ messagesTable.getAll(id, {index: 'parent'})
+    .orderBy('createdAt')
+    .limit(limit)
+    .run(conn)
+    .then(cursor => cursor.toArray())
+
+/**
+ * Gets the number of replies to a message.
+ * @param {Object} context  graph context
+ * @param {String} id       the ID of the parent message
+ */
+const getReplyCount = ({conn}, id) =>
+  messagesTable.getAll(id, {index: 'parent'})
+  .count()
+  .run(conn)
 
 /**
  * Returns the number of messages since a particular date.
@@ -36,7 +60,9 @@ const newMessageCount = ({conn, user}, roomId) =>
  */
 
 const getRoomMessages = ({user, conn}, room, nametag) => Promise.all([
-  messagesTable.getAll([room, false], {index: 'room_recipient'}).run(conn),
+  messagesTable.getAll([room, false], {index: 'room_recipient'})
+    .filter(message => r.not(message.hasFields('parent')))
+    .run(conn),
   messagesTable.getAll([room, nametag], {index: 'room_recipient'}).run(conn),
   messagesTable.getAll([room, user.nametags[room], true], {index: 'room_author_isDM'}).run(conn)
 ])
@@ -76,14 +102,25 @@ const toggleSaved = ({conn}, id, saved) =>
  *
  **/
 
-const create = (context, msg) => {
+const create = (context, m) => {
   const {conn, models: {Rooms}} = context
-  const messageObj = Object.assign(
+  let messageObj = Object.assign(
     {},
-    msg,
+    m,
     {createdAt: new Date(), reactions: []},
-    {recipient: msg.recipient ? msg.recipient : false}
+    {recipient: m.recipient ? m.recipient : false}
   )
+  if (m.parent) {
+    return messagesTable.insert(messageObj).run(conn)
+      .then((res) => {
+        if (res.errors > 0) {
+          return new errors.APIError('Error creating message')
+        }
+        return Object.assign({}, messageObj, {id: res.generated_keys[0]})
+      })
+      .then(message => Promise.all([checkMentions(context, message), message, emailIfReply(context, message)]))
+      .then(([updates = {}, message]) => Object.assign({}, message, updates))
+  }
   return checkForCommands(context, messageObj)
   .then(msg => messagesTable.insert(msg).run(conn))
   .then((res) => {
@@ -110,6 +147,70 @@ const create = (context, msg) => {
  **/
 
 const deleteMessage = (context, messageId) => messagesTable.get(messageId).delete().run(context.conn)
+
+/**
+ * Edits a message
+ *
+ * @param {Object} context     graph context
+ * @param {Object} messageId   the id of the message to be deleted
+ * @param {Object} text   the new text of the message
+ *
+ **/
+
+const editMessage = (context, messageId, text) =>
+  messagesTable.get(messageId).update({text, editedAt: new Date()}).run(context.conn)
+
+/**
+ * E-mails people in a reply thread if a comment is a reply
+ *
+ * @param {Object} context     graph context
+ * @param {Object} message   the reply in question
+ *
+ **/
+
+const emailIfReply = ({conn, user}, msg) =>
+   msg.parent
+   ? messagesTable.getAll(msg.parent)
+    .union(messagesTable.getAll(msg.parent, {index: 'parent'}))
+    .map(message => message.merge({
+      messageId: message('id'),
+      messageAuthor: r.db('nametag').table('nametags').get(msg.author)('name')
+    }))
+    .eqJoin('author', r.db('nametag').table('users'), {index: 'nametags'})
+    .zip()
+    .eqJoin('author', r.db('nametag').table('nametags'))
+    .zip()
+    .eqJoin('room', r.db('nametag').table('rooms'))
+    .zip()
+    .pluck('email', 'messageText', 'messageAuthor', 'messageId', 'room', 'userToken', 'title')
+    .run(conn)
+    .then(cursor => cursor.toArray())
+    .then(replies => {
+      const {messageId} = replies[0]
+      let promises = []
+      let notified = {[user.email]: true}
+      for (var i = 0; i < replies.length; i++) {
+        const {messageAuthor, room, userToken, title} = replies[i]
+        if (!notified[replies[i].email]) {
+          notified[replies[i].email] = true
+          promises.push(email({
+            to: replies[i].email,
+            from: {name: 'Nametag', email: 'noreply@nametag.chat'},
+            template: 'reply',
+            params: {
+              roomId: room,
+              roomName: title,
+              message: msg.text,
+              messageId,
+              author: messageAuthor,
+              userToken
+            }
+          }))
+        }
+      }
+      return Promise.all(promises)
+    })
+    : null
 
 /**
  * Checks a message for mentions and dms
@@ -378,10 +479,13 @@ const addReaction = ({conn}, messageId, emoji, nametagId) =>
 module.exports = (context) => ({
   Messages: {
     get: (id) => get(context, id),
+    getReplies: (id, limit) => getReplies(context, id, limit),
+    getReplyCount: (id) => getReplyCount(context, id),
     newMessageCount: (roomId) => newMessageCount(context, roomId),
     getRoomMessages: (roomId, nametag) => getRoomMessages(context, roomId, nametag),
     getNametagMessages: (nametag) => getNametagMessages(context, nametag),
     create: (message) => create(context, message),
+    edit: (messageId, text) => editMessage(context, messageId, text),
     delete: (messageId) => deleteMessage(context, messageId),
     addReaction: (messageId, emoji, nametagId) => addReaction(context, messageId, emoji, nametagId),
     toggleSaved: (id, saved) => toggleSaved(context, id, saved)

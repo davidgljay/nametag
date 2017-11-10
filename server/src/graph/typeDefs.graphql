@@ -137,6 +137,18 @@ type Message {
   # The id of the room that where the message was created
   room: Room!
 
+  # The parent message if it is a reply
+  parent: Message
+
+  # A reply link to display with this message, used for front end notifications
+  replyLink: ID
+
+  # Replies to a message
+  replies(limit: Int): [Message]
+
+  # Number of replies to a message
+  replyCount: Int
+
   # Emoji reactions to the message
   reactions: [EmojiReaction]
 
@@ -148,6 +160,10 @@ type Message {
 
   # Offers a badge in a message
   template: Template
+  
+  # Indicates when the message was last edited
+  editedAt: Date
+
 }
 
 # Emoji reactions to a message
@@ -386,6 +402,9 @@ type RootQuery {
   # Retrieves all active rooms in the system. May optionally include a specific id.
   rooms(query: String, granter: String): [Room]
 
+  # Retrieves replies to a particular message
+  replies(message: ID!): [Message]
+
   # Retrieves the current user
   me: User
 
@@ -444,6 +463,9 @@ input CreateMessageInput {
 
   # The ID of the room where the message takes place
   room: ID!
+
+  # The parent message of this message if it is a reply
+  parent: ID
 
   # The recipient of the message if it is a DM
   recipient: ID
@@ -661,6 +683,9 @@ type RootMutation {
   # Deletes a message
   deleteMessage(messageId: ID!, roomId: ID!): BasicResponse
 
+  # Edits a message
+  editMessage(messageId: ID!, text: String!, roomId: ID!): BasicResponse
+
   # Creates a nametag
   createNametag(nametag: CreateNametagInput!): CreateNametagResponse
 
@@ -823,7 +848,7 @@ type RootSubscription {
   messageAdded(roomId: ID!, nametagId: ID!): Message
 
   # Fired when a message is deleted from a room
-  messageDeleted(roomId: ID!): IDOnly
+  messageDeleted(roomId: ID!): Message
 
   # Fired when a nametag is added to a room
   nametagAdded(roomId: ID!): Nametag

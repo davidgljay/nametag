@@ -52,6 +52,7 @@ export default EmojiReactions
 const styles = {
   container: {
     display: 'flex',
+    flexWrap: 'wrap',
     marginTop: 3
   },
   reaction: {

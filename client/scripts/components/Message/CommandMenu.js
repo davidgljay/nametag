@@ -3,7 +3,18 @@ import MenuItem from 'material-ui/MenuItem'
 import Menu from 'material-ui/Menu'
 import Popover from 'material-ui/Popover'
 
-const CommandMenu = ({isMod, setDefaultMessage, onRequestClose, open, anchor}) => {
+const CommandMenu = ({
+  isMod,
+  setDefaultMessage,
+  onRequestClose,
+  open,
+  anchor,
+  messageId,
+  messageText,
+  deleteMessage = () => {},
+  setEditing = () => {},
+  roomId
+}) => {
   const commands = [
     {
       command: 'welcome',
@@ -38,6 +49,19 @@ const CommandMenu = ({isMod, setDefaultMessage, onRequestClose, open, anchor}) =
     onRequestClose()
   }
 
+  const onDeleteClick = e => {
+    e.preventDefault()
+    deleteMessage(messageId, roomId)
+    onRequestClose()
+  }
+
+  const onEditClick = e => {
+    e.preventDefault()
+    setEditing(messageId)
+    setDefaultMessage(messageText)
+    onRequestClose()
+  }
+
   return <Popover
     open={open}
     anchorEl={anchor}
@@ -54,18 +78,38 @@ const CommandMenu = ({isMod, setDefaultMessage, onRequestClose, open, anchor}) =
               primaryText={`/${command}: ${description}`}
               onClick={onMenuItemClick(command)} />
             )
-        }
+      }
+      {
+        messageId &&
+          <div>
+            <MenuItem
+              key='edit'
+              style={styles.commandMenu}
+              primaryText='Edit Message'
+              onClick={onEditClick} />
+            <MenuItem
+              key='delete'
+              style={styles.commandMenu}
+              primaryText='Delete Message'
+              onClick={onDeleteClick} />
+          </div>
+      }
     </Menu>
   </Popover>
 }
 
-const {bool, func, object} = PropTypes
+const {bool, func, object, string} = PropTypes
 CommandMenu.propTypes = {
   isMod: bool.isRequired,
   open: bool.isRequired,
   anchor: object,
   setDefaultMessage: func.isRequired,
-  onRequestClose: func.isRequired
+  onRequestClose: func.isRequired,
+  messageId: string,
+  messageText: string,
+  deleteMessage: func,
+  setEditing: func,
+  roomId: string
 }
 
 export default CommandMenu

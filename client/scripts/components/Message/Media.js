@@ -16,10 +16,10 @@ const Media = (props) => {
         allowfullscreen />
     </div>
   } else if (/.gif|.png|.jpg/.exec(props.url)) {
-    media = <img src={props.url} style={styles.mediaImage} />
+    media = <img src={`/api/image_redirect?url=${encodeURIComponent(props.url)}`} style={styles.mediaImage} />
   }
 
-  return <div className={styles.media}>
+  return <div style={styles.media}>
     {media}
   </div>
 }

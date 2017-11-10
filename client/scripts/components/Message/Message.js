@@ -5,9 +5,11 @@ import MessageMenu from './MessageMenu'
 import MentionMenu from './MentionMenu'
 import CommandMenu from './CommandMenu'
 import ModAction from './ModAction'
+import Replies from './Replies'
 import NametagIcon from '../Nametag/NametagIcon'
 import ReactMarkdown from 'react-markdown'
 import EmojiText from './EmojiText'
+import FirstReply from './FirstReply'
 import EmojiReactions from './EmojiReactions'
 import BadgeOffer from './BadgeOffer'
 import {primary, white, grey} from '../../../styles/colors'
@@ -17,11 +19,24 @@ class Message extends Component {
 
   constructor (props) {
     super(props)
-    this.state = {modAction: false, showActions: false, showMenu: ''}
+    this.state = {
+      modAction: false,
+      showActions: false,
+      showMenu: ''
+    }
 
     this.showModAction = (open) => (e) => {
       if (e) { e.preventDefault() }
       this.setState({modAction: open})
+    }
+
+    this.showReplies = (open) => (e) => {
+      const {message: {id, replies, replyCount}, getReplies, setVisibleReplies} = this.props
+      if (e) { e.preventDefault() }
+      if (replies.length < replyCount) {
+        getReplies(id)
+      }
+      setVisibleReplies(open ? id : '')
     }
 
     this.checkYouTube = (message) => {
@@ -54,24 +69,32 @@ class Message extends Component {
         id,
         author,
         createdAt,
+        editedAt,
         text,
         recipient,
         reactions,
-        template
+        template,
+        parent,
+        replies,
+        replyCount
       },
       norms,
       roomId,
       mod,
+      visibleReplies,
+      setVisibleReplies,
       toggleEmoji,
       myNametag,
       addReaction,
       hideAuthor,
       createMessage,
+      editMessage,
       deleteMessage,
       banNametag,
       hideDMs,
       setDefaultMessage,
-      setRecipient
+      setRecipient,
+      setEditing
     } = this.props
 
     const {showMenu, showActions} = this.state
@@ -108,19 +131,30 @@ class Message extends Component {
     // Getting around Markdown's splitting of the '_' character in a hacky way for now
     // Also, wrapping urls in brackets
     const emojiText = text
+      .replace(/:\)/, ':grinning:')
+      .replace(/:[pP]/, ':stuck_out_tongue:')
+      .replace(/:\(/, ':white_frowning_face:')
       .replace(/(?=\S+)_(?=\S+:)/g, '~@~A~')
       .replace(
         /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/,
         (url) => `[${url}](${url})`)
 
     const isMod = author && mod.id === author.id
+    const isReplyNotif = id.split('_')[0] === 'replyNotif'
 
     return <div>
       <div
         className='message'
-        style={messageContainerStyle}
+        style={isReplyNotif
+          ? {
+            ...messageContainerStyle,
+            cursor: 'pointer'
+          }
+          : messageContainerStyle}
         id={id}
-        onClick={() => this.setState({showActions: !showActions})}>
+        onClick={() => isReplyNotif
+          ? setVisibleReplies(id.split('_')[1])
+          : this.setState({showActions: !showActions})}>
         <div style={imageStyle} onClick={this.toggleMenu}>
           {
             author && !hideAuthor && <NametagIcon
@@ -172,12 +206,29 @@ class Message extends Component {
               <MessageMenu
                 showModAction={this.showModAction}
                 showActions={showActions}
-                isDM={recipient !== null}
+                showReplies={this.showReplies}
+                isDM={!!recipient}
+                isReply={!!parent}
                 toggleEmoji={toggleEmoji}
                 id={id} />
               <div style={styles.date}>
                 {moment(createdAt).format('h:mm A, ddd MMM DD YYYY')}
               </div>
+              {
+                editedAt &&
+                <div style={styles.date}>
+                  Edited
+                </div>
+              }
+            </div>
+          }
+          {
+            !parent && replies.length > 0 &&
+            <div style={styles.firstReply}>
+              <FirstReply
+                reply={replies[0]}
+                showReplies={this.showReplies(true)}
+                replyCount={replyCount} />
             </div>
           }
           {
@@ -197,6 +248,11 @@ class Message extends Component {
                 setDefaultMessage={setDefaultMessage}
                 anchor={document.getElementById(id)}
                 onRequestClose={this.toggleMenu}
+                messageId={id}
+                messageText={text}
+                roomId={roomId}
+                deleteMessage={deleteMessage}
+                setEditing={setEditing}
                 open={showMenu === 'commands'} />
             </div>
           }
@@ -217,6 +273,26 @@ class Message extends Component {
           roomId={roomId}
           createMessage={createMessage} />
       }
+      {
+        !parent && author && <Replies
+          createMessage={createMessage}
+          replies={replies}
+          roomId={roomId}
+          parent={id}
+          parentAuthor={author}
+          myNametag={myNametag}
+          deleteMessage={deleteMessage}
+          banNametag={banNametag}
+          toggleEmoji={toggleEmoji}
+          addReaction={addReaction}
+          setRecipient={setRecipient}
+          editMessage={editMessage}
+          norms={norms}
+          hideDMs={hideDMs}
+          open={visibleReplies === id}
+          closeReply={this.showReplies(false)}
+          mod={mod} />
+      }
     </div>
   }
 }
@@ -228,6 +304,7 @@ Message.propTypes = {
     id: string.isRequired,
     text: string.isRequired,
     createdAt: string.isRequired,
+    editedAt: string,
     author: shape({
       image: string,
       name: string.isRequired
@@ -241,6 +318,7 @@ Message.propTypes = {
   }).isRequired,
   norms: arrayOf(string.isRequired).isRequired,
   roomId: string.isRequired,
+  visibleReplies: string,
   myNametag: shape({
     id: string.isRequired
   }).isRequired,
@@ -252,7 +330,11 @@ Message.propTypes = {
   hideDMs: bool.isRequired,
   hideAuthor: bool,
   setDefaultMessage: func.isRequired,
-  setRecipient: func.isRequired
+  setRecipient: func.isRequired,
+  setEditing: func.isRequired,
+  editMessage: func,
+  getReplies: func,
+  setVisibleReplies: func
 }
 
 export default Message
@@ -332,7 +414,8 @@ const styles = {
     fontStyle: 'italic',
     color: grey,
     height: 22,
-    lineHeight: '22px'
+    lineHeight: '22px',
+    marginRight: 10
   },
   text: {
     fontSize: 16,

@@ -10,6 +10,7 @@ const RootQuery = {
     return Rooms.getVisible()
   },
   room: (obj, {id}, {models: {Rooms}}) => Rooms.get(id),
+  replies: (obj, {message}, {models: {Messages}}) => Messages.getReplies(message),
   me: (obj, args, {user}) => Promise.resolve(user),
   granter: (obj, {urlCode}, {user, models: {Granters}}) => user
   ? Granters.getByUrlCode(urlCode)

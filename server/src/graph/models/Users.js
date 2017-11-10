@@ -543,7 +543,7 @@ const unsubscribe = ({conn}, userToken, roomId) =>
 
 /**
  * Determines whether a hashed password is valid
- * TODO: Make this once function with findemail.
+ * TODO: Make this one db call with findemail.
  * @param {Object} context   graph context
  * @param {String} id     E-mail address of the user
  * @param {String} password  Hashed password from the user
@@ -557,6 +557,86 @@ const hashPassword = (password) => {
   let hashedPassword = SHA3(password, {outputLength: 224})
   return hashedPassword.toString(enc.Base64)
 }
+
+/**
+ * Sends an e-mail digest to all valid users
+ * @param {Object} context   graph context
+ *
+ */
+
+const emailDigest = ({conn}) =>
+
+  /* Query will return results of the form:
+  * [{
+  *  group, -The email to be delivered to
+  *  reduction: [
+  *    room: {title}, - The title of the room
+  *    mod: {name, image}, - The name and image of the room's mod
+  *    newMessages,  - The number of new messages in the room
+  *    newNametags   - The number of new nametags in the room
+  *  ]}]
+  */
+
+  db.table('nametags')
+  .filter(n => n('room'))
+  .eqJoin('room', db.table('rooms'))
+  .filter(join => r.not(join('right')('closed')))
+  .map(join => ({
+    room: join('right').pluck('title', 'mod', 'id'),
+    nametag: join('left').pluck('latestVisit', 'user')
+  }))
+  .eqJoin(join => join('nametag')('user'), db.table('users'))
+  .filter(join => join('right')('email')
+    .and(r.not(join('right')('unsubscribe').keys().contains('digest'))))
+  .map(join =>
+      join('left').merge({
+        email: join('right')('email'),
+        userToken: join('right')('userToken')
+      }))
+  .eqJoin(join => join('room')('mod'), db.table('nametags'))
+  .map(join => ({
+    id: join('left')('room')('id'),
+    title: join('left')('room')('title'),
+    email: join('left')('email'),
+    userToken: join('left')('userToken'),
+    mod: join('right').pluck('name', 'image'),
+    newNametags: db.table('nametags')
+        .getAll(join('left')('room')('id'), {index: 'room'})
+        .filter(nt => nt('createdAt').gt(join('left')('nametag')('latestVisit')))
+        .count(),
+    newMessages: db.table('messages')
+        .getAll([join('left')('room')('id'), false], {index: 'room_recipient'})
+        .filter(msg => msg('createdAt').gt(join('left')('nametag')('latestVisit')))
+        .count()
+  }))
+  .filter(join => join('newMessages').gt(0))
+  .map(join => join.merge({
+    latestMessage: db.table('messages')
+      .getAll([join('id'), false], {index: 'room_recipient'})
+      .orderBy(r.desc('createdAt'))
+      .nth(0)('text')
+  }))
+  .group('email')
+  .run(conn)
+  .then(results => {
+    let sent = {}
+    for (var i = 0; i < results.length; i++) {
+      const {group, reduction} = results[i]
+      const userToken = reduction[0].userToken
+      if (!sent[group]) {
+        sent[group] = true
+        sendEmail({
+          from: {
+            email: 'noreply@nametag.chat',
+            name: 'Nametag Update'
+          },
+          to: group,
+          template: 'digest',
+          params: {userToken, rooms: reduction}
+        })
+      }
+    }
+  })
 
 module.exports = (context) => ({
   Users: {
@@ -580,6 +660,7 @@ module.exports = (context) => ({
     passwordReset: (token, password) => passwordReset(context, token, password),
     emailConfirmationRequest: (email) => emailConfirmationRequest(context, email),
     emailConfirmation: (token) => emailConfirmation(context, token),
-    unsubscribe: (userToken, roomId) => unsubscribe(context, userToken, roomId)
+    unsubscribe: (userToken, roomId) => unsubscribe(context, userToken, roomId),
+    emailDigest: () => emailDigest(context)
   }
 })
