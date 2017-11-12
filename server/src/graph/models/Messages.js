@@ -132,7 +132,8 @@ const create = (context, m) => {
   .then(message => Promise.all([
     checkMentions(context, message),
     message,
-    Rooms.updateLatestMessage(message.room)
+    Rooms.updateLatestMessage(message.room),
+    Nametags.update(message.author, {latestVisit: new Date(Date.now() + 1000)})
   ])
   )
   .then(([updates = {}, message]) => Object.assign({}, message, updates))
