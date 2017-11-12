@@ -241,6 +241,11 @@ const notifyOfNewMessage = ({conn, models: {Nametags, Users}}, roomId) =>
           tokens.map(token => notification(notifData, token))
         )
       })
+      .then(() =>
+        db.table('nametags')
+          .getAll(...toNotify).update({latestRoomNotif: new Date()})
+          .run(conn)
+      )
   })
   .catch(errors.errorLog('notifyOfNewMessage'))
 
