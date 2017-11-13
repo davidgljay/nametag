@@ -103,7 +103,7 @@ const toggleSaved = ({conn}, id, saved) =>
  **/
 
 const create = (context, m) => {
-  const {conn, models: {Rooms}} = context
+  const {conn, models: {Rooms, Nametags}} = context
   let messageObj = Object.assign(
     {},
     m,
