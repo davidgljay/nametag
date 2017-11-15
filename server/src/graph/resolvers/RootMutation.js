@@ -54,14 +54,15 @@ const wrap = (mutation, requires, key = 'result') => (obj, args, context) => {
       break
     case 'ROOM_MOD':
       promise = context.models.Rooms.get(args.roomId)
-      .then(room => room.mod === context.user.nametags[room.id]
+      .then(room => room && room.mod === context.user.nametags[room.id]
         ? mutation(obj, args, context)
         : Promise.reject(ErrNotMod)
       )
       break
     case 'MY_MESSAGE':
       promise = context.models.Messages.get(args.messageId)
-      .then(message => message.author === context.user.nametags[args.roomId] &&
+      .then(message => message &&
+        message.author === context.user.nametags[args.roomId] &&
         message.room === args.roomId
         ? mutation(obj, args, context)
         : Promise.reject(ErrNotYourMessage)
