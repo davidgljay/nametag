@@ -244,6 +244,7 @@ app.post('/api/images',
 app.get('/api/image_redirect',
   (req, res) => {
     imageRedirect.redirect(decodeURIComponent(req.query.url), res)
+      .catch(err => console.error('Redirecting image', err))
   }
 )
 
