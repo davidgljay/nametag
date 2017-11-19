@@ -12,7 +12,7 @@ nametag:
   links:
     - rethinkdb
     - redis
-    - elasticsearch
+    # - elasticsearch
   ports:
     - "8181:8181"
     - "8185:8185"
