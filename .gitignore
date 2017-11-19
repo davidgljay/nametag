@@ -7,6 +7,7 @@
 /.keys/
 ./npm-debug.log
 /rethinkdb_data/
+/redis_data/
 /server/src/secrets.json
 /server/secrets.json
 /server/node_modules/
