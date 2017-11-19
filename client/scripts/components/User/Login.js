@@ -174,28 +174,27 @@ class Login extends Component {
 
     return <div style={styles.login} id='loginForm'>
       {
-        !emailClicked && <div style={styles.authProviders}>
+        <div style={styles.authProviders}>
           <h4>{message}</h4>
           <div style={styles.alert}>
             {alert}
           </div>
           {
-            loading
-            ? <CircularProgress />
-          : <div>
-            <img
-              style={styles.loginImg}
-              src='/public/images/twitter.jpg'
-              onClick={this.providerAuth('twitter')} />
-            <img
-              style={styles.loginImg}
-              src='/public/images/fb.jpg'
-              onClick={this.providerAuth('facebook')} />
-            <img
-              style={styles.loginImg}
-              src='/public/images/google.png'
-              onClick={this.providerAuth('google')} />
-          </div>
+            !loading && !emailClicked &&
+            <div>
+              <img
+                style={styles.loginImg}
+                src='/public/images/twitter.jpg'
+                onClick={this.providerAuth('twitter')} />
+              <img
+                style={styles.loginImg}
+                src='/public/images/fb.jpg'
+                onClick={this.providerAuth('facebook')} />
+              <img
+                style={styles.loginImg}
+                src='/public/images/google.png'
+                onClick={this.providerAuth('google')} />
+            </div>
           }
           <h4>OR</h4>
         </div>
