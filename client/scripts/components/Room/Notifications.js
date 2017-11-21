@@ -16,8 +16,13 @@ class Notifications extends Component {
       nametag => nametag.room && !nametag.banned &&
       nametag.room.id !== this.props.roomId
     )
-    .sort((a, b) => new Date(b.latestVisit).getTime() - new Date(a.latestVisit).getTime())
-    .sort((a, b) => b.room.newMessageCount - a.room.newMessageCount)
+    .sort((a, b) => {
+      if (b.room.newMessageCount === a.room.newMessageCount) {
+        return new Date(b.room.latestMessage).getTime() - new Date(a.room.latestMessage).getTime()
+      } else {
+        return b.room.newMessageCount - a.room.newMessageCount
+      }
+    })
   }
 
   componentWillMount () {
