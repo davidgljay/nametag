@@ -122,7 +122,10 @@ const create = (context, m) => {
       .then(([updates = {}, message]) => Object.assign({}, message, updates))
   }
   return checkForCommands(context, messageObj)
-  .then(msg => messagesTable.insert(msg).run(conn))
+  .then(msg => {
+    messageObj = msg
+    return messagesTable.insert(msg).run(conn)
+  })
   .then((res) => {
     if (res.errors > 0) {
       return new errors.APIError('Error creating message')
