@@ -230,6 +230,7 @@ const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
         [provider]: authProfile.id,
         createdAt: new Date(),
         badges: {},
+        password: uuid.v4().replace(/-/g, ''),
         userToken: uuid.v4().replace(/-/g, '').slice(0, 15),
         unsubscribe: {}
       }
