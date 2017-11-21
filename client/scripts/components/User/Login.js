@@ -182,21 +182,23 @@ class Login extends Component {
           {
             !loading && !emailClicked &&
             <div>
-              <img
-                style={styles.loginImg}
-                src='/public/images/twitter.jpg'
-                onClick={this.providerAuth('twitter')} />
-              <img
-                style={styles.loginImg}
-                src='/public/images/fb.jpg'
-                onClick={this.providerAuth('facebook')} />
-              <img
-                style={styles.loginImg}
-                src='/public/images/google.png'
-                onClick={this.providerAuth('google')} />
+              <div>
+                <img
+                  style={styles.loginImg}
+                  src='/public/images/twitter.jpg'
+                  onClick={this.providerAuth('twitter')} />
+                <img
+                  style={styles.loginImg}
+                  src='/public/images/fb.jpg'
+                  onClick={this.providerAuth('facebook')} />
+                <img
+                  style={styles.loginImg}
+                  src='/public/images/google.png'
+                  onClick={this.providerAuth('google')} />
+              </div>
+              <h4>OR</h4>
             </div>
           }
-          <h4>OR</h4>
         </div>
       }
       <form className='localAuth' onSubmit={this.onEnter}>
