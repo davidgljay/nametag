@@ -96,7 +96,7 @@ class RoomCards extends Component {
                   .filter(nametag => !!nametag.room && !nametag.banned)
                   .sort((a, b) => {
                     if (b.room.newMessageCount === a.room.newMessageCount) {
-                      return new Date(b.latestVisit).getTime() - new Date(a.latestVisit).getTime()
+                      return new Date(b.room.latestMessage).getTime() - new Date(a.room.latestMessage).getTime()
                     } else {
                       return b.room.newMessageCount - a.room.newMessageCount
                     }
