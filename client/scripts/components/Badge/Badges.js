@@ -4,7 +4,7 @@ import Badge from './Badge'
 const Badges = ({badges = [], draggable, removeFromSource, requiredBadges = [], style = {}}) =>
   <div id='badges' style={{...styles.badgesContainer, ...style}}>
     {
-      badges.map((badge) => {
+      badges && badges.map((badge) => {
         return <Badge
           badge={badge}
           key={badge.id}

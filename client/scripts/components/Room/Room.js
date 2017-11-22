@@ -108,9 +108,9 @@ class Room extends Component {
         document.title = `${room.title}`
       }
     }
-    if (!prevProps.myNametag && myNametag) {
+    if (!prevProps.myNametag && myNametag && room) {
       this.showPresence()
-      nametagUpdatedSubscription(params.roomId)
+      nametagUpdatedSubscription(room.id)
       messageAddedSubscription(room.id, myNametag.id)
       messageDeletedSubscription(room.id)
       track('ROOM_VIEW', {id: room.id, title: room.title})
