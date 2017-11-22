@@ -96,8 +96,7 @@ class Room extends Component {
     const {messageAddedSubscription,
       messageDeletedSubscription,
       nametagUpdatedSubscription,
-      myNametag,
-      params
+      myNametag
     } = this.props
     const {loading, room, me} = this.props.data
     if (prevProps.data.loading && !loading) {
