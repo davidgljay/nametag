@@ -104,7 +104,9 @@ class Room extends Component {
       if (me) {
         identify(me.id, {'$name': me.displayNames[0]})
       }
-      document.title = `${room.title}`
+      if (room) {
+        document.title = `${room.title}`
+      }
     }
     if (!prevProps.myNametag && myNametag) {
       this.showPresence()

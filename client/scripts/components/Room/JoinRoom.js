@@ -12,7 +12,6 @@ class JoinRoom extends Component {
   componentDidMount () {
     const {room, me} = this.props
     track('JOIN_ROOM_VIEW', {loggedIn: !!me, title: room.title, roomId: room.id})
-    document.title = `${room.title}`
   }
 
   render () {
