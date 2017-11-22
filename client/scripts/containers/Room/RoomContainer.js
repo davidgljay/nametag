@@ -2,7 +2,7 @@ import {connect} from 'react-redux'
 import component from '../../components/Room/Room'
 import {compose} from 'react-apollo'
 import {roomQuery} from '../../graph/queries'
-import {registerUser, loginUser, passwordResetRequest} from '../../actions/UserActions'
+import {registerUser, loginUser} from '../../actions/UserActions'
 import {setVisibleReplies} from '../../actions/RoomActions'
 import {
   createMessage,
@@ -11,6 +11,7 @@ import {
   updateLatestVisit,
   showTypingPrompt,
   updateToken,
+  passwordResetRequest,
   updateRoom,
   updateNametag,
   editMessage,
@@ -67,8 +68,7 @@ const mapDispatchToProps = (dispatch) => {
     removeNametagEditBadge: disp(removeNametagEditBadge),
     registerUser: disp(registerUser),
     loginUser: disp(loginUser),
-    setVisibleReplies: disp(setVisibleReplies),
-    passwordResetRequest: disp(passwordResetRequest)
+    setVisibleReplies: disp(setVisibleReplies)
   }
 }
 
@@ -80,6 +80,7 @@ const Room = compose(
   updateNametag,
   updateLatestVisit,
   showTypingPrompt,
+  passwordResetRequest,
   updateToken,
   editMessage,
   deleteMessage,
