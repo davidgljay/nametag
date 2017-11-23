@@ -10,7 +10,7 @@ export const registerServiceWorker = () => (dispatch) => {
   }
   if ('serviceWorker' in navigator &&
   navigator.userAgent.toLowerCase().indexOf('chrome') > -1 &&
-  typeof Notification !== undefined
+  typeof Notification !== 'undefined'
 ) {
     return navigator.serviceWorker.register('/firebase-messaging-sw.js', {scope: './'})
       .catch(errorLog('Error registering serviceWorker'))
