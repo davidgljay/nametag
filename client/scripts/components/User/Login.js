@@ -4,7 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import {grey} from '../../../styles/colors'
 import {track, alias, setTimer} from '../../utils/analytics'
-import {t} from '../../utils/i18n'
+import t from '../../utils/i18n'
 import key from 'keymaster'
 
 /* Function to Log in users via an auth provider or e-mail.
@@ -225,7 +225,7 @@ class Login extends Component {
             {
               state === 'LOGIN' &&
               <div style={styles.forgotPasswordLink} onClick={this.enablePasswordReset}>
-                {t.lang('login.forgot_pass')}
+                {t('login.forgot_pass')}
               </div>
             }
           </div>

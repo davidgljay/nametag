@@ -2,8 +2,9 @@ import ta from 'timeago.js'
 import has from 'lodash/has'
 import get from 'lodash/get'
 import merge from 'lodash/merge'
+import yaml from 'yamljs'
 
-import en from '../locales/en.js'
+const en = yaml.load('/public/locales/en.yml')
 
 // Translations are happening at https://translate.lingohub.com/the-coral-project/dashboard
 
