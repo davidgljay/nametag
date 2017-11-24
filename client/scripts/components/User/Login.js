@@ -4,6 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import {grey} from '../../../styles/colors'
 import {track, alias, setTimer} from '../../utils/analytics'
+import {t} from '../../utils/i18n'
 import key from 'keymaster'
 
 /* Function to Log in users via an auth provider or e-mail.
@@ -54,29 +55,29 @@ class Login extends Component {
 
     this.validateEmail = () => {
       if (!validEmail(this.state.email)) {
-        this.setState({emailAlert: 'Please enter a valid e-mail address'})
+        this.setState({emailAlert: t('login.enter_email')})
       }
     }
 
     this.validatePassword = () => {
       if (this.state.password.length < 8 && this.state.register) {
-        this.setState({passwordAlert: 'Your password must be at least 8 characters'})
+        this.setState({passwordAlert: t('login.short_pass')})
       }
     }
 
     this.register = () => {
       const {email, password, confirm} = this.state
       if (password !== confirm) {
-        this.setState({passwordAlert: 'Passwords do not match'})
+        this.setState({passwordAlert: t('login.pass_match')})
         return
       }
 
       if (password.length < 8) {
-        this.setState({passwordAlert: 'Your password must be at least 8 characters'})
+        this.setState({passwordAlert: t('login.short_pass')})
       }
 
       if (!validEmail(email)) {
-        this.setState({emailAlert: 'Please enter a valid e-mail address'})
+        this.setState({emailAlert: t('login.enter_email')})
         return
       }
       track('REGISTER_USER')
@@ -128,8 +129,8 @@ class Login extends Component {
           }
           this.setState({
             loading: false,
-            message: 'Please check your E-mail',
-            alert: 'You should receive a password reset link shortly.',
+            message: t('login.check_email'),
+            alert: t('login.pw_reset'),
             state: 'LOGIN'
           })
         })
@@ -195,14 +196,14 @@ class Login extends Component {
                   src='/public/images/google.png'
                   onClick={this.providerAuth('google')} />
               </div>
-              <h4>OR</h4>
+              <h4>{t('login.or')}</h4>
             </div>
           }
         </div>
       }
       <form className='localAuth' onSubmit={this.onEnter}>
         <TextField
-          floatingLabelText='E-mail'
+          floatingLabelText={t('login.email')}
           id='loginEmail'
           style={styles.field}
           errorText={emailAlert}
@@ -214,7 +215,7 @@ class Login extends Component {
           state !== 'PW_REQ' &&
           <div>
             <TextField
-              floatingLabelText='Password'
+              floatingLabelText={t('login.pword')}
               id='loginPassword'
               type='password'
               errorText={passwordAlert}
@@ -233,7 +234,7 @@ class Login extends Component {
           state === 'REGISTER' &&
           <div>
             <TextField
-              floatingLabelText='Confirm Password'
+              floatingLabelText={t('login.confirm')}
               style={styles.field}
               id='loginConfirm'
               errorText={passwordAlert}
@@ -260,14 +261,14 @@ class Login extends Component {
         {
           state === 'LOGIN' && <div style={styles.buttonContainer}>
             <FlatButton
-              label='Register'
+              label={t('login.register')}
               id='enableRegisterButton'
               style={styles.button}
               secondary
               onClick={() => this.setState({state: 'REGISTER', message: 'Register'})} />
             <RaisedButton
               style={styles.button}
-              label='LOG IN'
+              label={t('login.login')}
               id='submitLoginButton'
               primary
               onClick={this.login} />
@@ -276,14 +277,14 @@ class Login extends Component {
         {
           state === 'PW_REQ' && <div style={styles.buttonContainer}>
             <FlatButton
-              label='BACK'
+              label={t('back')}
               style={styles.button}
               secondary
               onClick={() => this.setState({state: 'LOGIN', message: this.props.message})} />
             <RaisedButton
               style={styles.button}
               id='resetPwButton'
-              label='SEND LINK'
+              label={t('login.send_link')}
               primary
               onClick={this.passwordReset} />
           </div>
