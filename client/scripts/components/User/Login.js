@@ -225,7 +225,7 @@ class Login extends Component {
             {
               state === 'LOGIN' &&
               <div style={styles.forgotPasswordLink} onClick={this.enablePasswordReset}>
-                Forgot Password?
+                {t.lang('login.forgot_pass')}
               </div>
             }
           </div>
@@ -246,14 +246,14 @@ class Login extends Component {
         {
           state === 'REGISTER' && <div style={styles.buttonContainer}>
             <FlatButton
-              label='LOG IN'
+              label={t('lang.login')}
               style={styles.button}
               secondary
               onClick={() => this.setState({state: 'LOGIN', message: this.props.message})} />
             <RaisedButton
               style={styles.button}
               id='registerButton'
-              label='REGISTER'
+              label={t('lang.register')}
               primary
               onClick={this.register} />
           </div>
@@ -265,7 +265,7 @@ class Login extends Component {
               id='enableRegisterButton'
               style={styles.button}
               secondary
-              onClick={() => this.setState({state: 'REGISTER', message: 'Register'})} />
+              onClick={() => this.setState({state: 'REGISTER', message: t('lang.register')})} />
             <RaisedButton
               style={styles.button}
               label={t('login.login')}
