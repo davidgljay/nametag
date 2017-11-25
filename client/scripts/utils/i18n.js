@@ -62,10 +62,12 @@ export function t (key, ...replacements) {
   const fullKey = `${lang}.${key}`
   if (has(translations, fullKey)) {
     let translation = get(translations, fullKey)
+    console.log('replacements', replacements)
 
     // replace any {n} with the arguments passed to this method
     replacements.forEach((str, i) => {
       translation = translation.replace(new RegExp(`\\{${i}\\}`, 'g'), str)
+      console.log(translation)
     })
     return translation
   } else {

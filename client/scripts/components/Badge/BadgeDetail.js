@@ -5,6 +5,7 @@ import EditNametag from '../Nametag/EditNametag'
 import CircularProgress from 'material-ui/CircularProgress'
 import Navbar from '../Utils/Navbar'
 import UserBadges from './UserBadges'
+import t from '../../utils/i18n'
 import Login from '../../containers/User/LoginContainer'
 
 class BadgeDetail extends Component {
@@ -80,15 +81,15 @@ class BadgeDetail extends Component {
 
     if (!me) {
       claimInfo = <Login
-        message={`Log in to ${verb} this badge`} />
+        message={t('badge.request_claim', verb)} />
     } else if (this.state.requested) {
       claimInfo = <div style={styles.claimInfo}>
         <div style={styles.header}>
           {
             template.approvalRequired
             ? <div>
-              <h3>Request submitted</h3>
-              You should hear back from {template.granter.name} shortly.
+              <h3>{t('request_submitted')}</h3>
+              {t('badge.hear_back', template.granter.name)}
             </div>
             : <div>
               <h3>Badge granted</h3>

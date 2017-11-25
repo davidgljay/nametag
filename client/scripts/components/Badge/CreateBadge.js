@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import Badge from './Badge'
 import TextField from 'material-ui/TextField'
 import Navbar from '../Utils/Navbar'
+import t from '../../utils/i18n'
 import Toggle from 'material-ui/Toggle'
 import CircularProgress from 'material-ui/CircularProgress'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -91,10 +92,9 @@ class CreateBadge extends Component {
         {
           !mini &&
           <div>
-            <h2>Create a Badge</h2>
+            <h2>{t('badge.create_badge')}</h2>
             <div style={styles.description}>
-              Badges can be used to verify things about someone, such as their
-              involvement in {granter.name}.
+              {t('badge.badge_desc', granter.name)}
             </div>
           </div>
         }
@@ -118,40 +118,38 @@ class CreateBadge extends Component {
           style={styles.textfield}
           value={name}
           onChange={(e) => this.updateBadge('name', e.target.value)}
-          floatingLabelText='Title'
+          floatingLabelText={t('title')}
           />
         <div style={styles.counter}>{40 - name.length}</div><br />
         <div style={styles.description}>
-          An identity that can be shared with others, such as "Lawyer" or "Dog Lover".
+          {t('badge.badge_example')}
         </div>
         <TextField
           style={styles.textfield}
           value={description}
           onChange={(e) => this.updateBadge('description', e.target.value)}
-          floatingLabelText='Description'
+          floatingLabelText={t('description')}
           />
         <div style={styles.description}>
-          A more detailed explanation, such as
-          "This individual is licensed to practice law by the New York State Bar."
-          Should not include personally identifiable information.
+          {t('badge.badge_detail_desc')}
         </div>
         <Toggle
-          label='Require Approval'
+          label={t('badge.require_approval')}
           toggled={approvalRequired}
           style={styles.toggle}
           onToggle={this.toggleApproval} />
         <div style={styles.description}>
           {
             approvalRequired
-            ? 'You must manually approve everyone who receives this badge.'
-            : 'This badge will be granted to anyone with the appropriate link.'
+            ? t('badge.req_approval_on')
+            : t('badge.req_approval_off')
           }
         </div>
         <div style={styles.createButton}>
           <RaisedButton
             labelStyle={styles.buttonLabel}
             primary
-            label={'CREATE BADGE'}
+            label={t('badge.create_badge')}
             onClick={this.createBadge} />
         </div>
       </div>

@@ -225,7 +225,7 @@ class Login extends Component {
             {
               state === 'LOGIN' &&
               <div style={styles.forgotPasswordLink} onClick={this.enablePasswordReset}>
-                {t('login.forgot_pass')}
+                {t('login.forgot_pass', 'stuff')}
               </div>
             }
           </div>

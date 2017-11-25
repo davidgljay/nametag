@@ -4,6 +4,7 @@ import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import Nametag from '../Nametag/Nametag'
 import Badge from './Badge'
+import t from '../../utils/i18n'
 import FontIcon from 'material-ui/FontIcon'
 import {primary, grey} from '../../../styles/colors'
 import CircularProgress from 'material-ui/CircularProgress'
@@ -78,10 +79,9 @@ class BadgeRequest extends Component {
               fullWidth
               onChange={this.updateNote}
               value={note}
-              floatingLabelText='Note' />
+              floatingLabelText={t('badge.note')} />
             <div style={styles.noteText}>
-              Add a note explaining why you have granted this badge to {nametag.name}.
-              Do not include any personally identifiable information.
+              {t('badge.note_grant', nametag.name)}
             </div>
             <div style={styles.grantButtons}>
               <FontIcon style={styles.backLink}
@@ -92,12 +92,12 @@ class BadgeRequest extends Component {
               </FontIcon>
               <RaisedButton
                 primary
-                label='GRANT BADGE'
+                label={t('badge.grant_badge')}
                 onClick={this.grant} />
             </div>
           </div>
           : <div>
-            <div style={styles.cardText}>would like the badge</div>
+            <div style={styles.cardText}>{t('badge.would_like')}</div>
             <div style={styles.badgeContainer}>
               <Badge badge={{
                 id: 'request',
@@ -106,8 +106,8 @@ class BadgeRequest extends Component {
               }} />
             </div>
             <CardActions>
-              <FlatButton label='DENY' secondary onClick={this.deny} />
-              <FlatButton label='APPROVE' primary onClick={this.approve} />
+              <FlatButton label={t('badge.deny')} secondary onClick={this.deny} />
+              <FlatButton label={t('approve')} primary onClick={this.approve} />
             </CardActions>
           </div>
         }

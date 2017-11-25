@@ -4,6 +4,7 @@ import Badge from './Badge'
 import Navbar from '../Utils/Navbar'
 import CircularProgress from 'material-ui/CircularProgress'
 import FlatButton from 'material-ui/FlatButton'
+import t from '../../utils/i18n'
 
 const ShareBadge = ({data: {loading, template}}) => <div>
   <Navbar empty />
@@ -23,7 +24,7 @@ const ShareBadge = ({data: {loading, template}}) => <div>
       <FlatButton
         labelStyle={styles.buttonLabel}
         primary
-        label={'BACK'}
+        label={t('back')}
         onClick={() => history.back()} />
     </div>
   }

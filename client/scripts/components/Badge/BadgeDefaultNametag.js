@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import {Card, CardActions} from 'material-ui/Card'
-import {dateFormat} from '../Utils/DateFormat'
+import {timeago} from '../../utils/i18n'
+import t from '../../utils/i18n'
 import Nametag from '../Nametag/Nametag'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -43,7 +44,7 @@ class DefaultNametag extends Component {
       <div>
         {
           notes.map(note => <div key={note.date} style={styles.noteText}>
-            {`${dateFormat(note.date)}: ${note.text}`}
+            {`${timeago(note.date)}: ${note.text}`}
           </div>)
         }
       </div>
@@ -55,15 +56,14 @@ class DefaultNametag extends Component {
             fullWidth
             onChange={this.updateNote}
             value={note}
-            floatingLabelText='Note' />
+            floatingLabelText={t('badge.note')} />
           <div style={styles.noteHint}>
-            {'Add a note that will be publicly visible on this individual\'s badge. ' +
-            'Do not include any personally identifiable information.'}
+            {t('badge.note_hint')}
           </div>
           <CardActions
             style={styles.actions}>
             <RaisedButton
-              label='ADD NOTE'
+              label={t('badge.add_note')}
               primary
               onClick={this.addNote} />
           </CardActions>

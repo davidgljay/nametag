@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react'
-import {dateFormat} from '../Utils/DateFormat'
 import { dragTypes } from '../../constants'
 import { DragSource } from 'react-dnd'
 import { Card } from 'material-ui/Card'
 import FontIcon from 'material-ui/FontIcon'
 import ImageUpload from '../Utils/ImageUpload'
+import t from '../../utils/i18n'
+import {timeago} from '../../utils/i18n'
 import CircularProgress from 'material-ui/CircularProgress'
 
 const badgeSource = {
@@ -100,14 +101,14 @@ class Badge extends Component {
             </div>
             <div>
               <div style={jumbo ? styles.jumboName : styles.name}>{name}</div>
-              <div style={styles.granter}>Granted by {granter.name}</div>
+              <div style={styles.granter}>{t('granted_by')}{granter.name}</div>
             </div>
           </div>
           <div style={styles.description}>{description}</div>
           <div style={styles.notes}>
             {notes && notes.map((note) => {
               return <div style={styles.note} key={note.date}>
-                <div style={styles.date}>{dateFormat(note.date)}</div>
+                <div style={styles.date}>{timeago(note.date)}</div>
                 <div style={styles.msg}>{'- ' + note.text}</div>
               </div>
             })}

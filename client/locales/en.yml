@@ -1,16 +1,43 @@
 en:
   login:
-    enter_email: "Please enter a valid e-mail address"
-    short_pass: "Your password must be at least 8 characters"
-    pass_match: "Passwords do not match"
-    check_email: "Please check your E-mail"
-    pw_reset: "You should receive a password reset link shortly."
-    email: "E-mail"
-    pword: "Password"
-    confirm: "Confirm Password"
-    forgot_pass: "Forgot Password?"
-    register: "Register"
-    or: "OR"
-    login: "Log In"
-    send_link: "Send Link"
-  back: "Back"
+    enter_email: Please enter a valid e-mail address
+    short_pass: Your password must be at least 8 characters
+    pass_match: Passwords do not match
+    check_email: Please check your E-mail
+    pw_reset: You should receive a password reset link shortly.
+    email: E-mail
+    pword: Password
+    confirm: Confirm Password
+    forgot_pass: Forgot Password?
+    register: Register
+    or: OR
+    login: Log In
+    send_link: Send Link
+  back: Back
+  approve: Approve
+  title: Title
+  description: Description
+  copy_clip: Copy To Clipboard
+  badge:
+    granted_by: Granted by
+    note: Note
+    grant_badge: Grant Badge
+    note_hint: Add a note that will be publicly visible on this individual's badge. Do not include any personally identifiable information.
+    add_note: Add Note
+    request: Request
+    claim: Claim
+    deny: Deny
+    request_claim: Log in to {0} this badge
+    request_submitted: Request submitted
+    hear_back: You should hear back from {0} shortly.
+    would_like: would like the badge
+    note_grant: Add a note explaining why you have granted this badge to {0}. Do not include any personally identifiable information.
+    create_badge: Create Badge
+    badge_desc: Badges can be used to verify things about someone, such as their involvement in {0}.
+    badge_example: An identity that can be shared with others, such as "Lawyer" or "Dog Lover".
+    badge_detail_desc: A more detailed explanation, such as "This individual is licensed to practice law by the New York State Bar." Should not include personally identifiable information.
+    require_approval: Require Approval
+    req_approval_on: You must manually approve everyone who receives this badge.
+    req_approval_off: This badge will be granted to anyone with the appropriate link.
+    share_subject: You've been granted a {0} badge on Nametag!
+    share_body: To claim your certificate just visit this URL:\n\n{0}
