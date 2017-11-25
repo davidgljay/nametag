@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import {Card, CardActions} from 'material-ui/Card'
-import {timeago} from '../../utils/i18n'
-import t from '../../utils/i18n'
+import t, {timeago} from '../../utils/i18n'
 import Nametag from '../Nametag/Nametag'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'

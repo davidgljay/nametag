@@ -3,7 +3,7 @@ import has from 'lodash/has'
 import get from 'lodash/get'
 import merge from 'lodash/merge'
 
-const en = YAML.load('/public/locales/en.yml')
+const en = YAML.load('/public/locales/en.yml') // eslint-disable-line
 
 // Translations are happening at https://translate.lingohub.com/the-coral-project/dashboard
 
@@ -15,14 +15,14 @@ let timeagoInstance
 
 function setLocale (locale) {
   try {
-    localStorage.setItem('locale', locale)
+    localStorage.setItem('locale', locale) // eslint-disable-line
   } catch (err) {
     console.error(err)
   }
 }
 
 function getLocale () {
-  return (localStorage.getItem('locale') || navigator.language || defaultLanguage).split('-')[0]
+  return (localStorage.getItem('locale') || navigator.language || defaultLanguage).split('-')[0] // eslint-disable-line
 }
 
 function init () {

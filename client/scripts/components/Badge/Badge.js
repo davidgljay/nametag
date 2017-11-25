@@ -4,8 +4,7 @@ import { DragSource } from 'react-dnd'
 import { Card } from 'material-ui/Card'
 import FontIcon from 'material-ui/FontIcon'
 import ImageUpload from '../Utils/ImageUpload'
-import t from '../../utils/i18n'
-import {timeago} from '../../utils/i18n'
+import t, {timeago} from '../../utils/i18n'
 import CircularProgress from 'material-ui/CircularProgress'
 
 const badgeSource = {

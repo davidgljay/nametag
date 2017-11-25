@@ -136,7 +136,7 @@
     ],
     "ignore": [
       "/node_modules",
-      "/horizon"
+      "/client/yaml.js"
     ]
   }
 }
