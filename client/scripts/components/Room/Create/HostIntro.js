@@ -3,7 +3,7 @@ import EditNametag from '../../Nametag/EditNametag'
 import UserBadges from '../../Badge/UserBadges'
 import TextField from 'material-ui/TextField'
 import {grey, red} from '../../../../styles/colors'
-import t from '../../utils/i18n'
+import t from '../../../utils/i18n'
 
 const HostIntro = ({
   nametagEdits,

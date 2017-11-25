@@ -3,7 +3,7 @@ import {grey, primary, red} from '../../../../styles/colors'
 import {List, ListItem} from 'material-ui/List'
 import Check from 'material-ui/svg-icons/navigation/check'
 import TextField from 'material-ui/TextField'
-import t from '../../utils/i18n'
+import t from '../../../utils/i18n'
 
 const defaultNorms = t('create_room.norms')
 

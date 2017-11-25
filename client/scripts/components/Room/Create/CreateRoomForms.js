@@ -8,7 +8,7 @@ import Toggle from 'material-ui/Toggle'
 import RoomCard from '../RoomCard'
 import {track} from '../../../utils/analytics'
 import {grey} from '../../../../styles/colors'
-import t from '../../utils/i18n'
+import t from '../../../utils/i18n'
 
 const getForm = ({
     error,

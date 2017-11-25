@@ -4,7 +4,7 @@ import {
   Stepper,
   StepLabel
 } from 'material-ui/Stepper'
-import t from '../../utils/i18n'
+import t from '../../../utils/i18n'
 
 const display = window.innerWidth < 650 ? {display: 'none'} : {}
 const CreateRoomStepper = ({stepIndex, loggedIn}) => <Stepper

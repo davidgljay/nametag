@@ -7,7 +7,7 @@ import { dragTypes } from '../../../constants'
 import {grey} from '../../../../styles/colors'
 import FontIcon from 'material-ui/FontIcon'
 import _ from 'lodash'
-import t from '../../utils/i18n'
+import t from '../../../utils/i18n'
 
 const privacyTarget = {
   drop (props, monitor) {

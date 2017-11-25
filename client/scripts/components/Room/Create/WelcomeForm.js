@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react'
 import AutoComplete from 'material-ui/AutoComplete'
 import {grey} from '../../../../styles/colors'
-import t from '../../utils/i18n'
+import t from '../../../utils/i18n'
 
 const defaultPrompts = t('create_room.welcome_options')
 
