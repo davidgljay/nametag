@@ -246,14 +246,14 @@ class Login extends Component {
         {
           state === 'REGISTER' && <div style={styles.buttonContainer}>
             <FlatButton
-              label={t('lang.login')}
+              label={t('login.login')}
               style={styles.button}
               secondary
               onClick={() => this.setState({state: 'LOGIN', message: this.props.message})} />
             <RaisedButton
               style={styles.button}
               id='registerButton'
-              label={t('lang.register')}
+              label={t('login.register')}
               primary
               onClick={this.register} />
           </div>
@@ -265,7 +265,7 @@ class Login extends Component {
               id='enableRegisterButton'
               style={styles.button}
               secondary
-              onClick={() => this.setState({state: 'REGISTER', message: t('lang.register')})} />
+              onClick={() => this.setState({state: 'REGISTER', message: t('login.register')})} />
             <RaisedButton
               style={styles.button}
               label={t('login.login')}

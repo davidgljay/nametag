@@ -51,7 +51,8 @@ class NTIconMenu extends Component {
         targetOrigin={{horizontal: 'left', vertical: 'top'}}
         style={styles.menuStyle}
         open={showMenu}
-        onTouchTap={() => { this.setState({showMenu: true}) }}
+        onRequestChange={open => { this.setState({showMenu: open}) }}
+        onClick={() => { this.setState({showMenu: true}) }}
         menuStyle={styles.menuStyle}>
         {
           images.map((url) =>
