@@ -3,6 +3,7 @@ import Navbar from '../Utils/Navbar'
 import CircularProgress from 'material-ui/CircularProgress'
 import {red} from '../../../styles/colors'
 import {track} from '../../utils/analytics'
+import t from '../../utils/i18n'
 
 class EmailConfirm extends Component {
   constructor (props) {
@@ -39,7 +40,7 @@ class EmailConfirm extends Component {
         {
           complete && !errors &&
           <div style={styles.emailConfirmationContainer}>
-            <h3>Your e-mail has been confirmed! Redirecting to homepage...</h3>
+            <h3>{t('user.em_confirmed')}</h3>
             <CircularProgress />
           </div>
         }

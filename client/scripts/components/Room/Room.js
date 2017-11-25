@@ -12,6 +12,7 @@ import ComposeWithMenus from '../Message/ComposeWithMenus'
 import JoinRoom from './JoinRoom'
 import {getQueryVariable} from '../../utils/queryVars'
 import {track, identify, setTimer} from '../../utils/analytics'
+import t from '../../utils/i18n'
 
 class Room extends Component {
 
@@ -254,7 +255,7 @@ class Room extends Component {
           !me && <Login
             registerUser={registerUser}
             loginUser={loginUser}
-            message='Create account to Join'
+            message={t('room.create_account')}
             register
             passwordResetRequest={passwordResetRequest} />
         }

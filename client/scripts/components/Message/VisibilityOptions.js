@@ -1,6 +1,7 @@
 import React from 'react'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
+import t from '../../utils/i18n'
 
 const VisibilityOptions = (props) => <div style={styles.chooseVis}>
   <div style={styles.visText}>
@@ -13,7 +14,7 @@ const VisibilityOptions = (props) => <div style={styles.chooseVis}>
                visibility
             </FontIcon>
           </IconButton>
-          Visible to everyone in the room.
+          {t('mod_action.visible_on')}
         </p>
         : <p>
           <IconButton onClick={props.setPublic(true)} style={styles.button}>
@@ -22,7 +23,7 @@ const VisibilityOptions = (props) => <div style={styles.chooseVis}>
                visibility_off
             </FontIcon>
           </IconButton>
-          Visible only to the author of this message.
+          {t('mod_action.visible_off')}
         </p>
       }
   </div>

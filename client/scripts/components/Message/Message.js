@@ -13,6 +13,7 @@ import FirstReply from './FirstReply'
 import EmojiReactions from './EmojiReactions'
 import {primary, white, grey} from '../../../styles/colors'
 import {track} from '../../utils/analytics'
+import t from '../../utils/i18n'
 
 class Message extends Component {
 
@@ -123,13 +124,14 @@ class Message extends Component {
       </div>
     } else if (recipient && recipient.id === myNametag.id) {
       messageStyle = {...styles.messageText, ...styles.directMessageIncoming}
-      callout = <div style={styles.dmCallout}>Private Message</div>
+      callout = <div style={styles.dmCallout}>{t('message.priate_msg')}</div>
     }
 
     // Getting around Markdown's splitting of the '_' character in a hacky way for now
     // Also, wrapping urls in brackets
     const emojiText = text
-      .replace(/:\)/, ':grinning:')
+      .replace(/:\)/, ':slightly_smiling_face:')
+      .replace(/:D/, ':grinning:')
       .replace(/:[pP]/, ':stuck_out_tongue:')
       .replace(/:\(/, ':white_frowning_face:')
       .replace(/(?=\S+)_(?=\S+:)/g, '~@~A~')
@@ -208,7 +210,7 @@ class Message extends Component {
               {
                 editedAt &&
                 <div style={styles.date}>
-                  Edited
+                  {t('message.edited')}
                 </div>
               }
             </div>

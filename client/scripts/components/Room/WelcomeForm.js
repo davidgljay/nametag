@@ -3,6 +3,7 @@ import Nametag from '../Nametag/Nametag'
 import {Card} from 'material-ui/Card'
 import Compose from '../Message/Compose'
 import {track, setTimer, increment} from '../../utils/analytics'
+import t from '../../utils/i18n'
 
 class WelcomeForm extends Component {
 
@@ -48,7 +49,7 @@ class WelcomeForm extends Component {
         defaultMessage={defaultMessage}
         mod={mod}
         topic=''
-        hintText='Introduce Yourself'
+        hintText={t('room.introduce')}
         onPost={this.onPost}
         onUpdateText={this.onUpdateText}
         />

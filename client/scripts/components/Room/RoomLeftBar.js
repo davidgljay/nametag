@@ -5,6 +5,7 @@ import Drawer from 'material-ui/Drawer'
 import Notifications from './Notifications'
 import Nametags from '../../components/Nametag/Nametags'
 import ShareButtons from './ShareButtons'
+import t from '../../utils/i18n'
 
 class RoomLeftBar extends Component {
   constructor (props) {
@@ -53,7 +54,7 @@ class RoomLeftBar extends Component {
           <ShareButtons roomId={room.id} title={room.title} />
         </div>
         <div style={styles.leftNavHeader}>
-          Norms
+          {t('room.norms')}
         </div>
         <div style={styles.norms}>
           <Norms norms={room.norms} />
@@ -61,7 +62,7 @@ class RoomLeftBar extends Component {
         {
           notifCount > 0 &&
             <div style={styles.leftNavHeader}>
-              Rooms
+              {t('room.rooms')}
             </div>
         }
         {
@@ -76,7 +77,7 @@ class RoomLeftBar extends Component {
           isMod &&
           <div>
             <div style={styles.leftNavHeader}>
-              Settings
+              {t('room.settings')}
             </div>
             <RoomSettings
               updateRoom={updateRoom}
@@ -90,7 +91,7 @@ class RoomLeftBar extends Component {
           <div>
             <div
               style={styles.leftNavHeader}>
-              Nametags
+              {t('room.nametags')}
             </div>
             <Nametags
               mod={room.mod.id}

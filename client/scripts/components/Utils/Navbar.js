@@ -8,6 +8,7 @@ import MenuItem from 'material-ui/MenuItem'
 import {mobile} from '../../../styles/sizes'
 import {track} from '../../utils/analytics'
 import NavDrawer from './NavDrawer'
+import t from '../../utils/i18n'
 
 const onHomeClick = () => {
   window.location = '/rooms'
@@ -56,7 +57,7 @@ class Navbar extends Component {
           <FlatButton
             style={styles.button}
             id='homeButton'
-            onClick={onHomeClick} label='HOME' />
+            onClick={onHomeClick} label={t('nav.home')} />
           {
             me.granters && me.granters.length === 1 &&
             <FlatButton
@@ -71,7 +72,7 @@ class Navbar extends Component {
                 style={styles.button}
                 id='granterButton'
                 onClick={this.showGranters}
-                label={'ORGANIZATIONS'} />
+                label={t('nav.orgs')} />
           }
           {
             me.granters && me.granters.length > 1 &&
@@ -96,13 +97,13 @@ class Navbar extends Component {
           <FlatButton
             style={styles.button}
             id='logoutButton'
-            onClick={onLogoutClick} label='LOG OUT' />
+            onClick={onLogoutClick} label={t('login.logout')} />
         </div>
           : <FlatButton
             style={styles.button}
             id='loginButton'
             onClick={() => toggleLogin()}
-            label='LOG IN' />
+            label={t('login.login')} />
         }
     </div>
     return <div>

@@ -1,18 +1,15 @@
 import React, {PropTypes} from 'react'
 import AutoComplete from 'material-ui/AutoComplete'
 import {grey} from '../../../../styles/colors'
+import t from '../../utils/i18n'
 
-const defaultPrompts = [
-  'What brings you to this conversation?',
-  'Why are you interested in this topic?',
-  'Briefly share your background.'
-]
+const defaultPrompts = t('create_room.welcome_options')
 
 const WelcomeForm = ({welcome, updateRoom, error}) =>
   <div style={styles.titleForm}>
-    <h1>Get People Talking</h1>
-    <h2>Start by choosing a welcome prompt.</h2>
-    <div style={styles.helpText}>Users will be asked this question when they enter the room.</div>
+    <h1>{t('create_room.talking')}</h1>
+    <h2>{t('create_room.welcome_start')}</h2>
+    <div style={styles.helpText}>{t('create_room.welcome_helptext')}</div>
     <AutoComplete
       style={styles.textfield}
       textFieldStyle={styles.textFieldInput}
@@ -26,7 +23,7 @@ const WelcomeForm = ({welcome, updateRoom, error}) =>
       openOnFocus
       filter={(text) => text.length === 0}
       dataSource={defaultPrompts}
-      floatingLabelText='Welcome Prompt' />
+      floatingLabelText={t('create_room.welcome_prompt')} />
   </div>
 
 const {string, object, func} = PropTypes

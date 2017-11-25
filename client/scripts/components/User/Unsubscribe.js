@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import Navbar from '../Utils/Navbar'
 import RaisedButton from 'material-ui/RaisedButton'
+import t from '../../utils/i18n'
 
 class Unsubscribe extends Component {
 
@@ -38,19 +39,18 @@ class Unsubscribe extends Component {
       {
         this.state.unsubscribed
         ? <div style={styles.container}>
-          <h2 style={styles.header}>You have been unsubscribed.</h2>
+          <h2 style={styles.header}>{t('user.unsubscribed')}</h2>
         </div>
         : <div style={styles.container}>
-          <h2 style={styles.header}>Would you like to stop receiving notifications from {roomName}?</h2>
+          <h2 style={styles.header}>{t('user.unsub', roomName)}</h2>
           <RaisedButton
             id='unsubscribeButton'
             primary
             labelStyle={styles.button}
             onClick={this.unsubscribeClick(roomId)}
-            label='Unsubscribe from room' />
+            label={t('user.unsub_label')} />
           <div style={styles.allText}>
-            We only e-mail you when you are directly mentioned in a conversation.
-            If you want us not to you can <a href='#' style={styles.allLink} onClick={this.unsubscribeClick('all')}>unsubscribe from all rooms</a> on Nametag.
+            {t('user.unsub_text')} <a href='#' style={styles.allLink} onClick={this.unsubscribeClick('all')}>{t('user.unsub_link')}</a>{t('user.unsub_text_2')}.
           </div>
         </div>
       }

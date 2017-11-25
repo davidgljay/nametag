@@ -6,6 +6,7 @@ import hashPassword from '../../utils/pwHash'
 import CircularProgress from 'material-ui/CircularProgress'
 import {red} from '../../../styles/colors'
 import {track} from '../../utils/analytics'
+import t from '../../utils/i18n'
 
 class PasswordReset extends Component {
   constructor (props) {
@@ -24,12 +25,12 @@ class PasswordReset extends Component {
 
     this.validatePassword = (password, confirm) => {
       if (password !== confirm) {
-        this.setState({passwordAlert: 'Passwords do not match'})
+        this.setState({passwordAlert: t('user.pw_match')})
         return false
       }
 
       if (password.length < 8) {
-        this.setState({passwordAlert: 'Password must be at least 8 characters'})
+        this.setState({passwordAlert: t('user.pw_short')})
         return false
       }
       this.setState({passwordAlert: ''})
@@ -78,12 +79,12 @@ class PasswordReset extends Component {
       {
         complete
         ? <div style={styles.resetPasswordContainer}>
-          <h3>Done! Your password has been updated.</h3>
-          <div>Redirecting you to the homepage...</div>
+          <h3>{t('user.pw_updated')}</h3>
+          <div>{t('user.redirecting')}</div>
           <CircularProgress />
         </div>
         : <div style={styles.resetPasswordContainer}>
-          <h3>Great! You can reset your password below.</h3>
+          <h3>{t('user.reset_pw')}</h3>
           {
             errors && <div style={styles.errorsContainer}>
               {
@@ -92,14 +93,14 @@ class PasswordReset extends Component {
             </div>
           }
           <TextField
-            floatingLabelText='Password'
+            floatingLabelText={t('user.password')}
             id='resetPassword'
             type='password'
             errorText={passwordAlert}
             style={styles.field}
             onChange={this.updateField('password')} />
           <TextField
-            floatingLabelText='Confirm Password'
+            floatingLabelText={t('user.confirm')}
             style={styles.field}
             id='resetConfirm'
             errorText={passwordAlert}
@@ -109,7 +110,7 @@ class PasswordReset extends Component {
           <RaisedButton
             style={styles.button}
             id='resetPwButton'
-            label='RESET PASSWORD'
+            label={t('user.reset')}
             primary
             onClick={this.passwordReset} />
         </div>

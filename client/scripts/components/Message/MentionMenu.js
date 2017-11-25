@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react'
 import Popover from 'material-ui/Popover'
 import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
+import t from '../../utils/i18n'
 
 const MentionMenu = ({nametagId, name, hideDMs, open, anchor, toggleMenu, setDefaultMessage, setRecipient}) => {
   const setMessage = message => e => {
@@ -26,13 +27,13 @@ const MentionMenu = ({nametagId, name, hideDMs, open, anchor, toggleMenu, setDef
       <Menu>
         <MenuItem
           key='Mention'
-          primaryText={`@Mention`}
+          primaryText={t('message.mention')}
           onClick={setMessage(`@${name} `)} />
         {
           !hideDMs &&
           <MenuItem
             key='DM'
-            primaryText={`Private Message`}
+            primaryText={t('message.private_msg')}
             onClick={setDM(nametagId)} />
         }
       </Menu>

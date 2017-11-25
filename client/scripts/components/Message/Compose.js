@@ -9,6 +9,7 @@ import Popover from 'material-ui/Popover'
 import {Picker} from 'emoji-mart'
 import emojiText from 'emoji-text'
 import key from 'keymaster'
+import t from '../../utils/i18n'
 import {track, increment} from '../../utils/analytics'
 
 class Compose extends Component {
@@ -153,9 +154,9 @@ class Compose extends Component {
       const nametag = nametags.filter(n => n.id === recipient)[0]
       calloutImage = nametag.image
       calloutName = nametag.name
-      calloutMsg = `Private message to ${nametag.name}:`
+      calloutMsg = t('message.private', nametag.name)
     } else if (editing) {
-      calloutMsg = 'Editing Message'
+      calloutMsg = t('message.editing')
     } else if (topic) {
       calloutImage = mod.image
       calloutName = mod.name
@@ -179,7 +180,7 @@ class Compose extends Component {
           {
             recipient &&
             <div style={styles.cancelContainer}>
-              <a href='#' style={styles.cancel} onClick={() => setRecipient(null)}>Cancel</a>
+              <a href='#' style={styles.cancel} onClick={() => setRecipient(null)}>{t('cancel')}</a>
             </div>
           }
           {
@@ -188,7 +189,7 @@ class Compose extends Component {
               <a href='#' style={styles.cancel} onClick={() => {
                 setEditing(null)
                 setDefaultMessage('')
-              }}>Cancel</a>
+              }}>{t('cancel')}</a>
             </div>
           }
         </div>
@@ -202,7 +203,7 @@ class Compose extends Component {
           <Picker
             set='emojione'
             emoji='dancer'
-            title='Skin Tone'
+            title={t('message.skin_tone')}
             onClick={emoji => this.setState({message: message + emoji.colons})} />
         </Popover>
         <IconButton

@@ -4,6 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import {red} from '../../../styles/colors'
 import {mobile} from '../../../styles/sizes'
 import radium from 'radium'
+import t from '../../utils/i18n'
 
 class StartRoomForm extends Component {
 
@@ -28,7 +29,7 @@ class StartRoomForm extends Component {
           state: {title}
         })
       } else {
-        this.setState({error: 'You must propose a topic of conversation.'})
+        this.setState({error: t('room.room_form_err')})
       }
     }
   }
@@ -43,7 +44,7 @@ class StartRoomForm extends Component {
           id='convoInput'
           style={styles.input}
           value={title}
-          placeholder='What would you like to talk about?'
+          placeholder={t('room.room_form')}
           onChange={this.onTitleChange} />
         <div style={styles.error}>{error}</div>
       </div>
@@ -52,7 +53,7 @@ class StartRoomForm extends Component {
           id='startConvoButton'
           primary
           style={styles.button}
-          label={loggedIn ? 'Start Conversation' : 'Try It Out'}
+          label={loggedIn ? t('room.start_conversation') : t('room.try_it')}
           onClick={this.startRoom}
           />
       </div>

@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react'
 import MenuItem from 'material-ui/MenuItem'
 import Menu from 'material-ui/Menu'
 import Popover from 'material-ui/Popover'
+import t from '../../utils/i18n'
 
 const CommandMenu = ({
   isMod,
@@ -19,27 +20,27 @@ const CommandMenu = ({
     {
       command: 'welcome',
       mod: true,
-      description: 'Update this room\'s welcome prompt'
+      description: t('message.commands.welcome')
     },
     {
       command: 'intro',
       mod: false,
-      description: 'Update your intro message'
+      description: t('message.commands.intro')
     },
     {
       command: 'name',
       mod: false,
-      description: 'Update your name'
+      description: t('message.commands.name')
     },
     {
       command: 'title',
       mod: true,
-      description: 'Update this room\'s title'
+      description: t('message.commands.title')
     },
     {
       command: 'announce',
       mod: true,
-      description: 'Send an e-mail to everyone in the room'
+      description: t('message.commands.announce')
     }
   ]
 
@@ -85,12 +86,12 @@ const CommandMenu = ({
             <MenuItem
               key='edit'
               style={styles.commandMenu}
-              primaryText='Edit Message'
+              primaryText={t('message.edit')}
               onClick={onEditClick} />
             <MenuItem
               key='delete'
               style={styles.commandMenu}
-              primaryText='Delete Message'
+              primaryText={t('message.delete')}
               onClick={onDeleteClick} />
           </div>
       }

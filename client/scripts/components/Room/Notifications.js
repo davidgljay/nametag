@@ -3,6 +3,7 @@ import {List, ListItem} from 'material-ui/List'
 import Badge from 'material-ui/Badge'
 import {white} from '../../../styles/colors'
 import NametagIcon from '../Nametag/NametagIcon'
+import t from '../../utils/i18n'
 
 class Notifications extends Component {
   constructor (props) {
@@ -81,7 +82,7 @@ class Notifications extends Component {
         <div
           style={styles.showMore}
           onClick={() => this.setState({showMore: true})}>
-          Show More
+          {t('room.show_more')}
         </div>
       }
     </div>

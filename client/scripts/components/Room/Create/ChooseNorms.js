@@ -3,19 +3,9 @@ import {grey, primary, red} from '../../../../styles/colors'
 import {List, ListItem} from 'material-ui/List'
 import Check from 'material-ui/svg-icons/navigation/check'
 import TextField from 'material-ui/TextField'
+import t from '../../utils/i18n'
 
-const defaultNorms = [
-  'Refrain from personal attacks',
-  'Avoid explicit language & content',
-  'Take time to welcome newcomers',
-  'What\'s said here stays here',
-  'Keep comments brief and to the point',
-  'Personal experience > personal opinion',
-  'Curiosity > judgement',
-  'Maintain an environment of safety and support',
-  'Maintain professionalism',
-  'Keep it light & fun'
-]
+const defaultNorms = t('create_room.norms')
 
 class ChooseNorms extends Component {
   constructor (props) {
@@ -70,9 +60,9 @@ class ChooseNorms extends Component {
 
   render () {
     return <div style={this.props.style}>
-      <h2>Set Conversation Norms</h2>
+      <h2>{t('create_room.set_norms')}</h2>
       <div style={styles.helpText}>
-        As a host, you will be able to hold people accountable to these norms.
+        {t('create_room.norms_detail')}
       </div>
       <div style={styles.error}>
         {this.props.error}
@@ -98,7 +88,7 @@ class ChooseNorms extends Component {
                   value={norm}
                   id='addCustomNorm'
                   multiLine
-                  hintText='Add a norm...'
+                  hintText={t('create_room.add_norm')}
                   onChange={this.onCustomNormChange(subIndex, i)}
                   />}
                 onClick={this.onNormClick(norm, i)}

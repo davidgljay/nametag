@@ -7,6 +7,7 @@ import radium from 'radium'
 import {track} from '../../utils/analytics'
 import RaisedButton from 'material-ui/RaisedButton'
 import {mobile} from '../../../styles/sizes'
+import t from '../../utils/i18n'
 
 class RoomCard extends Component {
 
@@ -46,7 +47,7 @@ class RoomCard extends Component {
           <RaisedButton
             primary
             id='JoinButton'
-            label='JOIN'
+            label={t('room.join')}
             disabled={disabled}
             onClick={example || disabled ? () => {} : this.onJoinClick} />
         </div>

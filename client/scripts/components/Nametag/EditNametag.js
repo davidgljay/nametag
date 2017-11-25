@@ -6,6 +6,7 @@ import {Card} from 'material-ui/Card'
 import AutoComplete from 'material-ui/AutoComplete'
 import NTIconMenu from './IconMenu'
 import {track} from '../../utils/analytics'
+import t from '../../utils/i18n'
 
 const nametagTarget = {
   drop (props, monitor) {
@@ -112,7 +113,7 @@ class EditNametag extends Component {
             updateNametagEdit={updateNametagEdit} />
           <div style={{width: 190, flex: 1}}>
             <AutoComplete
-              floatingLabelText='Name'
+              floatingLabelText={t('nametag.name')}
               filter={AutoComplete.noFilter}
               id='editNametagName'
               openOnFocus

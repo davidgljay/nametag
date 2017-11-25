@@ -1,15 +1,16 @@
 import React, {PropTypes} from 'react'
+import t from '../../utils/i18n'
 
 const getUrl = id => encodeURI(`https://nametag.chat/rooms/${id}`)
 
-const twitterLink = (roomId, title) => `https://twitter.com/intent/tweet?text=${encodeURI('Join the conversation: ' + title)}&url=${getUrl(roomId)}&via=NametagChat`
+const twitterLink = (roomId, title) => `https://twitter.com/intent/tweet?text=${encodeURI(t('room.invite_twitter') + title)}&url=${getUrl(roomId)}&via=NametagChat`
 
 const fbLink = (roomId, title) => `https://www.facebook.com/dialog/share?app_id=672526412895563&display=page&href=${getUrl(roomId)}&redirect_uri=${getUrl(roomId)}`
 
-const emailLink = (roomId, title) => `mailto:?subject=${encodeURI(title)}&body=${encodeURI('There\'s an interesting conversation going on, want to join?\n\n')}${getUrl(roomId)}`
+const emailLink = (roomId, title) => `mailto:?subject=${encodeURI(title)}&body=${encodeURI(t('room.invite_email'))}${getUrl(roomId)}`
 
 const ShareButtons = ({roomId, title}) => <div style={styles.container}>
-  <div style={styles.header}>Invite</div>
+  <div style={styles.header}>{t('room.invite')}</div>
   <div id='twitterShare' style={styles.share}>
     <a href={twitterLink(roomId, title)} target='_blank'><img style={styles.image} src='https://s3.amazonaws.com/nametag_images/white-twitter-30.png' /></a>
   </div>

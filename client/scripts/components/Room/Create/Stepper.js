@@ -4,6 +4,7 @@ import {
   Stepper,
   StepLabel
 } from 'material-ui/Stepper'
+import t from '../../utils/i18n'
 
 const display = window.innerWidth < 650 ? {display: 'none'} : {}
 const CreateRoomStepper = ({stepIndex, loggedIn}) => <Stepper
@@ -11,22 +12,22 @@ const CreateRoomStepper = ({stepIndex, loggedIn}) => <Stepper
   orientation='horizontal'
   style={display}>
   <Step>
-    <StepLabel>Choose Welcome Prompt</StepLabel>
+    <StepLabel>{t('create_room.stepper')[0]}</StepLabel>
   </Step>
   <Step>
-    <StepLabel>Set Conversation Norms</StepLabel>
+    <StepLabel>{t('create_room.stepper')[1]}</StepLabel>
   </Step>
   {
     loggedIn ? []
     : <Step>
-      <StepLabel>Create Account</StepLabel>
+      <StepLabel>{t('create_room.stepper')[2]}</StepLabel>
     </Step>
   }
   <Step>
-    <StepLabel>Introduce Yourself</StepLabel>
+    <StepLabel>{t('create_room.stepper')[3]}</StepLabel>
   </Step>
   <Step>
-    <StepLabel>Done!</StepLabel>
+    <StepLabel>{t('create_room.stepper')[4]}</StepLabel>
   </Step>
 </Stepper>
 

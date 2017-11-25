@@ -9,6 +9,7 @@ import FlatButton from 'material-ui/FlatButton'
 import {track} from '../../utils/analytics'
 import {grey, white} from '../../../styles/colors'
 import {getQueryVariable} from '../../utils/queryVars'
+import t from '../../utils/i18n'
 
 class CreateRoom extends Component {
 
@@ -130,18 +131,18 @@ class CreateRoom extends Component {
         case 0:
           return {
             valid: room.welcome,
-            welcomeError: !room.welcome && 'Please add a welcome prompt'
+            welcomeError: !room.welcome && t('create_room.errors.welcome')
           }
         case 1:
           return {
             valid: room.norms && room.norms.length > 0,
-            normsError: !room.norms || !room.norms.length > 0 && 'Please select at least one norm'
+            normsError: !room.norms || !room.norms.length > 0 && t('create_room.errors.norm')
           }
         case 2: {
           return {
             valid: nametagEdits.new.name && nametagEdits.new.image && nametagEdits.new.bio,
-            imageError: nametagEdits.new.image ? '' : 'Please choose an image',
-            bioError: nametagEdits.new.bio ? '' : 'Please introduce yourself'
+            imageError: nametagEdits.new.image ? '' : t('create_room.errors.image'),
+            bioError: nametagEdits.new.bio ? '' : t('create_room.errors.intro')
           }
         }
         default:
@@ -242,7 +243,7 @@ class CreateRoom extends Component {
               labelStyle={styles.backButtonLabel}
               id='backButton'
               onClick={this.handlePrev}
-              label='BACK' />
+              label={t('back')} />
           }
           {
             this.state.stepIndex < 3 &&
@@ -253,7 +254,7 @@ class CreateRoom extends Component {
               primary
               id='nextButton'
               onClick={this.handleNext}
-              label='NEXT' />
+              label={t('next')} />
           }
           {
             this.state.stepIndex === 3 &&
@@ -263,7 +264,7 @@ class CreateRoom extends Component {
               primary
               id='doneButton'
               onClick={this.createRoom}
-              label='GO TO ROOM' />
+              label={t('room.enter_room')} />
             }
         </div>
       </div>

@@ -6,6 +6,7 @@ import radium from 'radium'
 import {mobile} from '../../../styles/sizes'
 import {track} from '../../utils/analytics'
 import {primary} from '../../../styles/colors'
+import t from '../../utils/i18n'
 
 class JoinRoom extends Component {
 
@@ -30,12 +31,12 @@ class JoinRoom extends Component {
     return <div id='room' style={styles.container}>
       <Navbar me={me} empty />
       <div style={styles.hintText}>
-        Small, private conversations with people you trust.
+        {t('room.nametag_desc')}
       </div>
       <div id='roomInfoContainer' style={styles.roomInfoContainer}>
         <h3 style={styles.introText}>{
             banned
-            ? 'You have been banned from this conversation:'
+            ? t('room.banned')
             : ''
           }</h3>
         <RoomCard room={room} disabled={room.closed || banned} />
@@ -43,7 +44,7 @@ class JoinRoom extends Component {
       <div style={styles.joinContainer}>
         <div id='normsContainer' style={styles.normsContainer}>
           <div style={styles.norms}>
-            <h3>Norms</h3>
+            <h3>{t('room.norms')}</h3>
             <Norms norms={room.norms} showChecks />
           </div>
         </div>
