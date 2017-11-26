@@ -160,6 +160,13 @@ r.connect({host: 'rethinkdb'})
       local.handleLocalCallback(req, res, next))(req, res, next)
     })
 
+    app.post('/hash_login', (req, res, next) =>  {
+      const context = new Context({}, conn)
+      context.models.Users.hashLoginRequest(req.body.email, req.body.path)
+        .then(() => res.end())
+        .catch(err => next(new errors.APIError(err)))
+    })
+
     // Local login with a token
     app.get('/login/:hash', (req, res, next) =>  {
       passport.authenticate('hash',
@@ -173,7 +180,7 @@ r.connect({host: 'rethinkdb'})
       } else {
         const context = new Context({}, conn)
         context.models.Users.emailDigest()
-          .then(res.end('Success!'))
+          .then(res.end())
           .catch(err => next(new errors.APIError(err)))
       }
     })

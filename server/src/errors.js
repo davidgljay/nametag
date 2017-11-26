@@ -58,6 +58,11 @@ const ErrBadAuth = new APIError('E-mail or password is incorrect', {
   status: 400
 })
 
+const ErrBadHash = new APIError('This link is invalid', {
+  translation_key: 'BAD_HASH',
+  status: 400
+})
+
 const ErrNotInRoom = new APIError('User has not joined this room', {
   translation_key: 'NOT_IN_ROOM',
   status: 400
@@ -135,6 +140,7 @@ module.exports = {
   ExtendableError,
   APIError,
   ErrBadAuth,
+  ErrBadHash,
   ErrPasswordTooShort,
   ErrMissingEmail,
   ErrMissingPassword,

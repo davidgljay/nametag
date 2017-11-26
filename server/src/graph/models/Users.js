@@ -5,6 +5,7 @@ const fetch = require('node-fetch')
 const {fromUrl} = require('../../routes/images/imageUpload')
 const {
   ErrBadAuth,
+  ErrBadHash,
   ErrNotLoggedIn,
   ErrEmailTaken,
   ErrInvalidToken,
@@ -58,7 +59,7 @@ const getByHash = ({conn}, hash) =>
     .then(cursor => cursor.toArray())
     .then(results => {
       if (results.length === 0) {
-        return Promise.reject(ErrBadAuth)
+        return Promise.reject(ErrBadHash)
       }
       return results[0]
     })
@@ -549,6 +550,29 @@ const emailConfirmation = ({conn}, token) =>
     .then(res => res.replaced === 0 ? ErrNotFound : null)
 
 /**
+ * Sends an e-mail allowing a user to log in with a token
+ *
+ * @param {Object} context   graph context
+ * @param {String} email     Token confirming the user's e-mail
+ * @param {String} path      Optional: path to direct the user to upon successful login
+ *
+ */
+
+const hashLoginRequest = ({conn}, email, path) =>
+  getByEmail({conn}, email)
+    .then(({email, loginHash}) => {
+      sendEmail({
+        from: {
+          email: 'noreply@nametag.chat',
+          name: 'Nametag Login'
+        },
+        to: email,
+        template: 'hashLogin',
+        params: {loginHash, path}
+      })
+    })
+
+/**
  * Unsubscribes to a room or to all email.
  *
  * @param {Object} context   graph context
@@ -683,6 +707,7 @@ module.exports = (context) => ({
     passwordReset: (token, password) => passwordReset(context, token, password),
     emailConfirmationRequest: (email) => emailConfirmationRequest(context, email),
     emailConfirmation: (token) => emailConfirmation(context, token),
+    hashLoginRequest: (email, path) => hashLoginRequest(context, email, path),
     unsubscribe: (loginHash, roomId) => unsubscribe(context, loginHash, roomId),
     emailDigest: () => emailDigest(context)
   }

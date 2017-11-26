@@ -24,7 +24,7 @@ module.exports = ({roomId, roomTitle, loginHash}) => ({
 </tr>
 <tr>
   <td style="text-align: center">
-      <a href="https://nametag.chat/rooms/${roomId}" target='_blank'>
+      <a href="https://nametag.chat/rooms/${roomId}" target='_blank' style="text-decoration: none;">
           <div style="margin-top: 10px; margin-left: auto; margin-right: auto; padding: 10px; font-size: 20px; background: #12726a; color: #FFF; border-radius: 3px; max-width: 150px; text-align: center; text-decoration: none !important;">
               Go To Room
           </div>

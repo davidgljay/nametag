@@ -1,6 +1,6 @@
 const UsersLoader = require('../graph/models/Users')
 const HashStrategy = require('passport-hash').Strategy
-const {ErrBadAuth} = require('../errors')
+const {ErrBadHash} = require('../errors')
 const Users = (conn) => UsersLoader({conn}).Users
 
 module.exports = conn => new HashStrategy(
@@ -8,7 +8,7 @@ module.exports = conn => new HashStrategy(
     Users(conn).getByHash(hash)
       .then(user => {
         if (!user) {
-          return done(null, false, ErrBadAuth)
+          return done(null, false, ErrBadHash)
         }
         return done(null, user)
       })
@@ -22,14 +22,13 @@ module.exports.handleHashCallback = (req, res, next) => (err, user) => {
   }
 
   if (!user) {
-    return next(ErrBadAuth)
+    return next(ErrBadHash)
   }
-  // Perform the login of the user!
+  // Perform the login of the user
   req.login(user, (err) => {
     if (err) {
       return next(err)
     }
-    // We logged in the user! Let's send back the user id.
-    res.redirect('/')
+    res.redirect(req.query && req.query.path ? decodeURIComponent(req.query.path) : '/')
   })
 }
