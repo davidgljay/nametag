@@ -160,8 +160,8 @@ en:
     nametags: Nametags
     priv_msg_on: Only host can message privately
     priv_msg_off: Anyone can message privately
-    room_closed: This room is closed
-    room_open: This room is active
+    closed: This room is closed
+    open: This room is active
     invite: Invite
     invite_twitter: Join the conversation:
     invite_email: There's an interesting conversation going on, want to join?\n\n
