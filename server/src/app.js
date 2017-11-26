@@ -99,7 +99,7 @@ if (process.env.PRERENDER_TOKEN) {
 r.connect({host: 'rethinkdb'})
   .then(conn => {
     /* Auth Providers */
-    passport.use('local', local(conn))
+    // passport.use('local', local(conn))
     passport.use('hash', hash(conn))
     passport.use('facebook', facebook(conn))
     passport.use('twitter', twitter(conn))
@@ -155,17 +155,10 @@ r.connect({host: 'rethinkdb'})
       )(req, res, next))
 
     // Local login with username and password
-    app.post('/login', (req, res, next) => {
-      passport.authenticate('local',
-      local.handleLocalCallback(req, res, next))(req, res, next)
-    })
-
-    app.post('/hash_login', (req, res, next) =>  {
-      const context = new Context({}, conn)
-      context.models.Users.hashLoginRequest(req.body.email, req.body.path)
-        .then(() => res.end())
-        .catch(err => next(new errors.APIError(err)))
-    })
+    // app.post('/login', (req, res, next) => {
+    //   passport.authenticate('local',
+    //   local.handleLocalCallback(req, res, next))(req, res, next)
+    // })
 
     // Local login with a token
     app.get('/login/:hash', (req, res, next) =>  {

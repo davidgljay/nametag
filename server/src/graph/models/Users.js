@@ -391,65 +391,71 @@ const badgesFromAuth = (badge, provider) => {
  *
  * @param {Object} context   graph context
  * @param {String} email     E-mail address of the user
- * @param {String} password  Hashed password from the user
+ * @param {String} path      Current path of the user
  *
  */
-const createLocal = ({conn}, email, password) => {
-  const emailHash = MD5(email.trim().toLowerCase())
-  return fetch(`https://gravatar.com/${emailHash}.json`)
-  .then(res => res.ok ? res.json() : null)
-  .then(gravatarInfo => {
-    let displayNames = [email.match(/^[^@]+/)[0]]
-    let images = []
-    if (gravatarInfo) {
-      const {entry: [{preferredUsername, thumbnailUrl, displayName}]} = gravatarInfo
-      if (displayName) {
-        displayNames.push(displayName)
+const createLocal = (context, email, path) =>
+  usersTable.getAll(email, {index: 'email'}).count().eq(0).run(context.conn)
+    .then(newUser => {
+      const {conn} = context
+
+      // Create a new user
+      if (newUser) {
+        const emailHash = MD5(email.trim().toLowerCase())
+
+        // Check is a gravatar image exists
+        return fetch(`https://gravatar.com/${emailHash}.json`)
+        .then(res => res.ok ? res.json() : null)
+        .then(gravatarInfo => {
+          let displayNames = [email.match(/^[^@]+/)[0]]
+          let images = []
+          if (gravatarInfo) {
+            const {entry: [{preferredUsername, thumbnailUrl, displayName}]} = gravatarInfo
+            if (displayName) {
+              displayNames.push(displayName)
+            }
+            if (preferredUsername) {
+              displayNames.push(preferredUsername)
+            }
+            if (thumbnailUrl) {
+              images.push(thumbnailUrl)
+            }
+          }
+          // Make displayNames unique
+          displayNames = displayNames.reduce(
+            (arr, item) => arr.indexOf(item) === -1 ? arr.concat(item) : arr, []
+          )
+
+          // Insert the user
+          return usersTable.insert({
+              email,
+              createdAt: new Date(),
+              displayNames,
+              images: images,
+              badges: {},
+              password: uuid.v4().replace(/-/g, ''),
+              loginHash: uuid.v4().replace(/-/g, ''),
+              unsubscribe: {}
+            }).run(conn)
+        })
+        .then(res => {
+           if (res.errors) {
+             return Promise.reject(new Error('Could not insert user', res.error))
+           }
+           const id = res.generated_keys[0]
+           return Promise.all([
+             id,
+             emailConfirmationRequest(context, email)
+           ])
+           .then(([id]) => ({id, newUser}))
+         })
+
+      // If the user already exists, send a hash login request
+      } else {
+        return hashLoginRequest(context, email, path)
+          .then(() => ({newUser}))
       }
-      if (preferredUsername) {
-        displayNames.push(preferredUsername)
-      }
-      if (thumbnailUrl) {
-        images.push(thumbnailUrl)
-      }
-    }
-    // Make displayNames unique
-    displayNames = displayNames.reduce(
-      (arr, item) => arr.indexOf(item) === -1 ? arr.concat(item) : arr, []
-    )
-    return r.branch(
-      usersTable.getAll(email, {index: 'email'}).count().eq(0),
-      usersTable.insert({
-        email,
-        createdAt: new Date(),
-        displayNames,
-        images: images,
-        badges: {},
-        loginHash: uuid.v4().replace(/-/g, ''),
-        unsubscribe: {}
-      }),
-      {exists: true}
-    )
-   .run(conn)
-  })
- .then(res => {
-   if (res.errors) {
-     return Promise.reject(new Error('Could not insert user', res.error))
-   }
-   if (res.exists) {
-     return Promise.reject(ErrEmailTaken)
-   }
-   const id = res.generated_keys[0]
-   return Promise.all([
-     id,
-     emailConfirmationRequest({conn}, email),
-     usersTable.get(id).update({
-       password: hashPassword(`${password}${passwordsalt}`)
-     }).run(conn)
-   ])
-     .then(([id]) => id)
- })
-}
+    })
 
 /**
  * Sets a forgot password token.

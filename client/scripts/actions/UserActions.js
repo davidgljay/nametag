@@ -38,20 +38,3 @@ export function loginUser (email, password) {
       })
   }
 }
-
-export function hashLoginRequest (email) {
-  return () => {
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      credentials: 'same-origin',
-      body: JSON.stringify({
-        email,
-        path: window.location.href
-      })
-    }
-    return fetch('/hash_login', options)
-  }
-}
