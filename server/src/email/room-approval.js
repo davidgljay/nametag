@@ -1,4 +1,4 @@
-module.exports = ({roomId, roomTitle, userToken}) => ({
+module.exports = ({roomId, roomTitle, loginHash}) => ({
   subject: `Your Room Has Been Approved: ${roomTitle}`,
   txt: `Your room has been approved!:\n
   \n

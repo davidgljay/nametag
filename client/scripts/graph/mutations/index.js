@@ -131,9 +131,9 @@ export const passwordReset = graphql(PASSWORD_RESET, {
 
 export const unsubscribe = graphql(UNSUBSCRIBE, {
   props: ({ownProps, mutate}) => ({
-    unsubscribe: (userToken, roomId) => mutate({
+    unsubscribe: (loginHash, roomId) => mutate({
       variables: {
-        userToken,
+        loginHash,
         roomId
       }
     })

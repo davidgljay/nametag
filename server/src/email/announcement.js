@@ -1,4 +1,4 @@
-module.exports = ({roomId, roomName, message, author, userToken}) => ({
+module.exports = ({roomId, roomName, message, author, loginHash}) => ({
   subject: `Update in ${roomName}`,
   txt: `${author} has sent out an update about ${roomName}:\n
   \n
@@ -9,7 +9,7 @@ module.exports = ({roomId, roomName, message, author, userToken}) => ({
       https://nametag.chat/rooms/${roomId}\n
   \n\n
   You can also unsubscribe:\n
-  https://nametag.chat/unsubscribe/${userToken}?roomid=${roomId}&roomname=${encodeURIComponent(roomName)}\n\n`,
+  https://nametag.chat/unsubscribe/${loginHash}?roomid=${roomId}&roomname=${encodeURIComponent(roomName)}\n\n`,
   html: `<table style="padding: 20px; margin-left: auto; margin-right: auto;">
     <tr><td>
       <img src="https://s3.amazonaws.com/nametag_images/nametagLogoBlack55.png">
@@ -34,6 +34,6 @@ module.exports = ({roomId, roomName, message, author, userToken}) => ({
 </tr>
 
     <div style='text-align:center; font-size: 10px; margin-top: 40px;'>
-        <a style='color: grey; text-decoration: none;' href="https://nametag.chat/unsubscribe/${userToken}?roomid=${roomId}&roomname=${encodeURIComponent(roomName)}">Unsubscribe</a>
+        <a style='color: grey; text-decoration: none;' href="https://nametag.chat/unsubscribe/${loginHash}?roomid=${roomId}&roomname=${encodeURIComponent(roomName)}">Unsubscribe</a>
     </div>`
 })

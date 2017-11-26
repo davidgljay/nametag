@@ -46,6 +46,25 @@ const getByEmail = ({conn}, email) =>
     })
 
 /**
+ * Returns a user based on an e-mail address.
+ *
+ * @param {Object} context     graph context
+ * @param {String} email   an email used to look up the user
+ *
+ */
+
+const getByHash = ({conn}, hash) =>
+  usersTable.getAll(hash, {index: 'loginHash'}).run(conn)
+    .then(cursor => cursor.toArray())
+    .then(results => {
+      if (results.length === 0) {
+        return Promise.reject(ErrBadAuth)
+      }
+      return results[0]
+    })
+
+
+/**
  * Adds an e-mail address to an existing user
  *
  * @param {Object} context     graph context
@@ -231,7 +250,7 @@ const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
         createdAt: new Date(),
         badges: {},
         password: uuid.v4().replace(/-/g, ''),
-        userToken: uuid.v4().replace(/-/g, '').slice(0, 15),
+        loginHash: uuid.v4().replace(/-/g, ''),
         unsubscribe: {}
       }
 
@@ -405,7 +424,7 @@ const createLocal = ({conn}, email, password) => {
         displayNames,
         images: images,
         badges: {},
-        userToken: uuid.v4().replace(/-/g, '').slice(0, 15),
+        loginHash: uuid.v4().replace(/-/g, ''),
         unsubscribe: {}
       }),
       {exists: true}
@@ -533,13 +552,15 @@ const emailConfirmation = ({conn}, token) =>
  * Unsubscribes to a room or to all email.
  *
  * @param {Object} context   graph context
- * @param {String} userToken     Unique token identifying the user
+ * @param {String} loginHash     Unique token identifying the user
  * @param {String} roomId    Id of the room to be unsubscribed from
  *
  */
 
-const unsubscribe = ({conn}, userToken, roomId) =>
-  usersTable.getAll(userToken, {index: 'userToken'}).update({unsubscribe: {[roomId]: true}}).run(conn)
+const unsubscribe = ({conn}, loginHash, roomId) =>
+  usersTable.getAll(loginHash, {index: 'loginHash'})
+    .update({unsubscribe: {[roomId]: true}})
+    .run(conn)
     .then(res => res.replaced === 0 ? ErrNotFound : null)
 
 /**
@@ -592,14 +613,14 @@ const emailDigest = ({conn}) =>
   .map(join =>
       join('left').merge({
         email: join('right')('email'),
-        userToken: join('right')('userToken')
+        loginHash: join('right')('loginHash')
       }))
   .eqJoin(join => join('room')('mod'), db.table('nametags'))
   .map(join => ({
     id: join('left')('room')('id'),
     title: join('left')('room')('title'),
     email: join('left')('email'),
-    userToken: join('left')('userToken'),
+    loginHash: join('left')('loginHash'),
     mod: join('right').pluck('name', 'image'),
     newNametags: db.table('nametags')
         .getAll(join('left')('room')('id'), {index: 'room'})
@@ -623,7 +644,7 @@ const emailDigest = ({conn}) =>
     let sent = {}
     for (var i = 0; i < results.length; i++) {
       const {group, reduction} = results[i]
-      const userToken = reduction[0].userToken
+      const loginHash = reduction[0].loginHash
       if (!sent[group]) {
         sent[group] = true
         sendEmail({
@@ -633,7 +654,7 @@ const emailDigest = ({conn}) =>
           },
           to: group,
           template: 'digest',
-          params: {userToken, rooms: reduction}
+          params: {loginHash, rooms: reduction}
         })
       }
     }
@@ -644,6 +665,7 @@ module.exports = (context) => ({
     get: (id) => get(context, id),
     getByEmail: (email) => getByEmail(context, email),
     getByNametag: (nametagId) => getByNametag(context, nametagId),
+    getByHash: (hash) => getByHash(context, hash),
     addEmail: (userId, email) => addEmail(context, userId, email),
     getAdminTemplates: () => getAdminTemplates(context),
     findOrCreateFromAuth: (profile, provider) => findOrCreateFromAuth(context, profile, provider),
@@ -661,7 +683,7 @@ module.exports = (context) => ({
     passwordReset: (token, password) => passwordReset(context, token, password),
     emailConfirmationRequest: (email) => emailConfirmationRequest(context, email),
     emailConfirmation: (token) => emailConfirmation(context, token),
-    unsubscribe: (userToken, roomId) => unsubscribe(context, userToken, roomId),
+    unsubscribe: (loginHash, roomId) => unsubscribe(context, loginHash, roomId),
     emailDigest: () => emailDigest(context)
   }
 })

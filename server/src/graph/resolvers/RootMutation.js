@@ -263,8 +263,8 @@ const RootMutation = {
   },
   unsubscribe: {
     requires: null,
-    resolve: (obj, {userToken, roomId}, {models: {Users}}) =>
-      Users.unsubscribe(userToken, roomId)
+    resolve: (obj, {loginHash, roomId}, {models: {Users}}) =>
+      Users.unsubscribe(loginHash, roomId)
   },
   approveRoom: {
     requires: 'NAMETAG_ADMIN',

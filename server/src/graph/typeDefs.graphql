@@ -732,7 +732,7 @@ type RootMutation {
   emailConfirmation(token: String!): BasicResponse
 
   # Unsubscribes from a room
-  unsubscribe(userToken: String!, roomId: String!): BasicResponse
+  unsubscribe(loginHash: String!, roomId: String!): BasicResponse
 
   # Approves a public room
   approveRoom(roomId: ID!): BasicResponse

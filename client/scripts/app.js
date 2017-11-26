@@ -100,7 +100,7 @@ class Nametag extends Component {
             <Route path='/badges/:templateId/qrcode' component={ShareBadge} />
             <Route path='/passwordreset/:token' component={PasswordReset} />
             <Route path='/emailconfirm/:token' component={EmailConfirm} />
-            <Route path='/unsubscribe/:userToken' component={Unsubscribe} />
+            <Route path='/unsubscribe/:loginHash' component={Unsubscribe} />
             <Route path='/privacy' component={Privacy} />
             <Route path='/tos' component={Tos} />
           </Router>
