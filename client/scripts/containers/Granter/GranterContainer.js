@@ -1,7 +1,6 @@
 import component from '../../components/Granter/Granter'
 import {connect} from 'react-redux'
 import {compose} from 'react-apollo'
-import {registerUser, loginUser} from '../../actions/UserActions'
 import {createBadge, updateBadgeRequestStatus, addNote, updateToken} from '../../graph/mutations'
 import {granterQuery} from '../../graph/queries'
 import {requestNotifPermissions} from '../../actions/NotificationActions'
@@ -9,8 +8,6 @@ import {requestNotifPermissions} from '../../actions/NotificationActions'
 const mapDispatchToProps = (dispatch) => {
   const disp = (func) => (...args) => dispatch(func.apply(this, args))
   return {
-    registerUser: disp(registerUser),
-    loginUser: disp(loginUser),
     requestNotifPermissions: disp(requestNotifPermissions)
   }
 }

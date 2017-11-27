@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react'
 import WelcomeForm from './WelcomeForm'
 // import ChoosePrivacy from './ChoosePrivacy'
 import HostIntro from './HostIntro'
-import Login from '../../User/Login'
+import Login from '../../../containers/User/LoginContainer'
 import ChooseNorms from './ChooseNorms'
 import Toggle from 'material-ui/Toggle'
 import RoomCard from '../RoomCard'
@@ -24,9 +24,6 @@ const getForm = ({
     handleNext,
     handlePrev,
     setImageFromUrl,
-    loginUser,
-    passwordResetRequest,
-    registerUser,
     addNametagEditBadge,
     removeNametagEditBadge,
     addSelectedBadge,
@@ -72,11 +69,7 @@ const getForm = ({
         : <div>
           <h2>{t('create_room.create_account')}</h2>
           <Login
-            registerUser={registerUser}
-            loginUser={loginUser}
-            message=''
-            register
-            passwordResetRequest={passwordResetRequest} />
+            message='' />
         </div>
         }
       </div>

@@ -4,7 +4,7 @@ import RoomLeftBar from './RoomLeftBar'
 import AppBar from 'material-ui/AppBar'
 import Dialog from 'material-ui/Dialog'
 import radium, {keyframes} from 'radium'
-import Login from '../User/Login'
+import Login from '../../containers/User/LoginContainer'
 import Messages from '../../components/Message/Messages'
 import WelcomeForm from './WelcomeForm'
 import ConfirmNametagForm from './ConfirmNametagForm'
@@ -138,9 +138,6 @@ class Room extends Component {
       updateNametagEdit,
       addNametagEditBadge,
       removeNametagEditBadge,
-      registerUser,
-      loginUser,
-      passwordResetRequest,
       createNametag,
       latestMessageUpdatedSubscription,
       createMessage,
@@ -169,8 +166,6 @@ class Room extends Component {
     // If the user is not logged in and hasn't clicked "join room", return to the homepage
     if ((!myNametag && !isJoining) || (myNametag && myNametag.banned)) {
       return <JoinRoom
-        registerUser={registerUser}
-        loginUser={loginUser}
         room={room}
         me={me} />
     }
@@ -253,11 +248,7 @@ class Room extends Component {
         onRequestClose={this.dismissWelcomeModal}>
         {
           !me && <Login
-            registerUser={registerUser}
-            loginUser={loginUser}
-            message={t('room.create_account')}
-            register
-            passwordResetRequest={passwordResetRequest} />
+            message={t('room.create_account')} />
         }
         {
           me && !myNametag &&
@@ -308,9 +299,7 @@ Room.propTypes = {
     roomId: string.isRequired
   }),
   visibleReplies: string.isRequired,
-  loginUser: func.isRequired,
   registerUser: func.isRequired,
-  passwordResetRequest: func.isRequired,
   typingPrompts: array.isRequired,
   updateRoom: func.isRequired,
   createNametag: func.isRequired,

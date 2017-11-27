@@ -31,16 +31,12 @@ class Granter extends Component {
       data: {granter, me, loading, error},
       createBadge,
       updateBadgeRequestStatus,
-      loginUser,
-      registerUser,
       addNote
     } = this.props
 
     if (error && error.message === 'GraphQL Error: Not Logged In') {
       return <div>
         <LoginDialog
-          loginUser={loginUser}
-          registerUser={registerUser}
           showLogin
           message={t('granter.login_to_view')} />
       </div>

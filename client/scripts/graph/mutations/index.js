@@ -14,10 +14,8 @@ import UPDATE_BADGE_REQUEST_STATUS from './updateBadgeRequestStatus.graphql'
 import UPDATE_TOKEN from './updateToken.graphql'
 import DELETE_MESSAGE from './deleteMessage.graphql'
 import EDIT_MESSAGE from './editMessage.graphql'
-import PASSWORD_RESET from './passwordReset.graphql'
 import UNSUBSCRIBE from './unsubscribe.graphql'
 import SET_MOD_ONLY_DMS from './setModOnlyDMs.graphql'
-import PASSWORD_RESET_REQ from './passwordResetRequest.graphql'
 import EMAIL_CONF_REQ from './emailConfirmationRequest.graphql'
 import EMAIL_CONF from './emailConfirmation.graphql'
 import ADD_NOTE from './addNote.graphql'
@@ -103,27 +101,6 @@ export const createBadge = graphql(CREATE_BADGE, {
             }
           }
         }
-      }
-    })
-  })
-})
-
-export const passwordResetRequest = graphql(PASSWORD_RESET_REQ, {
-  props: ({ownProps, mutate}) => ({
-    passwordResetRequest: (email) => mutate({
-      variables: {
-        email
-      }
-    })
-  })
-})
-
-export const passwordReset = graphql(PASSWORD_RESET, {
-  props: ({ownProps, mutate}) => ({
-    passwordReset: (token, password) => mutate({
-      variables: {
-        token,
-        password
       }
     })
   })

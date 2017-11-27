@@ -241,16 +241,6 @@ const RootMutation = {
           : Promise.reject(ErrNotAuthorized)
         )
   },
-  passwordResetRequest: {
-    requires: null,
-    resolve: (obj, {email}, {models: {Users}}) =>
-      Users.passwordResetRequest(email)
-  },
-  passwordReset: {
-    requires: null,
-    resolve: (obj, {token, password}, {models: {Users}}) =>
-      Users.passwordReset(token, password)
-  },
   emailConfirmationRequest: {
     requires: null,
     resolve: (obj, {email}, {models: {Users}}) =>

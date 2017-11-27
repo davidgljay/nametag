@@ -188,8 +188,7 @@ class RoomCards extends Component {
           </div>
           <LoginDialog
             showLogin={this.state.showLogin}
-            toggleLogin={this.toggleLogin}
-            message={t('room.log_in')} />
+            toggleLogin={this.toggleLogin} />
         </div>
       </div>
     </div>
