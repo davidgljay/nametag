@@ -95,6 +95,10 @@ class Login extends Component {
     } = this.state
 
     return <div style={styles.login} id='loginForm'>
+      <h4>{message}</h4>
+      <div style={styles.alert}>
+        {alert}
+      </div>
       <form className='localAuth' onSubmit={this.onEnter}>
         <TextField
           floatingLabelText={t('login.email')}
@@ -108,10 +112,6 @@ class Login extends Component {
         <input type='submit' style={styles.hiddenSubmit} />
       </form>
       <div style={styles.authProviders}>
-        <h4>{message}</h4>
-        <div style={styles.alert}>
-          {alert}
-        </div>
         <div>
           <div>
             <img
