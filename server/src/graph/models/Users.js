@@ -428,15 +428,15 @@ const createLocal = (context, email, path) =>
 
           // Insert the user
           return usersTable.insert({
-              email,
-              createdAt: new Date(),
-              displayNames,
-              images: images,
-              badges: {},
-              password: uuid.v4().replace(/-/g, ''),
-              loginHash: uuid.v4().replace(/-/g, ''),
-              unsubscribe: {}
-            }).run(conn)
+            email,
+            createdAt: new Date(),
+            displayNames,
+            images: images,
+            badges: {},
+            password: uuid.v4().replace(/-/g, ''),
+            loginHash: uuid.v4().replace(/-/g, ''),
+            unsubscribe: {}
+          }).run(conn)
         })
         .then(res => {
            if (res.errors) {
