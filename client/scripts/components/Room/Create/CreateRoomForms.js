@@ -21,6 +21,7 @@ const getForm = ({
     closedIn,
     room,
     badges,
+    refetch,
     handleNext,
     handlePrev,
     setImageFromUrl,
@@ -69,6 +70,7 @@ const getForm = ({
         : <div>
           <h2>{t('create_room.create_account')}</h2>
           <Login
+            refetch={refetch}
             message='' />
         </div>
         }
@@ -124,6 +126,7 @@ CreateRoomForms.propTypes = {
   }).isRequired,
   registerUser: func.isRequired,
   loginUser: func.isRequired,
+  refetch: func.isRequired,
   passwordResetRequest: func.isRequired,
   nametagEdits: object.isRequired,
   addNametagEditBadge: func.isRequired,

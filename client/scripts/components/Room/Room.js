@@ -129,7 +129,8 @@ class Room extends Component {
       data: {
         loading,
         room,
-        me
+        me,
+        refetch
       },
       myNametag,
       nametagEdits,
@@ -248,6 +249,7 @@ class Room extends Component {
         onRequestClose={this.dismissWelcomeModal}>
         {
           !me && <Login
+            refetch={refetch}
             message={t('room.create_account')} />
         }
         {

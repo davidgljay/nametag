@@ -188,7 +188,7 @@ class CreateRoom extends Component {
 
   render () {
     const {
-      data: {me, loading},
+      data: {me, loading, refetch},
       nametagEdits,
       updateNametagEdit,
       addNametagEditBadge,
@@ -218,6 +218,7 @@ class CreateRoom extends Component {
             removeSelectedBadge={this.removeSelectedBadge}
             nametagEdits={nametagEdits}
             updateRoom={this.updateRoom}
+            refetch={refetch}
             addNametagEditBadge={addNametagEditBadge}
             removeNametagEditBadge={removeNametagEditBadge}
             addNorm={this.addNorm}

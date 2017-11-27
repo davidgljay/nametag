@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
-import {grey} from '../../../styles/colors'
 import {track, alias, setTimer} from '../../utils/analytics'
 import t from '../../utils/i18n'
 import key from 'keymaster'
@@ -46,6 +45,7 @@ class Login extends Component {
     }
 
     this.register = () => {
+      const {registerUser, refetch} = this.props
       const {email} = this.state
 
       if (!validEmail(email)) {
@@ -53,14 +53,14 @@ class Login extends Component {
         return
       }
       track('LOGIN_REGISTER_USER')
-      this.props.registerUser(email.trim().toLowerCase())
+      registerUser(email.trim().toLowerCase())
         .then(res => {
           if (res.error) {
             this.setState({alert: res.error.message})
           }
           if (res.newUser) {
             alias(res.id)
-            this.login()
+            refetch()
           } else {
             this.setState({alert: t('login.link_login'), message: t('login.hello')})
           }
@@ -146,6 +146,7 @@ const {func, string} = PropTypes
 
 Login.propTypes = {
   registerUser: func.isRequired,
+  refetch: func.isRequired,
   message: string
 }
 
