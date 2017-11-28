@@ -152,6 +152,9 @@ type Message {
   # Emoji reactions to the message
   reactions: [EmojiReaction]
 
+  # A template being granted with this message
+  template: Template
+
   # Indicates whether the message has been saved for viewing after the room has closed
   saved: Boolean
 
@@ -466,6 +469,9 @@ input CreateMessageInput {
 
   # The recipient of the message if it is a DM
   recipient: ID
+
+  # Template to be granted with this message
+  template: ID
 
 }
 

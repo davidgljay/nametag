@@ -110,36 +110,51 @@ const create = (context, m) => {
     {createdAt: new Date(), reactions: []},
     {recipient: m.recipient ? m.recipient : false}
   )
+
+  const createMessagePromise = messagesTable.insert(messageObj).run(conn)
+    .then((res) => {
+      if (res.errors > 0) {
+        return new errors.APIError('Error creating message')
+      }
+      return Object.assign({}, messageObj, {id: res.generated_keys[0]})
+    })
+    .then(message => Promise.all([
+      checkMentions(context, message),
+      message,
+      Rooms.updateLatestMessage(message.room),
+      Nametags.update(message.author, {latestVisit: new Date(Date.now() + 1000)})
+    ]))
+    .then(([updates = {}, message]) => {
+      messageObj = Object.assign({}, message, updates)
+      return messageObj
+    })
+
   if (m.parent) {
-    return messagesTable.insert(messageObj).run(conn)
-      .then((res) => {
-        if (res.errors > 0) {
-          return new errors.APIError('Error creating message')
-        }
-        return Object.assign({}, messageObj, {id: res.generated_keys[0]})
-      })
-      .then(message => Promise.all([checkMentions(context, message), message, emailIfReply(context, message)]))
-      .then(([updates = {}, message]) => Object.assign({}, message, updates))
+    return createPromise
+      .then(() => emailIfReply(context, message))
+      .then(() => messageObj)
   }
+
+  if (m.template) {
+    return db('template')
+      .get(m.template)
+      .eqJoin('granter', db('granter'))
+      .zip()
+      .pluck('adminTemplate')
+      .run(conn)
+      .then(({adminTemplate}) => {
+        if (!user.badges[adminTemplate]) {
+          return errors.ErrBadgeGrant
+        }
+        return createPromise
+      })
+  }
+
   return checkForCommands(context, messageObj)
   .then(msg => {
     messageObj = msg
-    return messagesTable.insert(msg).run(conn)
+    return createMessagePromise(messageObj)
   })
-  .then((res) => {
-    if (res.errors > 0) {
-      return new errors.APIError('Error creating message')
-    }
-    return Object.assign({}, messageObj, {id: res.generated_keys[0]})
-  })
-  .then(message => Promise.all([
-    checkMentions(context, message),
-    message,
-    Rooms.updateLatestMessage(message.room),
-    Nametags.update(message.author, {latestVisit: new Date(Date.now() + 1000)})
-  ])
-  )
-  .then(([updates = {}, message]) => Object.assign({}, message, updates))
 }
 
 /**
