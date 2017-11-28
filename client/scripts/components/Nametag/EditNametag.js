@@ -10,7 +10,9 @@ import t from '../../utils/i18n'
 
 const nametagTarget = {
   drop (props, monitor) {
-    props.addNametagEditBadge(monitor.getItem(), props.roomId || props.template)
+    if (props.addNametagEditBadge) {
+      props.addNametagEditBadge(monitor.getItem(), props.roomId || props.template)
+    }
   }
 }
 
@@ -53,7 +55,9 @@ class EditNametag extends Component {
 
     this.removeBadge = (badge) => {
       const {removeNametagEditBadge, roomId, template} = this.props
-      removeNametagEditBadge(badge, roomId || template)
+      if (removeNametagEditBadge) {
+        removeNametagEditBadge(badge, roomId || template)
+      }
     }
 
     this.requiredBadges = () =>
@@ -161,8 +165,8 @@ EditNametag.propTypes = {
   isOver: bool.isRequired,
   requiredTemplates: arrayOf(string).isRequired,
   updateNametagEdit: func.isRequired,
-  addNametagEditBadge: func.isRequired,
-  removeNametagEditBadge: func.isRequired
+  addNametagEditBadge: func,
+  removeNametagEditBadge: func
 }
 
 export default DropTarget(dragTypes.badge, nametagTarget, collect)(EditNametag)

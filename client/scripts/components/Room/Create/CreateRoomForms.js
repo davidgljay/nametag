@@ -70,7 +70,7 @@ const getForm = ({
         : <div>
           <h2>{t('create_room.create_account')}</h2>
           <Login
-            refetch={refetch}
+            onLogin={refetch}
             message='' />
         </div>
         }

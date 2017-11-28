@@ -1,6 +1,6 @@
 const UsersLoader = require('../graph/models/Users')
 // const LocalStrategy = require('passport-local').Strategy
-// const {ErrBadAuth} = require('../errors')
+const {ErrBadAuth} = require('../errors')
 const Users = (conn) => UsersLoader({conn}).Users
 
 // module.exports = conn => new LocalStrategy({
@@ -52,7 +52,15 @@ module.exports.register = conn => (req, res, next) => {
   Users(conn).createLocal(email, path)
     .then(({id, newUser}) => {
       if (newUser) {
-        res.json({id, newUser})
+        return Users(conn).get(id)
+          .then(user => {
+            req.login(user, (err) => {
+              if (err) {
+                return next(err)
+              }
+              res.json({id, newUser})
+            })
+          })
       } else {
         res.json({newUser})
       }

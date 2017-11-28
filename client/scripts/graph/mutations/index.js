@@ -23,16 +23,6 @@ import APPROVE_ROOM from './approveRoom.graphql'
 import BAN_NAMETAG from './banNametag.graphql'
 import errorLog from '../../utils/errorLog'
 
-export const createNametag = graphql(CREATE_NAMETAG, {
-  props: ({ownProps, mutate}) => ({
-    createNametag: (nametag) => mutate({
-      variables: {
-        nametag
-      }
-    })
-  })
-})
-
 export const createRoom = graphql(CREATE_ROOM, {
   props: ({ownProps, mutate}) => ({
     createRoom: (room) => mutate({
@@ -71,6 +61,31 @@ export const updateToken = graphql(UPDATE_TOKEN, {
         token
       }
     })
+  })
+})
+export const createNametag = graphql(CREATE_NAMETAG, {
+  props: ({ownProps, mutate}) => ({
+    createNametag: (nametag) => mutate({
+      variables: {
+        nametag
+      }
+    }),
+    updateQueries: {
+      roomQuery: (oldData, {mutationResult: {data: {createNametag: {errors, nametag}}}}) => {
+        if (errors) {
+          errorLog('Error creating nametag')(errors)
+          return oldData
+        }
+        return {
+          ...oldData,
+          room: {
+            ...oldData.room,
+            nametags: oldData.room.nametags
+              .concat(nametag)
+          }
+        }
+      }
+    }
   })
 })
 

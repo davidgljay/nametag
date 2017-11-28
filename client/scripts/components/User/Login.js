@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 import {track, alias, setTimer} from '../../utils/analytics'
+import {grey} from '../../../styles/colors'
 import t from '../../utils/i18n'
 import key from 'keymaster'
 
@@ -45,24 +46,25 @@ class Login extends Component {
     }
 
     this.register = () => {
-      const {registerUser, refetch} = this.props
+      const {registerUser, onLogin} = this.props
       const {email} = this.state
+      const self = this
 
       if (!validEmail(email)) {
-        this.setState({emailAlert: t('login.enter_email')})
+        self.setState({emailAlert: t('login.enter_email')})
         return
       }
       track('LOGIN_REGISTER_USER')
       registerUser(email.trim().toLowerCase())
         .then(res => {
           if (res.error) {
-            this.setState({alert: res.error.message})
+            self.setState({alert: res.error.message})
           }
           if (res.newUser) {
             alias(res.id)
-            refetch()
+            onLogin()
           } else {
-            this.setState({alert: t('login.link_login'), message: t('login.hello')})
+            self.setState({alert: t('login.link_login'), message: t('login.hello')})
           }
         })
     }
@@ -77,8 +79,8 @@ class Login extends Component {
   }
 
   componentWillMount () {
-    const {message} = this.props
-    this.setState({message})
+    const {message, alert} = this.props
+    this.setState({message, alert})
     setTimer('LOGIN_REGISTER_USER')
     key('enter', this.onEnter)
   }
@@ -94,8 +96,10 @@ class Login extends Component {
       message
     } = this.state
 
+    const {buttonMsg} = this.props
+
     return <div style={styles.login} id='loginForm'>
-      <h4>{message}</h4>
+      <h2>{message}</h2>
       <div style={styles.alert}>
         {alert}
       </div>
@@ -108,7 +112,7 @@ class Login extends Component {
           onBlur={this.validateEmail}
           onClick={() => this.setState({emailClicked: true})}
           onChange={this.updateField('email')} />
-        <div style={styles.alert}>{t('login.privacy_email')}</div>
+        <div style={styles.privacy}>{t('login.privacy_email')}</div>
         <input type='submit' style={styles.hiddenSubmit} />
       </form>
       <div style={styles.authProviders}>
@@ -127,14 +131,14 @@ class Login extends Component {
               src='/public/images/google.png'
               onClick={this.providerAuth('google')} />
           </div>
-          <div style={styles.alert}>{t('login.privacy_provider')}</div>
+          <div style={styles.privacy}>{t('login.privacy_provider')}</div>
         </div>
       </div>
       <div style={styles.buttonContainer}>
         <RaisedButton
           style={styles.button}
           id='registerButton'
-          label={t('login.login')}
+          label={buttonMsg || t('login.login')}
           primary
           onClick={this.register} />
       </div>
@@ -146,8 +150,10 @@ const {func, string} = PropTypes
 
 Login.propTypes = {
   registerUser: func.isRequired,
-  refetch: func.isRequired,
-  message: string
+  onLogin: func.isRequired,
+  message: string,
+  alert: string,
+  buttonMsg: string
 }
 
 export default Login
@@ -163,7 +169,7 @@ const styles = {
     width: 200
   },
   buttonContainer: {
-    marginTop: 10
+    marginTop: 20
   },
   button: {
     margin: 4,
@@ -176,6 +182,13 @@ const styles = {
     textAlign: 'center',
     fontStyle: 'italic',
     fontSize: 14,
+    fontWeight: 300
+  },
+  privacy: {
+    textAlign: 'center',
+    fontStyle: 'italic',
+    fontSize: 12,
+    color: grey,
     fontWeight: 300
   },
   hiddenSubmit: {

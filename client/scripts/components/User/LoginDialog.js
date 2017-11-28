@@ -8,15 +8,15 @@ const LoginDialog = ({toggleLogin, showLogin, message, refetch}) => <Dialog
   open={showLogin || false}
   onRequestClose={() => toggleLogin()}>
   <Login
-    refetch={refetch}
+    onLogin={refetch}
     message={message} />
 </Dialog>
 
-const {func, string} = PropTypes
+const {func, string, bool} = PropTypes
 
 LoginDialog.propTypes = {
   toggleLogin: func.isRequired,
-  showLogin: func.isRequired,
+  showLogin: bool,
   message: string,
   refetch: func.isRequired
 }

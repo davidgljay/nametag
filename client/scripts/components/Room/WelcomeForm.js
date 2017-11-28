@@ -2,6 +2,7 @@ import React, {PropTypes, Component} from 'react'
 import Nametag from '../Nametag/Nametag'
 import {Card} from 'material-ui/Card'
 import Compose from '../Message/Compose'
+import EditNametag from '../Nametag/EditNametag'
 import {track, setTimer, increment} from '../../utils/analytics'
 import t from '../../utils/i18n'
 
@@ -15,11 +16,19 @@ class WelcomeForm extends Component {
     }
 
     this.onPost = (post) => {
-      const {updateNametag, onWelcomeMsgSent, myNametag} = this.props
-      track('WELCOME_POST')
-      increment('ROOMS_POSTED')
-      updateNametag(myNametag.id, {bio: post})
-      onWelcomeMsgSent()
+      const {onIntro, joinRoom, me} = this.props
+      if (!post) {
+        return
+      }
+      if (!me) {
+        onIntro()
+        track('PRE_LOGIN_WELCOME_POST')
+        history.pushState('', document.title, `${window.location.pathname}?intro=${encodeURIComponent(post)}`)
+      } else {
+        track('WELCOME_POST')
+        increment('ROOMS_POSTED')
+        joinRoom(post)
+      }
     }
 
     this.onUpdateText = (bio) => this.setState({bio})
@@ -31,21 +40,34 @@ class WelcomeForm extends Component {
 
   render () {
     const {
-        createMessage,
-        welcome,
-        nametags,
-        mod,
+        room: {
+          welcome,
+          id,
+          nametags,
+          mod,
+          templates
+        },
+        me,
         defaultMessage,
-        roomId,
-        myNametag
+        myNametag,
+        nametagEdit = {},
+        updateNametagEdit
       } = this.props
 
     return <div className='welcome'>
+      {
+        me && <EditNametag
+          nametagEdit={nametagEdit}
+          me={me}
+          requiredTemplates={templates}
+          updateNametagEdit={updateNametagEdit}
+          roomId={id} />
+      }
       <h3 style={styles.header}>{welcome}</h3>
       <Compose
-        roomId={roomId}
+        roomId={id}
         myNametag={myNametag}
-        createMessage={createMessage}
+        createMessage={() => {}}
         defaultMessage={defaultMessage}
         mod={mod}
         topic=''
@@ -56,16 +78,15 @@ class WelcomeForm extends Component {
       <div style={styles.cardsContainer}>
         {
           nametags.map(nt => {
-            const nametag = nt.id === myNametag.id ? {...nt, bio: this.state.bio} : nt
+            const nametag = myNametag && nt.id === myNametag.id
+              ? {...nt, bio: this.state.bio} : nt
             return <Card key={nametag.id} id={nametag.id} style={styles.card}>
               <Nametag
                 nametag={nametag}
                 hideDMs
-                myNametagId={myNametag.id}
                 modId={mod.id} />
             </Card>
-          }
-          )
+          })
         }
       </div>
     </div>
@@ -75,13 +96,16 @@ class WelcomeForm extends Component {
 const {func, string, arrayOf, object, shape} = PropTypes
 
 WelcomeForm.propTypes = {
-  createMessage: func.isRequired,
-  welcome: string.isRequired,
-  onWelcomeMsgSent: func.isRequired,
-  nametags: arrayOf(object),
-  mod: object.isRequired,
-  roomId: string.isRequired,
-  updateNametag: func.isRequired,
+  room: shape({
+    id: string.isRequired,
+    welcome: string.isRequired,
+    templates: arrayOf(object).isRequired,
+    mod: object.isRequired,
+    nametags: arrayOf(object)
+  }),
+  updateNametagEdit: func.isRequired,
+  onIntro: func.isRequired,
+  nametagEdit: object,
   myNametag: shape({id: string.isRequired})
 }
 
