@@ -206,9 +206,8 @@ const RootMutation = {
           ? Templates.create(template) : ErrNotAuthorized)
   },
   createGranter: {
-    requires: 'LOGIN',
+    requires: 'NAMETAG_ADMIN',
     resolve: (obj, {granter}, {user, models: {Granters}}) =>
-      // TODO: Add concept of admin login and require that here.
       Granters.create(granter)
       .then(wrapResponse('granter'))
   },
@@ -241,6 +240,18 @@ const RootMutation = {
           : Promise.reject(ErrNotAuthorized)
         )
   },
+  approveRoom: {
+    requires: 'NAMETAG_ADMIN',
+    resolve: (obj, {roomId}, {models: {Rooms}}) =>
+      Rooms.approveRoom(roomId)
+      .then(wrapResponse('approveRoom'))
+  },
+  banNametag: {
+    requires: 'ROOM_MOD',
+    resolve: (obj, {roomId, nametagId}, {models: {Nametags}}) =>
+      Nametags.ban(nametagId, roomId)
+      .then(wrapResponse('banNametag'))
+  },
   passwordResetRequest: {
     requires: null,
     resolve: (obj, {email}, {models: {Users}}) =>
@@ -265,18 +276,6 @@ const RootMutation = {
     requires: null,
     resolve: (obj, {userToken, roomId}, {models: {Users}}) =>
       Users.unsubscribe(userToken, roomId)
-  },
-  approveRoom: {
-    requires: 'NAMETAG_ADMIN',
-    resolve: (obj, {roomId}, {models: {Rooms}}) =>
-      Rooms.approveRoom(roomId)
-      .then(wrapResponse('approveRoom'))
-  },
-  banNametag: {
-    requires: 'ROOM_MOD',
-    resolve: (obj, {roomId, nametagId}, {models: {Nametags}}) =>
-      Nametags.ban(nametagId, roomId)
-      .then(wrapResponse('banNametag'))
   }
 }
 
