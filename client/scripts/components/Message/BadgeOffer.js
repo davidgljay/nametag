@@ -4,7 +4,7 @@ import Badge from '../Badge/Badge'
 import radium from 'radium'
 import {grey} from '../../../styles/colors'
 import {mobile} from '../../../styles/sizes'
-import t from '../../../utils/i18n'
+import t from '../../utils/i18n'
 
 const BadgeOffer = ({template}) =>
   <div>
