@@ -10,6 +10,7 @@ import NametagIcon from '../Nametag/NametagIcon'
 import ReactMarkdown from 'react-markdown'
 import EmojiText from './EmojiText'
 import FirstReply from './FirstReply'
+import BadgeOffer from './BadgeOffer'
 import EmojiReactions from './EmojiReactions'
 import {primary, white, grey} from '../../../styles/colors'
 import {track} from '../../utils/analytics'
@@ -75,6 +76,7 @@ class Message extends Component {
         reactions,
         parent,
         replies,
+        template,
         replyCount
       },
       norms,
@@ -188,6 +190,12 @@ class Message extends Component {
               escapeHtml />
           </div>
           {media}
+          {
+            template &&
+            <div>
+              <BadgeOffer template={template} />
+            </div>
+          }
           {
             author &&
             <div style={styles.below}>
