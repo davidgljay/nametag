@@ -87,6 +87,8 @@ class Message extends Component {
       toggleEmoji,
       myNametag,
       addReaction,
+      badgeGrant,
+      canGrantBadges,
       hideAuthor,
       createMessage,
       editMessage,
@@ -242,6 +244,8 @@ class Message extends Component {
                 open={showMenu === 'mentions'}
                 anchor={document.getElementById(id)}
                 toggleMenu={this.toggleMenu}
+                badgeGrant={badgeGrant}
+                canGrantBadges={canGrantBadges}
                 setDefaultMessage={setDefaultMessage}
                 setRecipient={setRecipient} />
               <CommandMenu
@@ -325,6 +329,8 @@ Message.propTypes = {
   createMessage: func.isRequired,
   addReaction: func.isRequired,
   mod: object.isRequired,
+  canGrantBadges: bool.isRequired,
+  badgeGrant: func.isRequired,
   deleteMessage: func.isRequired,
   banNametag: func.isRequired,
   hideDMs: bool.isRequired,
