@@ -17,6 +17,7 @@ en:
   title: Title
   description: Description
   cancel: Cancel
+  agree: I Agree
   copy_clip: Copy To Clipboard
   badge:
     granted_by: Granted by

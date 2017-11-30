@@ -3,6 +3,8 @@ import Dialog from 'material-ui/Dialog'
 import Login from '../../containers/User/LoginContainer'
 import AboutNametag from './AboutNametag'
 import WelcomeForm from './WelcomeForm'
+import Norms from './Norms'
+import RaisedButton from 'material-ui/RaisedButton'
 import {getQueryVariable, removeQueryVar} from '../../utils/queryVars'
 import t from '../../utils/i18n'
 
@@ -36,10 +38,23 @@ class RoomDialog extends Component {
       let next
       switch (status) {
         case 'ABOUT':
-          next = () => this.setState({status: 'WELCOME'})
+          next = () => this.setState({status: 'NORMS'})
           return <div>
             <AboutNametag
               next={next} />
+          </div>
+        case 'NORMS':
+          next = () => this.setState({status: 'WELCOME'})
+          return <div style={styles.normsContainer}>
+            <h3>Norms</h3>
+            <Norms
+              norms={room.norms}
+              showChecks />
+            <RaisedButton
+              onClick={next}
+              primary
+              style={styles.normsButton}
+              label={t('agree')} />
           </div>
         case 'WELCOME':
           next = () => this.setState({status: 'LOGIN'})
@@ -118,5 +133,13 @@ const styles = {
   },
   bodyStyle: {
     overflowY: 'auto'
+  },
+  normsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  normsButton: {
+    marginTop: 30
   }
 }
