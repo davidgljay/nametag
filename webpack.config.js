@@ -69,6 +69,10 @@ module.exports = {
         to: path.join(__dirname, 'dist', 'public', 'images')
       },
       {
+        from: path.join(__dirname, 'client', 'locales'),
+        to: path.join(__dirname, 'dist', 'public', 'locales')
+      },
+      {
         from: path.join(__dirname, 'client', 'firebase-messaging-sw.js'),
         to: path.join(__dirname, 'dist', 'public', 'firebase-messaging-sw.js')
       },
@@ -83,6 +87,10 @@ module.exports = {
       {
         from: path.join(__dirname, 'client', 'index.html'),
         to: path.join(__dirname, 'dist', 'public', 'index.html')
+      },
+      {
+        from: path.join(__dirname, 'client', 'yaml.js'),
+        to: path.join(__dirname, 'dist', 'public', 'yaml.js')
       },
       {
         from: path.join(__dirname, 'client', 'styles'),

@@ -7,6 +7,7 @@ import { dragTypes } from '../../../constants'
 import {grey} from '../../../../styles/colors'
 import FontIcon from 'material-ui/FontIcon'
 import _ from 'lodash'
+import t from '../../../utils/i18n'
 
 const privacyTarget = {
   drop (props, monitor) {
@@ -34,12 +35,12 @@ class ChoosePrivacy extends Component {
       return selectedBadges.map(selected => selected.template.id).indexOf(badge.template.id) === -1
     })
 
-    let header = 'Conversation is Public'
+    let header = t('create_room.is_public')
 
     if (selectedBadges.length > 1) {
-      header = 'Conversation requires one or more of these badges:'
+      header = t('create_room.req_badge_plural')
     } else if (selectedBadges.length === 1) {
-      header = 'Conversation requires this badge:'
+      header = t('create_room.req_badge')
     }
 
     return <div style={styles.container}>
@@ -58,7 +59,7 @@ class ChoosePrivacy extends Component {
           <FontIcon
             style={styles.userBadgeIcon}
             className='material-icons'>arrow_upward</FontIcon>
-          Drag to Require
+          {t('create_room.drag_badge')}
           <FontIcon
             style={styles.userBadgeIcon}
             className='material-icons'>arrow_upward</FontIcon>

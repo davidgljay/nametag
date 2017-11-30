@@ -29,7 +29,7 @@ module.exports = conn => new FacebookStrategy({
       providerPhotoUrl: profile.photos[0].value,
 
       // TODO: Handle multiple e-mails
-      email: profile.emails.length > 0 && profile.emails[0].value,
+      email: profile.emails && profile.emails.length > 0 && profile.emails[0].value,
       id: profile.id,
       badges: [{
         name: profile.displayName

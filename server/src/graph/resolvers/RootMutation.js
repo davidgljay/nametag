@@ -54,14 +54,15 @@ const wrap = (mutation, requires, key = 'result') => (obj, args, context) => {
       break
     case 'ROOM_MOD':
       promise = context.models.Rooms.get(args.roomId)
-      .then(room => room.mod === context.user.nametags[room.id]
+      .then(room => room && room.mod === context.user.nametags[room.id]
         ? mutation(obj, args, context)
         : Promise.reject(ErrNotMod)
       )
       break
     case 'MY_MESSAGE':
       promise = context.models.Messages.get(args.messageId)
-      .then(message => message.author === context.user.nametags[args.roomId] &&
+      .then(message => message &&
+        message.author === context.user.nametags[args.roomId] &&
         message.room === args.roomId
         ? mutation(obj, args, context)
         : Promise.reject(ErrNotYourMessage)
@@ -205,9 +206,8 @@ const RootMutation = {
           ? Templates.create(template) : ErrNotAuthorized)
   },
   createGranter: {
-    requires: 'LOGIN',
+    requires: 'NAMETAG_ADMIN',
     resolve: (obj, {granter}, {user, models: {Granters}}) =>
-      // TODO: Add concept of admin login and require that here.
       Granters.create(granter)
       .then(wrapResponse('granter'))
   },
@@ -240,16 +240,6 @@ const RootMutation = {
           : Promise.reject(ErrNotAuthorized)
         )
   },
-  passwordResetRequest: {
-    requires: null,
-    resolve: (obj, {email}, {models: {Users}}) =>
-      Users.passwordResetRequest(email)
-  },
-  passwordReset: {
-    requires: null,
-    resolve: (obj, {token, password}, {models: {Users}}) =>
-      Users.passwordReset(token, password)
-  },
   emailConfirmationRequest: {
     requires: null,
     resolve: (obj, {email}, {models: {Users}}) =>
@@ -262,8 +252,8 @@ const RootMutation = {
   },
   unsubscribe: {
     requires: null,
-    resolve: (obj, {userToken, roomId}, {models: {Users}}) =>
-      Users.unsubscribe(userToken, roomId)
+    resolve: (obj, {loginHash, roomId}, {models: {Users}}) =>
+      Users.unsubscribe(loginHash, roomId)
   },
   approveRoom: {
     requires: 'NAMETAG_ADMIN',

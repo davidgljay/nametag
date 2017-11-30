@@ -1,7 +1,7 @@
 const {APIError, errorLog} = require('../../errors')
 const {db} = require('../../db')
 const pubsub = require('./pubsub')
-const {index} = require('../../elasticsearch')
+// const {index} = require('../../elasticsearch')
 const email = require('../../email')
 
 const RoomSubscription = ({conn, models: {Nametags, Users}}) => db.table('rooms').changes().run(conn)
@@ -40,19 +40,19 @@ const RoomSubscription = ({conn, models: {Nametags, Users}}) => db.table('rooms'
             email({
               to: user.email,
               from: {name: 'Nametag', email: 'noreply@nametag.chat'},
-              template: 'approvedRoom',
+              template: 'roomApproval',
               params: {
                 roomId: room.new_val.id,
                 roomTitle: room.new_val.title,
-                userToken: user.userToken
+                loginHash: user.loginHash
               }
             })
           })
       }
-      const roomForIndex = room.new_val.templates.length === 0
-        ? Object.assign({}, room.new_val, {templates: ['public']})
-        : room.new_val
-      index(roomForIndex, 'room', 'room')
+      // const roomForIndex = room.new_val.templates.length === 0
+      //   ? Object.assign({}, room.new_val, {templates: ['public']})
+      //   : room.new_val
+      // index(roomForIndex, 'room', 'room')
       if (room.old_val && room.old_val.latestMessage !== room.new_val.latestMessage) {
         pubsub.publish('latestMessageUpdated', {
           latestMessage: room.new_val.latestMessage,

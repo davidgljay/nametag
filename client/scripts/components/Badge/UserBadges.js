@@ -4,6 +4,7 @@ import Badge from './Badge'
 // import FlatButton from 'material-ui/FlatButton'
 import FontIcon from 'material-ui/FontIcon'
 import {grey} from '../../../styles/colors'
+import t from '../../utils/i18n'
 
 class UserBadges extends Component {
 
@@ -32,7 +33,7 @@ class UserBadges extends Component {
           <FontIcon
             style={styles.userBadgeIcon}
             className='material-icons'>arrow_upward</FontIcon>
-          Drag to Share
+          {t('badge.drag_share')}
           <FontIcon
             style={styles.userBadgeIcon}
             className='material-icons'>arrow_upward</FontIcon>

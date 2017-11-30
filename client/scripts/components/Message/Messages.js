@@ -5,6 +5,7 @@ import radium from 'radium'
 import HelpMessage from './HelpMessage'
 import Popover from 'material-ui/Popover'
 import {Picker} from 'emoji-mart'
+import t from '../../utils/i18n'
 
 class Messages extends Component {
 
@@ -95,7 +96,7 @@ class Messages extends Component {
 
   componentDidUpdate (prevProps) {
     if (prevProps.messages.length !== this.props.messages.length) {
-      // this.scroll()
+      this.scroll()
     }
   }
 
@@ -119,7 +120,7 @@ class Messages extends Component {
           mod && myNametag &&
           mod.id === myNametag.id &&
           <HelpMessage
-            text='Leave a few messages to set the tone, then invite a few people in to get things started. Just share a link to this room.' />
+            text={t('message.host_welcome')} />
         }
         {
           messages.map(this.mapMessage)

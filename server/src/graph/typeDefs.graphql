@@ -722,12 +722,6 @@ type RootMutation {
   # Adds a note to badge
   addNote(badgeId: ID!, text: String!): BasicResponse
 
-  # Creates a password reset request
-  passwordResetRequest(email: String!): BasicResponse
-
-  # Resets a password
-  passwordReset(token: String!, password: String!): BasicResponse
-
   # Requests an email confirmation
   emailConfirmationRequest(email: String!): BasicResponse
 
@@ -735,7 +729,7 @@ type RootMutation {
   emailConfirmation(token: String!): BasicResponse
 
   # Unsubscribes from a room
-  unsubscribe(userToken: String!, roomId: String!): BasicResponse
+  unsubscribe(loginHash: String!, roomId: String!): BasicResponse
 
   # Approves a public room
   approveRoom(roomId: ID!): BasicResponse

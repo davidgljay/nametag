@@ -3,6 +3,7 @@ import {withRouter} from 'react-router'
 import Login from '../../containers/User/LoginContainer'
 import RaisedButton from 'material-ui/RaisedButton'
 import Alert from '../Utils/Alert'
+import t from '../../utils/i18n'
 
 class Join extends Component {
 
@@ -32,7 +33,7 @@ class Join extends Component {
             primary
             labelStyle={styles.button}
             onClick={this.onJoinClick}
-            label='JOIN' />
+            label={t('room.join')} />
         </div>
     } else {
       join = <Login />

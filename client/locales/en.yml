@@ -1,0 +1,192 @@
+en:
+  login:
+    enter_email: Please enter a valid e-mail address
+    check_email: Please check your e-mail
+    hello: Hello again!
+    link_login: We've sent you an e-mail that you can use to log in.
+    email: E-mail
+    or: OR
+    login: Log In
+    logout: Log Out
+    send_link: Send Link
+    privacy_provider: We never post on your behalf.
+    privacy_email: We only e-mail you about conversations you've joined.
+  next: Next
+  back: Back
+  approve: Approve
+  title: Title
+  description: Description
+  cancel: Cancel
+  agree: I Agree
+  copy_clip: Copy To Clipboard
+  badge:
+    granted_by: Granted by
+    note: Note
+    grant_badge: Grant Badge
+    note_hint: Add a note that will be publicly visible on this individual's badge. Do not include any personally identifiable information.
+    add_note: Add Note
+    request: Request
+    claim: Claim
+    deny: Deny
+    request_claim: Log in to {0} this badge
+    request_submitted: Request submitted
+    hear_back: You should hear back from {0} shortly.
+    would_like: would like the badge
+    note_grant: Add a note explaining why you have granted this badge to {0}. Do not include any personally identifiable information.
+    create_badge: Create Badge
+    badge_desc: Badges can be used to verify things about someone, such as their involvement in {0}.
+    badge_example: An identity that can be shared with others, such as "Lawyer" or "Dog Lover".
+    badge_detail_desc: A more detailed explanation, such as "This individual is licensed to practice law by the New York State Bar." Should not include personally identifiable information.
+    require_approval: Require Approval
+    req_approval_on: You must manually approve everyone who receives this badge.
+    req_approval_off: This badge will be granted to anyone with the appropriate link.
+    share_subject: You've been granted a {0} badge on Nametag!
+    share_body: To claim your certificate just visit this URL:\n\n{0}
+    drag_share: Drag to Share
+  granter:
+    login_to_view: Log in to view this page.
+  message:
+    edit: Edit Message
+    editing: Editing Message
+    edited: Edited
+    delete: Delete Message
+    private: "Private message to {0}:"
+    private_msg: Private Message
+    mention: "@Mention"
+    closed: This discussion is closed.
+    typing: "Typing:"
+    host_welcome: Leave a few messages to set the tone, then invite a few people in to get things started. Just share a link to this room.
+    commands:
+      welcome: Update this room's welcome prompt
+      intro: Update your intro message
+      name: Update your name
+      title: Update this room's title
+      announce: Send an e-mail to everyone in the room
+    skin_tone: Skin Tone
+    reply_to: Reply To
+  mod_action:
+    norm_err: Please check at least one norm.
+    note: Note from the Moderator\n\n
+    report: Message Report\n\n
+    remind: Remind {0} of Conversation Norms
+    report_to_mod: Report This Post to the Moderator
+    add_note: Add an optional note.
+    send: Send Message
+    remove: Remove Message
+    ban: Ban Author
+    visible_on: Visible to everyone in the room.
+    visible_off: Visible only to the author of this message.
+  nametag:
+    name: Name
+  create_room:
+    norms:
+      - Refrain from personal attacks
+      - Avoid explicit language & content
+      - Take time to welcome newcomers
+      - What's said here stays here
+      - Keep comments brief and to the point
+      - Personal experience > personal opinion
+      - Curiosity > judgement
+      - Maintain an environment of safety and support
+      - Maintain professionalism
+      - Keep it light & fun
+    set_norms: Set Conversation Norms
+    norms_detail: As a host, you will be able to hold people accountable to these norms.
+    add_norm: Add a norm...
+    is_public: Conversation is Public
+    req_badge_plural: Conversation requires one or more of these badges:
+    req_badge: Conversation requires this badges:
+    drag_badge: Drag To Require
+    create_account: Create Account
+    done: You're done!
+    room_pub_on: Make Discoverable
+    room_pub_off: Keep Private
+    room_pub_on_help: Once approved, your conversation will be discoverable on Nametag.
+    room_pub_off_help: Your conversation will only be visible if you share its link.
+    intro: Introduce Yourself
+    intro_help: Give participants a sense of who you are and why this topic matters to you.
+    intro_custom: Customize how you will appear in this room. You must provide an image.
+    stepper:
+      - Choose Welcome Prompt
+      - Set Conversation Norms
+      - Create Account
+      - Intoduce Yourself
+      - Done!
+    welcome_options:
+      - What brings you to this conversation?
+      - Why are you interested in this topic?
+      - Briefly share your background.
+    talking: Get People Talking
+    welcome_start: Start by choosing a welcome prompt.
+    welcome_helptext: Users will be asked this question when they enter the room.
+    welcome_prompt: Welcome Prompt
+    errors:
+      welcome: Please add a welcome prompt
+      norm: Please select at least one norm
+      image: Please choose an image
+      intro: Please introduce yourself
+  room:
+    conf_nametag: How would you like to appear in this room?
+    enter_room: Enter Room
+    join: Join
+    nametag_desc: Small, private conversations with people you trust.
+    about_nametag: This conversation is confidential. Everyone must introduce themselves and agree to a set of shared norms.
+    got_it: Got It
+    edit_nametag: If you like, you can edit how you will appear in this room.
+    banned: You have been banned from this conversation:
+    norms: Norms
+    show_more: Show More
+    create_account: Register to Join
+    choose_one: Choose One Of the Following
+    dinner_party: Online conversation that feels like an intimate dinner party.
+    room_convos: Your Conversations
+    intimate: Chat Built For Intimate Conversation
+    feature_callouts:
+      0:
+        image: https://s3.amazonaws.com/nametag_images/site/welcoming.jpg
+        title: Welcoming
+        body: Everyone who enters a room introduces themselves, so you know what perspective they bring.
+      1:
+        image: https://s3.amazonaws.com/nametag_images/site/kayak.jpg
+        title: Focused
+        body: All conversations have a moderator and a shared set of norms to keep them focused on what matters.
+      2:
+        image: https://s3.amazonaws.com/nametag_images/site/intimate.jpg
+        title: Confidential
+        body: Limit conversations to people you trust, we keep what you say and where you say it private.
+    built_by: Nametag is built by folks who want better ways to build trust on the internet.
+    learn: Learn More
+    rooms: Rooms
+    settings: Settings
+    nametags: Nametags
+    priv_msg_on: Only host can message privately
+    priv_msg_off: Anyone can message privately
+    closed: This room is closed
+    open: This room is active
+    invite: Invite
+    invite_twitter: Join the conversation:
+    invite_email: There's an interesting conversation going on, want to join?\n\n
+    room_form_err: You must propose a topic of conversation.
+    room_form: What would you like to talk about?
+    start_conversation: Start Conversation
+    try_it: Try It Out
+    introduce: Introduce Yourself
+  user:
+    em_confirmed: Your e-mail has been confirmed! Redirecting to homepage...
+    pw_match: Passwords do not match
+    pw_short: Password must be at least 8 characters
+    pw_updated: Done! Your password has been updated.
+    redirecting: Redirecting you to the homepage...
+    reset_pw: Great! You can reset your password below.
+    password: Password
+    confirm: Confirm Password
+    reset: Reset Password
+    unsubscribed: You have been unsubscribed.
+    unsub: Would you like to stop receiving notifications from {roomName}?
+    unsub_label: Unsubscribe from room
+    unsub_text: We only e-mail you when you are directly mentioned in a conversation. If you want us not to you can
+    unsub_link: unsubscribe from all rooms
+    unsub_text_2:  on Nametag
+  nav:
+    home: Home
+    orgs: Organizations

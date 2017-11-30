@@ -4,6 +4,7 @@ import IconButton from 'material-ui/IconButton'
 import FlatButton from 'material-ui/FlatButton'
 import DefaultNametag from './BadgeDefaultNametag'
 import FontIcon from 'material-ui/FontIcon'
+import t from '../../utils/i18n'
 import {grey, primary} from '../../../styles/colors'
 
 class Template extends Component {
@@ -28,8 +29,8 @@ class Template extends Component {
 
     this.onMailClick = () => {
       window.open(
-        `mailto:?&subject=${encodeURIComponent(`You've been granted a ${this.props.template.name} badge on Nametag!`)}` +
-       `&body=${encodeURIComponent(`To claim your certificate just visit this URL:\n\n${this.getPath()}`)}`, '_blank'
+        `mailto:?&subject=${encodeURIComponent(t('badge.share_subject', this.props.template.name))}` +
+       `&body=${encodeURIComponent(t('badge.share_body', this.getPath()))}`, '_blank'
      )
     }
 
@@ -93,7 +94,7 @@ class Template extends Component {
           <div style={styles.copyButtonContainer}>
             <FlatButton
               style={styles.copyButton}
-              label='COPY TO CLIPBOARD'
+              label={t('copy_clip')}
               primary
               onClick={this.onClipboardClick}
               />

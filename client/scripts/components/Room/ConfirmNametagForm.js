@@ -4,6 +4,7 @@ import UserBadges from '../Badge/UserBadges'
 import RaisedButton from 'material-ui/RaisedButton'
 import {grey} from '../../../styles/colors'
 import {track, increment, setTimer} from '../../utils/analytics'
+import t from '../../utils/i18n'
 
 class ConfirmNametagForm extends Component {
 
@@ -39,7 +40,7 @@ class ConfirmNametagForm extends Component {
     } = this.props
 
     return <div className='confirm-nametag'>
-      <h3 style={styles.header}>How would you like to appear in this room?</h3>
+      <h3 style={styles.header}>{t('room.conf_nametag')}</h3>
       <EditNametag
         nametagEdit={nametag}
         me={me}
@@ -59,7 +60,7 @@ class ConfirmNametagForm extends Component {
           primary
           labelStyle={styles.button}
           onClick={this.onEnterClick}
-          label='ENTER ROOM' />
+          label={t('room.enter_room')} />
       </div>
     </div>
   }

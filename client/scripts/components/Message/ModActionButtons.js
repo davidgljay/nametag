@@ -3,6 +3,7 @@ import { CardActions } from 'material-ui/Card'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import {red} from '../../../styles/colors'
+import t from '../../utils/i18n'
 
 const ModActionButtons = (props) => <CardActions>
   <RaisedButton
@@ -10,18 +11,18 @@ const ModActionButtons = (props) => <CardActions>
     primary
     labelStyle={styles.primary}
     onClick={props.remindOfNorms}
-    label='SEND MESSAGE' />
+    label={t('mod_action.send')} />
   {
       props.isMod &&
       <div>
         <FlatButton
           style={styles.severe}
           onClick={props.removeMessage}
-          label='REMOVE MESSAGE' />
+          label={t('mod_action.remove_message')} />
         <FlatButton
           style={styles.severe}
           onClick={props.ban}
-          label='BAN AUTHOR' />
+          label={t('mod_action.ban_author')} />
       </div>
     }
 </CardActions>

@@ -105,6 +105,7 @@ Nametag.PropTypes = {
     present: bool,
     badges: arrayOf(object).isRequired
   }).isRequired,
+  myNametagId: string,
   setDefaultMessage: func,
   setRecipient: func,
   hideDMs: bool

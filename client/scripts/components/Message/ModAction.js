@@ -9,6 +9,7 @@ import FontIcon from 'material-ui/FontIcon'
 import {List, ListItem} from 'material-ui/List'
 import Checkbox from 'material-ui/Checkbox'
 import TextField from 'material-ui/TextField'
+import t from '../../utils/i18n'
 
 class ModAction extends Component {
 
@@ -52,7 +53,7 @@ class ModAction extends Component {
       const isMod = mod.id === myNametag.id
 
       if (Object.keys(normChecks).length === 0) {
-        this.setState({alert: 'Please check at least one norm.'})
+        this.setState({alert: t('mod_action.norm_err')})
         return
       }
 
@@ -66,8 +67,9 @@ class ModAction extends Component {
       } else {
         recipient = mod.id
       }
-      message += isMod ? `### Note from the Moderator\n\n`
-        : `### Message Report\n\n`
+      message += '### '
+      message += isMod ? t('mod_action.note')
+        : t('mod_action.report')
       message += `\n> ${text}\n`
       message += `${checkedNorms.reduce((msg, norm) => `${msg}* **${norm}** \n`, '')}\n`
       message += `*${note}*`
@@ -128,8 +130,8 @@ class ModAction extends Component {
         </FontIcon>
       </IconButton>
       {
-        isMod ? <h4 style={styles.title}>Remind {author.name} of Conversation Norms</h4>
-      : <h4 style={styles.title}>Report This Post to the Moderator</h4>
+        isMod ? <h4 style={styles.title}>{t('mod_action.remind', author.name)}</h4>
+      : <h4 style={styles.title}>{t('mod_action.report_to_mod')}</h4>
       }
       <List>
         {norms.map(this.showNorm)}
@@ -137,7 +139,7 @@ class ModAction extends Component {
       <TextField
         style={styles.addNote}
         onChange={this.addNote}
-        hintText='Add an optional note.'
+        hintText={t('mod_action.add_note')}
         value={note} />
       {
         isMod && <VisOptions

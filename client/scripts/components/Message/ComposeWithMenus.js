@@ -8,6 +8,7 @@ import NametagIcon from '../Nametag/NametagIcon'
 import {mobile} from '../../../styles/sizes'
 import {grey} from '../../../styles/colors'
 import radium from 'radium'
+import t from '../../utils/i18n'
 
 class ComposeWithMenu extends Component {
 
@@ -109,7 +110,7 @@ class ComposeWithMenu extends Component {
         showTypingPrompt={showTypingPrompt}
         nametags={nametags}
         closed={closed}
-        hintText={closed ? 'This discussion is closed.' : ''}
+        hintText={closed ? t('message.closed') : ''}
         createMessage={createMessage}
         editMessage={editMessage}
         defaultMessage={defaultMessage}
@@ -122,7 +123,7 @@ class ComposeWithMenu extends Component {
       />
       <div style={styles.typingPrompts}>
         {
-          typingPrompts.length > 0 && <div style={styles.typingPromptText}>Typing:</div>
+          typingPrompts.length > 0 && <div style={styles.typingPromptText}>t('message.typing')</div>
         }
         {
           typingPrompts.map(nametag =>

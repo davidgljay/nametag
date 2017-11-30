@@ -53,6 +53,7 @@
     "redux": "^3.5.2",
     "redux-thunk": "^2.1.0",
     "subscriptions-transport-ws": "^0.5.5-alpha.0",
+    "timeago.js": "^3.0.2",
     "winston": "^2.1.0",
     "ws": "^1.1.0"
   },
@@ -134,7 +135,7 @@
     ],
     "ignore": [
       "/node_modules",
-      "/horizon"
+      "/client/yaml.js"
     ]
   }
 }

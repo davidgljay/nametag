@@ -103,7 +103,7 @@ const toggleSaved = ({conn}, id, saved) =>
  **/
 
 const create = (context, m) => {
-  const {conn, models: {Rooms}} = context
+  const {conn, models: {Rooms, Nametags}} = context
   let messageObj = Object.assign(
     {},
     m,
@@ -122,7 +122,10 @@ const create = (context, m) => {
       .then(([updates = {}, message]) => Object.assign({}, message, updates))
   }
   return checkForCommands(context, messageObj)
-  .then(msg => messagesTable.insert(msg).run(conn))
+  .then(msg => {
+    messageObj = msg
+    return messagesTable.insert(msg).run(conn)
+  })
   .then((res) => {
     if (res.errors > 0) {
       return new errors.APIError('Error creating message')
@@ -132,7 +135,8 @@ const create = (context, m) => {
   .then(message => Promise.all([
     checkMentions(context, message),
     message,
-    Rooms.updateLatestMessage(message.room)
+    Rooms.updateLatestMessage(message.room),
+    Nametags.update(message.author, {latestVisit: new Date(Date.now() + 1000)})
   ])
   )
   .then(([updates = {}, message]) => Object.assign({}, message, updates))
@@ -182,7 +186,7 @@ const emailIfReply = ({conn, user}, msg) =>
     .zip()
     .eqJoin('room', r.db('nametag').table('rooms'))
     .zip()
-    .pluck('email', 'messageText', 'messageAuthor', 'messageId', 'room', 'userToken', 'title')
+    .pluck('email', 'messageText', 'messageAuthor', 'messageId', 'room', 'loginHash', 'title')
     .run(conn)
     .then(cursor => cursor.toArray())
     .then(replies => {
@@ -190,7 +194,7 @@ const emailIfReply = ({conn, user}, msg) =>
       let promises = []
       let notified = {[user.email]: true}
       for (var i = 0; i < replies.length; i++) {
-        const {messageAuthor, room, userToken, title} = replies[i]
+        const {messageAuthor, room, loginHash, title} = replies[i]
         if (!notified[replies[i].email]) {
           notified[replies[i].email] = true
           promises.push(email({
@@ -203,7 +207,7 @@ const emailIfReply = ({conn, user}, msg) =>
               message: msg.text,
               messageId,
               author: messageAuthor,
-              userToken
+              loginHash
             }
           }))
         }

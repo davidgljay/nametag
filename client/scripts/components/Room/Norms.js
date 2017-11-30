@@ -27,22 +27,22 @@ const styles = {
 
 }
 
-const Norms = (props) =>
+const Norms = ({norms, showChecks}) =>
   <div id='norms'>
     {
-      props.norms &&
+      norms &&
       <List style={styles.norms}>
         {
-          props.norms.map((norm, i) =>
+          norms.map((norm, i) =>
             <ListItem
               key={i}
               primaryText={norm}
               disabled
               innerDivStyle={
-                props.showChecks ? styles.normText
+                showChecks ? styles.normText
                 : {...styles.normText, padding: 7, fontSize: 14}
               }
-              leftIcon={props.showChecks ? <Check style={styles.check} /> : <div />}
+              leftIcon={showChecks ? <Check style={styles.check} /> : <div />}
               style={styles.norm} />
           )
         }

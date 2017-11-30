@@ -3,6 +3,7 @@ import {List, ListItem} from 'material-ui/List'
 import Badge from 'material-ui/Badge'
 import {white} from '../../../styles/colors'
 import NametagIcon from '../Nametag/NametagIcon'
+import t from '../../utils/i18n'
 
 class Notifications extends Component {
   constructor (props) {
@@ -16,8 +17,13 @@ class Notifications extends Component {
       nametag => nametag.room && !nametag.banned &&
       nametag.room.id !== this.props.roomId
     )
-    .sort((a, b) => new Date(b.latestVisit).getTime() - new Date(a.latestVisit).getTime())
-    .sort((a, b) => b.room.newMessageCount - a.room.newMessageCount)
+    .sort((a, b) => {
+      if (b.room.newMessageCount === a.room.newMessageCount) {
+        return new Date(b.room.latestMessage).getTime() - new Date(a.room.latestMessage).getTime()
+      } else {
+        return b.room.newMessageCount - a.room.newMessageCount
+      }
+    })
   }
 
   componentWillMount () {
@@ -76,7 +82,7 @@ class Notifications extends Component {
         <div
           style={styles.showMore}
           onClick={() => this.setState({showMore: true})}>
-          Show More
+          {t('room.show_more')}
         </div>
       }
     </div>

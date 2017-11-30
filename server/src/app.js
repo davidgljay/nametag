@@ -14,7 +14,7 @@ const session = require('express-session')
 const graph = require('./graph')
 const subscriptions = require('./graph/subscriptions')
 const apollo = require('graphql-server-express')
-const {local, facebook, twitter, google, authCallback} = require('./auth')
+const {local, facebook, twitter, google, authCallback, hash} = require('./auth')
 const errors = require('./errors')
 const Context = require('./graph/context')
 const {db} = require('./db')
@@ -99,7 +99,8 @@ if (process.env.PRERENDER_TOKEN) {
 r.connect({host: 'rethinkdb'})
   .then(conn => {
     /* Auth Providers */
-    passport.use('local', local(conn))
+    // passport.use('local', local(conn))
+    passport.use('hash', hash(conn))
     passport.use('facebook', facebook(conn))
     passport.use('twitter', twitter(conn))
     passport.use('google', google(conn))
@@ -153,9 +154,16 @@ r.connect({host: 'rethinkdb'})
         authCallback(req, res, next, conn)
       )(req, res, next))
 
-    app.post('/login', (req, res, next) => {
-      passport.authenticate('local',
-      local.handleLocalCallback(req, res, next))(req, res, next)
+    // Local login with username and password
+    // app.post('/login', (req, res, next) => {
+    //   passport.authenticate('local',
+    //   local.handleLocalCallback(req, res, next))(req, res, next)
+    // })
+
+    // Local login with a token
+    app.get('/login/:hash', (req, res, next) => {
+      passport.authenticate('hash',
+      hash.handleHashCallback(req, res, next))(req, res, next)
     })
 
     // Send an e-mail digest
@@ -165,7 +173,7 @@ r.connect({host: 'rethinkdb'})
       } else {
         const context = new Context({}, conn)
         context.models.Users.emailDigest()
-          .then(res.end('Success!'))
+          .then(res.end())
           .catch(err => next(new errors.APIError(err)))
       }
     })
@@ -244,6 +252,7 @@ app.post('/api/images',
 app.get('/api/image_redirect',
   (req, res) => {
     imageRedirect.redirect(decodeURIComponent(req.query.url), res)
+      .catch(err => console.error('Redirecting image', err))
   }
 )
 

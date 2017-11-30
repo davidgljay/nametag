@@ -1661,6 +1661,12 @@ passport-google-oauth@^1.0.0:
     passport-google-oauth1 "1.x.x"
     passport-google-oauth20 "1.x.x"
 
+passport-hash@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/passport-hash/-/passport-hash-0.6.0.tgz#2e24066d0e27da684170601d29624381cf0def95"
+  dependencies:
+    passport-strategy "1.x.x"
+
 passport-local@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/passport-local/-/passport-local-1.0.0.tgz#1fe63268c92e75606626437e3b906662c15ba6ee"

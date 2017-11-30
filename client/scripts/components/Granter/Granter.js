@@ -10,6 +10,7 @@ import FontIcon from 'material-ui/FontIcon'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import {mobile} from '../../../styles/sizes'
 import radium from 'radium'
+import t from '../../utils/i18n'
 
 class Granter extends Component {
 
@@ -30,18 +31,14 @@ class Granter extends Component {
       data: {granter, me, loading, error},
       createBadge,
       updateBadgeRequestStatus,
-      loginUser,
-      registerUser,
       addNote
     } = this.props
 
     if (error && error.message === 'GraphQL Error: Not Logged In') {
       return <div>
         <LoginDialog
-          loginUser={loginUser}
-          registerUser={registerUser}
           showLogin
-          message={'Log in to view this page.'} />
+          message={t('granter.login_to_view')} />
       </div>
     } else if (error) {
       return <h2>
@@ -77,7 +74,7 @@ class Granter extends Component {
           <div style={styles.createButtonContainter}>
             <FlatButton
               href={`/granters/${granter.urlCode}/badges/create`}
-              label='Create Badge'
+              label={t('badge.create_badge')}
               labelPosition='before'
               icon={
                 <FontIcon

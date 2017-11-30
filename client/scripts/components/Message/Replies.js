@@ -5,6 +5,7 @@ import NametagIcon from '../Nametag/NametagIcon'
 import Dialog from 'material-ui/Dialog'
 import FontIcon from 'material-ui/FontIcon'
 import {track, setTimer, increment} from '../../utils/analytics'
+import t from '../../utils/i18n'
 
 class Replies extends Component {
 
@@ -66,7 +67,7 @@ class Replies extends Component {
                 close
               </FontIcon>
           <h3 style={styles.header}>
-            <div>Reply To</div>
+            <div>{t('message.reply_to')}</div>
             <div style={styles.nametagIconStyle}>
               <NametagIcon
                 image={parentAuthor.image}

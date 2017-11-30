@@ -10,6 +10,7 @@ import {mobile} from '../../../styles/sizes'
 import {track, identify} from '../../utils/analytics'
 import {white, grey} from '../../../styles/colors'
 import CircularProgress from 'material-ui/CircularProgress'
+import t from '../../utils/i18n'
 
 class RoomCards extends Component {
 
@@ -46,7 +47,7 @@ class RoomCards extends Component {
 
   render () {
     const {
-      data: {me, rooms, loading}
+      data: {me, rooms, loading, refetch}
     } = this.props
 
     if (loading) {
@@ -80,7 +81,7 @@ class RoomCards extends Component {
           showAbout &&
           <div style={styles.header}>
             <div style={styles.headerText}>
-              Online conversation that feels like an intimate dinner party.
+              {t('room.dinner_party')}
             </div>
           </div>
         }
@@ -89,14 +90,14 @@ class RoomCards extends Component {
           {
             !showAbout &&
             <div style={styles.joinedRooms}>
-              <h3 style={styles.joinedRoomsHeader}>Your Conversations</h3>
+              <h3 style={styles.joinedRoomsHeader}>{t('room.room_convos')}</h3>
               <div style={styles.joinedRoomContainer}>
                 {
                   me.nametags
                   .filter(nametag => !!nametag.room && !nametag.banned)
                   .sort((a, b) => {
                     if (b.room.newMessageCount === a.room.newMessageCount) {
-                      return new Date(b.latestVisit).getTime() - new Date(a.latestVisit).getTime()
+                      return new Date(b.room.latestMessage).getTime() - new Date(a.room.latestMessage).getTime()
                     } else {
                       return b.room.newMessageCount - a.room.newMessageCount
                     }
@@ -113,7 +114,7 @@ class RoomCards extends Component {
                 <div
                   style={styles.showMore}
                   onClick={() => this.setState({showAllJoined: true})}>
-                  Show More
+                  {t('room.show_more')}
                 </div>
               }
             </div>
@@ -144,26 +145,22 @@ class RoomCards extends Component {
                   )
                 }
               </div>
-              <h2 style={styles.featureHeader}>Chat Built For Intimate Conversation</h2>
+              <h2 style={styles.featureHeader}>{t('room.intimate')}</h2>
               <div id='FeatureCallouts' style={styles.featureCallouts} >
-                <FeatureCallout
-                  image='https://s3.amazonaws.com/nametag_images/site/welcoming.jpg'
-                  title='Welcoming'
-                  body='Everyone who enters a room introduces themselves, so you know what perspective they bring.' />
-                <FeatureCallout
-                  image='https://s3.amazonaws.com/nametag_images/site/kayak.jpg'
-                  title='Focused'
-                  body='All conversations have a moderator and a shared set of norms to keep them focused on what matters.' />
-                <FeatureCallout
-                  image='https://s3.amazonaws.com/nametag_images/site/intimate.jpg'
-                  title='Confidential'
-                  body={'Limit conversations to people you trust, we keep what you say and where you say it private.'} />
+                {
+                  [0, 1, 2].map(i =>
+                    <FeatureCallout
+                      image={t(`room.feature_callouts.${i}.image`)}
+                      title={t(`room.feature_callouts.${i}.title`)}
+                      body={t(`room.feature_callouts.${i}.body`)} />
+                  )
+                }
               </div>
               <div style={styles.featureFooter}>
-                Nametag is built by folks who want better ways to build trust on the internet.
+                {t('room.built_by')}
                 <br />
                 <br />
-                <a href='https://medium.com/matter-driven-narrative/nametag-a-platform-for-building-relationships-fa977bca53ba' target='_blank'>Learn More</a>
+                <a href='https://medium.com/matter-driven-narrative/nametag-a-platform-for-building-relationships-fa977bca53ba' target='_blank'>{t('room.learn')}</a>
               </div>
             </div>
           }
@@ -191,8 +188,8 @@ class RoomCards extends Component {
           </div>
           <LoginDialog
             showLogin={this.state.showLogin}
-            toggleLogin={this.toggleLogin}
-            message='Log In or Register' />
+            refetch={refetch}
+            toggleLogin={this.toggleLogin} />
         </div>
       </div>
     </div>

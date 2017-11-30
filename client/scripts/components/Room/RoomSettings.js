@@ -1,9 +1,10 @@
 import React from 'react'
 import Toggle from 'material-ui/Toggle'
+import t from '../../utils/i18n'
 
 const RoomSettings = ({modOnlyDMs, closed, roomId, updateRoom}) => <div>
   <Toggle
-    label={modOnlyDMs ? 'Only host can message privately' : 'Anyone can message privately'}
+    label={modOnlyDMs ? t('room.priv_msg_off') : t('room.priv_msg_on')}
     toggled={!modOnlyDMs}
     onToggle={() => updateRoom(roomId, {modOnlyDMs: !modOnlyDMs})}
     labelStyle={styles.labelStyle}
@@ -11,7 +12,7 @@ const RoomSettings = ({modOnlyDMs, closed, roomId, updateRoom}) => <div>
     thumbSwitchedStyle={styles.thumbSwitched}
     trackSwitchedStyle={styles.trackSwitched} />
   <Toggle
-    label={closed ? 'This room is closed' : 'This room is active'}
+    label={closed ? t('room.closed') : t('room.open')}
     toggled={!closed}
     onToggle={() => updateRoom(roomId, {closed: !closed})}
     labelStyle={styles.labelStyle}

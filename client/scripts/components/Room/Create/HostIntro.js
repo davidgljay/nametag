@@ -3,6 +3,7 @@ import EditNametag from '../../Nametag/EditNametag'
 import UserBadges from '../../Badge/UserBadges'
 import TextField from 'material-ui/TextField'
 import {grey, red} from '../../../../styles/colors'
+import t from '../../../utils/i18n'
 
 const HostIntro = ({
   nametagEdits,
@@ -13,9 +14,9 @@ const HostIntro = ({
   me,
   error}) =>
     <div>
-      <h2>Introduce Yourself</h2>
+      <h2>{t('create_room.intro')}</h2>
       <div style={styles.helpText}>
-          Give participants a sense of who you are and why this topic matters to you.
+        {t('create_room.intro_help')}
       </div>
       <TextField
         style={styles.textfield}
@@ -25,9 +26,9 @@ const HostIntro = ({
         multiLine
         errorText={error && error.bioError}
         onChange={(e) => updateNametagEdit('new', 'bio', e.target.value)}
-        floatingLabelText='Introduce Yourself' />
+        floatingLabelText={t('create_room.intro')} />
       <div style={{...styles.helpText, ...styles.nametagHelpText}}>
-          Customize how you will appear in this room. You must provide an image.
+        {t('create_room.intro_custom')}
       </div>
       <div style={styles.error}>
         {error && error.imageError}

@@ -2,12 +2,13 @@ import React, {PropTypes} from 'react'
 import WelcomeForm from './WelcomeForm'
 // import ChoosePrivacy from './ChoosePrivacy'
 import HostIntro from './HostIntro'
-import Login from '../../User/Login'
+import Login from '../../../containers/User/LoginContainer'
 import ChooseNorms from './ChooseNorms'
 import Toggle from 'material-ui/Toggle'
 import RoomCard from '../RoomCard'
 import {track} from '../../../utils/analytics'
 import {grey} from '../../../../styles/colors'
+import t from '../../../utils/i18n'
 
 const getForm = ({
     error,
@@ -20,12 +21,10 @@ const getForm = ({
     closedIn,
     room,
     badges,
+    refetch,
     handleNext,
     handlePrev,
     setImageFromUrl,
-    loginUser,
-    passwordResetRequest,
-    registerUser,
     addNametagEditBadge,
     removeNametagEditBadge,
     addSelectedBadge,
@@ -69,13 +68,10 @@ const getForm = ({
             me={me}
             error={error} />
         : <div>
-          <h2>Create Account</h2>
+          <h2>{t('create_room.create_account')}</h2>
           <Login
-            registerUser={registerUser}
-            loginUser={loginUser}
-            message=''
-            register
-            passwordResetRequest={passwordResetRequest} />
+            onLogin={refetch}
+            message='' />
         </div>
         }
       </div>
@@ -85,11 +81,11 @@ const getForm = ({
         <div style={styles.preview}>
           <RoomCard room={{...room, mod: nametagEdits.new}} disableJoin />
         </div>
-        <h2>You're done!</h2>
+        <h2>{t('create_room.done')}</h2>
         <div style={styles.privacyContainer}>
           <Toggle
             style={styles.toggleStyle}
-            label={room.public ? 'Make Discoverable' : 'Keep Private'}
+            label={room.public ? t('create_room.room_pub_on') : t('create_room.room_pub_off')}
             toggled={room.public}
             labelStyle={{textAlign: 'left'}}
             thumbStyle={{backgroundColor: grey}}
@@ -98,8 +94,8 @@ const getForm = ({
           <div style={styles.helpText}>
             {
               room.public
-              ? 'Once approved, your conversation will be discoverable on Nametag.'
-              : 'Your conversation will only be visible if you share its link.'
+              ? t('create_room.room_pub_on_help')
+              : t('create_room.room_pub_off_help')
             }
           </div>
         </div>
@@ -130,6 +126,7 @@ CreateRoomForms.propTypes = {
   }).isRequired,
   registerUser: func.isRequired,
   loginUser: func.isRequired,
+  refetch: func.isRequired,
   passwordResetRequest: func.isRequired,
   nametagEdits: object.isRequired,
   addNametagEditBadge: func.isRequired,

@@ -6,10 +6,13 @@ import {Card} from 'material-ui/Card'
 import AutoComplete from 'material-ui/AutoComplete'
 import NTIconMenu from './IconMenu'
 import {track} from '../../utils/analytics'
+import t from '../../utils/i18n'
 
 const nametagTarget = {
   drop (props, monitor) {
-    props.addNametagEditBadge(monitor.getItem(), props.roomId || props.template)
+    if (props.addNametagEditBadge) {
+      props.addNametagEditBadge(monitor.getItem(), props.roomId || props.template)
+    }
   }
 }
 
@@ -52,7 +55,9 @@ class EditNametag extends Component {
 
     this.removeBadge = (badge) => {
       const {removeNametagEditBadge, roomId, template} = this.props
-      removeNametagEditBadge(badge, roomId || template)
+      if (removeNametagEditBadge) {
+        removeNametagEditBadge(badge, roomId || template)
+      }
     }
 
     this.requiredBadges = () =>
@@ -111,22 +116,27 @@ class EditNametag extends Component {
             about={roomId || template}
             updateNametagEdit={updateNametagEdit} />
           <div style={{width: 190, flex: 1}}>
-            <AutoComplete
-              floatingLabelText='Name'
-              filter={AutoComplete.noFilter}
-              id='editNametagName'
-              openOnFocus
-              disableFocusRipple={false}
-              dataSource={me.displayNames || []}
-              errorText={error && error.nameError}
-              onUpdateInput={name => updateNametagEdit(roomId || template, 'name', name)}
-              animated
-              style={nameStyle}
-              textFieldStyle={nameTextfieldStyle}
-              fullWidth={false}
-              floatingLabelStyle={floatingLabelStyle}
-              underlineShow={false}
-              searchText={nametag.name} />
+            <div>
+              <AutoComplete
+                floatingLabelText={t('nametag.name')}
+                filter={AutoComplete.noFilter}
+                id='editNametagName'
+                openOnFocus
+                disableFocusRipple={false}
+                dataSource={me.displayNames || []}
+                errorText={error && error.nameError}
+                onUpdateInput={name => updateNametagEdit(roomId || template, 'name', name)}
+                animated
+                style={nameStyle}
+                textFieldStyle={nameTextfieldStyle}
+                fullWidth={false}
+                floatingLabelStyle={floatingLabelStyle}
+                underlineShow={false}
+                searchText={nametag.name} />
+            </div>
+            <div style={styles.bio}>
+              {nametagEdit.bio}
+            </div>
           </div>
         </div>
         <Badges
@@ -160,8 +170,8 @@ EditNametag.propTypes = {
   isOver: bool.isRequired,
   requiredTemplates: arrayOf(string).isRequired,
   updateNametagEdit: func.isRequired,
-  addNametagEditBadge: func.isRequired,
-  removeNametagEditBadge: func.isRequired
+  addNametagEditBadge: func,
+  removeNametagEditBadge: func
 }
 
 export default DropTarget(dragTypes.badge, nametagTarget, collect)(EditNametag)
@@ -191,6 +201,12 @@ const styles = {
   },
   floatingLabelStyle: {
     top: 20
+  },
+  bio: {
+    fontSize: 12,
+    marginTop: 4,
+    paddingLeft: 20,
+    textAlign: 'left'
   }
 
 }
