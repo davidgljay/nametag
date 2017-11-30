@@ -1,25 +1,23 @@
 en:
   login:
     enter_email: Please enter a valid e-mail address
-    short_pass: Your password must be at least 8 characters
-    pass_match: Passwords do not match
-    check_email: Please check your E-mail
-    pw_reset: You should receive a password reset link shortly.
+    check_email: Please check your e-mail
+    hello: Hello again!
+    link_login: We've sent you an e-mail that you can use to log in.
     email: E-mail
-    pword: Password
-    confirm: Confirm Password
-    forgot_pass: Forgot Password?
-    register: Register
     or: OR
     login: Log In
     logout: Log Out
     send_link: Send Link
+    privacy_provider: We never post on your behalf.
+    privacy_email: We only e-mail you about conversations you've joined.
   next: Next
   back: Back
   approve: Approve
   title: Title
   description: Description
   cancel: Cancel
+  agree: I Agree
   copy_clip: Copy To Clipboard
   badge:
     granted_by: Granted by
@@ -132,10 +130,14 @@ en:
     enter_room: Enter Room
     join: Join
     nametag_desc: Small, private conversations with people you trust.
+    about_nametag: This conversation is confidential. Everyone must introduce themselves and agree to a set of shared norms.
+    got_it: Got It
+    edit_nametag: If you like, you can edit how you will appear in this room.
     banned: You have been banned from this conversation:
     norms: Norms
     show_more: Show More
-    create_account: Create account to Join
+    create_account: Register to Join
+    choose_one: Choose One Of the Following
     dinner_party: Online conversation that feels like an intimate dinner party.
     room_convos: Your Conversations
     intimate: Chat Built For Intimate Conversation
@@ -154,14 +156,13 @@ en:
         body: Limit conversations to people you trust, we keep what you say and where you say it private.
     built_by: Nametag is built by folks who want better ways to build trust on the internet.
     learn: Learn More
-    log_in: Log In Or Register
     rooms: Rooms
     settings: Settings
     nametags: Nametags
     priv_msg_on: Only host can message privately
     priv_msg_off: Anyone can message privately
-    room_closed: This room is closed
-    room_open: This room is active
+    closed: This room is closed
+    open: This room is active
     invite: Invite
     invite_twitter: Join the conversation:
     invite_email: There's an interesting conversation going on, want to join?\n\n

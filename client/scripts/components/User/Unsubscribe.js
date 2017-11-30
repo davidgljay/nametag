@@ -14,8 +14,8 @@ class Unsubscribe extends Component {
 
     this.unsubscribeClick = (roomId) => e => {
       e.preventDefault()
-      const {unsubscribe, params: {userToken}} = this.props
-      unsubscribe(userToken, roomId)
+      const {unsubscribe, params: {loginHash}} = this.props
+      unsubscribe(loginHash, roomId)
         .then(() => this.setState({unsubscribed: true}))
     }
 

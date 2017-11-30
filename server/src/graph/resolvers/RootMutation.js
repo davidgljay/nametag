@@ -240,6 +240,7 @@ const RootMutation = {
           : Promise.reject(ErrNotAuthorized)
         )
   },
+<<<<<<< HEAD
   approveRoom: {
     requires: 'NAMETAG_ADMIN',
     resolve: (obj, {roomId}, {models: {Rooms}}) =>
@@ -262,6 +263,8 @@ const RootMutation = {
     resolve: (obj, {token, password}, {models: {Users}}) =>
       Users.passwordReset(token, password)
   },
+=======
+>>>>>>> smoother-join
   emailConfirmationRequest: {
     requires: null,
     resolve: (obj, {email}, {models: {Users}}) =>
@@ -274,8 +277,25 @@ const RootMutation = {
   },
   unsubscribe: {
     requires: null,
+<<<<<<< HEAD
     resolve: (obj, {userToken, roomId}, {models: {Users}}) =>
       Users.unsubscribe(userToken, roomId)
+=======
+    resolve: (obj, {loginHash, roomId}, {models: {Users}}) =>
+      Users.unsubscribe(loginHash, roomId)
+  },
+  approveRoom: {
+    requires: 'NAMETAG_ADMIN',
+    resolve: (obj, {roomId}, {models: {Rooms}}) =>
+      Rooms.approveRoom(roomId)
+      .then(wrapResponse('approveRoom'))
+  },
+  banNametag: {
+    requires: 'ROOM_MOD',
+    resolve: (obj, {roomId, nametagId}, {models: {Nametags}}) =>
+      Nametags.ban(nametagId, roomId)
+      .then(wrapResponse('banNametag'))
+>>>>>>> smoother-join
   }
 }
 

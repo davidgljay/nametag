@@ -5,6 +5,7 @@ const mention = require('./mention')
 const reply = require('./reply')
 const announcement = require('./announcement')
 const publicRoom = require('./public-room')
+const hashLogin = require('./hash-login')
 const roomApproval = require('./room-approval')
 const digest = require('./digest')
 
@@ -16,6 +17,7 @@ module.exports = {
   reply,
   publicRoom,
   roomApproval,
+  hashLogin,
   announcement,
   digest
 }
