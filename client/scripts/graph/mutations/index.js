@@ -76,12 +76,29 @@ export const createNametag = graphql(CREATE_NAMETAG, {
           errorLog('Error creating nametag')(errors)
           return oldData
         }
+
         return {
           ...oldData,
           room: {
             ...oldData.room,
             nametags: oldData.room.nametags
               .concat(nametag)
+          },
+          me: {
+            ...oldData.me,
+            nametags: oldData.me.nametags.concate(
+              {
+                ...nametag,
+                room: {
+                  __typename: 'Room',
+                  id: oldData.room.id,
+                  latestMessage: oldData.room.latestMessage,
+                  mod: oldData.room.mod,
+                  newMessageCount: 0,
+                  title: oldData.room.title
+                }
+              }
+            )
           }
         }
       }
