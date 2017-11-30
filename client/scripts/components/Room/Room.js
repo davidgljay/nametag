@@ -145,7 +145,8 @@ class Room extends Component {
       data: {
         loading,
         room,
-        me
+        me,
+        refetch
       },
       myNametag,
       nametagEdits,
@@ -250,6 +251,7 @@ class Room extends Component {
           me={me}
           myNametag={myNametag}
           room={room}
+          refetch={refetch}
           joinRoom={this.joinRoom}
           updateNametagEdit={updateNametagEdit}
           nametagEdits={nametagEdits} />

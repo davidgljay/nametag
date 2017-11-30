@@ -117,6 +117,7 @@ RoomDialog.proptypes = {
   }),
   me: object.isRequired,
   joinRoom: func.isRequired,
+  refetch: func.isRequired,
   nametagEdits: object.isRequired,
   createNametag: func.isRequired,
   updateNametagEdit: func.isRequired,
