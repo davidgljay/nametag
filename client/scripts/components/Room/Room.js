@@ -128,8 +128,8 @@ class Room extends Component {
       if (me && !myNametag && intro) {
         this.joinRoom(intro)
         this.setState({keepLoading: true})
-        removeQueryVar('intro')
       }
+      removeQueryVar('intro')
     }
     if (!prevProps.myNametag && myNametag && room) {
       this.showPresence()
