@@ -11,7 +11,7 @@ const messagesTable = db.table('messages')
  * @param {Object} context  graph context
  * @param {String} id       the ID of the message to be retrieved
  */
-const get = ({conn}, id) => messagesTable.get(id).run(conn)
+const get = ({conn}, id) => id ? messagesTable.get(id).run(conn) : null
 
 /**
  * Gets replies to a message.

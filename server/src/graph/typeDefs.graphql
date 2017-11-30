@@ -152,6 +152,9 @@ type Message {
   # Emoji reactions to the message
   reactions: [EmojiReaction]
 
+  # Nametag to be displayed with this message
+  Nametag: Nametag
+
   # Indicates whether the message has been saved for viewing after the room has closed
   saved: Boolean
 

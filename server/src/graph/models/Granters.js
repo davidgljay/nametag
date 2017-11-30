@@ -14,7 +14,7 @@ const grantersTable = db.table('granters')
  *
  */
 
-const get = ({conn}, id) => grantersTable.get(id).run(conn)
+const get = ({conn}, id) => id ? grantersTable.get(id).run(conn) : null
 
 /**
  * Returns a badge granter from a url code.

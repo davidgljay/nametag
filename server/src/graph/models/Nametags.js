@@ -44,7 +44,7 @@ const getRoomNametags = ({conn}, room) =>
   *
   */
 
-const get = ({conn}, id) => nametagsTable.get(id).run(conn)
+const get = ({conn}, id) => id ? nametagsTable.get(id).run(conn) : null
 
 /**
  * Returns an array of nametags from an array of ids.

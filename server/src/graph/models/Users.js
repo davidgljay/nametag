@@ -25,7 +25,7 @@ const usersTable = db.table('users')
  *
  */
 
-const get = ({conn}, id) => usersTable.get(id).run(conn)
+const get = ({conn}, id) => id ? usersTable.get(id).run(conn) : null
 
 /**
  * Returns a user based on an e-mail address.
