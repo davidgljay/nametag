@@ -195,6 +195,9 @@ const emailIfReply = ({conn, user}, msg) =>
       let notified = {[user.email]: true}
       for (var i = 0; i < replies.length; i++) {
         const {messageAuthor, room, loginHash, title} = replies[i]
+        if (!messageAuthor) {
+          continue
+        }
         if (!notified[replies[i].email]) {
           notified[replies[i].email] = true
           promises.push(email({
