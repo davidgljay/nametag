@@ -83,6 +83,13 @@ class RoomDialog extends Component {
     }
   }
 
+  componentDidMount () {
+    const {me} = this.props
+    if (me) {
+      this.setState({status: 'NORMS'})
+    }
+  }
+
   render () {
     const {myNametag, me} = this.props
     const {status} = this.state
