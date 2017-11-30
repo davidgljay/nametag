@@ -89,7 +89,7 @@ const grantBadge = ({conn}, id, badgeId) => nametagsTable.get(id).update({badge:
  *
  **/
 
-const create = ({conn, user, models: {Users, BadgeRequests, Rooms, Templates, Badges}}, nt) => {
+const create = ({conn, user, models: {Users, BadgeRequests, Rooms, Messages, Templates, Badges}}, nt) => {
   const nametag = Object.assign(
     {},
     nt,
@@ -124,23 +124,27 @@ const create = ({conn, user, models: {Users, BadgeRequests, Rooms, Templates, Ba
       nametag.image && user.images.indexOf(nametag.image) === -1 ? Users.appendUserArray('images', nametag.image) : null,
 
       // Send a notification to the room's moderator
-      nametag.room ? Promise.all([
-        Rooms.get(nametag.room)
+      nametag.room ? Rooms.get(nametag.room)
             .then(room => Promise.all([
               room,
               Users.getTokens(id)
-            ])),
-        nametag
-      ])
-        .then(([[room, [token]], nametag]) => notification({
-          reason: 'MOD_ROOM_JOIN',
-          params: {
-            roomName: room.title,
-            roomId: room.id,
-            nametagName: nametag.name,
-            image: nametag.image
-          }
-        }, token))
+            ]))
+        .then(([room, [token]]) => Promise.all([
+          notification({
+            reason: 'MOD_ROOM_JOIN',
+            params: {
+              roomName: room.title,
+              roomId: room.id,
+              nametagName: nametag.name,
+              image: nametag.image
+            }
+          }, token),
+          Messages.create({
+            text: 'A new user has joined, say hello.',
+            nametag: nametag.id,
+            room: room.id
+          })
+        ]))
         : null
     ])
   })
