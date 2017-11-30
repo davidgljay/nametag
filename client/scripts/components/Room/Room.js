@@ -25,6 +25,7 @@ class Room extends Component {
       },
       presenceTime: null,
       defaultMessage: '',
+      keepLoading: false,
       nametagCreated: false,
       recipient: null,
       editing: null
@@ -115,7 +116,7 @@ class Room extends Component {
       nametagUpdatedSubscription,
       myNametag
     } = this.props
-    const {loading, room, me, refetch} = this.props.data
+    const {loading, room, me} = this.props.data
     if (prevProps.data.loading && !loading) {
       if (me) {
         identify(me.id, {'$name': me.displayNames[0]})
@@ -123,16 +124,16 @@ class Room extends Component {
       if (room) {
         document.title = `${room.title}`
       }
-      const intro = getQueryVariable(intro)
+      const intro = getQueryVariable('intro')
       if (me && !myNametag && intro) {
         this.joinRoom(intro)
-          .then(refetch)
-        this.setState({nametagCreated: true})
+        this.setState({keepLoading: true})
         removeQueryVar('intro')
       }
     }
     if (!prevProps.myNametag && myNametag && room) {
       this.showPresence()
+      this.setState({keepLoading: false})
       nametagUpdatedSubscription(room.id)
       messageAddedSubscription(room.id, myNametag.id)
       messageDeletedSubscription(room.id)
@@ -172,9 +173,9 @@ class Room extends Component {
       setVisibleReplies
     } = this.props
 
-    const {defaultMessage, recipient, editing, nametagCreated} = this.state
+    const {defaultMessage, recipient, editing, nametagCreated, keepLoading} = this.state
 
-    if (loading || !room) {
+    if (loading || !room || keepLoading) {
       return <div style={styles.spinner}>
         <CircularProgress />
       </div>

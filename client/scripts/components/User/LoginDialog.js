@@ -8,7 +8,7 @@ const LoginDialog = ({toggleLogin, showLogin, message, refetch}) => <Dialog
   open={showLogin || false}
   onRequestClose={() => toggleLogin()}>
   <Login
-    onLogin={refetch}
+    onLogin={() => refetch.then(toggleLogin)}
     message={message} />
 </Dialog>
 

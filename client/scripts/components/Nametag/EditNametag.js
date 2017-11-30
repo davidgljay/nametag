@@ -116,22 +116,27 @@ class EditNametag extends Component {
             about={roomId || template}
             updateNametagEdit={updateNametagEdit} />
           <div style={{width: 190, flex: 1}}>
-            <AutoComplete
-              floatingLabelText={t('nametag.name')}
-              filter={AutoComplete.noFilter}
-              id='editNametagName'
-              openOnFocus
-              disableFocusRipple={false}
-              dataSource={me.displayNames || []}
-              errorText={error && error.nameError}
-              onUpdateInput={name => updateNametagEdit(roomId || template, 'name', name)}
-              animated
-              style={nameStyle}
-              textFieldStyle={nameTextfieldStyle}
-              fullWidth={false}
-              floatingLabelStyle={floatingLabelStyle}
-              underlineShow={false}
-              searchText={nametag.name} />
+            <div>
+              <AutoComplete
+                floatingLabelText={t('nametag.name')}
+                filter={AutoComplete.noFilter}
+                id='editNametagName'
+                openOnFocus
+                disableFocusRipple={false}
+                dataSource={me.displayNames || []}
+                errorText={error && error.nameError}
+                onUpdateInput={name => updateNametagEdit(roomId || template, 'name', name)}
+                animated
+                style={nameStyle}
+                textFieldStyle={nameTextfieldStyle}
+                fullWidth={false}
+                floatingLabelStyle={floatingLabelStyle}
+                underlineShow={false}
+                searchText={nametag.name} />
+            </div>
+            <div style={styles.bio}>
+              {nametagEdit.bio}
+            </div>
           </div>
         </div>
         <Badges
@@ -196,6 +201,12 @@ const styles = {
   },
   floatingLabelStyle: {
     top: 20
+  },
+  bio: {
+    fontSize: 12,
+    marginTop: 4,
+    paddingLeft: 20,
+    textAlign: 'left'
   }
 
 }

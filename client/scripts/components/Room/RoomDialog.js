@@ -16,7 +16,7 @@ class RoomDialog extends Component {
       status: 'ABOUT'
     }
 
-    this.joinRoom = () => {
+    this.joinRoomFromQueryVar = () => {
       const {joinRoom} = this.props
       const intro = getQueryVariable('intro')
       removeQueryVar('intro')
@@ -27,9 +27,11 @@ class RoomDialog extends Component {
       const {
         createMessage,
         room,
+        me,
         myNametag,
         updateNametagEdit,
-        nametagEdits
+        nametagEdits,
+        joinRoom
       } = this.props
       let next
       switch (status) {
@@ -49,17 +51,19 @@ class RoomDialog extends Component {
           return <WelcomeForm
             createMessage={createMessage}
             room={room}
+            me={me}
             welcome={room.welcome}
             roomId={room.id}
             nametags={room.nametags}
             mod={room.mod}
+            joinRoom={joinRoom}
             nametagEdit={nametagEdits[room.id]}
             myNametag={myNametag}
             updateNametagEdit={updateNametagEdit}
             onIntro={next} />
         case 'LOGIN':
           return <Login
-            onLogin={this.joinRoom}
+            onLogin={this.joinRoomFromQueryVar}
             alert={t('room.choose_one')}
             buttonMsg={t('room.join')}
             message={t('room.create_account')} />

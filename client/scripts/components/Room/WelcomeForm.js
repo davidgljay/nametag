@@ -4,6 +4,7 @@ import {Card} from 'material-ui/Card'
 import Compose from '../Message/Compose'
 import EditNametag from '../Nametag/EditNametag'
 import {track, setTimer, increment} from '../../utils/analytics'
+import {grey} from '../../../styles/colors'
 import t from '../../utils/i18n'
 
 class WelcomeForm extends Component {
@@ -54,14 +55,21 @@ class WelcomeForm extends Component {
         updateNametagEdit
       } = this.props
 
+    const {bio} = this.state
+
     return <div className='welcome'>
       {
-        me && <EditNametag
-          nametagEdit={nametagEdit}
-          me={me}
-          requiredTemplates={templates}
-          updateNametagEdit={updateNametagEdit}
-          roomId={id} />
+        me && <div style={styles.editNametag}>
+          <div style={styles.hintText}>
+            {t('room.edit_nametag')}
+          </div>
+          <EditNametag
+            nametagEdit={{...nametagEdit, bio}}
+            me={me}
+            requiredTemplates={templates}
+            updateNametagEdit={updateNametagEdit}
+            roomId={id} />
+        </div>
       }
       <h3 style={styles.header}>{welcome}</h3>
       <Compose
@@ -103,9 +111,11 @@ WelcomeForm.propTypes = {
     mod: object.isRequired,
     nametags: arrayOf(object)
   }),
+  me: object,
   updateNametagEdit: func.isRequired,
   onIntro: func.isRequired,
   nametagEdit: object,
+  joinRoom: func.isRequired,
   myNametag: shape({id: string.isRequired})
 }
 
@@ -128,5 +138,15 @@ const styles = {
     maxHeight: '50vh',
     paddingBottom: 30,
     marginTop: 20
+  },
+  hintText: {
+    textAlign: 'center',
+    fontStyle: 'italic',
+    fontSize: 12,
+    color: grey,
+    fontWeight: 300
+  },
+  editNametag: {
+    marginBottom: 20
   }
 }
