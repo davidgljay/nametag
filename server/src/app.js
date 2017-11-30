@@ -161,7 +161,7 @@ r.connect({host: 'rethinkdb'})
     // })
 
     // Local login with a token
-    app.get('/login/:hash', (req, res, next) =>  {
+    app.get('/login/:hash', (req, res, next) => {
       passport.authenticate('hash',
       hash.handleHashCallback(req, res, next))(req, res, next)
     })

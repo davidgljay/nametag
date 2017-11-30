@@ -7,7 +7,6 @@ const {
   ErrBadAuth,
   ErrBadHash,
   ErrNotLoggedIn,
-  ErrEmailTaken,
   ErrInvalidToken,
   ErrNotFound,
   APIError
@@ -63,7 +62,6 @@ const getByHash = ({conn}, hash) =>
       }
       return results[0]
     })
-
 
 /**
  * Adds an e-mail address to an existing user
@@ -439,16 +437,16 @@ const createLocal = (context, email, path) =>
           }).run(conn)
         })
         .then(res => {
-           if (res.errors) {
-             return Promise.reject(new Error('Could not insert user', res.error))
-           }
-           const id = res.generated_keys[0]
-           return Promise.all([
-             id,
-             emailConfirmationRequest(context, email)
-           ])
+          if (res.errors) {
+            return Promise.reject(new Error('Could not insert user', res.error))
+          }
+          const id = res.generated_keys[0]
+          return Promise.all([
+            id,
+            emailConfirmationRequest(context, email)
+          ])
            .then(([id]) => ({id, newUser}))
-         })
+        })
 
       // If the user already exists, send a hash login request
       } else {
