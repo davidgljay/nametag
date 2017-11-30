@@ -19,10 +19,10 @@ class RoomDialog extends Component {
     }
 
     this.joinRoomFromQueryVar = () => {
-      const {joinRoom} = this.props
+      const {joinRoom, refetch} = this.props
       const intro = getQueryVariable('intro')
       removeQueryVar('intro')
-      joinRoom(intro)
+      refetch().then(() => joinRoom(intro))
     }
 
     this.renderDialog = (status) => {

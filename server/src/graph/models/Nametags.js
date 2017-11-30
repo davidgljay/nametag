@@ -140,8 +140,8 @@ const create = ({conn, user, models: {Users, BadgeRequests, Rooms, Messages, Tem
             }
           }, token),
           Messages.create({
-            text: 'A new user has joined, say hello.',
-            nametag: nametag.id,
+            text: 'Someone new has joined, say hello.',
+            nametag: id,
             room: room.id
           })
         ]))

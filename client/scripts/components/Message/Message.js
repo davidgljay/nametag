@@ -1,11 +1,13 @@
 import React, { Component, PropTypes } from 'react'
 import moment from 'moment'
+import {Card} from 'material-ui/Card'
 import Media from './Media'
 import MessageMenu from './MessageMenu'
 import MentionMenu from './MentionMenu'
 import CommandMenu from './CommandMenu'
 import ModAction from './ModAction'
 import Replies from './Replies'
+import Nametag from '../Nametag/Nametag'
 import NametagIcon from '../Nametag/NametagIcon'
 import ReactMarkdown from 'react-markdown'
 import EmojiText from './EmojiText'
@@ -75,7 +77,8 @@ class Message extends Component {
         reactions,
         parent,
         replies,
-        replyCount
+        replyCount,
+        nametag
       },
       norms,
       roomId,
@@ -189,7 +192,21 @@ class Message extends Component {
           </div>
           {media}
           {
-            author &&
+            nametag &&
+            <div style={styles.nametagContainer}>
+              <Card key={nametag.id} id={nametag.id} style={styles.nametag}>
+                <Nametag
+                  nametag={nametag}
+                  myNametagId={myNametag.id}
+                  modId={mod.id}
+                  setDefaultMessage={setDefaultMessage}
+                  setRecipient={setRecipient}
+                  hideDMs={hideDMs} />
+              </Card>
+            </div>
+          }
+          {
+            (author || nametag) &&
             <div style={styles.below}>
               <EmojiReactions
                 reactions={reactions}
@@ -306,6 +323,7 @@ Message.propTypes = {
       image: string,
       name: string.isRequired
     }),
+    nametag: object,
     saved: bool
   }).isRequired,
   norms: arrayOf(string.isRequired).isRequired,
@@ -432,5 +450,16 @@ const styles = {
   },
   compressed: {
     paddingTop: 0
+  },
+  nametag: {
+    width: 240,
+    marginTop: 10,
+    marginBottom: 10,
+    minHeight: 60,
+    paddingBottom: 5
+  },
+  nametagContainer: {
+    display: 'flex',
+    justifyContent: 'center'
   }
 }

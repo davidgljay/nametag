@@ -286,6 +286,7 @@ export const createMessage = graphql(CREATE_MESSAGE, {
             },
             recipient: null,
             reactions: [],
+            nametag: null,
             parent: message.parent ? {
               __typename: 'Message',
               id: message.parent,

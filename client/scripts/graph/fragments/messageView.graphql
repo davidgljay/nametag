@@ -18,4 +18,30 @@ fragment messageView on Message {
     emoji
     nametagId
   }
+  nametag {
+    id
+    name
+    image
+    bio
+    badges {
+      id
+      template {
+        id
+        name
+        description
+        image
+        createdAt
+        granter {
+          id
+          name
+          description
+          image
+        }
+      }
+      notes {
+        date
+        text
+      }
+    }
+  }
 }

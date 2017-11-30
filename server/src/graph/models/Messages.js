@@ -136,7 +136,7 @@ const create = (context, m) => {
     checkMentions(context, message),
     message,
     Rooms.updateLatestMessage(message.room),
-    Nametags.update(message.author, {latestVisit: new Date(Date.now() + 1000)})
+    message.author ? Nametags.update(message.author, {latestVisit: new Date(Date.now() + 1000)}) : null
   ])
   )
   .then(([updates = {}, message]) => Object.assign({}, message, updates))
