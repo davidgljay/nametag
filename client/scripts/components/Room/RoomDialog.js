@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react'
 import Dialog from 'material-ui/Dialog'
 import Login from '../../containers/User/LoginContainer'
-import RaisedButton from 'material-ui/RaisedButton'
+import AboutNametag from './AboutNametag'
 import WelcomeForm from './WelcomeForm'
 import {getQueryVariable, removeQueryVar} from '../../utils/queryVars'
 import t from '../../utils/i18n'
@@ -38,16 +38,11 @@ class RoomDialog extends Component {
         case 'ABOUT':
           next = () => this.setState({status: 'WELCOME'})
           return <div>
-            <h1>About Nametag</h1>
-            <RaisedButton
-              primary
-              onClick={next}
-              label='Next' />
+            <AboutNametag
+              next={next} />
           </div>
         case 'WELCOME':
-          next = () => {
-            this.setState({status: 'LOGIN'})
-          }
+          next = () => this.setState({status: 'LOGIN'})
           return <WelcomeForm
             createMessage={createMessage}
             room={room}
