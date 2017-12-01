@@ -13,7 +13,7 @@ module.exports = ({rooms, loginHash}) => {
   for (var i = 0; i < rooms.length; i++) {
     let room = rooms[i]
     html += `<tr>
-<td style="padding: 10px; border: 1px #a8a8a8 solid; width:100%; min-width: 250px; max-width: 500px; border-radius: 4px; box-shadow: 2px 2px 6px #888888;">
+    <td style="padding: 10px; border: 1px #a8a8a8 solid; width:100%; min-width: 250px; max-width: 500px; border-radius: 4px; box-shadow: 2px 2px 6px #888888;">
       <a href="https://nametag.chat/rooms/${room.id}" target='_blank' style="text-decoration: none; color: #000;">
       <table style="width: 100%; padding-bottom: 20px;">
         <tr style="vertical-align: top;">
@@ -31,7 +31,22 @@ module.exports = ({rooms, loginHash}) => {
           </td>
         </tr>
       </table>
-        <div>"${room.latestMessage}"</div>
+      <table>
+        <tr>
+          <td style="width: 80px;">
+            ${
+              room.latestMessage.image
+              ? `<img style="width: 60px; height: 60px; border-radius: 30px; display: inline-block;" src='${room.latestMessage.image}'/>`
+              : ''
+            }
+          </td>
+          <td style="text-align: left;">
+            <b>${room.latestMessage.name}</b></br>
+            ${room.latestMessage.text}
+          </td>
+        </tr>
+      </table>
+
       </a>
     </td>
     </tr>
