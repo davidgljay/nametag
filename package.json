@@ -6,7 +6,7 @@
     "test-watch": "jest --watch",
     "start": "docker-compose up -d && docker-compose logs -f nametag",
     "build": "webpack --progress -p --config webpack.config.js --bail",
-    "build-watch": "webpack --progress --debug --config webpack.config.js --watch",
+    "build-watch": "webpack --progress --config webpack.config.js --watch",
     "lint": "standard",
     "lint-fix": "standard --fix",
     "pree2e": "docker-compose stop && NODE_ENV=test ./tests/e2e/preE2e.sh",
