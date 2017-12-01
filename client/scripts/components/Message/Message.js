@@ -284,12 +284,23 @@ class Message extends Component {
           createMessage={createMessage} />
       }
       {
-        !parent && author && <Replies
+        !parent && (author || nametag) && <Replies
           createMessage={createMessage}
           replies={replies}
           roomId={roomId}
-          parent={id}
-          parentAuthor={author}
+          parent={{
+            id,
+            author,
+            createdAt,
+            editedAt,
+            text,
+            recipient,
+            reactions,
+            parent: 'self',
+            replies: [],
+            replyCount: 0,
+            nametag
+          }}
           myNametag={myNametag}
           deleteMessage={deleteMessage}
           banNametag={banNametag}
