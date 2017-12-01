@@ -132,6 +132,7 @@ en:
     nametag_desc: Small, private conversations with people you trust.
     about_nametag: This conversation is confidential. Everyone must introduce themselves and agree to a set of shared norms.
     got_it: Got It
+    already_joined: I've already joined this room.
     edit_nametag: If you like, you can edit how you will appear in this room.
     banned: You have been banned from this conversation:
     norms: Norms

@@ -7,6 +7,7 @@ import Norms from './Norms'
 import RaisedButton from 'material-ui/RaisedButton'
 import {getQueryVariable, removeQueryVar} from '../../utils/queryVars'
 import t from '../../utils/i18n'
+import {primary} from '../../../styles/colors'
 
 class RoomDialog extends Component {
 
@@ -15,7 +16,8 @@ class RoomDialog extends Component {
 
     this.state = {
       intro: '',
-      status: 'ABOUT'
+      status: 'ABOUT',
+      alreadyJoined: false
     }
 
     this.joinRoomFromQueryVar = () => {
@@ -23,6 +25,11 @@ class RoomDialog extends Component {
       const intro = getQueryVariable('intro')
       removeQueryVar('intro')
       refetch().then(() => joinRoom(intro))
+    }
+
+    this.skipToLogin = e => {
+      e.preventDefault()
+      this.setState({status: 'LOGIN', alreadyJoined: true})
     }
 
     this.renderDialog = (status) => {
@@ -35,6 +42,8 @@ class RoomDialog extends Component {
         nametagEdits,
         joinRoom
       } = this.props
+
+      const {alreadyJoined} = this.state
       let next
       switch (status) {
         case 'ABOUT':
@@ -76,7 +85,7 @@ class RoomDialog extends Component {
             onLogin={this.joinRoomFromQueryVar}
             alert={t('room.choose_one')}
             buttonMsg={t('room.join')}
-            message={t('room.create_account')} />
+            message={alreadyJoined ? t('login.login') : t('room.create_account')} />
         default:
           return 'Something has gone wrong.'
       }
@@ -102,6 +111,12 @@ class RoomDialog extends Component {
         open={!me || !myNametag || !myNametag.bio}
         onRequestClose={this.dismissWelcomeModal}>
         {this.renderDialog(status)}
+        {
+          status !== 'LOGIN' &&
+          <div style={styles.alreadyJoined} onClick={this.skipToLogin}>
+            {t('room.already_joined')}
+          </div>
+        }
       </Dialog>
     </div>
   }
@@ -149,5 +164,13 @@ const styles = {
   },
   normsButton: {
     marginTop: 30
+  },
+  alreadyJoined: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: 20,
+    fontSize: 12,
+    color: primary,
+    cursor: 'pointer'
   }
 }
