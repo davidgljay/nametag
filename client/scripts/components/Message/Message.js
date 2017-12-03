@@ -135,7 +135,7 @@ class Message extends Component {
     const emojiText = text
       .replace(/:\)/, ':slightly_smiling_face:')
       .replace(/:D/, ':grinning:')
-      .replace(/:[pP]/, ':stuck_out_tongue:')
+      .replace(/:P/, ':stuck_out_tongue:')
       .replace(/:\(/, ':white_frowning_face:')
       .replace(/(?=\S+)_(?=\S+:)/g, '~@~A~')
       .replace(
