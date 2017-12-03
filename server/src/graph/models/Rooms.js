@@ -16,7 +16,7 @@ const roomsTable = db.table('rooms')
  *
  */
 
-const get = ({conn}, id) => id ? roomsTable.get(id).run(conn) : null
+const get = ({conn}, id) => id ? roomsTable.get(id).run(conn) : Promise.resolve(null)
 
 /**
 * Returns all visible public rooms for this user.
