@@ -11,7 +11,7 @@ const messagesTable = db.table('messages')
  * @param {Object} context  graph context
  * @param {String} id       the ID of the message to be retrieved
  */
-const get = ({conn}, id) => messagesTable.get(id).run(conn)
+const get = ({conn}, id) => id ? messagesTable.get(id).run(conn) : null
 
 /**
  * Gets replies to a message.
@@ -201,7 +201,7 @@ const emailIfReply = ({conn, user}, msg) =>
     .zip()
     .eqJoin('room', r.db('nametag').table('rooms'))
     .zip()
-    .pluck('email', 'messageText', 'messageAuthor', 'messageId', 'room', 'userToken', 'title')
+    .pluck('email', 'messageText', 'messageAuthor', 'messageId', 'room', 'loginHash', 'title')
     .run(conn)
     .then(cursor => cursor.toArray())
     .then(replies => {
@@ -209,7 +209,10 @@ const emailIfReply = ({conn, user}, msg) =>
       let promises = []
       let notified = {[user.email]: true}
       for (var i = 0; i < replies.length; i++) {
-        const {messageAuthor, room, userToken, title} = replies[i]
+        const {messageAuthor, room, loginHash, title} = replies[i]
+        if (!messageAuthor) {
+          continue
+        }
         if (!notified[replies[i].email]) {
           notified[replies[i].email] = true
           promises.push(email({
@@ -222,7 +225,7 @@ const emailIfReply = ({conn, user}, msg) =>
               message: msg.text,
               messageId,
               author: messageAuthor,
-              userToken
+              loginHash
             }
           }))
         }

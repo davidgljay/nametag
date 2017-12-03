@@ -77,7 +77,7 @@ class Compose extends Component {
       }
       track('POST_MESSAGE', {room: roomId})
       increment('MESSAGES_POSTED')
-      if (message.length > 0) {
+      if (message.length > 0 && myNametag) {
         let msg = {
           text: emojiText.convert(message, {delimiter: ':'}),
           author: myNametag.id,

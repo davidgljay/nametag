@@ -14,26 +14,14 @@ import UPDATE_BADGE_REQUEST_STATUS from './updateBadgeRequestStatus.graphql'
 import UPDATE_TOKEN from './updateToken.graphql'
 import DELETE_MESSAGE from './deleteMessage.graphql'
 import EDIT_MESSAGE from './editMessage.graphql'
-import PASSWORD_RESET from './passwordReset.graphql'
 import UNSUBSCRIBE from './unsubscribe.graphql'
 import SET_MOD_ONLY_DMS from './setModOnlyDMs.graphql'
-import PASSWORD_RESET_REQ from './passwordResetRequest.graphql'
 import EMAIL_CONF_REQ from './emailConfirmationRequest.graphql'
 import EMAIL_CONF from './emailConfirmation.graphql'
 import ADD_NOTE from './addNote.graphql'
 import APPROVE_ROOM from './approveRoom.graphql'
 import BAN_NAMETAG from './banNametag.graphql'
 import errorLog from '../../utils/errorLog'
-
-export const createNametag = graphql(CREATE_NAMETAG, {
-  props: ({ownProps, mutate}) => ({
-    createNametag: (nametag) => mutate({
-      variables: {
-        nametag
-      }
-    })
-  })
-})
 
 export const createRoom = graphql(CREATE_ROOM, {
   props: ({ownProps, mutate}) => ({
@@ -75,6 +63,48 @@ export const updateToken = graphql(UPDATE_TOKEN, {
     })
   })
 })
+export const createNametag = graphql(CREATE_NAMETAG, {
+  props: ({ownProps, mutate}) => ({
+    createNametag: (nametag) => mutate({
+      variables: {
+        nametag
+      }
+    }),
+    updateQueries: {
+      roomQuery: (oldData, {mutationResult: {data: {createNametag: {errors, nametag}}}}) => {
+        if (errors) {
+          errorLog('Error creating nametag')(errors)
+          return oldData
+        }
+
+        return {
+          ...oldData,
+          room: {
+            ...oldData.room,
+            nametags: oldData.room.nametags
+              .concat(nametag)
+          },
+          me: {
+            ...oldData.me,
+            nametags: oldData.me.nametags.concate(
+              {
+                ...nametag,
+                room: {
+                  __typename: 'Room',
+                  id: oldData.room.id,
+                  latestMessage: oldData.room.latestMessage,
+                  mod: oldData.room.mod,
+                  newMessageCount: 0,
+                  title: oldData.room.title
+                }
+              }
+            )
+          }
+        }
+      }
+    }
+  })
+})
 
 export const createBadge = graphql(CREATE_BADGE, {
   props: ({ownProps, mutate}) => ({
@@ -108,32 +138,11 @@ export const createBadge = graphql(CREATE_BADGE, {
   })
 })
 
-export const passwordResetRequest = graphql(PASSWORD_RESET_REQ, {
-  props: ({ownProps, mutate}) => ({
-    passwordResetRequest: (email) => mutate({
-      variables: {
-        email
-      }
-    })
-  })
-})
-
-export const passwordReset = graphql(PASSWORD_RESET, {
-  props: ({ownProps, mutate}) => ({
-    passwordReset: (token, password) => mutate({
-      variables: {
-        token,
-        password
-      }
-    })
-  })
-})
-
 export const unsubscribe = graphql(UNSUBSCRIBE, {
   props: ({ownProps, mutate}) => ({
-    unsubscribe: (userToken, roomId) => mutate({
+    unsubscribe: (loginHash, roomId) => mutate({
       variables: {
-        userToken,
+        loginHash,
         roomId
       }
     })
@@ -277,6 +286,7 @@ export const createMessage = graphql(CREATE_MESSAGE, {
             },
             recipient: null,
             reactions: [],
+            nametag: null,
             parent: message.parent ? {
               __typename: 'Message',
               id: message.parent,

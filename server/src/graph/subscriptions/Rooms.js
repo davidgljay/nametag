@@ -40,11 +40,11 @@ const RoomSubscription = ({conn, models: {Nametags, Users}}) => db.table('rooms'
             email({
               to: user.email,
               from: {name: 'Nametag', email: 'noreply@nametag.chat'},
-              template: 'approvedRoom',
+              template: 'roomApproval',
               params: {
                 roomId: room.new_val.id,
                 roomTitle: room.new_val.title,
-                userToken: user.userToken
+                loginHash: user.loginHash
               }
             })
           })

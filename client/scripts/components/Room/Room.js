@@ -2,17 +2,13 @@ import React, { Component, PropTypes } from 'react'
 import CircularProgress from 'material-ui/CircularProgress'
 import RoomLeftBar from './RoomLeftBar'
 import AppBar from 'material-ui/AppBar'
-import Dialog from 'material-ui/Dialog'
+import RoomDialog from './RoomDialog'
 import radium, {keyframes} from 'radium'
-import Login from '../User/Login'
-import Messages from '../../components/Message/Messages'
-import WelcomeForm from './WelcomeForm'
-import ConfirmNametagForm from './ConfirmNametagForm'
+import Messages from '../Message/Messages'
 import ComposeWithMenus from '../Message/ComposeWithMenus'
-import JoinRoom from './JoinRoom'
-import {getQueryVariable} from '../../utils/queryVars'
+
+import {getQueryVariable, removeQueryVar} from '../../utils/queryVars'
 import {track, identify, setTimer} from '../../utils/analytics'
-import t from '../../utils/i18n'
 
 class Room extends Component {
 
@@ -29,8 +25,8 @@ class Room extends Component {
       },
       presenceTime: null,
       defaultMessage: '',
-      hasPosted: null,
-      dismissedWelcomeModal: false,
+      keepLoading: false,
+      nametagCreated: false,
       recipient: null,
       editing: null
     }
@@ -65,6 +61,18 @@ class Room extends Component {
       window.location = '/rooms'
     }
 
+    this.joinRoom = (intro, nametagEdit = {}) => {
+      const {data: {room, me, refetch}, createNametag} = this.props
+      const nametag = {
+        bio: intro,
+        room: room.id,
+        name: nametagEdit.name || me.displayNames[0],
+        image: nametagEdit.image || me.images[0]
+      }
+      return createNametag(nametag)
+        .then(refetch)
+    }
+
     this.onCreateNametag = () => this.props.data.refetch()
 
     this.setDefaultMessage = (defaultMessage) => this.setState({defaultMessage})
@@ -94,7 +102,8 @@ class Room extends Component {
   }
 
   componentDidUpdate (prevProps) {
-    const {messageAddedSubscription,
+    const {
+      messageAddedSubscription,
       messageDeletedSubscription,
       nametagUpdatedSubscription,
       myNametag
@@ -107,9 +116,16 @@ class Room extends Component {
       if (room) {
         document.title = `${room.title}`
       }
+      const intro = getQueryVariable('intro')
+      if (me && !myNametag && intro) {
+        this.joinRoom(intro)
+        this.setState({keepLoading: true})
+      }
+      removeQueryVar('intro')
     }
     if (!prevProps.myNametag && myNametag && room) {
       this.showPresence()
+      this.setState({keepLoading: false})
       nametagUpdatedSubscription(room.id)
       messageAddedSubscription(room.id, myNametag.id)
       messageDeletedSubscription(room.id)
@@ -129,19 +145,14 @@ class Room extends Component {
       data: {
         loading,
         room,
-        me
+        me,
+        refetch
       },
       myNametag,
       nametagEdits,
       typingPrompts,
       showTypingPrompt,
       updateNametagEdit,
-      addNametagEditBadge,
-      removeNametagEditBadge,
-      registerUser,
-      loginUser,
-      passwordResetRequest,
-      createNametag,
       latestMessageUpdatedSubscription,
       createMessage,
       updateRoom,
@@ -152,28 +163,17 @@ class Room extends Component {
       addReaction,
       getReplies,
       visibleReplies,
-      setVisibleReplies,
-      location: {state: locationState}
+      setVisibleReplies
     } = this.props
 
-    const {defaultMessage, recipient, editing} = this.state
+    const {defaultMessage, recipient, editing, nametagCreated, keepLoading} = this.state
 
-    const isJoining = locationState && locationState.isJoining
-
-    if (loading || !room) {
+    if (loading || !room || keepLoading) {
       return <div style={styles.spinner}>
         <CircularProgress />
       </div>
     }
 
-    // If the user is not logged in and hasn't clicked "join room", return to the homepage
-    if ((!myNametag && !isJoining) || (myNametag && myNametag.banned)) {
-      return <JoinRoom
-        registerUser={registerUser}
-        loginUser={loginUser}
-        room={room}
-        me={me} />
-    }
     let hideDMs
 
     const isMobile = window.innerWidth < 800
@@ -222,7 +222,7 @@ class Room extends Component {
             setRecipient={this.setRecipient}
             setEditing={this.setEditing}
             mod={room.mod}
-            messages={me && myNametag && myNametag.bio ? room.messages : []} />
+            messages={me && (myNametag && myNametag.bio) || nametagCreated ? room.messages : []} />
         </div>
         <ComposeWithMenus
           createMessage={createMessage}
@@ -245,46 +245,17 @@ class Room extends Component {
           typingPrompts={typingPrompts}
           myNametag={myNametag} />
       </div>
-      <Dialog
-        modal={false}
-        contentStyle={styles.dialog}
-        bodyStyle={styles.bodyStyle}
-        open={!me || !myNametag || !myNametag.bio}
-        onRequestClose={this.dismissWelcomeModal}>
-        {
-          !me && <Login
-            registerUser={registerUser}
-            loginUser={loginUser}
-            message={t('room.create_account')}
-            register
-            passwordResetRequest={passwordResetRequest} />
-        }
-        {
-          me && !myNametag &&
-          <ConfirmNametagForm
-            roomId={room.id}
-            templates={room.templates.map(t => t.id)}
-            nametag={nametagEdits[room.id]}
-            me={me}
-            createNametag={createNametag}
-            addNametagEditBadge={addNametagEditBadge}
-            removeNametagEditBadge={removeNametagEditBadge}
-            updateNametagEdit={updateNametagEdit}
-            onCreateNametag={this.onCreateNametag} />
-        }
-        {
-          myNametag && !myNametag.bio &&
-          <WelcomeForm
-            createMessage={createMessage}
-            welcome={room.welcome}
-            roomId={room.id}
-            nametags={room.nametags}
-            mod={room.mod}
-            myNametag={myNametag}
-            updateNametag={updateNametag}
-            onWelcomeMsgSent={() => this.setState({hasPosted: true})} />
-        }
-      </Dialog>
+      {
+        !nametagCreated &&
+        <RoomDialog
+          me={me}
+          myNametag={myNametag}
+          room={room}
+          refetch={refetch}
+          joinRoom={this.joinRoom}
+          updateNametagEdit={updateNametagEdit}
+          nametagEdits={nametagEdits} />
+      }
     </div>
   }
 }
@@ -308,9 +279,7 @@ Room.propTypes = {
     roomId: string.isRequired
   }),
   visibleReplies: string.isRequired,
-  loginUser: func.isRequired,
   registerUser: func.isRequired,
-  passwordResetRequest: func.isRequired,
   typingPrompts: array.isRequired,
   updateRoom: func.isRequired,
   createNametag: func.isRequired,
@@ -338,11 +307,6 @@ const slideIn = keyframes({
 }, 'slideIn')
 
 const styles = {
-  dialog: {
-    maxWidth: 820,
-    width: 'fit-content',
-    bottom: window.innerWidth < 800 ? '15vh' : 0
-  },
   bodyStyle: {
     overflowY: 'auto'
   },

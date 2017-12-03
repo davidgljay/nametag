@@ -42,7 +42,6 @@ class Replies extends Component {
         setRecipient,
         parent,
         open,
-        parentAuthor,
         norms,
         hideDMs,
         closeReply,
@@ -69,10 +68,17 @@ class Replies extends Component {
           <h3 style={styles.header}>
             <div>{t('message.reply_to')}</div>
             <div style={styles.nametagIconStyle}>
-              <NametagIcon
-                image={parentAuthor.image}
-                name={parentAuthor.name}
-                diameter={30} />
+              {
+                parent.author
+                ? <NametagIcon
+                  image={parent.author.image}
+                  name={parent.author.name}
+                  diameter={30} />
+                : <NametagIcon
+                  image={parent.nametag.image}
+                  name={parent.nametag.name}
+                  diameter={30} />
+              }
             </div>
           </h3>
           <div style={editingReply ? styles.editingContainer : {}}>
@@ -86,13 +92,13 @@ class Replies extends Component {
               setEditing={this.setEditing}
               editMessage={editMessage}
               mod={mod}
-              parent={parent}
+              parent={parent.id}
               topic=''
               onPost={this.onPost} />
           </div>
           <div style={styles.cardsContainer}>
             {
-              replies.map((reply, i) =>
+              [parent].concat(replies).map((reply, i) =>
                 <Message
                   message={reply}
                   roomId={roomId}
@@ -132,12 +138,14 @@ Replies.propTypes = {
   replies: arrayOf(shape({
     id: string.isRequired
   }).isRequired),
-  parentAuthor: shape({
-    name: string.isRequired,
-    image: string
-  }).isRequired,
   roomId: string.isRequired,
-  parent: string.isRequired,
+  parent: shape({
+    id: string.isRequired,
+    author: shape({
+      name: string.isRequired,
+      image: string
+    })
+  }).isRequired,
   myNametag: object.isRequired,
   deleteMessage: func.isRequired,
   banNametag: func.isRequired,

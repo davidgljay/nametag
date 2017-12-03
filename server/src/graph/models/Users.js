@@ -5,8 +5,8 @@ const fetch = require('node-fetch')
 const {fromUrl} = require('../../routes/images/imageUpload')
 const {
   ErrBadAuth,
+  ErrBadHash,
   ErrNotLoggedIn,
-  ErrEmailTaken,
   ErrInvalidToken,
   ErrNotFound,
   APIError
@@ -25,7 +25,7 @@ const usersTable = db.table('users')
  *
  */
 
-const get = ({conn}, id) => usersTable.get(id).run(conn)
+const get = ({conn}, id) => id ? usersTable.get(id).run(conn) : null
 
 /**
  * Returns a user based on an e-mail address.
@@ -41,6 +41,24 @@ const getByEmail = ({conn}, email) =>
     .then(results => {
       if (results.length === 0) {
         return Promise.reject(ErrBadAuth)
+      }
+      return results[0]
+    })
+
+/**
+ * Returns a user based on an e-mail address.
+ *
+ * @param {Object} context     graph context
+ * @param {String} email   an email used to look up the user
+ *
+ */
+
+const getByHash = ({conn}, hash) =>
+  usersTable.getAll(hash, {index: 'loginHash'}).run(conn)
+    .then(cursor => cursor.toArray())
+    .then(results => {
+      if (results.length === 0) {
+        return Promise.reject(ErrBadHash)
       }
       return results[0]
     })
@@ -231,7 +249,7 @@ const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
         createdAt: new Date(),
         badges: {},
         password: uuid.v4().replace(/-/g, ''),
-        userToken: uuid.v4().replace(/-/g, '').slice(0, 15),
+        loginHash: uuid.v4().replace(/-/g, ''),
         unsubscribe: {}
       }
 
@@ -371,65 +389,71 @@ const badgesFromAuth = (badge, provider) => {
  *
  * @param {Object} context   graph context
  * @param {String} email     E-mail address of the user
- * @param {String} password  Hashed password from the user
+ * @param {String} path      Current path of the user
  *
  */
-const createLocal = ({conn}, email, password) => {
-  const emailHash = MD5(email.trim().toLowerCase())
-  return fetch(`https://gravatar.com/${emailHash}.json`)
-  .then(res => res.ok ? res.json() : null)
-  .then(gravatarInfo => {
-    let displayNames = [email.match(/^[^@]+/)[0]]
-    let images = []
-    if (gravatarInfo) {
-      const {entry: [{preferredUsername, thumbnailUrl, displayName}]} = gravatarInfo
-      if (displayName) {
-        displayNames.push(displayName)
+const createLocal = (context, email, path) =>
+  usersTable.getAll(email, {index: 'email'}).count().eq(0).run(context.conn)
+    .then(newUser => {
+      const {conn} = context
+
+      // Create a new user
+      if (newUser) {
+        const emailHash = MD5(email.trim().toLowerCase())
+
+        // Check is a gravatar image exists
+        return fetch(`https://gravatar.com/${emailHash}.json`)
+        .then(res => res.ok ? res.json() : null)
+        .then(gravatarInfo => {
+          let displayNames = [email.match(/^[^@]+/)[0]]
+          let images = []
+          if (gravatarInfo) {
+            const {entry: [{preferredUsername, thumbnailUrl, displayName}]} = gravatarInfo
+            if (displayName) {
+              displayNames.push(displayName)
+            }
+            if (preferredUsername) {
+              displayNames.push(preferredUsername)
+            }
+            if (thumbnailUrl) {
+              images.push(thumbnailUrl)
+            }
+          }
+          // Make displayNames unique
+          displayNames = displayNames.reduce(
+            (arr, item) => arr.indexOf(item) === -1 ? arr.concat(item) : arr, []
+          )
+
+          // Insert the user
+          return usersTable.insert({
+            email,
+            createdAt: new Date(),
+            displayNames,
+            images: images,
+            badges: {},
+            password: uuid.v4().replace(/-/g, ''),
+            loginHash: uuid.v4().replace(/-/g, ''),
+            unsubscribe: {}
+          }).run(conn)
+        })
+        .then(res => {
+          if (res.errors) {
+            return Promise.reject(new Error('Could not insert user', res.error))
+          }
+          const id = res.generated_keys[0]
+          return Promise.all([
+            id,
+            emailConfirmationRequest(context, email)
+          ])
+           .then(([id]) => ({id, newUser}))
+        })
+
+      // If the user already exists, send a hash login request
+      } else {
+        return hashLoginRequest(context, email, path)
+          .then(() => ({newUser}))
       }
-      if (preferredUsername) {
-        displayNames.push(preferredUsername)
-      }
-      if (thumbnailUrl) {
-        images.push(thumbnailUrl)
-      }
-    }
-    // Make displayNames unique
-    displayNames = displayNames.reduce(
-      (arr, item) => arr.indexOf(item) === -1 ? arr.concat(item) : arr, []
-    )
-    return r.branch(
-      usersTable.getAll(email, {index: 'email'}).count().eq(0),
-      usersTable.insert({
-        email,
-        createdAt: new Date(),
-        displayNames,
-        images: images,
-        badges: {},
-        userToken: uuid.v4().replace(/-/g, '').slice(0, 15),
-        unsubscribe: {}
-      }),
-      {exists: true}
-    )
-   .run(conn)
-  })
- .then(res => {
-   if (res.errors) {
-     return Promise.reject(new Error('Could not insert user', res.error))
-   }
-   if (res.exists) {
-     return Promise.reject(ErrEmailTaken)
-   }
-   const id = res.generated_keys[0]
-   return Promise.all([
-     id,
-     emailConfirmationRequest({conn}, email),
-     usersTable.get(id).update({
-       password: hashPassword(`${password}${passwordsalt}`)
-     }).run(conn)
-   ])
-     .then(([id]) => id)
- })
-}
+    })
 
 /**
  * Sets a forgot password token.
@@ -530,16 +554,41 @@ const emailConfirmation = ({conn}, token) =>
     .then(res => res.replaced === 0 ? ErrNotFound : null)
 
 /**
+ * Sends an e-mail allowing a user to log in with a token
+ *
+ * @param {Object} context   graph context
+ * @param {String} email     Token confirming the user's e-mail
+ * @param {String} path      Optional: path to direct the user to upon successful login
+ *
+ */
+
+const hashLoginRequest = ({conn}, email, path) =>
+  getByEmail({conn}, email)
+    .then(({email, loginHash}) => {
+      sendEmail({
+        from: {
+          email: 'noreply@nametag.chat',
+          name: 'Nametag Login'
+        },
+        to: email,
+        template: 'hashLogin',
+        params: {loginHash, path}
+      })
+    })
+
+/**
  * Unsubscribes to a room or to all email.
  *
  * @param {Object} context   graph context
- * @param {String} userToken     Unique token identifying the user
+ * @param {String} loginHash     Unique token identifying the user
  * @param {String} roomId    Id of the room to be unsubscribed from
  *
  */
 
-const unsubscribe = ({conn}, userToken, roomId) =>
-  usersTable.getAll(userToken, {index: 'userToken'}).update({unsubscribe: {[roomId]: true}}).run(conn)
+const unsubscribe = ({conn}, loginHash, roomId) =>
+  usersTable.getAll(loginHash, {index: 'loginHash'})
+    .update({unsubscribe: {[roomId]: true}})
+    .run(conn)
     .then(res => res.replaced === 0 ? ErrNotFound : null)
 
 /**
@@ -592,14 +641,14 @@ const emailDigest = ({conn}) =>
   .map(join =>
       join('left').merge({
         email: join('right')('email'),
-        userToken: join('right')('userToken')
+        loginHash: join('right')('loginHash')
       }))
   .eqJoin(join => join('room')('mod'), db.table('nametags'))
   .map(join => ({
     id: join('left')('room')('id'),
     title: join('left')('room')('title'),
     email: join('left')('email'),
-    userToken: join('left')('userToken'),
+    loginHash: join('left')('loginHash'),
     mod: join('right').pluck('name', 'image'),
     newNametags: db.table('nametags')
         .getAll(join('left')('room')('id'), {index: 'room'})
@@ -615,7 +664,12 @@ const emailDigest = ({conn}) =>
     latestMessage: db.table('messages')
       .getAll([join('id'), false], {index: 'room_recipient'})
       .orderBy(r.desc('createdAt'))
-      .nth(0)('text')
+      .filter(m => m('author'))
+      .limit(1)
+      .eqJoin('author', db.table('nametags'))
+      .zip()
+      .pluck('text', 'name', 'image')
+      .nth(0)
   }))
   .group('email')
   .run(conn)
@@ -623,7 +677,7 @@ const emailDigest = ({conn}) =>
     let sent = {}
     for (var i = 0; i < results.length; i++) {
       const {group, reduction} = results[i]
-      const userToken = reduction[0].userToken
+      const loginHash = reduction[0].loginHash
       if (!sent[group]) {
         sent[group] = true
         sendEmail({
@@ -633,7 +687,7 @@ const emailDigest = ({conn}) =>
           },
           to: group,
           template: 'digest',
-          params: {userToken, rooms: reduction}
+          params: {loginHash, rooms: reduction}
         })
       }
     }
@@ -644,6 +698,7 @@ module.exports = (context) => ({
     get: (id) => get(context, id),
     getByEmail: (email) => getByEmail(context, email),
     getByNametag: (nametagId) => getByNametag(context, nametagId),
+    getByHash: (hash) => getByHash(context, hash),
     addEmail: (userId, email) => addEmail(context, userId, email),
     getAdminTemplates: () => getAdminTemplates(context),
     findOrCreateFromAuth: (profile, provider) => findOrCreateFromAuth(context, profile, provider),
@@ -661,7 +716,8 @@ module.exports = (context) => ({
     passwordReset: (token, password) => passwordReset(context, token, password),
     emailConfirmationRequest: (email) => emailConfirmationRequest(context, email),
     emailConfirmation: (token) => emailConfirmation(context, token),
-    unsubscribe: (userToken, roomId) => unsubscribe(context, userToken, roomId),
+    hashLoginRequest: (email, path) => hashLoginRequest(context, email, path),
+    unsubscribe: (loginHash, roomId) => unsubscribe(context, loginHash, roomId),
     emailDigest: () => emailDigest(context)
   }
 })

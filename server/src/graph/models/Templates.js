@@ -11,7 +11,7 @@ const templatesTable = db.table('templates')
  *
  */
 
-const get = ({conn}, id) => templatesTable.get(id).run(conn)
+const get = ({conn}, id) => id ? templatesTable.get(id).run(conn) : null
 
 /**
  * Returns an array of badge templates from an array of ids.

@@ -154,6 +154,8 @@ type Message {
 
   # A template being granted with this message
   template: Template
+  # Nametag to be displayed with this message
+  nametag: Nametag
 
   # Indicates whether the message has been saved for viewing after the room has closed
   saved: Boolean
@@ -725,12 +727,6 @@ type RootMutation {
   # Adds a note to badge
   addNote(badgeId: ID!, text: String!): BasicResponse
 
-  # Creates a password reset request
-  passwordResetRequest(email: String!): BasicResponse
-
-  # Resets a password
-  passwordReset(token: String!, password: String!): BasicResponse
-
   # Requests an email confirmation
   emailConfirmationRequest(email: String!): BasicResponse
 
@@ -738,7 +734,7 @@ type RootMutation {
   emailConfirmation(token: String!): BasicResponse
 
   # Unsubscribes from a room
-  unsubscribe(userToken: String!, roomId: String!): BasicResponse
+  unsubscribe(loginHash: String!, roomId: String!): BasicResponse
 
   # Approves a public room
   approveRoom(roomId: ID!): BasicResponse

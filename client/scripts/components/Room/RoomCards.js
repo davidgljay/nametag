@@ -47,7 +47,7 @@ class RoomCards extends Component {
 
   render () {
     const {
-      data: {me, rooms, loading}
+      data: {me, rooms, loading, refetch}
     } = this.props
 
     if (loading) {
@@ -150,6 +150,7 @@ class RoomCards extends Component {
                 {
                   [0, 1, 2].map(i =>
                     <FeatureCallout
+                      key={i}
                       image={t(`room.feature_callouts.${i}.image`)}
                       title={t(`room.feature_callouts.${i}.title`)}
                       body={t(`room.feature_callouts.${i}.body`)} />
@@ -188,8 +189,8 @@ class RoomCards extends Component {
           </div>
           <LoginDialog
             showLogin={this.state.showLogin}
-            toggleLogin={this.toggleLogin}
-            message={t('room.log_in')} />
+            refetch={refetch}
+            toggleLogin={this.toggleLogin} />
         </div>
       </div>
     </div>

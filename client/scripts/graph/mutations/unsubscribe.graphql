@@ -1,5 +1,5 @@
-mutation Unsubscribe($userToken: String!, $roomId: String!) {
-  unsubscribe(userToken: $userToken, roomId: $roomId) {
+mutation Unsubscribe($loginHash: String!, $roomId: String!) {
+  unsubscribe(loginHash: $loginHash, roomId: $roomId) {
     errors {
       translation_key
       message

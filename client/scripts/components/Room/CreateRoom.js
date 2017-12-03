@@ -188,14 +188,11 @@ class CreateRoom extends Component {
 
   render () {
     const {
-      data: {me, loading},
+      data: {me, loading, refetch},
       nametagEdits,
       updateNametagEdit,
       addNametagEditBadge,
-      removeNametagEditBadge,
-      registerUser,
-      loginUser,
-      passwordResetRequest
+      removeNametagEditBadge
     } = this.props
     const {room, stepIndex} = this.state
     const selectedBadges = room.templates.map(template => ({id: template.id, notes: [], template}))
@@ -221,9 +218,7 @@ class CreateRoom extends Component {
             removeSelectedBadge={this.removeSelectedBadge}
             nametagEdits={nametagEdits}
             updateRoom={this.updateRoom}
-            loginUser={loginUser}
-            registerUser={registerUser}
-            passwordResetRequest={passwordResetRequest}
+            refetch={refetch}
             addNametagEditBadge={addNametagEditBadge}
             removeNametagEditBadge={removeNametagEditBadge}
             addNorm={this.addNorm}

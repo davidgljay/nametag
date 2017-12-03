@@ -1,7 +1,9 @@
+#import "../fragments/nametagView.graphql"
+
 mutation CreateNametag($nametag: CreateNametagInput!) {
   createNametag(nametag: $nametag) {
     nametag {
-      id
+      ...nametagView
     }
     errors {
       translation_key
