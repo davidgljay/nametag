@@ -50,8 +50,16 @@ function getTypingPrompts (state, {data}) {
   return room.nametags.filter(nametag => state.typingPrompts[nametag.id])
 }
 
+function getGrantableTemplates ({data}) {
+  if (!data.me || !data.me.granters) {
+    return []
+  }
+  return data.me.granters.reduce((arr, granter) => arr.concat(granter.templates), [])
+}
+
 const mapStateToProps = (state, ownProps) => ({
   myNametag: getMyNametag(ownProps),
+  grantableTemplates: getGrantableTemplates(ownProps),
   nametagEdits: state.nametagEdits,
   visibleReplies: state.room.visibleReplies,
   typingPrompts: getTypingPrompts(state, ownProps)

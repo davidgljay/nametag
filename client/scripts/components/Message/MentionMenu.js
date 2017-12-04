@@ -16,6 +16,12 @@ const MentionMenu = ({
   canGrantBadges,
   badgeGrant
 }) => {
+  const showBadgeGrant = nametagId => e => {
+    e.preventDefault()
+    badgeGrant(nametagId)
+    toggleMenu(e)
+  }
+
   const setMessage = message => e => {
     e.preventDefault()
     setDefaultMessage(message)
@@ -51,8 +57,8 @@ const MentionMenu = ({
           canGrantBadges &&
           <MenuItem
             key='badgeGrant'
-            primateText={t('message.badge_grant')}
-            onClick={badgeGrant(nametagId)} />
+            primaryText={t('badge.badge_grant')}
+            onClick={showBadgeGrant(nametagId)} />
         }
       </Menu>
     </Popover>

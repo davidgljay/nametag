@@ -64,6 +64,7 @@ class Badge extends Component {
       onUploadImage,
       currentOffset,
       initialOffset,
+      selectBadge,
       draggable
     } = this.props
 
@@ -100,7 +101,7 @@ class Badge extends Component {
             </div>
             <div>
               <div style={jumbo ? styles.jumboName : styles.name}>{name}</div>
-              <div style={styles.granter}>{t('granted_by')}{granter.name}</div>
+              <div style={styles.granter}>{t('badge.granted_by')} {granter.name}</div>
             </div>
           </div>
           <div style={styles.description}>{description}</div>
@@ -130,11 +131,12 @@ class Badge extends Component {
         styles.chipIcon,
         jumbo ? styles.jumboChipIcon : {},
         {background: `url(${image}) 0 0 / cover`})
+
       badgeComponent = <div
         style={chipStyle}
         className='mdl-shadow--2dp'
         key={id}
-        onClick={this.toggleExpanded}>
+        onClick={selectBadge || this.toggleExpanded}>
         {
             image
             ? <div style={imageStyle} />
@@ -170,7 +172,8 @@ Badge.propTypes = {
   isDragging: PropTypes.bool.isRequired,
   removeFromSource: PropTypes.func,
   showIconUpload: PropTypes.bool,
-  onUploadImage: PropTypes.func
+  onUploadImage: PropTypes.func,
+  selectBadge: PropTypes.func
 }
 
 export default DragSource(dragTypes.badge, badgeSource, collect)(Badge)

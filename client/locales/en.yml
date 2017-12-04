@@ -22,7 +22,7 @@ en:
   badge:
     granted_by: Granted by
     note: Note
-    grant_badge: Grant Badge
+    badge_grant: Grant Badge
     note_hint: Add a note that will be publicly visible on this individual's badge. Do not include any personally identifiable information.
     add_note: Add Note
     request: Request

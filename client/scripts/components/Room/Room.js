@@ -149,6 +149,7 @@ class Room extends Component {
         refetch
       },
       myNametag,
+      grantableTemplates,
       nametagEdits,
       typingPrompts,
       showTypingPrompt,
@@ -213,6 +214,7 @@ class Room extends Component {
             hideDMs={!!hideDMs}
             addReaction={addReaction}
             deleteMessage={deleteMessage}
+            grantableTemplates={grantableTemplates}
             banNametag={banNametag}
             getReplies={getReplies}
             editMessage={editMessage}

@@ -48,6 +48,22 @@ query roomQuery($id: ID!){
     id
     images
     displayNames
+    granters {
+      id
+      templates {
+        id
+        name
+        description
+        image
+        createdAt
+        granter {
+          id
+          name
+          description
+          image
+        }
+      }
+    }
     nametags {
       id
       mentions

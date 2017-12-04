@@ -18,6 +18,10 @@ class Messages extends Component {
       showBadgeGrant: ''
     }
 
+    this.badgeGrant = (nametagId) => {
+      this.setState({showBadgeGrant: nametagId})
+    }
+
     this.mapMessage = (message, i) => {
       const {
         norms,
@@ -90,10 +94,6 @@ class Messages extends Component {
       addReaction(showEmoji, emoji.colons, myNametag.id)
       this.setState({showEmoji: ''})
     }
-
-    this.badgeGrant = (nametagId) => {
-      this.setState({showBadgeGrant: nametagId})
-    }
   }
 
   componentDidMount () {
@@ -128,7 +128,7 @@ class Messages extends Component {
         open={!!showBadgeGrant}
         anchorEl={document.getElementById('compose')}
         overlayStyle={{opacity: 0}}
-        onRequestClose={this.badgeGrant('')}>
+        onRequestClose={() => this.badgeGrant('')}>
         <GrantBadge
           grantableTemplates={grantableTemplates}
           grantee={showBadgeGrant} />

@@ -1,30 +1,24 @@
-import React, {PropTypes, Component} from 'react'
-import UserBadges from '../Badge/UserBadges'
-import Badges from '../../Badge/Badges'
+import React, {PropTypes} from 'react'
+import Badges from '../Badge/Badges'
 
-class GrantBadge extends Component {
+const GrantBadge = ({grantableTemplates, selectBadge}) => {
+  const grantableBadges = grantableTemplates.map(template => ({
+    id: template.id,
+    template
+  }))
 
-  constructor (props) {
-    super(props)
+  return <div>
+    <Badges
+      badges={grantableBadges}
+      selectBadge={selectBadge} />
+  </div>
+}
 
-    this.state = {
-      badges: []
-    }
-  }
+const {arrayOf, object, func} = PropTypes
 
-  render () {
-    const {} = this.props
+GrantBadge.proptypes = {
+  grantableTemplates: arrayOf(object),
+  selectBadge: func.isRequired
+}
 
-    return <div>
-
-     </div>
-  }
- }
-
- const {array, shape, bool, object, string, func} = PropTypes
-
- GrantBadge.proptypes = {
-
- }
-
- export default GrantBadge
+export default GrantBadge
