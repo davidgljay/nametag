@@ -266,41 +266,41 @@ export const createMessage = graphql(CREATE_MESSAGE, {
       variables: {
         message
       },
-      optimisticResponse: {
-        createMessage: {
-          __typename: 'CreateMessageResponse',
-          message: {
-            __typename: 'Message',
-            id: `tempMessage_${Date.now()}`,
-            text: message.text,
-            createdAt: new Date().toISOString(),
-            editedAt: null,
-            saved: false,
-            replies: [],
-            replyCount: 0,
-            author: {
-              __typename: 'Nametag',
-              image: author.image,
-              id: author.id,
-              name: author.name
-            },
-            recipient: null,
-            reactions: [],
-            nametag: null,
-            parent: message.parent ? {
-              __typename: 'Message',
-              id: message.parent,
-              author: {
-                __typename: 'Nametag',
-                id: 'tempAuthor',
-                name: ''
-              }
-            }
-            : null
-          },
-          errors: null
-        }
-      },
+      // optimisticResponse: {
+      //   createMessage: {
+      //     __typename: 'CreateMessageResponse',
+      //     message: {
+      //       __typename: 'Message',
+      //       id: `tempMessage_${Date.now()}`,
+      //       text: message.text,
+      //       createdAt: new Date().toISOString(),
+      //       editedAt: null,
+      //       saved: false,
+      //       replies: [],
+      //       replyCount: 0,
+      //       author: {
+      //         __typename: 'Nametag',
+      //         image: author.image,
+      //         id: author.id,
+      //         name: author.name
+      //       },
+      //       recipient: null,
+      //       reactions: [],
+      //       nametag: null,
+      //       parent: message.parent ? {
+      //         __typename: 'Message',
+      //         id: message.parent,
+      //         author: {
+      //           __typename: 'Nametag',
+      //           id: 'tempAuthor',
+      //           name: ''
+      //         }
+      //       }
+      //       : null
+      //     },
+      //     errors: null
+      //   }
+      // },
       updateQueries: {
         roomQuery: (oldData, {mutationResult: {data: {createMessage: {message, errors}}}}) => {
           if (errors) {
