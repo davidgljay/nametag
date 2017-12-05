@@ -191,12 +191,12 @@ r.connect({host: 'rethinkdb'})
             if (!result) {
               res.render('404.pug')
             } else {
-              res.render('index.pug', {title: result.title, image: result.image, bio: result.bio})
+              res.render('index.pug', {title: result.title, image: result.image, description: result.bio})
             }
           })
           .catch(next)
       } else {
-        res.render('index.pug', {title: 'Nametag'})
+        res.render('index.pug', {title: 'Nametag', description: "Small conversations with people you can trust."})
       }
     })
 

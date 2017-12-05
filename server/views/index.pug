@@ -1,6 +1,6 @@
 html
   header
-    meta(name= "description" content= "Small conversations with people you can trust.")
+    meta(name= "description" content= description)
     meta(name= "viewport" content= "width=device-width")
     link(rel="manifest" href="/public/manifest.json")
     title= title
@@ -21,7 +21,4 @@ html
       div(style="display: none;")
         - if (image)
           img(src= image)
-        - if (bio)
-          div.
-            bio
     script(src="/public/scripts/app.js")
