@@ -266,6 +266,8 @@ export const createMessage = graphql(CREATE_MESSAGE, {
       variables: {
         message
       },
+      // Removing optimistic message posting, this seems to cause a
+      // strange edge case when posting a reply if the reply subscription comes in first
       // optimisticResponse: {
       //   createMessage: {
       //     __typename: 'CreateMessageResponse',
