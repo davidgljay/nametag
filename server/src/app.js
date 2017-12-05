@@ -178,9 +178,31 @@ r.connect({host: 'rethinkdb'})
       }
     })
 
+    // app.get('/test', (req, res, next) => {
+    //   res.render('room.pug', { title: 'StuffnThings' })
+    // })
+
     /* All others serve index.html */
     app.get('*', (req, res, next) => {
-      res.sendFile(path.join('/usr', 'client', 'public', 'index.html'))
+      // If loading a room, display key room info in a template
+      if (/\/rooms\/[a-z0-9\-]*/.test(req.url)) {
+        const roomId = /\/rooms\/([a-z0-9\-]*)/.exec(req.url)[1]
+        db.table('rooms').getAll(roomId)
+        .eqJoin('mod', db.table('nametags'))
+        .zip()
+        .run(conn)
+          .then(cursor => cursor.toArray())
+          .then(([result]) => {
+            if (!result) {
+              res.render('404.pug')
+            } else {
+              res.render('index.pug', {title: result.title, image:result.image, bio: result.bio})
+            }
+          })
+          .catch(next)
+      } else {
+        res.render('index.pug', {title: 'Nametag'})
+      }
     })
 
     app.use(Raven.errorHandler())
