@@ -85,10 +85,6 @@ module.exports = {
         to: path.join(__dirname, 'dist', 'public', 'manifest.json')
       },
       {
-        from: path.join(__dirname, 'client', 'index.html'),
-        to: path.join(__dirname, 'dist', 'public', 'index.html')
-      },
-      {
         from: path.join(__dirname, 'client', 'yaml.js'),
         to: path.join(__dirname, 'dist', 'public', 'yaml.js')
       },
