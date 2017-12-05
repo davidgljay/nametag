@@ -38,7 +38,7 @@ const commands = {
     return this.waitForElementVisible('@compose')
     .setValue('@composeTextInput', message)
     .click('@sendMessageButton')
-    .waitForElementVisible('@messageText')
+    .waitForElementVisible('.messageText:nth-child(2)')
     .assert.containsText('body', message)
   },
   exitRoom () {
