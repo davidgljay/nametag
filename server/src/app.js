@@ -33,7 +33,6 @@ const GIT_HASH = execSync('git rev-parse HEAD', {
 
 process.env.AWS_ACCESS_KEY_ID = config.s3.accessKeyId
 process.env.AWS_SECRET_ACCESS_KEY = config.s3.secretAccessKey
-process.env.PRERENDER_TOKEN = config.prerender.token ? config.prerender.token : ''
 
 Raven.config(config.sentry.dsn, {
   tags: {git_commit: GIT_HASH},
@@ -90,10 +89,6 @@ app.use(function (req, res, next) {
 })
 app.use(passport.initialize())
 app.use(passport.session())
-// Prerender pages for SEO optimization
-if (process.env.PRERENDER_TOKEN) {
-  app.use(require('prerender-node').set('prerenderToken', process.env.PRERENDER_TOKEN))
-}
 
 /* Get rethinkdb connection */
 r.connect({host: 'rethinkdb'})
