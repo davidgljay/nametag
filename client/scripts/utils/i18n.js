@@ -5,10 +5,17 @@ import merge from 'lodash/merge'
 
 let en
 
-if (YAML) { //eslint-disable-line
-  en = YAML.load('/public/locales/en.yml') //eslint-disable-line
+if (window.YAML) {
+  en = window.YAML.load('/public/locales/en.yml') //eslint-disable-line
 } else {
-  document.location.reload(true)
+  console.log('YAML not found, clearing cache and forcing hard reload.')
+  caches.keys()
+   .then(keys => {
+     if (keys.indexOf('nametag-cache-v1') > -1) {
+       caches.delete('nametag-cache-v1')
+       document.location.reload(true)
+     }
+   })
 }
 
 // Translations are happening at https://translate.lingohub.com/the-coral-project/dashboard
