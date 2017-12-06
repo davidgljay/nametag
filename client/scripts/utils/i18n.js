@@ -3,7 +3,13 @@ import has from 'lodash/has'
 import get from 'lodash/get'
 import merge from 'lodash/merge'
 
-const en = YAML.load('/public/locales/en.yml') // eslint-disable-line
+let en
+
+if (YAML) { //eslint-disable-line
+  en = YAML.load('/public/locales/en.yml') //eslint-disable-line
+} else {
+  document.location.reload(true)
+}
 
 // Translations are happening at https://translate.lingohub.com/the-coral-project/dashboard
 
