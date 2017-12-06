@@ -96,6 +96,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'stretch',
+    minHeight: 80,
     padding: 10
   },
   input: {
