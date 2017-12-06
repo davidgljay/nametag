@@ -15,7 +15,6 @@ module.exports = {
     const roomCardsPage = client.page.RoomCards()
 
     roomCardsPage
-      .registerInRoom(users.participant)
       .joinRoom(users.participant)
   },
   'Participant posts a message': client => {
@@ -23,10 +22,11 @@ module.exports = {
     const page = client.page.Room()
 
     page
-      .updateNametag(users.participant.name)
+      .agreeToNorms()
       .postWelcome(messages[1])
-      .assertLoaded(room, users.participant)
-      .postMessage(messages[2])
+      .register(users.participant)
+      .assertLoaded(room, {name: 'participant'})
+      .postReply(messagees[3])
   },
   after: client => {
     client.end()

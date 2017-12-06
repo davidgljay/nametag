@@ -3,48 +3,55 @@ const commands = {
     return this.waitForElementVisible('body', 3000)
   },
   roomJoin (user) {
-    return this.waitForElementVisible('@loginForm')
-    .click('@enableRegisterButton')
-    .waitForElementVisible('@registerButton')
-    .setValue('@emailForm', user.email)
-    .setValue('@passForm', user.pass)
-    .setValue('@confForm', user.pass)
-    .click('@registerButton')
-    .waitForElementVisible('@joinRoomButton')
+    return this.waitForElementVisible('@joinRoomButton')
     .click('@joinRoomButton')
     .waitForElementVisible('@messages')
   },
-  assertLoaded ({title, description, norm}, {bio, name}) {
+  assertLoaded ({title, description, norm}, {name}) {
     return this.waitForElementVisible('#roomTitle')
     .assert.containsText('#roomTitle', title)
+    .waitForElementVisible('@nametags')
     .assert.containsText('@nametags', name)
     .assert.containsText('#norms', norm)
   },
   updateNametag (name) {
     return this.waitForElementVisible('@editNametag')
     .setValue('@editNametagName', name)
-    .click('@enterRoomButton')
+  },
+  agreeToNorms () {
+    return this.waitForElementVisible('@aboutNametagNext')
+      .click('@aboutNametagNext')
+      .waitForElementVisible('@agreeToNorms')
+      .click('@agreeToNorms')
   },
   postWelcome (message) {
     return this.waitForElementVisible('@welcomeModalInput')
     .setValue('@welcomeModalInput', message)
     .click('@welcomeModalSend')
-    .waitForElementVisible('@messageText')
-    .assert.containsText('@messages', message)
-    .waitForElementVisible('#myNametag .bio')
-    .assert.containsText('#myNametag .bio', message)
   },
-  postMessage (message) {
+  postMessage (message, i) {
     return this.waitForElementVisible('@compose')
     .setValue('@composeTextInput', message)
     .click('@sendMessageButton')
-    .waitForElementVisible('.messageText:nth-child(2)')
+    .waitForElementPresent(`.messageText:nth-of-type(${i})`)
+    .getLocationInView(`.messageText:nth-of-type(${i})`)
     .assert.containsText('body', message)
   },
   exitRoom () {
     return this.waitForElementVisible('@close')
     .click('@close')
     .waitForElementVisible('#roomCards')
+  },
+  register (user) {
+    return this
+    .waitForElementVisible('@registerButton')
+    .setValue('@emailForm', user.email)
+    .click('@registerButton')
+  },
+  postReply (message) {
+    return this.waitForElementVisible('@replybutton')
+    .click('@replyButton')
+    .waitForElementVisible('@replyTextInput')
   }
 }
 
@@ -113,6 +120,12 @@ module.exports = {
     },
     confForm: {
       selector: '#loginConfirm'
+    },
+    aboutNametagNext: {
+      selector: '#aboutNametagNext'
+    },
+    agreeToNorms: {
+      selector: '#agreeToNorms'
     }
   }
 }
