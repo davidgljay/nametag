@@ -19,8 +19,8 @@ const commands = {
   addNorms (norm) {
     return this
       .waitForElementVisible('@addCustomNorm')
-      .setValue('@addCustomNorm', norm)
       .getLocationInView('@nextButton')
+      .setValue('@addCustomNorm', norm)
       .click('@nextButton')
   },
   addBio (bio, name) {
@@ -44,8 +44,6 @@ const commands = {
     return this
     .waitForElementVisible('@registerButton')
     .setValue('@emailForm', user.email)
-    .setValue('@passForm', user.pass)
-    .setValue('@confForm', user.pass)
     .click('@registerButton')
   }
 }

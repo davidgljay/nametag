@@ -3,19 +3,22 @@ module.exports = {
   baseUrl: 'https://localhost:8181',
   users: {
     mod: {
-      email: 'mod@test.com',
+      email: 'davidgljay@gmail.com',
       pass: 'testtest',
-      name: 'Robo'
+      name: 'Robo',
+      bio: 'I\'m a little robot.'
     },
     participant: {
       email: 'participant@test.com',
       pass: 'testtest',
-      name: 'Catbot'
+      name: 'Catbot',
+      bio: 'A robot, also a cat!'
     },
     smParticipant: {
       email: 'smParticipant@test.com',
       pass: 'testtest',
-      name: 'TritterKid'
+      name: 'TwitterKid',
+      bio: 'Fresh from tweetland'
     }
   },
   room: {

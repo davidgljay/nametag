@@ -10,7 +10,7 @@ import radium from 'radium'
 const JoinedRoomCard = ({room}) =>
   <Card
     key={room.id}
-    className='JoinedRoomCard'
+    className='joinedRoomCard'
     style={styles.cardContainer}
     onClick={() => browserHistory.push(`/rooms/${room.id}`)}>
     <div className='cardMod' style={styles.modContainer}>
@@ -45,7 +45,7 @@ const JoinedRoomCard = ({room}) =>
         }
       </div>
     </div>
-    <div style={styles.title}>{room.title}</div>
+    <div style={styles.title} className='roomTitle'>{room.title}</div>
   </Card>
 
 const {shape, string} = PropTypes

@@ -131,7 +131,7 @@ class Message extends Component {
       </div>
     } else if (recipient && recipient.id === myNametag.id) {
       messageStyle = {...styles.messageText, ...styles.directMessageIncoming}
-      callout = <div style={styles.dmCallout}>{t('message.priate_msg')}</div>
+      callout = <div style={styles.dmCallout}>{t('message.private_msg')}</div>
     }
 
     // Getting around Markdown's splitting of the '_' character in a hacky way for now

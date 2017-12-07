@@ -46,7 +46,7 @@ class RoomCard extends Component {
         <div style={styles.joinContainer}>
           <RaisedButton
             primary
-            id='JoinButton'
+            className='joinButton'
             label={t('room.join')}
             disabled={disabled}
             onClick={example || disabled ? () => {} : this.onJoinClick} />

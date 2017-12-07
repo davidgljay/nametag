@@ -13,7 +13,7 @@ module.exports = ({to, from, template, params}) => {
     recipients: typeof to === 'string'
     ? [
       {
-        address: to
+        address: process.env.NODE_ENV === 'production' ? to : 'nametagchat@gmail.com'
       }
     ]
     : to.map(address => ({address})),

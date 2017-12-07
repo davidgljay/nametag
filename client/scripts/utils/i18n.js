@@ -3,7 +3,20 @@ import has from 'lodash/has'
 import get from 'lodash/get'
 import merge from 'lodash/merge'
 
-const en = YAML.load('/public/locales/en.yml') // eslint-disable-line
+let en
+
+if (window.YAML) {
+  en = window.YAML.load('/public/locales/en.yml') //eslint-disable-line
+} else {
+  console.log('YAML not found, clearing cache and forcing hard reload.')
+  caches.keys()
+   .then(keys => {
+     if (keys.indexOf('nametag-cache-v1') > -1) {
+       caches.delete('nametag-cache-v1')
+       document.location.reload(true)
+     }
+   })
+}
 
 // Translations are happening at https://translate.lingohub.com/the-coral-project/dashboard
 

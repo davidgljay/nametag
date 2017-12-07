@@ -2,7 +2,6 @@ importScripts('https://www.gstatic.com/firebasejs/4.6.2/firebase-app.js')
 importScripts('https://www.gstatic.com/firebasejs/4.6.2/firebase-messaging.js')
 var cacheName = 'nametag-cache-v1'
 var urlsToCache = [
-  '/',
   '/images/google.png',
   '/images/twitter.jpg',
   '/images/fb.jpg'

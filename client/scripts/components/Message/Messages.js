@@ -176,7 +176,6 @@ export default radium(Messages)
 const styles = {
   messages: {
     minHeight: '100vh',
-    height: '100%',
     width: 'calc(100% - 275px)',
     display: 'flex',
     flexDirection: 'column',

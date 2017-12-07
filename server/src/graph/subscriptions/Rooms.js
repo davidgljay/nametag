@@ -14,7 +14,7 @@ const RoomSubscription = ({conn, models: {Nametags, Users}}) => db.table('rooms'
       if (!room.new_val || !room.old_val) {
         return
       }
-      if (!room.old_val.mod && room.new_val.public === 'PENDING') {
+      if (!room.old_val.mod && room.new_val.public === 'PENDING' && room.new_val.mod) {
         Nametags.get(room.new_val.mod)
           .then(mod => {
             email({

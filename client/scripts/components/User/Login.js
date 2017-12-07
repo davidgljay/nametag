@@ -83,7 +83,7 @@ class Login extends Component {
     const {message, alert} = this.props
     this.setState({message, alert})
     setTimer('LOGIN_REGISTER_USER')
-    key('enter', this.onEnter)
+    key('enter', this.register)
   }
 
   componentWillUnmount () {
@@ -105,7 +105,7 @@ class Login extends Component {
       <div style={styles.alert}>
         {alert}
       </div>
-      <form className='localAuth' onSubmit={this.onEnter}>
+      <form className='localAuth' onSubmit={this.register}>
         <TextField
           floatingLabelText={t('login.email')}
           id='loginEmail'

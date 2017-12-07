@@ -79,7 +79,7 @@ const getForm = ({
       track('HOST_INTRO')
       return <div style={styles.container}>
         <div style={styles.preview}>
-          <RoomCard room={{...room, mod: nametagEdits.new}} disableJoin />
+          <RoomCard room={{...room, mod: nametagEdits.new}} disabled />
         </div>
         <h2>{t('create_room.done')}</h2>
         <div style={styles.privacyContainer}>
@@ -89,8 +89,7 @@ const getForm = ({
             toggled={room.public}
             labelStyle={{textAlign: 'left'}}
             thumbStyle={{backgroundColor: grey}}
-            onToggle={(e, isChecked) => updateRoom('public', isChecked)}
-            />
+            onToggle={(e, isChecked) => updateRoom('public', isChecked)} />
           <div style={styles.helpText}>
             {
               room.public

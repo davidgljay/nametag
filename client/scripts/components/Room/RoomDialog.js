@@ -61,6 +61,7 @@ class RoomDialog extends Component {
               showChecks />
             <RaisedButton
               onClick={next}
+              id='agreeToNorms'
               primary
               style={styles.normsButton}
               label={t('agree')} />

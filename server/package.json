@@ -43,6 +43,7 @@
     "passport-twitter-email": "^1.0.3",
     "pem": "^1.8.1",
     "prerender-node": "^2.7.2",
+    "pug": "^2.0.0-rc.4",
     "raven": "^2.1.0",
     "req-flash": "^0.0.3",
     "rethinkdb": "^2.1.1",

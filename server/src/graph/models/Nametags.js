@@ -44,7 +44,7 @@ const getRoomNametags = ({conn}, room) =>
   *
   */
 
-const get = ({conn}, id) => id ? nametagsTable.get(id).run(conn) : null
+const get = ({conn}, id) => id ? nametagsTable.get(id).run(conn) : Promise.resolve(null)
 
 /**
  * Returns an array of nametags from an array of ids.

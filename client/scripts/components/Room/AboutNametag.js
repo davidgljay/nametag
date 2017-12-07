@@ -10,6 +10,7 @@ const AboutNametag = ({next}) => <div style={styles.container}>
   <RaisedButton
     primary
     onClick={next}
+    id='aboutNametagNext'
     label={t('room.got_it')} />
 </div>
 
