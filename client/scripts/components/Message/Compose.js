@@ -136,6 +136,7 @@ class Compose extends Component {
     const {
       topic,
       mod,
+      parent,
       nametags,
       recipient,
       editing,
@@ -215,7 +216,7 @@ class Compose extends Component {
         <form onSubmit={this.post} style={styles.form} onClick={this.toggleEmoji(false)}>
           <TextField
             name='compose'
-            id='composeTextInput'
+            id={parent ? 'replyTextInput' : 'composeTextInput'}
             style={styles.textfield}
             onChange={this.onChange}
             autoComplete='off'

@@ -49,9 +49,11 @@ const commands = {
     .click('@registerButton')
   },
   postReply (message) {
-    return this.waitForElementVisible('@replybutton')
+    return this.waitForElementVisible('@replyButton')
     .click('@replyButton')
     .waitForElementVisible('@replyTextInput')
+    .setValue('@replyTextInput', message)
+    .click('@sendMessageButton')
   }
 }
 
@@ -126,6 +128,12 @@ module.exports = {
     },
     agreeToNorms: {
       selector: '#agreeToNorms'
+    },
+    replyButton: {
+      selector: '#replyIcon'
+    },
+    replyTextInput: {
+      selector: '#replyTextInput'
     }
   }
 }

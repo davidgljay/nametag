@@ -17,16 +17,16 @@ module.exports = {
     roomCardsPage
       .joinRoom(users.participant)
   },
-  'Participant posts a message': client => {
+  'Participant posts a reply': client => {
     const {messages, room, users} = client.globals
     const page = client.page.Room()
 
     page
       .agreeToNorms()
-      .postWelcome(messages[1])
+      .postWelcome(messages[2])
       .register(users.participant)
       .assertLoaded(room, {name: 'participant'})
-      .postReply(messagees[3])
+      .postReply(messages[3])
   },
   after: client => {
     client.end()
