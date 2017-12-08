@@ -397,7 +397,8 @@ const styles = {
     color: grey,
     fontStyle: 'italic',
     display: 'flex',
-    marginLeft: 10
+    marginLeft: 10,
+    marginBottom: 10
   },
   messageText: {
     width: '100%',

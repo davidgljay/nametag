@@ -268,7 +268,7 @@ const clone = ({conn}, id) =>
         return Promise.reject(new errors.APIError(res.errors[0]))
       }
       return res.generated_keys[0]
-    }
+    })
 
 module.exports = (context) => ({
   Nametags: {

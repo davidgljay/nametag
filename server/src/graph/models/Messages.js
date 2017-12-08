@@ -103,7 +103,7 @@ const toggleSaved = ({conn}, id, saved) =>
  **/
 
 const create = (context, m) => {
-  const {conn, models: {Rooms, Nametags}} = context
+  const {conn, user, models: {Rooms, Nametags}} = context
   let messageObj = Object.assign(
     {},
     m,
@@ -111,7 +111,7 @@ const create = (context, m) => {
     {recipient: m.recipient ? m.recipient : false}
   )
 
-  const createMessagePromise = messagesTable.insert(messageObj).run(conn)
+  const createMessagePromise = () => messagesTable.insert(messageObj).run(conn)
     .then((res) => {
       if (res.errors > 0) {
         return new errors.APIError('Error creating message')
@@ -136,24 +136,25 @@ const create = (context, m) => {
   }
 
   if (m.template) {
-    return db('template')
-      .get(m.template)
-      .eqJoin('granter', db('granter'))
+    return db.table('templates')
+      .getAll(m.template)
+      .eqJoin('granter', db.table('granters'))
       .zip()
       .pluck('adminTemplate')
+      .nth(0)
       .run(conn)
       .then(({adminTemplate}) => {
         if (!user.badges[adminTemplate]) {
           return errors.ErrBadgeGrant
         }
-        return createPromise
+        return createMessagePromise()
       })
   }
 
   return checkForCommands(context, messageObj)
   .then(msg => {
     messageObj = msg
-    return createMessagePromise(messageObj)
+    return createMessagePromise()
   })
 }
 
