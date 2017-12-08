@@ -17,6 +17,36 @@ export function setVisibleReplies (messageId) {
 }
 
 /*
+* Set Badge Grantee
+* @params
+*   nametagId
+*
+* @returns
+*   Action to set a the recipient of a badge
+*/
+export function setBadgeGrantee (nametagId) {
+  return {
+    type: constants.SET_BADGE_GRANTEE,
+    nametagId
+  }
+}
+
+/*
+* Set Badge To Grant
+* @params
+*   nametagId
+*
+* @returns
+*   Action to set a the recipient of a badge
+*/
+export function setBadgeToGrant (nametagId) {
+  return {
+    type: constants.SET_BADGE_TO_GRANT,
+    nametagId
+  }
+}
+
+/*
 * Search Images
 * @params
 *   searchString

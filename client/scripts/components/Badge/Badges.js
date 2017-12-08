@@ -1,14 +1,14 @@
 import React, {PropTypes} from 'react'
 import Badge from './Badge'
 
-const Badges = ({badges = [], draggable, removeFromSource, selectBadge, requiredBadges = [], style = {}}) =>
+const Badges = ({badges = [], draggable, removeFromSource, onBadgeClick, requiredBadges = [], style = {}}) =>
   <div id='badges' style={{...styles.badgesContainer, ...style}}>
     {
       badges && badges.map((badge) =>
         <Badge
           badge={badge}
           key={badge.id}
-          selectBadge={selectBadge}
+          onBadgeClick={onBadgeClick}
           draggable={draggable && requiredBadges.indexOf(badge.id) === -1}
           removeFromSource={removeFromSource} />
       )
@@ -22,7 +22,7 @@ Badges.propTypes = {
   })),
   requiredBadges: arrayOf(string),
   draggable: bool,
-  selectBadge: func,
+  onBadgeClick: func,
   removeItem: func,
   style: object
 }

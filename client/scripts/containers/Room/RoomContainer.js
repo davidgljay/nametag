@@ -3,7 +3,7 @@ import component from '../../components/Room/Room'
 import {compose} from 'react-apollo'
 import {roomQuery} from '../../graph/queries'
 import {registerUser} from '../../actions/UserActions'
-import {setVisibleReplies} from '../../actions/RoomActions'
+import {setVisibleReplies, setBadgeGrantee, setBadgeToGrant} from '../../actions/RoomActions'
 import {
   createMessage,
   createNametag,
@@ -62,6 +62,8 @@ const mapStateToProps = (state, ownProps) => ({
   grantableTemplates: getGrantableTemplates(ownProps),
   nametagEdits: state.nametagEdits,
   visibleReplies: state.room.visibleReplies,
+  badgeGrantee: state.room.badgeGrantee,
+  badgeToGrant: state.room.badgeToGrant,
   typingPrompts: getTypingPrompts(state, ownProps)
 })
 
@@ -74,7 +76,9 @@ const mapDispatchToProps = (dispatch) => {
     addNametagEditBadge: disp(addNametagEditBadge),
     removeNametagEditBadge: disp(removeNametagEditBadge),
     registerUser: disp(registerUser),
-    setVisibleReplies: disp(setVisibleReplies)
+    setVisibleReplies: disp(setVisibleReplies),
+    setBadgeGrantee: disp(setBadgeGrantee),
+    setBadgeToGrant: disp(setBadgeToGrant)
   }
 }
 

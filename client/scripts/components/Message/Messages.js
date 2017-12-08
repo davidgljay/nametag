@@ -14,12 +14,7 @@ class Messages extends Component {
     super(props)
 
     this.state = {
-      showEmoji: '',
-      showBadgeGrant: ''
-    }
-
-    this.badgeGrant = (nametagId) => {
-      this.setState({showBadgeGrant: nametagId})
+      showEmoji: ''
     }
 
     this.mapMessage = (message, i) => {
@@ -34,6 +29,7 @@ class Messages extends Component {
         addReaction,
         getReplies,
         setVisibleReplies,
+        setBadgeGrantee,
         visibleReplies,
         setDefaultMessage,
         setRecipient,
@@ -61,7 +57,7 @@ class Messages extends Component {
         canGrantBadges={grantableTemplates.length > 0}
         visibleReplies={visibleReplies}
         addReaction={addReaction}
-        badgeGrant={this.badgeGrant}
+        badgeGrant={setBadgeGrantee}
         setVisibleReplies={setVisibleReplies}
         setDefaultMessage={setDefaultMessage}
         setRecipient={setRecipient}
@@ -110,8 +106,17 @@ class Messages extends Component {
   }
 
   render () {
-    const {messages, myNametag, mod, grantableTemplates} = this.props
-    const {showEmoji, showBadgeGrant} = this.state
+    const {
+      messages,
+      myNametag,
+      mod,
+      grantableTemplates,
+      badgeGrantee,
+      setBadgeToGrant,
+      setBadgeGrantee,
+      setRecipient
+    } = this.props
+    const {showEmoji} = this.state
     return <div style={styles.messages} id='messages'>
       <Popover
         open={!!showEmoji}
@@ -125,13 +130,15 @@ class Messages extends Component {
           onClick={this.addReaction} />
       </Popover>
       <Popover
-        open={!!showBadgeGrant}
+        open={!!badgeGrantee}
         anchorEl={document.getElementById('compose')}
         overlayStyle={{opacity: 0}}
-        onRequestClose={() => this.badgeGrant('')}>
+        onRequestClose={() => setBadgeGrantee('')}>
         <GrantBadge
           grantableTemplates={grantableTemplates}
-          grantee={showBadgeGrant} />
+          setBadgeToGrant={setBadgeToGrant}
+          setBadgeGrantee={setBadgeGrantee}
+          setRecipient={setRecipient} />
       </Popover>
       <div style={styles.msgContainer}>
         {
@@ -165,6 +172,8 @@ Messages.propTypes = {
   addReaction: func.isRequired,
   editMessage: func.isRequired,
   getReplies: func.isRequired,
+  setBadgeGrantee: func.isRequired,
+  setBadgeToGrant: func.isRequired,
   setVisibleReplies: func.isRequired,
   setDefaultMessage: func.isRequired,
   setRecipient: func.isRequired,

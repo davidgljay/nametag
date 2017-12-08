@@ -150,6 +150,8 @@ class Room extends Component {
       },
       myNametag,
       grantableTemplates,
+      badgeGrantee,
+      setBadgeGrantee,
       nametagEdits,
       typingPrompts,
       showTypingPrompt,
@@ -164,7 +166,8 @@ class Room extends Component {
       addReaction,
       getReplies,
       visibleReplies,
-      setVisibleReplies
+      setVisibleReplies,
+      setBadgeToGrant
     } = this.props
 
     const {defaultMessage, recipient, editing, nametagCreated, keepLoading} = this.state
@@ -202,6 +205,7 @@ class Room extends Component {
             latestMessageUpdatedSubscription={latestMessageUpdatedSubscription}
             updateRoom={updateRoom}
             myNametag={myNametag}
+            setBadgeGrantee={setBadgeGrantee}
             setDefaultMessage={this.setDefaultMessage}
             setRecipient={this.setRecipient}
             expanded={this.state.leftBarExpanded}
@@ -215,6 +219,9 @@ class Room extends Component {
             addReaction={addReaction}
             deleteMessage={deleteMessage}
             grantableTemplates={grantableTemplates}
+            setBadgeGrantee={setBadgeGrantee}
+            badgeGrantee={badgeGrantee}
+            setBadgeToGrant={setBadgeToGrant}
             banNametag={banNametag}
             getReplies={getReplies}
             editMessage={editMessage}
@@ -236,6 +243,7 @@ class Room extends Component {
           recipient={recipient}
           setDefaultMessage={this.setDefaultMessage}
           setRecipient={this.setRecipient}
+          setBadgeToGrant={setBadgeToGrant}
           editing={editing}
           setEditing={this.setEditing}
           editMessage={editMessage}
@@ -281,6 +289,7 @@ Room.propTypes = {
     roomId: string.isRequired
   }),
   visibleReplies: string.isRequired,
+  badgeGrantee: string.isRequired,
   registerUser: func.isRequired,
   typingPrompts: array.isRequired,
   updateRoom: func.isRequired,
@@ -293,6 +302,7 @@ Room.propTypes = {
   updateToken: func.isRequired,
   getReplies: func.isRequired,
   setVisibleReplies: func.isRequired,
+  setBadgeGrantee: func.isRequired,
   banNametag: func.isRequired
 }
 

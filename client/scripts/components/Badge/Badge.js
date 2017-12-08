@@ -64,7 +64,7 @@ class Badge extends Component {
       onUploadImage,
       currentOffset,
       initialOffset,
-      selectBadge,
+      onBadgeClick,
       draggable
     } = this.props
 
@@ -136,7 +136,7 @@ class Badge extends Component {
         style={chipStyle}
         className='mdl-shadow--2dp'
         key={id}
-        onClick={selectBadge || this.toggleExpanded}>
+        onClick={onBadgeClick || this.toggleExpanded}>
         {
             image
             ? <div style={imageStyle} />
@@ -173,7 +173,7 @@ Badge.propTypes = {
   removeFromSource: PropTypes.func,
   showIconUpload: PropTypes.bool,
   onUploadImage: PropTypes.func,
-  selectBadge: PropTypes.func
+  onBadgeClick: PropTypes.func
 }
 
 export default DragSource(dragTypes.badge, badgeSource, collect)(Badge)
