@@ -41,7 +41,6 @@ class Badge extends Component {
 
     this.onBadgeClick = badge => e => {
       const {onBadgeClick} = this.props
-      console.log('onBadgeClick', badge)
       e.preventDefault()
       onBadgeClick(badge)
     }
