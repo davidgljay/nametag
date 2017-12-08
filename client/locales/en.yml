@@ -54,6 +54,7 @@ en:
     private_msg: Private Message
     mention: "@Mention"
     closed: This discussion is closed.
+    badgeGrant: Granting the following badge to {0}:
     typing: "Typing:"
     host_welcome: Leave a few messages to set the tone, then invite a few people in to get things started. Just share a link to this room.
     commands:

@@ -138,6 +138,7 @@ class Messages extends Component {
           grantableTemplates={grantableTemplates}
           setBadgeToGrant={setBadgeToGrant}
           setBadgeGrantee={setBadgeGrantee}
+          badgeGrantee={badgeGrantee}
           setRecipient={setRecipient} />
       </Popover>
       <div style={styles.msgContainer}>
@@ -166,6 +167,7 @@ Messages.propTypes = {
   }),
   hideDMs: bool.isRequired,
   grantableTemplates: arrayOf(shape).isRequired,
+  badgeGrantee: string.isRequired,
   visibleReplies: string.isRequired,
   deleteMessage: func.isRequired,
   banNametag: func.isRequired,

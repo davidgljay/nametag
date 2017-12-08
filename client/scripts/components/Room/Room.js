@@ -150,6 +150,7 @@ class Room extends Component {
       },
       myNametag,
       grantableTemplates,
+      badgeToGrant,
       badgeGrantee,
       setBadgeGrantee,
       nametagEdits,
@@ -244,6 +245,7 @@ class Room extends Component {
           recipient={recipient}
           setDefaultMessage={this.setDefaultMessage}
           setRecipient={this.setRecipient}
+          badgeToGrant={badgeToGrant}
           setBadgeToGrant={setBadgeToGrant}
           editing={editing}
           setEditing={this.setEditing}
@@ -291,6 +293,7 @@ Room.propTypes = {
   }),
   visibleReplies: string.isRequired,
   badgeGrantee: string.isRequired,
+  badgeToGrant: object,
   registerUser: func.isRequired,
   typingPrompts: array.isRequired,
   updateRoom: func.isRequired,

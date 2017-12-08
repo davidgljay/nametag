@@ -34,11 +34,17 @@ class Badge extends Component {
     this.state = {
       expanded: false
     }
-    this.toggleExpanded = this.toggleExpanded.bind(this)
-  }
 
-  toggleExpanded () {
-    this.setState({expanded: !this.state.expanded})
+    this.toggleExpanded = () => {
+      this.setState({expanded: !this.state.expanded})
+    }
+
+    this.onBadgeClick = badge => e => {
+      const {onBadgeClick} = this.props
+      console.log('onBadgeClick', badge)
+      e.preventDefault()
+      onBadgeClick(badge)
+    }
   }
 
   componentDidMount () {
@@ -47,16 +53,7 @@ class Badge extends Component {
 
   render () {
     const {
-      badge: {
-        id,
-        notes,
-        template: {
-          name,
-          description,
-          image,
-          granter
-        }
-      },
+      badge,
       jumbo,
       connectDragSource,
       showIconUpload,
@@ -67,6 +64,17 @@ class Badge extends Component {
       onBadgeClick,
       draggable
     } = this.props
+
+    const {
+        id,
+        notes,
+        template: {
+          name,
+          description,
+          image,
+          granter
+        }
+      } = badge
 
     // Show an image if one exists, or a manu to upload an image if showIconUpload is enabled
     let imageComponent
@@ -136,7 +144,7 @@ class Badge extends Component {
         style={chipStyle}
         className='mdl-shadow--2dp'
         key={id}
-        onClick={onBadgeClick || this.toggleExpanded}>
+        onClick={onBadgeClick ? this.onBadgeClick(badge) : this.toggleExpanded}>
         {
             image
             ? <div style={imageStyle} />

@@ -84,6 +84,7 @@ class ComposeWithMenu extends Component {
       roomId,
       closed,
       myNametag,
+      badgeToGrant,
       showTypingPrompt,
       createMessage,
       defaultMessage,
@@ -94,6 +95,7 @@ class ComposeWithMenu extends Component {
       setDefaultMessage,
       editMessage,
       setRecipient,
+      setBadgeToGrant,
       editing,
       setEditing
     } = this.props
@@ -105,6 +107,7 @@ class ComposeWithMenu extends Component {
       <Compose
         roomId={roomId}
         recipient={recipient}
+        badgeToGrant={badgeToGrant}
         editing={editing}
         myNametag={myNametag}
         showTypingPrompt={showTypingPrompt}
@@ -117,6 +120,7 @@ class ComposeWithMenu extends Component {
         setDefaultMessage={setDefaultMessage}
         setEditing={setEditing}
         setRecipient={setRecipient}
+        setBadgeToGrant={setBadgeToGrant}
         mod={mod}
         topic={topic}
         onUpdateText={this.onUpdateText}
@@ -172,8 +176,10 @@ ComposeWithMenu.propTypes = {
   setDefaultMessage: func.isRequired,
   showTypingPrompt: func.isRequired,
   setRecipient: func.isRequired,
+  setBadgeToGrant: func.isRequired,
   topic: string,
   recipient: string,
+  badgeToGrant: object,
   mod: object.isRequired
 }
 

@@ -39,10 +39,10 @@ export function setBadgeGrantee (nametagId) {
 * @returns
 *   Action to set a the recipient of a badge
 */
-export function setBadgeToGrant (nametagId) {
+export function setBadgeToGrant (badge) {
   return {
     type: constants.SET_BADGE_TO_GRANT,
-    nametagId
+    badge
   }
 }
 
