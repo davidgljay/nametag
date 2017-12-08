@@ -36,6 +36,8 @@ class Nametag extends Component {
       nametag: {id, name, image, bio, badges},
       setDefaultMessage,
       setRecipient,
+      setBadgeGrantee,
+      canGrantBadges,
       hideDMs,
       myNametagId,
       style
@@ -79,7 +81,9 @@ class Nametag extends Component {
             anchor={document.getElementById(id)}
             toggleMenu={this.toggleMenu}
             setDefaultMessage={setDefaultMessage}
-            setRecipient={setRecipient} />
+            canGrantBadges={canGrantBadges}
+            setRecipient={setRecipient}
+            setBadgeGrantee={setBadgeGrantee} />
           <CommandMenu
             open={showMenu === 'commands'}
             isMod={modId === myNametagId}
@@ -108,6 +112,7 @@ Nametag.PropTypes = {
   myNametagId: string,
   setDefaultMessage: func,
   setRecipient: func,
+  canGrantBadges: bool.isRequired,
   hideDMs: bool
 }
 

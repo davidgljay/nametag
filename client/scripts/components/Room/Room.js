@@ -205,6 +205,7 @@ class Room extends Component {
             latestMessageUpdatedSubscription={latestMessageUpdatedSubscription}
             updateRoom={updateRoom}
             myNametag={myNametag}
+            canGrantBadges={grantableTemplates.length > 0}
             setBadgeGrantee={setBadgeGrantee}
             setDefaultMessage={this.setDefaultMessage}
             setRecipient={this.setRecipient}

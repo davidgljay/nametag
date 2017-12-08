@@ -15,15 +15,9 @@ class RoomLeftBar extends Component {
       this.setState({leftBarExpanded: !this.state.leftBarExpanded})
     }
 
-    this.setDefaultMessage = (message) => {
-      const {setDefaultMessage, toggleLeftBar} = this.props
-      setDefaultMessage(message)
-      toggleLeftBar()
-    }
-
-    this.setRecipient = (id) => {
-      const {setRecipient, toggleLeftBar} = this.props
-      setRecipient(id)
+    this.toggleOnClick = func => param => {
+      const {toggleLeftBar} = this.props
+      func(param)
       toggleLeftBar()
     }
   }
@@ -34,6 +28,10 @@ class RoomLeftBar extends Component {
       me,
       latestMessageUpdatedSubscription,
       updateRoom,
+      canGrantBadges,
+      setBadgeGrantee,
+      setRecipient,
+      setDefaultMessage,
       myNametag,
       expanded,
       toggleLeftBar
@@ -95,8 +93,10 @@ class RoomLeftBar extends Component {
             </div>
             <Nametags
               mod={room.mod.id}
-              setDefaultMessage={this.setDefaultMessage}
-              setRecipient={this.setRecipient}
+              canGrantBadges={canGrantBadges}
+              setDefaultMessage={this.toggleOnClick(setDefaultMessage)}
+              setRecipient={this.toggleOnClick(setRecipient)}
+              setBadgeGrantee={this.toggleOnClick(setBadgeGrantee)}
               nametags={room.nametags}
               hideDMs={hideDMs}
               myNametagId={myNametag.id} />
@@ -136,6 +136,8 @@ RoomLeftBar.propTypes = {
   latestMessageUpdatedSubscription: func.isRequired,
   setDefaultMessage: func.isRequired,
   setRecipient: func.isRequired,
+  setBadgeGrantee: func.isRequired,
+  canGrantBadges: bool.isRequired,
   updateRoom: func.isRequired,
   myNametag: shape({
     id: string.isRequired

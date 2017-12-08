@@ -57,7 +57,7 @@ class Messages extends Component {
         canGrantBadges={grantableTemplates.length > 0}
         visibleReplies={visibleReplies}
         addReaction={addReaction}
-        badgeGrant={setBadgeGrantee}
+        setBadgeGrantee={setBadgeGrantee}
         setVisibleReplies={setVisibleReplies}
         setDefaultMessage={setDefaultMessage}
         setRecipient={setRecipient}

@@ -14,11 +14,11 @@ const MentionMenu = ({
   setDefaultMessage,
   setRecipient,
   canGrantBadges,
-  badgeGrant
+  setBadgeGrantee
 }) => {
   const showBadgeGrant = nametagId => e => {
     e.preventDefault()
-    badgeGrant(nametagId)
+    setBadgeGrantee(nametagId)
     toggleMenu(e)
   }
 
@@ -56,7 +56,7 @@ const MentionMenu = ({
         {
           canGrantBadges &&
           <MenuItem
-            key='badgeGrant'
+            key='setBadgeGrantee'
             primaryText={t('badge.badge_grant')}
             onClick={showBadgeGrant(nametagId)} />
         }
@@ -75,7 +75,7 @@ MentionMenu.propTypes = {
   anchor: object,
   open: bool.isRequired,
   canGrantBadges: bool.isRequired,
-  badgeGrant: func.isRequired
+  setBadgeGrantee: func.isRequired
 }
 
 export default MentionMenu
