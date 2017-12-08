@@ -257,17 +257,20 @@ const ban = ({conn, models: {Messages}}, id, roomId) =>
    * @param {String} id   the id of the nametag to be cloned
    */
 
-const clone = ({conn}, id) =>
+const clone = ({conn, models: {Users}}, id, about) =>
   nametagsTable.insert(
     nametagsTable.get(id)
       .pluck('name', 'bio', 'user')
       .merge({createdAt: new Date()})
+      .merge(about)
     )
+    .run(conn)
     .then(res => {
       if (res.errors) {
-        return Promise.reject(new errors.APIError(res.errors[0]))
+        return Promise.reject(new errors.APIError('Error cloning Nametag: ' + res.errors[0]))
       }
-      return res.generated_keys[0]
+      let newId = res.generated_keys[0]
+      return Users.addNametag(newId, about.template || about.room).then(() => newId)
     })
 
 module.exports = (context) => ({
@@ -283,6 +286,7 @@ module.exports = (context) => ({
     getNametagCount: (room) => getNametagCount(context, room),
     updateLatestVisit: (nametagId) => updateLatestVisit(context, nametagId),
     grantBadge: (id, badgeId) => grantBadge(context, id, badgeId),
-    ban: (id, roomId) => ban(context, id, roomId)
+    ban: (id, roomId) => ban(context, id, roomId),
+    clone: (id, about) => clone(context, id, about)
   }
 })

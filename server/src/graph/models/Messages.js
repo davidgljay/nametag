@@ -458,13 +458,14 @@ const acceptBadge = ({conn, user, models:{Badges, Nametags}}, messageId) =>
         return new errors.APIError('Badge was not offered to this user.')
       }
       return Promise.all([
-        Nametags.clone(recipient),
+        Nametags.clone(recipient, {template}),
         template
       ])
     })
-    .then(([defaultNametag, template]) =>
-      Badges.create({note: 'Badge Granted', template, defaultNametag})
-    )
+    .then(([defaultNametag, template]) => {
+      return Badges.create({note: 'Badge Granted', template, defaultNametag})
+    })
+    .then(res => console.log(res))
 
 module.exports = (context) => ({
   Messages: {
@@ -478,6 +479,7 @@ module.exports = (context) => ({
     edit: (messageId, text) => editMessage(context, messageId, text),
     delete: (messageId) => deleteMessage(context, messageId),
     addReaction: (messageId, emoji, nametagId) => addReaction(context, messageId, emoji, nametagId),
-    toggleSaved: (id, saved) => toggleSaved(context, id, saved)
+    toggleSaved: (id, saved) => toggleSaved(context, id, saved),
+    acceptBadge: (messageId) => acceptBadge(context, messageId)
   }
 })

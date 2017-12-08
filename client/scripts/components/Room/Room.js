@@ -168,7 +168,8 @@ class Room extends Component {
       getReplies,
       visibleReplies,
       setVisibleReplies,
-      setBadgeToGrant
+      setBadgeToGrant,
+      acceptBadge
     } = this.props
 
     const {defaultMessage, recipient, editing, nametagCreated, keepLoading} = this.state
@@ -232,6 +233,7 @@ class Room extends Component {
             setDefaultMessage={this.setDefaultMessage}
             setRecipient={this.setRecipient}
             setEditing={this.setEditing}
+            acceptBadge={acceptBadge}
             mod={room.mod}
             messages={me && (myNametag && myNametag.bio) || nametagCreated ? room.messages : []}
             myBadges={me ? me.badges : []} />
@@ -308,7 +310,8 @@ Room.propTypes = {
   getReplies: func.isRequired,
   setVisibleReplies: func.isRequired,
   setBadgeGrantee: func.isRequired,
-  banNametag: func.isRequired
+  banNametag: func.isRequired,
+  acceptBadge: func.isRequired
 }
 
 export default radium(Room)

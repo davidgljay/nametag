@@ -1,0 +1,8 @@
+mutation AcceptBadge($messageId:ID!) {
+  acceptBadge(messageId:$messageId) {
+    errors {
+      translation_key
+      message
+    }
+  }
+}

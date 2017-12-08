@@ -38,7 +38,8 @@ class Messages extends Component {
         editMessage,
         hideDMs,
         deleteMessage,
-        banNametag
+        banNametag,
+        acceptBadge
       } = this.props
 
       return <Message
@@ -62,6 +63,7 @@ class Messages extends Component {
         setVisibleReplies={setVisibleReplies}
         setDefaultMessage={setDefaultMessage}
         setRecipient={setRecipient}
+        acceptBadge={acceptBadge}
         setEditing={setEditing}
         editMessage={editMessage}
         myBadges={myBadges}
@@ -182,7 +184,8 @@ Messages.propTypes = {
   setVisibleReplies: func.isRequired,
   setDefaultMessage: func.isRequired,
   setRecipient: func.isRequired,
-  setEditing: func.isRequired
+  setEditing: func.isRequired,
+  acceptBadge: func.isRequired
 }
 
 export default radium(Messages)

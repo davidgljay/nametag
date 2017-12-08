@@ -101,6 +101,7 @@ class Message extends Component {
       hideDMs,
       setDefaultMessage,
       setRecipient,
+      acceptBadge,
       setEditing
     } = this.props
 
@@ -202,7 +203,9 @@ class Message extends Component {
               <BadgeOffer
                 template={template}
                 myBadges={myBadges}
-                isRecipient={myNametag.id === recipient.id} />
+                messageId={id}
+                isRecipient={myNametag.id === recipient.id}
+                acceptBadge={acceptBadge} />
             </div>
           }
           {
@@ -371,6 +374,7 @@ Message.propTypes = {
   hideAuthor: bool,
   setDefaultMessage: func.isRequired,
   setRecipient: func.isRequired,
+  acceptBadge: func.isRequired,
   setEditing: func.isRequired,
   editMessage: func,
   getReplies: func,

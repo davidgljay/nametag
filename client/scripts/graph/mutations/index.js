@@ -21,6 +21,7 @@ import EMAIL_CONF from './emailConfirmation.graphql'
 import ADD_NOTE from './addNote.graphql'
 import APPROVE_ROOM from './approveRoom.graphql'
 import BAN_NAMETAG from './banNametag.graphql'
+import ACCEPT_BADGE from './acceptBadge.graphql'
 import errorLog from '../../utils/errorLog'
 
 export const createRoom = graphql(CREATE_ROOM, {
@@ -59,6 +60,16 @@ export const updateToken = graphql(UPDATE_TOKEN, {
     updateToken: (token) => mutate({
       variables: {
         token
+      }
+    })
+  })
+})
+
+export const acceptBadge = graphql(ACCEPT_BADGE, {
+  props: ({ownProps, mutate}) => ({
+    acceptBadge: (messageId) => mutate({
+      variables: {
+        messageId
       }
     })
   })
