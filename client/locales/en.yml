@@ -56,8 +56,9 @@ en:
     closed: This discussion is closed.
     badgeGrant: Granting the following badge to {0}:
     badgeoffer_start: You have been offered the following badge:
-    badgeoffer_end: .
+    badgeoffer_end: You can use this badge to prove your affiliation with {0} and to access exclusive conversations.
     badgeoffer_button: Accept
+    badge_claimed: Badge Recieved
     typing: "Typing:"
     host_welcome: Leave a few messages to set the tone, then invite a few people in to get things started. Just share a link to this room.
     commands:

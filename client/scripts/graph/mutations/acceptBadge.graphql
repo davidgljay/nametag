@@ -1,5 +1,10 @@
+#import "../fragments/badgeView.graphql"
+
 mutation AcceptBadge($messageId:ID!) {
   acceptBadge(messageId:$messageId) {
+    badge {
+      ...badgeView
+    }
     errors {
       translation_key
       message

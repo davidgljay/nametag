@@ -70,50 +70,68 @@ export const acceptBadge = graphql(ACCEPT_BADGE, {
     acceptBadge: (messageId) => mutate({
       variables: {
         messageId
+      },
+      updateQueries: {
+        roomQuery: (oldData, {mutationResult: {data: {acceptBadge: {errors, badge}}}}) => {
+          console.log('accept badge response')
+          if (errors) {
+            errorLog('Error accepting badge')(errors)
+            return oldData
+          }
+
+          return {
+            ...oldData,
+            me: {
+              ...oldData.me,
+              badges: oldData.me.badges.concat(badge)
+            }
+          }
+        }
       }
     })
   })
 })
+
 export const createNametag = graphql(CREATE_NAMETAG, {
   props: ({ownProps, mutate}) => ({
     createNametag: (nametag) => mutate({
       variables: {
         nametag
-      }
-    }),
-    updateQueries: {
-      roomQuery: (oldData, {mutationResult: {data: {createNametag: {errors, nametag}}}}) => {
-        if (errors) {
-          errorLog('Error creating nametag')(errors)
-          return oldData
-        }
+      },
+      updateQueries: {
+        roomQuery: (oldData, {mutationResult: {data: {createNametag: {errors, nametag}}}}) => {
+          if (errors) {
+            errorLog('Error creating nametag')(errors)
+            return oldData
+          }
 
-        return {
-          ...oldData,
-          room: {
-            ...oldData.room,
-            nametags: oldData.room.nametags
-              .concat(nametag)
-          },
-          me: {
-            ...oldData.me,
-            nametags: oldData.me.nametags.concate(
-              {
-                ...nametag,
-                room: {
-                  __typename: 'Room',
-                  id: oldData.room.id,
-                  latestMessage: oldData.room.latestMessage,
-                  mod: oldData.room.mod,
-                  newMessageCount: 0,
-                  title: oldData.room.title
+          return {
+            ...oldData,
+            room: {
+              ...oldData.room,
+              nametags: oldData.room.nametags
+                .concat(nametag)
+            },
+            me: {
+              ...oldData.me,
+              nametags: oldData.me.nametags.concate(
+                {
+                  ...nametag,
+                  room: {
+                    __typename: 'Room',
+                    id: oldData.room.id,
+                    latestMessage: oldData.room.latestMessage,
+                    mod: oldData.room.mod,
+                    newMessageCount: 0,
+                    title: oldData.room.title
+                  }
                 }
-              }
-            )
+              )
+            }
           }
         }
       }
-    }
+    })
   })
 })
 

@@ -465,7 +465,6 @@ const acceptBadge = ({conn, user, models:{Badges, Nametags}}, messageId) =>
     .then(([defaultNametag, template]) => {
       return Badges.create({note: 'Badge Granted', template, defaultNametag})
     })
-    .then(res => console.log(res))
 
 module.exports = (context) => ({
   Messages: {

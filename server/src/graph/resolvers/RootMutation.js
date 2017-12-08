@@ -271,7 +271,7 @@ const RootMutation = {
     requires: 'LOGIN',
     resolve: (obj, {messageId}, {models: {Messages}}) =>
       Messages.acceptBadge(messageId)
-      .then(wrapResponse('acceptBadge'))
+      .then(wrapResponse('badge'))
   }
 }
 

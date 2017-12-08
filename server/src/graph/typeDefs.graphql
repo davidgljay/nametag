@@ -744,7 +744,7 @@ type RootMutation {
   banNametag(roomId: ID!, nametagId: ID!): BasicResponse
 
   # Accepts a badge offered in a message
-  acceptBadge(messageId: ID!): BasicResponse
+  acceptBadge(messageId: ID!): CreateBadgeResponse
 
 }
 

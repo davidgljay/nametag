@@ -17,15 +17,20 @@ const BadgeOffer = ({template, myBadges, isRecipient, acceptBadge, messageId}) =
           id: template.id
         }} />
       </div>
-      <div>{t('message.badgeoffer_end')}</div>
     </div>
+    <div style={styles.badgeOffer}>{t('message.badgeoffer_end', template.granter.name)}</div>
     {
       isRecipient &&
-      !myBadges.find(badge => badge.template.id === template.id) &&
-      <FlatButton
-        primary
-        onClick={() => acceptBadge(messageId)}
-        label={t('message.badgeoffer_button')} />
+      (
+        myBadges.find(badge => badge.template.id === template.id)
+        ? <FlatButton
+          disabled
+          label={t('message.badge_claimed')} />
+        : <FlatButton
+          primary
+          onClick={() => acceptBadge(messageId)}
+          label={t('message.badgeoffer_button')} />
+      )
     }
 
   </div>
@@ -51,13 +56,13 @@ export default radium(BadgeOffer)
 const styles = {
   badgeOffer: {
     fontWeight: 300,
-    color: grey,
     display: 'flex',
     lineHeight: '30px',
     marginTop: 10,
     [mobile]: {
       flexDirection: 'column',
-      alignItems: 'flex-start'
+      alignItems: 'flex-start',
+      lineHeight: 'inherit'
     }
   },
   ask: {
