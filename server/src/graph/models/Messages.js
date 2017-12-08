@@ -130,8 +130,8 @@ const create = (context, m) => {
     })
 
   if (m.parent) {
-    return createMessagePromise
-      .then(() => emailIfReply(context, message))
+    return createMessagePromise()
+      .then(() => emailIfReply(context, messageObj))
       .then(() => messageObj)
   }
 
@@ -446,7 +446,7 @@ const addReaction = ({conn}, messageId, emoji, nametagId) =>
  *
  **/
 
-const acceptBadge = ({conn, user, models:{Badges, Nametags}}, messageId) =>
+const acceptBadge = ({conn, user, models: {Badges, Nametags}}, messageId) =>
   messagesTable.get(messageId)
     .pluck('template', 'room', 'recipient')
     .run(conn)

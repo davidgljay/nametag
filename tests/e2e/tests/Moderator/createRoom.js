@@ -45,7 +45,7 @@ module.exports = {
   },
   'Moderator posts another message': client => {
     const page = client.page.Room()
-    const {room, messages, users} = client.globals
+    const {room, users} = client.globals
 
     page
       .assertLoaded(room, users.mod)
