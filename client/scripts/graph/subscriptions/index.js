@@ -97,6 +97,7 @@ export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeT
             saved: false,
             parent: null,
             nametag: null,
+            template: null,
             recipient: null,
             author: null,
             reactions: []

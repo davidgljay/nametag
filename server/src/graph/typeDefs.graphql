@@ -154,6 +154,7 @@ type Message {
 
   # A template being granted with this message
   template: Template
+
   # Nametag to be displayed with this message
   nametag: Nametag
 
@@ -741,6 +742,9 @@ type RootMutation {
 
   # Bans a user from a room
   banNametag(roomId: ID!, nametagId: ID!): BasicResponse
+
+  # Accepts a badge offered in a message
+  acceptBadge(messageId: ID!): BasicResponse
 
 }
 

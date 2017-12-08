@@ -49,6 +49,7 @@ class Compose extends Component {
       const {
         myNametag,
         roomId,
+        badgeToGrant,
         createMessage,
         setDefaultMessage,
         setRecipient,
@@ -81,7 +82,8 @@ class Compose extends Component {
         let msg = {
           text: emojiText.convert(message, {delimiter: ':'}),
           author: myNametag.id,
-          room: roomId
+          room: roomId,
+          template: badgeToGrant ? badgeToGrant.template.id : null
         }
         if (recipient) {
           msg.recipient = recipient

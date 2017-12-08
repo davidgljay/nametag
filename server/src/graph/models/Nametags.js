@@ -250,6 +250,26 @@ const ban = ({conn, models: {Messages}}, id, roomId) =>
       ])
     })
 
+  /**
+   * Clones a nametag
+   *
+   * @param {Object} context     graph context
+   * @param {String} id   the id of the nametag to be cloned
+   */
+
+const clone = ({conn}, id) =>
+  nametagsTable.insert(
+    nametagsTable.get(id)
+      .pluck('name', 'bio', 'user')
+      .merge({createdAt: new Date()})
+    )
+    .then(res => {
+      if (res.errors) {
+        return Promise.reject(new errors.APIError(res.errors[0]))
+      }
+      return res.generated_keys[0]
+    }
+
 module.exports = (context) => ({
   Nametags: {
     get: (id) => get(context, id),

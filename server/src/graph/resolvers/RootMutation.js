@@ -266,6 +266,12 @@ const RootMutation = {
     resolve: (obj, {roomId, nametagId}, {models: {Nametags}}) =>
       Nametags.ban(nametagId, roomId)
       .then(wrapResponse('banNametag'))
+  },
+  acceptBadge: {
+    requires: 'LOGIN',
+    resolve: (obj, {messageId}, {models: {Messages}}) =>
+      Messages.acceptBadge(messageId)
+      .then(wrapResponse('acceptBadge'))
   }
 }
 
