@@ -6,7 +6,7 @@ import {grey} from '../../../styles/colors'
 import {mobile} from '../../../styles/sizes'
 import t from '../../utils/i18n'
 
-const BadgeOffer = ({template}) =>
+const BadgeOffer = ({template, myBadges, isRecipient}) =>
   <div>
     <div style={styles.badgeOffer}>
       <div>{t('message.badgeoffer_start')}</div>
@@ -19,12 +19,17 @@ const BadgeOffer = ({template}) =>
       </div>
       <div>{t('message.badgeoffer_end')}</div>
     </div>
-    <FlatButton
-      primary
-      label={t('message.badgeoffer_button')} />
+    {
+      isRecipient &&
+      !myBadges.find(badge => badge.template.id === template.id) &&
+      <FlatButton
+        primary
+        label={t('message.badgeoffer_button')} />
+    }
+
   </div>
 
-const {string, shape, arrayOf, number} = PropTypes
+const {string, shape, arrayOf, object, bool} = PropTypes
 
 BadgeOffer.proptypes = {
   template: shape({
@@ -34,7 +39,8 @@ BadgeOffer.proptypes = {
       name: string.isRequired
     })
   }),
-  donationAmounts: arrayOf(number).isRequired
+  myBadges: arrayOf(object).isRequired,
+  isRecipient: bool.isRequired
 }
 
 export default radium(BadgeOffer)

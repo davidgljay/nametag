@@ -233,7 +233,8 @@ class Room extends Component {
             setRecipient={this.setRecipient}
             setEditing={this.setEditing}
             mod={room.mod}
-            messages={me && (myNametag && myNametag.bio) || nametagCreated ? room.messages : []} />
+            messages={me && (myNametag && myNametag.bio) || nametagCreated ? room.messages : []}
+            myBadges={me ? me.badges : []} />
         </div>
         <ComposeWithMenus
           createMessage={createMessage}

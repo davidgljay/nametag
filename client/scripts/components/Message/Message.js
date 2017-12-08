@@ -85,6 +85,7 @@ class Message extends Component {
       norms,
       roomId,
       mod,
+      myBadges,
       visibleReplies,
       setVisibleReplies,
       toggleEmoji,
@@ -198,7 +199,10 @@ class Message extends Component {
           {
             template &&
             <div>
-              <BadgeOffer template={template} />
+              <BadgeOffer
+                template={template}
+                myBadges={myBadges}
+                isRecipient={myNametag.id === recipient.id} />
             </div>
           }
           {

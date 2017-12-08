@@ -26,6 +26,7 @@ class Messages extends Component {
         grantableTemplates,
         createMessage,
         messages,
+        myBadges,
         addReaction,
         getReplies,
         setVisibleReplies,
@@ -63,6 +64,7 @@ class Messages extends Component {
         setRecipient={setRecipient}
         setEditing={setEditing}
         editMessage={editMessage}
+        myBadges={myBadges}
         norms={norms}
         mod={mod}
         createMessage={createMessage}
@@ -168,6 +170,7 @@ Messages.propTypes = {
   hideDMs: bool.isRequired,
   grantableTemplates: arrayOf(shape).isRequired,
   badgeGrantee: string.isRequired,
+  myBadges: arrayOf(object).isRequired,
   visibleReplies: string.isRequired,
   deleteMessage: func.isRequired,
   banNametag: func.isRequired,
