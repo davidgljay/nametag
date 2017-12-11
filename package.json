@@ -14,7 +14,7 @@
     "postE2e": "docker-compose stop",
     "backup": "docker-compose run nametag sh backup.sh",
     "pull-demo": "git pull origin demo && yarn install && yarn build-demo && docker-compose build nametag && yarn backup && docker-compose stop && docker-compose up -d",
-    "pull": "git pull origin master && yarn install && yarn build && docker-compose build nametag && yarn backup && docker-compose stop && docker-compose up -d",
+    "pull": "git pull origin master && yarn install && yarn build && docker-compose build nametag && yarn backup && source .env && export NODE_ENV && docker-compose stop && docker-compose up -d",
     "storybook": "start-storybook -p 9001 -c .storybook"
   },
   "dependencies": {
