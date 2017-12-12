@@ -146,6 +146,7 @@ class Message extends Component {
 
     const isMod = author && mod.id === author.id
     const isReplyNotif = id.split('_')[0] === 'replyNotif'
+    const about = author || nametag
 
     return <div>
       <div
@@ -244,11 +245,11 @@ class Message extends Component {
             </div>
           }
           {
-            author &&
+            about &&
             <div>
               <MentionMenu
-                nametagId={author.id}
-                name={author.name}
+                nametagId={about.id}
+                name={about.name}
                 hideDMs={hideDMs && !isMod}
                 open={showMenu === 'mentions'}
                 anchor={document.getElementById(id)}
@@ -274,7 +275,7 @@ class Message extends Component {
         this.state.modAction &&
         <ModAction
           msgId={id}
-          author={author}
+          author={about}
           norms={norms}
           text={text}
           mod={mod}
