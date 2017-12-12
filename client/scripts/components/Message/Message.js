@@ -50,14 +50,16 @@ class Message extends Component {
     }
 
     this.toggleMenu = e => {
-      const {myNametag, message: {author}} = this.props
+      const {myNametag, message: {author, nametag}} = this.props
       if (!this.state.showMenu) {
         track('MESSAGE_MENU_OPEN')
       }
       if (e && e.preventDefault) {
         e.preventDefault()
       }
-      const target = author.id === myNametag.id ? 'commands' : 'mentions'
+      const target = (author && author.id === myNametag.id) ||
+      (nametag && nametag.id === myNametag.id)
+      ? 'commands' : 'mentions'
       this.setState({
         showMenu: this.state.showMenu ? '' : target
       })
