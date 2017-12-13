@@ -150,6 +150,7 @@ class RoomCards extends Component {
                 {
                   [0, 1, 2].map(i =>
                     <FeatureCallout
+                      key={i}
                       image={t(`room.feature_callouts.${i}.image`)}
                       title={t(`room.feature_callouts.${i}.title`)}
                       body={t(`room.feature_callouts.${i}.body`)} />

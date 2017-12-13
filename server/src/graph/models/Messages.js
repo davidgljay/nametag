@@ -11,7 +11,7 @@ const messagesTable = db.table('messages')
  * @param {Object} context  graph context
  * @param {String} id       the ID of the message to be retrieved
  */
-const get = ({conn}, id) => messagesTable.get(id).run(conn)
+const get = ({conn}, id) => id ? messagesTable.get(id).run(conn) : Promise.resolve(null)
 
 /**
  * Gets replies to a message.
@@ -136,7 +136,7 @@ const create = (context, m) => {
     checkMentions(context, message),
     message,
     Rooms.updateLatestMessage(message.room),
-    Nametags.update(message.author, {latestVisit: new Date(Date.now() + 1000)})
+    message.author ? Nametags.update(message.author, {latestVisit: new Date(Date.now() + 1000)}) : null
   ])
   )
   .then(([updates = {}, message]) => Object.assign({}, message, updates))
@@ -195,6 +195,9 @@ const emailIfReply = ({conn, user}, msg) =>
       let notified = {[user.email]: true}
       for (var i = 0; i < replies.length; i++) {
         const {messageAuthor, room, loginHash, title} = replies[i]
+        if (!messageAuthor) {
+          continue
+        }
         if (!notified[replies[i].email]) {
           notified[replies[i].email] = true
           promises.push(email({

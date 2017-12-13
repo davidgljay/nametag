@@ -25,7 +25,7 @@ const usersTable = db.table('users')
  *
  */
 
-const get = ({conn}, id) => usersTable.get(id).run(conn)
+const get = ({conn}, id) => id ? usersTable.get(id).run(conn) : Promise.resolve(null)
 
 /**
  * Returns a user based on an e-mail address.
@@ -664,7 +664,12 @@ const emailDigest = ({conn}) =>
     latestMessage: db.table('messages')
       .getAll([join('id'), false], {index: 'room_recipient'})
       .orderBy(r.desc('createdAt'))
-      .nth(0)('text')
+      .filter(m => m('author'))
+      .limit(1)
+      .eqJoin('author', db.table('nametags'))
+      .zip()
+      .pluck('text', 'name', 'image')
+      .nth(0)
   }))
   .group('email')
   .run(conn)

@@ -23,18 +23,17 @@ class Compose extends Component {
 
     this.onChange = (e) => {
       const text = e.target.value
-      const {onUpdateText, showTypingPrompt} = this.props
-      const {lastTypingPrompt} = this.state
+      const {onUpdateText} = this.props
       if (onUpdateText) {
         onUpdateText(text)
       }
 
       // Post a prompt that the user is typing once every 2 seconds at most
       // Temporarily disabling, as this seems to slow down typing noticably
-      if (showTypingPrompt && Date.now() - lastTypingPrompt > 4000) {
-        this.setState({lastTypingPrompt: Date.now()})
+      // if (showTypingPrompt && Date.now() - lastTypingPrompt > 4000) {
+        // this.setState({lastTypingPrompt: Date.now()})
         // showTypingPrompt(myNametag.id, roomId)
-      }
+      // }
 
       if (text.slice(-1) === '\n') {
         this.post(e)
@@ -137,6 +136,7 @@ class Compose extends Component {
     const {
       topic,
       mod,
+      parent,
       nametags,
       recipient,
       editing,
@@ -216,7 +216,7 @@ class Compose extends Component {
         <form onSubmit={this.post} style={styles.form} onClick={this.toggleEmoji(false)}>
           <TextField
             name='compose'
-            id='composeTextInput'
+            id={parent ? 'replyTextInput' : 'composeTextInput'}
             style={styles.textfield}
             onChange={this.onChange}
             autoComplete='off'

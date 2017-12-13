@@ -17,6 +17,7 @@ const styles = {
     color: grey,
     fontSize: 14,
     textAlign: 'center',
+    marginLeft: 30,
     width: '100%'
   }
 }

@@ -62,7 +62,7 @@ class Room extends Component {
     }
 
     this.joinRoom = (intro, nametagEdit = {}) => {
-      const {data: {room, me, refetch}, createNametag, createMessage} = this.props
+      const {data: {room, me, refetch}, createNametag} = this.props
       const nametag = {
         bio: intro,
         room: room.id,
@@ -70,14 +70,6 @@ class Room extends Component {
         image: nametagEdit.image || me.images[0]
       }
       return createNametag(nametag)
-        .then(({data: {createNametag: {nametag: {id}}}}) => {
-          const message = {
-            text: intro,
-            author: id,
-            room: room.id
-          }
-          return createMessage(message, {...nametag, id})
-        })
         .then(refetch)
     }
 
@@ -154,7 +146,8 @@ class Room extends Component {
       data: {
         loading,
         room,
-        me
+        me,
+        refetch
       },
       myNametag,
       nametagEdits,
@@ -259,6 +252,7 @@ class Room extends Component {
           me={me}
           myNametag={myNametag}
           room={room}
+          refetch={refetch}
           joinRoom={this.joinRoom}
           updateNametagEdit={updateNametagEdit}
           nametagEdits={nametagEdits} />

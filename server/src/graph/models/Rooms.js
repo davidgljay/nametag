@@ -16,7 +16,7 @@ const roomsTable = db.table('rooms')
  *
  */
 
-const get = ({conn}, id) => roomsTable.get(id).run(conn)
+const get = ({conn}, id) => id ? roomsTable.get(id).run(conn) : Promise.resolve(null)
 
 /**
 * Returns all visible public rooms for this user.
@@ -120,7 +120,8 @@ const getQuery = ({conn, user, models: {Users}}, query) =>
  *
  **/
 
-const create = ({conn, models: {Nametags, Users, Messages}}, rm) => {
+const create = ({conn, models: {Nametags, Users}}, rm) => {
+  const defaultPublic = process.env.NODE_ENV === 'test' ? 'APPROVED' : 'PENDING'
   const room = Object.assign(
     {},
     rm,
@@ -128,7 +129,7 @@ const create = ({conn, models: {Nametags, Users, Messages}}, rm) => {
       createdAt: new Date(),
       modOnlyDMs: false,
       mod: null,
-      public: rm.public ? 'PENDING' : false,
+      public: rm.public ? defaultPublic : false,
       closed: false
     })
   return Promise.all([
@@ -150,13 +151,11 @@ const create = ({conn, models: {Nametags, Users, Messages}}, rm) => {
   })
   .then(([nametag, id, room]) => {
     const modId = nametag.id
-    const message = {text: nametag.bio, author: modId, room: id}
     return Promise.all([
       roomsTable.get(id).update({mod: modId}).run(conn),
       id,
       modId,
-      room,
-      Messages.create(message)
+      room
     ])
   })
   // Return room

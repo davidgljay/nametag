@@ -45,10 +45,13 @@ const commands = {
   joinRoom () {
     return this
       .waitForElementVisible('@roomCard')
-      .click('@roomCard')
-      .waitForElementVisible('.roomCard.notFlipping')
       .waitForElementVisible('@joinRoomButton')
       .click('@joinRoomButton')
+  },
+  logout () {
+    return this
+      .waitForElementVisible('@logout')
+      .click('@logout')
   }
 }
 
@@ -92,13 +95,16 @@ module.exports = {
       selector: '#createRoomButton'
     },
     joinRoomButton: {
-      selector: '#joinRoomButton'
+      selector: '.joinButton'
     },
     convoInput: {
       selector: '#convoInput'
     },
     startConvo: {
       selector: '#startConvoButton'
+    },
+    logout: {
+      selector: '#logoutButton'
     }
   }
 }

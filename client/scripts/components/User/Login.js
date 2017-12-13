@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
+import CircularProgress from 'material-ui/CircularProgress'
 import {track, alias, setTimer} from '../../utils/analytics'
 import {grey} from '../../../styles/colors'
 import t from '../../utils/i18n'
@@ -27,7 +28,7 @@ class Login extends Component {
     this.state = {
       email: '',
       alert: '',
-      loading: false,
+      providerLoading: false,
       emailClicked: false
     }
 
@@ -73,7 +74,7 @@ class Login extends Component {
       e.preventDefault()
       track('PROVIDER_AUTH', {provider})
       window.sessionStorage.setItem('postAuth', window.location)
-      this.setState({loading: true})
+      this.setState({providerLoading: true})
       window.location = `/auth/${provider}`
     }
   }
@@ -82,7 +83,7 @@ class Login extends Component {
     const {message, alert} = this.props
     this.setState({message, alert})
     setTimer('LOGIN_REGISTER_USER')
-    key('enter', this.onEnter)
+    key('enter', this.register)
   }
 
   componentWillUnmount () {
@@ -93,7 +94,8 @@ class Login extends Component {
     const {
       emailAlert,
       alert,
-      message
+      message,
+      providerLoading
     } = this.state
 
     const {buttonMsg} = this.props
@@ -103,7 +105,7 @@ class Login extends Component {
       <div style={styles.alert}>
         {alert}
       </div>
-      <form className='localAuth' onSubmit={this.onEnter}>
+      <form className='localAuth' onSubmit={this.register}>
         <TextField
           floatingLabelText={t('login.email')}
           id='loginEmail'
@@ -116,23 +118,27 @@ class Login extends Component {
         <input type='submit' style={styles.hiddenSubmit} />
       </form>
       <div style={styles.authProviders}>
-        <div>
-          <div>
-            <img
-              style={styles.loginImg}
-              src='/public/images/twitter.jpg'
-              onClick={this.providerAuth('twitter')} />
-            <img
-              style={styles.loginImg}
-              src='/public/images/fb.jpg'
-              onClick={this.providerAuth('facebook')} />
-            <img
-              style={styles.loginImg}
-              src='/public/images/google.png'
-              onClick={this.providerAuth('google')} />
-          </div>
-          <div style={styles.privacy}>{t('login.privacy_provider')}</div>
-        </div>
+        {
+            providerLoading
+            ? <CircularProgress />
+            : <div>
+              <div>
+                <img
+                  style={styles.loginImg}
+                  src='/public/images/twitter.jpg'
+                  onClick={this.providerAuth('twitter')} />
+                <img
+                  style={styles.loginImg}
+                  src='/public/images/fb.jpg'
+                  onClick={this.providerAuth('facebook')} />
+                <img
+                  style={styles.loginImg}
+                  src='/public/images/google.png'
+                  onClick={this.providerAuth('google')} />
+              </div>
+              <div style={styles.privacy}>{t('login.privacy_provider')}</div>
+            </div>
+        }
       </div>
       <div style={styles.buttonContainer}>
         <RaisedButton

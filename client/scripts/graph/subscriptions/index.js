@@ -23,7 +23,8 @@ export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeT
     }
     const message = subscriptionData.data.messageAdded
 
-    const addReply = (msg, reply) => ({
+    const addReply = (msg, reply) =>
+    ({
       ...msg,
       replies: msg.replies
         .concat(reply)
@@ -94,6 +95,8 @@ export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeT
             replies: [],
             replyCount: 0,
             saved: false,
+            parent: null,
+            nametag: null,
             recipient: null,
             author: null,
             reactions: []

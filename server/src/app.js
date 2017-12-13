@@ -33,7 +33,6 @@ const GIT_HASH = execSync('git rev-parse HEAD', {
 
 process.env.AWS_ACCESS_KEY_ID = config.s3.accessKeyId
 process.env.AWS_SECRET_ACCESS_KEY = config.s3.secretAccessKey
-process.env.PRERENDER_TOKEN = config.prerender.token ? config.prerender.token : ''
 
 Raven.config(config.sentry.dsn, {
   tags: {git_commit: GIT_HASH},
@@ -90,10 +89,6 @@ app.use(function (req, res, next) {
 })
 app.use(passport.initialize())
 app.use(passport.session())
-// Prerender pages for SEO optimization
-if (process.env.PRERENDER_TOKEN) {
-  app.use(require('prerender-node').set('prerenderToken', process.env.PRERENDER_TOKEN))
-}
 
 /* Get rethinkdb connection */
 r.connect({host: 'rethinkdb'})
@@ -178,9 +173,31 @@ r.connect({host: 'rethinkdb'})
       }
     })
 
+    // app.get('/test', (req, res, next) => {
+    //   res.render('room.pug', { title: 'StuffnThings' })
+    // })
+
     /* All others serve index.html */
     app.get('*', (req, res, next) => {
-      res.sendFile(path.join('/usr', 'client', 'public', 'index.html'))
+      // If loading a room, display key room info in a template
+      if (/\/rooms\/[a-z0-9-]{36}/.test(req.url)) {
+        const roomId = /\/rooms\/([a-z0-9-]{36})/.exec(req.url)[1]
+        db.table('rooms').getAll(roomId)
+        .eqJoin('mod', db.table('nametags'))
+        .zip()
+        .run(conn)
+          .then(cursor => cursor.toArray())
+          .then(([result]) => {
+            if (!result) {
+              res.render('404.pug')
+            } else {
+              res.render('index.pug', {title: result.title, image: result.image, description: result.bio})
+            }
+          })
+          .catch(next)
+      } else {
+        res.render('index.pug', {title: 'Nametag', description: "Small conversations with people you can trust."})
+      }
     })
 
     app.use(Raven.errorHandler())

@@ -1,11 +1,13 @@
 import React, { Component, PropTypes } from 'react'
 import moment from 'moment'
+import {Card} from 'material-ui/Card'
 import Media from './Media'
 import MessageMenu from './MessageMenu'
 import MentionMenu from './MentionMenu'
 import CommandMenu from './CommandMenu'
 import ModAction from './ModAction'
 import Replies from './Replies'
+import Nametag from '../Nametag/Nametag'
 import NametagIcon from '../Nametag/NametagIcon'
 import ReactMarkdown from 'react-markdown'
 import EmojiText from './EmojiText'
@@ -49,14 +51,16 @@ class Message extends Component {
     }
 
     this.toggleMenu = e => {
-      const {myNametag, message: {author}} = this.props
+      const {myNametag, message: {author, nametag}} = this.props
       if (!this.state.showMenu) {
         track('MESSAGE_MENU_OPEN')
       }
       if (e && e.preventDefault) {
         e.preventDefault()
       }
-      const target = author.id === myNametag.id ? 'commands' : 'mentions'
+      const target = (author && author.id === myNametag.id) ||
+      (nametag && nametag.id === myNametag.id)
+      ? 'commands' : 'mentions'
       this.setState({
         showMenu: this.state.showMenu ? '' : target
       })
@@ -77,7 +81,8 @@ class Message extends Component {
         template,
         parent,
         replies,
-        replyCount
+        replyCount,
+        nametag
       },
       norms,
       roomId,
@@ -126,7 +131,7 @@ class Message extends Component {
       </div>
     } else if (recipient && recipient.id === myNametag.id) {
       messageStyle = {...styles.messageText, ...styles.directMessageIncoming}
-      callout = <div style={styles.dmCallout}>{t('message.priate_msg')}</div>
+      callout = <div style={styles.dmCallout}>{t('message.private_msg')}</div>
     }
 
     // Getting around Markdown's splitting of the '_' character in a hacky way for now
@@ -134,7 +139,7 @@ class Message extends Component {
     const emojiText = text
       .replace(/:\)/, ':slightly_smiling_face:')
       .replace(/:D/, ':grinning:')
-      .replace(/:[pP]/, ':stuck_out_tongue:')
+      .replace(/:P/, ':stuck_out_tongue:')
       .replace(/:\(/, ':white_frowning_face:')
       .replace(/(?=\S+)_(?=\S+:)/g, '~@~A~')
       .replace(
@@ -143,6 +148,7 @@ class Message extends Component {
 
     const isMod = author && mod.id === author.id
     const isReplyNotif = id.split('_')[0] === 'replyNotif'
+    const about = author || nametag
 
     return <div>
       <div
@@ -198,7 +204,21 @@ class Message extends Component {
               />
           }
           {
-            author &&
+            nametag &&
+            <div style={styles.nametagContainer}>
+              <Card key={nametag.id} id={nametag.id} style={styles.nametag}>
+                <Nametag
+                  nametag={nametag}
+                  myNametagId={myNametag.id}
+                  modId={mod.id}
+                  setDefaultMessage={setDefaultMessage}
+                  setRecipient={setRecipient}
+                  hideDMs={hideDMs} />
+              </Card>
+            </div>
+          }
+          {
+            (author || nametag) &&
             <div style={styles.below}>
               <EmojiReactions
                 reactions={reactions}
@@ -234,11 +254,11 @@ class Message extends Component {
             </div>
           }
           {
-            author &&
+            about &&
             <div>
               <MentionMenu
-                nametagId={author.id}
-                name={author.name}
+                nametagId={about.id}
+                name={about.name}
                 hideDMs={hideDMs && !isMod}
                 open={showMenu === 'mentions'}
                 anchor={document.getElementById(id)}
@@ -264,7 +284,7 @@ class Message extends Component {
         this.state.modAction &&
         <ModAction
           msgId={id}
-          author={author}
+          author={about}
           norms={norms}
           text={text}
           mod={mod}
@@ -276,12 +296,23 @@ class Message extends Component {
           createMessage={createMessage} />
       }
       {
-        !parent && author && <Replies
+        !parent && (author || nametag) && <Replies
           createMessage={createMessage}
           replies={replies}
           roomId={roomId}
-          parent={id}
-          parentAuthor={author}
+          parent={{
+            id,
+            author,
+            createdAt,
+            editedAt,
+            text,
+            recipient,
+            reactions,
+            parent: 'self',
+            replies: [],
+            replyCount: 0,
+            nametag
+          }}
           myNametag={myNametag}
           deleteMessage={deleteMessage}
           banNametag={banNametag}
@@ -315,8 +346,13 @@ Message.propTypes = {
       image: string,
       name: string.isRequired
     }),
+<<<<<<< HEAD
     saved: bool,
     template: object
+=======
+    nametag: object,
+    saved: bool
+>>>>>>> master
   }).isRequired,
   norms: arrayOf(string.isRequired).isRequired,
   roomId: string.isRequired,
@@ -442,5 +478,16 @@ const styles = {
   },
   compressed: {
     paddingTop: 0
+  },
+  nametag: {
+    width: 240,
+    marginTop: 10,
+    marginBottom: 10,
+    minHeight: 60,
+    paddingBottom: 5
+  },
+  nametagContainer: {
+    display: 'flex',
+    justifyContent: 'center'
   }
 }

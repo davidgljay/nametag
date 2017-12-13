@@ -205,7 +205,7 @@ const styles = {
   bio: {
     fontSize: 12,
     marginTop: 4,
-    paddingLeft: 20,
+    paddingLeft: 10,
     textAlign: 'left'
   }
 

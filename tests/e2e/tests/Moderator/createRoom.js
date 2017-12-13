@@ -31,7 +31,7 @@ module.exports = {
 
     page
       .assertLoaded(room, users.mod)
-      .postWelcome(messages[0])
+      .postMessage(messages[0], 2)
   },
   'Moderator exits and re-enters the room': client => {
     const page = client.page.Room()
@@ -39,17 +39,24 @@ module.exports = {
 
     page
       .exitRoom()
-      .waitForElementVisible('.roomNotif')
+      .waitForElementVisible('.joinedRoomCard')
       .assert.containsText('.roomTitle', room.title)
-      .click('.roomNotif')
+      .click('.joinedRoomCard')
   },
-  'Moderator posts a message': client => {
+  'Moderator posts another message': client => {
     const page = client.page.Room()
     const {room, messages, users} = client.globals
 
     page
       .assertLoaded(room, users.mod)
-      .postMessage(messages[1])
+      // .postMessage(messages[1], 3)
+      .exitRoom()
+  },
+  'Moderator logs out': client => {
+    const page = client.page.RoomCards()
+
+    page
+      .logout()
   },
   after: client => {
     client.end()

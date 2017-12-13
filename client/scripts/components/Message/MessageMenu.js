@@ -41,6 +41,7 @@ class MessageMenu extends Component {
             !isReply &&
             <FontIcon
               key='replyIcon'
+              id='replyIcon'
               className='material-icons'
               style={styles.actionIcon}
               onClick={showReplies(true)}>

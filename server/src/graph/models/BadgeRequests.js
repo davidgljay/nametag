@@ -11,7 +11,7 @@ const badgeRequestsTable = db.table('badgeRequests')
  *
  */
 
-const get = ({conn}, id) => badgeRequestsTable.get(id).run(conn)
+const get = ({conn}, id) => id ? badgeRequestsTable.get(id).run(conn) : Promise.resolve(null)
 
 /**
  * Returns an array of badge requests from an array of ids.
