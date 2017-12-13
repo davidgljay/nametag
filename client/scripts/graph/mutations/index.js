@@ -266,43 +266,6 @@ export const createMessage = graphql(CREATE_MESSAGE, {
       variables: {
         message
       },
-<<<<<<< HEAD
-      optimisticResponse: {
-        createMessage: {
-          __typename: 'CreateMessageResponse',
-          message: {
-            __typename: 'Message',
-            id: `tempMessage_${Date.now()}`,
-            text: message.text,
-            createdAt: new Date().toISOString(),
-            editedAt: null,
-            saved: false,
-            replies: [],
-            replyCount: 0,
-            author: {
-              __typename: 'Nametag',
-              image: author.image,
-              id: author.id,
-              name: author.name
-            },
-            recipient: null,
-            reactions: [],
-            template: null,
-            parent: message.parent ? {
-              __typename: 'Message',
-              id: message.parent,
-              author: {
-                __typename: 'Nametag',
-                id: 'tempAuthor',
-                name: ''
-              }
-            }
-            : null
-          },
-          errors: null
-        }
-      },
-=======
       // Removing optimistic message posting, this seems to cause a
       // strange edge case when posting a reply if the reply subscription comes in first
       // optimisticResponse: {
@@ -340,7 +303,6 @@ export const createMessage = graphql(CREATE_MESSAGE, {
       //     errors: null
       //   }
       // },
->>>>>>> master
       updateQueries: {
         roomQuery: (oldData, {mutationResult: {data: {createMessage: {message, errors}}}}) => {
           if (errors) {
