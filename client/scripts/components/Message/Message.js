@@ -346,13 +346,9 @@ Message.propTypes = {
       image: string,
       name: string.isRequired
     }),
-<<<<<<< HEAD
     saved: bool,
-    template: object
-=======
-    nametag: object,
-    saved: bool
->>>>>>> master
+    template: object,
+    nametag: object
   }).isRequired,
   norms: arrayOf(string.isRequired).isRequired,
   roomId: string.isRequired,
