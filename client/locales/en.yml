@@ -66,8 +66,8 @@ en:
     reply_to: Reply To
   mod_action:
     norm_err: Please check at least one norm.
-    note: Note from the Moderator\n\n
-    report: Message Report\n\n
+    note: Note from the Moderator
+    report: Message Report
     remind: Remind {0} of Conversation Norms
     report_to_mod: Report This Post to the Moderator
     add_note: Add an optional note.
