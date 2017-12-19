@@ -112,10 +112,10 @@ class Replies extends Component {
                     canGrantBadges={canGrantBadges}
                     acceptBadge={acceptBadge}
                     hideAuthor={
-                      i > 0 &&
-                      replies[i - 1].author &&
+                      i > 1 &&
+                      replies[i - 2].author &&
                       !!reply.author &&
-                      reply.author.id === replies[i - 1].author.id
+                      reply.author.id === replies[i - 2].author.id
                     }
                     toggleEmoji={toggleEmoji}
                     deleteMessage={deleteMessage}
@@ -169,7 +169,7 @@ Replies.propTypes = {
   closeReply: func.isRequired,
   setBadgeGrantee: func.isRequired,
   acceptBadge: func.isRequired,
-  canGrantBadges: bool.isRequired
+  canGrantBadges: bool.isRequireda
 }
 
 export default Replies
