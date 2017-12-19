@@ -86,12 +86,14 @@ const wrap = (mutation, requires, key = 'result') => (obj, args, context) => {
     case 'MY_NAMETAG':
       if (!context.user) {
         promise = Promise.reject(ErrNotLoggedIn)
+      } else if (!context.user.nametags) {
+        promise = Promise.reject(ErrNotYourNametag)
       } else {
         const myNametagIds = Object.keys(context.user.nametags)
         .map(roomId => context.user.nametags[roomId])
         promise = myNametagIds.indexOf(args.nametagId) > -1
-      ? mutation(obj, args, context)
-      : Promise.reject(ErrNotYourNametag)
+          ? mutation(obj, args, context)
+          : Promise.reject(ErrNotYourNametag)
       }
       break
     case 'NAMETAG_ADMIN':
