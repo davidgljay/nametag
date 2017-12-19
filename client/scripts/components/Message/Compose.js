@@ -243,7 +243,7 @@ class Compose extends Component {
             !closed &&
             <FlatButton
               style={styles.sendButton}
-              id='sendMessageButton'
+              id={parent ? 'sendReplyButton' : 'sendMessageButton'}
               type='submit'
               icon={
                 <FontIcon

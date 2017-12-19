@@ -324,6 +324,9 @@ class Message extends Component {
             replyCount: 0,
             nametag
           }}
+          setBadgeGrantee={setBadgeGrantee}
+          canGrantBadges={canGrantBadges}
+          acceptBadge={acceptBadge}
           myNametag={myNametag}
           deleteMessage={deleteMessage}
           banNametag={banNametag}

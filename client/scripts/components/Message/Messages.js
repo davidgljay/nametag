@@ -42,35 +42,36 @@ class Messages extends Component {
         acceptBadge
       } = this.props
 
-      return <Message
-        message={message}
-        roomId={roomId}
-        key={message.id}
-        hideDMs={hideDMs}
-        hideAuthor={i > 0 &&
-          messages[i - 1].author &&
-          !!message.author &&
-          message.author.id === messages[i - 1].author.id
-        }
-        toggleEmoji={this.toggleEmoji}
-        deleteMessage={deleteMessage}
-        banNametag={banNametag}
-        getReplies={getReplies}
-        canGrantBadges={grantableTemplates.length > 0}
-        visibleReplies={visibleReplies}
-        addReaction={addReaction}
-        setBadgeGrantee={setBadgeGrantee}
-        setVisibleReplies={setVisibleReplies}
-        setDefaultMessage={setDefaultMessage}
-        setRecipient={setRecipient}
-        acceptBadge={acceptBadge}
-        setEditing={setEditing}
-        editMessage={editMessage}
-        myBadges={myBadges}
-        norms={norms}
-        mod={mod}
-        createMessage={createMessage}
-        myNametag={myNametag} />
+      return <div className={`message${i}`} key={message.id}>
+        <Message
+          message={message}
+          roomId={roomId}
+          hideDMs={hideDMs}
+          hideAuthor={i > 0 &&
+            messages[i - 1].author &&
+            !!message.author &&
+            message.author.id === messages[i - 1].author.id
+          }
+          toggleEmoji={this.toggleEmoji}
+          deleteMessage={deleteMessage}
+          banNametag={banNametag}
+          getReplies={getReplies}
+          canGrantBadges={grantableTemplates.length > 0}
+          visibleReplies={visibleReplies}
+          addReaction={addReaction}
+          setBadgeGrantee={setBadgeGrantee}
+          setVisibleReplies={setVisibleReplies}
+          setDefaultMessage={setDefaultMessage}
+          setRecipient={setRecipient}
+          acceptBadge={acceptBadge}
+          setEditing={setEditing}
+          editMessage={editMessage}
+          myBadges={myBadges}
+          norms={norms}
+          mod={mod}
+          createMessage={createMessage}
+          myNametag={myNametag} />
+      </div>
     }
 
     this.scroll = () => {
