@@ -114,7 +114,7 @@ export const createNametag = graphql(CREATE_NAMETAG, {
             },
             me: {
               ...oldData.me,
-              nametags: oldData.me.nametags.concate(
+              nametags: oldData.me.nametags.concat(
                 {
                   ...nametag,
                   room: {
