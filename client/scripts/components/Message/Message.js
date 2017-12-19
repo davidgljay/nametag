@@ -144,7 +144,7 @@ class Message extends Component {
         /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/,
         (url) => `[${url}](${url})`)
 
-    const isMod = author && mod.id === author.id
+    const isMod = !!author && mod.id === author.id
     const isReplyNotif = id.split('_')[0] === 'replyNotif'
     const about = author || nametag
 

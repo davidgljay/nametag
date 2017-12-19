@@ -127,18 +127,28 @@ export const messageDeleted = subscribeToMore => roomId => subscribeToMore({
       return oldData
     }
 
+    if (messageDeleted.parent) {
+      return {
+        ...oldData,
+        room: {
+          ...oldData.room,
+          messages: oldData.room.messages
+            .map(msg => msg.id === messageDeleted.parent.id
+              ? {
+                ...msg,
+                replies: msg.replies.filter(reply => reply.id !== messageDeleted.id)
+              }
+              : msg)
+        }
+      }
+    }
+
     return {
       ...oldData,
       room: {
         ...oldData.room,
         messages: oldData.room.messages
           .filter(msg => msg.id !== messageDeleted.id)
-          .map(msg => msg.id === messageDeleted.parent.id
-            ? {
-              ...msg,
-              replies: msg.replies.filter(reply => reply.id !== messageDeleted.id)
-            }
-            : msg)
       }
     }
   }
