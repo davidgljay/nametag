@@ -123,10 +123,7 @@ CreateRoomForms.propTypes = {
     title: string,
     welcome: string.isRequired
   }).isRequired,
-  registerUser: func.isRequired,
-  loginUser: func.isRequired,
   refetch: func.isRequired,
-  passwordResetRequest: func.isRequired,
   nametagEdits: object.isRequired,
   addNametagEditBadge: func.isRequired,
   removeNametagEditBadge: func.isRequired,
