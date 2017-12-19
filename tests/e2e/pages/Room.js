@@ -33,8 +33,8 @@ const commands = {
     return this.waitForElementVisible('@compose')
     .setValue('@composeTextInput', message)
     .click('@sendMessageButton')
-    .waitForElementPresent(`.messageText:nth-of-type(${i})`)
-    .getLocationInView(`.messageText:nth-of-type(${i})`)
+    .waitForElementPresent(`.message${i}`)
+    .getLocationInView(`.message${i}`)
     .assert.containsText('body', message)
   },
   exitRoom () {
@@ -48,12 +48,14 @@ const commands = {
     .setValue('@emailForm', user.email)
     .click('@registerButton')
   },
-  postReply (message) {
+  postReply (message, i) {
     return this.waitForElementVisible('@replyButton')
     .click('@replyButton')
     .waitForElementVisible('@replyTextInput')
     .setValue('@replyTextInput', message)
-    .click('@sendMessageButton')
+    .click('@sendReplyButton')
+    .waitForElementVisible(`.reply${i}`)
+    .assert.containsText('body', message)
   }
 }
 
@@ -89,6 +91,9 @@ module.exports = {
     },
     sendMessageButton: {
       selector: '#sendMessageButton'
+    },
+    sendReplyButton: {
+      selector: '#sendReplyButton'
     },
     messageText: {
       selector: '.messageText'
