@@ -77,6 +77,12 @@ export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeT
     // If so add it to the appropriate place in the graph
     // and update the user that a reply has taken place.
     if (message.parent) {
+      let replyTo
+      if (message.parent.author) {
+        replyTo = message.parent.author.name
+      } else if (message.parent.nametag) {
+        replyTo = message.parent.nametag.name
+      }
       return {
         ...oldData,
         room: {
@@ -90,7 +96,7 @@ export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeT
             __typename: 'Message',
             id: `replyNotif_${message.parent.id}_${message.id}`,
             createdAt: new Date().toISOString(),
-            text: `${message.author.name} has replied to ${message.parent.author.name}.`,
+            text: `${message.author.name} has replied to ${replyTo}.`,
             editedAt: null,
             replies: [],
             replyCount: 0,
