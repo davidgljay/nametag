@@ -194,13 +194,13 @@ const emailIfReply = ({conn, user}, msg) =>
     .union(messagesTable.getAll(msg.parent, {index: 'parent'}))
     .map(message => message.merge({
       messageId: message('id'),
-      messageAuthor: r.db('nametag').table('nametags').get(msg.author || msg.nametag)('name')
+      messageAuthor: db.table('nametags').get(msg.author || msg.nametag)('name')
     }))
-    .eqJoin('author', r.db('nametag').table('users'), {index: 'nametags'})
+    .eqJoin('author', db.table('users'), {index: 'nametags'})
     .zip()
-    .eqJoin('author', r.db('nametag').table('nametags'))
+    .eqJoin('author', db.table('nametags'))
     .zip()
-    .eqJoin('room', r.db('nametag').table('rooms'))
+    .eqJoin('room', db.table('rooms'))
     .zip()
     .pluck('email', 'messageText', 'messageAuthor', 'messageId', 'room', 'loginHash', 'title')
     .run(conn)
