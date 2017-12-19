@@ -4,7 +4,8 @@ import constants from '../constants'
 
 const notificationsSupported = process.env.NODE_ENV === 'production' &&
   navigator.userAgent.toLowerCase().indexOf('chrome') > -1 &&
-  typeof Notification !== 'undefined'
+  typeof Notification !== 'undefined' &&
+  typeof firebase !== 'undefined'
 
 // Registers a serviceWorker and registers that worker with firebase
 export const registerServiceWorker = () => (dispatch) => {

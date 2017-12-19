@@ -51,14 +51,16 @@ class Message extends Component {
     }
 
     this.toggleMenu = e => {
-      const {myNametag, message: {author}} = this.props
+      const {myNametag, message: {author, nametag}} = this.props
       if (!this.state.showMenu) {
         track('MESSAGE_MENU_OPEN')
       }
       if (e && e.preventDefault) {
         e.preventDefault()
       }
-      const target = author.id === myNametag.id ? 'commands' : 'mentions'
+      const target = (author && author.id === myNametag.id) ||
+      (nametag && nametag.id === myNametag.id)
+      ? 'commands' : 'mentions'
       this.setState({
         showMenu: this.state.showMenu ? '' : target
       })
@@ -148,8 +150,9 @@ class Message extends Component {
         /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/,
         (url) => `[${url}](${url})`)
 
-    const isMod = author && mod.id === author.id
+    const isMod = !!author && mod.id === author.id
     const isReplyNotif = id.split('_')[0] === 'replyNotif'
+    const about = author || nametag
 
     return <div>
       <div
@@ -260,11 +263,11 @@ class Message extends Component {
             </div>
           }
           {
-            author &&
+            about &&
             <div>
               <MentionMenu
-                nametagId={author.id}
-                name={author.name}
+                nametagId={about.id}
+                name={about.name}
                 hideDMs={hideDMs && !isMod}
                 open={showMenu === 'mentions'}
                 anchor={document.getElementById(id)}
@@ -292,7 +295,7 @@ class Message extends Component {
         this.state.modAction &&
         <ModAction
           msgId={id}
-          author={author}
+          author={about}
           norms={norms}
           text={text}
           mod={mod}
