@@ -212,7 +212,6 @@ class Message extends Component {
             </div>
           }
           {
-            author &&
             nametag &&
             <div style={styles.nametagContainer}>
               <Card key={nametag.id} id={nametag.id} style={styles.nametag}>
@@ -220,8 +219,6 @@ class Message extends Component {
                   nametag={nametag}
                   myNametagId={myNametag.id}
                   modId={mod.id}
-                  setDefaultMessage={setDefaultMessage}
-                  setRecipient={setRecipient}
                   hideDMs={hideDMs} />
               </Card>
             </div>

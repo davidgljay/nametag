@@ -112,7 +112,8 @@ Nametag.PropTypes = {
   myNametagId: string,
   setDefaultMessage: func,
   setRecipient: func,
-  canGrantBadges: bool.isRequired,
+  canGrantBadges: bool,
+  setBadgeGrantee: func,
   hideDMs: bool
 }
 
