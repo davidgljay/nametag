@@ -214,6 +214,7 @@ class Room extends Component {
             setDefaultMessage={this.setDefaultMessage}
             setRecipient={this.setRecipient}
             expanded={this.state.leftBarExpanded}
+            toggleNametagImageMenu={toggleNametagImageMenu}
             toggleLeftBar={this.toggleLeftBar} />
           <Messages
             roomId={room.id}
@@ -237,6 +238,7 @@ class Room extends Component {
             setEditing={this.setEditing}
             acceptBadge={acceptBadge}
             mod={room.mod}
+            updateNametag={updateNametag}
             showNametagImageMenu={showNametagImageMenu}
             toggleNametagImageMenu={toggleNametagImageMenu}
             messages={me && (myNametag && myNametag.bio) || nametagCreated ? room.messages : []}
@@ -260,6 +262,7 @@ class Room extends Component {
           updateRoom={updateRoom}
           updateNametag={updateNametag}
           nametags={room.nametags}
+          toggleNametagImageMenu={toggleNametagImageMenu}
           defaultMessage={defaultMessage}
           showTypingPrompt={showTypingPrompt}
           typingPrompts={typingPrompts}

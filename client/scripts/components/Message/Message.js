@@ -104,6 +104,7 @@ class Message extends Component {
       setDefaultMessage,
       setRecipient,
       acceptBadge,
+      toggleNametagImageMenu,
       setEditing
     } = this.props
 
@@ -283,6 +284,7 @@ class Message extends Component {
                 roomId={roomId}
                 deleteMessage={deleteMessage}
                 setEditing={setEditing}
+                toggleNametagImageMenu={toggleNametagImageMenu}
                 open={showMenu === 'commands'} />
             </div>
           }
@@ -379,6 +381,7 @@ Message.propTypes = {
   setRecipient: func.isRequired,
   acceptBadge: func.isRequired,
   setEditing: func.isRequired,
+  toggleNametagImageMenu: func.isRequired,
   editMessage: func,
   getReplies: func,
   setVisibleReplies: func

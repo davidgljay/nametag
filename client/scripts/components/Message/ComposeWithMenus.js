@@ -96,6 +96,7 @@ class ComposeWithMenu extends Component {
       editMessage,
       setRecipient,
       setBadgeToGrant,
+      toggleNametagImageMenu,
       editing,
       setEditing
     } = this.props
@@ -160,6 +161,7 @@ class ComposeWithMenu extends Component {
         open={showComposeMenu === 'command'}
         anchor={document.getElementById('compose')}
         onRequestClose={this.closeMenus}
+        toggleNametagImageMenu={toggleNametagImageMenu}
         setDefaultMessage={setDefaultMessage} />
     </div>
   }
@@ -180,7 +182,8 @@ ComposeWithMenu.propTypes = {
   topic: string,
   recipient: string,
   badgeToGrant: object,
-  mod: object.isRequired
+  mod: object.isRequired,
+  toggleNametagImageMenu: func.isRequired
 }
 
 export default radium(ComposeWithMenu)

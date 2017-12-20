@@ -10,6 +10,7 @@ const Nametags = ({
   setRecipient,
   setBadgeGrantee,
   canGrantBadges,
+  toggleNametagImageMenu,
   hideDMs
 }) =>
   <div id='nametags' style={styles.nametags}>
@@ -26,6 +27,7 @@ const Nametags = ({
             setRecipient={setRecipient}
             setDefaultMessage={setDefaultMessage}
             setBadgeGrantee={setBadgeGrantee}
+            toggleNametagImageMenu={toggleNametagImageMenu}
             modId={mod} />
         </Card>)
     }
@@ -36,6 +38,7 @@ Nametags.propTypes = {
   nametags: arrayOf(object).isRequired,
   mod: string.isRequired,
   canGrantBadges: bool.isRequired,
+  toggleNametagImageMenu: func.isRequired,
   myNametagId: string,
   hideDMs: bool,
   setDefaultMessage: func,

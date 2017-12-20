@@ -16,13 +16,25 @@ class NTIconMenu extends Component {
     }
 
     this.onUpload = (res) => {
-      this.props.updateNametagEdit(this.props.about, 'image', res.url)
+      const {updateNametagEdit, updateNametag, toggleNametagImageMenu, about} = this.props
+      if (updateNametag) {
+        updateNametag(about, {image: res.url})
+      } else if (updateNametagEdit) {
+        updateNametagEdit(about, 'image', res.url)
+        toggleNametagImageMenu(false)
+      }
       this.setState({loadingImage: false})
     }
 
     this.onUpdateIcon = (url) => () => {
+      const {updateNametagEdit, updateNametag, toggleNametagImageMenu, about} = this.props
       this.setState({showMenu: false})
-      this.props.updateNametagEdit(this.props.about, 'image', url)
+      if (updateNametag) {
+        updateNametag(about, {image: url})
+        toggleNametagImageMenu(false)
+      } else if (updateNametagEdit) {
+        updateNametagEdit(about, 'image', url)
+      }
     }
   }
 
@@ -89,7 +101,9 @@ NTIconMenu.propTypes = {
   images: arrayOf(string),
   image: string,
   showMenu: bool,
-  updateNametagEdit: func.isRequired,
+  updateNametagEdit: func,
+  toggleNametagImageMenu: func,
+  updateNametag: func,
   about: string.isRequired
 }
 

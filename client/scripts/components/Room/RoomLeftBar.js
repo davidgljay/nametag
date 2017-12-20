@@ -34,7 +34,8 @@ class RoomLeftBar extends Component {
       setDefaultMessage,
       myNametag,
       expanded,
-      toggleLeftBar
+      toggleLeftBar,
+      toggleNametagImageMenu
     } = this.props
     const notifCount = !myNametag || !me ? 0 : me.nametags.filter(
       nametag => nametag.room &&
@@ -97,6 +98,7 @@ class RoomLeftBar extends Component {
               setDefaultMessage={this.toggleOnClick(setDefaultMessage)}
               setRecipient={this.toggleOnClick(setRecipient)}
               setBadgeGrantee={this.toggleOnClick(setBadgeGrantee)}
+              toggleNametagImageMenu={toggleNametagImageMenu}
               nametags={room.nametags}
               hideDMs={hideDMs}
               myNametagId={myNametag.id} />
@@ -143,7 +145,8 @@ RoomLeftBar.propTypes = {
     id: string.isRequired
   }),
   expanded: bool.isRequired,
-  toggleLeftBar: func.isRequired
+  toggleLeftBar: func.isRequired,
+  toggleNametagImageMenu: func.isRequired
 }
 
 export default RoomLeftBar

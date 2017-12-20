@@ -169,7 +169,7 @@ Replies.propTypes = {
   closeReply: func.isRequired,
   setBadgeGrantee: func.isRequired,
   acceptBadge: func.isRequired,
-  canGrantBadges: bool.isRequireda
+  canGrantBadges: bool.isRequired
 }
 
 export default Replies

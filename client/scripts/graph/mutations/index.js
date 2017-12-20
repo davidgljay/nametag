@@ -254,6 +254,7 @@ export const updateNametag = graphql(UPDATE_NAMETAG, {
       },
       optimisticResponse: {
         updateNametag: {
+          __typename: 'BasicResponse',
           errors: null
         }
       },
@@ -263,14 +264,13 @@ export const updateNametag = graphql(UPDATE_NAMETAG, {
             errorLog('Error updating nametag')(errors)
             return oldData
           }
-
           return {
             ...oldData,
             room: {
               ...oldData.room,
               nametags: oldData.room.nametags
-                .map(nametag => nametag.Id === nametagId
-                  ? {...nametag, ...nametagUpdate} : nametag)
+                .map(nametag => nametag.id === nametagId
+                  ? {...nametag, ...nametagUpdate, __typename: 'Nametag'} : nametag)
             }
           }
         }

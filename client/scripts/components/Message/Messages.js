@@ -34,6 +34,7 @@ class Messages extends Component {
         setBadgeGrantee,
         visibleReplies,
         setDefaultMessage,
+        toggleNametagImageMenu,
         setRecipient,
         setEditing,
         editMessage,
@@ -70,6 +71,7 @@ class Messages extends Component {
           myBadges={me ? me.badges : []}
           norms={norms}
           mod={mod}
+          toggleNametagImageMenu={toggleNametagImageMenu}
           createMessage={createMessage}
           myNametag={myNametag} />
       </div>
@@ -124,7 +126,6 @@ class Messages extends Component {
       showNametagImageMenu,
       toggleNametagImageMenu,
       updateNametag,
-      roomId,
       me
     } = this.props
     const {showEmoji} = this.state
@@ -160,8 +161,10 @@ class Messages extends Component {
         <NTIconMenu
           images={me ? me.images : []}
           image={myNametag ? myNametag.image : ''}
-          about={roomId}
-          updateNametagEdit={updateNametag} />
+          about={myNametag ? myNametag.id : ''}
+          showMenu
+          toggleNametagImageMenu={toggleNametagImageMenu}
+          updateNametag={updateNametag} />
       </Popover>
       <div style={styles.msgContainer}>
         {

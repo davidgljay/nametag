@@ -9,7 +9,7 @@ import MESSAGE_DELETED from './messageDeleted.graphql'
 import {addTypingPrompt} from '../../actions/TypingPromptActions'
 
 const clearObjectNulls = (object) => Object.keys(object).reduce(
-      (obj, key) => object[key] ? {...obj, [key]: object[key]} : obj, {})
+      (obj, key) => object[key] !== null ? {...obj, [key]: object[key]} : obj, {})
 
 export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeToMore({
   document: MESSAGE_ADDED,
@@ -237,24 +237,24 @@ export const nametagUpdated = subscribeToMore => roomId => subscribeToMore({
   variables: {
     roomId
   },
-  updateQuery: (oldData, {subscriptionData: {data: {nametagUpdated}}}) => {
-    if (!nametagUpdated) {
+  updateQuery: (oldData, {subscriptionData: {data: {nametagUpdated: {nametag}}}}) => {
+    if (!nametag) {
       return oldData
     }
 
     // Reload the page if the user is banned
     if (
       oldData.me &&
-      oldData.me.nametags.find(nt => nt.id === nametagUpdated.id) &&
-      nametagUpdated.banned) {
+      oldData.me.nametags.find(nt => nt.id === nametag.id) &&
+      nametag.banned) {
       window.location.reload()
     }
 
     let newNametags
     const nametags = oldData.room.nametags
-    if (nametags.filter(n => n.id === nametagUpdated.id).length > 0) {
-      newNametags = nametags.map(n => n.id === nametagUpdated.id
-        ? {...n, ...clearObjectNulls(nametagUpdated), __typename: 'Nametag'}
+    if (nametags.filter(n => n.id === nametag.id).length > 0) {
+      newNametags = nametags.map(n => n.id === nametag.id
+        ? nametag
         : n)
     } else {
       newNametags = nametags.concat({

@@ -872,7 +872,7 @@ type RootSubscription {
   roomUpdated(roomId: ID!): UpdateRoom
 
   # Fired when data about a nametag is updated
-  nametagUpdated(roomId: ID!): UpdateNametag
+  nametagUpdated(roomId: ID!): Nametag
 }
 
 ################################################################################

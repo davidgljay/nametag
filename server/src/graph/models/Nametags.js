@@ -192,10 +192,10 @@ const update = ({conn}, nametagId, nametagUpdate) =>
       if (res.errors) {
         return Promise.reject(new errors.APIError(res.errors[0]))
       }
-      return nametagsTable.get(nametagId).pluck('room').run(conn)
+      return nametagsTable.get(nametagId).run(conn)
     })
-    .then(({room}) => {
-      pubsub.publish('nametagUpdated', Object.assign({}, nametagUpdate, {room, id: nametagId}))
+    .then(nametag => {
+      pubsub.publish('nametagUpdated', nametag)
     })
 
 /**

@@ -7,7 +7,7 @@ import t from '../../utils/i18n'
 const CommandMenu = ({
   isMod,
   setDefaultMessage,
-  showNametagImageMenu,
+  toggleNametagImageMenu,
   onRequestClose,
   open,
   anchor,
@@ -54,7 +54,7 @@ const CommandMenu = ({
     e.preventDefault()
     switch (command) {
       case 'image':
-        showNametagImageMenu()
+        toggleNametagImageMenu(true)
         break
       default:
         setDefaultMessage(`/${command} `)
