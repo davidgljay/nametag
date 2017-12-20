@@ -26,6 +26,13 @@ class NTIconMenu extends Component {
     }
   }
 
+  componentDidMount () {
+    const {showMenu} = this.props
+    if (showMenu) {
+      this.setState({showMenu})
+    }
+  }
+
   render () {
     const {image, images = []} = this.props
     const {loadingImage, showMenu} = this.state
@@ -76,11 +83,14 @@ class NTIconMenu extends Component {
   }
 }
 
+const {arrayOf, string, func, bool} = PropTypes
+
 NTIconMenu.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.string),
-  image: PropTypes.string,
-  updateNametagEdit: PropTypes.func.isRequired,
-  about: PropTypes.string.isRequired
+  images: arrayOf(string),
+  image: string,
+  showMenu: bool,
+  updateNametagEdit: func.isRequired,
+  about: string.isRequired
 }
 
 export default NTIconMenu

@@ -65,6 +65,7 @@ en:
       welcome: Update this room's welcome prompt
       intro: Update your intro message
       name: Update your name
+      image: Update your image
       title: Update this room's title
       announce: Send an e-mail to everyone in the room
     skin_tone: Skin Tone

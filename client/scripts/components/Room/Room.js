@@ -169,7 +169,9 @@ class Room extends Component {
       visibleReplies,
       setVisibleReplies,
       setBadgeToGrant,
-      acceptBadge
+      acceptBadge,
+      showNametagImageMenu,
+      toggleNametagImageMenu
     } = this.props
 
     const {defaultMessage, recipient, editing, nametagCreated, keepLoading} = this.state
@@ -235,8 +237,10 @@ class Room extends Component {
             setEditing={this.setEditing}
             acceptBadge={acceptBadge}
             mod={room.mod}
+            showNametagImageMenu={showNametagImageMenu}
+            toggleNametagImageMenu={toggleNametagImageMenu}
             messages={me && (myNametag && myNametag.bio) || nametagCreated ? room.messages : []}
-            myBadges={me ? me.badges : []} />
+            me={me} />
         </div>
         <ComposeWithMenus
           createMessage={createMessage}
@@ -311,7 +315,9 @@ Room.propTypes = {
   setVisibleReplies: func.isRequired,
   setBadgeGrantee: func.isRequired,
   banNametag: func.isRequired,
-  acceptBadge: func.isRequired
+  acceptBadge: func.isRequired,
+  toggleNametagImageMenu: func.isRequired,
+  showNametagImageMenu: bool.isRequired
 }
 
 export default radium(Room)

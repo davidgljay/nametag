@@ -5,6 +5,7 @@ import radium from 'radium'
 import HelpMessage from './HelpMessage'
 import Popover from 'material-ui/Popover'
 import GrantBadge from './GrantBadge'
+import NTIconMenu from '../Nametag/IconMenu'
 import {Picker} from 'emoji-mart'
 import t from '../../utils/i18n'
 
@@ -26,7 +27,7 @@ class Messages extends Component {
         grantableTemplates,
         createMessage,
         messages,
-        myBadges,
+        me,
         addReaction,
         getReplies,
         setVisibleReplies,
@@ -66,7 +67,7 @@ class Messages extends Component {
           acceptBadge={acceptBadge}
           setEditing={setEditing}
           editMessage={editMessage}
-          myBadges={myBadges}
+          myBadges={me ? me.badges : []}
           norms={norms}
           mod={mod}
           createMessage={createMessage}
@@ -119,7 +120,12 @@ class Messages extends Component {
       badgeGrantee,
       setBadgeToGrant,
       setBadgeGrantee,
-      setRecipient
+      setRecipient,
+      showNametagImageMenu,
+      toggleNametagImageMenu,
+      updateNametag,
+      roomId,
+      me
     } = this.props
     const {showEmoji} = this.state
     return <div style={styles.messages} id='messages'>
@@ -146,6 +152,17 @@ class Messages extends Component {
           badgeGrantee={badgeGrantee}
           setRecipient={setRecipient} />
       </Popover>
+      <Popover
+        open={showNametagImageMenu}
+        anchorEl={document.getElementById('compose')}
+        overlayStyle={{opacity: 0}}
+        onRequestClose={() => toggleNametagImageMenu(false)}>
+        <NTIconMenu
+          images={me ? me.images : []}
+          image={myNametag ? myNametag.image : ''}
+          about={roomId}
+          updateNametagEdit={updateNametag} />
+      </Popover>
       <div style={styles.msgContainer}>
         {
           mod && myNametag &&
@@ -170,10 +187,13 @@ Messages.propTypes = {
   myNametag: shape({
     id: string.isRequired
   }),
+  me: shape({
+    images: arrayOf(string).isRequired,
+    badges: arrayOf(object).isRequired
+  }),
   hideDMs: bool.isRequired,
   grantableTemplates: arrayOf(shape).isRequired,
   badgeGrantee: string.isRequired,
-  myBadges: arrayOf(object).isRequired,
   visibleReplies: string.isRequired,
   deleteMessage: func.isRequired,
   banNametag: func.isRequired,
@@ -186,7 +206,10 @@ Messages.propTypes = {
   setDefaultMessage: func.isRequired,
   setRecipient: func.isRequired,
   setEditing: func.isRequired,
-  acceptBadge: func.isRequired
+  acceptBadge: func.isRequired,
+  toggleNametagImageMenu: func.isRequired,
+  showNametagImageMenu: bool.isRequired,
+  updateNametag: func.isRequired
 }
 
 export default radium(Messages)

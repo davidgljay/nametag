@@ -47,6 +47,21 @@ export function setBadgeToGrant (badge) {
 }
 
 /*
+* Open Nametag Image Menu
+* @params
+*   open
+*
+* @returns
+*   Action to set a the recipient of a badge
+*/
+export function toggleNametagImageMenu (open) {
+  return {
+    type: constants.TOGGLE_NAMETAG_IMAGE_MENU,
+    open
+  }
+}
+
+/*
 * Search Images
 * @params
 *   searchString
