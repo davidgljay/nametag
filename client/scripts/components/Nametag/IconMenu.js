@@ -12,18 +12,19 @@ class NTIconMenu extends Component {
 
     this.state = {
       loadingImage: false,
-      showMenu: false
+      showMenu: false,
+      uploadingFile: false
     }
 
     this.onUpload = (res) => {
       const {updateNametagEdit, updateNametag, toggleNametagImageMenu, about} = this.props
       if (updateNametag) {
         updateNametag(about, {image: res.url})
+        toggleNametagImageMenu(false)
       } else if (updateNametagEdit) {
         updateNametagEdit(about, 'image', res.url)
-        toggleNametagImageMenu(false)
       }
-      this.setState({loadingImage: false})
+      this.setState({loadingImage: false, uploadingFile: false})
     }
 
     this.onUpdateIcon = (url) => () => {
@@ -47,13 +48,15 @@ class NTIconMenu extends Component {
 
   render () {
     const {image, images = []} = this.props
-    const {loadingImage, showMenu} = this.state
+    const {loadingImage, showMenu, uploadingFile} = this.state
 
     const uploadIcon = <ImageUpload
-      onChooseFile={() => this.setState({showMenu: false, loadingImage: true})}
+      onChooseFile={() => {
+        this.setState({loadingImage: true})
+      }
+      }
       onUploadFile={this.onUpload}
       width={80} />
-
     let render
     if (loadingImage) {
       render = <CircularProgress />
@@ -70,8 +73,9 @@ class NTIconMenu extends Component {
         targetOrigin={{horizontal: 'left', vertical: 'top'}}
         style={styles.menuStyle}
         open={showMenu}
-        onRequestChange={open => { this.setState({showMenu: open}) }}
-        onClick={() => { this.setState({showMenu: true}) }}
+        // Need to keep menu open while selecting a file for upload
+        onRequestChange={open => uploadingFile ? null : this.setState({showMenu: open})}
+        onClick={() => this.setState({showMenu: true})}
         menuStyle={styles.menuStyle}>
         {
           images.map((url) =>
@@ -86,6 +90,7 @@ class NTIconMenu extends Component {
       }
         <MenuItem
           style={styles.menuItemStyle}
+          onClick={() => this.setState({uploadingFile: true, showMenu: true})}
           innerDivStyle={styles.menuItemInnerDivStyle}>
           {uploadIcon}
         </MenuItem>
