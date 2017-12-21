@@ -59,7 +59,7 @@ class NTIconMenu extends Component {
       width={80} />
     let render
     if (loadingImage) {
-      render = <CircularProgress />
+      render = <div style={styles.loading}><CircularProgress /></div>
     } else if (!image) {
       render = uploadIcon
     } else {
@@ -115,6 +115,10 @@ NTIconMenu.propTypes = {
 export default NTIconMenu
 
 const styles = {
+  loading: {
+    padding: 20,
+    borderRadius: 20
+  },
   menuItemStyle: {
     lineHeight: 'inherit',
     minHeight: 80
