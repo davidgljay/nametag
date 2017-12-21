@@ -4,6 +4,7 @@ import FileUpload from 'react-fileupload'
 import errorLog from '../../utils/errorLog'
 
 // Ref used by FileUpload prevents this from being a stateless component.
+// TODO: integrate https://www.npmjs.com/package/browser-compress-image
 class ImageUpload extends Component {
 
   render () {
