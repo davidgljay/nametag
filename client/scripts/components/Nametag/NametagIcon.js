@@ -34,7 +34,7 @@ const NametagIcon = ({image, name, diameter, marginRight, style = {}}) => {
       image
       ? <div alt={name} style={{
         ...imageStyle,
-        background: `url(${image}) no-repeat cover center`
+        background: `url(${image}) center center / cover no-repeat`
       }} />
       : <div style={{...imageStyle, ...defaultImageStyle}} >
         {name.slice(0, 2)}

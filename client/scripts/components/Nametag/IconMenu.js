@@ -67,7 +67,9 @@ class NTIconMenu extends Component {
       render = <IconMenu
         iconButtonElement={
           <IconButton style={styles.buttonStyle} iconStyle={styles.image}>
-            <img src={image} />
+            <div style={{
+              background: `url(${image}) center center / cover no-repeat`
+            }} />
           </IconButton>
         }
         anchorOrigin={{horizontal: 'left', vertical: 'top'}}
@@ -79,13 +81,16 @@ class NTIconMenu extends Component {
         onClick={() => this.setState({showMenu: true})}
         menuStyle={styles.menuStyle}>
         {
-          images.map((url) =>
+          images.map((url, i) =>
             <MenuItem
-              key={url}
+              key={i}
               style={styles.menuItemStyle}
               innerDivStyle={styles.menuItemInnerDivStyle}
               onTouchTap={this.onUpdateIcon(url)}>
-              <img src={url} style={styles.image} />
+              <div style={{
+                ...styles.image,
+                background: `url(${url}) center center / cover no-repeat`
+              }} />
             </MenuItem>
           )
       }
@@ -126,7 +131,8 @@ const styles = {
   },
   menuItemInnerDivStyle: {
     padding: 6,
-    textAlign: 'center'
+    display: 'flex',
+    justifyContent: 'center'
   },
   image: {
     borderRadius: 25,
