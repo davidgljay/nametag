@@ -10,7 +10,7 @@ class ImageUpload extends Component {
       e.preventDefault()
       onChooseFile()
       return uploadImage(width, e.target.files[0])
-      .then(() => onUploadFile())
+        .then(onUploadFile)
     }
 
     return <div style={styles.uploadMenuItem}>
