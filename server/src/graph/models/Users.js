@@ -168,6 +168,32 @@ const addNametag = ({user, conn}, nametagId, roomId) =>
   usersTable.get(user.id).update({nametags: {[roomId]: nametagId}}).run(conn)
 
 /**
+ * Adds a new default name for the user
+ *
+ * @param {Object} context     graph context
+ * @param {String} name   the name to be added
+ *
+ */
+
+const addDefaultName = ({user, conn}, name) =>
+  usersTable.get(user.id).update(
+    u => ({displayNames: u('displayNames').append(name)})
+  ).run(conn)
+
+/**
+ * Adds a new default image for the user
+ *
+ * @param {Object} context     graph context
+ * @param {String} image   the image to be added
+ *
+ */
+
+const addDefaultImage = ({user, conn}, image) =>
+  usersTable.get(user.id).update(
+    u => ({images: u('images').append(image)})
+  ).run(conn)
+
+/**
  * Adds a badge to the user.
  *
  * @param {Object} context     graph context
@@ -718,6 +744,8 @@ module.exports = (context) => ({
     emailConfirmation: (token) => emailConfirmation(context, token),
     hashLoginRequest: (email, path) => hashLoginRequest(context, email, path),
     unsubscribe: (loginHash, roomId) => unsubscribe(context, loginHash, roomId),
+    addDefaultName: (name) => addDefaultName(context, name),
+    addDefaultImage: (image) => addDefaultImage(context, image),
     emailDigest: () => emailDigest(context)
   }
 })

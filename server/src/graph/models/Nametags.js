@@ -186,15 +186,24 @@ const getNametagCount = ({conn}, room) => nametagsTable.filter({room}).count().r
  *
  */
 
-const update = ({conn}, nametagId, nametagUpdate) =>
+const update = ({conn, models: {Users}}, nametagId, nametagUpdate) =>
   nametagsTable.get(nametagId).update(nametagUpdate).run(conn)
     .then(res => {
       if (res.errors) {
         return Promise.reject(new errors.APIError(res.errors[0]))
       }
-      return nametagsTable.get(nametagId).run(conn)
+      let userUpdate = null
+      if (nametagUpdate.name) {
+        userUpdate = Users.addDefaultName(nametagUpdate.name)
+      } else if (nametagUpdate.image) {
+        userUpdate = Users.addDefaultImage(nametagUpdate.image)
+      }
+      return Promise.all([
+        nametagsTable.get(nametagId).run(conn),
+        userUpdate
+      ])
     })
-    .then(nametag => {
+    .then(([nametag]) => {
       pubsub.publish('nametagUpdated', nametag)
     })
 
