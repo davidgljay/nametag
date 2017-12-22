@@ -128,7 +128,10 @@ export function uploadImage (width, file) {
       formData.append('images', resizedImage)
       const options = {
         method: 'POST',
-        body: formData
+        body: formData,
+        headers: {
+          imagewidth: width * 3
+        }
       }
       console.log('Posting image after resize')
 

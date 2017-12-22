@@ -10,7 +10,7 @@ module.exports.multer = multer({
   storage: multerS3({
     s3: s3,
     bucket: config.s3.bucket,
-    destination: 'raw',
+    destination: (req, file, cb) => { cb(null, req.headers.imagewidth) },
     mimetype: (req, file, cb) => { cb(null, file.mimetype) },
     filename: (req, file, cb) => {
       cb(null, Date.now() + '-' + file.fieldname)

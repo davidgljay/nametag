@@ -257,12 +257,10 @@ app.get('/favicon.ico', (req, res) => {
 
 /* Upload an image and return the url of that image on S3 */
 app.post('/api/images',
-  imageUpload.multer.any(),
-  (req, res) => {
-    imageUpload.resize(req.query.width, req.query.height, req.files[0].filename)
-      .then(data => res.json(data))
-      .catch(err => console.error('Uploading image', err))
-  }
+    imageUpload.multer.any(),
+    (req, res) => {
+      res.json({url: `https://s3.amazonaws.com/nametag_images/${req.headers.imagewidth}/${req.files[0].filename}`})
+    }
 )
 
 /* Redirect to an image (used to securely deliver images hosted via http) */
