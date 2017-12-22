@@ -3,7 +3,12 @@ import component from '../../components/Room/Room'
 import {compose} from 'react-apollo'
 import {roomQuery} from '../../graph/queries'
 import {registerUser} from '../../actions/UserActions'
-import {setVisibleReplies, setBadgeGrantee, setBadgeToGrant, toggleNametagImageMenu} from '../../actions/RoomActions'
+import {
+  setVisibleReplies,
+  setBadgeGrantee,
+  setBadgeToGrant,
+  toggleNametagImageMenu
+} from '../../actions/RoomActions'
 import {
   createMessage,
   createNametag,

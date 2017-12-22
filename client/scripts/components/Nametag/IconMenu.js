@@ -3,7 +3,7 @@ import IconMenu from 'material-ui/IconMenu'
 import MenuItem from 'material-ui/MenuItem'
 import IconButton from 'material-ui/IconButton'
 import CircularProgress from 'material-ui/CircularProgress'
-import ImageUpload from '../Utils/ImageUpload'
+import ImageUpload from '../../containers/Utils/ImageUploadContainer'
 
 class NTIconMenu extends Component {
 
@@ -14,6 +14,10 @@ class NTIconMenu extends Component {
       loadingImage: false,
       showMenu: false,
       uploadingFile: false
+    }
+
+    this.onChooseFile = file => {
+      this.setState({loadingImage: true})
     }
 
     this.onUpload = (res) => {
@@ -51,10 +55,7 @@ class NTIconMenu extends Component {
     const {loadingImage, showMenu, uploadingFile} = this.state
 
     const uploadIcon = <ImageUpload
-      onChooseFile={() => {
-        this.setState({loadingImage: true})
-      }
-      }
+      onChooseFile={this.onChooseFile}
       onUploadFile={this.onUpload}
       width={80} />
     let render
