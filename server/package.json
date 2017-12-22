@@ -31,7 +31,7 @@
     "jsonwebtoken": "^5.5.4",
     "mime-types": "^2.0.4",
     "multer": "^1.2.0",
-    "multer-storage-s3": "^1.1.1",
+    "multer-s3": "^2.7.0",
     "node-fetch": "1.6.3",
     "nodemon": "^1.11.0",
     "oauth": "^0.9.14",

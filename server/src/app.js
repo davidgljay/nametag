@@ -259,7 +259,7 @@ app.get('/favicon.ico', (req, res) => {
 app.post('/api/images',
     imageUpload.multer.any(),
     (req, res) => {
-      res.json({url: `https://s3.amazonaws.com/nametag_images/${req.headers.imagewidth}/${req.files[0].filename}`})
+      res.json({url: req.files[0].location})
     }
 )
 
