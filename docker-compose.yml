@@ -30,9 +30,10 @@ redis:
   image: redis:alpine
   ports:
     - "6379:6379"
-  command: redis-server --appendonly yes
+  command: redis-server /usr/local/etc/redis/redis.conf
   volumes:
     - ./redis_data:/data
+    - ./redis_conf:/usr/local/etc/redis/
 # elasticsearch:
 #     image: docker.elastic.co/elasticsearch/elasticsearch:5.4.0
 #     environment:
