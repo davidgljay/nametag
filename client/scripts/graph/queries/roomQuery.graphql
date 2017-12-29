@@ -26,6 +26,11 @@ query roomQuery($id: ID!){
         ...badgeView
       }
     }
+    granter {
+      id
+      name
+      image
+    }
     nametags {
       ...nametagView
     }

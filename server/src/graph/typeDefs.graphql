@@ -73,6 +73,9 @@ type Room {
   # The room's moderator
   mod: Nametag!
 
+  # The granter sponsoring this room
+  granter: Granter
+
   # The date when the room was created
   createdAt: Date!
 

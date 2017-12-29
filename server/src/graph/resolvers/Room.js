@@ -19,6 +19,7 @@ const Room = {
   newMessageCount: ({id}, _, {user, models: {Messages}}) =>
     user ? Messages.newMessageCount(id) : 0,
   mod: ({mod}, _, {models: {Nametags}}) => Nametags.get(mod),
+  granter: ({granter}, _, {models: {Granters}}) => Granters.get(granter),
   templates: ({templates}, _, {models: {Templates}}) => Templates.getAll(templates)
 }
 
