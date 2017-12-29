@@ -6,4 +6,4 @@ rethinkdb dump -c rethinkdb
 mv rethinkdb_dump* backup
 
 # Add sc3md
-s3cmd -c /usr/nametag/.s3cfg sync * s3://nametag_backups
+s3cmd -c /usr/nametag/.s3cfg sync ./backup s3://nametag_backups
