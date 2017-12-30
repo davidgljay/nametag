@@ -7,6 +7,7 @@ const r = require('rethinkdb')
 const express = require('express')
 const imageUpload = require('./routes/images/imageUpload')
 const imageRedirect = require('./routes/images/imageRedirect')
+const stripeAuth = require('./routes/granters/stripeAuth')
 const config = require('./secrets.json')
 const path = require('path')
 const bodyParser = require('body-parser')
@@ -173,9 +174,16 @@ r.connect({host: 'rethinkdb'})
       }
     })
 
-    // app.get('/test', (req, res, next) => {
-    //   res.render('room.pug', { title: 'StuffnThings' })
-    // })
+    app.get('/granters/:granter/stripe_auth', (req, res, next) => {
+      if (!req.query.code) {
+        next(errors.ErrInvalidToken)
+      } else {
+        const context = new Context({}, conn)
+        stripeAuth(context, req.params.granter, req.query.code)
+          .then(() => res.redirect(`/granters/${req.params.granter}`))
+          .catch(next)
+      }
+    })
 
     /* All others serve index.html */
     app.get('*', (req, res, next) => {
