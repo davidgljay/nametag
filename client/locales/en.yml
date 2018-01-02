@@ -45,6 +45,8 @@ en:
     drag_share: Drag to Share
   granter:
     login_to_view: Log in to view this page.
+    stripe_dash: Donations Dashboard
+    stripe_register: Register To Recieve Payments
   message:
     edit: Edit Message
     editing: Editing Message

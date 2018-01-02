@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import Navbar from '../Utils/Navbar'
 import GranterInfo from './GranterInfo'
+import StripeButton from './StripeButton'
 import BadgeRequest from '../Badge/BadgeRequest'
 import Template from '../Badge/Template'
 import CircularProgress from 'material-ui/CircularProgress'
@@ -72,10 +73,10 @@ class Granter extends Component {
             }
           </ReactCSSTransitionGroup>
           <div style={styles.createButtonContainter}>
+            <StripeButton granter={granter} me={me} />
             <FlatButton
               href={`/granters/${granter.urlCode}/badges/create`}
               label={t('badge.create_badge')}
-              labelPosition='before'
               icon={
                 <FontIcon
                   className='material-icons'>
