@@ -53,7 +53,7 @@ class Granter extends Component {
       : <div>
         <Navbar me={me} />
         <div id='granterDetail' style={styles.granterDetail}>
-          <GranterInfo granter={granter} />
+          <GranterInfo granter={granter} me={me} />
           <ReactCSSTransitionGroup
             transitionName='fade'
             style={styles.badgeRequests}

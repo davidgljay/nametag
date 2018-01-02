@@ -28,5 +28,6 @@ export default {
   // Public keys and tokens
   FIREBASE_WEB_KEY: 'AIzaSyCkPlC2qRkXchd9AdubS6aAyvhE1TNAPqU',
   FIREBASE_SENDER_ID: '820872076821',
-  SENTRY_DSN: 'https://5843edea127249928e8f94a645b46348@sentry.io/197147'
+  SENTRY_DSN: 'https://5843edea127249928e8f94a645b46348@sentry.io/197147',
+  STRIPE_CLIENT_ID: 'ca_C2MwXiLMHINblnFauKnQ7eQ5Ybb6o85a'
 }

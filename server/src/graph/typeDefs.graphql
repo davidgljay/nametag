@@ -56,6 +56,9 @@ type User {
   # Templates from organizations that this user administers
   adminTemplates: [Template]
 
+  # Email address of the user
+  email: String
+
 }
 
 # A room where discussions can take place
@@ -323,6 +326,9 @@ type Granter {
 
   # List of administrators
   adminTemplate: Template
+
+  # Stripe account id for payment processing
+  stripe: String
 
 }
 
