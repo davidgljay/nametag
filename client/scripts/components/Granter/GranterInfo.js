@@ -3,9 +3,9 @@ import {mobile} from '../../../styles/sizes'
 import radium from 'radium'
 import constants from '../../constants'
 
-const GranterInfo = ({granter: {name, image, description, stripe}, me: {email}}) => {
+const GranterInfo = ({granter: {name, image, description, stripe, urlCode}, me: {email}}) => {
   let stripeUrl = `https://connect.stripe.com/express/oauth/authorize?client_id=${constants.STRIPE_CLIENT_ID}`
-  stripeUrl += `&redirect_uri=${encodeURIComponent(window.location.href)}`
+  stripeUrl += `&state=${urlCode}`
   stripeUrl += `&stripe_user[business_name]=${name}`
   stripeUrl += `&stripe_user[email]=${email}`
 

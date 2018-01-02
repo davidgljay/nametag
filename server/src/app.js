@@ -174,13 +174,13 @@ r.connect({host: 'rethinkdb'})
       }
     })
 
-    app.get('/granters/:granter/stripe_auth', (req, res, next) => {
+    app.get('/stripe_auth', (req, res, next) => {
       if (!req.query.code) {
         next(errors.ErrInvalidToken)
       } else {
         const context = new Context({}, conn)
-        stripeAuth(context, req.params.granter, req.query.code)
-          .then(() => res.redirect(`/granters/${req.params.granter}`))
+        stripeAuth(context, req.query.state, req.query.code)
+          .then(() => res.redirect(`/granters/${req.query.state}`))
           .catch(next)
       }
     })
