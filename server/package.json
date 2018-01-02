@@ -46,6 +46,7 @@
     "raven": "^2.1.0",
     "req-flash": "^0.0.3",
     "rethinkdb": "^2.1.1",
+    "stripe": "^5.4.0",
     "subscriptions-transport-ws": "^0.5.5-alpha.0",
     "uuid": "^3.0.1",
     "winston": "^2.1.0"

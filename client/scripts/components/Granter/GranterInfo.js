@@ -16,7 +16,7 @@ const GranterInfo = ({granter: {name, image, description, stripe, urlCode}, me: 
       <div style={styles.description}>{description}</div>
       {
         stripe
-        ? <a href='https://dashboard.stripe.com/dashboard'>Donations Dashboard</a>
+        ? <a href={`/granters/${urlCode}/stripe_dash`}>Donations Dashboard</a>
         : <a href={stripeUrl}>
             Register to recieve payments
           </a>

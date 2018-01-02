@@ -8,6 +8,7 @@ const express = require('express')
 const imageUpload = require('./routes/images/imageUpload')
 const imageRedirect = require('./routes/images/imageRedirect')
 const stripeAuth = require('./routes/granters/stripeAuth')
+const stripeDash = require('./routes/granters/stripeDash')
 const config = require('./secrets.json')
 const path = require('path')
 const bodyParser = require('body-parser')
@@ -183,6 +184,13 @@ r.connect({host: 'rethinkdb'})
           .then(() => res.redirect(`/granters/${req.query.state}`))
           .catch(next)
       }
+    })
+
+    app.get('/granters/:granter/stripe_dash', (req, res, next) => {
+      const context = new Context({}, conn)
+      stripeDash(context, req.params.granter, req.user)
+        .then(({url}) => res.redirect(url))
+        .catch(next)
     })
 
     /* All others serve index.html */
