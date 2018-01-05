@@ -1,7 +1,7 @@
-const r = require('rethinkdb')
+// const r = require('rethinkdb')
 const {db} = require('../../db')
-const errors = require('../../errors')
-const notification = require('../../notifications')
+// const errors = require('../../errors')
+// const notification = require('../../notifications')
 
 const volActionsTable = db.table('volActions')
 
@@ -19,19 +19,36 @@ const get = ({conn}, id) => id ? volActionsTable.get(id).run(conn) : Promise.res
  * Creates a vol action
  *
  * @param {Object} context     graph context
- * @param {Object} volAction   the volunteer action to be created
+ * @param {Array} volActions   the volunteer actions to be created
  *
+ * Note: Getting room and granter info from the database for security reasons
  **/
 
-const create = ({conn}, volAction) => {
-  const volActionObj = Object.assign({}, volAction, {createdAt: new Date(), updatedAt: new Date()})
-  return volActionsTable.insert(templateObj).run(conn)
-    .then(res => Object.assign({}, templateObj, {id: res.generated_keys[0]}))
-}
+const createArray = ({conn}, volActions) =>
+ db.table('nametags')
+    .getAll(volActions.nametag)
+    .eqJoin(n => n('room'), db.table('rooms'))
+    .zip()
+    .pluck('room', 'granter')
+    .nth(0)
+    .do(res => {
+      volActionsTable.insert(
+        volActions.actions.map(action =>
+          res.merge({
+            action,
+            nametag: volActions.nametag,
+            note: volActions.note,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          })
+        )
+      )
+    })
+    .then(res => ({ids: res.generated_keys}))
 
 module.exports = (context) => ({
   VolActions: {
     get: (id) => get(context, id),
-    create: volAction => create(context, volAction)
+    createArray: volActions => createArray(context, volActions)
   }
 })

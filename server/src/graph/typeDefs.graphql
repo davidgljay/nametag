@@ -455,9 +455,6 @@ type VolAction {
   # The user's Nametag
   nametag: ID!
 
-  # The users's ID
-  user: ID!
-
   # The room where the user volunteered
   room: ID!
 }
@@ -476,9 +473,6 @@ type Donation {
 
   # The user's Nametag
   nametag: ID!
-
-  # The users's ID
-  user: ID!
 
   # The room where the user donated
   room: ID!
@@ -692,7 +686,32 @@ input CreateGranterInput {
 
 }
 
-# Input required to update a nametag
+input CreateVolActionInput {
+
+  # Actions that the user is volunteering for
+  actions: [String!]
+
+  # The user's Nametag
+  nametag: ID!
+
+  # An optional note
+  note: String
+
+}
+
+input CreateDonationInput {
+
+  # Actions that the user is volunteering for
+  amount: Float!
+
+  # The user's Nametag
+  nametag: ID!
+
+  # An optional note
+  note: String
+
+}
+
 
 ## Responses
 
@@ -756,6 +775,17 @@ type BasicResponse implements Response {
 
   #Optionally, include an id of a newly created object
   id: ID
+
+  # An array of errors relating to the mutation that occurred.
+  errors: [UserError]
+
+}
+
+# Basic Response including only errors
+type ArrayResponse implements Response {
+
+  #Optionally, include an array of ids of newly created objects
+  ids: [ID]
 
   # An array of errors relating to the mutation that occurred.
   errors: [UserError]
@@ -833,6 +863,12 @@ type RootMutation {
 
   # Accepts a badge offered in a message
   acceptBadge(messageId: ID!): CreateBadgeResponse
+
+  # Creates a volunteer action
+  createVolActions:(volActions: CreateVolActionsInput): ArrayResponse
+
+  # Creates a donation
+  createDonation:(donation: CreateDonationInput): BasicResponse
 
 }
 

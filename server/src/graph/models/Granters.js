@@ -163,7 +163,7 @@ const create = ({conn, models: {Templates}}, granter) =>
    *
    **/
 
-   const addStripe = ({conn}, granterCode, stripe) =>
+const addStripe = ({conn}, granterCode, stripe) =>
      r.branch(
         grantersTable
           .getAll(granterCode, {index: 'urlCode'})

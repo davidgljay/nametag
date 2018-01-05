@@ -1,7 +1,7 @@
-const r = require('rethinkdb')
+// const r = require('rethinkdb')
 const {db} = require('../../db')
-const errors = require('../../errors')
-const notification = require('../../notifications')
+// const errors = require('../../errors')
+// const notification = require('../../notifications')
 
 const donationsTable = db.table('donations')
 
@@ -15,19 +15,32 @@ const donationsTable = db.table('donations')
 
 const get = ({conn}, id) => id ? donationsTable.get(id).run(conn) : Promise.resolve(null)
 
-/**
- * Creates a vol action
- *
- * @param {Object} context     graph context
- * @param {Object} donation   the donation to be created
- *
- **/
+ /**
+  * Creates a donation
+  *
+  * @param {Object} context     graph context
+  * @param {Array} donation   the volunteer actions to be created
+  *
+  * Note: Getting room and granter info from the database for security reasons
+  **/
 
-const create = ({conn}, donation) => {
-  const donationObj = Object.assign({}, donation, {createdAt: new Date(), updatedAt: new Date()})
-  return donationsTable.insert(templateObj).run(conn)
-    .then(res => Object.assign({}, templateObj, {id: res.generated_keys[0]}))
-}
+const create = ({conn}, donation) =>
+  db.table('nametags')
+     .getAll(donation.nametag)
+     .eqJoin(n => n('room'), db.table('rooms'))
+     .zip()
+     .pluck('room', 'granter')
+     .nth(0)
+     .do(res => {
+       donationsTable.insert(
+           res.merge(donation)
+           .merge({
+             createdAt: new Date(),
+             updatedAt: new Date()
+           })
+         )
+     })
+     .then(res => ({id: res.generated_keys[0]}))
 
 module.exports = (context) => ({
   Donations: {

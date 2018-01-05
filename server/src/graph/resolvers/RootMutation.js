@@ -274,6 +274,18 @@ const RootMutation = {
     resolve: (obj, {messageId}, {models: {Messages}}) =>
       Messages.acceptBadge(messageId)
       .then(wrapResponse('badge'))
+  },
+  createVolActions: {
+    requires: 'MY_NAMETAG',
+    resolve: (obj, {volActions}, {user, models: {VolActions}}) =>
+      VolActions.createArray(volActions)
+      .then(wrapResponse('volActions'))
+  },
+  createDonation: {
+    requires: 'MY_NAMETAG',
+    resolve: (obj, {donation}, {user, models: {Donations}}) =>
+      Donations.create(donation)
+      .then(wrapResponse('donation'))
   }
 }
 

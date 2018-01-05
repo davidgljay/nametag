@@ -6,6 +6,8 @@ const BadgeRequest = require('./BadgeRequest')
 const Message = require('./Message')
 const Nametag = require('./Nametag')
 const User = require('./User')
+const VolAction = require('./VolAction')
+const Donation = require('./Donation')
 const RootQuery = require('./RootQuery')
 const RootMutation = require('./RootMutation')
 const RootSubscription = require('./RootSubscription')
@@ -21,6 +23,8 @@ module.exports = {
   Message,
   Nametag,
   User,
+  Donation,
+  VolAction,
   RootQuery,
   RootMutation,
   RootSubscription
