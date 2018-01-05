@@ -66,11 +66,12 @@ class NTIconMenu extends Component {
     } else {
       render = <IconMenu
         iconButtonElement={
-          <IconButton style={styles.buttonStyle} iconStyle={styles.image}>
+          <div style={styles.buttonStyle}>
             <div style={{
+              ...styles.image,
               background: `url(${image}) center center / cover no-repeat`
             }} />
-          </IconButton>
+          </div>
         }
         anchorOrigin={{horizontal: 'left', vertical: 'top'}}
         targetOrigin={{horizontal: 'left', vertical: 'top'}}
