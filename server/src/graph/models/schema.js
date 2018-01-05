@@ -43,5 +43,11 @@ module.exports = {
   },
   modActions: {
     indexes: [{name: 'granterStatus', fields: ['granter', 'status']}]
+  },
+  volActions: {
+    indexes: ['room', 'granter']
+  },
+  donations: {
+    indexes: ['room', 'granter']
   }
 }

@@ -114,6 +114,18 @@ type Room {
 
   # Indicates whether a room is closed
   closed: Boolean
+
+  # Volunteer action types for this room
+  actionTypes: [ActionType]
+
+  # Text for a call to action for this room
+  ctaText: String
+
+  # Image for a call to action for this room
+  ctaImage: String
+
+  # Text for thanking participants when they have taken action
+  thankText: String
 }
 
 # A topic of discussion in a room
@@ -260,6 +272,17 @@ type Note {
 
 }
 
+# A type of volunteer action selectable by a granter
+type ActionType {
+
+  # The title of the action
+  title: String!
+
+  # Description of the action
+  desc: String!
+
+}
+
 # A verified component of a user's identity
 type Template {
   # The ID of the badge
@@ -329,6 +352,18 @@ type Granter {
 
   # Stripe account id for payment processing
   stripe: String
+
+  # Default action types for this granter
+  defaultActionTypes: [ActionType]
+
+  # Default image for calls to action
+  defaultCtaText: String
+
+  # Default image for calls to action
+  defaultCtaImage: String
+
+  # Default thanking text for calls to action
+  defaultThankText: String
 
 }
 
@@ -403,6 +438,50 @@ type ModAlert implements GranterNotification {
   # An optional note from the Moderator
   note: String
 
+}
+
+# Indicates a volunteer taking action
+type VolAction {
+
+  # Action that the user has volunteered for
+  action: String!
+
+  # Additional note left by the user
+  note: String
+
+  # Granter that this user is volunteering for
+  granter: ID!
+
+  # The user's Nametag
+  nametag: ID!
+
+  # The users's ID
+  user: ID!
+
+  # The room where the user volunteered
+  room: ID!
+}
+
+# Created when someone donates
+type Donation {
+
+  # Amount donated
+  donation: Float!
+
+  # Additional note left by the user
+  note: String
+
+  # Granter that this user is donating to
+  granter: ID!
+
+  # The user's Nametag
+  nametag: ID!
+
+  # The users's ID
+  user: ID!
+
+  # The room where the user donated
+  room: ID!
 }
 
 # The queries available for Nametag
