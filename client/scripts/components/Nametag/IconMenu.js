@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import IconMenu from 'material-ui/IconMenu'
 import MenuItem from 'material-ui/MenuItem'
-import IconButton from 'material-ui/IconButton'
 import CircularProgress from 'material-ui/CircularProgress'
 import ImageUpload from '../../containers/Utils/ImageUploadContainer'
 
