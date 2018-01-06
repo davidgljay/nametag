@@ -44,6 +44,7 @@ const createArray = ({conn}, volActions) =>
         )
       )
     })
+    .run(conn)
     .then(res => ({ids: res.generated_keys}))
 
 module.exports = (context) => ({
