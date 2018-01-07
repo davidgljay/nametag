@@ -1,8 +1,8 @@
 // const r = require('rethinkdb')
 const {db} = require('../../db')
 // const errors = require('../../errors')
-// const notification = require('../../notifications')
-
+const notification = require('../../notifications')
+const email = require('../../email')
 const volActionsTable = db.table('volActions')
 
 /**
@@ -24,25 +24,101 @@ const get = ({conn}, id) => id ? volActionsTable.get(id).run(conn) : Promise.res
  * Note: Getting room and granter info from the database for security reasons
  **/
 
-const createArray = ({conn}, volActions) =>
- db.table('nametags')
+const createArray = ({conn, models: {Messages}}, volActions) =>
+  db.table('nametags')
     .getAll(volActions.nametag)
+    .map(n => n.merge({nametagImage: n('image')}))
     .eqJoin(n => n('room'), db.table('rooms'))
     .zip()
-    .pluck('room', 'granter')
+    .eqJoin(n => n('user'), db.table('users'))
+    .zip()
+    .pluck('room', 'granter', 'id', 'title', 'name', 'email', 'token', 'nametagImage')
     .nth(0)
-    .do(res => {
-      volActionsTable.insert(
+    .run(conn)
+    .then(({room, granter, id, title, name, token, email, nametagImage}) => {
+      const volunteerEmail = email
+      const volunteerName = name
+      const volunteerIcon = nametagIcon
+
+      const insertPromise = volActionsTable.insert(
         volActions.actions.map(action =>
-          res.merge({
+          ({
             action,
+            room,
+            granter,
             nametag: volActions.nametag,
             note: volActions.note,
             createdAt: new Date(),
             updatedAt: new Date()
           })
         )
+      ).run(conn)
+
+      const messagePromise = Messages.create({
+          room,
+          text: `*${name}* has volunteered!`
+      })
+
+      const modMessagePromise = Messages.create({
+        room,
+        text: `
+          **${name}** has volunteered to do the following:\n
+          ${volActions.actions.map(action => `* **${action}**\n`)}
+          Reach out to say thanks!
+        `,
+        recipient: mod
+      })
+
+      const emailGranterAdminsAndMod = db.table('granters')
+          .get(granterId)
+          .do(g => db.table('templates').get(g('adminTemplate')))
+          .do(t => db.table('badges').getAll(t('id'), {index: 'template'}))
+          .map(b => b('defaultNametag'))
+          .do(nametagIds => db.table('users').getAll(...nametagIds, mod, {index: 'nametags'})('email'))
+          .distinct()
+          .run(conn)
+          .then(emails => Promise.all(
+              emails.map(em => email({
+                to: em,
+                from: {
+                  name: 'Nametag',
+                  email: 'info@nametag.chat'
+                },
+                template: 'volAction',
+                params: {
+                  volunteerName,
+                  volunteerIcon,
+                  volunteerEmail,
+                  roomId: id,
+                  roomTitle: title,
+                  actions: volActions.actions
+                }
+              }))
       )
+
+      const notificationPromise = notification(
+        {
+          reason: 'VOLUNTEER',
+          params: {
+            name,
+            roomId: id,
+            roomTitle: title,
+            icon: nametagImage,
+            text: 'Click to thank them.'
+          }
+        },
+        token
+      )
+
+      return Promise.all([
+        insertPromise,
+        messagePromise,
+        modMessagePromise,
+        notificationPromise,
+        emailGranterAdminsAndMod
+      ])
+    })
+    .do(res => {
     })
     .run(conn)
     .then(res => ({ids: res.generated_keys}))
