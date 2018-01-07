@@ -12,6 +12,7 @@ const Room = {
         : Messages.getRoomMessages(id, user.nametags[id])
       )
   },
+  actionTypes: ({actionTypes}) => actionTypes ? actionTypes : [],
   nametags: ({id}, _, {user, models: {Nametags}}) => Nametags.getRoomNametags(id),
   nametagCount: ({id}, _, {models: {Nametags}}) => Nametags.getNametagCount(id),
   newNametagCount: ({id}, _, {user, models: {Nametags}}) =>

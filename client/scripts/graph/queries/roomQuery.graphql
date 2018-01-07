@@ -10,13 +10,20 @@ query roomQuery($id: ID!){
     welcome
     topic
     closed
+    modOnlyDMs
+    ctaText
+    ctaImage
+    thankText
+    actionTypes {
+      title
+      desc
+    }
     templates {
       id
       image
       name
       description
     }
-    modOnlyDMs
     mod {
       id
       name
@@ -30,6 +37,7 @@ query roomQuery($id: ID!){
       id
       name
       image
+      stripe
     }
     nametags {
       ...nametagView

@@ -5,6 +5,7 @@ import AppBar from 'material-ui/AppBar'
 import RoomDialog from './RoomDialog'
 import radium, {keyframes} from 'radium'
 import Messages from '../Message/Messages'
+import VolActionDialog from '../VolAction/VolActionDialog'
 import ComposeWithMenus from '../Message/ComposeWithMenus'
 
 import {getQueryVariable, removeQueryVar} from '../../utils/queryVars'
@@ -26,6 +27,7 @@ class Room extends Component {
       presenceTime: null,
       defaultMessage: '',
       keepLoading: false,
+      showVolDialog: false,
       nametagCreated: false,
       recipient: null,
       editing: null
@@ -174,7 +176,7 @@ class Room extends Component {
       toggleNametagImageMenu
     } = this.props
 
-    const {defaultMessage, recipient, editing, nametagCreated, keepLoading} = this.state
+    const {defaultMessage, recipient, editing, nametagCreated, keepLoading, showVolDialog} = this.state
 
     if (loading || !room || keepLoading) {
       return <div style={styles.spinner}>
@@ -186,10 +188,19 @@ class Room extends Component {
 
     const isMobile = window.innerWidth < 800
 
-    const backIcon = <img
-      id='backButton'
-      style={styles.backIcon}
-      src='https://s3.amazonaws.com/nametag_images/logo-inverted30.png' />
+    const showCallToAction = room.granter &&
+      room.granter.stripe &&
+      room.actionTypes.length > 0
+
+    const leftIcon = showCallToAction
+      ? <img
+        id='volActionButton'
+        style={styles.backIcon}
+        src='https://s3.amazonaws.com/nametag_images/site/jointhefight.png' />
+      : <img
+        id='backButton'
+        style={styles.backIcon}
+        src='https://s3.amazonaws.com/nametag_images/logo-inverted30.png' />
 
     return <div style={styles.roomContainer}>
       <div id='room'>
@@ -198,8 +209,11 @@ class Room extends Component {
           title={room.title}
           titleStyle={styles.title}
           style={styles.appBar}
-          iconElementRight={backIcon}
-          onRightIconButtonTouchTap={this.showRooms}
+          iconElementRight={leftIcon}
+          onRightIconButtonTouchTap={
+            showCallToAction
+            ? () => this.setState({showVolDialog: true})
+            : this.showRooms}
           onLeftIconButtonTouchTap={this.toggleLeftBar}
           iconStyleLeft={isMobile ? {display: 'inline-block'} : {display: 'none'}} />
         <div>
@@ -279,6 +293,15 @@ class Room extends Component {
           updateNametagEdit={updateNametagEdit}
           nametagEdits={nametagEdits} />
       }
+      {
+        showCallToAction &&
+        <VolActionDialog
+          granter={room.granter}
+          open={showVolDialog}
+          closeDialog={() => this.setState({showVolDialog: false})}
+          room={room}
+          nametagEdits={nametagEdits} />
+      }
     </div>
   }
 }
@@ -294,7 +317,9 @@ Room.propTypes = {
       messages: arrayOf(object),
       nametags: arrayOf(object),
       modOnlyDMs: bool,
-      closed: bool
+      closed: bool,
+      stripe: string,
+      actions: string
     }),
     me: object
   }).isRequired,
