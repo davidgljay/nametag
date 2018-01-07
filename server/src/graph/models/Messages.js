@@ -107,8 +107,7 @@ const create = (context, m) => {
   let messageObj = Object.assign(
     {},
     m,
-    {createdAt: new Date(), reactions: []},
-    {recipient: m.recipient ? m.recipient : false}
+    {createdAt: new Date(), reactions: []}
   )
 
   const createMessagePromise = () => messagesTable.insert(messageObj).run(conn)
@@ -128,6 +127,15 @@ const create = (context, m) => {
       messageObj = Object.assign({}, message, updates)
       return messageObj
     })
+
+  if (m.recipient) {
+    return createMessagePromise()
+      .then(() => Promise.all([
+        dmMentionNotif(messageObj, messageObj.recipient, 'DM'),
+        dmMentionEmail(messageObj, messageObj.recipient, 'dm')
+      ]))
+      .then(() => messageObj)
+  }
 
   if (m.parent) {
     return createMessagePromise()
@@ -189,7 +197,7 @@ const editMessage = (context, messageId, text) =>
  **/
 
 const emailIfReply = ({conn, user}, msg) =>
-   msg.parent
+   msg.parent && (msg.author || msg.nametag)
    ? messagesTable.getAll(msg.parent)
     .union(messagesTable.getAll(msg.parent, {index: 'parent'}))
     .map(message => message.merge({
@@ -267,8 +275,8 @@ const checkMentions = (context, message) => {
           newText = newText.replace(new RegExp(`@${name}+`, 'g'), (mention) => `*${mention}*`)
           promises.push(
               Nametags.addMention(id)
-              .then(() => mentionNotif(context, id, message, 'MENTION'))
-              .then(() => mentionEmail(context, id, message))
+              .then(() => dmMentionNotif(context, id, message, 'MENTION'))
+              .then(() => dmMentionEmail(context, id, message, 'mention'))
             )
         }
       }
@@ -370,9 +378,9 @@ const checkForCommands = ({user, models: {Rooms, Nametags, Users}}, message) => 
  *
  **/
 
-const mentionNotif = ({models: {Users, Rooms, Nametags}}, to, message, reason) =>
+const dmMentionNotif = ({models: {Users, Rooms, Nametags}}, to, message, reason) =>
   Promise.all([
-    Users.getTokens(message.author),
+    Users.getTokens(to),
     Rooms.get(message.room),
     Nametags.get(message.author),
     message
@@ -391,47 +399,51 @@ const mentionNotif = ({models: {Users, Rooms, Nametags}}, to, message, reason) =
     : null
   )
 
-  /**
-   * Sends an email based on a mention
-   *
-   * @param {Object} context     graph context
-   * @param {String} id        the nametag id of the user being mentioned
-   * @param {Object} message   the message to be checked
-   *
-   **/
+/**
+ * Sends an email based on a mention
+ *
+ * @param {Object} context     graph context
+ * @param {String} id        the nametag id of the user being mentioned
+ * @param {Object} message   the message to be checked
+ *
+ **/
 
-const mentionEmail = ({models: {Rooms, Users, Nametags}}, id, message) =>
-     Promise.all([
-       Users.getByNametag(id),
-       Rooms.get(message.room),
-       Nametags.get(message.author),
-       message
-     ])
-     .then(([user, room, author, message]) =>
-     user.email && !user.unsubscribe.all && !user.unsubscribe[room.id]
-     ? email({
-       to: user.email,
-       from: {name: 'Nametag', email: 'noreply@nametag.chat'},
-       template: 'mention',
-       params: {
-         roomId: room.id,
-         roomName: room.title,
-         message: message.text,
-         author: author.name
-       }
-     })
-        : null
-      )
+const dmMentionEmail = ({models: {Rooms, Users, Nametags}}, id, message, template) => {
+  if (!message.author) {
+    return
+  }
+  Promise.all([
+    Users.getByNametag(id),
+    Rooms.get(message.room),
+    Nametags.get(message.author),
+    message
+  ])
+  .then(([user, room, author, message]) =>
+  user.email && !user.unsubscribe.all && !user.unsubscribe[room.id]
+  ? email({
+    to: user.email,
+    from: {name: 'Nametag', email: 'noreply@nametag.chat'},
+    template,
+    params: {
+      roomId: room.id,
+      roomName: room.title,
+      message: message.text,
+      author: author.name
+    }
+  })
+     : null
+ )
+}
 
-  /**
-   * Adds an emoji reaction to a message
-   *
-   * @param {Object} context     graph context
-   * @param {String} messageId   the message being reacted to
-   * @param {String} emoji      the emoji of the reaction
-   * @param {String} nametagId  the id of the nametag who created the reaction
-   *
-   **/
+/**
+ * Adds an emoji reaction to a message
+ *
+ * @param {Object} context     graph context
+ * @param {String} messageId   the message being reacted to
+ * @param {String} emoji      the emoji of the reaction
+ * @param {String} nametagId  the id of the nametag who created the reaction
+ *
+ **/
 
 const addReaction = ({conn}, messageId, emoji, nametagId) =>
   messagesTable.get(messageId)

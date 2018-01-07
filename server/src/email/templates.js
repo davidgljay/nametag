@@ -2,6 +2,7 @@ const passwordReset = require('./password-reset')
 const emailConfirm = require('./email-confirm')
 const badgeRequest = require('./badge-request')
 const mention = require('./mention')
+const dm = require('./dm')
 const reply = require('./reply')
 const announcement = require('./announcement')
 const publicRoom = require('./public-room')
@@ -16,6 +17,7 @@ module.exports = {
   badgeRequest,
   mention,
   reply,
+  dm,
   publicRoom,
   roomApproval,
   hashLogin,
