@@ -686,10 +686,10 @@ input CreateGranterInput {
 
 }
 
-input CreateVolActionInput {
+input CreateVolActionsInput {
 
   # Actions that the user is volunteering for
-  actions: [String!]
+  actions: [String]
 
   # The user's Nametag
   nametag: ID!
@@ -701,8 +701,8 @@ input CreateVolActionInput {
 
 input CreateDonationInput {
 
-  # Actions that the user is volunteering for
-  amount: Float!
+  # Amount that the user donated
+  # amount: Int!
 
   # The user's Nametag
   nametag: ID!
@@ -773,7 +773,7 @@ type CreateGranterResponse implements Response {
 # Basic Response including only errors
 type BasicResponse implements Response {
 
-  #Optionally, include an id of a newly created object
+  # Optionally, include an id of a newly created object
   id: ID
 
   # An array of errors relating to the mutation that occurred.
@@ -784,7 +784,7 @@ type BasicResponse implements Response {
 # Basic Response including only errors
 type ArrayResponse implements Response {
 
-  #Optionally, include an array of ids of newly created objects
+  # Optionally, include an array of ids of newly created objects
   ids: [ID]
 
   # An array of errors relating to the mutation that occurred.
@@ -865,10 +865,10 @@ type RootMutation {
   acceptBadge(messageId: ID!): CreateBadgeResponse
 
   # Creates a volunteer action
-  createVolActions:(volActions: CreateVolActionsInput): ArrayResponse
+  createVolActions(volActions: CreateVolActionsInput): ArrayResponse
 
   # Creates a donation
-  createDonation:(donation: CreateDonationInput): BasicResponse
+  createDonation(donation: CreateDonationInput): BasicResponse
 
 }
 

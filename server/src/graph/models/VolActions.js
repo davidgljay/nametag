@@ -2,7 +2,7 @@
 const {db} = require('../../db')
 // const errors = require('../../errors')
 const notification = require('../../notifications')
-const email = require('../../email')
+const sendEmail = require('../../email')
 const volActionsTable = db.table('volActions')
 
 /**
@@ -32,13 +32,13 @@ const createArray = ({conn, models: {Messages}}, volActions) =>
     .zip()
     .eqJoin(n => n('user'), db.table('users'))
     .zip()
-    .pluck('room', 'granter', 'id', 'title', 'name', 'email', 'token', 'nametagImage')
+    .pluck('room', 'mod', 'granter', 'id', 'title', 'name', 'email', 'token', 'nametagIcon')
     .nth(0)
     .run(conn)
-    .then(({room, granter, id, title, name, token, email, nametagImage}) => {
+    .then(({room, mod, granter, id, title, name, token, email, nametagImage}) => {
       const volunteerEmail = email
       const volunteerName = name
-      const volunteerIcon = nametagIcon
+      const volunteerImage = nametagImage
 
       const insertPromise = volActionsTable.insert(
         volActions.actions.map(action =>
@@ -55,8 +55,8 @@ const createArray = ({conn, models: {Messages}}, volActions) =>
       ).run(conn)
 
       const messagePromise = Messages.create({
-          room,
-          text: `*${name}* has volunteered!`
+        room,
+        text: `*${name}* has volunteered!`
       })
 
       const modMessagePromise = Messages.create({
@@ -70,7 +70,7 @@ const createArray = ({conn, models: {Messages}}, volActions) =>
       })
 
       const emailGranterAdminsAndMod = db.table('granters')
-          .get(granterId)
+          .get(granter)
           .do(g => db.table('templates').get(g('adminTemplate')))
           .do(t => db.table('badges').getAll(t('id'), {index: 'template'}))
           .map(b => b('defaultNametag'))
@@ -78,7 +78,7 @@ const createArray = ({conn, models: {Messages}}, volActions) =>
           .distinct()
           .run(conn)
           .then(emails => Promise.all(
-              emails.map(em => email({
+              emails.map(em => sendEmail({
                 to: em,
                 from: {
                   name: 'Nametag',
@@ -87,13 +87,14 @@ const createArray = ({conn, models: {Messages}}, volActions) =>
                 template: 'volAction',
                 params: {
                   volunteerName,
-                  volunteerIcon,
+                  volunteerImage,
                   volunteerEmail,
                   roomId: id,
                   roomTitle: title,
                   actions: volActions.actions
                 }
               }))
+            )
       )
 
       const notificationPromise = notification(

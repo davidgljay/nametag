@@ -1,4 +1,4 @@
-module.exports = ({roomId, roomTitle, volunteerName, volunteerIcon, volunteerEmail, actions}) => ({
+module.exports = ({roomId, roomTitle, volunteerName, volunteerImage, volunteerEmail, actions}) => ({
   subject: `${volunteerName} has volunteered in ${roomTitle}`,
   txt: `${volunteerName} has volunteered to do the following:\n
   \n
@@ -16,7 +16,7 @@ module.exports = ({roomId, roomTitle, volunteerName, volunteerIcon, volunteerEma
     </td></tr>
 <tr>
     <td style="text-align: center;">
-    ${volunteerIcon ? `<div style="width: 50px; height: 50px; border-radius: 25px; background: url(${volunteerIcon})   center center / cover no-repeat;"/>` : ''}
+    ${volunteerImage ? `<div style="width: 50px; height: 50px; border-radius: 25px; background: url(${volunteerImage})   center center / cover no-repeat;"/>` : ''}
     <h2>${volunteerName} has volunteered to do the following:</h2></td>
 </tr>
 <tr>
