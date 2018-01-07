@@ -128,7 +128,7 @@ const create = (context, m) => {
       return messageObj
     })
 
-  if (m.recipient) {
+  if (m.recipient && m.author) {
     return createMessagePromise()
       .then(() => Promise.all([
         dmMentionNotif(messageObj, messageObj.recipient, 'DM'),
@@ -408,10 +408,7 @@ const dmMentionNotif = ({models: {Users, Rooms, Nametags}}, to, message, reason)
  *
  **/
 
-const dmMentionEmail = ({models: {Rooms, Users, Nametags}}, id, message, template) => {
-  if (!message.author) {
-    return
-  }
+const dmMentionEmail = ({models: {Rooms, Users, Nametags}}, id, message, template) =>
   Promise.all([
     Users.getByNametag(id),
     Rooms.get(message.room),
@@ -433,7 +430,6 @@ const dmMentionEmail = ({models: {Rooms, Users, Nametags}}, id, message, templat
   })
      : null
  )
-}
 
 /**
  * Adds an emoji reaction to a message
