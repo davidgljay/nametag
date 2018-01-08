@@ -19,14 +19,16 @@ const get = ({conn}, id) => id ? volActionsTable.get(id).run(conn) : Promise.res
  * Creates a vol action
  *
  * @param {Object} context     graph context
- * @param {Array} volActions   the volunteer actions to be created
+ * @param {Array} actions   the volunteer actions to be created
+ * @param {String} nametagId the id of the nametag of the person who is volunteering
+ * @param {String} note      an optional note from the user
  *
  * Note: Getting room and granter info from the database for security reasons
  **/
 
-const createArray = ({conn, models: {Messages}}, volActions) =>
+const createArray = ({conn, models: {Messages}}, actions, nametagId, note) =>
   db.table('nametags')
-    .getAll(volActions.nametag)
+    .getAll(nametagId)
     .map(n => n.merge({nametagImage: n('image')}))
     .eqJoin(n => n('room'), db.table('rooms'))
     .zip()
@@ -41,13 +43,13 @@ const createArray = ({conn, models: {Messages}}, volActions) =>
       const volunteerImage = nametagImage
 
       const insertPromise = volActionsTable.insert(
-        volActions.actions.map(action =>
+        actions.map(action =>
           ({
             action,
             room,
             granter,
-            nametag: volActions.nametag,
-            note: volActions.note,
+            nametag: nametagId,
+            note,
             createdAt: new Date(),
             updatedAt: new Date()
           })
@@ -59,13 +61,13 @@ const createArray = ({conn, models: {Messages}}, volActions) =>
         text: `*${name}* has volunteered!`
       })
 
+      let messageText = `**${name}** has volunteered to do the following:\n\n`
+      messageText += `${actions.map(action => `**${action}**\n\n`)}`
+      messageText += 'Reach out to say thanks!'
+
       const modMessagePromise = Messages.create({
         room,
-        text: `
-          **${name}** has volunteered to do the following:\n
-          ${volActions.actions.map(action => `* **${action}**\n`)}
-          Reach out to say thanks!
-        `,
+        text: messageText,
         recipient: mod
       })
 
@@ -74,11 +76,13 @@ const createArray = ({conn, models: {Messages}}, volActions) =>
           .do(g => db.table('templates').get(g('adminTemplate')))
           .do(t => db.table('badges').getAll(t('id'), {index: 'template'}))
           .map(b => b('defaultNametag'))
-          .do(nametagIds => db.table('users').getAll(...nametagIds, mod, {index: 'nametags'})('email'))
+          .map(nametagId => db.table('users').getAll(nametagId, {index: 'nametags'})('email').nth(0))
+          .union(db.table('users').getAll(mod, {index: 'nametags'})('email'))
           .distinct()
           .run(conn)
           .then(emails => Promise.all(
-              emails.map(em => sendEmail({
+              emails.map(em =>
+                sendEmail({
                 to: em,
                 from: {
                   name: 'Nametag',
@@ -91,7 +95,7 @@ const createArray = ({conn, models: {Messages}}, volActions) =>
                   volunteerEmail,
                   roomId: id,
                   roomTitle: title,
-                  actions: volActions.actions
+                  actions: actions
                 }
               }))
             )
@@ -119,14 +123,11 @@ const createArray = ({conn, models: {Messages}}, volActions) =>
         emailGranterAdminsAndMod
       ])
     })
-    .do(res => {
-    })
-    .run(conn)
     .then(res => ({ids: res.generated_keys}))
 
 module.exports = (context) => ({
   VolActions: {
     get: (id) => get(context, id),
-    createArray: volActions => createArray(context, volActions)
+    createArray: (actions, nametagId, note) => createArray(context, actions, nametagId, note)
   }
 })

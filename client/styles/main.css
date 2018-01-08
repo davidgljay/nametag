@@ -31,7 +31,7 @@ input:focus {
 }
 
 .messageText p {
-  display: inline;
+  /*display: inline;*/
 }
 
 .messageText blockquote {

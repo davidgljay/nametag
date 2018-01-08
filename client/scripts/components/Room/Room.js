@@ -172,6 +172,7 @@ class Room extends Component {
       setVisibleReplies,
       setBadgeToGrant,
       acceptBadge,
+      createVolActions,
       showNametagImageMenu,
       toggleNametagImageMenu
     } = this.props
@@ -300,6 +301,8 @@ class Room extends Component {
           open={showVolDialog}
           closeDialog={() => this.setState({showVolDialog: false})}
           room={room}
+          myNametagId={myNametag.id}
+          createVolActions={createVolActions}
           nametagEdits={nametagEdits} />
       }
     </div>

@@ -17,12 +17,10 @@ class VolActionDialog extends Component {
       singedUp: false
     }
 
-    this.addAction = (action) => () => {
-      console.log(action)
+    this.addAction = (action) => () =>
       this.setState({
         checkedActions: this.state.checkedActions.concat(action.title)
       })
-    }
 
     this.removeAction = (action) => () => this.setState(prevState => {
       const index = prevState.checkedActions.indexOf(action.title)
@@ -31,6 +29,13 @@ class VolActionDialog extends Component {
         .concat(prevState.checkedActions.slice(index + 1))
       return prevState
     })
+
+    this.onSignupClick = () => {
+      const {checkedActions} = this.state
+      const {createVolActions, myNametagId} = this.props
+      createVolActions(checkedActions, myNametagId, null)
+        .then(this.setState({signedUp: true}))
+    }
   }
 
   render () {
@@ -97,6 +102,7 @@ class VolActionDialog extends Component {
         <div style={styles.buttonContainer}>
           <RaisedButton
             primary
+            onClick={this.onSignupClick}
             label='SIGN ME UP!' />
         </div>
       </Dialog>
@@ -122,7 +128,8 @@ VolActionDialog.propTypes = {
     }).isRequired
   }),
   closeDialog: func.isRequired,
-  createVolActions: func.isRequired
+  createVolActions: func.isRequired,
+  myNametagId: string.isRequired
 }
 
 export default VolActionDialog

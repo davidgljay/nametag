@@ -22,6 +22,7 @@ import ADD_NOTE from './addNote.graphql'
 import APPROVE_ROOM from './approveRoom.graphql'
 import BAN_NAMETAG from './banNametag.graphql'
 import ACCEPT_BADGE from './acceptBadge.graphql'
+import CREATE_VOL_ACTIONS from './createVolActions.graphql'
 import errorLog from '../../utils/errorLog'
 
 export const createRoom = graphql(CREATE_ROOM, {
@@ -60,6 +61,18 @@ export const updateToken = graphql(UPDATE_TOKEN, {
     updateToken: (token) => mutate({
       variables: {
         token
+      }
+    })
+  })
+})
+
+export const createVolActions = graphql(CREATE_VOL_ACTIONS, {
+  props: ({ownProps, mutate}) => ({
+    createVolActions: (actions, nametagId, note) => mutate({
+      variables: {
+        actions,
+        nametagId,
+        note
       }
     })
   })

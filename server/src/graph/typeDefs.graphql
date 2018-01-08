@@ -865,7 +865,7 @@ type RootMutation {
   acceptBadge(messageId: ID!): CreateBadgeResponse
 
   # Creates a volunteer action
-  createVolActions(volActions: CreateVolActionsInput): ArrayResponse
+  createVolActions(actions: [String!]!, nametagId: ID!, note: String): ArrayResponse
 
   # Creates a donation
   createDonation(donation: CreateDonationInput): BasicResponse

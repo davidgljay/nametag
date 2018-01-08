@@ -277,8 +277,8 @@ const RootMutation = {
   },
   createVolActions: {
     requires: 'MY_NAMETAG',
-    resolve: (obj, {volActions}, {user, models: {VolActions}}) =>
-      VolActions.createArray(volActions)
+    resolve: (obj, {actions, nametagId, note}, {user, models: {VolActions}}) =>
+      VolActions.createArray(actions, nametagId, note)
       .then(wrapResponse('volActions'))
   },
   createDonation: {

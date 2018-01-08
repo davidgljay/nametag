@@ -1,0 +1,9 @@
+mutation CreateVolActions($actions: [String!]!, $nametagId: ID!, $note: String) {
+  createVolActions(actions: $actions, nametagId: $nametagId, note: $note) {
+    ids
+    errors {
+      translation_key
+      message
+    }
+  }
+}

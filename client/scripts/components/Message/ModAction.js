@@ -72,7 +72,7 @@ class ModAction extends Component {
         : t('mod_action.report')
       message += `\n> ${text}\n`
       message += `${checkedNorms.reduce((msg, norm) => `${msg}* **${norm}** \n`, '')}\n`
-      message += `*${note}*`
+      message += note ? `*${note}*` : ''
       let modAction = {
         text: message,
         author: myNametag.id,
