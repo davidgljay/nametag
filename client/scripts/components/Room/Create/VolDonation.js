@@ -55,6 +55,15 @@ class VolDonation extends Component {
       })
   }
 
+  componentDidMount () {
+    const {updateRoom, granters} = this.props
+    const {actionTypes} = this.state
+    const granter = granters[0]
+    updateRoom('actionTypes', actionTypes)
+    updateRoom('ctaImage', granter.defaultCtaImages[0] || granter.image)
+    updateRoom('ctaText', granter.defaultCtaText)
+  }
+
   render () {
     const {granters, room, email, updateRoom} = this.props
     const {showImageMenu, actionTypes} = this.state
@@ -94,7 +103,7 @@ class VolDonation extends Component {
               about='room'
               showMenu={showImageMenu}
               toggleNametagImageMenu={(open) => this.setState({showImageMenu: open})}
-              updateNametag={this.onImageUpload} />
+              updateNametagEdit={this.onImageUpload} />
             <TextField
               id='ctaText'
               value={room.ctaText || granter.defaultCtaText || granter.description}
