@@ -156,16 +156,19 @@ class CreateRoom extends Component {
   }
 
   componentDidMount () {
-    const {location: {state: locationState}} = this.props
+    const {location: {state: locationState}, nametagEdits, updateNametagEdit} = this.props
     const title = locationState && locationState.title
     const stepIndex = getQueryVariable('step')
     if (stepIndex) {
       this.setState({stepIndex: parseInt(stepIndex)})
     }
-    this.props.updateNametagEdit('new', 'image', '')
-    this.props.updateNametagEdit('new', 'name', '')
-    this.props.updateNametagEdit('new', 'bio', '')
-    this.props.updateNametagEdit('new', 'badges', [])
+    if (!nametagEdits.new) {
+      updateNametagEdit('new', 'image', '')
+      updateNametagEdit('new', 'name', '')
+      updateNametagEdit('new', 'bio', '')
+      updateNametagEdit('new', 'badges', [])
+    }
+
     if (title) {
       this.updateRoom('title', title)
       track('CREATE_ROOM_VIEW', {title})
