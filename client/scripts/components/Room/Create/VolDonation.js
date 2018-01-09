@@ -63,6 +63,9 @@ class VolDonation extends Component {
     if (!room.ctaText) {
       updateRoom('ctaText', granter.defaultCtaText)
     }
+    if (!room.thankText) {
+      updateRoom('thankText', t('create_room.cta.thanks'))
+    }
   }
 
   render () {
