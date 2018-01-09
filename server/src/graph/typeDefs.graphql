@@ -360,7 +360,7 @@ type Granter {
   defaultCtaText: String
 
   # Default image for calls to action
-  defaultCtaImage: String
+  defaultCtaImages: [String]
 
   # Default thanking text for calls to action
   defaultThankText: String

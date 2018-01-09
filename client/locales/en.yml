@@ -124,6 +124,15 @@ en:
       - What brings you to this conversation?
       - Why are you interested in this topic?
       - Briefly share your background.
+    cta:
+      add_call: Add A Call To Action
+      add_call_header: Optionally enable a call to action for participants to volunteer and donate
+      enable_call: Enable call to action for
+      personal: Add a personal appeal
+      actions_avail: What actions should be available?
+      add_action: ADD ACTION
+      donation_enabled: Donations are enabled
+      enable_donation: Enable Donations
     talking: Get People Talking
     welcome_start: Start by choosing a welcome prompt.
     welcome_helptext: Users will be asked this question when they enter the room.

@@ -3,10 +3,20 @@
 query userQuery {
   me {
     id
+    email
     granters {
       id
       name
+      image
+      description
+      defaultCtaText
+      defaultCtaImages
+      defaultActionTypes {
+        title
+        desc
+      }
       urlCode
+      stripe
     }
     displayNames
     images

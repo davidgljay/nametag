@@ -6,6 +6,7 @@ import Login from '../../../containers/User/LoginContainer'
 import ChooseNorms from './ChooseNorms'
 import Toggle from 'material-ui/Toggle'
 import RoomCard from '../RoomCard'
+import VolDonation from './VolDonation'
 import {track} from '../../../utils/analytics'
 import {grey} from '../../../../styles/colors'
 import t from '../../../utils/i18n'
@@ -34,6 +35,29 @@ const getForm = ({
     addNorm,
     removeNorm
   }) => {
+  const doneScreen = <div style={styles.container}>
+    <div style={styles.preview}>
+      <RoomCard room={{...room, mod: nametagEdits.new}} disabled />
+    </div>
+    <h2>{t('create_room.done')}</h2>
+    <div style={styles.privacyContainer}>
+      <Toggle
+        style={styles.toggleStyle}
+        label={room.public ? t('create_room.room_pub_on') : t('create_room.room_pub_off')}
+        toggled={room.public}
+        labelStyle={{textAlign: 'left'}}
+        thumbStyle={{backgroundColor: grey}}
+        onToggle={(e, isChecked) => updateRoom('public', isChecked)} />
+      <div style={styles.helpText}>
+        {
+          room.public
+          ? t('create_room.room_pub_on_help')
+          : t('create_room.room_pub_off_help')
+        }
+      </div>
+    </div>
+  </div>
+
   switch (stepIndex) {
     case 0:
       return <div>
@@ -77,28 +101,15 @@ const getForm = ({
       </div>
     case 3:
       track('HOST_INTRO')
-      return <div style={styles.container}>
-        <div style={styles.preview}>
-          <RoomCard room={{...room, mod: nametagEdits.new}} disabled />
-        </div>
-        <h2>{t('create_room.done')}</h2>
-        <div style={styles.privacyContainer}>
-          <Toggle
-            style={styles.toggleStyle}
-            label={room.public ? t('create_room.room_pub_on') : t('create_room.room_pub_off')}
-            toggled={room.public}
-            labelStyle={{textAlign: 'left'}}
-            thumbStyle={{backgroundColor: grey}}
-            onToggle={(e, isChecked) => updateRoom('public', isChecked)} />
-          <div style={styles.helpText}>
-            {
-              room.public
-              ? t('create_room.room_pub_on_help')
-              : t('create_room.room_pub_off_help')
-            }
-          </div>
-        </div>
-      </div>
+      return me.granters
+      ? <VolDonation
+        granters={me.granters}
+        room={room}
+        email={me.email}
+        updateRoom={updateRoom} />
+      : doneScreen
+    case 4:
+      return doneScreen
     default:
       return 'Something has gone wrong!'
   }

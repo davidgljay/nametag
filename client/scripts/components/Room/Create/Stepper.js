@@ -7,7 +7,7 @@ import {
 import t from '../../../utils/i18n'
 
 const display = window.innerWidth < 650 ? {display: 'none'} : {}
-const CreateRoomStepper = ({stepIndex, loggedIn}) => <Stepper
+const CreateRoomStepper = ({stepIndex, loggedIn, hasGranters}) => <Stepper
   activeStep={stepIndex}
   orientation='horizontal'
   style={display}>
@@ -27,8 +27,18 @@ const CreateRoomStepper = ({stepIndex, loggedIn}) => <Stepper
     <StepLabel>{t('create_room.stepper')[3]}</StepLabel>
   </Step>
   <Step>
-    <StepLabel>{t('create_room.stepper')[4]}</StepLabel>
+    {
+      hasGranters
+      ? <StepLabel>Choose Calls To Action</StepLabel>
+      : <StepLabel>{t('create_room.stepper')[4]}</StepLabel>
+    }
   </Step>
+  {
+    hasGranters &&
+    <Step>
+      <StepLabel>{t('create_room.stepper')[4]}</StepLabel>
+    </Step>
+  }
 </Stepper>
 
 export default CreateRoomStepper

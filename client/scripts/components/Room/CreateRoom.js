@@ -20,7 +20,8 @@ class CreateRoom extends Component {
       room: {
         templates: [],
         welcome: '',
-        public: true
+        public: true,
+        actionTypes: []
       },
       image: '',
       norms: {},
@@ -202,7 +203,7 @@ class CreateRoom extends Component {
         me={me}
         toggleLogin={() => {}} />
       <div style={styles.title}>
-        <Stepper stepIndex={stepIndex} loggedIn={!!me} />
+        <Stepper stepIndex={stepIndex} loggedIn={!!me} hasGranters={me && me.granters} />
       </div>
       <div style={styles.createRoom}>
         {
