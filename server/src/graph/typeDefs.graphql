@@ -535,6 +535,18 @@ input CreateRoomInput {
   # Indicates whether the room should be displayed on the homepage and in searches
   public: Boolean!
 
+  # Call to action text
+  ctaText: String
+
+  # Call to action image
+  ctaImage: String
+
+  # Text thanking volunteers
+  thankText: String
+
+  # Volunteer actions available for this room
+  actionTypes: [ActionType]
+
 }
 
 # Input required in order to create a message
