@@ -133,6 +133,8 @@ en:
       add_action: ADD ACTION
       donation_enabled: Donations are enabled
       enable_donation: Enable Donations
+      thanks: Thank You!
+      thank_header: Thank participants for taking action
     talking: Get People Talking
     welcome_start: Start by choosing a welcome prompt.
     welcome_helptext: Users will be asked this question when they enter the room.

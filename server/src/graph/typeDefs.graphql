@@ -545,8 +545,14 @@ input CreateRoomInput {
   thankText: String
 
   # Volunteer actions available for this room
-  actionTypes: [ActionType]
+  actionTypes: [ActionTypeInput]
 
+}
+
+input ActionTypeInput {
+  title: String
+
+  desc: String
 }
 
 # Input required in order to create a message

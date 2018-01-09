@@ -16,8 +16,7 @@ class VolDonation extends Component {
     super(props)
 
     this.state = {
-      showImageMenu: false,
-      actionTypes: this.props.granters[0].defaultActionTypes
+      showImageMenu: false
     }
 
     this.selectGranter = (e, i, granterId) => {
@@ -32,41 +31,43 @@ class VolDonation extends Component {
       this.props.updateRoom('ctaImage', url)
 
     this.updateActionType = (index, type) => (e, value) => {
-      const {updateRoom} = this.props
-      const {actionTypes} = this.state
+      const {updateRoom, room: {actionTypes}} = this.props
       const newActionTypes = actionTypes.slice()
-      actionTypes[index] = {
+      newActionTypes[index] = {
         ...actionTypes[index],
         [type]: value
       }
-      this.setState({actionTypes: newActionTypes})
       updateRoom('actionTypes', newActionTypes)
     }
 
-    this.addActionType = () =>
-      this.setState({
-        actionTypes: this.state.actionTypes.concat({})
-      })
+    this.addActionType = () => {
+      const {updateRoom, room: {actionTypes}} = this.props
+      updateRoom('actionTypes', actionTypes.concat({__typename: 'ActionType'}))
+    }
 
-    this.removeActionType = (i) => () =>
-      this.setState({
-        actionTypes: this.state.actionTypes.slice(0, i)
-          .concat(this.state.actionTypes.slice(i + 1))
-      })
+    this.removeActionType = (i) => () => {
+      const {updateRoom, room: {actionTypes}} = this.props
+      updateRoom('actionTypes', actionTypes.slice(0, i).concat(actionTypes.slice(i + 1)))
+    }
   }
 
   componentDidMount () {
-    const {updateRoom, granters} = this.props
-    const {actionTypes} = this.state
+    const {updateRoom, granters, room} = this.props
     const granter = granters[0]
-    updateRoom('actionTypes', actionTypes)
-    updateRoom('ctaImage', granter.defaultCtaImages[0] || granter.image)
-    updateRoom('ctaText', granter.defaultCtaText)
+    if (!room.actionTypes) {
+      updateRoom('actionTypes', granter.defaultActionTypes)
+    }
+    if (!room.ctaImage) {
+      updateRoom('ctaImage', granter.defaultCtaImages[0] || granter.image)
+    }
+    if (!room.ctaText) {
+      updateRoom('ctaText', granter.defaultCtaText)
+    }
   }
 
   render () {
     const {granters, room, email, updateRoom} = this.props
-    const {showImageMenu, actionTypes} = this.state
+    const {showImageMenu} = this.state
     const granter = granters.find(g => g.id === room.granter)
 
     let stripeUrl
@@ -98,8 +99,8 @@ class VolDonation extends Component {
           <div style={styles.header}>{t('create_room.cta.personal')}</div>
           <div style={styles.ctaContainer}>
             <NTIconMenu
-              image={granter.defaultCtaImages[0] || granter.image}
-              images={[granter.image].concat(granter.defaultCtaImages)}
+              image={room.ctaImage || granter.defaultCtaImages[0] || granter.image}
+              images={[room.ctaImage].concat(granter.defaultCtaImages)}
               about='room'
               showMenu={showImageMenu}
               toggleNametagImageMenu={(open) => this.setState({showImageMenu: open})}
@@ -111,11 +112,20 @@ class VolDonation extends Component {
               onChange={(e, val) => updateRoom('ctaText', val)}
               rows={2} />
           </div>
+          <div style={styles.header}>{t('create_room.cta.thank_header')}</div>
+          <div style={styles.ctaContainer}>
+            <TextField
+              id='thankText'
+              value={room.thankText || t('create_room.cta.thanks')}
+              multiLine
+              onChange={(e, val) => updateRoom('thankText', val)}
+              rows={2} />
+          </div>
           <div>
             <div style={styles.header}>{t('create_room.cta.actions_avail')}</div>
             <div>
               {
-                actionTypes.map((actionType, i) => <div key={i} style={styles.actionTypeContainer}>
+                room.actionTypes.map((actionType, i) => <div key={i} style={styles.actionTypeContainer}>
                   <div style={styles.actionType}>
                     <TextField
                       id={`actionTitle${i}`}
