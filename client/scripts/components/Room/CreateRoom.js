@@ -242,8 +242,11 @@ class CreateRoom extends Component {
               label={t('back')} />
           }
           {
-            this.state.stepIndex < 3 &&
-            !(this.state.stepIndex === 2 && !me) &&
+            this.state.stepIndex < 4 &&
+            (
+              !(this.state.stepIndex === 2 && !me) ||
+              (this.state.stepIndex === 3 && me && me.granters.length > 0)
+            ) &&
             <RaisedButton
               style={styles.button}
               labelStyle={styles.buttonLabel}
@@ -253,7 +256,8 @@ class CreateRoom extends Component {
               label={t('next')} />
           }
           {
-            this.state.stepIndex === 3 &&
+            this.state.stepIndex >= 3 &&
+            !(this.state.stepIndex === 3 && me && me.granters.length > 0) &&
             <RaisedButton
               style={styles.button}
               labelStyle={styles.buttonLabel}

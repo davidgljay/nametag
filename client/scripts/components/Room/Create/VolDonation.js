@@ -31,18 +31,17 @@ class VolDonation extends Component {
     this.onImageUpload = (_, __, url) =>
       this.props.updateRoom('ctaImage', url)
 
-    this.updateActionType = (index, type) => (e, value) =>
-      this.setState(prevState => {
-        const actionTypes = prevState.actionTypes.slice()
-        actionTypes[index] = {
-          ...prevState.actionTypes[index],
-          [type]: value
-        }
-        return {
-          ...prevState,
-          actionTypes
-        }
-      })
+    this.updateActionType = (index, type) => (e, value) => {
+      const {updateRoom} = this.props
+      const {actionTypes} = this.state
+      const newActionTypes = actionTypes.slice()
+      actionTypes[index] = {
+        ...actionTypes[index],
+        [type]: value
+      }
+      this.setState({actionTypes: newActionTypes})
+      updateRoom('actionTypes', newActionTypes)
+    }
 
     this.addActionType = () =>
       this.setState({
@@ -57,7 +56,7 @@ class VolDonation extends Component {
   }
 
   render () {
-    const {granters, room, email} = this.props
+    const {granters, room, email, updateRoom} = this.props
     const {showImageMenu, actionTypes} = this.state
     const granter = granters.find(g => g.id === room.granter)
 
@@ -91,14 +90,16 @@ class VolDonation extends Component {
           <div style={styles.ctaContainer}>
             <NTIconMenu
               image={granter.defaultCtaImages[0] || granter.image}
-              images={granter.defaultCtaImages}
+              images={[granter.image].concat(granter.defaultCtaImages)}
               about='room'
               showMenu={showImageMenu}
               toggleNametagImageMenu={(open) => this.setState({showImageMenu: open})}
               updateNametag={this.onImageUpload} />
             <TextField
-              value={granter.defaultCtaText || granter.description}
+              id='ctaText'
+              value={room.ctaText || granter.defaultCtaText || granter.description}
               multiLine
+              onChange={(e, val) => updateRoom('ctaText', val)}
               rows={2} />
           </div>
           <div>
@@ -108,12 +109,14 @@ class VolDonation extends Component {
                 actionTypes.map((actionType, i) => <div key={i} style={styles.actionTypeContainer}>
                   <div style={styles.actionType}>
                     <TextField
+                      id={`actionTitle${i}`}
                       value={actionType.title}
                       underlineShow={false}
                       onChange={this.updateActionType(i, 'title')}
                       style={styles.actionTitleStyle}
                       inputStyle={styles.actionTitle} />
                     <TextField
+                      id={`actionDesc${i}`}
                       value={actionType.desc}
                       underlineShow={false}
                       onChange={this.updateActionType(i, 'desc')}
