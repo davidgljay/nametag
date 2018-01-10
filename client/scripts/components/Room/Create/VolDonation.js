@@ -23,7 +23,10 @@ class VolDonation extends Component {
       const {updateRoom, granters} = this.props
       updateRoom('granter', granterId)
       const granter = granters.find(g => g.id === granterId)
-      this.setState({actionTypes: granter && granter.defaultActionTypes || []})
+      updateRoom('actionTypes', granter && granter.defaultActionTypes.map(a => ({title: a.title, desc: a.desc})) || [])
+      updateRoom('ctaText', granter && granter.defaultCtaText || granter.desc)
+      updateRoom('thankText', granter && granter.defaultThankText || t('create_room.cta.thanks'))
+      updateRoom('ctaImage', granter && granter.defaultCtaImages && granter.defaultCtaImages[0])
     }
 
     // Transform updateRoom into the format expected by IconMenu.
@@ -54,11 +57,14 @@ class VolDonation extends Component {
   componentDidMount () {
     const {updateRoom, granters, room} = this.props
     const granter = granters[0]
-    if (!room.actionTypes) {
-      updateRoom('actionTypes', granter.defaultActionTypes)
+    if (!room.granter) {
+      updateRoom('granter', granter.id)
+    }
+    if (!room.actionTypes || room.actionTypes.length === 0) {
+      updateRoom('actionTypes', granter.defaultActionTypes.map(a => ({title: a.title, desc: a.desc})))
     }
     if (!room.ctaImage) {
-      updateRoom('ctaImage', granter.defaultCtaImages[0] || granter.image)
+      updateRoom('ctaImage', granter.defaultCtaImages && granter.defaultCtaImages[0] || granter.image)
     }
     if (!room.ctaText) {
       updateRoom('ctaText', granter.defaultCtaText || granter.desc)
@@ -110,7 +116,7 @@ class VolDonation extends Component {
               updateNametagEdit={this.onImageUpload} />
             <TextField
               id='ctaText'
-              value={room.ctaText || granter.defaultCtaText || granter.description}
+              value={room.ctaText}
               multiLine
               onChange={(e, val) => updateRoom('ctaText', val)}
               rows={2} />

@@ -23,6 +23,7 @@ class StartRoomForm extends Component {
 
     this.startRoom = () => {
       const {title} = this.state
+      console.log('Starting room creation')
       if (title) {
         this.props.router.push({
           pathname: `/rooms/create`,
@@ -38,7 +39,7 @@ class StartRoomForm extends Component {
     const {loggedIn} = this.props
     const {title, error} = this.state
     return <div style={loggedIn ? styles.loggedInContainer : {}}>
-      <div style={styles.inputContainer}>
+      <form style={styles.inputContainer} onSubmit={this.startRoom}>
         <input
           type='text'
           id='convoInput'
@@ -47,7 +48,7 @@ class StartRoomForm extends Component {
           placeholder={t('room.room_form')}
           onChange={this.onTitleChange} />
         <div style={styles.error}>{error}</div>
-      </div>
+      </form>
       <div style={styles.buttonContainer}>
         <RaisedButton
           id='startConvoButton'
