@@ -130,10 +130,12 @@ export const createNametag = graphql(CREATE_NAMETAG, {
               nametags: oldData.me.nametags.concat(
                 {
                   ...nametag,
+                  mentions: [],
+                  latestVisit: new Date(),
                   room: {
                     __typename: 'Room',
                     id: oldData.room.id,
-                    latestMessage: oldData.room.latestMessage,
+                    latestMessage: new Date(),
                     mod: oldData.room.mod,
                     newMessageCount: 0,
                     title: oldData.room.title
