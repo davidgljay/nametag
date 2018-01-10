@@ -107,7 +107,12 @@ const create = (context, m) => {
   let messageObj = Object.assign(
     {},
     m,
-    {createdAt: new Date(), reactions: []}
+    {
+      createdAt: new Date(),
+      reactions: [],
+      // Lack of recipient must be false rather than null so that it is indexable by rethinkDB
+      recipient: m.recipient || false
+    }
   )
 
   const createMessagePromise = () => messagesTable.insert(messageObj).run(conn)
