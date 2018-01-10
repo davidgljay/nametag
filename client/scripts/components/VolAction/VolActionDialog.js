@@ -5,6 +5,7 @@ import {List, ListItem} from 'material-ui/List'
 import NametagIcon from '../Nametag/NametagIcon'
 import {primary} from '../../../styles/colors'
 import RaisedButton from 'material-ui/RaisedButton'
+import ChooseAmount from '../Donation/ChooseAmount'
 
 class VolActionDialog extends Component {
 
@@ -14,8 +15,11 @@ class VolActionDialog extends Component {
     this.state = {
       checkedActions: [],
       donated: false,
-      singedUp: false
+      singedUp: false,
+      amount: null
     }
+
+    this.selectAmount = (amount) => () => this.setState({amount})
 
     this.addAction = (action) => () =>
       this.setState({
@@ -49,7 +53,7 @@ class VolActionDialog extends Component {
         actionTypes,
         granter}
       } = this.props
-    const {checkedActions, donated, signedUp} = this.state
+    const {checkedActions, donated, signedUp, amount} = this.state
 
     return <div>
       <Dialog
@@ -99,6 +103,15 @@ class VolActionDialog extends Component {
             })
           }
         </List>
+        {
+          granter.stripe &&
+          <div style={styles.donationContainer}>
+            <h3>Can you also make a donation?</h3>
+            <ChooseAmount
+              selectAmount={this.selectAmount}
+              selectedAmount={amount} />
+          </div>
+        }
         <div style={styles.buttonContainer}>
           <RaisedButton
             primary
@@ -123,7 +136,7 @@ VolActionDialog.propTypes = {
     ctaText: string.isRequired,
     thankText: string.isRequired,
     granter: shape({
-      stripe: string.isRequired,
+      stripe: string,
       name: string.isRequired
     }).isRequired
   }),
@@ -159,5 +172,11 @@ const styles = {
   checkedAction: {
     color: primary,
     background: 'rgba(18, 114, 106, .25)'
+  },
+  donationContainer: {
+    textAlign: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
   }
 }
