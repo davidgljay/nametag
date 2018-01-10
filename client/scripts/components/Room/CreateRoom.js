@@ -241,7 +241,6 @@ class CreateRoom extends Component {
         me={me}
         toggleLogin={() => {}} />
       <div style={styles.title}>
-        <Stepper stepIndex={stepIndex} loggedIn={!!me} hasGranters={me && me.granters} />
       </div>
       <div style={styles.createRoom}>
         {
@@ -294,7 +293,8 @@ class CreateRoom extends Component {
           }
           {
             this.state.stepIndex >= 3 &&
-            !(this.state.stepIndex === 3 && me && me.granters.length > 0) &&
+            me &&
+            !(this.state.stepIndex === 3 && me.granters.length > 0) &&
             <RaisedButton
               style={styles.button}
               labelStyle={styles.buttonLabel}
