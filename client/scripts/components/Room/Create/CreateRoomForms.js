@@ -100,7 +100,7 @@ const getForm = ({
       </div>
     case 3:
       track('HOST_INTRO')
-      return me.granters
+      return me.granters && me.granters.length > 0
       ? <VolDonation
         granters={me.granters}
         room={room}
