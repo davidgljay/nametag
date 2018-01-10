@@ -42,7 +42,7 @@ class VolDonation extends Component {
 
     this.addActionType = () => {
       const {updateRoom, room: {actionTypes}} = this.props
-      updateRoom('actionTypes', actionTypes.concat({__typename: 'ActionType'}))
+      updateRoom('actionTypes', actionTypes.concat({}))
     }
 
     this.removeActionType = (i) => () => {

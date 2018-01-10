@@ -15,9 +15,8 @@ const getForm = ({
     error,
     stepIndex,
     updateRoom,
-    nametagEdits,
     selectedBadges,
-    updateNametagEdit,
+    updateMod,
     setClosed,
     closedIn,
     room,
@@ -26,8 +25,8 @@ const getForm = ({
     handleNext,
     handlePrev,
     setImageFromUrl,
-    addNametagEditBadge,
-    removeNametagEditBadge,
+    addModBadge,
+    removemodBadge,
     addSelectedBadge,
     removeSelectedBadge,
     me,
@@ -37,7 +36,7 @@ const getForm = ({
   }) => {
   const doneScreen = <div style={styles.container}>
     <div style={styles.preview}>
-      <RoomCard room={{...room, mod: nametagEdits.new}} disabled />
+      <RoomCard room={room} disabled />
     </div>
     <h2>{t('create_room.done')}</h2>
     <div style={styles.privacyContainer}>
@@ -84,11 +83,11 @@ const getForm = ({
         {
           me
           ? <HostIntro
-            nametagEdits={nametagEdits}
+            mod={room.mod}
             selectedBadges={selectedBadges}
-            addNametagEditBadge={addNametagEditBadge}
-            removeNametagEditBadge={removeNametagEditBadge}
-            updateNametagEdit={updateNametagEdit}
+            addModBadge={addModBadge}
+            removemodBadge={removemodBadge}
+            updateMod={updateMod}
             me={me}
             error={error} />
         : <div>
@@ -129,15 +128,15 @@ CreateRoomForms.propTypes = {
   error: object,
   stepIndex: number.isRequired,
   updateRoom: func.isRequired,
-  updateNametagEdit: func.isRequired,
+  updateMod: func.isRequired,
   room: shape({
     title: string,
-    welcome: string.isRequired
+    welcome: string.isRequired,
+    mod: object.isRequired
   }).isRequired,
   refetch: func.isRequired,
-  nametagEdits: object.isRequired,
-  addNametagEditBadge: func.isRequired,
-  removeNametagEditBadge: func.isRequired,
+  addModBadge: func.isRequired,
+  removeModBadge: func.isRequired,
   me: shape({
     badges: arrayOf(shape({
       id: string.isRequired

@@ -21,7 +21,10 @@ class CreateRoom extends Component {
         templates: [],
         welcome: '',
         public: true,
-        actionTypes: []
+        actionTypes: [],
+        mod: {
+          badges: []
+        }
       },
       image: '',
       norms: {},
@@ -77,18 +80,61 @@ class CreateRoom extends Component {
       })
     }
 
+    this.updateMod = (__, key, val) =>
+      this.setState(prevState => {
+        const newRoom = {
+          ...prevState.room,
+          mod: {
+            ...prevState.room.mod,
+            [key]: val
+          }
+        }
+        window.localStorage.setItem('room', JSON.stringify(newRoom))
+        return {
+          ...prevState,
+          room: newRoom
+        }
+      })
+
+    this.addModBadge = (badge) => {
+      const {room} = this.state
+      let newRoom = {
+        ...room,
+        mod: {
+          ...room.mod,
+          badges: room.mod.badges.concat(badge)
+        }
+      }
+
+      window.localStorage.setItem('room', JSON.stringify(newRoom))
+      this.setState({room: newRoom})
+    }
+
+    this.removeModBadge = (badge) => {
+      const {room} = this.state
+      const badgeIndex = room.mod.badges.reduce((result, b, i) =>
+        b.id === badge.id ? i : result, null
+      )
+      const newRoom = {
+        ...room,
+        mod: {
+          ...room.mod,
+          badges: room.mod.badges.slice(0, badgeIndex).concat(
+            room.mod.badges.slice(badgeIndex + 1)
+          )
+        }
+      }
+
+      window.localStorage.setItem('room', JSON.stringify(newRoom))
+      this.setState({room: newRoom})
+    }
+
     this.createRoom = () => {
       const {room} = this.state
       track('CREATE_ROOM', {title: room.title})
-      const {nametagEdits} = this.props
       const roomTemplates = room.templates.map(t => t.id)
-      const mod = {
-        ...nametagEdits.new,
-        badges: nametagEdits.new.badges.map(b => b.id)
-      }
       this.props.createRoom({
         ...room,
-        mod,
         templates: roomTemplates
       })
       .then(({data: {createRoom: {room: {id}}}}) => {
@@ -127,7 +173,6 @@ class CreateRoom extends Component {
 
     this.validate = (stepIndex) => {
       const {room} = this.state
-      const {nametagEdits} = this.props
       switch (stepIndex) {
         case 0:
           return {
@@ -141,9 +186,9 @@ class CreateRoom extends Component {
           }
         case 2: {
           return {
-            valid: nametagEdits.new.name && nametagEdits.new.image && nametagEdits.new.bio,
-            imageError: nametagEdits.new.image ? '' : t('create_room.errors.image'),
-            bioError: nametagEdits.new.bio ? '' : t('create_room.errors.intro')
+            valid: room.mod.name && room.mod.image && room.mod.bio,
+            imageError: room.mod.image ? '' : t('create_room.errors.image'),
+            bioError: room.mod.bio ? '' : t('create_room.errors.intro')
           }
         }
         default:
@@ -156,17 +201,11 @@ class CreateRoom extends Component {
   }
 
   componentDidMount () {
-    const {location: {state: locationState}, nametagEdits, updateNametagEdit} = this.props
+    const {location: {state: locationState}} = this.props
     const title = locationState && locationState.title
     const stepIndex = getQueryVariable('step')
     if (stepIndex) {
       this.setState({stepIndex: parseInt(stepIndex)})
-    }
-    if (!nametagEdits.new) {
-      updateNametagEdit('new', 'image', '')
-      updateNametagEdit('new', 'name', '')
-      updateNametagEdit('new', 'bio', '')
-      updateNametagEdit('new', 'badges', [])
     }
 
     if (title) {
@@ -192,11 +231,7 @@ class CreateRoom extends Component {
 
   render () {
     const {
-      data: {me, loading, refetch},
-      nametagEdits,
-      updateNametagEdit,
-      addNametagEditBadge,
-      removeNametagEditBadge
+      data: {me, loading, refetch}
     } = this.props
     const {room, stepIndex} = this.state
     const selectedBadges = room.templates.map(template => ({id: template.id, notes: [], template}))
@@ -212,19 +247,18 @@ class CreateRoom extends Component {
         {
           <CreateRoomForms
             stepIndex={this.state.stepIndex}
-            updateNametagEdit={updateNametagEdit}
-            room={this.state.room}
+            updateMod={this.updateMod}
+            room={room}
             badges={me ? me.badges : []}
             handleNext={this.handleNext}
             handlePrev={this.handlePrev}
             selectedBadges={selectedBadges}
             addSelectedBadge={this.addSelectedBadge}
             removeSelectedBadge={this.removeSelectedBadge}
-            nametagEdits={nametagEdits}
             updateRoom={this.updateRoom}
             refetch={refetch}
-            addNametagEditBadge={addNametagEditBadge}
-            removeNametagEditBadge={removeNametagEditBadge}
+            addModBadge={this.addModBadge}
+            removeModBadge={this.removeModBadge}
             addNorm={this.addNorm}
             norms={this.state.norms}
             setClosed={this.setClosed}
@@ -281,7 +315,6 @@ class CreateRoom extends Component {
 const {func, object, shape, arrayOf} = PropTypes
 CreateRoom.propTypes = {
   createRoom: func.isRequired,
-  nametagEdits: object.isRequired,
   data: shape({
     me: shape({
       badges: arrayOf(object).isRequired

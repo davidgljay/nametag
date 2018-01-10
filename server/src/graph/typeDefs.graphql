@@ -547,6 +547,9 @@ input CreateRoomInput {
   # Volunteer actions available for this room
   actionTypes: [ActionTypeInput]
 
+  # Granter sponsoring this room
+  granter: ID
+
 }
 
 input ActionTypeInput {
