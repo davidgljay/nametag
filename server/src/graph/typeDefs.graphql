@@ -279,7 +279,7 @@ type ActionType {
   title: String!
 
   # Description of the action
-  desc: String!
+  desc: String
 
 }
 
@@ -553,7 +553,7 @@ input CreateRoomInput {
 }
 
 input ActionTypeInput {
-  title: String
+  title: String!
 
   desc: String
 }

@@ -190,7 +190,6 @@ class Room extends Component {
     const isMobile = window.innerWidth < 800
 
     const showCallToAction = room.granter &&
-      room.granter.stripe &&
       room.actionTypes.length > 0
 
     const leftIcon = showCallToAction
