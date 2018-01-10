@@ -83,21 +83,21 @@ const createArray = ({conn, models: {Messages}}, actions, nametagId, note) =>
           .then(emails => Promise.all(
               emails.map(em =>
                 sendEmail({
-                to: em,
-                from: {
-                  name: 'Nametag',
-                  email: 'info@nametag.chat'
-                },
-                template: 'volAction',
-                params: {
-                  volunteerName,
-                  volunteerImage,
-                  volunteerEmail,
-                  roomId: id,
-                  roomTitle: title,
-                  actions: actions
-                }
-              }))
+                  to: em,
+                  from: {
+                    name: 'Nametag',
+                    email: 'info@nametag.chat'
+                  },
+                  template: 'volAction',
+                  params: {
+                    volunteerName,
+                    volunteerImage,
+                    volunteerEmail,
+                    roomId: id,
+                    roomTitle: title,
+                    actions: actions
+                  }
+                }))
             )
       )
 
