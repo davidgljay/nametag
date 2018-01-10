@@ -5,7 +5,6 @@ import TextField from 'material-ui/TextField'
 const donationAmounts = [10, 25, 50]
 
 const onUpdateCustom = (selectAmount) => (e) => {
-  console.log('amount', e.target.value)
   selectAmount(e.target.value)()
 }
 
@@ -24,7 +23,7 @@ const ChooseAmount = ({selectedAmount, selectAmount}) =>
            return <div
              key={i}
              style={donationStyle}
-             onClick={selectAmount(amount)} >
+             onClick={amount === selectedAmount ? selectAmount(null) : selectAmount(amount)} >
              ${amount}
            </div>
          })
@@ -61,7 +60,8 @@ export default ChooseAmount
 const styles = {
   donationContainer: {
     display: 'flex',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+    marginBottom: 20
   },
   donation: {
     borderRadius: 3,
