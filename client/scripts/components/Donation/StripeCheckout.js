@@ -12,7 +12,7 @@ class StripeCheckout extends Component {
     }
 
     this.setPaymentRequest = () => {
-      const {amount, stripe: {paymentRequest}} = this.props
+      const {amount, stripe: {paymentRequest}, createDonation, myNametagId} = this.props
       if (!amount) {
         return null
       }
@@ -30,6 +30,7 @@ class StripeCheckout extends Component {
         console.log('Received Stripe token: ', token)
         console.log('Received customer information: ', data)
         complete('success')
+          .then(() => createDonation(amount, myNametagId, token.id, ''))
       })
 
       preq.canMakePayment().then(result => {

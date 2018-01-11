@@ -37,20 +37,26 @@ class VolActionDialog extends Component {
     })
 
     this.onSignupClick = () => {
-      const {checkedActions} = this.state
-      const {createVolActions, myNametag, email, roomTitle, granter, stripe} = this.props
+      const {checkedActions, amount} = this.state
+      const {
+        createDonation,
+        createVolActions,
+        myNametag,
+        email,
+        roomTitle,
+        granter,
+        stripe
+      } = this.props
       if (checkedActions.length > 0) {
         createVolActions(checkedActions, myNametag.id, null)
           .then(this.setState({signedUp: true}))
       }
-      if (granter.stripe) {
+      if (granter.stripe && amount) {
         stripe.createToken({
           type: 'card',
-          name: myNametag.name,
-          email,
-          room: roomTitle,
-          bio: myNametag.bio
-        }).then(res => console.log('create token', res))
+          email
+        })
+        .then(res => createDonation(amount, myNametag.id, res.token.id))
       }
     }
   }
@@ -60,6 +66,8 @@ class VolActionDialog extends Component {
       open,
       closeDialog,
       stripe,
+      createDonation,
+      myNametag,
       room: {
         ctaImage,
         ctaText,
@@ -125,7 +133,11 @@ class VolActionDialog extends Component {
             <ChooseAmount
               selectAmount={this.selectAmount}
               selectedAmount={amount} />
-            <StripeCheckout amount={amount} stripe={stripe} />
+            <StripeCheckout
+              amount={amount}
+              stripe={stripe}
+              myNametagId={myNametag.id}
+              createDonation={createDonation} />
           </div>
         }
         <div style={styles.buttonContainer}>

@@ -23,7 +23,8 @@ import {
   addReaction,
   banNametag,
   acceptBadge,
-  createVolActions
+  createVolActions,
+  createDonation
 } from '../../graph/mutations'
 import {requestNotifPermissions} from '../../actions/NotificationActions'
 import {
@@ -106,6 +107,7 @@ const Room = compose(
   addReaction,
   acceptBadge,
   createVolActions,
+  createDonation,
   roomQuery,
   connect(mapStateToProps, mapDispatchToProps)
 )(component)

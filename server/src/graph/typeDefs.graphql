@@ -720,20 +720,6 @@ input CreateVolActionsInput {
 
 }
 
-input CreateDonationInput {
-
-  # Amount that the user donated
-  # amount: Int!
-
-  # The user's Nametag
-  nametag: ID!
-
-  # An optional note
-  note: String
-
-}
-
-
 ## Responses
 
 # CreateRoomResponse is returned with the room that was created and any
@@ -889,7 +875,7 @@ type RootMutation {
   createVolActions(actions: [String!]!, nametagId: ID!, note: String): ArrayResponse
 
   # Creates a donation
-  createDonation(donation: CreateDonationInput): BasicResponse
+  createDonation(amount: Int!, nametagId: ID!, token: String!, note: String): BasicResponse
 
 }
 

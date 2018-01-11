@@ -174,6 +174,7 @@ class Room extends Component {
       setBadgeToGrant,
       acceptBadge,
       createVolActions,
+      createDonation,
       showNametagImageMenu,
       toggleNametagImageMenu
     } = this.props
@@ -305,6 +306,7 @@ class Room extends Component {
             email={me.email}
             roomTitle={room.title}
             myNametag={myNametag}
+            createDonation={createDonation}
             createVolActions={createVolActions}
             nametagEdits={nametagEdits} />
         </Elements>

@@ -1,5 +1,9 @@
 // const r = require('rethinkdb')
 const {db} = require('../../db')
+const config = require('../../secrets.json')
+const stripe = require('stripe')(config.stripe.client_secret)
+const fetch = require('node-fetch')
+const {STRIPE_CHARGE_URL} = require('../../constants')
 // const errors = require('../../errors')
 // const notification = require('../../notifications')
 
@@ -19,33 +23,59 @@ const get = ({conn}, id) => id ? donationsTable.get(id).run(conn) : Promise.reso
   * Creates a donation
   *
   * @param {Object} context     graph context
-  * @param {Array} donation   the volunteer actions to be created
+  * @param {Int} amount   the amount being donated
+  * @param {String} nametag The nametag of the user making the donation
+  * @param {String} token The stripe token representing the user's credit card information
+  * @param {String} note An optional note from the user
   *
   * Note: Getting room and granter info from the database for security reasons
   **/
 
-const create = ({conn}, donation) =>
-  db.table('nametags')
-     .getAll(donation.nametag)
-     .eqJoin(n => n('room'), db.table('rooms'))
-     .zip()
-     .pluck('room', 'granter')
-     .nth(0)
-     .do(res => {
-       donationsTable.insert(
-           res.merge(donation)
-           .merge({
-             createdAt: new Date(),
-             updatedAt: new Date()
-           })
-         )
-     })
-     .run(conn)
-     .then(res => ({id: res.generated_keys[0]}))
+const create = ({conn}, amount, nametag, token, note) =>
+  db.table('nametags').getAll(nametag)
+    .eqJoin(n => n('room'), db.table('rooms'))
+    .zip()
+    .eqJoin(r => r('granter'), db.table('granters'))
+    .zip()
+    .pluck('room', 'granter', 'name')
+    .nth(0)
+    .run(conn)
+  .then(({room, granter, name}) =>
+    Promise.all([
+      stripe.charges.create({
+        amount: amount * 100,
+        currency: "usd",
+        description: `Donation to ${name}`,
+        source: token
+      }),
+      room,
+      granter
+    ])
+  )
+  .then(([res, room, granter]) =>
+    donationsTable.insert(
+        {
+          amount,
+          nametag,
+          token,
+          note,
+          room,
+          granter,
+          stripe_response: res,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+      ).run(conn)
+  )
+  .then(res => ({id: res.generated_keys[0]}))
+  .then((res) => {
+    console.log('id', res)
+    return res
+  })
 
 module.exports = (context) => ({
   Donations: {
     get: (id) => get(context, id),
-    create: donation => create(context, donation)
+    create: (amount, nametag, token, note) => create(context, amount, nametag, token, note)
   }
 })
