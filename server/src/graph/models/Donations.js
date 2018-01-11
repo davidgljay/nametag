@@ -37,16 +37,20 @@ const create = ({conn}, amount, nametag, token, note) =>
     .zip()
     .eqJoin(r => r('granter'), db.table('granters'))
     .zip()
-    .pluck('room', 'granter', 'name')
+    .pluck('room', 'granter', 'name', 'stripe')
     .nth(0)
     .run(conn)
-  .then(({room, granter, name}) =>
+  .then(({room, granter, name, stripe}) =>
     Promise.all([
       stripe.charges.create({
         amount: amount * 100,
         currency: "usd",
         description: `Donation to ${name}`,
-        source: token
+        source: token,
+        destination: {
+          amount: amount * 90,
+          account: stripe,
+        },
       }),
       room,
       granter
