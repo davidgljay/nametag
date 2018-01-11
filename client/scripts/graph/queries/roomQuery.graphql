@@ -61,6 +61,7 @@ query roomQuery($id: ID!){
     id
     images
     displayNames
+    email
     granters {
       id
       templates {

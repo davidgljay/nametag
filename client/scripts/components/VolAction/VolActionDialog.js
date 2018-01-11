@@ -6,6 +6,8 @@ import NametagIcon from '../Nametag/NametagIcon'
 import {primary} from '../../../styles/colors'
 import RaisedButton from 'material-ui/RaisedButton'
 import ChooseAmount from '../Donation/ChooseAmount'
+import StripeCheckout from '../Donation/StripeCheckout'
+import {injectStripe} from 'react-stripe-elements'
 
 class VolActionDialog extends Component {
 
@@ -36,9 +38,20 @@ class VolActionDialog extends Component {
 
     this.onSignupClick = () => {
       const {checkedActions} = this.state
-      const {createVolActions, myNametagId} = this.props
-      createVolActions(checkedActions, myNametagId, null)
-        .then(this.setState({signedUp: true}))
+      const {createVolActions, myNametag, email, roomTitle, granter, stripe} = this.props
+      if (checkedActions.length > 0) {
+        createVolActions(checkedActions, myNametag.id, null)
+          .then(this.setState({signedUp: true}))
+      }
+      if (granter.stripe) {
+        stripe.createToken({
+          type: 'card',
+          name: myNametag.name,
+          email,
+          room: roomTitle,
+          bio: myNametag.bio
+        }).then(res => console.log('create token', res))
+      }
     }
   }
 
@@ -46,12 +59,14 @@ class VolActionDialog extends Component {
     const {
       open,
       closeDialog,
+      stripe,
       room: {
         ctaImage,
         ctaText,
         thankText,
         actionTypes,
-        granter}
+        granter
+      }
       } = this.props
     const {checkedActions, donated, signedUp, amount} = this.state
 
@@ -110,6 +125,7 @@ class VolActionDialog extends Component {
             <ChooseAmount
               selectAmount={this.selectAmount}
               selectedAmount={amount} />
+            <StripeCheckout amount={amount} stripe={stripe} />
           </div>
         }
         <div style={styles.buttonContainer}>
@@ -140,12 +156,15 @@ VolActionDialog.propTypes = {
       name: string.isRequired
     }).isRequired
   }),
+  email: string.isRequired,
   closeDialog: func.isRequired,
   createVolActions: func.isRequired,
-  myNametagId: string.isRequired
+  myNametag: shape({
+    id: string.isRequired
+  }).isRequired
 }
 
-export default VolActionDialog
+export default injectStripe(VolActionDialog)
 
 const styles = {
   buttonContainer: {

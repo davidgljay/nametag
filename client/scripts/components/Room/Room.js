@@ -7,6 +7,7 @@ import radium, {keyframes} from 'radium'
 import Messages from '../Message/Messages'
 import VolActionDialog from '../VolAction/VolActionDialog'
 import ComposeWithMenus from '../Message/ComposeWithMenus'
+import {Elements} from 'react-stripe-elements'
 
 import {getQueryVariable, removeQueryVar} from '../../utils/queryVars'
 import {track, identify, setTimer} from '../../utils/analytics'
@@ -295,14 +296,18 @@ class Room extends Component {
       }
       {
         showCallToAction &&
-        <VolActionDialog
-          granter={room.granter}
-          open={showVolDialog}
-          closeDialog={() => this.setState({showVolDialog: false})}
-          room={room}
-          myNametagId={myNametag.id}
-          createVolActions={createVolActions}
-          nametagEdits={nametagEdits} />
+        <Elements>
+          <VolActionDialog
+            granter={room.granter}
+            open={showVolDialog}
+            closeDialog={() => this.setState({showVolDialog: false})}
+            room={room}
+            email={me.email}
+            roomTitle={room.title}
+            myNametag={myNametag}
+            createVolActions={createVolActions}
+            nametagEdits={nametagEdits} />
+        </Elements>
       }
     </div>
   }

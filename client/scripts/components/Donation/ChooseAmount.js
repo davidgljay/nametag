@@ -1,6 +1,5 @@
-import React, {PropTypes, Component} from 'react'
-import {grey, white, primary} from '../../../styles/colors'
-import TextField from 'material-ui/TextField'
+import React, {PropTypes} from 'react'
+import {grey} from '../../../styles/colors'
 
 const donationAmounts = [10, 25, 50]
 
@@ -86,7 +85,7 @@ const styles = {
   customInput: {
     border: 'none',
     fontSize: '16px',
-    borderBottom: '1px solid grey',
+    borderBottom: `1px solid ${grey}`,
     width: 40,
     background: 'rgba(0,0,0,0)'
   }
