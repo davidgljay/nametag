@@ -240,7 +240,9 @@ class CreateRoom extends Component {
       <Navbar
         me={me}
         toggleLogin={() => {}} />
-      <div style={styles.title} />
+      <div style={styles.title}>
+        <Stepper stepIndex={stepIndex} loggedIn={!!me} hasGranters={me && me.granters && me.granters.length > 0} />
+      </div>
       <div style={styles.createRoom}>
         {
           <CreateRoomForms

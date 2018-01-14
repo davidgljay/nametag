@@ -153,18 +153,23 @@ class VolActionDialog extends Component {
               }
             </List>
             {
-              granter.stripe &&
-              <div style={styles.donationContainer}>
-                <h3>Can you also make a donation?</h3>
-                <ChooseAmount
-                  selectAmount={this.selectAmount}
-                  selectedAmount={amount} />
-                <StripeCheckout
-                  amount={amount}
-                  stripe={stripe}
-                  setDonated={this.setDonated}
-                  myNametagId={myNametag.id}
-                  createDonation={createDonation} />
+              granter.stripe && <div>
+                {
+                  donated
+                  ? <h3>Thank you for your donation</h3>
+                  : <div style={styles.donationContainer}>
+                    <h3>Can you also make a donation?</h3>
+                    <ChooseAmount
+                      selectAmount={this.selectAmount}
+                      selectedAmount={amount} />
+                    <StripeCheckout
+                      amount={amount}
+                      stripe={stripe}
+                      setDonated={this.setDonated}
+                      myNametagId={myNametag.id}
+                      createDonation={createDonation} />
+                  </div>
+                }
               </div>
             }
             <div style={styles.buttonContainer}>

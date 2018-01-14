@@ -1,11 +1,6 @@
-// const r = require('rethinkdb')
 const {db} = require('../../db')
 const config = require('../../secrets.json')
-const stripe = require('stripe')(config.stripe.client_secret)
-const fetch = require('node-fetch')
-const {STRIPE_CHARGE_URL} = require('../../constants')
-// const errors = require('../../errors')
-// const notification = require('../../notifications')
+const stripeTools = require('stripe')(config.stripe.client_secret)
 
 const donationsTable = db.table('donations')
 
@@ -42,7 +37,7 @@ const create = ({conn}, amount, nametag, token, note) =>
     .run(conn)
   .then(({room, granter, name, stripe}) =>
     Promise.all([
-      stripe.charges.create({
+      stripeTools.charges.create({
         amount: amount * 100,
         currency: 'usd',
         description: `Donation to ${name}`,
