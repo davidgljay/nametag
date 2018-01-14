@@ -1,10 +1,8 @@
 import React, {Component, PropTypes} from 'react'
-import RoomCard from './RoomCard'
 import FeatureCallout from './FeatureCallout'
 import Navbar from '../Utils/Navbar'
 import LoginDialog from '../User/LoginDialog'
 import JoinedRoomCard from './JoinedRoomCard'
-import StartRoomForm from './StartRoomForm'
 import radium from 'radium'
 import {mobile} from '../../../styles/sizes'
 import {track, identify} from '../../utils/analytics'
@@ -47,7 +45,7 @@ class RoomCards extends Component {
 
   render () {
     const {
-      data: {me, rooms, loading, refetch}
+      data: {me, loading, refetch}
     } = this.props
 
     if (loading) {
@@ -62,16 +60,6 @@ class RoomCards extends Component {
     }
     const {showAllJoined} = this.state
     const showAbout = !me || me.nametags.length === 0
-    let nametagHash = {}
-    if (me) {
-      nametagHash = me.nametags.reduce((hash, nametag) => {
-        if (!nametag.room) {
-          return hash
-        }
-        hash[nametag.room.id] = nametag
-        return hash
-      }, {})
-    }
     return <div id='roomCards'>
       <Navbar
         me={me}
@@ -81,12 +69,11 @@ class RoomCards extends Component {
           showAbout &&
           <div style={styles.header}>
             <div style={styles.headerText}>
-              {t('room.dinner_party')}
+              {t('room.header')}
             </div>
           </div>
         }
         <div style={styles.container}>
-          <StartRoomForm loggedIn={!!me && me.nametags.length > 0} />
           {
             !showAbout &&
             <div style={styles.joinedRooms}>
@@ -122,29 +109,6 @@ class RoomCards extends Component {
           {
             showAbout &&
             <div>
-              <div id='firstRooms' style={styles.firstRooms}>
-                {
-                  rooms &&
-                  rooms.length > 0 &&
-                  rooms
-                  .filter(room => !nametagHash[room.id])
-                  .slice(0, 2)
-                  .map((room, i) => {
-                    let banned = false
-                    if (me) {
-                      const myNametag = me.nametags.find(nt => nt.room && nt.room.id === room.id)
-                      banned = !!myNametag && myNametag.banned
-                    }
-                    return <RoomCard
-                      key={room.id}
-                      room={room}
-                      disabled={banned || room.closed}
-                      me={me}
-                      style={i === 1 && showAbout ? {marginBottom: 10} : {}} />
-                  }
-                  )
-                }
-              </div>
               <h2 style={styles.featureHeader}>{t('room.intimate')}</h2>
               <div id='FeatureCallouts' style={styles.featureCallouts} >
                 {
@@ -165,28 +129,6 @@ class RoomCards extends Component {
               </div>
             </div>
           }
-          <div style={styles.roomCards}>
-            {
-              rooms &&
-              rooms.length > 0 &&
-              rooms
-              .filter(room => !nametagHash[room.id])
-              .slice(showAbout ? 2 : 0)
-              .map(room => {
-                let banned = false
-                if (me) {
-                  const myNametag = me.nametags.find(nt => nt.room && nt.room.id === room.id)
-                  banned = !!myNametag && myNametag.banned
-                }
-                return <RoomCard
-                  key={room.id}
-                  room={room}
-                  disabled={banned || room.closed}
-                  me={me} />
-              }
-              )
-            }
-          </div>
           <LoginDialog
             showLogin={this.state.showLogin}
             refetch={refetch}
