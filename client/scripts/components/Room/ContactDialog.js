@@ -1,10 +1,11 @@
 import React, {Component, PropTypes} from 'react'
 import Dialog from 'material-ui/Dialog'
-import {primary} from '../../../styles/colors'
+// import {primary} from '../../../styles/colors'
 import FontIcon from 'material-ui/FontIcon'
 import RaisedButton from 'material-ui/RaisedButton'
 import {injectStripe} from 'react-stripe-elements'
-import t from '../../utils/i18n'
+// import t from '../../utils/i18n'
+import {track} from '../../utils/analytics'
 
 class ContactDialog extends Component {
 
@@ -27,6 +28,8 @@ class ContactDialog extends Component {
       e.preventDefault()
       const {name, email, organization, note} = this.state
       const {contactForm} = this.props
+
+      track('CONTACT_SUBMIT')
 
       contactForm(name, email, organization, note)
     }

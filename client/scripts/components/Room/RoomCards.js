@@ -26,11 +26,15 @@ class RoomCards extends Component {
       this.setState({showLogin: !this.state.showLogin})
     }
 
-    this.closeContactDialog = () =>
+    this.closeContactDialog = () => {
+      track('CLOSE_CONTACT')
       this.setState({contactReason: null})
+    }
 
-    this.openContactDialog = reason => () =>
+    this.openContactDialog = reason => () => {
+      track('CONTACT', {reason})
       this.setState({contactReason: reason})
+    }
   }
 
   componentWillMount () {
