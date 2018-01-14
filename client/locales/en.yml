@@ -177,18 +177,18 @@ en:
         body: All conversations have a moderator, a shared set of norms and clear calls to action.
     works_callouts:
       0:
-        image: https://s3.amazonaws.com/nametag_images/site/welcoming.jpg
+        image: https://s3.amazonaws.com/nametag_images/site/invite.png
         title: Invite
         body: Decide on a topic and invite in supporters over e-mail, SMS and social media.
       1:
-        image: https://s3.amazonaws.com/nametag_images/site/intimate.jpg
+        image: https://s3.amazonaws.com/nametag_images/site/welcoming.jpg
         title: Engage
         body: Participants introduce themselves with personal stories, then converse in a space that you control.
       2:
         image: https://s3.amazonaws.com/nametag_images/site/kayak.jpg
         title: Mobilize
         body: Those who feel inspired will volunteer, donate, and invite their friends.
-    built_by: Nametag is built by folks who want better ways to build trust on the internet.
+    built_by: Our team has over a decade of experience building social movements through authentic conversation online. We believe that real change starts with people sharing personal stories in small conversations.
     learn: Learn More
     rooms: Rooms
     settings: Settings
@@ -207,6 +207,8 @@ en:
     introduce: Introduce Yourself
     close: CLOSE
     sign_up: SIGN ME UP!
+    contact: CONTACT US
+    who: Who We Are
   user:
     em_confirmed: Your e-mail has been confirmed! Redirecting to homepage...
     pw_match: Passwords do not match

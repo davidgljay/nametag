@@ -7,7 +7,7 @@ import ContactDialog from './ContactDialog'
 import radium from 'radium'
 import {mobile} from '../../../styles/sizes'
 import {track, identify} from '../../utils/analytics'
-import {white, grey} from '../../../styles/colors'
+import {white, grey, primary} from '../../../styles/colors'
 import CircularProgress from 'material-ui/CircularProgress'
 import RaisedButton from 'material-ui/RaisedButton'
 import ScrollDemo from '../Static/ScrollDemo'
@@ -140,11 +140,20 @@ class RoomCards extends Component {
                   )
                 }
               </div>
-              <div style={styles.featureFooter}>
-                {t('room.built_by')}
-                <br />
-                <br />
-                <a href='https://medium.com/matter-driven-narrative/nametag-a-platform-for-building-relationships-fa977bca53ba' target='_blank'>{t('room.learn')}</a>
+              <div style={styles.buttonContainer}>
+                <RaisedButton primary label={t('room.try_it')} onClick={this.openContactDialog('requestDemo')} />
+              </div>
+              <div style={styles.whoWeAreContainer}>
+                <h2 style={styles.featureHeader}>{t('room.who')}</h2>
+                <img style={styles.whoWeAreImage} src='https://s3.amazonaws.com/nametag_images/site/pride.jpg' />
+                <div style={styles.featureFooter}>
+                  {t('room.built_by')}
+                  <br />
+                  <br />
+                </div>
+                <div style={styles.buttonContainer}>
+                  <RaisedButton primary label={t('room.contact')} onClick={this.openContactDialog('contactForm')} />
+                </div>
               </div>
             </div>
           }
@@ -194,7 +203,8 @@ export default radium(RoomCards)
 const styles = {
   background: {
     background: '#fbfbfb',
-    minHeight: '100vh'
+    minHeight: '100vh',
+    paddingBottom: 50
   },
   container: {
     maxWidth: 800,
@@ -244,7 +254,8 @@ const styles = {
   },
   featureHeader: {
     margin: '40px 10px 0px 10px',
-    textAlign: 'center'
+    textAlign: 'center',
+    color: 'primary'
   },
   featureCallouts: {
     display: 'flex',
@@ -253,7 +264,7 @@ const styles = {
   },
   featureFooter: {
     textAlign: 'center',
-    margin: '20px 10px',
+    margin: 20,
     fontWeight: 300
   },
   spinner: {
@@ -263,5 +274,15 @@ const styles = {
   buttonContainer: {
     display: 'flex',
     justifyContent: 'center'
+  },
+  whoWeAreImage: {
+    width: '80%',
+    borderRadius: 3,
+    marginTop: 3
+  },
+  whoWeAreContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column'
   }
 }

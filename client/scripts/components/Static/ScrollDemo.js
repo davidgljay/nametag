@@ -78,7 +78,7 @@ class ScrollDemo extends Component {
         messages.map((message, i) =>
           <DemoMessage
             hideAuthor={i === 1}
-            style={this.getStyle(0 + i * 75, 100 + i * 75)}
+            style={this.getStyle(0 + i * 80, 100 + i * 80)}
             message={message} />
       )
       }
