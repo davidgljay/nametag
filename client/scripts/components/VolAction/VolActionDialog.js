@@ -8,6 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import ChooseAmount from '../Donation/ChooseAmount'
 import StripeCheckout from '../Donation/StripeCheckout'
 import {injectStripe} from 'react-stripe-elements'
+import t from '../../utils/i18n'
 
 class VolActionDialog extends Component {
 
@@ -43,22 +44,37 @@ class VolActionDialog extends Component {
         createVolActions,
         myNametag,
         email,
-        roomTitle,
         granter,
         stripe
       } = this.props
+
+      if (checkedActions.length === 0 && !amount) {
+        return
+      }
+
+      let promises = []
       if (checkedActions.length > 0) {
-        createVolActions(checkedActions, myNametag.id, null)
-          .then(this.setState({signedUp: true}))
+        promises.push(
+          createVolActions(checkedActions, myNametag.id, null)
+            .then(this.setState({signedUp: true}))
+        )
       }
+
       if (granter.stripe && amount) {
-        stripe.createToken({
-          type: 'card',
-          email
-        })
-        .then(res => createDonation(amount, myNametag.id, res.token.id))
+        promises.push(
+          stripe.createToken({
+            type: 'card',
+            email
+          })
+          .then(res => createDonation(amount, myNametag.id, res.token.id))
+        )
       }
+
+      Promise.all(promises)
+        .then(() => this.setState({signedUp: true}))
     }
+
+    this.setDonated = () => {this.setState({donated: true})}
   }
 
   render () {
@@ -77,6 +93,7 @@ class VolActionDialog extends Component {
       }
       } = this.props
     const {checkedActions, donated, signedUp, amount} = this.state
+    const text = signedUp ? thankText : ctaText
 
     return <div>
       <Dialog
@@ -97,55 +114,68 @@ class VolActionDialog extends Component {
             name={granter.name}
             diameter={50}
             marginRight={20} />
-          <div style={styles.ctaText}>
-            {ctaText}
+          <div style={text.length > 80 ? styles.ctaText : styles.bigText}>
+            {text}
           </div>
         </div>
-        <List style={styles.actionTypes}>
-          {
-            actionTypes.map((action, i) => {
-              const checked = checkedActions.indexOf(action.title) > -1
-              const icon = checked
-                ? <FontIcon
-                  style={styles.check}
-                  className='material-icons'>
-                    check_box
-                  </FontIcon>
-                : <FontIcon
-                  className='material-icons'>
-                    check_box_outline_blank
-                  </FontIcon>
-              return <ListItem
-                key={i}
-                onClick={checked ? this.removeAction(action) : this.addAction(action)}
-                primaryText={action.title}
-                secondaryText={action.desc}
-                innerDivStyle={checked ? styles.checkedAction : styles.uncheckedAction}
-                leftIcon={icon}
-                style={styles.action} />
-            })
-          }
-        </List>
         {
-          granter.stripe &&
-          <div style={styles.donationContainer}>
-            <h3>Can you also make a donation?</h3>
-            <ChooseAmount
-              selectAmount={this.selectAmount}
-              selectedAmount={amount} />
-            <StripeCheckout
-              amount={amount}
-              stripe={stripe}
-              myNametagId={myNametag.id}
-              createDonation={createDonation} />
+          signedUp
+          ? <div style={styles.buttonContainer}>
+            <RaisedButton
+              primary
+              onClick={closeDialog}
+              label={t('room.close')} />
+          </div>
+          : <div>
+            <List style={styles.actionTypes}>
+              {
+                actionTypes.map((action, i) => {
+                  const checked = checkedActions.indexOf(action.title) > -1
+                  const icon = checked
+                    ? <FontIcon
+                      style={styles.check}
+                      className='material-icons'>
+                        check_box
+                      </FontIcon>
+                    : <FontIcon
+                      className='material-icons'>
+                        check_box_outline_blank
+                      </FontIcon>
+                  return <ListItem
+                    key={i}
+                    onClick={checked ? this.removeAction(action) : this.addAction(action)}
+                    primaryText={action.title}
+                    secondaryText={action.desc}
+                    innerDivStyle={checked ? styles.checkedAction : styles.uncheckedAction}
+                    leftIcon={icon}
+                    style={styles.action} />
+                })
+              }
+            </List>
+            {
+              granter.stripe &&
+              <div style={styles.donationContainer}>
+                <h3>Can you also make a donation?</h3>
+                <ChooseAmount
+                  selectAmount={this.selectAmount}
+                  selectedAmount={amount} />
+                <StripeCheckout
+                  amount={amount}
+                  stripe={stripe}
+                  setDonated={this.setDonated}
+                  myNametagId={myNametag.id}
+                  createDonation={createDonation} />
+              </div>
+            }
+            <div style={styles.buttonContainer}>
+              <RaisedButton
+                primary
+                onClick={this.onSignupClick}
+                label={t('room.sign_up')} />
+            </div>
           </div>
         }
-        <div style={styles.buttonContainer}>
-          <RaisedButton
-            primary
-            onClick={this.onSignupClick}
-            label='SIGN ME UP!' />
-        </div>
+
       </Dialog>
     </div>
   }
@@ -190,8 +220,11 @@ const styles = {
     display: 'flex'
   },
   ctaText: {
+    flex: 1
+  },
+  bigText: {
     flex: 1,
-    fontStyle: 'italic'
+    fontSize: '24px'
   },
   closeIcon: {
     float: 'right',

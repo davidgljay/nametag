@@ -27,7 +27,9 @@ const get = ({conn}, id) => id ? volActionsTable.get(id).run(conn) : Promise.res
  **/
 
 const createArray = ({conn, models: {Messages}}, actions, nametagId, note) =>
-  db.table('nametags')
+  actions.length === 0
+  ? Promise.resolve([])
+  : db.table('nametags')
     .getAll(nametagId)
     .map(n => n.merge({nametagImage: n('image')}))
     .eqJoin(n => n('room'), db.table('rooms'))

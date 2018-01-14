@@ -191,6 +191,8 @@ en:
     start_conversation: Start Conversation
     try_it: Try It Out
     introduce: Introduce Yourself
+    close: CLOSE
+    sign_up: SIGN ME UP!
   user:
     em_confirmed: Your e-mail has been confirmed! Redirecting to homepage...
     pw_match: Passwords do not match

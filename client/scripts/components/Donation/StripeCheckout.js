@@ -12,7 +12,14 @@ class StripeCheckout extends Component {
     }
 
     this.setPaymentRequest = () => {
-      const {amount, stripe: {paymentRequest}, createDonation, myNametagId} = this.props
+      const {
+        amount,
+        stripe: {paymentRequest},
+        createDonation,
+        myNametagId,
+        setDonated
+      } = this.props
+
       if (!amount) {
         return null
       }
@@ -26,16 +33,15 @@ class StripeCheckout extends Component {
         }
       })
 
-      preq.on('token', ({complete, token, ...data}) => {
-        console.log('Received Stripe token: ', token)
-        console.log('Received customer information: ', data)
+      preq.on('token', ({complete, token, ...data}) =>
         complete('success')
-          .then(() => createDonation(amount, myNametagId, token.id, ''))
-      })
+          .then(() => createDonation(amount, myNametagId, token.id))
+          .then(setDonated)
+      )
 
-      preq.canMakePayment().then(result => {
+      preq.canMakePayment().then(result =>
         this.setState({canMakePayment: !!result})
-      })
+      )
 
       this.setState({paymentRequest: preq})
     }
@@ -57,13 +63,14 @@ class StripeCheckout extends Component {
     return <div style={styles.container}>
       {
         amount && <div style={styles.checkout}>
-          <CardElement style={{base: {fontSize: '18px'}}} />
           {
             paymentRequest && canMakePayment &&
             <PaymentRequestButtonElement
               paymentRequest={paymentRequest}
               className='PaymentRequestButton' />
           }
+          <CardElement style={{base: {fontSize: '18px'}}} />
+          <img style={styles.poweredBy} src='https://s3.amazonaws.com/nametag_images/site/powered_by_stripe.png' />
         </div>
       }
     </div>
@@ -76,7 +83,8 @@ StripeCheckout.propTypes = {
   amount: number,
   stripe: shape({
     paymentRequest: func.isRequired
-  }).isRequired
+  }).isRequired,
+  setDonated: func.isRequired
 }
 
 export default StripeCheckout
@@ -88,5 +96,9 @@ const styles = {
   checkout: {
     paddingBottom: 20,
     minHeight: 20
+  },
+  poweredBy: {
+    width: 100,
+    marginTop: 10
   }
 }
