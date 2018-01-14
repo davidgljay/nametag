@@ -167,13 +167,13 @@ en:
         title: Welcoming
         body: Everyone who enters a room introduces themselves, so you know what perspective they bring.
       1:
-        image: https://s3.amazonaws.com/nametag_images/site/kayak.jpg
-        title: Focused
-        body: All conversations have a moderator and a shared set of norms to keep them focused on what matters.
-      2:
         image: https://s3.amazonaws.com/nametag_images/site/intimate.jpg
-        title: Confidential
+        title: Intimate
         body: Limit conversations to people you trust, we keep what you say and where you say it private.
+      2:
+        image: https://s3.amazonaws.com/nametag_images/site/kayak.jpg
+        title: Relevant
+        body: All conversations have a moderator, a shared set of norms and clear calls to action.
     built_by: Nametag is built by folks who want better ways to build trust on the internet.
     learn: Learn More
     rooms: Rooms
