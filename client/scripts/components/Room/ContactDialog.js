@@ -1,12 +1,8 @@
 import React, {Component, PropTypes} from 'react'
 import Dialog from 'material-ui/Dialog'
-import FontIcon from 'material-ui/FontIcon'
-import {List, ListItem} from 'material-ui/List'
-import NametagIcon from '../Nametag/NametagIcon'
 import {primary} from '../../../styles/colors'
+import FontIcon from 'material-ui/FontIcon'
 import RaisedButton from 'material-ui/RaisedButton'
-import ChooseAmount from '../Donation/ChooseAmount'
-import StripeCheckout from '../Donation/StripeCheckout'
 import {injectStripe} from 'react-stripe-elements'
 import t from '../../utils/i18n'
 
@@ -37,8 +33,8 @@ class ContactDialog extends Component {
   }
 
   render () {
-    const {name, email, organization, note} = this.state
-    const {closeDialog, open} = this.props
+    // const {name, email, organization, note} = this.state
+    const {closeDialog, open, title} = this.props
 
     return <div>
       <Dialog
@@ -47,6 +43,13 @@ class ContactDialog extends Component {
         bodyStyle={styles.bodyStyle}
         open={open}
         onRequestClose={closeDialog}>
+        <FontIcon
+          onClick={closeDialog}
+          style={styles.closeIcon}
+          className='material-icons'>
+          close
+        </FontIcon>
+        <h3>{title}</h3>
         <form onSubmit={this.onSubmit}>
           <label htmlFor='name'>Name</label>
           <input
@@ -74,6 +77,12 @@ class ContactDialog extends Component {
             rows={3}
             style={styles.input}
             onChange={this.setItem('note')} />
+          <div style={styles.buttonContainer}>
+            <RaisedButton
+              onClick={this.onSubmit}
+              label={title}
+              primary />
+          </div>
         </form>
       </Dialog>
     </div>
@@ -96,32 +105,8 @@ const styles = {
     width: '100%',
     marginBottom: 20
   },
-  bodyStyle: {},
-  cta: {
-    display: 'flex'
-  },
-  ctaText: {
-    flex: 1
-  },
-  bigText: {
-    flex: 1,
-    fontSize: '24px'
-  },
   closeIcon: {
     float: 'right',
     cursor: 'pointer'
-  },
-  check: {
-    color: primary
-  },
-  checkedAction: {
-    color: primary,
-    background: 'rgba(18, 114, 106, .25)'
-  },
-  donationContainer: {
-    textAlign: 'center',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
   }
 }
