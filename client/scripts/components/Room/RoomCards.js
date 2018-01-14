@@ -9,6 +9,8 @@ import {mobile} from '../../../styles/sizes'
 import {track, identify} from '../../utils/analytics'
 import {white, grey} from '../../../styles/colors'
 import CircularProgress from 'material-ui/CircularProgress'
+import RaisedButton from 'material-ui/RaisedButton'
+import ScrollDemo from '../Static/ScrollDemo'
 import t from '../../utils/i18n'
 
 class RoomCards extends Component {
@@ -122,6 +124,10 @@ class RoomCards extends Component {
           {
             showAbout &&
             <div>
+              <div style={styles.buttonContainer}>
+                <RaisedButton primary label='Try It Out' onClick={this.openContactDialog('requestDemo')} />
+              </div>
+              <ScrollDemo />
               <h2 style={styles.featureHeader}>{t('room.intimate')}</h2>
               <div id='FeatureCallouts' style={styles.featureCallouts} >
                 {
@@ -224,7 +230,7 @@ const styles = {
     fontSize: 36,
     fontWeight: 300,
     padding: 10,
-    paddingTop: window.innerWidth * 494 / 1023 - 80,
+    paddingTop: window.innerWidth * 500 / 1023 - 80,
     [mobile]: {
       fontSize: 22
     }
@@ -253,5 +259,9 @@ const styles = {
   spinner: {
     marginLeft: '45%',
     marginTop: '40vh'
+  },
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'center'
   }
 }

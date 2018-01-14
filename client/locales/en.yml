@@ -158,9 +158,9 @@ en:
     show_more: Show More
     create_account: Register to Join
     choose_one: Choose One Of the Following
-    header: Authentic conversations that lead to action.
+    header: Host authentic conversations that lead to action.
     room_convos: Your Conversations
-    intimate: Chat Built For Intimate Conversation
+    intimate: Chat Built For Organizing
     feature_callouts:
       0:
         image: https://s3.amazonaws.com/nametag_images/site/welcoming.jpg

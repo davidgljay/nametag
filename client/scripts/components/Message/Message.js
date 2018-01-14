@@ -394,7 +394,7 @@ const styles = {
     paddingTop: 10,
     paddingBottom: 5,
     marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 5,
     display: 'flex'
   },
   directMessageIncoming: {
@@ -490,7 +490,8 @@ const styles = {
     cursor: 'default'
   },
   compressed: {
-    paddingTop: 0
+    paddingTop: 0,
+    marginTop: 0
   },
   nametag: {
     width: 240,

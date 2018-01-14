@@ -1,9 +1,8 @@
 import React, {Component, PropTypes} from 'react'
 import Dialog from 'material-ui/Dialog'
-// import {primary} from '../../../styles/colors'
+import {grey, primary} from '../../../styles/colors'
 import FontIcon from 'material-ui/FontIcon'
 import RaisedButton from 'material-ui/RaisedButton'
-import {injectStripe} from 'react-stripe-elements'
 // import t from '../../utils/i18n'
 import TextField from 'material-ui/TextField'
 import {track} from '../../utils/analytics'
@@ -40,7 +39,7 @@ class ContactDialog extends Component {
     // const {name, email, organization, note} = this.state
     const {closeDialog, reason} = this.props
 
-    const title = reason === 'requestDemo' ? 'Request Demo' : 'Contact Us'
+    const title = reason === 'requestDemo' ? 'Request A Demo' : 'Contact Us'
 
     return <div>
       <Dialog
@@ -55,33 +54,31 @@ class ContactDialog extends Component {
           className='material-icons'>
           close
         </FontIcon>
-        <h3>{title}</h3>
-        <form onSubmit={this.onSubmit}>
+        <h3 style={styles.header}>{title}</h3>
+        <div style={styles.container} onSubmit={this.onSubmit}>
           <TextField
             id='name'
             type='text'
-            floatingLabel='Name'
+            floatingLabelText='Name'
             style={styles.input}
             onChange={this.setItem('name')}
             />
           <TextField
             id='email'
             type='text'
-            floatingLabel='E-mail'
+            floatingLabelText='E-mail'
             style={styles.input}
             onChange={this.setItem('email')} />
           <TextField
             id='organization'
             type='text'
-            floatingLabel='Organization'
+            floatingLabelText='Organization'
             style={styles.input}
             onChange={this.setItem('organization')} />
-          <label htmlFor='note'>Organization</label>
           <TextField
             id='note'
-            rowtype='text'
-            rows={3}
-            floatingLabel={'Anything else you\'d like to add?'}
+            multiLine
+            floatingLabelText={'Anything else you\'d like to add?'}
             style={styles.input}
             onChange={this.setItem('note')} />
           <div style={styles.buttonContainer}>
@@ -90,7 +87,7 @@ class ContactDialog extends Component {
               label={title}
               primary />
           </div>
-        </form>
+        </div>
       </Dialog>
     </div>
   }
@@ -104,17 +101,35 @@ ContactDialog.propTypes = {
   reason: string.isRequired
 }
 
-export default injectStripe(ContactDialog)
+export default ContactDialog
 
 const styles = {
+  dialog: {
+    width: 400
+  },
+  header: {
+    textAlign: 'center',
+    color: primary
+  },
   buttonContainer: {
     display: 'flex',
     justifyContent: 'center',
     width: '100%',
-    marginBottom: 20
+    margin: 20
+  },
+  bodyStyle: {
+    overflowY: 'auto'
   },
   closeIcon: {
     float: 'right',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    color: grey
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  input: {
+    width: '100%'
   }
 }
