@@ -5,6 +5,7 @@ import FontIcon from 'material-ui/FontIcon'
 import RaisedButton from 'material-ui/RaisedButton'
 import {injectStripe} from 'react-stripe-elements'
 // import t from '../../utils/i18n'
+import TextField from 'material-ui/TextField'
 import {track} from '../../utils/analytics'
 
 class ContactDialog extends Component {
@@ -56,30 +57,31 @@ class ContactDialog extends Component {
         </FontIcon>
         <h3>{title}</h3>
         <form onSubmit={this.onSubmit}>
-          <label htmlFor='name'>Name</label>
-          <input
+          <TextField
             id='name'
             type='text'
+            floatingLabel='Name'
             style={styles.input}
             onChange={this.setItem('name')}
             />
-          <label htmlFor='email'>E-mail</label>
-          <input
+          <TextField
             id='email'
             type='text'
+            floatingLabel='E-mail'
             style={styles.input}
             onChange={this.setItem('email')} />
-          <label htmlFor='organization'>Organization</label>
-          <input
+          <TextField
             id='organization'
             type='text'
+            floatingLabel='Organization'
             style={styles.input}
             onChange={this.setItem('organization')} />
           <label htmlFor='note'>Organization</label>
-          <textarea
+          <TextField
             id='note'
             rowtype='text'
             rows={3}
+            floatingLabel={'Anything else you\'d like to add?'}
             style={styles.input}
             onChange={this.setItem('note')} />
           <div style={styles.buttonContainer}>
