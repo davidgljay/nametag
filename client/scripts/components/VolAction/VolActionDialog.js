@@ -74,7 +74,7 @@ class VolActionDialog extends Component {
         .then(() => this.setState({signedUp: true}))
     }
 
-    this.setDonated = () => {this.setState({donated: true})}
+    this.setDonated = () => { this.setState({donated: true}) }
   }
 
   render () {

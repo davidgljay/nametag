@@ -240,8 +240,7 @@ class CreateRoom extends Component {
       <Navbar
         me={me}
         toggleLogin={() => {}} />
-      <div style={styles.title}>
-      </div>
+      <div style={styles.title} />
       <div style={styles.createRoom}>
         {
           <CreateRoomForms
@@ -269,7 +268,7 @@ class CreateRoom extends Component {
 
         <div>
           {
-            this.state.stepIndex > 0 &&
+            stepIndex > 0 &&
             <FlatButton
               style={styles.button}
               labelStyle={styles.backButtonLabel}
@@ -278,10 +277,10 @@ class CreateRoom extends Component {
               label={t('back')} />
           }
           {
-            this.state.stepIndex < 4 &&
+            stepIndex < 4 &&
             (
-              !(this.state.stepIndex === 2 && !me) ||
-              (this.state.stepIndex === 3 && me && me.granters.length > 0)
+              !(stepIndex === 2 && !me) ||
+              (stepIndex === 3 && me && me.granters.length > 0)
             ) &&
             <RaisedButton
               style={styles.button}
@@ -292,9 +291,9 @@ class CreateRoom extends Component {
               label={t('next')} />
           }
           {
-            this.state.stepIndex >= 3 &&
+            stepIndex >= 3 &&
             me &&
-            !(this.state.stepIndex === 3 && me.granters.length > 0) &&
+            !(stepIndex === 3 && me.granters.length > 0) &&
             <RaisedButton
               style={styles.button}
               labelStyle={styles.buttonLabel}

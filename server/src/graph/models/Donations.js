@@ -44,13 +44,13 @@ const create = ({conn}, amount, nametag, token, note) =>
     Promise.all([
       stripe.charges.create({
         amount: amount * 100,
-        currency: "usd",
+        currency: 'usd',
         description: `Donation to ${name}`,
         source: token,
         destination: {
           amount: amount * 90,
-          account: stripe,
-        },
+          account: stripe
+        }
       }),
       room,
       granter
@@ -58,17 +58,17 @@ const create = ({conn}, amount, nametag, token, note) =>
   )
   .then(([res, room, granter]) =>
     donationsTable.insert(
-        {
-          amount,
-          nametag,
-          token,
-          note,
-          room,
-          granter,
-          stripe_response: res,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        }
+      {
+        amount,
+        nametag,
+        token,
+        note,
+        room,
+        granter,
+        stripe_response: res,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
       ).run(conn)
   )
   .then(res => ({id: res.generated_keys[0]}))
