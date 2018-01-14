@@ -125,18 +125,18 @@ class RoomCards extends Component {
             showAbout &&
             <div>
               <div style={styles.buttonContainer}>
-                <RaisedButton primary label='Try It Out' onClick={this.openContactDialog('requestDemo')} />
+                <RaisedButton primary label={t('room.try_it')} onClick={this.openContactDialog('requestDemo')} />
               </div>
               <ScrollDemo />
-              <h2 style={styles.featureHeader}>{t('room.intimate')}</h2>
+              <h2 style={styles.featureHeader}>{t('room.works')}</h2>
               <div id='FeatureCallouts' style={styles.featureCallouts} >
                 {
                   [0, 1, 2].map(i =>
                     <FeatureCallout
                       key={i}
-                      image={t(`room.feature_callouts.${i}.image`)}
-                      title={t(`room.feature_callouts.${i}.title`)}
-                      body={t(`room.feature_callouts.${i}.body`)} />
+                      image={t(`room.works_callouts.${i}.image`)}
+                      title={t(`room.works_callouts.${i}.title`)}
+                      body={t(`room.works_callouts.${i}.body`)} />
                   )
                 }
               </div>
@@ -230,7 +230,7 @@ const styles = {
     fontSize: 36,
     fontWeight: 300,
     padding: 10,
-    paddingTop: window.innerWidth * 500 / 1023 - 80,
+    paddingTop: window.innerWidth * 493 / 1023 - 80,
     [mobile]: {
       fontSize: 22
     }

@@ -160,7 +160,8 @@ en:
     choose_one: Choose One Of the Following
     header: Host authentic conversations that lead to action.
     room_convos: Your Conversations
-    intimate: Chat Built For Organizing
+    organizing: Chat Built For Organizing
+    works: How It Works
     feature_callouts:
       0:
         image: https://s3.amazonaws.com/nametag_images/site/welcoming.jpg
@@ -174,6 +175,19 @@ en:
         image: https://s3.amazonaws.com/nametag_images/site/kayak.jpg
         title: Relevant
         body: All conversations have a moderator, a shared set of norms and clear calls to action.
+    works_callouts:
+      0:
+        image: https://s3.amazonaws.com/nametag_images/site/welcoming.jpg
+        title: Invite
+        body: Decide on a topic and invite in supporters over e-mail, SMS and social media.
+      1:
+        image: https://s3.amazonaws.com/nametag_images/site/intimate.jpg
+        title: Engage
+        body: Participants introduce themselves with personal stories, then converse in a space that you control.
+      2:
+        image: https://s3.amazonaws.com/nametag_images/site/kayak.jpg
+        title: Mobilize
+        body: Those who feel inspired will volunteer, donate, and invite their friends.
     built_by: Nametag is built by folks who want better ways to build trust on the internet.
     learn: Learn More
     rooms: Rooms
