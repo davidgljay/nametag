@@ -9,6 +9,7 @@ const imageUpload = require('./routes/images/imageUpload')
 const imageRedirect = require('./routes/images/imageRedirect')
 const stripeAuth = require('./routes/granters/stripeAuth')
 const stripeDash = require('./routes/granters/stripeDash')
+const contactForm = require('./routes/contact/contact')
 const config = require('./secrets.json')
 const path = require('path')
 const bodyParser = require('body-parser')
@@ -292,5 +293,13 @@ app.post('/api/image_url',
   (req, res, next) => {
     imageUpload.fromUrl(req.body.width, req.body.height, req.body.url)
       .then(data => res.json(data))
+      .catch(err => next(`Uploading image from URL ${err}`))
+  })
+
+/* Accepts input from the contact form */
+app.post('/api/contact_form',
+  (req, res, next) => {
+    contactForm(req.body)
+      .then(() => res.end(200))
       .catch(err => next(`Uploading image from URL ${err}`))
   })

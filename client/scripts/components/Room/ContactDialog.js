@@ -34,14 +34,16 @@ class ContactDialog extends Component {
 
   render () {
     // const {name, email, organization, note} = this.state
-    const {closeDialog, open, title} = this.props
+    const {closeDialog, reason} = this.props
+
+    const title = reason === 'requestDemo' ? 'Request Demo' : 'Contact Us'
 
     return <div>
       <Dialog
         modal={false}
         contentStyle={styles.dialog}
         bodyStyle={styles.bodyStyle}
-        open={open}
+        open={!!reason}
         onRequestClose={closeDialog}>
         <FontIcon
           onClick={closeDialog}
@@ -89,11 +91,12 @@ class ContactDialog extends Component {
   }
 }
 
-const {func} = PropTypes
+const {func, string} = PropTypes
 
 ContactDialog.propTypes = {
   closeDialog: func.isRequired,
-  contactForm: func.isRequired
+  contactForm: func.isRequired,
+  reason: string.isRequired
 }
 
 export default injectStripe(ContactDialog)

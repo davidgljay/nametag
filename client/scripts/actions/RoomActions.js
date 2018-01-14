@@ -143,3 +143,29 @@ export function uploadImage (width, file) {
     }).catch(errorLog('Resizing and uploading image'))
   }
 }
+
+/*
+* Submits information from the contact us form
+* @params
+*   name
+*   email
+*   organization
+*   note
+*
+* @returns
+*   Promise resolving to uploaded image
+*/
+export function contactForm (name, email, organization, note, reason) {
+  return () => {
+    const options = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({name, email, organization, note, reason})
+    }
+    return fetch('/api/contact_form', options)
+      .then(res => {
+        return res.ok ? res.json()
+          : Promise.reject(`Error submitting contact form`)
+      }).catch(errorLog('Searching for image'))
+  }
+}

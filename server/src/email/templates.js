@@ -9,6 +9,8 @@ const publicRoom = require('./public-room')
 const hashLogin = require('./hash-login')
 const roomApproval = require('./room-approval')
 const volAction = require('./vol-action')
+const contactForm = require('./contact-form')
+const demoRequest = require('./demo-request')
 const digest = require('./digest')
 
 module.exports = {
@@ -23,5 +25,7 @@ module.exports = {
   hashLogin,
   announcement,
   digest,
-  volAction
+  volAction,
+  contactForm,
+  demoRequest
 }

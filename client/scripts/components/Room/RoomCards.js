@@ -3,6 +3,7 @@ import FeatureCallout from './FeatureCallout'
 import Navbar from '../Utils/Navbar'
 import LoginDialog from '../User/LoginDialog'
 import JoinedRoomCard from './JoinedRoomCard'
+import ContactDialog from './ContactDialog'
 import radium from 'radium'
 import {mobile} from '../../../styles/sizes'
 import {track, identify} from '../../utils/analytics'
@@ -17,12 +18,19 @@ class RoomCards extends Component {
 
     this.state = {
       showLogin: false,
-      showAllJoined: false
+      showAllJoined: false,
+      contactReason: null
     }
 
     this.toggleLogin = () => {
       this.setState({showLogin: !this.state.showLogin})
     }
+
+    this.closeContactDialog = () =>
+      this.setState({contactReason: null})
+
+    this.openContactDialog = reason => () =>
+      this.setState({contactReason: reason})
   }
 
   componentWillMount () {
@@ -45,8 +53,9 @@ class RoomCards extends Component {
 
   render () {
     const {
-      data: {me, loading, refetch}
+      data: {me, loading, refetch, contactForm}
     } = this.props
+    const {contactReason} = this.state
 
     if (loading) {
       return <div id='roomCards'>
@@ -133,6 +142,10 @@ class RoomCards extends Component {
             showLogin={this.state.showLogin}
             refetch={refetch}
             toggleLogin={this.toggleLogin} />
+          <ContactDialog
+            contactForm={contactForm}
+            reason={contactReason}
+            closeDialog={this.closeContactDialog} />
         </div>
       </div>
     </div>
