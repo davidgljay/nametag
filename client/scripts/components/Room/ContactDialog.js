@@ -65,7 +65,7 @@ class ContactDialog extends Component {
               label={t('room.close')}
               primary />
           </div>
-          :<div style={styles.container} onSubmit={this.onSubmit}>
+          : <div style={styles.container} onSubmit={this.onSubmit}>
             <TextField
               id='name'
               type='text'

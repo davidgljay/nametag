@@ -236,13 +236,16 @@ const styles = {
   },
   headerText: {
     color: white,
-    textAlign: 'center',
-    fontSize: 36,
-    fontWeight: 300,
-    padding: 10,
-    paddingTop: window.innerWidth * 493 / 1023 - 80,
+    fontSize: 42,
+    fontWeight: 700,
+    padding: 50,
+    width: '40%',
+    height: window.innerWidth * 494 / 1023 - 100,
+    background: 'linear-gradient(-90deg, rgba(0,0,0,0), rgba(0,0,0,0.5))',
     [mobile]: {
-      fontSize: 22
+      fontSize: 22,
+      padding: 20,
+      height: window.innerWidth * 494 / 1023 - 40
     }
   },
   showMore: {
@@ -255,7 +258,7 @@ const styles = {
   featureHeader: {
     margin: '40px 10px 0px 10px',
     textAlign: 'center',
-    color: 'primary'
+    color: primary
   },
   featureCallouts: {
     display: 'flex',
