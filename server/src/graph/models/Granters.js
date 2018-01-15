@@ -1,4 +1,5 @@
 const {db} = require('../../db')
+const r = require('rethinkdb')
 const {ErrNotFound, APIError} = require('../../errors')
 const sendEmail = require('../../email')
 const notification = require('../../notifications')
@@ -153,6 +154,33 @@ const create = ({conn, models: {Templates}}, granter) =>
       )
       .then(([id, adminRes, templateUpdateRes]) => Object.assign({}, granter, {id}))
 
+  /**
+   * Adds a stripe account
+   *
+   * @param {Object} context     graph context
+   * @param {Object} granter_code   the url code of the badge granter
+   * @param {Object} stripe_id the id of the stripe account to be added
+   *
+   **/
+
+const addStripe = ({conn}, granterCode, stripe) =>
+     r.branch(
+        grantersTable
+          .getAll(granterCode, {index: 'urlCode'})
+          .nth(0)
+          .hasFields('stripe'),
+        {error: 'Stripe account already set for this granter.'},
+        grantersTable
+          .getAll(granterCode, {index: 'urlCode'})
+          .update({stripe})
+      ).run(conn)
+      .then(result => {
+        if (result.error) {
+          return new APIError(result.error)
+        }
+        return
+      })
+
 module.exports = (context) => ({
   Granters: {
     get: id => get(context, id),
@@ -160,6 +188,7 @@ module.exports = (context) => ({
     getByUrlCode: urlCode => getByUrlCode(context, urlCode),
     getByAdminTemplate: adminTemplateIds => getByAdminTemplate(context, adminTemplateIds),
     notifyAdmins: (granterId, template, params) => notifyAdmins(context, granterId, template, params),
-    emailAdmins: (granterId, template, params) => emailAdmins(context, granterId, template, params)
+    emailAdmins: (granterId, template, params) => emailAdmins(context, granterId, template, params),
+    addStripe: (granterCode, stripe) => addStripe(context, granterCode, stripe)
   }
 })

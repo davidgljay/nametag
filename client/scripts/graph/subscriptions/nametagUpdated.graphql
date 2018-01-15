@@ -1,15 +1,7 @@
-#import "../fragments/badgeView.graphql"
+#import "../fragments/nametagView.graphql"
 
 subscription nametagUpdated ($roomId: ID!) {
   nametagUpdated(roomId: $roomId) {
-    id
-    name
-    bio
-    image
-    present
-    banned
-    badges {
-      ...badgeView
-    }
+    ...nametagView
   }
 }

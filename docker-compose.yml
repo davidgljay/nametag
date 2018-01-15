@@ -1,8 +1,10 @@
 nametag:
   build: .
   dockerfile: nametagDockerfile
+  env_file:
+    - .env
   environment:
-    - NODE_ENV=${NODE_ENV}
+    - NODE_ENV
   volumes:
     - ./dist:/usr/client/
     - ./.keys:/usr/.keys

@@ -25,7 +25,7 @@ const getAll = ({conn}, ids) => templatesTable.getAll(...ids).run(conn)
   .then(cursor => cursor.toArray())
 
 /**
- * Returns an array of badge templates from an array of ids.
+ * Returns an array of badge templates for a particular badge granter.
  *
  * @param {Object} context     graph context
  * @param {String} granterId   the id of the badge granter

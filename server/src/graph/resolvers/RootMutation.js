@@ -86,12 +86,14 @@ const wrap = (mutation, requires, key = 'result') => (obj, args, context) => {
     case 'MY_NAMETAG':
       if (!context.user) {
         promise = Promise.reject(ErrNotLoggedIn)
+      } else if (!context.user.nametags) {
+        promise = Promise.reject(ErrNotYourNametag)
       } else {
         const myNametagIds = Object.keys(context.user.nametags)
         .map(roomId => context.user.nametags[roomId])
         promise = myNametagIds.indexOf(args.nametagId) > -1
-      ? mutation(obj, args, context)
-      : Promise.reject(ErrNotYourNametag)
+          ? mutation(obj, args, context)
+          : Promise.reject(ErrNotYourNametag)
       }
       break
     case 'NAMETAG_ADMIN':
@@ -266,6 +268,21 @@ const RootMutation = {
     resolve: (obj, {roomId, nametagId}, {models: {Nametags}}) =>
       Nametags.ban(nametagId, roomId)
       .then(wrapResponse('banNametag'))
+  },
+  acceptBadge: {
+    requires: 'LOGIN',
+    resolve: (obj, {messageId}, {models: {Messages}}) =>
+      Messages.acceptBadge(messageId)
+  },
+  createVolActions: {
+    requires: 'MY_NAMETAG',
+    resolve: (obj, {actions, nametagId, note}, {user, models: {VolActions}}) =>
+      VolActions.createArray(actions, nametagId, note)
+  },
+  createDonation: {
+    requires: 'MY_NAMETAG',
+    resolve: (obj, {amount, nametagId, token, note}, {user, models: {Donations}}) =>
+      Donations.create(amount, nametagId, token, note)
   }
 }
 

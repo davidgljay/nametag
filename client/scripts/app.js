@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Radium, {StyleRoot} from 'radium'
 import Raven from 'raven-js'
-
+import {StripeProvider} from 'react-stripe-elements'
 import constants from './constants'
 import Room from './containers/Room/RoomContainer'
 import RoomCards from './containers/Room/RoomCardsContainer'
@@ -86,22 +86,24 @@ class Nametag extends Component {
     return <ApolloProvider client={client} store={store}>
       <StyleRoot>
         <MuiThemeProvider muiTheme={muiTheme}>
-          <Router history={browserHistory}>
-            <Route path='/' component={RoomCards} />
-            <Route path='/rooms' component={RoomCards} />
-            <Route path='/rooms/create' component={CreateRoom} />
-            <Route path='/rooms/:roomId' component={Room} />
-            <Route path='/rooms/:roomId/approve' component={ApproveRoom} />
-            <Route path='/granters/:urlCode' component={Granter} />
-            <Route path='/granters/:urlCode/badges/create' component={CreateBadge} />
-            <Route path='/granters/:urlCode/badges/:templateId' component={Badge} />
-            <Route path='/badges/:templateId' component={Badge} />
-            <Route path='/badges/:templateId/qrcode' component={ShareBadge} />
-            <Route path='/emailconfirm/:token' component={EmailConfirm} />
-            <Route path='/unsubscribe/:loginHash' component={Unsubscribe} />
-            <Route path='/privacy' component={Privacy} />
-            <Route path='/tos' component={Tos} />
-          </Router>
+          <StripeProvider apiKey={constants.STRIPE_CLIENT_ID}>
+            <Router history={browserHistory}>
+              <Route path='/' component={RoomCards} />
+              <Route path='/rooms' component={RoomCards} />
+              <Route path='/rooms/create' component={CreateRoom} />
+              <Route path='/rooms/:roomId' component={Room} />
+              <Route path='/rooms/:roomId/approve' component={ApproveRoom} />
+              <Route path='/granters/:urlCode' component={Granter} />
+              <Route path='/granters/:urlCode/badges/create' component={CreateBadge} />
+              <Route path='/granters/:urlCode/badges/:templateId' component={Badge} />
+              <Route path='/badges/:templateId' component={Badge} />
+              <Route path='/badges/:templateId/qrcode' component={ShareBadge} />
+              <Route path='/emailconfirm/:token' component={EmailConfirm} />
+              <Route path='/unsubscribe/:loginHash' component={Unsubscribe} />
+              <Route path='/privacy' component={Privacy} />
+              <Route path='/tos' component={Tos} />
+            </Router>
+          </StripeProvider>
         </MuiThemeProvider>
       </StyleRoot>
     </ApolloProvider>

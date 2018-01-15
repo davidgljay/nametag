@@ -26,7 +26,7 @@ module.exports = {
       .postWelcome(messages[2])
       .register(users.participant)
       .assertLoaded(room, {name: 'participant'})
-      .postReply(messages[3])
+      .postReply(messages[3], 1)
   },
   after: client => {
     client.end()

@@ -9,6 +9,8 @@ const Templates = require('./Templates')
 const Granters = require('./Granters')
 const BadgeRequests = require('./BadgeRequests')
 const Users = require('./Users')
+const VolActions = require('./VolActions')
+const Donations = require('./Donations')
 const schema = require('./schema')
 const {errorLog} = require('../../errors')
 
@@ -22,7 +24,9 @@ module.exports = (context) => {
     Templates,
     Granters,
     BadgeRequests,
-    Users
+    Users,
+    Donations,
+    VolActions
   ].map((loaders) => {
     // Each loader is a function which takes the context.
     return loaders(context)

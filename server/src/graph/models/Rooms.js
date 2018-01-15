@@ -134,7 +134,16 @@ const create = ({conn, models: {Nametags, Users}}, rm) => {
     })
   return Promise.all([
     roomsTable.insert(room).run(conn),
-    rm.mod
+    rm.mod,
+    room.granter ? db.table('granters').get(room.granter)
+      .update(rm => rm.merge({
+        defaultActionTypes: room.actionTypes,
+        defaultCtaText: room.ctaText,
+        defaultThankText: room.thankText,
+        defaultCtaImages: r.branch(rm.hasFields('defaultCtaImages'), rm('defaultCtaImages').union(room.ctaImage), [room.ctaImage]),
+        updatedAt: new Date()
+      })).run(conn)
+      : null
   ])
   .then(([res, mod]) => {
     if (res.errors > 0) {

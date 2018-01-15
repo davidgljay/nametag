@@ -186,16 +186,25 @@ const getNametagCount = ({conn}, room) => nametagsTable.filter({room}).count().r
  *
  */
 
-const update = ({conn}, nametagId, nametagUpdate) =>
+const update = ({conn, models: {Users}}, nametagId, nametagUpdate) =>
   nametagsTable.get(nametagId).update(nametagUpdate).run(conn)
     .then(res => {
       if (res.errors) {
         return Promise.reject(new errors.APIError(res.errors[0]))
       }
-      return nametagsTable.get(nametagId).pluck('room').run(conn)
+      let userUpdate = null
+      if (nametagUpdate.name) {
+        userUpdate = Users.addDefaultName(nametagUpdate.name)
+      } else if (nametagUpdate.image) {
+        userUpdate = Users.addDefaultImage(nametagUpdate.image)
+      }
+      return Promise.all([
+        nametagsTable.get(nametagId).run(conn),
+        userUpdate
+      ])
     })
-    .then(({room}) => {
-      pubsub.publish('nametagUpdated', Object.assign({}, nametagUpdate, {room, id: nametagId}))
+    .then(([nametag]) => {
+      pubsub.publish('nametagUpdated', nametag)
     })
 
 /**
@@ -250,6 +259,29 @@ const ban = ({conn, models: {Messages}}, id, roomId) =>
       ])
     })
 
+  /**
+   * Clones a nametag
+   *
+   * @param {Object} context     graph context
+   * @param {String} id   the id of the nametag to be cloned
+   */
+
+const clone = ({conn, models: {Users}}, id, about) =>
+  nametagsTable.insert(
+    nametagsTable.get(id)
+      .pluck('name', 'bio', 'user')
+      .merge({createdAt: new Date()})
+      .merge(about)
+    )
+    .run(conn)
+    .then(res => {
+      if (res.errors) {
+        return Promise.reject(new errors.APIError('Error cloning Nametag: ' + res.errors[0]))
+      }
+      let newId = res.generated_keys[0]
+      return Users.addNametag(newId, about.template || about.room).then(() => newId)
+    })
+
 module.exports = (context) => ({
   Nametags: {
     get: (id) => get(context, id),
@@ -263,6 +295,7 @@ module.exports = (context) => ({
     getNametagCount: (room) => getNametagCount(context, room),
     updateLatestVisit: (nametagId) => updateLatestVisit(context, nametagId),
     grantBadge: (id, badgeId) => grantBadge(context, id, badgeId),
-    ban: (id, roomId) => ban(context, id, roomId)
+    ban: (id, roomId) => ban(context, id, roomId),
+    clone: (id, about) => clone(context, id, about)
   }
 })

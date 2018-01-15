@@ -22,7 +22,7 @@ en:
   badge:
     granted_by: Granted by
     note: Note
-    grant_badge: Grant Badge
+    badge_grant: Grant Badge
     note_hint: Add a note that will be publicly visible on this individual's badge. Do not include any personally identifiable information.
     add_note: Add Note
     request: Request
@@ -45,6 +45,8 @@ en:
     drag_share: Drag to Share
   granter:
     login_to_view: Log in to view this page.
+    stripe_dash: Donations Dashboard
+    stripe_register: Register To Recieve Payments
   message:
     edit: Edit Message
     editing: Editing Message
@@ -54,12 +56,18 @@ en:
     private_msg: Private Message
     mention: "@Mention"
     closed: This discussion is closed.
+    badgeGrant: Granting the following badge to {0}:
+    badgeoffer_start: You have been offered the following badge:
+    badgeoffer_end: You can use this badge to prove your affiliation with {0} and to access exclusive conversations.
+    badgeoffer_button: Accept
+    badge_claimed: Badge Recieved
     typing: "Typing:"
     host_welcome: Leave a few messages to set the tone, then invite a few people in to get things started. Just share a link to this room.
     commands:
       welcome: Update this room's welcome prompt
       intro: Update your intro message
       name: Update your name
+      image: Update your image
       title: Update this room's title
       announce: Send an e-mail to everyone in the room
     skin_tone: Skin Tone
@@ -116,6 +124,17 @@ en:
       - What brings you to this conversation?
       - Why are you interested in this topic?
       - Briefly share your background.
+    cta:
+      add_call: Add A Call To Action
+      add_call_header: Optionally enable a call to action for participants to volunteer and donate
+      enable_call: Enable call to action for
+      personal: Add a personal appeal
+      actions_avail: What actions should be available?
+      add_action: ADD ACTION
+      donation_enabled: Donations are enabled
+      enable_donation: Enable Donations
+      thanks: Thank You!
+      thank_header: Thank participants for taking action
     talking: Get People Talking
     welcome_start: Start by choosing a welcome prompt.
     welcome_helptext: Users will be asked this question when they enter the room.
@@ -139,23 +158,37 @@ en:
     show_more: Show More
     create_account: Register to Join
     choose_one: Choose One Of the Following
-    dinner_party: Online conversation that feels like an intimate dinner party.
+    header: Host authentic conversations that lead to action.
     room_convos: Your Conversations
-    intimate: Chat Built For Intimate Conversation
+    organizing: Chat Built For Organizing
+    works: How It Works
     feature_callouts:
       0:
         image: https://s3.amazonaws.com/nametag_images/site/welcoming.jpg
         title: Welcoming
         body: Everyone who enters a room introduces themselves, so you know what perspective they bring.
       1:
-        image: https://s3.amazonaws.com/nametag_images/site/kayak.jpg
-        title: Focused
-        body: All conversations have a moderator and a shared set of norms to keep them focused on what matters.
-      2:
         image: https://s3.amazonaws.com/nametag_images/site/intimate.jpg
-        title: Confidential
+        title: Intimate
         body: Limit conversations to people you trust, we keep what you say and where you say it private.
-    built_by: Nametag is built by folks who want better ways to build trust on the internet.
+      2:
+        image: https://s3.amazonaws.com/nametag_images/site/kayak.jpg
+        title: Relevant
+        body: All conversations have a moderator, a shared set of norms and clear calls to action.
+    works_callouts:
+      0:
+        image: https://s3.amazonaws.com/nametag_images/site/invite.png
+        title: Invite
+        body: Decide on a topic and invite in supporters over e-mail, SMS and social media.
+      1:
+        image: https://s3.amazonaws.com/nametag_images/site/welcoming.jpg
+        title: Engage
+        body: Participants introduce themselves with personal stories, then converse in a space that you control.
+      2:
+        image: https://s3.amazonaws.com/nametag_images/site/kayak.jpg
+        title: Mobilize
+        body: Those who feel inspired will volunteer, donate, and invite their friends.
+    built_by: Our team has over a decade of experience building social movements through authentic conversation online. We believe that real change starts with people sharing personal stories in small conversations.
     learn: Learn More
     rooms: Rooms
     settings: Settings
@@ -172,6 +205,10 @@ en:
     start_conversation: Start Conversation
     try_it: Try It Out
     introduce: Introduce Yourself
+    close: CLOSE
+    sign_up: SIGN ME UP!
+    contact: CONTACT US
+    who: Who We Are
   user:
     em_confirmed: Your e-mail has been confirmed! Redirecting to homepage...
     pw_match: Passwords do not match

@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react'
 import {mobile} from '../../../styles/sizes'
 import radium from 'radium'
 
-const GranterInfo = ({granter: {name, image, description}}) =>
+const GranterInfo = ({granter: {name, image, description, urlCode}, me: {email}}) =>
   <div id='granterInfo' style={styles.granterInfoContainer}>
     <img src={image} style={styles.granterImage} />
     <div id='granterDetails' style={styles.granterDetails}>

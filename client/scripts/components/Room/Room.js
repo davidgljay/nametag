@@ -5,7 +5,9 @@ import AppBar from 'material-ui/AppBar'
 import RoomDialog from './RoomDialog'
 import radium, {keyframes} from 'radium'
 import Messages from '../Message/Messages'
+import VolActionDialog from '../VolAction/VolActionDialog'
 import ComposeWithMenus from '../Message/ComposeWithMenus'
+import {Elements} from 'react-stripe-elements'
 
 import {getQueryVariable, removeQueryVar} from '../../utils/queryVars'
 import {track, identify, setTimer} from '../../utils/analytics'
@@ -26,6 +28,7 @@ class Room extends Component {
       presenceTime: null,
       defaultMessage: '',
       keepLoading: false,
+      showVolDialog: false,
       nametagCreated: false,
       recipient: null,
       editing: null
@@ -150,6 +153,10 @@ class Room extends Component {
         refetch
       },
       myNametag,
+      grantableTemplates,
+      badgeToGrant,
+      badgeGrantee,
+      setBadgeGrantee,
       nametagEdits,
       typingPrompts,
       showTypingPrompt,
@@ -164,10 +171,16 @@ class Room extends Component {
       addReaction,
       getReplies,
       visibleReplies,
-      setVisibleReplies
+      setVisibleReplies,
+      setBadgeToGrant,
+      acceptBadge,
+      createVolActions,
+      createDonation,
+      showNametagImageMenu,
+      toggleNametagImageMenu
     } = this.props
 
-    const {defaultMessage, recipient, editing, nametagCreated, keepLoading} = this.state
+    const {defaultMessage, recipient, editing, nametagCreated, keepLoading, showVolDialog} = this.state
 
     if (loading || !room || keepLoading) {
       return <div style={styles.spinner}>
@@ -179,10 +192,18 @@ class Room extends Component {
 
     const isMobile = window.innerWidth < 800
 
-    const backIcon = <img
-      id='backButton'
-      style={styles.backIcon}
-      src='https://s3.amazonaws.com/nametag_images/logo-inverted30.png' />
+    const showCallToAction = me && room.granter &&
+      room.actionTypes.length > 0
+
+    const leftIcon = showCallToAction
+      ? <img
+        id='volActionButton'
+        style={styles.backIcon}
+        src='https://s3.amazonaws.com/nametag_images/site/jointhefight.png' />
+      : <img
+        id='backButton'
+        style={styles.backIcon}
+        src='https://s3.amazonaws.com/nametag_images/logo-inverted30.png' />
 
     return <div style={styles.roomContainer}>
       <div id='room'>
@@ -191,8 +212,11 @@ class Room extends Component {
           title={room.title}
           titleStyle={styles.title}
           style={styles.appBar}
-          iconElementRight={backIcon}
-          onRightIconButtonTouchTap={this.showRooms}
+          iconElementRight={leftIcon}
+          onRightIconButtonTouchTap={
+            showCallToAction
+            ? () => this.setState({showVolDialog: true})
+            : this.showRooms}
           onLeftIconButtonTouchTap={this.toggleLeftBar}
           iconStyleLeft={isMobile ? {display: 'inline-block'} : {display: 'none'}} />
         <div>
@@ -202,9 +226,12 @@ class Room extends Component {
             latestMessageUpdatedSubscription={latestMessageUpdatedSubscription}
             updateRoom={updateRoom}
             myNametag={myNametag}
+            canGrantBadges={grantableTemplates.length > 0}
+            setBadgeGrantee={setBadgeGrantee}
             setDefaultMessage={this.setDefaultMessage}
             setRecipient={this.setRecipient}
             expanded={this.state.leftBarExpanded}
+            toggleNametagImageMenu={toggleNametagImageMenu}
             toggleLeftBar={this.toggleLeftBar} />
           <Messages
             roomId={room.id}
@@ -214,6 +241,10 @@ class Room extends Component {
             hideDMs={!!hideDMs}
             addReaction={addReaction}
             deleteMessage={deleteMessage}
+            grantableTemplates={grantableTemplates}
+            setBadgeGrantee={setBadgeGrantee}
+            badgeGrantee={badgeGrantee}
+            setBadgeToGrant={setBadgeToGrant}
             banNametag={banNametag}
             getReplies={getReplies}
             editMessage={editMessage}
@@ -222,8 +253,13 @@ class Room extends Component {
             setDefaultMessage={this.setDefaultMessage}
             setRecipient={this.setRecipient}
             setEditing={this.setEditing}
+            acceptBadge={acceptBadge}
             mod={room.mod}
-            messages={me && (myNametag && myNametag.bio) || nametagCreated ? room.messages : []} />
+            updateNametag={updateNametag}
+            showNametagImageMenu={showNametagImageMenu}
+            toggleNametagImageMenu={toggleNametagImageMenu}
+            messages={me && (myNametag && myNametag.bio) || nametagCreated ? room.messages : []}
+            me={me} />
         </div>
         <ComposeWithMenus
           createMessage={createMessage}
@@ -235,12 +271,15 @@ class Room extends Component {
           recipient={recipient}
           setDefaultMessage={this.setDefaultMessage}
           setRecipient={this.setRecipient}
+          badgeToGrant={badgeToGrant}
+          setBadgeToGrant={setBadgeToGrant}
           editing={editing}
           setEditing={this.setEditing}
           editMessage={editMessage}
           updateRoom={updateRoom}
           updateNametag={updateNametag}
           nametags={room.nametags}
+          toggleNametagImageMenu={toggleNametagImageMenu}
           defaultMessage={defaultMessage}
           showTypingPrompt={showTypingPrompt}
           typingPrompts={typingPrompts}
@@ -257,6 +296,22 @@ class Room extends Component {
           updateNametagEdit={updateNametagEdit}
           nametagEdits={nametagEdits} />
       }
+      {
+        showCallToAction &&
+        <Elements>
+          <VolActionDialog
+            granter={room.granter}
+            open={showVolDialog}
+            closeDialog={() => this.setState({showVolDialog: false})}
+            room={room}
+            email={me.email}
+            roomTitle={room.title}
+            myNametag={myNametag}
+            createDonation={createDonation}
+            createVolActions={createVolActions}
+            nametagEdits={nametagEdits} />
+        </Elements>
+      }
     </div>
   }
 }
@@ -272,7 +327,9 @@ Room.propTypes = {
       messages: arrayOf(object),
       nametags: arrayOf(object),
       modOnlyDMs: bool,
-      closed: bool
+      closed: bool,
+      stripe: string,
+      actions: string
     }),
     me: object
   }).isRequired,
@@ -280,6 +337,8 @@ Room.propTypes = {
     roomId: string.isRequired
   }),
   visibleReplies: string.isRequired,
+  badgeGrantee: string.isRequired,
+  badgeToGrant: object,
   registerUser: func.isRequired,
   typingPrompts: array.isRequired,
   updateRoom: func.isRequired,
@@ -292,7 +351,11 @@ Room.propTypes = {
   updateToken: func.isRequired,
   getReplies: func.isRequired,
   setVisibleReplies: func.isRequired,
-  banNametag: func.isRequired
+  setBadgeGrantee: func.isRequired,
+  banNametag: func.isRequired,
+  acceptBadge: func.isRequired,
+  toggleNametagImageMenu: func.isRequired,
+  showNametagImageMenu: bool.isRequired
 }
 
 export default radium(Room)

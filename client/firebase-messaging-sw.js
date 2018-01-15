@@ -61,7 +61,15 @@ firebase.messaging().setBackgroundMessageHandler((payload) => {
       }
       break
     case 'DM':
-      notificationTitle = `${params.senderName} has sent you a direct message in ${params.roomTitle}`
+      notificationTitle = `${params.senderName} has sent you a private message in ${params.roomTitle}`
+      notificationOptions = {
+        body: params.text,
+        icon: params.icon,
+        data: `/rooms/${params.roomId}`
+      }
+      break
+    case 'VOLUNTEER':
+      notificationTitle = `${params.name} has volunteered in ${params.roomTitle}`
       notificationOptions = {
         body: params.text,
         icon: params.icon,

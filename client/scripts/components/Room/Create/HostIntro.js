@@ -6,11 +6,11 @@ import {grey, red} from '../../../../styles/colors'
 import t from '../../../utils/i18n'
 
 const HostIntro = ({
-  nametagEdits,
+  mod,
   selectedBadges,
-  addNametagEditBadge,
-  removeNametagEditBadge,
-  updateNametagEdit,
+  addModBadge,
+  removeModBadge,
+  updateMod,
   me,
   error}) =>
     <div>
@@ -21,11 +21,11 @@ const HostIntro = ({
       <TextField
         style={styles.textfield}
         inputStyle={styles.textFieldInput}
-        value={nametagEdits.new.bio}
+        value={mod.bio}
         id='bioField'
         multiLine
         errorText={error && error.bioError}
-        onChange={(e) => updateNametagEdit('new', 'bio', e.target.value)}
+        onChange={(e) => updateMod(null, 'bio', e.target.value)}
         floatingLabelText={t('create_room.intro')} />
       <div style={{...styles.helpText, ...styles.nametagHelpText}}>
         {t('create_room.intro_custom')}
@@ -37,17 +37,17 @@ const HostIntro = ({
         <div>
           <EditNametag
             error={error}
-            nametagEdit={nametagEdits.new}
-            addNametagEditBadge={addNametagEditBadge}
+            nametagEdit={mod}
+            addNametagEditBadge={addModBadge}
             requiredTemplates={selectedBadges.map(b => b.template.id)}
-            removeNametagEditBadge={removeNametagEditBadge}
-            updateNametagEdit={updateNametagEdit}
+            removeNametagEditBadge={removeModBadge}
+            updateNametagEdit={updateMod}
             me={me}
             roomId='new' />
           <div style={styles.userBadges}>
             <UserBadges
               badges={me.badges}
-              selectedBadges={nametagEdits.new && nametagEdits.new.badges} />
+              selectedBadges={mod && mod.badges} />
           </div>
         </div>
       </div>
@@ -56,11 +56,11 @@ const HostIntro = ({
 const {object, arrayOf, shape, func, string} = PropTypes
 
 HostIntro.proptypes = {
-  nametagEdits: shape({new: object.isRequired}).isRequired,
+  mod: object.isRequired,
   selectedBadges: arrayOf(shape({template: shape({id: string.isRequired})})).isRequired,
-  addNametagEditBadge: func.isRequired,
-  removeNametagEditBadge: func.isRequired,
-  updateNametagEdit: func.isRequired,
+  addModBadge: func.isRequired,
+  removeModBadge: func.isRequired,
+  updateMod: func.isRequired,
   me: object,
   error: object
 }

@@ -45,6 +45,9 @@ class Replies extends Component {
         norms,
         hideDMs,
         closeReply,
+        acceptBadge,
+        canGrantBadges,
+        setBadgeGrantee,
         mod
       } = this.props
 
@@ -99,29 +102,33 @@ class Replies extends Component {
           <div style={styles.cardsContainer}>
             {
               [parent].concat(replies).map((reply, i) =>
-                <Message
-                  message={reply}
-                  roomId={roomId}
-                  key={reply.id}
-                  id={reply.id}
-                  hideDMs={hideDMs}
-                  hideAuthor={
-                    i > 0 &&
-                    replies[i - 1].author &&
-                    !!reply.author &&
-                    reply.author.id === replies[i - 1].author.id
-                  }
-                  toggleEmoji={toggleEmoji}
-                  deleteMessage={deleteMessage}
-                  banNametag={banNametag}
-                  addReaction={addReaction}
-                  setDefaultMessage={this.setDefaultMessage}
-                  setRecipient={setRecipient}
-                  setEditing={this.setEditing}
-                  norms={norms}
-                  mod={mod}
-                  createMessage={createMessage}
-                  myNametag={myNametag} />
+                <div className={`reply${i}`} key={reply.id}>
+                  <Message
+                    message={reply}
+                    roomId={roomId}
+                    id={reply.id}
+                    hideDMs={hideDMs}
+                    setBadgeGrantee={setBadgeGrantee}
+                    canGrantBadges={canGrantBadges}
+                    acceptBadge={acceptBadge}
+                    hideAuthor={
+                      i > 1 &&
+                      replies[i - 2].author &&
+                      !!reply.author &&
+                      reply.author.id === replies[i - 2].author.id
+                    }
+                    toggleEmoji={toggleEmoji}
+                    deleteMessage={deleteMessage}
+                    banNametag={banNametag}
+                    addReaction={addReaction}
+                    setDefaultMessage={this.setDefaultMessage}
+                    setRecipient={setRecipient}
+                    setEditing={this.setEditing}
+                    norms={norms}
+                    mod={mod}
+                    createMessage={createMessage}
+                    myNametag={myNametag} />
+                </div>
               )
             }
           </div>
@@ -159,7 +166,10 @@ Replies.propTypes = {
   open: bool.isRequired,
   hideDMs: bool.isRequired,
   mod: object.isRequired,
-  closeReply: func.isRequired
+  closeReply: func.isRequired,
+  setBadgeGrantee: func.isRequired,
+  acceptBadge: func.isRequired,
+  canGrantBadges: bool.isRequired
 }
 
 export default Replies

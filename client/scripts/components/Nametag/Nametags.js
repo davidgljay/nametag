@@ -2,7 +2,17 @@ import React, {PropTypes} from 'react'
 import Nametag from './Nametag'
 import {Card} from 'material-ui/Card'
 
-const Nametags = ({nametags, mod, myNametagId, setDefaultMessage, setRecipient, hideDMs}) =>
+const Nametags = ({
+  nametags,
+  mod,
+  myNametagId,
+  setDefaultMessage,
+  setRecipient,
+  setBadgeGrantee,
+  canGrantBadges,
+  toggleNametagImageMenu,
+  hideDMs
+}) =>
   <div id='nametags' style={styles.nametags}>
     {
       nametags
@@ -13,8 +23,11 @@ const Nametags = ({nametags, mod, myNametagId, setDefaultMessage, setRecipient, 
             nametag={nametag}
             hideDMs={hideDMs}
             myNametagId={myNametagId}
+            canGrantBadges={canGrantBadges}
             setRecipient={setRecipient}
             setDefaultMessage={setDefaultMessage}
+            setBadgeGrantee={setBadgeGrantee}
+            toggleNametagImageMenu={toggleNametagImageMenu}
             modId={mod} />
         </Card>)
     }
@@ -24,10 +37,13 @@ const {arrayOf, string, object, func, bool} = PropTypes
 Nametags.propTypes = {
   nametags: arrayOf(object).isRequired,
   mod: string.isRequired,
+  canGrantBadges: bool.isRequired,
+  toggleNametagImageMenu: func.isRequired,
   myNametagId: string,
   hideDMs: bool,
   setDefaultMessage: func,
-  setRecipient: func
+  setRecipient: func,
+  setBadgeGrantee: func
 }
 
 export default Nametags

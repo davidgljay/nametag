@@ -31,7 +31,7 @@ input:focus {
 }
 
 .messageText p {
-  display: inline;
+  /*display: inline;*/
 }
 
 .messageText blockquote {
@@ -56,4 +56,11 @@ input:focus {
 .fade-leave.fade-leave-active {
   opacity: 0;
   transition: opacity 1500ms ease-in;
+}
+
+/*Prevent spinner button for numeric inputs*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }

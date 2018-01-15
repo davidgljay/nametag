@@ -56,6 +56,9 @@ type User {
   # Templates from organizations that this user administers
   adminTemplates: [Template]
 
+  # Email address of the user
+  email: String
+
 }
 
 # A room where discussions can take place
@@ -72,6 +75,9 @@ type Room {
 
   # The room's moderator
   mod: Nametag!
+
+  # The granter sponsoring this room
+  granter: Granter
 
   # The date when the room was created
   createdAt: Date!
@@ -108,6 +114,18 @@ type Room {
 
   # Indicates whether a room is closed
   closed: Boolean
+
+  # Volunteer action types for this room
+  actionTypes: [ActionType]
+
+  # Text for a call to action for this room
+  ctaText: String
+
+  # Image for a call to action for this room
+  ctaImage: String
+
+  # Text for thanking participants when they have taken action
+  thankText: String
 }
 
 # A topic of discussion in a room
@@ -151,6 +169,9 @@ type Message {
 
   # Emoji reactions to the message
   reactions: [EmojiReaction]
+
+  # A template being granted with this message
+  template: Template
 
   # Nametag to be displayed with this message
   nametag: Nametag
@@ -254,6 +275,17 @@ type Note {
 
 }
 
+# A type of volunteer action selectable by a granter
+type ActionType {
+
+  # The title of the action
+  title: String!
+
+  # Description of the action
+  desc: String
+
+}
+
 # A verified component of a user's identity
 type Template {
   # The ID of the badge
@@ -320,6 +352,21 @@ type Granter {
 
   # List of administrators
   adminTemplate: Template
+
+  # Stripe account id for payment processing
+  stripe: String
+
+  # Default action types for this granter
+  defaultActionTypes: [ActionType]
+
+  # Default image for calls to action
+  defaultCtaText: String
+
+  # Default image for calls to action
+  defaultCtaImages: [String]
+
+  # Default thanking text for calls to action
+  defaultThankText: String
 
 }
 
@@ -396,6 +443,44 @@ type ModAlert implements GranterNotification {
 
 }
 
+# Indicates a volunteer taking action
+type VolAction {
+
+  # Action that the user has volunteered for
+  action: String!
+
+  # Additional note left by the user
+  note: String
+
+  # Granter that this user is volunteering for
+  granter: ID!
+
+  # The user's Nametag
+  nametag: ID!
+
+  # The room where the user volunteered
+  room: ID!
+}
+
+# Created when someone donates
+type Donation {
+
+  # Amount donated
+  donation: Float!
+
+  # Additional note left by the user
+  note: String
+
+  # Granter that this user is donating to
+  granter: ID!
+
+  # The user's Nametag
+  nametag: ID!
+
+  # The room where the user donated
+  room: ID!
+}
+
 # The queries available for Nametag
 type RootQuery {
 
@@ -453,6 +538,27 @@ input CreateRoomInput {
   # Indicates whether the room should be displayed on the homepage and in searches
   public: Boolean!
 
+  # Call to action text
+  ctaText: String
+
+  # Call to action image
+  ctaImage: String
+
+  # Text thanking volunteers
+  thankText: String
+
+  # Volunteer actions available for this room
+  actionTypes: [ActionTypeInput]
+
+  # Granter sponsoring this room
+  granter: ID
+
+}
+
+input ActionTypeInput {
+  title: String!
+
+  desc: String
 }
 
 # Input required in order to create a message
@@ -472,6 +578,9 @@ input CreateMessageInput {
 
   # The recipient of the message if it is a DM
   recipient: ID
+
+  # Template to be granted with this message
+  template: ID
 
 }
 
@@ -601,7 +710,18 @@ input CreateGranterInput {
 
 }
 
-# Input required to update a nametag
+input CreateVolActionsInput {
+
+  # Actions that the user is volunteering for
+  actions: [String]
+
+  # The user's Nametag
+  nametag: ID!
+
+  # An optional note
+  note: String
+
+}
 
 ## Responses
 
@@ -663,8 +783,19 @@ type CreateGranterResponse implements Response {
 # Basic Response including only errors
 type BasicResponse implements Response {
 
-  #Optionally, include an id of a newly created object
+  # Optionally, include an id of a newly created object
   id: ID
+
+  # An array of errors relating to the mutation that occurred.
+  errors: [UserError]
+
+}
+
+# Basic Response including only errors
+type ArrayResponse implements Response {
+
+  # Optionally, include an array of ids of newly created objects
+  ids: [ID]
 
   # An array of errors relating to the mutation that occurred.
   errors: [UserError]
@@ -739,6 +870,15 @@ type RootMutation {
 
   # Bans a user from a room
   banNametag(roomId: ID!, nametagId: ID!): BasicResponse
+
+  # Accepts a badge offered in a message
+  acceptBadge(messageId: ID!): CreateBadgeResponse
+
+  # Creates a volunteer action
+  createVolActions(actions: [String!]!, nametagId: ID!, note: String): ArrayResponse
+
+  # Creates a donation
+  createDonation(amount: Int!, nametagId: ID!, token: String!, note: String): BasicResponse
 
 }
 
@@ -866,7 +1006,7 @@ type RootSubscription {
   roomUpdated(roomId: ID!): UpdateRoom
 
   # Fired when data about a nametag is updated
-  nametagUpdated(roomId: ID!): UpdateNametag
+  nametagUpdated(roomId: ID!): Nametag
 }
 
 ################################################################################

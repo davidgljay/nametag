@@ -34,11 +34,16 @@ class Badge extends Component {
     this.state = {
       expanded: false
     }
-    this.toggleExpanded = this.toggleExpanded.bind(this)
-  }
 
-  toggleExpanded () {
-    this.setState({expanded: !this.state.expanded})
+    this.toggleExpanded = () => {
+      this.setState({expanded: !this.state.expanded})
+    }
+
+    this.onBadgeClick = badge => e => {
+      const {onBadgeClick} = this.props
+      e.preventDefault()
+      onBadgeClick(badge)
+    }
   }
 
   componentDidMount () {
@@ -47,7 +52,19 @@ class Badge extends Component {
 
   render () {
     const {
-      badge: {
+      badge,
+      jumbo,
+      connectDragSource,
+      showIconUpload,
+      isDragging,
+      onUploadImage,
+      currentOffset,
+      initialOffset,
+      onBadgeClick,
+      draggable
+    } = this.props
+
+    const {
         id,
         notes,
         template: {
@@ -56,16 +73,7 @@ class Badge extends Component {
           image,
           granter
         }
-      },
-      jumbo,
-      connectDragSource,
-      showIconUpload,
-      isDragging,
-      onUploadImage,
-      currentOffset,
-      initialOffset,
-      draggable
-    } = this.props
+      } = badge
 
     // Show an image if one exists, or a manu to upload an image if showIconUpload is enabled
     let imageComponent
@@ -100,7 +108,7 @@ class Badge extends Component {
             </div>
             <div>
               <div style={jumbo ? styles.jumboName : styles.name}>{name}</div>
-              <div style={styles.granter}>{t('granted_by')}{granter.name}</div>
+              <div style={styles.granter}>{t('badge.granted_by')} {granter.name}</div>
             </div>
           </div>
           <div style={styles.description}>{description}</div>
@@ -130,11 +138,12 @@ class Badge extends Component {
         styles.chipIcon,
         jumbo ? styles.jumboChipIcon : {},
         {background: `url(${image}) 0 0 / cover`})
+
       badgeComponent = <div
         style={chipStyle}
         className='mdl-shadow--2dp'
         key={id}
-        onClick={this.toggleExpanded}>
+        onClick={onBadgeClick ? this.onBadgeClick(badge) : this.toggleExpanded}>
         {
             image
             ? <div style={imageStyle} />
@@ -170,7 +179,8 @@ Badge.propTypes = {
   isDragging: PropTypes.bool.isRequired,
   removeFromSource: PropTypes.func,
   showIconUpload: PropTypes.bool,
-  onUploadImage: PropTypes.func
+  onUploadImage: PropTypes.func,
+  onBadgeClick: PropTypes.func
 }
 
 export default DragSource(dragTypes.badge, badgeSource, collect)(Badge)

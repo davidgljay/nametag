@@ -92,11 +92,15 @@ const ErrNotYourMessage = new APIError('you are not the author of this message',
   status: 400
 })
 
-const ErrNotNametagAdmin = new APIError('you must be a nametag administrator to perform this action', {
+const ErrNotNametagAdmin = new APIError('You must be a nametag administrator to perform this action', {
   status: 400
 })
 
-const ErrBanned = new APIError('you have been banned from this room', {
+const ErrBanned = new APIError('You have been banned from this room', {
+  status: 400
+})
+
+const ErrBadgeGrant = new APIError('You do not have permission to grant this badge', {
   status: 400
 })
 
@@ -157,5 +161,6 @@ module.exports = {
   ErrInvalidToken,
   ErrNotNametagAdmin,
   ErrBanned,
+  ErrBadgeGrant,
   errorLog
 }

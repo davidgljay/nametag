@@ -1,5 +1,5 @@
 import React from 'react'
-import {green500} from 'material-ui/styles/colors'
+import {primary} from '../../../styles/colors'
 import {List, ListItem} from 'material-ui/List'
 import Check from 'material-ui/svg-icons/navigation/check'
 
@@ -22,7 +22,7 @@ const styles = {
   check: {
     height: 25,
     marginRight: 10,
-    fill: green500
+    fill: primary
   }
 
 }

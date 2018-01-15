@@ -4,6 +4,8 @@ import {mobile} from '../../../styles/sizes'
 import radium from 'radium'
 import HelpMessage from './HelpMessage'
 import Popover from 'material-ui/Popover'
+import GrantBadge from './GrantBadge'
+import NTIconMenu from '../Nametag/IconMenu'
 import {Picker} from 'emoji-mart'
 import t from '../../utils/i18n'
 
@@ -22,46 +24,57 @@ class Messages extends Component {
         roomId,
         myNametag,
         mod,
+        grantableTemplates,
         createMessage,
         messages,
+        me,
         addReaction,
         getReplies,
         setVisibleReplies,
+        setBadgeGrantee,
         visibleReplies,
         setDefaultMessage,
+        toggleNametagImageMenu,
         setRecipient,
         setEditing,
         editMessage,
         hideDMs,
         deleteMessage,
-        banNametag
+        banNametag,
+        acceptBadge
       } = this.props
 
-      return <Message
-        message={message}
-        roomId={roomId}
-        key={message.id}
-        hideDMs={hideDMs}
-        hideAuthor={i > 0 &&
-          messages[i - 1].author &&
-          !!message.author &&
-          message.author.id === messages[i - 1].author.id
-        }
-        toggleEmoji={this.toggleEmoji}
-        deleteMessage={deleteMessage}
-        banNametag={banNametag}
-        getReplies={getReplies}
-        visibleReplies={visibleReplies}
-        addReaction={addReaction}
-        setVisibleReplies={setVisibleReplies}
-        setDefaultMessage={setDefaultMessage}
-        setRecipient={setRecipient}
-        setEditing={setEditing}
-        editMessage={editMessage}
-        norms={norms}
-        mod={mod}
-        createMessage={createMessage}
-        myNametag={myNametag} />
+      return <div className={`message${i}`} key={message.id}>
+        <Message
+          message={message}
+          roomId={roomId}
+          hideDMs={hideDMs}
+          hideAuthor={i > 0 &&
+            messages[i - 1].author &&
+            !!message.author &&
+            message.author.id === messages[i - 1].author.id
+          }
+          toggleEmoji={this.toggleEmoji}
+          deleteMessage={deleteMessage}
+          banNametag={banNametag}
+          getReplies={getReplies}
+          canGrantBadges={grantableTemplates.length > 0}
+          visibleReplies={visibleReplies}
+          addReaction={addReaction}
+          setBadgeGrantee={setBadgeGrantee}
+          setVisibleReplies={setVisibleReplies}
+          setDefaultMessage={setDefaultMessage}
+          setRecipient={setRecipient}
+          acceptBadge={acceptBadge}
+          setEditing={setEditing}
+          editMessage={editMessage}
+          myBadges={me ? me.badges : []}
+          norms={norms}
+          mod={mod}
+          toggleNametagImageMenu={toggleNametagImageMenu}
+          createMessage={createMessage}
+          myNametag={myNametag} />
+      </div>
     }
 
     this.scroll = () => {
@@ -101,7 +114,20 @@ class Messages extends Component {
   }
 
   render () {
-    const {messages, myNametag, mod} = this.props
+    const {
+      messages,
+      myNametag,
+      mod,
+      grantableTemplates,
+      badgeGrantee,
+      setBadgeToGrant,
+      setBadgeGrantee,
+      setRecipient,
+      showNametagImageMenu,
+      toggleNametagImageMenu,
+      updateNametag,
+      me
+    } = this.props
     const {showEmoji} = this.state
     return <div style={styles.messages} id='messages'>
       <Popover
@@ -114,6 +140,31 @@ class Messages extends Component {
           emoji='dancer'
           title='Skin Tone'
           onClick={this.addReaction} />
+      </Popover>
+      <Popover
+        open={!!badgeGrantee}
+        anchorEl={document.getElementById('compose')}
+        overlayStyle={{opacity: 0}}
+        onRequestClose={() => setBadgeGrantee('')}>
+        <GrantBadge
+          grantableTemplates={grantableTemplates}
+          setBadgeToGrant={setBadgeToGrant}
+          setBadgeGrantee={setBadgeGrantee}
+          badgeGrantee={badgeGrantee}
+          setRecipient={setRecipient} />
+      </Popover>
+      <Popover
+        open={showNametagImageMenu}
+        anchorEl={document.getElementById('compose')}
+        overlayStyle={{opacity: 0}}
+        onRequestClose={() => toggleNametagImageMenu(false)}>
+        <NTIconMenu
+          images={me ? me.images : []}
+          image={myNametag ? myNametag.image : ''}
+          about={myNametag ? myNametag.id : ''}
+          showMenu
+          toggleNametagImageMenu={toggleNametagImageMenu}
+          updateNametag={updateNametag} />
       </Popover>
       <div style={styles.msgContainer}>
         {
@@ -139,17 +190,29 @@ Messages.propTypes = {
   myNametag: shape({
     id: string.isRequired
   }),
+  me: shape({
+    images: arrayOf(string).isRequired,
+    badges: arrayOf(object).isRequired
+  }),
   hideDMs: bool.isRequired,
+  grantableTemplates: arrayOf(shape).isRequired,
+  badgeGrantee: string.isRequired,
   visibleReplies: string.isRequired,
   deleteMessage: func.isRequired,
   banNametag: func.isRequired,
   addReaction: func.isRequired,
   editMessage: func.isRequired,
   getReplies: func.isRequired,
+  setBadgeGrantee: func.isRequired,
+  setBadgeToGrant: func.isRequired,
   setVisibleReplies: func.isRequired,
   setDefaultMessage: func.isRequired,
   setRecipient: func.isRequired,
-  setEditing: func.isRequired
+  setEditing: func.isRequired,
+  acceptBadge: func.isRequired,
+  toggleNametagImageMenu: func.isRequired,
+  showNametagImageMenu: bool.isRequired,
+  updateNametag: func.isRequired
 }
 
 export default radium(Messages)

@@ -84,6 +84,7 @@ class ComposeWithMenu extends Component {
       roomId,
       closed,
       myNametag,
+      badgeToGrant,
       showTypingPrompt,
       createMessage,
       defaultMessage,
@@ -94,6 +95,8 @@ class ComposeWithMenu extends Component {
       setDefaultMessage,
       editMessage,
       setRecipient,
+      setBadgeToGrant,
+      toggleNametagImageMenu,
       editing,
       setEditing
     } = this.props
@@ -105,6 +108,7 @@ class ComposeWithMenu extends Component {
       <Compose
         roomId={roomId}
         recipient={recipient}
+        badgeToGrant={badgeToGrant}
         editing={editing}
         myNametag={myNametag}
         showTypingPrompt={showTypingPrompt}
@@ -117,6 +121,7 @@ class ComposeWithMenu extends Component {
         setDefaultMessage={setDefaultMessage}
         setEditing={setEditing}
         setRecipient={setRecipient}
+        setBadgeToGrant={setBadgeToGrant}
         mod={mod}
         topic={topic}
         onUpdateText={this.onUpdateText}
@@ -156,6 +161,7 @@ class ComposeWithMenu extends Component {
         open={showComposeMenu === 'command'}
         anchor={document.getElementById('compose')}
         onRequestClose={this.closeMenus}
+        toggleNametagImageMenu={toggleNametagImageMenu}
         setDefaultMessage={setDefaultMessage} />
     </div>
   }
@@ -172,9 +178,12 @@ ComposeWithMenu.propTypes = {
   setDefaultMessage: func.isRequired,
   showTypingPrompt: func.isRequired,
   setRecipient: func.isRequired,
+  setBadgeToGrant: func.isRequired,
   topic: string,
   recipient: string,
-  mod: object.isRequired
+  badgeToGrant: object,
+  mod: object.isRequired,
+  toggleNametagImageMenu: func.isRequired
 }
 
 export default radium(ComposeWithMenu)

@@ -103,43 +103,72 @@ const toggleSaved = ({conn}, id, saved) =>
  **/
 
 const create = (context, m) => {
-  const {conn, models: {Rooms, Nametags}} = context
+  const {conn, user, models: {Rooms, Nametags}} = context
   let messageObj = Object.assign(
     {},
     m,
-    {createdAt: new Date(), reactions: []},
-    {recipient: m.recipient ? m.recipient : false}
+    {
+      createdAt: new Date(),
+      reactions: [],
+      // Lack of recipient must be false rather than null so that it is indexable by rethinkDB
+      recipient: m.recipient || false
+    }
   )
-  if (m.parent) {
-    return messagesTable.insert(messageObj).run(conn)
-      .then((res) => {
-        if (res.errors > 0) {
-          return new errors.APIError('Error creating message')
-        }
-        return Object.assign({}, messageObj, {id: res.generated_keys[0]})
-      })
-      .then(message => Promise.all([checkMentions(context, message), message, emailIfReply(context, message)]))
-      .then(([updates = {}, message]) => Object.assign({}, message, updates))
+
+  const createMessagePromise = () => messagesTable.insert(messageObj).run(conn)
+    .then((res) => {
+      if (res.errors > 0) {
+        return new errors.APIError('Error creating message')
+      }
+      return Object.assign({}, messageObj, {id: res.generated_keys[0]})
+    })
+    .then(message => Promise.all([
+      checkMentions(context, message),
+      message,
+      Rooms.updateLatestMessage(message.room),
+      message.author ? Nametags.update(message.author, {latestVisit: new Date(Date.now() + 1000)}) : null
+    ]))
+    .then(([updates = {}, message]) => {
+      messageObj = Object.assign({}, message, updates)
+      return messageObj
+    })
+
+  if (m.recipient && m.author) {
+    return createMessagePromise()
+      .then(() => Promise.all([
+        dmMentionNotif(messageObj, messageObj.recipient, 'DM'),
+        dmMentionEmail(messageObj, messageObj.recipient, 'dm')
+      ]))
+      .then(() => messageObj)
   }
+
+  if (m.parent) {
+    return createMessagePromise()
+      .then(() => emailIfReply(context, messageObj))
+      .then(() => messageObj)
+  }
+
+  if (m.template) {
+    return db.table('templates')
+      .getAll(m.template)
+      .eqJoin('granter', db.table('granters'))
+      .zip()
+      .pluck('adminTemplate')
+      .nth(0)
+      .run(conn)
+      .then(({adminTemplate}) => {
+        if (!user.badges[adminTemplate]) {
+          return errors.ErrBadgeGrant
+        }
+        return createMessagePromise()
+      })
+  }
+
   return checkForCommands(context, messageObj)
   .then(msg => {
     messageObj = msg
-    return messagesTable.insert(msg).run(conn)
+    return createMessagePromise()
   })
-  .then((res) => {
-    if (res.errors > 0) {
-      return new errors.APIError('Error creating message')
-    }
-    return Object.assign({}, messageObj, {id: res.generated_keys[0]})
-  })
-  .then(message => Promise.all([
-    checkMentions(context, message),
-    message,
-    Rooms.updateLatestMessage(message.room),
-    message.author ? Nametags.update(message.author, {latestVisit: new Date(Date.now() + 1000)}) : null
-  ])
-  )
-  .then(([updates = {}, message]) => Object.assign({}, message, updates))
 }
 
 /**
@@ -173,18 +202,18 @@ const editMessage = (context, messageId, text) =>
  **/
 
 const emailIfReply = ({conn, user}, msg) =>
-   msg.parent
+   msg.parent && (msg.author || msg.nametag)
    ? messagesTable.getAll(msg.parent)
     .union(messagesTable.getAll(msg.parent, {index: 'parent'}))
     .map(message => message.merge({
       messageId: message('id'),
-      messageAuthor: r.db('nametag').table('nametags').get(msg.author)('name')
+      messageAuthor: db.table('nametags').get(msg.author || msg.nametag)('name')
     }))
-    .eqJoin('author', r.db('nametag').table('users'), {index: 'nametags'})
+    .eqJoin('author', db.table('users'), {index: 'nametags'})
     .zip()
-    .eqJoin('author', r.db('nametag').table('nametags'))
+    .eqJoin('author', db.table('nametags'))
     .zip()
-    .eqJoin('room', r.db('nametag').table('rooms'))
+    .eqJoin('room', db.table('rooms'))
     .zip()
     .pluck('email', 'messageText', 'messageAuthor', 'messageId', 'room', 'loginHash', 'title')
     .run(conn)
@@ -251,8 +280,8 @@ const checkMentions = (context, message) => {
           newText = newText.replace(new RegExp(`@${name}+`, 'g'), (mention) => `*${mention}*`)
           promises.push(
               Nametags.addMention(id)
-              .then(() => mentionNotif(context, id, message, 'MENTION'))
-              .then(() => mentionEmail(context, id, message))
+              .then(() => dmMentionNotif(context, id, message, 'MENTION'))
+              .then(() => dmMentionEmail(context, id, message, 'mention'))
             )
         }
       }
@@ -346,67 +375,6 @@ const checkForCommands = ({user, models: {Rooms, Nametags, Users}}, message) => 
   }
 }
 
-// /**
-//  * Checks a message for mentions and dms
-//  *
-//  * @param {Object} nametags     the room's nametags
-//  * @param {Object} text         the text of the message to be checked
-//  *
-//  **/
-// const checkMentions = (context, nametags, message) => {
-//   const splitMsg = message.text.split('@')
-//   const {Nametags} = context.models
-//   let newText = message.text
-//   let promises = []
-//   // For every mention, check every nametag in the room to see if it matches the name.
-//   for (let i = 0; i < splitMsg.length; i++) {
-//     const section = splitMsg[i]
-//     for (let j = 0; j < nametags.length; j++) {
-//       const {name, id} = nametags[j]
-//       if (section.slice(0, name.length).toLowerCase() === name.toLowerCase()) {
-//         newText = newText.replace(new RegExp(`@${name}+`, 'g'), (mention) => `*${mention}*`)
-//         promises.push(
-//           Nametags.addMention(id)
-//           .then(() => mentionNotif(context, id, message, 'MENTION'))
-//           .then(() => mentionEmail(context, id, message))
-//         )
-//       }
-//     }
-//   }
-//   promises.push(messagesTable.get(message.id).update({text: newText}).run(context.conn))
-//   return Promise.all(promises).then(() => ({text: newText}))
-// }
-
-// /**
-//  * Checks sets a message recipient if the message is a dm
-//  *
-//  * @param {Object} nametags     the room's nametags
-//  * @param {Object} text         the text of the message to be checked
-//  *
-//  **/
-// const setDm = (context, nametags, message, room) => {
-//   const Nametags = context.models.Nametags
-//   // For every mention, check every nametag in the room to see if it matches the name.
-//   for (let i = 0; i < nametags.length; i++) {
-//     const {name, id} = nametags[i]
-//     if (message.text.slice(2, name.length + 2).toLowerCase() === name.toLowerCase()) {
-//       // If the room allows mod-only DMing, return if the message is not to or from a mod
-//       if (id !== room.mod && message.author !== room.mod && room.modOnlyDMs) {
-//         return
-//       }
-//
-//       const newText = message.text.slice(name.length + 2)
-//       return Promise.all([
-//         Nametags.addMention(id)
-//         .then(() => mentionNotif(context, id, Object.assign({}, message, {text: newText}), 'DM')),
-//         messagesTable.get(message.id).update({recipient: id, text: newText}).run(context.conn)
-//       ])
-//       .then(() => ({recipient: id, text: newText}))
-//     }
-//   }
-//   return
-// }
-
 /**
  * Sends a notification based on a mention
  *
@@ -415,9 +383,9 @@ const checkForCommands = ({user, models: {Rooms, Nametags, Users}}, message) => 
  *
  **/
 
-const mentionNotif = ({models: {Users, Rooms, Nametags}}, to, message, reason) =>
+const dmMentionNotif = ({models: {Users, Rooms, Nametags}}, to, message, reason) =>
   Promise.all([
-    Users.getTokens(message.author),
+    Users.getTokens(to),
     Rooms.get(message.room),
     Nametags.get(message.author),
     message
@@ -436,52 +404,80 @@ const mentionNotif = ({models: {Users, Rooms, Nametags}}, to, message, reason) =
     : null
   )
 
-  /**
-   * Sends an email based on a mention
-   *
-   * @param {Object} context     graph context
-   * @param {String} id        the nametag id of the user being mentioned
-   * @param {Object} message   the message to be checked
-   *
-   **/
+/**
+ * Sends an email based on a mention
+ *
+ * @param {Object} context     graph context
+ * @param {String} id        the nametag id of the user being mentioned
+ * @param {Object} message   the message to be checked
+ *
+ **/
 
-const mentionEmail = ({models: {Rooms, Users, Nametags}}, id, message) =>
-     Promise.all([
-       Users.getByNametag(id),
-       Rooms.get(message.room),
-       Nametags.get(message.author),
-       message
-     ])
-     .then(([user, room, author, message]) =>
-     user.email && !user.unsubscribe.all && !user.unsubscribe[room.id]
-     ? email({
-       to: user.email,
-       from: {name: 'Nametag', email: 'noreply@nametag.chat'},
-       template: 'mention',
-       params: {
-         roomId: room.id,
-         roomName: room.title,
-         message: message.text,
-         author: author.name
-       }
-     })
-        : null
-      )
+const dmMentionEmail = ({models: {Rooms, Users, Nametags}}, id, message, template) =>
+  Promise.all([
+    Users.getByNametag(id),
+    Rooms.get(message.room),
+    Nametags.get(message.author),
+    message
+  ])
+  .then(([user, room, author, message]) =>
+  user.email && !user.unsubscribe.all && !user.unsubscribe[room.id]
+  ? email({
+    to: user.email,
+    from: {name: 'Nametag', email: 'noreply@nametag.chat'},
+    template,
+    params: {
+      roomId: room.id,
+      roomName: room.title,
+      message: message.text,
+      author: author.name
+    }
+  })
+     : null
+ )
 
-  /**
-   * Adds an emoji reaction to a message
-   *
-   * @param {Object} context     graph context
-   * @param {String} messageId   the message being reacted to
-   * @param {String} emoji      the emoji of the reaction
-   * @param {String} nametagId  the id of the nametag who created the reaction
-   *
-   **/
+/**
+ * Adds an emoji reaction to a message
+ *
+ * @param {Object} context     graph context
+ * @param {String} messageId   the message being reacted to
+ * @param {String} emoji      the emoji of the reaction
+ * @param {String} nametagId  the id of the nametag who created the reaction
+ *
+ **/
 
 const addReaction = ({conn}, messageId, emoji, nametagId) =>
   messagesTable.get(messageId)
     .update(message => ({reactions: message('reactions').setInsert({emoji, nametagId})}))
     .run(conn)
+
+/**
+ * Accepts a badge offered in a message
+ *
+ * @param {Object} context     graph context
+ * @param {String} messageId   the message offering the badge
+ *
+ **/
+
+const acceptBadge = ({conn, user, models: {Badges, Nametags}}, messageId) =>
+  messagesTable.get(messageId)
+    .pluck('template', 'room', 'recipient')
+    .run(conn)
+    .then(({template, room, recipient}) => {
+      if (!template) {
+        return new errors.APIError('Message must include a badge offer.')
+      }
+      if (user.nametags[room] !== recipient) {
+        return new errors.APIError('Badge was not offered to this user.')
+      }
+      return Promise.all([
+        Nametags.clone(recipient, {template}),
+        template
+      ])
+    })
+    .then(([defaultNametag, template]) => {
+      return Badges.create({note: 'Badge Granted', template, defaultNametag})
+    })
 
 module.exports = (context) => ({
   Messages: {
@@ -495,6 +491,7 @@ module.exports = (context) => ({
     edit: (messageId, text) => editMessage(context, messageId, text),
     delete: (messageId) => deleteMessage(context, messageId),
     addReaction: (messageId, emoji, nametagId) => addReaction(context, messageId, emoji, nametagId),
-    toggleSaved: (id, saved) => toggleSaved(context, id, saved)
+    toggleSaved: (id, saved) => toggleSaved(context, id, saved),
+    acceptBadge: (messageId) => acceptBadge(context, messageId)
   }
 })

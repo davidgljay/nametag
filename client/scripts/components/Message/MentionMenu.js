@@ -4,7 +4,24 @@ import Menu from 'material-ui/Menu'
 import MenuItem from 'material-ui/MenuItem'
 import t from '../../utils/i18n'
 
-const MentionMenu = ({nametagId, name, hideDMs, open, anchor, toggleMenu, setDefaultMessage, setRecipient}) => {
+const MentionMenu = ({
+  nametagId,
+  name,
+  hideDMs,
+  open,
+  anchor,
+  toggleMenu,
+  setDefaultMessage,
+  setRecipient,
+  canGrantBadges,
+  setBadgeGrantee
+}) => {
+  const showBadgeGrant = nametagId => e => {
+    e.preventDefault()
+    setBadgeGrantee(nametagId)
+    toggleMenu(e)
+  }
+
   const setMessage = message => e => {
     e.preventDefault()
     setDefaultMessage(message)
@@ -36,6 +53,13 @@ const MentionMenu = ({nametagId, name, hideDMs, open, anchor, toggleMenu, setDef
             primaryText={t('message.private_msg')}
             onClick={setDM(nametagId)} />
         }
+        {
+          canGrantBadges &&
+          <MenuItem
+            key='setBadgeGrantee'
+            primaryText={t('badge.badge_grant')}
+            onClick={showBadgeGrant(nametagId)} />
+        }
       </Menu>
     </Popover>
   </div>
@@ -49,7 +73,9 @@ MentionMenu.propTypes = {
   setDefaultMessage: func.isRequired,
   setRecipient: func.isRequired,
   anchor: object,
-  open: bool.isRequired
+  open: bool.isRequired,
+  canGrantBadges: bool.isRequired,
+  setBadgeGrantee: func.isRequired
 }
 
 export default MentionMenu

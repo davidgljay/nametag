@@ -21,6 +21,9 @@ import EMAIL_CONF from './emailConfirmation.graphql'
 import ADD_NOTE from './addNote.graphql'
 import APPROVE_ROOM from './approveRoom.graphql'
 import BAN_NAMETAG from './banNametag.graphql'
+import ACCEPT_BADGE from './acceptBadge.graphql'
+import CREATE_VOL_ACTIONS from './createVolActions.graphql'
+import CREATE_DONATION from './createDonation.graphql'
 import errorLog from '../../utils/errorLog'
 
 export const createRoom = graphql(CREATE_ROOM, {
@@ -63,46 +66,101 @@ export const updateToken = graphql(UPDATE_TOKEN, {
     })
   })
 })
+
+export const createVolActions = graphql(CREATE_VOL_ACTIONS, {
+  props: ({ownProps, mutate}) => ({
+    createVolActions: (actions, nametagId, note) => mutate({
+      variables: {
+        actions,
+        nametagId,
+        note
+      }
+    })
+  })
+})
+
+export const createDonation = graphql(CREATE_DONATION, {
+  props: ({ownProps, mutate}) => ({
+    createDonation: (amount, nametagId, token, note = '') => mutate({
+      variables: {
+        amount,
+        nametagId,
+        token,
+        note
+      }
+    })
+  })
+})
+
+export const acceptBadge = graphql(ACCEPT_BADGE, {
+  props: ({ownProps, mutate}) => ({
+    acceptBadge: (messageId) => mutate({
+      variables: {
+        messageId
+      },
+      updateQueries: {
+        roomQuery: (oldData, {mutationResult: {data: {acceptBadge: {errors, badge}}}}) => {
+          console.log('accept badge response')
+          if (errors) {
+            errorLog('Error accepting badge')(errors)
+            return oldData
+          }
+
+          return {
+            ...oldData,
+            me: {
+              ...oldData.me,
+              badges: oldData.me.badges.concat(badge)
+            }
+          }
+        }
+      }
+    })
+  })
+})
+
 export const createNametag = graphql(CREATE_NAMETAG, {
   props: ({ownProps, mutate}) => ({
     createNametag: (nametag) => mutate({
       variables: {
         nametag
-      }
-    }),
-    updateQueries: {
-      roomQuery: (oldData, {mutationResult: {data: {createNametag: {errors, nametag}}}}) => {
-        if (errors) {
-          errorLog('Error creating nametag')(errors)
-          return oldData
-        }
+      },
+      updateQueries: {
+        roomQuery: (oldData, {mutationResult: {data: {createNametag: {errors, nametag}}}}) => {
+          if (errors) {
+            errorLog('Error creating nametag')(errors)
+            return oldData
+          }
 
-        return {
-          ...oldData,
-          room: {
-            ...oldData.room,
-            nametags: oldData.room.nametags
-              .concat(nametag)
-          },
-          me: {
-            ...oldData.me,
-            nametags: oldData.me.nametags.concate(
-              {
-                ...nametag,
-                room: {
-                  __typename: 'Room',
-                  id: oldData.room.id,
-                  latestMessage: oldData.room.latestMessage,
-                  mod: oldData.room.mod,
-                  newMessageCount: 0,
-                  title: oldData.room.title
+          return {
+            ...oldData,
+            room: {
+              ...oldData.room,
+              nametags: oldData.room.nametags
+                .concat(nametag)
+            },
+            me: {
+              ...oldData.me,
+              nametags: oldData.me.nametags.concat(
+                {
+                  ...nametag,
+                  mentions: [],
+                  latestVisit: new Date(),
+                  room: {
+                    __typename: 'Room',
+                    id: oldData.room.id,
+                    latestMessage: new Date(),
+                    mod: oldData.room.mod,
+                    newMessageCount: 0,
+                    title: oldData.room.title
+                  }
                 }
-              }
-            )
+              )
+            }
           }
         }
       }
-    }
+    })
   })
 })
 
@@ -225,6 +283,7 @@ export const updateNametag = graphql(UPDATE_NAMETAG, {
       },
       optimisticResponse: {
         updateNametag: {
+          __typename: 'BasicResponse',
           errors: null
         }
       },
@@ -234,14 +293,13 @@ export const updateNametag = graphql(UPDATE_NAMETAG, {
             errorLog('Error updating nametag')(errors)
             return oldData
           }
-
           return {
             ...oldData,
             room: {
               ...oldData.room,
               nametags: oldData.room.nametags
-                .map(nametag => nametag.Id === nametagId
-                  ? {...nametag, ...nametagUpdate} : nametag)
+                .map(nametag => nametag.id === nametagId
+                  ? {...nametag, ...nametagUpdate, __typename: 'Nametag'} : nametag)
             }
           }
         }

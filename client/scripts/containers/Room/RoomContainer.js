@@ -3,7 +3,12 @@ import component from '../../components/Room/Room'
 import {compose} from 'react-apollo'
 import {roomQuery} from '../../graph/queries'
 import {registerUser} from '../../actions/UserActions'
-import {setVisibleReplies} from '../../actions/RoomActions'
+import {
+  setVisibleReplies,
+  setBadgeGrantee,
+  setBadgeToGrant,
+  toggleNametagImageMenu
+} from '../../actions/RoomActions'
 import {
   createMessage,
   createNametag,
@@ -16,7 +21,10 @@ import {
   editMessage,
   deleteMessage,
   addReaction,
-  banNametag
+  banNametag,
+  acceptBadge,
+  createVolActions,
+  createDonation
 } from '../../graph/mutations'
 import {requestNotifPermissions} from '../../actions/NotificationActions'
 import {
@@ -50,10 +58,21 @@ function getTypingPrompts (state, {data}) {
   return room.nametags.filter(nametag => state.typingPrompts[nametag.id])
 }
 
+function getGrantableTemplates ({data}) {
+  if (!data.me || !data.me.granters) {
+    return []
+  }
+  return data.me.granters.reduce((arr, granter) => arr.concat(granter.templates), [])
+}
+
 const mapStateToProps = (state, ownProps) => ({
   myNametag: getMyNametag(ownProps),
+  grantableTemplates: getGrantableTemplates(ownProps),
   nametagEdits: state.nametagEdits,
   visibleReplies: state.room.visibleReplies,
+  badgeGrantee: state.room.badgeGrantee,
+  badgeToGrant: state.room.badgeToGrant,
+  showNametagImageMenu: state.room.showNametagImageMenu,
   typingPrompts: getTypingPrompts(state, ownProps)
 })
 
@@ -66,7 +85,10 @@ const mapDispatchToProps = (dispatch) => {
     addNametagEditBadge: disp(addNametagEditBadge),
     removeNametagEditBadge: disp(removeNametagEditBadge),
     registerUser: disp(registerUser),
-    setVisibleReplies: disp(setVisibleReplies)
+    setVisibleReplies: disp(setVisibleReplies),
+    setBadgeGrantee: disp(setBadgeGrantee),
+    setBadgeToGrant: disp(setBadgeToGrant),
+    toggleNametagImageMenu: disp(toggleNametagImageMenu)
   }
 }
 
@@ -83,6 +105,9 @@ const Room = compose(
   deleteMessage,
   banNametag,
   addReaction,
+  acceptBadge,
+  createVolActions,
+  createDonation,
   roomQuery,
   connect(mapStateToProps, mapDispatchToProps)
 )(component)

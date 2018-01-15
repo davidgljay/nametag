@@ -1,5 +1,5 @@
 const multer = require('multer')
-const multerS3 = require('multer-storage-s3')
+const multerS3 = require('multer-s3')
 const AWS = require('aws-sdk')
 const s3 = new AWS.S3()
 const config = require('../../secrets.json')
@@ -10,10 +10,10 @@ module.exports.multer = multer({
   storage: multerS3({
     s3: s3,
     bucket: config.s3.bucket,
-    destination: 'raw',
+    acl: 'public-read',
     mimetype: (req, file, cb) => { cb(null, file.mimetype) },
-    filename: (req, file, cb) => {
-      cb(null, Date.now() + '-' + file.fieldname)
+    key: (req, file, cb) => {
+      cb(null, `${req.headers.imagewidth}/${Date.now()}-${file.fieldname}`)
     }
   })
 })

@@ -7,6 +7,9 @@ const r = require('rethinkdb')
 const express = require('express')
 const imageUpload = require('./routes/images/imageUpload')
 const imageRedirect = require('./routes/images/imageRedirect')
+const stripeAuth = require('./routes/granters/stripeAuth')
+const stripeDash = require('./routes/granters/stripeDash')
+const contactForm = require('./routes/contact/contact')
 const config = require('./secrets.json')
 const path = require('path')
 const bodyParser = require('body-parser')
@@ -173,9 +176,23 @@ r.connect({host: 'rethinkdb'})
       }
     })
 
-    // app.get('/test', (req, res, next) => {
-    //   res.render('room.pug', { title: 'StuffnThings' })
-    // })
+    app.get('/stripe_auth', (req, res, next) => {
+      if (!req.query.code) {
+        next(errors.ErrInvalidToken)
+      } else {
+        const context = new Context({}, conn)
+        stripeAuth(context, req.query.state, req.query.code)
+          .then(() => res.redirect(`/granters/${req.query.state}`))
+          .catch(next)
+      }
+    })
+
+    app.get('/granters/:granter/stripe_dash', (req, res, next) => {
+      const context = new Context({}, conn)
+      stripeDash(context, req.params.granter, req.user)
+        .then(({url}) => res.redirect(url))
+        .catch(next)
+    })
 
     /* All others serve index.html */
     app.get('*', (req, res, next) => {
@@ -196,7 +213,7 @@ r.connect({host: 'rethinkdb'})
           })
           .catch(next)
       } else {
-        res.render('index.pug', {title: 'Nametag', description: "Small conversations with people you can trust."})
+        res.render('index.pug', {title: 'Nametag', description: 'Small conversations with people you can trust.'})
       }
     })
 
@@ -257,12 +274,10 @@ app.get('/favicon.ico', (req, res) => {
 
 /* Upload an image and return the url of that image on S3 */
 app.post('/api/images',
-  imageUpload.multer.any(),
-  (req, res) => {
-    imageUpload.resize(req.query.width, req.query.height, req.files[0].filename)
-      .then(data => res.json(data))
-      .catch(err => console.error('Uploading image', err))
-  }
+    imageUpload.multer.any(),
+    (req, res) => {
+      res.json({url: req.files[0].location})
+    }
 )
 
 /* Redirect to an image (used to securely deliver images hosted via http) */
@@ -278,5 +293,13 @@ app.post('/api/image_url',
   (req, res, next) => {
     imageUpload.fromUrl(req.body.width, req.body.height, req.body.url)
       .then(data => res.json(data))
+      .catch(err => next(`Uploading image from URL ${err}`))
+  })
+
+/* Accepts input from the contact form */
+app.post('/api/contact_form',
+  (req, res, next) => {
+    contactForm(req.body)
+      .then(() => res.end(200))
       .catch(err => next(`Uploading image from URL ${err}`))
   })

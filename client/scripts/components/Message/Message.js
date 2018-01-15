@@ -12,6 +12,7 @@ import NametagIcon from '../Nametag/NametagIcon'
 import ReactMarkdown from 'react-markdown'
 import EmojiText from './EmojiText'
 import FirstReply from './FirstReply'
+import BadgeOffer from './BadgeOffer'
 import EmojiReactions from './EmojiReactions'
 import BadgeOffer from './BadgeOffer'
 import {primary, white, grey} from '../../../styles/colors'
@@ -82,16 +83,20 @@ class Message extends Component {
         parent,
         replies,
         replyCount,
+        template,
         nametag
       },
       norms,
       roomId,
       mod,
+      myBadges,
       visibleReplies,
       setVisibleReplies,
       toggleEmoji,
       myNametag,
       addReaction,
+      setBadgeGrantee,
+      canGrantBadges,
       hideAuthor,
       createMessage,
       editMessage,
@@ -100,6 +105,8 @@ class Message extends Component {
       hideDMs,
       setDefaultMessage,
       setRecipient,
+      acceptBadge,
+      toggleNametagImageMenu,
       setEditing
     } = this.props
 
@@ -146,7 +153,7 @@ class Message extends Component {
         /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/,
         (url) => `[${url}](${url})`)
 
-    const isMod = author && mod.id === author.id
+    const isMod = !!author && mod.id === author.id
     const isReplyNotif = id.split('_')[0] === 'replyNotif'
     const about = author || nametag
 
@@ -198,10 +205,21 @@ class Message extends Component {
           {media}
           {
             template &&
+<<<<<<< HEAD
             <BadgeOffer
               template={template}
               donationAmounts={[10, 25, 50]}
               />
+=======
+            <div>
+              <BadgeOffer
+                template={template}
+                myBadges={myBadges}
+                messageId={id}
+                isRecipient={myNametag.id === recipient.id}
+                acceptBadge={acceptBadge} />
+            </div>
+>>>>>>> homepage
           }
           {
             nametag &&
@@ -211,8 +229,6 @@ class Message extends Component {
                   nametag={nametag}
                   myNametagId={myNametag.id}
                   modId={mod.id}
-                  setDefaultMessage={setDefaultMessage}
-                  setRecipient={setRecipient}
                   hideDMs={hideDMs} />
               </Card>
             </div>
@@ -263,6 +279,8 @@ class Message extends Component {
                 open={showMenu === 'mentions'}
                 anchor={document.getElementById(id)}
                 toggleMenu={this.toggleMenu}
+                setBadgeGrantee={setBadgeGrantee}
+                canGrantBadges={canGrantBadges}
                 setDefaultMessage={setDefaultMessage}
                 setRecipient={setRecipient} />
               <CommandMenu
@@ -275,6 +293,7 @@ class Message extends Component {
                 roomId={roomId}
                 deleteMessage={deleteMessage}
                 setEditing={setEditing}
+                toggleNametagImageMenu={toggleNametagImageMenu}
                 open={showMenu === 'commands'} />
             </div>
           }
@@ -313,6 +332,9 @@ class Message extends Component {
             replyCount: 0,
             nametag
           }}
+          setBadgeGrantee={setBadgeGrantee}
+          canGrantBadges={canGrantBadges}
+          acceptBadge={acceptBadge}
           myNametag={myNametag}
           deleteMessage={deleteMessage}
           banNametag={banNametag}
@@ -359,13 +381,17 @@ Message.propTypes = {
   createMessage: func.isRequired,
   addReaction: func.isRequired,
   mod: object.isRequired,
+  canGrantBadges: bool.isRequired,
+  setBadgeGrantee: func.isRequired,
   deleteMessage: func.isRequired,
   banNametag: func.isRequired,
   hideDMs: bool.isRequired,
   hideAuthor: bool,
   setDefaultMessage: func.isRequired,
   setRecipient: func.isRequired,
+  acceptBadge: func.isRequired,
   setEditing: func.isRequired,
+  toggleNametagImageMenu: func.isRequired,
   editMessage: func,
   getReplies: func,
   setVisibleReplies: func
@@ -378,7 +404,7 @@ const styles = {
     paddingTop: 10,
     paddingBottom: 5,
     marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 5,
     display: 'flex'
   },
   directMessageIncoming: {
@@ -395,7 +421,8 @@ const styles = {
     color: grey,
     fontStyle: 'italic',
     display: 'flex',
-    marginLeft: 10
+    marginLeft: 10,
+    marginBottom: 10
   },
   messageText: {
     width: '100%',
@@ -473,7 +500,8 @@ const styles = {
     cursor: 'default'
   },
   compressed: {
-    paddingTop: 0
+    paddingTop: 0,
+    marginTop: 0
   },
   nametag: {
     width: 240,

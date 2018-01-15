@@ -31,7 +31,7 @@ module.exports = {
 
     page
       .assertLoaded(room, users.mod)
-      .postMessage(messages[0], 2)
+      .postMessage(messages[0], 1)
   },
   'Moderator exits and re-enters the room': client => {
     const page = client.page.Room()
@@ -45,7 +45,7 @@ module.exports = {
   },
   'Moderator posts another message': client => {
     const page = client.page.Room()
-    const {room, messages, users} = client.globals
+    const {room, users} = client.globals
 
     page
       .assertLoaded(room, users.mod)

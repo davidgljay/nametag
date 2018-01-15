@@ -5,6 +5,7 @@ import NametagIcon from '../Nametag/NametagIcon'
 import IconButton from 'material-ui/IconButton'
 import FlatButton from 'material-ui/FlatButton'
 import TextField from 'material-ui/TextField'
+import Badge from '../Badge/Badge'
 import Popover from 'material-ui/Popover'
 import {Picker} from 'emoji-mart'
 import emojiText from 'emoji-text'
@@ -48,6 +49,7 @@ class Compose extends Component {
       const {
         myNametag,
         roomId,
+        badgeToGrant,
         createMessage,
         setDefaultMessage,
         setRecipient,
@@ -80,7 +82,8 @@ class Compose extends Component {
         let msg = {
           text: emojiText.convert(message, {delimiter: ':'}),
           author: myNametag.id,
-          room: roomId
+          room: roomId,
+          template: badgeToGrant ? badgeToGrant.template.id : null
         }
         if (recipient) {
           msg.recipient = recipient
@@ -138,6 +141,7 @@ class Compose extends Component {
       mod,
       parent,
       nametags,
+      badgeToGrant,
       recipient,
       editing,
       setRecipient,
@@ -145,7 +149,7 @@ class Compose extends Component {
       setDefaultMessage,
       closed,
       hintText
-  } = this.props
+    } = this.props
     const {showEmoji, message} = this.state
     let calloutImage
     let calloutName
@@ -154,7 +158,11 @@ class Compose extends Component {
       const nametag = nametags.filter(n => n.id === recipient)[0]
       calloutImage = nametag.image
       calloutName = nametag.name
-      calloutMsg = t('message.private', nametag.name)
+      if (badgeToGrant) {
+        calloutMsg = t('message.badgeGrant', nametag.name)
+      } else {
+        calloutMsg = t('message.private', nametag.name)
+      }
     } else if (editing) {
       calloutMsg = t('message.editing')
     } else if (topic) {
@@ -175,12 +183,19 @@ class Compose extends Component {
             </div>
           }
           <div id='topic' style={styles.topic}>
-            {calloutMsg}
+            <div>{calloutMsg}</div>
+            {
+              badgeToGrant &&
+              <div>
+                <Badge
+                  badge={badgeToGrant} />
+              </div>
+            }
           </div>
           {
             recipient &&
             <div style={styles.cancelContainer}>
-              <a href='#' style={styles.cancel} onClick={() => setRecipient(null)}>{t('cancel')}</a>
+              <a href='#' style={styles.cancel} onClick={() => setRecipient('')}>{t('cancel')}</a>
             </div>
           }
           {
@@ -228,7 +243,7 @@ class Compose extends Component {
             !closed &&
             <FlatButton
               style={styles.sendButton}
-              id='sendMessageButton'
+              id={parent ? 'sendReplyButton' : 'sendMessageButton'}
               type='submit'
               icon={
                 <FontIcon
@@ -243,7 +258,7 @@ class Compose extends Component {
   }
 }
 
-const {string, func, shape, arrayOf, bool} = PropTypes
+const {string, func, shape, arrayOf, bool, object} = PropTypes
 
 Compose.propTypes = {
   roomId: string.isRequired,
@@ -254,6 +269,7 @@ Compose.propTypes = {
   createMessage: func.isRequired,
   editMessage: func,
   recipient: string,
+  badgeToGrant: object,
   parent: string,
   defaultMessage: string,
   setDefaultMessage: func,
@@ -273,6 +289,7 @@ Compose.propTypes = {
   onPost: func,
   showTypingPrompt: func,
   setRecipient: func,
+  setBadgeToGrant: func,
   setEditing: func,
   closed: bool
 }
@@ -290,7 +307,9 @@ const styles = {
   topic: {
     fontStyle: 'italic',
     fontSize: 14,
-    color: grey
+    color: grey,
+    display: 'flex',
+    lineHeight: '28px'
   },
   topicContainer: {
     display: 'flex',

@@ -32,7 +32,10 @@ const NametagIcon = ({image, name, diameter, marginRight, style = {}}) => {
   return <div style={{marginRight}}>
     {
       image
-      ? <img src={image} alt={name} style={imageStyle} />
+      ? <div alt={name} style={{
+        ...imageStyle,
+        background: `url(${image}) center center / cover no-repeat`
+      }} />
       : <div style={{...imageStyle, ...defaultImageStyle}} >
         {name.slice(0, 2)}
       </div>

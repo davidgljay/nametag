@@ -9,7 +9,7 @@ import MESSAGE_DELETED from './messageDeleted.graphql'
 import {addTypingPrompt} from '../../actions/TypingPromptActions'
 
 const clearObjectNulls = (object) => Object.keys(object).reduce(
-      (obj, key) => object[key] ? {...obj, [key]: object[key]} : obj, {})
+      (obj, key) => object[key] !== null ? {...obj, [key]: object[key]} : obj, {})
 
 export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeToMore({
   document: MESSAGE_ADDED,
@@ -77,6 +77,12 @@ export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeT
     // If so add it to the appropriate place in the graph
     // and update the user that a reply has taken place.
     if (message.parent) {
+      let replyTo
+      if (message.parent.author) {
+        replyTo = message.parent.author.name
+      } else if (message.parent.nametag) {
+        replyTo = message.parent.nametag.name
+      }
       return {
         ...oldData,
         room: {
@@ -90,13 +96,14 @@ export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeT
             __typename: 'Message',
             id: `replyNotif_${message.parent.id}_${message.id}`,
             createdAt: new Date().toISOString(),
-            text: `${message.author.name} has replied to ${message.parent.author.name}.`,
+            text: `${message.author.name} has replied to ${replyTo}.`,
             editedAt: null,
             replies: [],
             replyCount: 0,
             saved: false,
             parent: null,
             nametag: null,
+            template: null,
             recipient: null,
             author: null,
             reactions: []
@@ -127,18 +134,28 @@ export const messageDeleted = subscribeToMore => roomId => subscribeToMore({
       return oldData
     }
 
+    if (messageDeleted.parent) {
+      return {
+        ...oldData,
+        room: {
+          ...oldData.room,
+          messages: oldData.room.messages
+            .map(msg => msg.id === messageDeleted.parent.id
+              ? {
+                ...msg,
+                replies: msg.replies.filter(reply => reply.id !== messageDeleted.id)
+              }
+              : msg)
+        }
+      }
+    }
+
     return {
       ...oldData,
       room: {
         ...oldData.room,
         messages: oldData.room.messages
           .filter(msg => msg.id !== messageDeleted.id)
-          .map(msg => msg.id === messageDeleted.parent.id
-            ? {
-              ...msg,
-              replies: msg.replies.filter(reply => reply.id !== messageDeleted.id)
-            }
-            : msg)
       }
     }
   }
@@ -220,24 +237,24 @@ export const nametagUpdated = subscribeToMore => roomId => subscribeToMore({
   variables: {
     roomId
   },
-  updateQuery: (oldData, {subscriptionData: {data: {nametagUpdated}}}) => {
-    if (!nametagUpdated) {
+  updateQuery: (oldData, {subscriptionData: {data: {nametagUpdated: {nametag}}}}) => {
+    if (!nametag) {
       return oldData
     }
 
     // Reload the page if the user is banned
     if (
       oldData.me &&
-      oldData.me.nametags.find(nt => nt.id === nametagUpdated.id) &&
-      nametagUpdated.banned) {
+      oldData.me.nametags.find(nt => nt.id === nametag.id) &&
+      nametag.banned) {
       window.location.reload()
     }
 
     let newNametags
     const nametags = oldData.room.nametags
-    if (nametags.filter(n => n.id === nametagUpdated.id).length > 0) {
-      newNametags = nametags.map(n => n.id === nametagUpdated.id
-        ? {...n, ...clearObjectNulls(nametagUpdated), __typename: 'Nametag'}
+    if (nametags.filter(n => n.id === nametag.id).length > 0) {
+      newNametags = nametags.map(n => n.id === nametag.id
+        ? nametag
         : n)
     } else {
       newNametags = nametags.concat({

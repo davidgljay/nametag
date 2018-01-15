@@ -1,15 +1,16 @@
 import React, {Component, PropTypes} from 'react'
-import RoomCard from './RoomCard'
 import FeatureCallout from './FeatureCallout'
 import Navbar from '../Utils/Navbar'
 import LoginDialog from '../User/LoginDialog'
 import JoinedRoomCard from './JoinedRoomCard'
-import StartRoomForm from './StartRoomForm'
+import ContactDialog from './ContactDialog'
 import radium from 'radium'
 import {mobile} from '../../../styles/sizes'
 import {track, identify} from '../../utils/analytics'
-import {white, grey} from '../../../styles/colors'
+import {white, grey, primary} from '../../../styles/colors'
 import CircularProgress from 'material-ui/CircularProgress'
+import RaisedButton from 'material-ui/RaisedButton'
+import ScrollDemo from '../Static/ScrollDemo'
 import t from '../../utils/i18n'
 
 class RoomCards extends Component {
@@ -19,11 +20,22 @@ class RoomCards extends Component {
 
     this.state = {
       showLogin: false,
-      showAllJoined: false
+      showAllJoined: false,
+      contactReason: null
     }
 
     this.toggleLogin = () => {
       this.setState({showLogin: !this.state.showLogin})
+    }
+
+    this.closeContactDialog = () => {
+      track('CLOSE_CONTACT')
+      this.setState({contactReason: null})
+    }
+
+    this.openContactDialog = reason => () => {
+      track('CONTACT', {reason})
+      this.setState({contactReason: reason})
     }
   }
 
@@ -47,8 +59,9 @@ class RoomCards extends Component {
 
   render () {
     const {
-      data: {me, rooms, loading, refetch}
+      data: {me, loading, refetch}, contactForm
     } = this.props
+    const {contactReason} = this.state
 
     if (loading) {
       return <div id='roomCards'>
@@ -62,16 +75,6 @@ class RoomCards extends Component {
     }
     const {showAllJoined} = this.state
     const showAbout = !me || me.nametags.length === 0
-    let nametagHash = {}
-    if (me) {
-      nametagHash = me.nametags.reduce((hash, nametag) => {
-        if (!nametag.room) {
-          return hash
-        }
-        hash[nametag.room.id] = nametag
-        return hash
-      }, {})
-    }
     return <div id='roomCards'>
       <Navbar
         me={me}
@@ -81,12 +84,11 @@ class RoomCards extends Component {
           showAbout &&
           <div style={styles.header}>
             <div style={styles.headerText}>
-              {t('room.dinner_party')}
+              {t('room.header')}
             </div>
           </div>
         }
         <div style={styles.container}>
-          <StartRoomForm loggedIn={!!me && me.nametags.length > 0} />
           {
             !showAbout &&
             <div style={styles.joinedRooms}>
@@ -122,75 +124,47 @@ class RoomCards extends Component {
           {
             showAbout &&
             <div>
-              <div id='firstRooms' style={styles.firstRooms}>
-                {
-                  rooms &&
-                  rooms.length > 0 &&
-                  rooms
-                  .filter(room => !nametagHash[room.id])
-                  .slice(0, 2)
-                  .map((room, i) => {
-                    let banned = false
-                    if (me) {
-                      const myNametag = me.nametags.find(nt => nt.room && nt.room.id === room.id)
-                      banned = !!myNametag && myNametag.banned
-                    }
-                    return <RoomCard
-                      key={room.id}
-                      room={room}
-                      disabled={banned || room.closed}
-                      me={me}
-                      style={i === 1 && showAbout ? {marginBottom: 10} : {}} />
-                  }
-                  )
-                }
+              <div style={styles.buttonContainer}>
+                <RaisedButton primary label={t('room.try_it')} onClick={this.openContactDialog('requestDemo')} />
               </div>
-              <h2 style={styles.featureHeader}>{t('room.intimate')}</h2>
+              <ScrollDemo />
+              <h2 style={styles.featureHeader}>{t('room.works')}</h2>
               <div id='FeatureCallouts' style={styles.featureCallouts} >
                 {
                   [0, 1, 2].map(i =>
                     <FeatureCallout
                       key={i}
-                      image={t(`room.feature_callouts.${i}.image`)}
-                      title={t(`room.feature_callouts.${i}.title`)}
-                      body={t(`room.feature_callouts.${i}.body`)} />
+                      image={t(`room.works_callouts.${i}.image`)}
+                      title={t(`room.works_callouts.${i}.title`)}
+                      body={t(`room.works_callouts.${i}.body`)} />
                   )
                 }
               </div>
-              <div style={styles.featureFooter}>
-                {t('room.built_by')}
-                <br />
-                <br />
-                <a href='https://medium.com/matter-driven-narrative/nametag-a-platform-for-building-relationships-fa977bca53ba' target='_blank'>{t('room.learn')}</a>
+              <div style={styles.buttonContainer}>
+                <RaisedButton primary label={t('room.try_it')} onClick={this.openContactDialog('requestDemo')} />
+              </div>
+              <div style={styles.whoWeAreContainer}>
+                <h2 style={styles.featureHeader}>{t('room.who')}</h2>
+                <img style={styles.whoWeAreImage} src='https://s3.amazonaws.com/nametag_images/site/pride.jpg' />
+                <div style={styles.featureFooter}>
+                  {t('room.built_by')}
+                  <br />
+                  <br />
+                </div>
+                <div style={styles.buttonContainer}>
+                  <RaisedButton primary label={t('room.contact')} onClick={this.openContactDialog('contactForm')} />
+                </div>
               </div>
             </div>
           }
-          <div style={styles.roomCards}>
-            {
-              rooms &&
-              rooms.length > 0 &&
-              rooms
-              .filter(room => !nametagHash[room.id])
-              .slice(showAbout ? 2 : 0)
-              .map(room => {
-                let banned = false
-                if (me) {
-                  const myNametag = me.nametags.find(nt => nt.room && nt.room.id === room.id)
-                  banned = !!myNametag && myNametag.banned
-                }
-                return <RoomCard
-                  key={room.id}
-                  room={room}
-                  disabled={banned || room.closed}
-                  me={me} />
-              }
-              )
-            }
-          </div>
           <LoginDialog
             showLogin={this.state.showLogin}
             refetch={refetch}
             toggleLogin={this.toggleLogin} />
+          <ContactDialog
+            contactForm={contactForm}
+            reason={contactReason}
+            closeDialog={this.closeContactDialog} />
         </div>
       </div>
     </div>
@@ -229,7 +203,8 @@ export default radium(RoomCards)
 const styles = {
   background: {
     background: '#fbfbfb',
-    minHeight: '100vh'
+    minHeight: '100vh',
+    paddingBottom: 50
   },
   container: {
     maxWidth: 800,
@@ -255,19 +230,22 @@ const styles = {
   header: {
     width: '100%',
     height: window.innerWidth * 494 / 1023,
-    background: 'url(https://s3.amazonaws.com/nametag_images/site/nametag-header.png)',
+    background: 'url(https://s3.amazonaws.com/nametag_images/sites/nametag-header2.jpg)',
     backgroundSize: 'cover',
     marginBottom: 40
   },
   headerText: {
     color: white,
-    textAlign: 'center',
-    fontSize: 36,
-    fontWeight: 300,
-    padding: 10,
-    paddingTop: window.innerWidth * 494 / 1023 - 80,
+    fontSize: 42,
+    fontWeight: 700,
+    padding: 50,
+    width: '40%',
+    height: window.innerWidth * 494 / 1023 - 100,
+    background: 'linear-gradient(-90deg, rgba(0,0,0,0), rgba(0,0,0,0.5))',
     [mobile]: {
-      fontSize: 22
+      fontSize: 22,
+      padding: 20,
+      height: window.innerWidth * 494 / 1023 - 40
     }
   },
   showMore: {
@@ -279,7 +257,8 @@ const styles = {
   },
   featureHeader: {
     margin: '40px 10px 0px 10px',
-    textAlign: 'center'
+    textAlign: 'center',
+    color: primary
   },
   featureCallouts: {
     display: 'flex',
@@ -288,11 +267,25 @@ const styles = {
   },
   featureFooter: {
     textAlign: 'center',
-    margin: '20px 10px',
+    margin: 20,
     fontWeight: 300
   },
   spinner: {
     marginLeft: '45%',
     marginTop: '40vh'
+  },
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  whoWeAreImage: {
+    width: '80%',
+    borderRadius: 3,
+    marginTop: 3
+  },
+  whoWeAreContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column'
   }
 }

@@ -1,5 +1,6 @@
 import errorLog from '../utils/errorLog'
 import constants from '../constants'
+import readAndCompressImage from 'browser-image-resizer'
 
 /*
 * Show Replies
@@ -13,6 +14,51 @@ export function setVisibleReplies (messageId) {
   return {
     type: constants.SET_VISIBLE_REPLIES,
     messageId
+  }
+}
+
+/*
+* Set Badge Grantee
+* @params
+*   nametagId
+*
+* @returns
+*   Action to set a the recipient of a badge
+*/
+export function setBadgeGrantee (nametagId) {
+  return {
+    type: constants.SET_BADGE_GRANTEE,
+    nametagId
+  }
+}
+
+/*
+* Set Badge To Grant
+* @params
+*   nametagId
+*
+* @returns
+*   Action to set a the recipient of a badge
+*/
+export function setBadgeToGrant (badge) {
+  return {
+    type: constants.SET_BADGE_TO_GRANT,
+    badge
+  }
+}
+
+/*
+* Open Nametag Image Menu
+* @params
+*   open
+*
+* @returns
+*   Action to set a the recipient of a badge
+*/
+export function toggleNametagImageMenu (open) {
+  return {
+    type: constants.TOGGLE_NAMETAG_IMAGE_MENU,
+    open
   }
 }
 
@@ -37,7 +83,7 @@ export function searchImage (query, startAt) {
 }
 
 /*
-* Upload an image
+* Sets an image from a url
 * @params
 *   url - The url of the image to be loaded
 *
@@ -55,6 +101,71 @@ export function setImageFromUrl (width, height, url) {
       .then(res => {
         return res.ok ? res.json()
           : Promise.reject(`Error setting image from ${url}`)
+      }).catch(errorLog('Searching for image'))
+  }
+}
+
+/*
+* Resizes and uploads an image
+* @params
+*   url - The url of the image to be loaded
+*
+* @returns
+*   Promise resolving to uploaded image
+*/
+export function uploadImage (width, file) {
+  return () => {
+    return readAndCompressImage(file, {
+      quality: 0.5,
+      maxWidth: width * 3,
+      maxHeight: width * 3,
+      autoRotate: true,
+      debug: true
+    })
+    .then(resizedImage => {
+      const url = `/api/images`
+      const formData = new FormData() //eslint-disable-line
+      formData.append('images', resizedImage)
+      const options = {
+        method: 'POST',
+        body: formData,
+        headers: {
+          imagewidth: width * 3
+        }
+      }
+      console.log('Posting image after resize')
+
+      return fetch(url, options)
+    })
+    .then(res => {
+      return res.ok ? res.json()
+        : Promise.reject(`Error uploading image`)
+    }).catch(errorLog('Resizing and uploading image'))
+  }
+}
+
+/*
+* Submits information from the contact us form
+* @params
+*   name
+*   email
+*   organization
+*   note
+*
+* @returns
+*   Promise resolving to uploaded image
+*/
+export function contactForm (name, email, organization, note, reason) {
+  return () => {
+    const options = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({name, email, organization, note, reason})
+    }
+    return fetch('/api/contact_form', options)
+      .then(res => {
+        return res.ok ? res.json()
+          : Promise.reject(`Error submitting contact form`)
       }).catch(errorLog('Searching for image'))
   }
 }
