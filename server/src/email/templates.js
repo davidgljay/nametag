@@ -12,7 +12,7 @@ const volAction = require('./vol-action')
 const contactForm = require('./contact-form')
 const demoRequest = require('./demo-request')
 const digest = require('./digest')
-const donation = require('./dontation')
+const donation = require('./donation')
 
 module.exports = {
   passwordReset,
