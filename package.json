@@ -13,13 +13,8 @@
     "e2e": "nightwatch",
     "postE2e": "docker-compose stop",
     "backup": "docker-compose run nametag sh backup.sh",
-<<<<<<< HEAD
     "pull": "git pull origin demo && yarn install && yarn build && docker-compose build nametag && yarn backup && docker-compose stop && NODE_ENV=demo docker-compose up -d",
     "reset-demo": "docker-compose run nametag node ./src/demo/wipedb.js && docker-compose run nametag rethinkdb restore backup/demo-template.tar.gz -c rethinkdb --force",
-=======
-    "pull-demo": "git pull origin demo && yarn install && yarn build-demo && docker-compose build nametag && yarn backup && docker-compose stop && docker-compose up -d",
-    "pull": "git pull origin master && yarn install && yarn build && docker-compose build nametag && yarn backup && docker-compose stop && docker-compose up -d",
->>>>>>> homepage
     "storybook": "start-storybook -p 9001 -c .storybook"
   },
   "dependencies": {
@@ -105,21 +100,6 @@
   },
   "engines": {
     "node": ">=0.10.0"
-  },
-  "jest": {
-    "unmockedModulePathPatterns": [
-      "<rootDir>/node_modules/react",
-      "<rootDir>/node_modules/bluebird",
-      "<rootDir>/server/node_modules"
-    ],
-    "testPathIgnorePatterns": [
-      "/app/bower_components/",
-      "/dist/bower_components",
-      "/node_modules/",
-      "/dist/"
-    ],
-    "automock": true,
-    "verbose": true
   },
   "standard": {
     "globals": [
