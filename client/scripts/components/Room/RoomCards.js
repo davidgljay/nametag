@@ -230,7 +230,7 @@ const styles = {
   header: {
     width: '100%',
     height: window.innerWidth * 494 / 1023,
-    background: 'url(https://s3.amazonaws.com/nametag_images/site/nametag-header.png)',
+    background: 'url(https://s3.amazonaws.com/nametag_images/sites/nametag-header2.jpg)',
     backgroundSize: 'cover',
     marginBottom: 40
   },
@@ -240,7 +240,7 @@ const styles = {
     fontSize: 36,
     fontWeight: 300,
     padding: 10,
-    paddingTop: window.innerWidth * 493 / 1023 - 50,
+    paddingTop: window.innerWidth * 493 / 1023 - 80,
     [mobile]: {
       fontSize: 22
     }

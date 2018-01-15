@@ -28,11 +28,11 @@ class ContactDialog extends Component {
     this.onSubmit = (e) => {
       e.preventDefault()
       const {name, email, organization, note} = this.state
-      const {contactForm} = this.props
+      const {contactForm, reason} = this.props
 
       track('CONTACT_SUBMIT')
 
-      contactForm(name, email, organization, note)
+      contactForm(name, email, organization, note, reason)
       this.setState({sent: true})
     }
   }
@@ -109,7 +109,7 @@ const {func, string} = PropTypes
 ContactDialog.propTypes = {
   closeDialog: func.isRequired,
   contactForm: func.isRequired,
-  reason: string.isRequired
+  reason: string
 }
 
 export default ContactDialog
