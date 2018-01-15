@@ -48,7 +48,7 @@ class ScrollDemo extends Component {
 
     this.getStyle = (start, end) => {
       const {scroll} = this.state
-      const headerHeight = window.innerWidth * 493 / 1023 / 2
+      const headerHeight = window.innerWidth < 800 ? 0 : window.innerWidth * 493 / 1023 / 2
       const adjustedScroll = scroll - headerHeight
       let tween = 0
       if (adjustedScroll < start) {
@@ -78,7 +78,7 @@ class ScrollDemo extends Component {
         messages.map((message, i) =>
           <DemoMessage
             hideAuthor={i === 1}
-            style={this.getStyle(0 + i * 80, 100 + i * 80)}
+            style={this.getStyle(-10 + i * 80, 100 + i * 80)}
             message={message} />
       )
       }
