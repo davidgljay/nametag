@@ -59,7 +59,7 @@ class RoomCards extends Component {
 
   render () {
     const {
-      data: {me, loading, refetch, contactForm}
+      data: {me, loading, refetch}, contactForm
     } = this.props
     const {contactReason} = this.state
 
@@ -240,7 +240,7 @@ const styles = {
     fontSize: 36,
     fontWeight: 300,
     padding: 10,
-    paddingTop: window.innerWidth * 493 / 1023 - 60,
+    paddingTop: window.innerWidth * 493 / 1023 - 50,
     [mobile]: {
       fontSize: 22
     }

@@ -3,7 +3,7 @@ import Dialog from 'material-ui/Dialog'
 import {grey, primary} from '../../../styles/colors'
 import FontIcon from 'material-ui/FontIcon'
 import RaisedButton from 'material-ui/RaisedButton'
-// import t from '../../utils/i18n'
+import t from '../../utils/i18n'
 import TextField from 'material-ui/TextField'
 import {track} from '../../utils/analytics'
 
@@ -16,7 +16,8 @@ class ContactDialog extends Component {
       name: '',
       email: '',
       organization: '',
-      note: ''
+      note: '',
+      sent: false
     }
 
     this.setItem = item => e => {
@@ -32,12 +33,13 @@ class ContactDialog extends Component {
       track('CONTACT_SUBMIT')
 
       contactForm(name, email, organization, note)
+      this.setState({sent: true})
     }
   }
 
   render () {
-    // const {name, email, organization, note} = this.state
     const {closeDialog, reason} = this.props
+    const {sent} = this.state
 
     const title = reason === 'requestDemo' ? 'Request A Demo' : 'Contact Us'
 
@@ -54,40 +56,49 @@ class ContactDialog extends Component {
           className='material-icons'>
           close
         </FontIcon>
-        <h3 style={styles.header}>{title}</h3>
-        <div style={styles.container} onSubmit={this.onSubmit}>
-          <TextField
-            id='name'
-            type='text'
-            floatingLabelText='Name'
-            style={styles.input}
-            onChange={this.setItem('name')}
-            />
-          <TextField
-            id='email'
-            type='text'
-            floatingLabelText='E-mail'
-            style={styles.input}
-            onChange={this.setItem('email')} />
-          <TextField
-            id='organization'
-            type='text'
-            floatingLabelText='Organization'
-            style={styles.input}
-            onChange={this.setItem('organization')} />
-          <TextField
-            id='note'
-            multiLine
-            floatingLabelText={'Anything else you\'d like to add?'}
-            style={styles.input}
-            onChange={this.setItem('note')} />
-          <div style={styles.buttonContainer}>
+        <h3 style={styles.header}>{sent ? 'Thanks, we\'ll reach out to you shortly.' : title}</h3>
+        {
+          sent
+          ? <div style={styles.buttonContainer}>
             <RaisedButton
-              onClick={this.onSubmit}
-              label={title}
+              onClick={closeDialog}
+              label={t('room.close')}
               primary />
           </div>
-        </div>
+          :<div style={styles.container} onSubmit={this.onSubmit}>
+            <TextField
+              id='name'
+              type='text'
+              floatingLabelText='Name'
+              style={styles.input}
+              onChange={this.setItem('name')}
+              />
+            <TextField
+              id='email'
+              type='text'
+              floatingLabelText='E-mail'
+              style={styles.input}
+              onChange={this.setItem('email')} />
+            <TextField
+              id='organization'
+              type='text'
+              floatingLabelText='Organization'
+              style={styles.input}
+              onChange={this.setItem('organization')} />
+            <TextField
+              id='note'
+              multiLine
+              floatingLabelText={'Anything else you\'d like to add?'}
+              style={styles.input}
+              onChange={this.setItem('note')} />
+            <div style={styles.buttonContainer}>
+              <RaisedButton
+                onClick={this.onSubmit}
+                label={title}
+                primary />
+            </div>
+          </div>
+        }
       </Dialog>
     </div>
   }
