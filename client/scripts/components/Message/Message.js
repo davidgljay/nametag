@@ -205,12 +205,6 @@ class Message extends Component {
           {media}
           {
             template &&
-<<<<<<< HEAD
-            <BadgeOffer
-              template={template}
-              donationAmounts={[10, 25, 50]}
-              />
-=======
             <div>
               <BadgeOffer
                 template={template}
@@ -219,7 +213,6 @@ class Message extends Component {
                 isRecipient={myNametag.id === recipient.id}
                 acceptBadge={acceptBadge} />
             </div>
->>>>>>> homepage
           }
           {
             nametag &&
