@@ -26,16 +26,17 @@ const get = ({conn}, id) => id ? donationsTable.get(id).run(conn) : Promise.reso
   * Note: Getting room and granter info from the database for security reasons
   **/
 
-const create = ({conn}, amount, nametag, token, note) =>
+const create = ({conn, user}, amount, nametag, token, note) =>
   db.table('nametags').getAll(nametag)
+    .map(n => n.merge({donorName: n('name'), donorImage: n('image')}))
     .eqJoin(n => n('room'), db.table('rooms'))
     .zip()
     .eqJoin(r => r('granter'), db.table('granters'))
     .zip()
-    .pluck('room', 'granter', 'name', 'stripe')
+    .pluck('room', 'granter', 'name', 'stripe', 'donorName', 'donorEmail')
     .nth(0)
     .run(conn)
-  .then(({room, granter, name, stripe}) =>
+  .then(({room, title, granter, name, stripe, donorName, donorEmail}) =>
     Promise.all([
       stripeTools.charges.create({
         amount: amount * 100,
@@ -47,30 +48,71 @@ const create = ({conn}, amount, nametag, token, note) =>
           account: stripe
         }
       }),
-      room,
-      granter
+      data
     ])
   )
-  .then(([res, room, granter]) =>
-    donationsTable.insert(
-      {
-        amount,
-        nametag,
-        token,
-        note,
-        room,
-        granter,
-        stripe_response: res,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }
-      ).run(conn)
-  )
-  .then(res => ({id: res.generated_keys[0]}))
-  .then((res) => {
-    console.log('id', res)
-    return res
+  .then(([res, {room, title, granter, name, stripe, donorName, donorEmail}]) => {
+
+    const insertPromise = donationsTable.insert(
+          {
+            amount,
+            nametag,
+            token,
+            note,
+            room,
+            granter,
+            stripe_response: res,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          }
+          ).run(conn)
+
+    let messageText = `**${name}** has donated!\n\n`
+    messageText += 'Reach out to say thanks!'
+
+    const modMessagePromise = Messages.create({
+      room,
+      text: messageText,
+      recipient: mod
+    })
+
+    const emailGranterAdminsAndMod = db.table('granters')
+        .get(granter)
+        .do(g => db.table('templates').get(g('adminTemplate')))
+        .do(t => db.table('badges').getAll(t('id'), {index: 'template'}))
+        .map(b => b('defaultNametag'))
+        .map(nametagId => db.table('users').getAll(nametagId, {index: 'nametags'})('email').nth(0))
+        .union(db.table('users').getAll(mod, {index: 'nametags'})('email'))
+        .distinct()
+        .run(conn)
+        .then(emails => Promise.all(
+            emails.map(em =>
+              sendEmail({
+                to: em,
+                from: {
+                  name: 'Nametag',
+                  email: 'info@nametag.chat'
+                },
+                template: 'donation',
+                params: {
+                  donorName,
+                  donorImage,
+                  donorEmail: user.email,
+                  roomId: room,
+                  roomTitle: title,
+                  amount
+                }
+              }))
+          )
+    )
+
+    return Promise.all([
+      insertPromise,
+      modMessagePromise,
+      emailGranterAdminsAndMod
+    ])
   })
+  .then(res => ({id: res.generated_keys[0]}))
 
 module.exports = (context) => ({
   Donations: {

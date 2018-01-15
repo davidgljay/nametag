@@ -12,6 +12,7 @@ const volAction = require('./vol-action')
 const contactForm = require('./contact-form')
 const demoRequest = require('./demo-request')
 const digest = require('./digest')
+const donation = require('./dontation')
 
 module.exports = {
   passwordReset,
@@ -25,6 +26,7 @@ module.exports = {
   hashLogin,
   announcement,
   digest,
+  donation,
   volAction,
   contactForm,
   demoRequest
