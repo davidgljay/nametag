@@ -1,6 +1,7 @@
 const {db} = require('../../db')
 const config = require('../../secrets.json')
 const stripeTools = require('stripe')(config.stripe.client_secret)
+const sendEmail = require('../../email')
 
 const donationsTable = db.table('donations')
 
@@ -26,18 +27,20 @@ const get = ({conn}, id) => id ? donationsTable.get(id).run(conn) : Promise.reso
   * Note: Getting room and granter info from the database for security reasons
   **/
 
-const create = ({conn, user}, amount, nametag, token, note) =>
+const create = ({conn, user, models: {Messages}}, amount, nametag, token, note) =>
   db.table('nametags').getAll(nametag)
     .map(n => n.merge({donorName: n('name'), donorImage: n('image')}))
     .eqJoin(n => n('room'), db.table('rooms'))
     .zip()
     .eqJoin(r => r('granter'), db.table('granters'))
     .zip()
-    .pluck('room', 'granter', 'name', 'stripe', 'donorName', 'donorEmail')
+    .pluck('room', 'granter', 'mod', 'name', 'stripe', 'donorName', 'donorImage')
     .nth(0)
     .run(conn)
-  .then(({room, title, granter, name, stripe, donorName, donorEmail}) =>
-    Promise.all([
+  .then((data) => {
+    const {name, stripe} = data
+
+    return Promise.all([
       stripeTools.charges.create({
         amount: amount * 100,
         currency: 'usd',
@@ -50,22 +53,20 @@ const create = ({conn, user}, amount, nametag, token, note) =>
       }),
       data
     ])
-  )
-  .then(([res, {room, title, granter, name, stripe, donorName, donorEmail}]) => {
-
+  })
+  .then(([res, {room, title, mod, granter, name, stripe, donorName, donorImage}]) => {
     const insertPromise = donationsTable.insert(
-          {
-            amount,
-            nametag,
-            token,
-            note,
-            room,
-            granter,
-            stripe_response: res,
-            createdAt: new Date(),
-            updatedAt: new Date()
-          }
-          ).run(conn)
+      {
+        amount,
+        nametag,
+        token,
+        note,
+        room,
+        granter,
+        stripe_response: res,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }).run(conn)
 
     let messageText = `**${name}** has donated!\n\n`
     messageText += 'Reach out to say thanks!'
