@@ -17,7 +17,7 @@ RUN apt-get install rethinkdb -y
 RUN apt-get install python-pip -y
 RUN pip install rethinkdb
 RUN pip install s3cmd
-LABEL yarnUpdated="12/22/17"
+LABEL yarnUpdated="1/15/17"
 COPY $PWD/server/package.json /usr/nametag/server/package.json
 WORKDIR /usr/nametag/server
 RUN yarn install
