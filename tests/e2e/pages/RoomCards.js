@@ -6,7 +6,6 @@ const commands = {
   startConvo (title) {
     return this.waitForElementVisible('@convoInput')
       .setValue('@convoInput', title)
-      .getLocationInView('@startConvo')
       .assert.visible('@startConvo')
       .click('@startConvo')
       .waitForElementVisible('#welcomeField')
@@ -97,7 +96,7 @@ module.exports = {
       selector: '#convoInput'
     },
     startConvo: {
-      selector: '#startConvoButton'
+      selector: 'button#startConvoButton'
     },
     logout: {
       selector: '#logoutButton'
