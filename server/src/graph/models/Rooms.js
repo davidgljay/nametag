@@ -122,6 +122,7 @@ const getQuery = ({conn, user, models: {Users}}, query) =>
 
 const create = ({conn, models: {Nametags, Users}}, rm) => {
   const defaultPublic = process.env.NODE_ENV === 'test' ? 'APPROVED' : 'PENDING'
+  const testId = process.env.NODE_ENV === 'test' ? {id: '123456'} : {}
   const room = Object.assign(
     {},
     rm,
@@ -131,7 +132,9 @@ const create = ({conn, models: {Nametags, Users}}, rm) => {
       mod: null,
       public: rm.public ? defaultPublic : false,
       closed: false
-    })
+    },
+    testId
+    )
   return Promise.all([
     roomsTable.insert(room).run(conn),
     rm.mod,
@@ -149,7 +152,7 @@ const create = ({conn, models: {Nametags, Users}}, rm) => {
     if (res.errors > 0) {
       return new errors.APIError('Error creating room')
     }
-    const id = res.generated_keys[0]
+    const id = process.env.NODE_ENV === 'test' ? '123456' : res.generated_keys[0]
     const nametag = Object.assign({}, mod, {room: id})
     return Promise.all([
       Nametags.create(nametag),

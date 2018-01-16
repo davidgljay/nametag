@@ -1,21 +1,13 @@
 module.exports = {
   '@tags': ['login', 'participant'],
   before: client => {
-    const page = client.page.RoomCards()
-    const {launchUrl} = client
+    const page = client.page.Room()
 
     client
-    .url(launchUrl)
+    .url('https://localhost:8181/rooms/123456')
 
     page
     .ready()
-  },
-  'Participant registers and joins a room': client => {
-    const {users} = client.globals
-    const roomCardsPage = client.page.RoomCards()
-
-    roomCardsPage
-      .joinRoom(users.participant)
   },
   'Participant posts a reply': client => {
     const {messages, room, users} = client.globals

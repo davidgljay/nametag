@@ -18,7 +18,8 @@ const CreateRoomStepper = ({stepIndex, loggedIn, hasGranters}) => <Stepper
     <StepLabel>{t('create_room.stepper')[1]}</StepLabel>
   </Step>
   {
-    loggedIn ? []
+    !loggedIn
+    ? []
     : <Step>
       <StepLabel>{t('create_room.stepper')[2]}</StepLabel>
     </Step>
@@ -29,15 +30,16 @@ const CreateRoomStepper = ({stepIndex, loggedIn, hasGranters}) => <Stepper
   <Step>
     {
       hasGranters
-      ? <StepLabel>Choose Calls To Action</StepLabel>
-      : <StepLabel>{t('create_room.stepper')[4]}</StepLabel>
+      ? <StepLabel>{t('create_room.stepper')[4]}</StepLabel>
+      : <StepLabel>{t('create_room.stepper')[5]}</StepLabel>
     }
   </Step>
   {
-    hasGranters &&
-    <Step>
-      <StepLabel>{t('create_room.stepper')[4]}</StepLabel>
+    hasGranters
+    ? <Step>
+      <StepLabel>{t('create_room.stepper')[5]}</StepLabel>
     </Step>
+    : []
   }
 </Stepper>
 

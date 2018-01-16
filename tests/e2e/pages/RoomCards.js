@@ -6,7 +6,6 @@ const commands = {
   startConvo (title) {
     return this.waitForElementVisible('@convoInput')
       .setValue('@convoInput', title)
-      .getLocationInView('@startConvo')
       .assert.visible('@startConvo')
       .click('@startConvo')
       .waitForElementVisible('#welcomeField')
@@ -20,11 +19,7 @@ const commands = {
     .waitForElementVisible('@loginButton')
     .click('@loginButton')
     .waitForElementVisible('@loginForm')
-    .click('@enableRegisterButton')
-    .waitForElementVisible('@registerButton')
     .setValue('@emailForm', user.email)
-    .setValue('@passForm', user.pass)
-    .setValue('@confForm', user.pass)
     .click('@registerButton')
     .waitForElementVisible('@logoutButton')
   },
@@ -101,7 +96,7 @@ module.exports = {
       selector: '#convoInput'
     },
     startConvo: {
-      selector: '#startConvoButton'
+      selector: 'button#startConvoButton'
     },
     logout: {
       selector: '#logoutButton'

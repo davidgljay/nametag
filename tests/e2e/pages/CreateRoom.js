@@ -35,7 +35,6 @@ const commands = {
     return this
       .setWelcome(welcome)
       .addNorms(norm)
-      .register(user)
       .addBio(user.bio, user.name)
       .waitForElementVisible('@doneButton')
       .click('@doneButton')

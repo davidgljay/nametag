@@ -11,10 +11,11 @@ module.exports = {
     .ready()
   },
   'Moderator initiates the process to create a room': client => {
-    const {room} = client.globals
+    const {room, users} = client.globals
     const page = client.page.RoomCards()
 
     page
+      .register(users.mod)
       .startConvo(room.title)
   },
   'Moderator creates a room': client => {
