@@ -39,22 +39,6 @@ const getForm = ({
       <RoomCard room={room} disabled />
     </div>
     <h2>{t('create_room.done')}</h2>
-    <div style={styles.privacyContainer}>
-      <Toggle
-        style={styles.toggleStyle}
-        label={room.public ? t('create_room.room_pub_on') : t('create_room.room_pub_off')}
-        toggled={room.public}
-        labelStyle={{textAlign: 'left'}}
-        thumbStyle={{backgroundColor: grey}}
-        onToggle={(e, isChecked) => updateRoom('public', isChecked)} />
-      <div style={styles.helpText}>
-        {
-          room.public
-          ? t('create_room.room_pub_on_help')
-          : t('create_room.room_pub_off_help')
-        }
-      </div>
-    </div>
   </div>
 
   switch (stepIndex) {

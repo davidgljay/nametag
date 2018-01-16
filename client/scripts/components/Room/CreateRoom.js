@@ -280,9 +280,9 @@ class CreateRoom extends Component {
           }
           {
             stepIndex < 4 &&
-            (
-              !(stepIndex === 2 && !me) ||
-              (stepIndex === 3 && me && me.granters && me.granters.length > 0)
+            !(
+              (stepIndex === 2 && !me) ||
+              (stepIndex === 3 && me && me.granters && me.granters.length === 0)
             ) &&
             <RaisedButton
               style={styles.button}
