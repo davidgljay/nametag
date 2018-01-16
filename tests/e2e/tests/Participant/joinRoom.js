@@ -2,7 +2,6 @@ module.exports = {
   '@tags': ['login', 'participant'],
   before: client => {
     const page = client.page.Room()
-    const {launchUrl} = client
 
     client
     .url('https://localhost:8181/rooms/123456')
