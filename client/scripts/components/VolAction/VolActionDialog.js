@@ -214,16 +214,15 @@ VolActionDialog.propTypes = {
 export default injectStripe(VolActionDialog)
 
 const styles = {
-  dialog: {
-    overflowY: 'auto'
-  },
   buttonContainer: {
     display: 'flex',
     justifyContent: 'center',
     width: '100%',
     marginBottom: 20
   },
-  bodyStyle: {},
+  bodyStyle: {
+    overflowY: 'auto'
+  },
   cta: {
     display: 'flex'
   },
