@@ -82,7 +82,6 @@ class Message extends Component {
         parent,
         replies,
         replyCount,
-        template,
         nametag
       },
       norms,
