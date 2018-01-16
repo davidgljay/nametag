@@ -65,9 +65,12 @@ class StripeCheckout extends Component {
         amount && <div style={styles.checkout}>
           {
             paymentRequest && canMakePayment &&
-            <PaymentRequestButtonElement
-              paymentRequest={paymentRequest}
-              className='PaymentRequestButton' />
+            <div style={styles.paymentRequest}>
+              <PaymentRequestButtonElement
+                paymentRequest={paymentRequest}
+                className='PaymentRequestButton' />
+              <h3>OR</h3>
+            </div>
           }
           <CardElement style={{base: {fontSize: '18px'}}} />
           <img style={styles.poweredBy} src='https://s3.amazonaws.com/nametag_images/site/powered_by_stripe.png' />
@@ -100,5 +103,9 @@ const styles = {
   poweredBy: {
     width: 100,
     marginTop: 10
+  },
+  paymentRequest: {
+    margin: 10,
+    textAlign: 'center'
   }
 }
