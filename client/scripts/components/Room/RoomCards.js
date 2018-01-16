@@ -4,6 +4,7 @@ import Navbar from '../Utils/Navbar'
 import LoginDialog from '../User/LoginDialog'
 import JoinedRoomCard from './JoinedRoomCard'
 import ContactDialog from './ContactDialog'
+import StartRoomForm from './StartRoomForm'
 import radium from 'radium'
 import {mobile} from '../../../styles/sizes'
 import {track, identify} from '../../utils/analytics'
@@ -74,7 +75,7 @@ class RoomCards extends Component {
       </div>
     }
     const {showAllJoined} = this.state
-    const showAbout = !me || me.nametags.length === 0
+    const showAbout = !me
     return <div id='roomCards'>
       <Navbar
         me={me}
@@ -92,7 +93,10 @@ class RoomCards extends Component {
           {
             !showAbout &&
             <div style={styles.joinedRooms}>
-              <h3 style={styles.joinedRoomsHeader}>{t('room.room_convos')}</h3>
+              <StartRoomForm />
+              {
+                me.nametags.length > 0 && <h3 style={styles.joinedRoomsHeader}>{t('room.room_convos')}</h3>
+              }
               <div style={styles.joinedRoomContainer}>
                 {
                   me.nametags
