@@ -42,12 +42,12 @@ const create = ({conn, user, models: {Messages}}, amount, nametag, token, note) 
 
     return Promise.all([
       stripeTools.charges.create({
-        amount: amount * 100,
+        amount,
         currency: 'usd',
         description: `Donation to ${name}`,
         source: token,
         destination: {
-          amount: amount * 90,
+          amount: amount * 0.9,
           account: stripe
         }
       }),
