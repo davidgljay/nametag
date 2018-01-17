@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react'
 import Login from '../../containers/User/LoginContainer'
 import Dialog from 'material-ui/Dialog'
+import {grey} from '../../../styles/colors'
 
 const LoginDialog = ({toggleLogin, showLogin, message, refetch}) => <Dialog
   modal={false}
@@ -11,6 +12,9 @@ const LoginDialog = ({toggleLogin, showLogin, message, refetch}) => <Dialog
   <Login
     onLogin={() => refetch().then(toggleLogin)}
     message={message} />
+  <div style={styles.tos}>
+    <a href='/privacy'>Privacy Policy</a> and <a href='/tos'>Terms of Service</a>
+  </div>
 </Dialog>
 
 const {func, string, bool} = PropTypes
@@ -31,5 +35,12 @@ const styles = {
   },
   body: {
     overflowY: 'auto'
+  },
+  tos: {
+    color: grey,
+    fontSize: 12,
+    fontStyle: 'italic',
+    textAlign: 'center',
+    marginTop: 20
   }
 }
