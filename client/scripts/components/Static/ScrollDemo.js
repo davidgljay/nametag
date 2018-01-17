@@ -60,6 +60,7 @@ class ScrollDemo extends Component {
       }
       return {
         opacity: tween,
+        padding: '2px 8px',
         position: 'relative',
         top: 30 - tween * 30
       }
@@ -86,6 +87,7 @@ class ScrollDemo extends Component {
         )
         }
       </div>
+      <img style={styles.phoneBottom} src='https://s3.amazonaws.com/nametag_images/site/phonebottom.png' />
     </div>
   }
 }
@@ -94,14 +96,21 @@ export default ScrollDemo
 
 const styles = {
   container: {
-    maxWidth: 800
+    maxWidth: 800,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
   },
   phoneTop: {
     width: '100%',
     marginTop: 20
   },
+  phoneBottom: {
+    width: '100%',
+    marginBottom: 20
+  },
   demoMessagesContainer: {
-    padding: 10,
+    width: '100%',
     background: 'url(https://s3.amazonaws.com/nametag_images/site/phonebg.png)',
     backgroundSize: 'contain',
     backgroundRepeatY: 'repeat'
