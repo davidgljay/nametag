@@ -69,6 +69,10 @@ module.exports = {
         to: path.join(__dirname, 'dist', 'public', 'images')
       },
       {
+        from: path.join(__dirname, 'client', 'well-known'),
+        to: path.join(__dirname, 'dist', 'public', 'well-known')
+      },
+      {
         from: path.join(__dirname, 'client', 'locales'),
         to: path.join(__dirname, 'dist', 'public', 'locales')
       },

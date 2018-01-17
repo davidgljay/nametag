@@ -93,6 +93,7 @@ app.use(function (req, res, next) {
 app.use(passport.initialize())
 app.use(passport.session())
 
+
 /* Get rethinkdb connection */
 r.connect({host: 'rethinkdb'})
   .then(conn => {
@@ -271,6 +272,9 @@ app.get('/firebase-messaging-sw.js', (req, res) => {
 app.get('/favicon.ico', (req, res) => {
   res.sendFile(path.join('/usr', 'client', 'public', 'favicon.ico'))
 })
+
+/* Serve well-known files */
+app.use('/.well-known', express.static(path.join('/usr', 'client', 'public', 'well-known')))
 
 /* Upload an image and return the url of that image on S3 */
 app.post('/api/images',
