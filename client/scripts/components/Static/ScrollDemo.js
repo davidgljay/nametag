@@ -73,18 +73,37 @@ class ScrollDemo extends Component {
   }
 
   render () {
-    return <div>
-      {
-        messages.map((message, i) =>
-          <DemoMessage
-            key={i}
-            hideAuthor={i === 1}
-            style={this.getStyle(-10 + i * 80, 100 + i * 80)}
-            message={message} />
-      )
-      }
+    return <div style={styles.container}>
+      <img style={styles.phoneTop} src='https://s3.amazonaws.com/nametag_images/site/phonetop.png' />
+      <div style={styles.demoMessagesContainer}>
+        {
+          messages.map((message, i) =>
+            <DemoMessage
+              key={i}
+              hideAuthor={i === 1}
+              style={this.getStyle(80 + i * 100, 250 + i * 100)}
+              message={message} />
+        )
+        }
+      </div>
     </div>
   }
 }
 
 export default ScrollDemo
+
+const styles = {
+  container: {
+    maxWidth: 800
+  },
+  phoneTop: {
+    width: '100%',
+    marginTop: 20
+  },
+  demoMessagesContainer: {
+    padding: 10,
+    background: 'url(https://s3.amazonaws.com/nametag_images/site/phonebg.png)',
+    backgroundSize: 'contain',
+    backgroundRepeatY: 'repeat'
+  }
+}
