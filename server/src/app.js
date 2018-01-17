@@ -304,6 +304,6 @@ app.post('/api/image_url',
 app.post('/api/contact_form',
   (req, res, next) => {
     contactForm(req.body)
-      .then(() => res.end(200))
-      .catch(err => next(`Uploading image from URL ${err}`))
+      .then(() => res.status(200).end())
+      .catch(err => next(`Error posting to contact form ${err}`))
   })
