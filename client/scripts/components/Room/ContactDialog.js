@@ -41,7 +41,7 @@ class ContactDialog extends Component {
     const {closeDialog, reason} = this.props
     const {sent} = this.state
 
-    const title = reason === 'requestDemo' ? 'Request A Demo' : 'Contact Us'
+    const title = reason === 'demoRequest' ? 'Request A Demo' : 'Contact Us'
 
     return <div>
       <Dialog
