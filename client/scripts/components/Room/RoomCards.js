@@ -129,7 +129,7 @@ class RoomCards extends Component {
             showAbout &&
             <div>
               <div style={styles.buttonContainer}>
-                <RaisedButton primary label={t('room.try_it')} onClick={this.openContactDialog('requestDemo')} />
+                <RaisedButton primary label={t('room.try_it')} onClick={this.openContactDialog('demoRequest')} />
               </div>
               <ScrollDemo />
               <h2 style={styles.featureHeader}>{t('room.works')}</h2>
@@ -145,11 +145,10 @@ class RoomCards extends Component {
                 }
               </div>
               <div style={styles.buttonContainer}>
-                <RaisedButton primary label={t('room.try_it')} onClick={this.openContactDialog('requestDemo')} />
+                <RaisedButton primary label={t('room.try_it')} onClick={this.openContactDialog('demoRequest')} />
               </div>
               <div style={styles.whoWeAreContainer}>
                 <h2 style={styles.featureHeader}>{t('room.who')}</h2>
-                <img style={styles.whoWeAreImage} src='https://s3.amazonaws.com/nametag_images/site/pride.jpg' />
                 <div style={styles.featureFooter}>
                   {t('room.built_by')}
                   <br />

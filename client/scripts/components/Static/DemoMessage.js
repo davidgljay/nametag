@@ -25,6 +25,9 @@ const Message = ({
   if (!author) {
     messageStyle = {...styles.messageText, ...styles.helpMessage}
   }
+  if (nametag) {
+    messageStyle = {...messageStyle, ...styles.nametagMessage}
+  }
 
   // Getting around Markdown's splitting of the '_' character in a hacky way for now
   // Also, wrapping urls in brackets
@@ -43,14 +46,17 @@ const Message = ({
       className='message'
       style={messageContainerStyle}
       id={id}>
-      <div style={imageStyle}>
-        {
-          author && !hideAuthor && <NametagIcon
-            image={author.image}
-            name={author.name}
-            diameter={50} />
-        }
-      </div>
+      {
+        !nametag &&
+        <div style={imageStyle}>
+          {
+            author && !hideAuthor && <NametagIcon
+              image={author.image}
+              name={author.name}
+              diameter={50} />
+          }
+        </div>
+      }
       <div style={messageStyle}>
         {
           author && !hideAuthor && <div style={styles.name}>
@@ -143,6 +149,11 @@ const styles = {
     overflowWrap: 'break-word',
     wordWrap: 'break-word',
     wordBreak: 'break-word'
+  },
+  nametagMessage: {
+    paddingRight: 20,
+    paddingLeft: 20,
+    borderRadius: 5
   },
   helpMessage: {
     color: grey,

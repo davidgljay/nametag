@@ -306,6 +306,9 @@ class CreateRoom extends Component {
             }
         </div>
       </div>
+      <div style={styles.tos}>
+        <a href='/privacy'>Privacy Policy</a> and <a href='/tos'>Terms of Service</a>
+      </div>
     </div>
     : <div style={styles.spinner}>
       <CircularProgress />
@@ -354,5 +357,12 @@ const styles = {
   spinner: {
     marginLeft: '45%',
     marginTop: '40vh'
+  },
+  tos: {
+    color: grey,
+    fontSize: 12,
+    fontStyle: 'italic',
+    textAlign: 'center',
+    marginBottom: 30
   }
 }

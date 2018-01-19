@@ -93,6 +93,7 @@ app.use(function (req, res, next) {
 app.use(passport.initialize())
 app.use(passport.session())
 
+
 /* Get rethinkdb connection */
 r.connect({host: 'rethinkdb'})
   .then(conn => {
@@ -272,6 +273,9 @@ app.get('/favicon.ico', (req, res) => {
   res.sendFile(path.join('/usr', 'client', 'public', 'favicon.ico'))
 })
 
+/* Serve well-known files */
+app.use('/.well-known', express.static(path.join('/usr', 'client', 'public', 'well-known')))
+
 /* Upload an image and return the url of that image on S3 */
 app.post('/api/images',
     imageUpload.multer.any(),
@@ -300,6 +304,6 @@ app.post('/api/image_url',
 app.post('/api/contact_form',
   (req, res, next) => {
     contactForm(req.body)
-      .then(() => res.end(200))
-      .catch(err => next(`Uploading image from URL ${err}`))
+      .then(() => res.status(200).end())
+      .catch(err => next(`Error posting to contact form ${err}`))
   })

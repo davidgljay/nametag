@@ -60,6 +60,7 @@ class ScrollDemo extends Component {
       }
       return {
         opacity: tween,
+        padding: '2px 8px',
         position: 'relative',
         top: 30 - tween * 30
       }
@@ -73,18 +74,45 @@ class ScrollDemo extends Component {
   }
 
   render () {
-    return <div>
-      {
-        messages.map((message, i) =>
-          <DemoMessage
-            key={i}
-            hideAuthor={i === 1}
-            style={this.getStyle(-10 + i * 80, 100 + i * 80)}
-            message={message} />
-      )
-      }
+    return <div style={styles.container}>
+      <img style={styles.phoneTop} src='https://s3.amazonaws.com/nametag_images/site/phonetop.png' />
+      <div style={styles.demoMessagesContainer}>
+        {
+          messages.map((message, i) =>
+            <DemoMessage
+              key={i}
+              hideAuthor={i === 1}
+              style={this.getStyle(80 + i * 100, 250 + i * 100)}
+              message={message} />
+        )
+        }
+      </div>
+      <img style={styles.phoneBottom} src='https://s3.amazonaws.com/nametag_images/site/phonebottom.png' />
     </div>
   }
 }
 
 export default ScrollDemo
+
+const styles = {
+  container: {
+    maxWidth: 800,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  phoneTop: {
+    width: '100%',
+    marginTop: 20
+  },
+  phoneBottom: {
+    width: '100%',
+    marginBottom: 20
+  },
+  demoMessagesContainer: {
+    width: '100%',
+    background: 'url(https://s3.amazonaws.com/nametag_images/site/phonebg.png)',
+    backgroundSize: 'contain',
+    backgroundRepeatY: 'repeat'
+  }
+}
