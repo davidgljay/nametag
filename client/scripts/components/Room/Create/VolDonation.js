@@ -23,10 +23,17 @@ class VolDonation extends Component {
       const {updateRoom, granters} = this.props
       updateRoom('granter', granterId)
       const granter = granters.find(g => g.id === granterId)
-      updateRoom('actionTypes', granter && granter.defaultActionTypes.map(a => ({title: a.title, desc: a.desc})) || [])
-      updateRoom('ctaText', granter && granter.defaultCtaText || granter.desc)
-      updateRoom('thankText', granter && granter.defaultThankText || t('create_room.cta.thanks'))
-      updateRoom('ctaImage', granter && granter.defaultCtaImages && granter.defaultCtaImages[0])
+      if (granter) {
+        updateRoom('actionTypes', granter.defaultActionTypes.map(a => ({title: a.title, desc: a.desc})) || [])
+        updateRoom('ctaText', granter.defaultCtaText || granter.desc)
+        updateRoom('thankText', granter.defaultThankText || t('create_room.cta.thanks'))
+        updateRoom('ctaImage', granter.defaultCtaImages && granter.defaultCtaImages[0])
+      } else {
+        updateRoom('actionTypes', [])
+        updateRoom('ctaText', '')
+        updateRoom('thankText', '')
+        updateRoom('ctaImage', '')
+      }
     }
 
     // Transform updateRoom into the format expected by IconMenu.
