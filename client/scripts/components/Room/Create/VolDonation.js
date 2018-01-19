@@ -93,7 +93,7 @@ class VolDonation extends Component {
       <div style={styles.enableDonationsContainer}>
         <div>{t('create_room.cta.enable_call')}</div>
         <DropDownMenu value={room.granter} onChange={this.selectGranter} style={styles.dropDown}>
-          <MenuItem value={granters[0].id} primaryText='' />
+          <MenuItem value={null} primaryText='' />
           {
             granters.map(granter => <MenuItem
               key={granter.id}
