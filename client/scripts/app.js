@@ -86,7 +86,7 @@ class Nametag extends Component {
     return <ApolloProvider client={client} store={store}>
       <StyleRoot>
         <MuiThemeProvider muiTheme={muiTheme}>
-          <StripeProvider apiKey={constants.STRIPE_CLIENT_ID}>
+          <StripeProvider apiKey={constants.STRIPE_CLIENT_PUBLISHABLE}>
             <Router history={browserHistory}>
               <Route path='/' component={RoomCards} />
               <Route path='/rooms' component={RoomCards} />
