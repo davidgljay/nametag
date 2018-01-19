@@ -29,10 +29,6 @@ export default {
   FIREBASE_WEB_KEY: 'AIzaSyCkPlC2qRkXchd9AdubS6aAyvhE1TNAPqU',
   FIREBASE_SENDER_ID: '820872076821',
   SENTRY_DSN: 'https://5843edea127249928e8f94a645b46348@sentry.io/197147',
-<<<<<<< HEAD
-  STRIPE_CLIENT_ID: 'pk_test_rKR5HbQPaYLCwqA3ZVylCpaD'
-=======
   STRIPE_CLIENT_PUBLISHABLE: 'pk_test_rKR5HbQPaYLCwqA3ZVylCpaD',
   STRIPE_CLIENT_ID: 'ca_C2MwXiLMHINblnFauKnQ7eQ5Y'
->>>>>>> master
 }
