@@ -297,6 +297,7 @@ class Room extends Component {
       }
       {
         showCallToAction &&
+        myNametag &&
         <Elements>
           <VolActionDialog
             granter={room.granter}
