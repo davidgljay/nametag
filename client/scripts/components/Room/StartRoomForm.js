@@ -54,7 +54,7 @@ class StartRoomForm extends Component {
           id='startConvoButton'
           primary
           style={styles.button}
-          label={loggedIn ? t('room.start_conversation') : t('room.try_it')}
+          label={t('room.start_conversation')}
           onClick={this.startRoom}
           />
       </div>
