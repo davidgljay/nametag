@@ -94,7 +94,8 @@ export default StripeCheckout
 
 const styles = {
   container: {
-    width: 400
+    maxWidth: 400,
+    width: '100%'
   },
   checkout: {
     paddingBottom: 20,
