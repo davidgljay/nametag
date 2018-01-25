@@ -8,6 +8,9 @@ import RaisedButton from 'material-ui/RaisedButton'
 import {getQueryVariable, removeQueryVar} from '../../utils/queryVars'
 import t from '../../utils/i18n'
 import {primary} from '../../../styles/colors'
+import {mobile} from '../../../styles/sizes'
+import radium from 'radium'
+import {track, setTimer} from '../../utils/analytics'
 
 class RoomDialog extends Component {
 
@@ -23,11 +26,13 @@ class RoomDialog extends Component {
     this.joinRoomFromQueryVar = () => {
       const {joinRoom, refetch} = this.props
       const intro = getQueryVariable('intro')
+      track('JOIN_ROOM')
       removeQueryVar('intro')
       refetch().then(() => joinRoom(intro))
     }
 
     this.skipToLogin = e => {
+      track('SKIP_TO_LOGIN')
       e.preventDefault()
       this.setState({status: 'LOGIN', alreadyJoined: true})
     }
@@ -47,13 +52,21 @@ class RoomDialog extends Component {
       let next
       switch (status) {
         case 'ABOUT':
-          next = () => this.setState({status: 'NORMS'})
+          next = () => {
+            track('ROOM_JOIN_ABOUT')
+            setTimer('ROOM_JOIN_NORMS')
+            this.setState({status: 'NORMS'})
+          }
           return <div>
             <AboutNametag
               next={next} />
           </div>
         case 'NORMS':
-          next = () => this.setState({status: 'WELCOME'})
+          next = () => {
+            track('ROOM_JOIN_NORMS')
+            setTimer('ROOM_JOIN_WELCOME')
+            this.setState({status: 'WELCOME'})
+          }
           return <div style={styles.normsContainer}>
             <h3>Norms</h3>
             <Norms
@@ -67,7 +80,11 @@ class RoomDialog extends Component {
               label={t('agree')} />
           </div>
         case 'WELCOME':
-          next = () => this.setState({status: 'LOGIN'})
+          next = () => {
+            track('ROOM_JOIN_WELCOME')
+            setTimer('LOGIN')
+            this.setState({status: 'LOGIN'})
+          }
           return <WelcomeForm
             createMessage={createMessage}
             room={room}
@@ -147,13 +164,16 @@ RoomDialog.proptypes = {
   updateNametag: func.isRequired
 }
 
-export default RoomDialog
+export default radium(RoomDialog)
 
 const styles = {
   dialog: {
     maxWidth: 820,
     width: 'fit-content',
-    bottom: window.innerWidth < 800 ? '15vh' : 0
+    bottom: '15vh',
+    [mobile]: {
+      bottom: 0
+    }
   },
   bodyStyle: {
     overflowY: 'auto'
