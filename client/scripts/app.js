@@ -55,8 +55,16 @@ const muiTheme = getMuiTheme({
 
 class Nametag extends Component {
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      stripe: null
+    }
+  }
+
+
   componentWillMount () {
-    // store.dispatch(getUser())
     store.dispatch(firebaseInit())
     store.dispatch(registerServiceWorker())
 
@@ -80,6 +88,17 @@ class Nametag extends Component {
         }
       }
     })
+  }
+
+  componentDidMount () {
+    if (window.Stripe) {
+      this.setState({stripe: window.Stripe(constants.STRIPE_CLIENT_PUBLISHABLE)})
+    } else {
+      document.querySelector('#stripe-js').addEventListener('load', () => {
+        // Create Stripe instance once Stripe.js loads
+        this.setState({stripe: window.Stripe(constants.STRIPE_CLIENT_PUBLISHABLE)})
+      })
+    }
   }
 
   render () {
