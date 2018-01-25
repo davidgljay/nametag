@@ -8,6 +8,8 @@ import RaisedButton from 'material-ui/RaisedButton'
 import {getQueryVariable, removeQueryVar} from '../../utils/queryVars'
 import t from '../../utils/i18n'
 import {primary} from '../../../styles/colors'
+import {mobile} from '../../../styles/sizes'
+import radium from 'radium'
 import {track, setTimer} from '../../utils/analytics'
 
 class RoomDialog extends Component {
@@ -162,13 +164,16 @@ RoomDialog.proptypes = {
   updateNametag: func.isRequired
 }
 
-export default RoomDialog
+export default radium(RoomDialog)
 
 const styles = {
   dialog: {
     maxWidth: 820,
     width: 'fit-content',
-    bottom: window.innerWidth < 800 ? '15vh' : 0
+    bottom: '15vh',
+    [mobile]: {
+      bottom: 0
+    }
   },
   bodyStyle: {
     overflowY: 'auto'
