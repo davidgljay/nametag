@@ -214,7 +214,7 @@ r.connect({host: 'rethinkdb'})
           })
           .catch(next)
       } else {
-        res.render('index.pug', {title: 'Nametag', description: 'Small conversations with people you can trust.'})
+        res.render('index.pug', {title: 'Nametag', description: 'Online chat built for authentic conversations that inspire action.'})
       }
     })
 
