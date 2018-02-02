@@ -29,6 +29,6 @@ export default {
   FIREBASE_WEB_KEY: 'AIzaSyCkPlC2qRkXchd9AdubS6aAyvhE1TNAPqU',
   FIREBASE_SENDER_ID: '820872076821',
   SENTRY_DSN: 'https://5843edea127249928e8f94a645b46348@sentry.io/197147',
-  STRIPE_CLIENT_PUBLISHABLE: 'pk_test_rKR5HbQPaYLCwqA3ZVylCpaD',
-  STRIPE_CLIENT_ID: 'ca_C2MwXiLMHINblnFauKnQ7eQ5Ybb6o85a'
+  STRIPE_CLIENT_PUBLISHABLE: process.env.NODE_ENV === 'production' ? 'pk_live_kDymZ5eLNGV6xaRfQYqrhoQV' : 'pk_test_rKR5HbQPaYLCwqA3ZVylCpaD',
+  STRIPE_CLIENT_ID: process.env.NODE_ENV === 'production' ? 'ca_C2MwWYxNsaczcTsYHR4rMZiUbagl2wh1' : 'ca_C2MwXiLMHINblnFauKnQ7eQ5Ybb6o85a'
 }
