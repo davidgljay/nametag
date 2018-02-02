@@ -9,6 +9,7 @@ const StripeButton = ({granter: {stripe, name, urlCode}, me: {email}}) => {
   stripeUrl += `&state=${urlCode}`
   stripeUrl += `&stripe_user[business_name]=${name}`
   stripeUrl += `&stripe_user[email]=${email}`
+  stripeUrl += `&redirect_uri=${window.location.origin}/stripe_auth`
   return <FlatButton
     href={stripe ? `/granters/${urlCode}/stripe_dash` : stripeUrl}
     label={t(stripe ? 'granter.stripe_dash' : 'granter.stripe_register')}
