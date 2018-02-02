@@ -93,7 +93,6 @@ app.use(function (req, res, next) {
 app.use(passport.initialize())
 app.use(passport.session())
 
-
 /* Get rethinkdb connection */
 r.connect({host: 'rethinkdb'})
   .then(conn => {

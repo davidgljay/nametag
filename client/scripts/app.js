@@ -55,14 +55,13 @@ const muiTheme = getMuiTheme({
 
 class Nametag extends Component {
 
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
       stripe: null
     }
   }
-
 
   componentWillMount () {
     store.dispatch(firebaseInit())
