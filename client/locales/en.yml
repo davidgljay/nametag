@@ -19,6 +19,8 @@ en:
   cancel: Cancel
   agree: I Agree
   copy_clip: Copy To Clipboard
+  required-field: This field is required
+  invalid-email: Please enter a valid e-mail address
   badge:
     granted_by: Granted by
     note: Note
@@ -194,8 +196,8 @@ en:
     rooms: Rooms
     settings: Settings
     nametags: Nametags
-    priv_msg_on: Only host can message privately
-    priv_msg_off: Anyone can message privately
+    priv_msg_on: Anyone can message privately
+    priv_msg_off: Only host can message privately
     closed: This room is closed
     open: This room is active
     invite: Invite

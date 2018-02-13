@@ -6,6 +6,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import t from '../../utils/i18n'
 import TextField from 'material-ui/TextField'
 import {track} from '../../utils/analytics'
+import validEmail from '../../utils/validEmail'
 
 class ContactDialog extends Component {
 
@@ -17,7 +18,10 @@ class ContactDialog extends Component {
       email: '',
       organization: '',
       note: '',
-      sent: false
+      sent: false,
+      nameError: '',
+      emailError: '',
+      orgError: ''
     }
 
     this.setItem = item => e => {
@@ -30,6 +34,22 @@ class ContactDialog extends Component {
       const {name, email, organization, note} = this.state
       const {contactForm, reason} = this.props
 
+      let emailError = email ? '' : t('required-field')
+      if (email && !validEmail(email)) {
+        emailError = t('invalid-email')
+      }
+      const nameError = name ? '' : t('required-field')
+      const orgError = organization ? '' : t('required-field')
+
+      if (nameError || emailError || orgError) {
+        this.setState({
+          nameError,
+          emailError,
+          orgError
+        })
+        return
+      }
+
       track('CONTACT_SUBMIT')
 
       contactForm(name, email, organization, note, reason)
@@ -39,7 +59,7 @@ class ContactDialog extends Component {
 
   render () {
     const {closeDialog, reason} = this.props
-    const {sent} = this.state
+    const {sent, nameError, orgError, emailError} = this.state
 
     const title = reason === 'demoRequest' ? 'Request A Demo' : 'Contact Us'
 
@@ -70,6 +90,7 @@ class ContactDialog extends Component {
               id='name'
               type='text'
               floatingLabelText='Name'
+              errorText={nameError}
               style={styles.input}
               onChange={this.setItem('name')}
               />
@@ -77,12 +98,14 @@ class ContactDialog extends Component {
               id='email'
               type='text'
               floatingLabelText='E-mail'
+              errorText={emailError}
               style={styles.input}
               onChange={this.setItem('email')} />
             <TextField
               id='organization'
               type='text'
               floatingLabelText='Organization'
+              errorText={orgError}
               style={styles.input}
               onChange={this.setItem('organization')} />
             <TextField

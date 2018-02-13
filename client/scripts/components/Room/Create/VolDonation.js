@@ -92,6 +92,7 @@ class VolDonation extends Component {
       stripeUrl += `&state=${granter.urlCode}`
       stripeUrl += `&stripe_user[business_name]=${granter.name}`
       stripeUrl += `&stripe_user[email]=${email}`
+      stripeUrl += `&redirect_uri=${window.location.origin}/stripe_auth`
     }
 
     return <div>

@@ -60,7 +60,7 @@ module.exports = ({rooms, loginHash}) => {
     </div>`
 
   return {
-    subject: `"${rooms[0].title}" has new messages"`,
+    subject: `People are talking in "${rooms[0].title}", wanna join?`,
     html
   }
 }

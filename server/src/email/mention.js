@@ -1,5 +1,5 @@
 module.exports = ({roomId, roomName, message, author, loginHash}) => ({
-  subject: `You have been mentioned in ${roomName}`,
+  subject: `${author} has mentioned you in ${roomName}`,
   txt: `You have been mentioned:\n
   \n
       ${message}\n

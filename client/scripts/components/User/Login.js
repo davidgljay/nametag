@@ -5,6 +5,7 @@ import CircularProgress from 'material-ui/CircularProgress'
 import {track, alias, setTimer} from '../../utils/analytics'
 import {grey} from '../../../styles/colors'
 import t from '../../utils/i18n'
+import validEmail from '../../utils/validEmail'
 import key from 'keymaster'
 
 /* Function to Log in users via an auth provider or e-mail.
@@ -15,11 +16,6 @@ Google
 FB
 E-mail
 */
-
-const validEmail = (email) => {
-  const re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i // eslint-disable-line
-  return re.test(email)
-}
 
 class Login extends Component {
   constructor (props) {
@@ -195,6 +191,7 @@ const styles = {
     fontStyle: 'italic',
     fontSize: 12,
     color: grey,
+    marginTop: 15,
     fontWeight: 300
   },
   hiddenSubmit: {

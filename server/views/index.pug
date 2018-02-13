@@ -1,5 +1,6 @@
+doctype html
 html
-  header
+  head
     meta(name= "description" content= description)
     meta(name= "viewport" content= "width=device-width")
     meta(http-equiv="cache-control" content="no-cache")
@@ -12,7 +13,7 @@ html
     link(rel="stylesheet" href="/public/styles/main.css")
     link(rel="stylesheet" href="/public/styles/emoji-mart.css")
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.3/jquery.min.js')
-    script(src='https://js.stripe.com/v3/' async)
+    script(id="stripe-js" src='https://js.stripe.com/v3/')
     script(src="https://www.gstatic.com/firebasejs/4.6.2/firebase-app.js")
     script(src="https://www.gstatic.com/firebasejs/4.6.2/firebase-messaging.js")
     script(type="text/javascript").
