@@ -111,10 +111,11 @@ const emailAdmins = ({conn, models: {Users}}, granterId, template, params) =>
  *
  * @param {Object} context     graph context
  * @param {Object} granter   the badge granter to be created
+ * @param {Object} adminEmail   email of the administrator for this new granter
  *
  **/
 
-const create = ({conn, models: {Templates}}, granter) =>
+const create = ({conn, models: {Templates}}, granter, adminEmail) =>
   fromUrl(200, null, granter.image)
     .then(({url, errorMessage}) => {
       if (errorMessage) {
@@ -136,13 +137,15 @@ const create = ({conn, models: {Templates}}, granter) =>
         id,
         Templates.createAndGrant(
           {
-            name: `Admin`,
+            name: `${granter.name} Admin`,
             description: `This individual has the right to grant and revoke badges on behalf of ${granter.name}.`,
             image: granter.image,
             approvalRequired: false,
             granter: id
           },
-        `Created account for ${granter.name}.`)
+        `Created account for ${granter.name}.`,
+        adminEmail
+      )
       ])
     })
       .then(([id, [template]]) =>
@@ -184,7 +187,7 @@ const addStripe = ({conn}, granterCode, stripe) =>
 module.exports = (context) => ({
   Granters: {
     get: id => get(context, id),
-    create: badge => create(context, badge),
+    create: (granter, adminEmail) => create(context, granter, adminEmail),
     getByUrlCode: urlCode => getByUrlCode(context, urlCode),
     getByAdminTemplate: adminTemplateIds => getByAdminTemplate(context, adminTemplateIds),
     notifyAdmins: (granterId, template, params) => notifyAdmins(context, granterId, template, params),

@@ -55,20 +55,30 @@ const create = ({conn}, template) => {
  * @param {Object} context     graph context
  * @param {Object} template   the badge template to be created
  * @param {String} note   a note to be appended when the badge is granted
+ * @param {String} email (optional) the e-mail address of the person other than
+ *            the currently logged in user who should recieve this badge.
  *
+ * Note: the email parameter should only be used when creating an administrator
+ * for a new badge granting organization.
  **/
 
-const createAndGrant = (context, template, note) => {
-  const {models: {Nametags}} = context
-  return create(context, template)
+const createAndGrant = (context, template, note, email) => {
+  const {user, models: {Nametags, Users}} = context
+  const createPromise = name => create(context, template)
     .then(templ => Promise.all([
       templ,
       Nametags.create({
-        name: templ.name,
+        name,
         bio: templ.description,
         template: templ.id
-      }, false)
+      }, email)
     ]))
+
+  if (email) {
+    return Users.getByEmail(email)
+      .then(({displayNames}) => createPromise(displayNames[0]))
+  }
+  return createPromise(user.displayNames[0])
 }
 
 module.exports = (context) => ({
@@ -77,6 +87,6 @@ module.exports = (context) => ({
     getAll: (ids) => getAll(context, ids),
     getGranterTemplates: (granterId) => getGranterTemplates(context, granterId),
     create: badge => create(context, badge),
-    createAndGrant: (template, note) => createAndGrant(context, template, note)
+    createAndGrant: (template, note, email) => createAndGrant(context, template, note, email)
   }
 })

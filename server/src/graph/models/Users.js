@@ -161,11 +161,22 @@ const getByNametag = ({conn}, nametagId) =>
  * @param {Object} context     graph context
  * @param {String} nametagId   the id of the nametag to be added
  * @param {String} roomId   the id of the room for that nametag
+ * @param {String} email (optional) the e-mail of the user to be granted this badge
+ *
+ * Note: the email parameter should only be used when creating an admin badge for a new badge granter.
  *
  */
 
-const addNametag = ({user, conn}, nametagId, roomId) =>
-  usersTable.get(user.id).update({nametags: {[roomId]: nametagId}}).run(conn)
+const addNametag = ({user, conn}, nametagId, roomId, email) => {
+  if (email) {
+    return usersTable.getAll(email, {index: 'email'}).count().run(conn)
+    .then(count => count > 0
+      ? usersTable.getAll(email, {index: 'email'}).update({nametags: {[roomId]: nametagId}}).run(conn)
+      : Promise.reject(new APIError(`${email} does not have an accounton Nametag.`))
+    )
+  }
+  return usersTable.get(user.id).update({nametags: {[roomId]: nametagId}}).run(conn)
+}
 
 /**
  * Adds a new default name for the user
@@ -731,7 +742,7 @@ module.exports = (context) => ({
     createLocal: (email, password) => createLocal(context, email, password),
     validPassword: (id, password) => validPassword(context, id, password),
     appendUserArray: (property, value) => appendUserArray(context, property, value),
-    addNametag: (nametagId, roomId) => addNametag(context, nametagId, roomId),
+    addNametag: (nametagId, roomId, email) => addNametag(context, nametagId, roomId, email),
     addBadge: (badgeId, templateId, nametagId) => addBadge(context, badgeId, templateId, nametagId),
     addToken: (token) => addToken(context, token),
     getTokens: (nametagIds) => getTokens(context, nametagIds),

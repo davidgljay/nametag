@@ -12,6 +12,8 @@ scalar Date
 
     COMPANY
 
+    CAMPAIGN
+
     EDUCATIONAL
 
     COMMUNITY_GROUP
@@ -830,7 +832,7 @@ type RootMutation {
   createTemplate(template: CreateTemplateInput!): BasicResponse
 
   # Creates a badge granter
-  createGranter(granter: CreateGranterInput!): CreateGranterResponse
+  createGranter(granter: CreateGranterInput!, adminEmail: String!): CreateGranterResponse
 
   # Adds a reaction to a message
   addReaction(messageId: ID!, emoji: String!, nametagId: ID!): BasicResponse
