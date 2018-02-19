@@ -34,7 +34,7 @@ const create = ({conn, user, models: {Messages}}, amount, nametag, token, note) 
     .zip()
     .eqJoin(r => r('granter'), db.table('granters'))
     .zip()
-    .pluck('room', 'granter', 'mod', 'name', 'stripe', 'donorName', 'donorImage')
+    .pluck('room', 'title', 'granter', 'mod', 'name', 'stripe', 'donorName', 'donorImage')
     .nth(0)
     .run(conn)
   .then((data) => {
