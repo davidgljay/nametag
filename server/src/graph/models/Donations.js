@@ -68,7 +68,7 @@ const create = ({conn, user, models: {Messages}}, amount, nametag, token, note) 
         updatedAt: new Date()
       }).run(conn)
 
-    let messageText = `**${name}** has donated!\n\n`
+    let messageText = `**${donorName}** has donated!\n\n`
     messageText += 'Reach out to say thanks!'
 
     const modMessagePromise = Messages.create({
