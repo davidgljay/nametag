@@ -199,10 +199,7 @@ class Room extends Component {
         id='volActionButton'
         style={styles.backIcon}
         src='https://s3.amazonaws.com/nametag_images/site/jointhefight.png' />
-      : <img
-        id='backButton'
-        style={styles.backIcon}
-        src='https://s3.amazonaws.com/nametag_images/logo-inverted30.png' />
+      : null
 
     return <div style={styles.roomContainer}>
       <div id='room'>
@@ -214,8 +211,7 @@ class Room extends Component {
           iconElementRight={leftIcon}
           onRightIconButtonTouchTap={
             showCallToAction
-            ? () => this.setState({showVolDialog: true})
-            : this.showRooms}
+            ? () => this.setState({showVolDialog: true}) : () => {}}
           onLeftIconButtonTouchTap={this.toggleLeftBar}
           iconStyleLeft={isMobile ? {display: 'inline-block'} : {display: 'none'}} />
         <div>
@@ -380,7 +376,8 @@ const styles = {
   appBar: {
     position: 'fixed',
     boxShadow: 'none',
-    fontWeight: 300
+    fontWeight: 300,
+    height: 85
   },
   title: {
     fontWeight: 300
