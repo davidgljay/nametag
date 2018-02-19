@@ -76,9 +76,6 @@ class VolDonation extends Component {
     if (!room.ctaText) {
       updateRoom('ctaText', granter.defaultCtaText || granter.desc)
     }
-    if (!room.thankText) {
-      updateRoom('thankText', t('create_room.cta.thanks'))
-    }
   }
 
   render () {
@@ -133,7 +130,7 @@ class VolDonation extends Component {
           <div style={styles.ctaContainer}>
             <TextField
               id='thankText'
-              value={room.thankText || t('create_room.cta.thanks')}
+              value={room.thankText}
               multiLine
               onChange={(e, val) => updateRoom('thankText', val)}
               rows={2} />

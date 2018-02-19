@@ -22,6 +22,7 @@ class CreateRoom extends Component {
         welcome: '',
         public: true,
         actionTypes: [],
+        thankText: t('create_room.cta.thanks'),
         mod: {
           badges: []
         }
