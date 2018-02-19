@@ -6,6 +6,7 @@ import NametagIcon from '../Nametag/NametagIcon'
 import {primary} from '../../../styles/colors'
 import RaisedButton from 'material-ui/RaisedButton'
 import ChooseAmount from '../Donation/ChooseAmount'
+import CircularProgress from 'material-ui/CircularProgress'
 import StripeCheckout from '../Donation/StripeCheckout'
 import {injectStripe} from 'react-stripe-elements'
 import t from '../../utils/i18n'
@@ -48,6 +49,8 @@ class VolActionDialog extends Component {
         stripe
       } = this.props
 
+      this.setState({loadingSignup: true})
+
       if (checkedActions.length === 0 && !amount) {
         return
       }
@@ -71,7 +74,7 @@ class VolActionDialog extends Component {
       }
 
       Promise.all(promises)
-        .then(() => this.setState({signedUp: true}))
+        .then(() => this.setState({signedUp: true, loadingSignup: false}))
     }
 
     this.setDonated = () => { this.setState({donated: true}) }
@@ -92,7 +95,7 @@ class VolActionDialog extends Component {
         granter
       }
       } = this.props
-    const {checkedActions, donated, signedUp, amount} = this.state
+    const {checkedActions, donated, signedUp, amount, loadingSignup} = this.state
     const text = signedUp ? thankText : ctaText
 
     return <div>
@@ -173,10 +176,14 @@ class VolActionDialog extends Component {
               </div>
             }
             <div style={styles.buttonContainer}>
-              <RaisedButton
-                primary
-                onClick={this.onSignupClick}
-                label={t('room.sign_up')} />
+              {
+                loadingSignup
+                ? <CircularProgress />
+                : <RaisedButton
+                  primary
+                  onClick={this.onSignupClick}
+                  label={t('room.sign_up')} />
+              }
             </div>
           </div>
         }
