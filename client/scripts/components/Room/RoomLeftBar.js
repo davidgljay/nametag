@@ -163,7 +163,7 @@ const styles = {
     minHeight: 400,
     background: '#12726a',
     height: '100%',
-    paddingTop: 15,
+    paddingTop: 20,
     paddingLeft: 15,
     paddingRight: 15,
     paddingBottom: 50,
