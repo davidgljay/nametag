@@ -113,7 +113,7 @@ const create = ({conn, user, models: {Messages}}, amount, nametag, token, note) 
       emailGranterAdminsAndMod
     ])
   })
-  .then(res => ({id: res.generated_keys[0]}))
+  .then(([res]) => ({id: res.generated_keys[0]}))
 
 module.exports = (context) => ({
   Donations: {
