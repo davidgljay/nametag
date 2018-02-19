@@ -1,6 +1,6 @@
 module.exports = ({roomId, roomTitle, donorName, donorImage, donorEmail, amount}) => ({
   subject: `${donorName} has donated in ${roomTitle}`,
-  txt: `${donorName} has donated $${amount/100}!
+  txt: `${donorName} has donated $${amount / 100}!
   \n
   Their e-mail is: ${donorEmail}\n
   \n
@@ -17,7 +17,7 @@ module.exports = ({roomId, roomTitle, donorName, donorImage, donorEmail, amount}
       ${donorImage ? `<div style="width: 50px; height: 50px; border-radius: 25px; background: url(${donorImage})   center center / cover no-repeat;"/>` : ''}
     </td>
     <td style="text-align: center;">
-      <h2>${donorName} has donated $${amount/100}!</h2>
+      <h2>${donorName} has donated $${amount / 100}!</h2>
     </td>
 </tr>
 <tr>
