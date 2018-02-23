@@ -61,6 +61,30 @@ type User {
   # Email address of the user
   email: String
 
+  # Name for the purposes of donation reporting
+  donationName: String
+
+  # Employer for the purposes of donation reporting
+  donationEmployer: String
+
+  # Occupation for the purposes of donation reporting
+  donationOccupation: String
+
+  # Address 1 for the purposes of donation reporting
+  donationAddress1: String
+
+  # Address 1 for the purposes of donation reporting
+  donationAddress1: String
+
+  # City for the purposes of donation reporting
+  donationCity: String
+
+  # State for the purposes of donation reporting
+  donationState: String
+
+  # ZIP for the purposes of donation reporting
+  donationZip: String
+
 }
 
 # A room where discussions can take place
@@ -478,7 +502,33 @@ type Donation {
 
   # The room where the user donated
   room: ID!
+
+  # Name for the purposes of donation reporting
+  name: String
+
+  # Employer for the purposes of donation reporting
+  employer: String
+
+  # Occupation for the purposes of donation reporting
+  occupation: String
+
+  # Address 1 for the purposes of donation reporting
+  address1: String
+
+  # Address 2 for the purposes of donation reporting
+  address2: String
+
+  # City for the purposes of donation reporting
+  city: String
+
+  # State for the purposes of donation reporting
+  state: String
+
+  # ZIP for the purposes of donation reporting
+  zip: String
+
 }
+
 
 # The queries available for Nametag
 type RootQuery {
@@ -722,6 +772,46 @@ input CreateVolActionsInput {
 
 }
 
+input CreateDonationInput {
+
+  # The amount being donated in US cents.
+  amount: Int!
+
+  # The nametag ID of the person donating
+  nametagId: ID!
+
+  # Stripe token of the donation transaction
+  token: String!
+
+  # An optional note from the user
+  note: String
+
+  # Name for the purposes of donation reporting
+  name: String
+
+  # Employer for the purposes of donation reporting
+  employer: String
+
+  # Occupation for the purposes of donation reporting
+  occupation: String
+
+  # Address 1 for the purposes of donation reporting
+  address1: String
+
+  # Address 2 for the purposes of donation reporting
+  address2: String
+
+  # City for the purposes of donation reporting
+  city: String
+
+  # State for the purposes of donation reporting
+  state: String
+
+  # ZIP for the purposes of donation reporting
+  zip: String
+
+}
+
 ## Responses
 
 # CreateRoomResponse is returned with the room that was created and any
@@ -877,7 +967,7 @@ type RootMutation {
   createVolActions(actions: [String!]!, nametagId: ID!, note: String): ArrayResponse
 
   # Creates a donation
-  createDonation(amount: Int!, nametagId: ID!, token: String!, note: String): BasicResponse
+  createDonation(donation: CreateDonationInput!): BasicResponse
 
 }
 

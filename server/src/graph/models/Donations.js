@@ -27,9 +27,9 @@ const get = ({conn}, id) => id ? donationsTable.get(id).run(conn) : Promise.reso
   * Note: Getting room and granter info from the database for security reasons
   **/
 
-const create = ({conn, user, models: {Messages}}, amount, nametag, token, note) =>
-  db.table('nametags').getAll(nametag)
-    .map(n => n.merge({donorName: n('name'), donorImage: n('image')}))
+const create = ({conn, user, models: {Messages}}, donation) =>
+  db.table('nametags').getAll(donation.nametag)
+    .map(n => n.merge({donorRoomName: n('name'), donorImage: n('image')}))
     .eqJoin(n => n('room'), db.table('rooms'))
     .zip()
     .eqJoin(r => r('granter'), db.table('granters'))
@@ -38,7 +38,10 @@ const create = ({conn, user, models: {Messages}}, amount, nametag, token, note) 
     .nth(0)
     .run(conn)
   .then((data) => {
-    const {name, stripe} = data
+    const {stripe} = data
+    const {amount, token} = donation
+
+    const name = donation.name || data.name
 
     return Promise.all([
       stripeTools.charges.create({
@@ -54,19 +57,18 @@ const create = ({conn, user, models: {Messages}}, amount, nametag, token, note) 
       data
     ])
   })
-  .then(([res, {room, title, mod, granter, name, stripe, donorName, donorImage}]) => {
+  .then(([res, {room, title, mod, granter, stripe, donorName, donorImage}]) => {
     const insertPromise = donationsTable.insert(
-      {
-        amount,
-        nametag,
-        token,
-        note,
-        room,
-        granter,
-        stripe_response: res,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }).run(conn)
+        Object.assign(
+          {},
+          donation,
+          {
+            stripe_response: res,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          }
+        )
+      ).run(conn)
 
     let messageText = `**${donorName}** has donated!\n\n`
     messageText += 'Reach out to say thanks!'
@@ -101,7 +103,7 @@ const create = ({conn, user, models: {Messages}}, amount, nametag, token, note) 
                   donorEmail: user.email,
                   roomId: room,
                   roomTitle: title,
-                  amount
+                  amount: donation.amount
                 }
               }))
           )
@@ -118,6 +120,6 @@ const create = ({conn, user, models: {Messages}}, amount, nametag, token, note) 
 module.exports = (context) => ({
   Donations: {
     get: (id) => get(context, id),
-    create: (amount, nametag, token, note) => create(context, amount, nametag, token, note)
+    create: (donation) => create(context, donation)
   }
 })
