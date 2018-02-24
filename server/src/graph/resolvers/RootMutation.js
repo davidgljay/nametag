@@ -281,8 +281,8 @@ const RootMutation = {
   },
   createDonation: {
     requires: 'MY_NAMETAG',
-    resolve: (obj, {donation}, {user, models: {Donations}}) =>
-      Donations.create(donation)
+    resolve: (obj, {donation, nametagId}, {user, models: {Donations}}) =>
+      Donations.create(donation, nametagId)
   }
 }
 

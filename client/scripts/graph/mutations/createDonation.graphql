@@ -1,5 +1,5 @@
-mutation CreateDonations($donation: CreateDonationInput!) {
-  createDonation(donation: $donation) {
+mutation CreateDonations($donation: CreateDonationInput!, $nametagId: ID!) {
+  createDonation(donation: $donation, nametagId: $nametagId) {
     id
     errors {
       translation_key

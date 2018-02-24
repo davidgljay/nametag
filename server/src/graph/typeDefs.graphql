@@ -777,14 +777,8 @@ input CreateDonationInput {
   # The amount being donated in US cents.
   amount: Int!
 
-  # The nametag ID of the person donating
-  nametagId: ID!
-
   # Stripe token of the donation transaction
   token: String!
-
-  # An optional note from the user
-  note: String
 
   # Name for the purposes of donation reporting
   name: String
@@ -967,7 +961,7 @@ type RootMutation {
   createVolActions(actions: [String!]!, nametagId: ID!, note: String): ArrayResponse
 
   # Creates a donation
-  createDonation(donation: CreateDonationInput!): BasicResponse
+  createDonation(donation: CreateDonationInput!, nametagId: ID!): BasicResponse
 
 }
 

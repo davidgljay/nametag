@@ -27,8 +27,8 @@ const get = ({conn}, id) => id ? donationsTable.get(id).run(conn) : Promise.reso
   * Note: Getting room and granter info from the database for security reasons
   **/
 
-const create = ({conn, user, models: {Messages}}, donation) =>
-  db.table('nametags').getAll(donation.nametag)
+const create = ({conn, user, models: {Messages}}, donation, nametagId) =>
+  db.table('nametags').getAll(nametagId)
     .map(n => n.merge({donorRoomName: n('name'), donorImage: n('image')}))
     .eqJoin(n => n('room'), db.table('rooms'))
     .zip()
@@ -63,6 +63,7 @@ const create = ({conn, user, models: {Messages}}, donation) =>
           {},
           donation,
           {
+            nametagId,
             stripe_response: res,
             createdAt: new Date(),
             updatedAt: new Date()
@@ -120,6 +121,6 @@ const create = ({conn, user, models: {Messages}}, donation) =>
 module.exports = (context) => ({
   Donations: {
     get: (id) => get(context, id),
-    create: (donation) => create(context, donation)
+    create: (donation, nametagId) => create(context, donation, nametagId)
   }
 })
