@@ -5,6 +5,7 @@ const {ROOM_TIMEOUT} = require('../../constants')
 const {search} = require('../../elasticsearch')
 const pubsub = require('../subscriptions/pubsub')
 const notification = require('../../notifications')
+const uuid = require('uuid')
 
 const roomsTable = db.table('rooms')
 
@@ -123,10 +124,13 @@ const getQuery = ({conn, user, models: {Users}}, query) =>
 const create = ({conn, models: {Nametags, Users}}, rm) => {
   const defaultPublic = process.env.NODE_ENV === 'test' ? 'APPROVED' : 'PENDING'
   const testId = process.env.NODE_ENV === 'test' ? {id: '123456'} : {}
+  const shortLink = rm.title.split('').slice(0, 2).join('').toLowerCase()
+    + uuid.v4().slice(0, 4)
   const room = Object.assign(
     {},
     rm,
     {
+      shortLink,
       createdAt: new Date(),
       modOnlyDMs: false,
       mod: null,
