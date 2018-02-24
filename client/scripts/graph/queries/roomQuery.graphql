@@ -38,6 +38,7 @@ query roomQuery($id: ID!){
       name
       image
       stripe
+      type
     }
     nametags {
       ...nametagView

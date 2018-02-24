@@ -106,7 +106,7 @@ const wrap = (mutation, requires, key = 'result') => (obj, args, context) => {
           return Templates.getGranterTemplates(id)
         })
         .then((templates) => {
-          const adminTemplate = templates.find(template => template.name === 'Admin')
+          const adminTemplate = templates.find(template => template.name === 'Nametag Admin')
           return user.badges[adminTemplate.id]
           ? mutation(obj, args, context)
           : Promise.reject(ErrNotNametagAdmin)
@@ -209,8 +209,8 @@ const RootMutation = {
   },
   createGranter: {
     requires: 'NAMETAG_ADMIN',
-    resolve: (obj, {granter}, {user, models: {Granters}}) =>
-      Granters.create(granter)
+    resolve: (obj, {granter, adminEmail}, {user, models: {Granters}}) =>
+      Granters.create(granter, adminEmail)
       .then(wrapResponse('granter'))
   },
   updateToken: {
@@ -281,8 +281,8 @@ const RootMutation = {
   },
   createDonation: {
     requires: 'MY_NAMETAG',
-    resolve: (obj, {amount, nametagId, token, note}, {user, models: {Donations}}) =>
-      Donations.create(amount, nametagId, token, note)
+    resolve: (obj, {donation, nametagId}, {user, models: {Donations}}) =>
+      Donations.create(donation, nametagId)
   }
 }
 

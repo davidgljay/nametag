@@ -163,7 +163,7 @@ const styles = {
     minHeight: 400,
     background: '#12726a',
     height: '100%',
-    paddingTop: 15,
+    paddingTop: 0,
     paddingLeft: 15,
     paddingRight: 15,
     paddingBottom: 50,
@@ -175,7 +175,7 @@ const styles = {
     zIndex: 120
   },
   leftBarDesktop: {
-    marginTop: 55
+    marginTop: 85
   },
   norms: {
     color: '#FFF'

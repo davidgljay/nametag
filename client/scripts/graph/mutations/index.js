@@ -81,12 +81,10 @@ export const createVolActions = graphql(CREATE_VOL_ACTIONS, {
 
 export const createDonation = graphql(CREATE_DONATION, {
   props: ({ownProps, mutate}) => ({
-    createDonation: (amount, nametagId, token, note = '') => mutate({
+    createDonation: (donation, nametagId) => mutate({
       variables: {
-        amount,
-        nametagId,
-        token,
-        note
+        donation,
+        nametagId
       }
     })
   })

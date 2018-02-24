@@ -27,18 +27,21 @@ const get = ({conn}, id) => id ? donationsTable.get(id).run(conn) : Promise.reso
   * Note: Getting room and granter info from the database for security reasons
   **/
 
-const create = ({conn, user, models: {Messages}}, amount, nametag, token, note) =>
-  db.table('nametags').getAll(nametag)
-    .map(n => n.merge({donorName: n('name'), donorImage: n('image')}))
+const create = ({conn, user, models: {Messages}}, donation, nametagId) =>
+  db.table('nametags').getAll(nametagId)
+    .map(n => n.merge({donorRoomName: n('name'), donorImage: n('image')}))
     .eqJoin(n => n('room'), db.table('rooms'))
     .zip()
     .eqJoin(r => r('granter'), db.table('granters'))
     .zip()
-    .pluck('room', 'granter', 'mod', 'name', 'stripe', 'donorName', 'donorImage')
+    .pluck('room', 'title', 'granter', 'mod', 'name', 'stripe', 'donorName', 'donorImage')
     .nth(0)
     .run(conn)
   .then((data) => {
-    const {name, stripe} = data
+    const {stripe} = data
+    const {amount, token} = donation
+
+    const name = donation.name || data.name
 
     return Promise.all([
       stripeTools.charges.create({
@@ -54,21 +57,21 @@ const create = ({conn, user, models: {Messages}}, amount, nametag, token, note) 
       data
     ])
   })
-  .then(([res, {room, title, mod, granter, name, stripe, donorName, donorImage}]) => {
+  .then(([res, {room, title, mod, granter, stripe, donorName, donorImage}]) => {
     const insertPromise = donationsTable.insert(
-      {
-        amount,
-        nametag,
-        token,
-        note,
-        room,
-        granter,
-        stripe_response: res,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }).run(conn)
+        Object.assign(
+          {},
+          donation,
+          {
+            nametagId,
+            stripe_response: res,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          }
+        )
+      ).run(conn)
 
-    let messageText = `**${name}** has donated!\n\n`
+    let messageText = `**${donorName}** has donated!\n\n`
     messageText += 'Reach out to say thanks!'
 
     const modMessagePromise = Messages.create({
@@ -101,7 +104,7 @@ const create = ({conn, user, models: {Messages}}, amount, nametag, token, note) 
                   donorEmail: user.email,
                   roomId: room,
                   roomTitle: title,
-                  amount
+                  amount: donation.amount
                 }
               }))
           )
@@ -113,11 +116,11 @@ const create = ({conn, user, models: {Messages}}, amount, nametag, token, note) 
       emailGranterAdminsAndMod
     ])
   })
-  .then(res => ({id: res.generated_keys[0]}))
+  .then(([res]) => ({id: res.generated_keys[0]}))
 
 module.exports = (context) => ({
   Donations: {
     get: (id) => get(context, id),
-    create: (amount, nametag, token, note) => create(context, amount, nametag, token, note)
+    create: (donation, nametagId) => create(context, donation, nametagId)
   }
 })

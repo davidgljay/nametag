@@ -17,7 +17,15 @@ class StripeCheckout extends Component {
         stripe: {paymentRequest},
         createDonation,
         myNametagId,
-        setDonated
+        setDonated,
+        name,
+        occupation,
+        employer,
+        address1,
+        address2,
+        city,
+        state,
+        zip
       } = this.props
 
       if (!amount) {
@@ -35,7 +43,19 @@ class StripeCheckout extends Component {
 
       preq.on('token', ({complete, token, ...data}) =>
         complete('success')
-          .then(() => createDonation(amount, myNametagId, token.id))
+          .then(() => createDonation({
+            amount,
+            nametag: myNametagId,
+            token: token.id,
+            name,
+            occupation,
+            employer,
+            address1,
+            address2,
+            city,
+            state,
+            zip
+          }))
           .then(setDonated)
       )
 
@@ -59,7 +79,10 @@ class StripeCheckout extends Component {
 
   render () {
     const {amount} = this.props
-    const {paymentRequest, canMakePayment} = this.state
+    const {
+      paymentRequest,
+      canMakePayment
+    } = this.state
     return <div style={styles.container}>
       {
         amount && <div style={styles.checkout}>
@@ -80,14 +103,22 @@ class StripeCheckout extends Component {
   }
 }
 
-const {number, shape, func} = PropTypes
+const {number, shape, func, string} = PropTypes
 
 StripeCheckout.propTypes = {
   amount: number,
   stripe: shape({
     paymentRequest: func.isRequired
   }).isRequired,
-  setDonated: func.isRequired
+  setDonated: func.isRequired,
+  name: string,
+  occupation: string,
+  employer: string,
+  address1: string,
+  address2: string,
+  city: string,
+  state: string,
+  zip: string
 }
 
 export default StripeCheckout

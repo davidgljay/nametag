@@ -84,12 +84,15 @@ const grantBadge = ({conn}, id, badgeId) => nametagsTable.get(id).update({badge:
  *
  * @param {Object} context     graph context
  * @param {Object} nametag   the nametag to be created
- * @param {Boolean} createBadgeRequest Toggles whether the creation of this
- *   nametag should trigger the creation of a badge request
+ * @param {String} email (optional) the e-mail address of the person other than
+ *            the currently logged in user who should recieve this badge.
+ *
+ * Note: the email parameter should only be used when creating an administrator
+ * for a new badge granting organization.
  *
  **/
 
-const create = ({conn, user, models: {Users, BadgeRequests, Rooms, Messages, Templates, Badges}}, nt) => {
+const create = ({conn, user, models: {Users, BadgeRequests, Rooms, Messages, Templates, Badges}}, nt, email) => {
   const nametag = Object.assign(
     {},
     nt,
@@ -106,7 +109,7 @@ const create = ({conn, user, models: {Users, BadgeRequests, Rooms, Messages, Tem
     return Promise.all([
 
       // Add the nametag to the user profile
-      Users.addNametag(id, nametag.room || nametag.template),
+      Users.addNametag(id, nametag.room || nametag.template, email),
       id,
 
       // Create a BadgeRequest or new badge if appropriate
@@ -225,7 +228,7 @@ const updateLatestVisit = ({conn}, nametagId) => nametagsTable
     setTimeout(() => {
       nametagsTable.get(nametagId).run(conn)
       .then(nametag => {
-        if (Date.now() - new Date(nametag.latestVisit).getTime() > 20000) {
+        if (!nametag.Date.now() - new Date(nametag.latestVisit).getTime() > 20000) {
           return nametagsTable.get(nametagId).update({present: false}).run(conn)
           .catch(errors.errorLog('Setting nametag presence to false'))
         }
@@ -289,7 +292,7 @@ module.exports = (context) => ({
     newNametagCount: (room, date) => newNametagCount(context, room, date),
     getRoomNametags: (room) => getRoomNametags(context, room),
     getByBadge: (badgeId) => getByBadge(context, badgeId),
-    create: (nametag, createBadgeRequest) => create(context, nametag, createBadgeRequest),
+    create: (nametag, email) => create(context, nametag, email),
     update: (nametagId, nametagUpdate) => update(context, nametagId, nametagUpdate),
     addMention: (nametag) => addMention(context, nametag),
     getNametagCount: (room) => getNametagCount(context, room),

@@ -135,7 +135,7 @@ class EditNametag extends Component {
                 searchText={nametag.name} />
             </div>
             <div style={styles.bio}>
-              {nametagEdit.bio}
+              {nametag.bio}
             </div>
           </div>
         </div>

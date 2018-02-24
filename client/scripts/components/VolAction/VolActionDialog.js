@@ -3,11 +3,13 @@ import Dialog from 'material-ui/Dialog'
 import FontIcon from 'material-ui/FontIcon'
 import {List, ListItem} from 'material-ui/List'
 import NametagIcon from '../Nametag/NametagIcon'
-import {primary} from '../../../styles/colors'
+import {primary, grey} from '../../../styles/colors'
 import RaisedButton from 'material-ui/RaisedButton'
 import ChooseAmount from '../Donation/ChooseAmount'
+import CircularProgress from 'material-ui/CircularProgress'
 import StripeCheckout from '../Donation/StripeCheckout'
 import {injectStripe} from 'react-stripe-elements'
+import TextField from 'material-ui/TextField'
 import t from '../../utils/i18n'
 
 class VolActionDialog extends Component {
@@ -19,10 +21,21 @@ class VolActionDialog extends Component {
       checkedActions: [],
       donated: false,
       singedUp: false,
-      amount: null
+      amount: null,
+      name: '',
+      occupation: '',
+      employer: '',
+      address1: '',
+      address2: '',
+      city: '',
+      state: '',
+      zip: '',
+      donationInfoMissing: false
     }
 
-    this.selectAmount = (amount) => () => this.setState({amount})
+    this.selectAmount = amount => () => this.setState({amount})
+
+    this.setDonationInfo = field => (e, value) => this.setState({[field]: value})
 
     this.addAction = (action) => () =>
       this.setState({
@@ -38,7 +51,18 @@ class VolActionDialog extends Component {
     })
 
     this.onSignupClick = () => {
-      const {checkedActions, amount} = this.state
+      const {
+        checkedActions,
+        amount,
+        name,
+        occupation,
+        employer,
+        address1,
+        address2,
+        city,
+        state,
+        zip
+      } = this.state
       const {
         createDonation,
         createVolActions,
@@ -51,6 +75,16 @@ class VolActionDialog extends Component {
       if (checkedActions.length === 0 && !amount) {
         return
       }
+
+      if (granter.type === 'CAMPAIGN' && (
+        !name || !occupation || !employer || !address1 || !address2 ||
+        !city || !state || !zip
+      )) {
+        this.setState({donationInfoMissing: true})
+        return
+      }
+
+      this.setState({loadingSignup: true})
 
       let promises = []
       if (checkedActions.length > 0) {
@@ -66,12 +100,30 @@ class VolActionDialog extends Component {
             type: 'card',
             email
           })
-          .then(res => createDonation(amount, myNametag.id, res.token.id))
+          .then(res => createDonation(
+            {
+              amount,
+              token: res.token.id,
+              name,
+              occupation,
+              employer,
+              address1,
+              address2,
+              city,
+              state,
+              zip
+            },
+            myNametag.id,
+          ))
         )
       }
 
       Promise.all(promises)
-        .then(() => this.setState({signedUp: true}))
+        .then(() => this.setState({signedUp: true, loadingSignup: false}))
+        .catch((e) => {
+          console.log('Caught error on donation', e)
+          this.setState({loadingSignup: false, signedUp: false})
+        })
     }
 
     this.setDonated = () => { this.setState({donated: true}) }
@@ -92,7 +144,22 @@ class VolActionDialog extends Component {
         granter
       }
       } = this.props
-    const {checkedActions, donated, signedUp, amount} = this.state
+    const {
+      checkedActions,
+      donated,
+      signedUp,
+      amount,
+      loadingSignup,
+      name,
+      occupation,
+      employer,
+      address1,
+      address2,
+      city,
+      state,
+      zip,
+      donationInfoMissing
+    } = this.state
     const text = signedUp ? thankText : ctaText
 
     return <div>
@@ -167,16 +234,82 @@ class VolActionDialog extends Component {
                       stripe={stripe}
                       setDonated={this.setDonated}
                       myNametagId={myNametag.id}
-                      createDonation={createDonation} />
+                      granterType={granter.type}
+                      createDonation={createDonation}
+                      name={name}
+                      occupation={occupation}
+                      employer={employer}
+                      address1={address1}
+                      address2={address2}
+                      city={city}
+                      state={state}
+                      zip={zip} />
+                    {
+                      granter.type === 'CAMPAIGN' && amount &&
+                      <div style={styles.donationInfoContainer}>
+                        <div style={styles.helpText}>
+                          Thanks for donating! For legal reasons, we need the following information to process your donation.
+                        </div>
+                        <TextField
+                          floatingLabelText='Name'
+                          value={name}
+                          errorText={donationInfoMissing && !name && 'Required'}
+                          onChange={this.setDonationInfo('name')} />
+                        <TextField
+                          floatingLabelText='Occupation'
+                          value={occupation}
+                          errorText={donationInfoMissing && !occupation && 'Required'}
+                          onChange={this.setDonationInfo('occupation')} />
+                        <TextField
+                          floatingLabelText='Employer'
+                          value={employer}
+                          errorText={donationInfoMissing && !employer && 'Required'}
+                          onChange={this.setDonationInfo('employer')} />
+                        <TextField
+                          floatingLabelText='Address 1'
+                          value={address1}
+                          errorText={donationInfoMissing && !address1 && 'Required'}
+                          onChange={this.setDonationInfo('address1')} />
+                        <TextField
+                          floatingLabelText='Address 2'
+                          value={address2}
+                          onChange={this.setDonationInfo('address2')} />
+                        <div>
+                          <TextField
+                            floatingLabelText='City'
+                            value={city}
+                            style={styles.cityField}
+                            errorText={donationInfoMissing && !city && 'Required'}
+                            onChange={this.setDonationInfo('city')} />
+                          <TextField
+                            floatingLabelText='State'
+                            value={state}
+                            style={styles.stateField}
+                            errorText={donationInfoMissing && !state && 'Required'}
+                            onChange={this.setDonationInfo('state')} />
+                          <TextField
+                            floatingLabelText='Zip'
+                            style={styles.zipField}
+                            value={zip}
+                            errorText={donationInfoMissing && !zip && 'Required'}
+                            type='number'
+                            onChange={this.setDonationInfo('zip')} />
+                        </div>
+                      </div>
+                    }
                   </div>
                 }
               </div>
             }
             <div style={styles.buttonContainer}>
-              <RaisedButton
-                primary
-                onClick={this.onSignupClick}
-                label={t('room.sign_up')} />
+              {
+                loadingSignup
+                ? <CircularProgress />
+                : <RaisedButton
+                  primary
+                  onClick={this.onSignupClick}
+                  label={amount ? t('room.sign_up_donate') : t('room.sign_up')} />
+              }
             </div>
           </div>
         }
@@ -249,5 +382,30 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
+  },
+  donationInfoContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginBottom: 20
+  },
+  cityField: {
+    width: 150,
+    margin: '0px 10px'
+  },
+  stateField: {
+    width: 60,
+    margin: '0px 10px'
+  },
+  zipField: {
+    width: 80,
+    margin: '0px 10px'
+  },
+  helpText: {
+    color: grey,
+    fontSize: 14,
+    textAlign: 'center',
+    marginLeft: 30,
+    width: '100%'
   }
 }
