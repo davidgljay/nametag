@@ -35,7 +35,6 @@ roomsTable.getAll(shortLink, {index: 'shortLink'})
   .run(conn)
   .then(res => res.toArray())
   .then(array => {
-    console.log('shortLinkArray', array)
     if (array.length === 0) {
       return clone({conn}, shortLink)
     } else {
@@ -319,29 +318,28 @@ const clone = ({conn}, shortLink) =>
       mod: j('right').without('id', 'createdAt', 'updatedAt')
     }))
     .run(conn)
-    .then(({room, mod}) =>
+    .then(cursor => cursor.toArray())
+    .then(([{room, mod}]) =>
       Promise.all([
         roomsTable.insert(Object.assign({}, room, {createdAt: new Date(), updatedAt: new Date()})).run(conn),
-        db('nametags').insert(Object.assign({}, mod, {createdAt: new Date(), updatedAt: new Date()})).run(conn),
-        db('messages').getAll(roomId, {index: 'room'}).run(conn).then(messages => messages.toArray()),
+        db.table('nametags').insert(Object.assign({}, mod, {createdAt: new Date(), updatedAt: new Date()})).run(conn),
+        db.table('messages').getAll([mod.room, false], {index: 'room_recipient'}).without('id').run(conn).then(messages => messages.toArray()),
+        mod.user
       ])
     )
-    .then(([roomRes, modRes, messages]) => {
-      console.log('roomRes', roomRes)
-      console.log('modRes', modRes)
-      console.log('messages', messages)
+    .then(([roomRes, modRes, messages, user]) => {
       const newRoomId = roomRes.generated_keys[0]
       const newModId = modRes.generated_keys[0]
 
-    // Copy every message posted before another user joins the room
+      // Copy every message posted before another user joins the room
       let messagesToCopy = []
       for (var i=0; i < messages.length; i++) {
-        if (!messages[i].nametag) {
-          messagesToCopy.push(
-            Object.assign({}, messages[i], {room: newRoomId})
-          )
-        } else {
+        if (messages[i].nametag && messages[i].nametag !== room.mod) {
           break
+        } else {
+          messagesToCopy.push(
+            Object.assign({}, messages[i], {room: newRoomId, author: newModId})
+          )
         }
       }
 
@@ -350,16 +348,12 @@ const clone = ({conn}, shortLink) =>
       return Promise.all([
         newRoomId,
         roomsTable.get(newRoomId).update({mod: newModId}).run(conn),
-        db('nametags').get(newModId).update({room: newRoomId}).run(conn),
-        db('messages').insert(messagesToCopy).run(conn)
+        db.table('nametags').get(newModId).update({room: newRoomId}).run(conn),
+        db.table('users').get(user).update({nametags: {[newRoomId]: newModId}}).run(conn),
+        db.table('messages').insert(messagesToCopy).run(conn)
       ])
     })
-    .then(([newRoomId, r1, r2, r3]) => {
-      console.log('r1', r1)
-      console.log('r2', r2)
-      console.log('r3', r3)
-      return newRoomId
-    })
+    .then(([newRoomId]) => newRoomId)
 
 module.exports = (context) => ({
   Rooms: {
