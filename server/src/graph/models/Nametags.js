@@ -228,7 +228,7 @@ const updateLatestVisit = ({conn}, nametagId) => nametagsTable
     setTimeout(() => {
       nametagsTable.get(nametagId).run(conn)
       .then(nametag => {
-        if (!nametag.Date.now() - new Date(nametag.latestVisit).getTime() > 20000) {
+        if (Date.now() - new Date(nametag.latestVisit).getTime() > 20000) {
           return nametagsTable.get(nametagId).update({present: false}).run(conn)
           .catch(errors.errorLog('Setting nametag presence to false'))
         }
