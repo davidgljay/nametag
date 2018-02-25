@@ -42,7 +42,6 @@ roomsTable.getAll(shortLink, {index: 'shortLink'})
     }
   })
 
-
 /**
 * Returns all visible public rooms for this user.
 *
@@ -148,8 +147,7 @@ const getQuery = ({conn, user, models: {Users}}, query) =>
 const create = ({conn, models: {Nametags, Users}}, rm) => {
   const defaultPublic = process.env.NODE_ENV === 'test' ? 'APPROVED' : 'PENDING'
   const testId = process.env.NODE_ENV === 'test' ? {id: '123456'} : {}
-  const shortLink = rm.title.split('').slice(0, 2).join('').toLowerCase()
-    + uuid.v4().slice(0, 3)
+  const shortLink = rm.title.split('').slice(0, 2).join('').toLowerCase() + uuid.v4().slice(0, 3)
   const room = Object.assign(
     {},
     rm,
@@ -300,7 +298,6 @@ const notifyOfNewMessage = ({conn, models: {Nametags, Users}}, roomId) =>
 const approveRoom = ({conn}, roomId) =>
   roomsTable.get(roomId).update({public: 'APPROVED'}).run(conn)
 
-
   /**
   * Clones a room with too many participants
   *
@@ -324,17 +321,18 @@ const clone = ({conn}, shortLink) =>
         roomsTable.insert(Object.assign({}, room, {createdAt: new Date(), updatedAt: new Date()})).run(conn),
         db.table('nametags').insert(Object.assign({}, mod, {createdAt: new Date(), updatedAt: new Date()})).run(conn),
         db.table('messages').getAll([mod.room, false], {index: 'room_recipient'}).without('id').run(conn).then(messages => messages.toArray()),
-        mod.user
+        mod.user,
+        room.mod
       ])
     )
-    .then(([roomRes, modRes, messages, user]) => {
+    .then(([roomRes, modRes, messages, user, oldModId]) => {
       const newRoomId = roomRes.generated_keys[0]
       const newModId = modRes.generated_keys[0]
 
       // Copy every message posted before another user joins the room
       let messagesToCopy = []
-      for (var i=0; i < messages.length; i++) {
-        if (messages[i].nametag && messages[i].nametag !== room.mod) {
+      for (var i = 0; i < messages.length; i++) {
+        if (messages[i].nametag && messages[i].nametag !== oldModId) {
           break
         } else {
           messagesToCopy.push(
