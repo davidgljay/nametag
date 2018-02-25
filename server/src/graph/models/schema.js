@@ -16,6 +16,7 @@ module.exports = {
   rooms: {
     indexes: [
       'latestMessage',
+      'shortLink',
       {name: 'templates', multi: true},
       {name: 'isPublic', fields: {countEq: ['templates', 0]}}
     ]

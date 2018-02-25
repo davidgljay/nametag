@@ -212,6 +212,14 @@ r.connect({host: 'rethinkdb'})
             }
           })
           .catch(next)
+      } else if (/\/r\/[a-z0-9]+/.test(req.url)) {
+        const {models: {Rooms}} = new Context({}, conn)
+        const roomShortLink = /\/r\/([a-z0-9]+)/.exec(req.url)[1]
+        Rooms.getByShortLink(roomShortLink)
+          .then(roomId =>
+            roomId ? res.redirect(`/rooms/${roomId}`)
+            : res.render('404.pug')
+          )
       } else {
         res.render('index.pug', {title: 'Nametag', description: 'Online chat built for authentic conversations that inspire action.'})
       }
