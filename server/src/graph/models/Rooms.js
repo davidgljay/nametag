@@ -336,7 +336,7 @@ const clone = ({conn}, shortLink) =>
           break
         } else {
           messagesToCopy.push(
-            Object.assign({}, messages[i], {room: newRoomId, author: newModId})
+            Object.assign({}, messages[i], {room: newRoomId, author: messages[i].author ? newModId : null})
           )
         }
       }
