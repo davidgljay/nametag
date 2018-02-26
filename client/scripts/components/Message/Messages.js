@@ -2,12 +2,11 @@ import React, { Component, PropTypes} from 'react'
 import Message from './Message'
 import {mobile} from '../../../styles/sizes'
 import radium from 'radium'
-import HelpMessage from './HelpMessage'
+import HostMessage from './HostMessage'
 import Popover from 'material-ui/Popover'
 import GrantBadge from './GrantBadge'
 import NTIconMenu from '../Nametag/IconMenu'
 import {Picker} from 'emoji-mart'
-import t from '../../utils/i18n'
 
 class Messages extends Component {
 
@@ -126,6 +125,7 @@ class Messages extends Component {
       showNametagImageMenu,
       toggleNametagImageMenu,
       updateNametag,
+      shortLink,
       me
     } = this.props
     const {showEmoji} = this.state
@@ -170,8 +170,8 @@ class Messages extends Component {
         {
           mod && myNametag &&
           mod.id === myNametag.id &&
-          <HelpMessage
-            text={t('message.host_welcome')} />
+          <HostMessage
+            shortLink={shortLink} />
         }
         {
           messages.map(this.mapMessage)
@@ -185,6 +185,7 @@ const {string, arrayOf, object, func, bool, shape} = PropTypes
 
 Messages.propTypes = {
   roomId: string.isRequired,
+  shortLink: string.isRequired,
   messages: arrayOf(object).isRequired,
   createMessage: func.isRequired,
   myNametag: shape({

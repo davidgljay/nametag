@@ -231,6 +231,7 @@ class Room extends Component {
           <Messages
             roomId={room.id}
             norms={room.norms}
+            shortLink={room.shortLink}
             createMessage={createMessage}
             myNametag={myNametag}
             hideDMs={!!hideDMs}

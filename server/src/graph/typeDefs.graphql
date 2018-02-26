@@ -108,6 +108,9 @@ type Room {
   # The date when the room was created
   createdAt: Date!
 
+  # A shortlink for sharing the room
+  shortLink: String
+
   # The messages sent in the room
   messages: [Message]
 

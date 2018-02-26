@@ -14,6 +14,7 @@ query roomQuery($id: ID!){
     ctaText
     ctaImage
     thankText
+    shortLink
     actionTypes {
       title
       desc
