@@ -35,7 +35,7 @@ class HostMessage extends Component {
           style={styles.copyLink}
           type='text'
           onClick={this.onClipboardClick}
-          value={`https://nametag/chat/r/${shortLink}`}
+          value={`https://nametag.chat/r/${shortLink}`}
           readOnly />
         <div style={styles.copyButtonContainer}>
           <FlatButton

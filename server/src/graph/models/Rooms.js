@@ -6,6 +6,7 @@ const {search} = require('../../elasticsearch')
 const pubsub = require('../subscriptions/pubsub')
 const notification = require('../../notifications')
 const uuid = require('uuid')
+const sendEmail = require('../../email')
 
 const roomsTable = db.table('rooms')
 
@@ -30,7 +31,7 @@ const get = ({conn}, id) => id ? roomsTable.get(id).run(conn) : Promise.resolve(
 const getByShortLink = ({conn}, shortLink) =>
 roomsTable.getAll(shortLink, {index: 'shortLink'})
   .map(room => ({id: room('id'), nametagCount: db.table('nametags').getAll(room('id'), {index: 'room'}).count()}))
-  .filter(room => room('nametagCount').lt(15))
+  .filter(room => room('nametagCount').lt(-1))
   .limit(1)('id')
   .run(conn)
   .then(res => res.toArray())
@@ -147,7 +148,7 @@ const getQuery = ({conn, user, models: {Users}}, query) =>
 const create = ({conn, models: {Nametags, Users}}, rm) => {
   const defaultPublic = process.env.NODE_ENV === 'test' ? 'APPROVED' : 'PENDING'
   const testId = process.env.NODE_ENV === 'test' ? {id: '123456'} : {}
-  const shortLink = rm.title.split('').slice(0, 2).join('').toLowerCase() + uuid.v4().slice(0, 3)
+  const shortLink = rm.title.split(' ').slice(0, 2).join('').toLowerCase() + uuid.v4().slice(0, 3)
   const room = Object.assign(
     {},
     rm,
@@ -342,13 +343,28 @@ const clone = ({conn}, shortLink) =>
       }
 
       // TODO: e-mail mod and let them know that a new room has been spawned.
+      const eMailPromise = db.table('users').getAll(user).pluck('email')
+        .merge(roomsTable.get(newRoomId).pluck('id', 'title')).run(conn)
+        .then(cursor => cursor.toArray())
+        .then(([{email, id, title}]) =>
+          sendEmail({
+            to: email,
+            from: {name: 'Nametag', email: 'noreply@nametag.chat'},
+            template: 'roomClone',
+            params: {
+              roomId: id,
+              roomTitle: title
+            }
+          })
+        )
 
       return Promise.all([
         newRoomId,
         roomsTable.get(newRoomId).update({mod: newModId}).run(conn),
         db.table('nametags').get(newModId).update({room: newRoomId}).run(conn),
         db.table('users').get(user).update({nametags: {[newRoomId]: newModId}}).run(conn),
-        db.table('messages').insert(messagesToCopy).run(conn)
+        db.table('messages').insert(messagesToCopy).run(conn),
+        eMailPromise
       ])
     })
     .then(([newRoomId]) => newRoomId)
