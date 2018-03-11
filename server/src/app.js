@@ -263,12 +263,12 @@ app.get('/logout',
 // ==============================================================================
 
 // Only include the graphiql tool if we aren't in production mode.
-if (app.get('env') !== 'production') {
+// if (app.get('env') !== 'production') {
   // Interactive graphiql interface.
   app.use('/api/v1/graph/iql', apollo.graphiqlExpress({
     endpointURL: '/api/v1/graph/ql'
   }))
-}
+// }
 
 // Server sw.js
 app.get('/firebase-messaging-sw.js', (req, res) => {
