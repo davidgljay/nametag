@@ -136,8 +136,8 @@ const create = (context, m) => {
   if (m.recipient && m.author) {
     return createMessagePromise()
       .then(() => Promise.all([
-        dmMentionNotif(messageObj, messageObj.recipient, 'DM'),
-        dmMentionEmail(messageObj, messageObj.recipient, 'dm')
+        dmMentionNotif(context, messageObj.recipient, messageObj, 'DM'),
+        dmMentionEmail(context, messageObj.recipient, messageObj, 'dm')
       ]))
       .then(() => messageObj)
   }
