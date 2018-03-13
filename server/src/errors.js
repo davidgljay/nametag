@@ -96,6 +96,10 @@ const ErrNotNametagAdmin = new APIError('You must be a nametag administrator to 
   status: 400
 })
 
+const ErrRoomNotFound = new APIError('RoomNotFound', {
+  status: 404
+})
+
 const ErrBanned = new APIError('You have been banned from this room', {
   status: 400
 })

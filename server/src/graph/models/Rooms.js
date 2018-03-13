@@ -317,6 +317,7 @@ const clone = ({conn}, shortLink) =>
     }))
     .run(conn)
     .then(cursor => cursor.toArray())
+    .then(array => array.length >= 1 ? array : Promise.reject(errors.ErrRoomNotFound))
     .then(([{room, mod}]) =>
       Promise.all([
         roomsTable.insert(Object.assign({}, room, {createdAt: new Date(), updatedAt: new Date()})).run(conn),

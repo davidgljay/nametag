@@ -220,6 +220,7 @@ r.connect({host: 'rethinkdb'})
             roomId ? res.redirect(`/rooms/${roomId}`)
             : res.render('404.pug')
           )
+          .catch(() => res.render('404.pug'))
       } else {
         res.render('index.pug', {title: 'Nametag', description: 'Online chat built for authentic conversations that inspire action.'})
       }
