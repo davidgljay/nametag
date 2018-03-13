@@ -196,6 +196,22 @@ r.connect({host: 'rethinkdb'})
 
     /* All others serve index.html */
     app.get('*', (req, res, next) => {
+      const context = new Context({}, conn)
+      if (req.query.loginHash) {
+        return context.models.Users.getByHash(req.query.loginHash)
+          .then(user =>
+            req.login(user, (err) => {
+                if (err) {
+                  return next(err)
+                }
+                res.redirect(req.url.replace(/loginHash=[^&]+&/, ''))
+              })
+            )
+          .catch(error =>
+            res.redirect(req.url.replace(/loginHash=[^&]+[&]*/, ''))
+          )
+      }
+
       // If loading a room, display key room info in a template
       if (/\/rooms\/[a-z0-9-]{36}/.test(req.url)) {
         const roomId = /\/rooms\/([a-z0-9-]{36})/.exec(req.url)[1]

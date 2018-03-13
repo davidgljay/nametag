@@ -96,7 +96,7 @@ const ErrNotNametagAdmin = new APIError('You must be a nametag administrator to 
   status: 400
 })
 
-const ErrRoomNotFound = new APIError('RoomNotFound', {
+const ErrRoomNotFound = new APIError('Room not found', {
   status: 404
 })
 
