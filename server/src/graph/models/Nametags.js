@@ -3,6 +3,7 @@ const r = require('rethinkdb')
 const errors = require('../../errors')
 const pubsub = require('../subscriptions/pubsub')
 const notification = require('../../notifications')
+const sendEmail = require('../../email')
 
 const nametagsTable = db.table('nametags')
 
@@ -127,12 +128,18 @@ const create = ({conn, user, models: {Users, BadgeRequests, Rooms, Messages, Tem
       nametag.image && user.images.indexOf(nametag.image) === -1 ? Users.appendUserArray('images', nametag.image) : null,
 
       // Send a notification to the room's moderator
-      nametag.room ? Rooms.get(nametag.room)
-            .then(room => Promise.all([
-              room,
-              Users.getTokens(id)
-            ]))
-        .then(([room, [token]]) => Promise.all([
+      nametag.room ?
+          db.table('rooms').getAll(nametag.room)
+          .eqJoin('mod', db.table('nametags'))
+          .map(join => ({room: join('left'), modId: join('right')('id')}))
+          .run(conn)
+          .then(cursor => cursor.toArray())
+          .then(([{room, modId}]) => Promise.all([
+            room,
+            Users.getByNametag(modId),
+            Users.getTokens(id)
+          ]))
+        .then(([room, {email, loginHash}, [token]]) => Promise.all([
           notification({
             reason: 'MOD_ROOM_JOIN',
             params: {
@@ -142,6 +149,19 @@ const create = ({conn, user, models: {Users, BadgeRequests, Rooms, Messages, Tem
               image: nametag.image
             }
           }, token),
+          sendEmail({
+            to: email,
+            from: {name: 'Nametag', email: 'noreply@nametag.chat'},
+            template: 'modRoomJoin',
+            params: {
+              roomId: room.id,
+              roomTitle: room.title,
+              nametagName: nametag.name,
+              nametagImage: nametag.image,
+              nametagBio: nametag.bio,
+              loginHash
+            }
+          }),
           Messages.create({
             text: 'Someone new has joined, say hello.',
             nametag: id,
