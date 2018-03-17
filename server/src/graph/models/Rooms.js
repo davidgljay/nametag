@@ -30,8 +30,12 @@ const get = ({conn}, id) => id ? roomsTable.get(id).run(conn) : Promise.resolve(
 
 const getByShortLink = ({conn}, shortLink) =>
 roomsTable.getAll(shortLink, {index: 'shortLink'})
-  .map(room => ({id: room('id'), nametagCount: db.table('nametags').getAll(room('id'), {index: 'room'}).count()}))
-  .filter(room => room('nametagCount').lt(15))
+  .map(room => ({
+    id: room('id'),
+    nametagLimit: r.branch(room.hasFields('nametagLimit'), room('nametagLimit'), 15),
+    nametagCount: db.table('nametags').getAll(room('id'), {index: 'room'}).count()
+  }))
+  .filter(room => room('nametagCount').lt(room('nametagLimit')))
   .limit(1)('id')
   .run(conn)
   .then(res => res.toArray())
