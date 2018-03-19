@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react'
-import FeatureCallout from './FeatureCallout'
 import Navbar from '../Utils/Navbar'
 import LoginDialog from '../User/LoginDialog'
 import JoinedRoomCard from './JoinedRoomCard'
@@ -10,8 +9,6 @@ import {mobile} from '../../../styles/sizes'
 import {track, identify} from '../../utils/analytics'
 import {white, grey, primary} from '../../../styles/colors'
 import CircularProgress from 'material-ui/CircularProgress'
-import RaisedButton from 'material-ui/RaisedButton'
-import ScrollDemo from '../Static/ScrollDemo'
 import t from '../../utils/i18n'
 
 class RoomCards extends Component {
@@ -20,23 +17,11 @@ class RoomCards extends Component {
     super(props)
 
     this.state = {
-      showLogin: false,
-      showAllJoined: false,
-      contactReason: null
+      showLogin: false
     }
 
     this.toggleLogin = () => {
       this.setState({showLogin: !this.state.showLogin})
-    }
-
-    this.closeContactDialog = () => {
-      track('CLOSE_CONTACT')
-      this.setState({contactReason: null})
-    }
-
-    this.openContactDialog = reason => () => {
-      track('CONTACT', {reason})
-      this.setState({contactReason: reason})
     }
   }
 
@@ -60,9 +45,8 @@ class RoomCards extends Component {
 
   render () {
     const {
-      data: {me, loading, refetch}, contactForm
+      data: {me, loading, refetch}
     } = this.props
-    const {contactReason} = this.state
 
     if (loading) {
       return <div id='roomCards'>
@@ -71,116 +55,36 @@ class RoomCards extends Component {
         </div>
       </div>
     }
-    const {showAllJoined} = this.state
-    const showAbout = !me
     return <div id='roomCards'>
+      <Navbar me={me} toggleLogin={this.toggleLogin} />
       <div style={styles.background}>
-        {
-          showAbout &&
-          <div style={styles.hero}>
-            <div style={styles.heroText}>
-              <div style={styles.titleContainer}>
-                <img style={styles.logo} src='https://s3.amazonaws.com/nametag_images/site/nametag_inverted.png' />
-                <div style={styles.title}>Nametag</div>
-              </div>
-              {t('homepage.header')}
+        <div style={styles.container}>
+          <div style={styles.joinedRooms}>
+            <StartRoomForm />
+            {
+              me.nametags.length > 0 && <h3 style={styles.joinedRoomsHeader}>{t('room.room_convos')}</h3>
+            }
+            <div style={styles.joinedRoomContainer}>
+              {
+                me.nametags
+                .filter(nametag => !!nametag.room && !nametag.banned)
+                .sort((a, b) => {
+                  if (b.room.newMessageCount === a.room.newMessageCount) {
+                    return new Date(b.room.latestMessage).getTime() - new Date(a.room.latestMessage).getTime()
+                  } else {
+                    return b.room.newMessageCount - a.room.newMessageCount
+                  }
+                })
+                .map(nametag => <JoinedRoomCard
+                  key={nametag.id}
+                  room={nametag.room} />)
+              }
             </div>
           </div>
-        }
-        <div style={styles.container}>
-          {
-            !showAbout &&
-            <div style={styles.joinedRooms}>
-              <StartRoomForm />
-              {
-                me.nametags.length > 0 && <h3 style={styles.joinedRoomsHeader}>{t('room.room_convos')}</h3>
-              }
-              <div style={styles.joinedRoomContainer}>
-                {
-                  me.nametags
-                  .filter(nametag => !!nametag.room && !nametag.banned)
-                  .sort((a, b) => {
-                    if (b.room.newMessageCount === a.room.newMessageCount) {
-                      return new Date(b.room.latestMessage).getTime() - new Date(a.room.latestMessage).getTime()
-                    } else {
-                      return b.room.newMessageCount - a.room.newMessageCount
-                    }
-                  })
-                  .slice(0, showAllJoined ? me.nametags.length : 4)
-                  .map(nametag => <JoinedRoomCard
-                    key={nametag.id}
-                    room={nametag.room} />)
-                }
-              </div>
-              {
-                !showAllJoined &&
-                me.nametags.filter(nametag => !!nametag.room && !nametag.banned).length > 4 &&
-                <div
-                  style={styles.showMore}
-                  onClick={() => this.setState({showAllJoined: true})}>
-                  {t('room.show_more')}
-                </div>
-              }
-            </div>
-          }
-          {
-            showAbout &&
-            <div style={styles.container}>
-              <div style={styles.loginContainer}>
-                <div style={styles.login} onClick={this.toggleLogin}>{t('login.login')}</div>
-              </div>
-              <h2 style={styles.headerText}>People Are Ready To Support Your Work</h2>
-              <div style={styles.bodyText}>
-                {
-                  `Your work inspires people who want to connect with you and support what you do.`
-                }
-              </div>
-              <div style={styles.bodyText}>
-                {
-                  `Nametag lets these people connect with your organization and with one another
-                  in small group conversations that can be joined at any time.`
-                }
-              </div>
-              <div style={styles.featuresContainer} >
-                <img src='https://s3.amazonaws.com/nametag_images/site/angle.svg' style={styles.angle} />
-                <h2 style={styles.featuresHeader}>How Nametag Works</h2>
-                <div id='FeatureCallouts' style={styles.featureCallouts} >
-                  {
-                    [0, 1, 2].map(i =>
-                      <FeatureCallout
-                        key={i}
-                        image={t(`room.works_callouts.${i}.image`)}
-                        title={t(`room.works_callouts.${i}.title`)}
-                        body={t(`room.works_callouts.${i}.body`)} />
-                    )
-                  }
-                </div>
-                <img src='https://s3.amazonaws.com/nametag_images/site/angle2.svg' style={styles.angle} />
-              </div>
-              <div style={styles.buttonContainer}>
-                <RaisedButton primary label={t('room.try_it')} onClick={this.openContactDialog('demoRequest')} />
-              </div>
-              <div style={styles.whoWeAreContainer}>
-                <h2 style={styles.headerText}>{t('room.who')}</h2>
-                <div style={styles.builtBy}>
-                  {t('room.built_by')}
-                  <br />
-                  <br />
-                </div>
-                <div style={styles.buttonContainer}>
-                  <RaisedButton primary label={t('room.contact')} onClick={this.openContactDialog('contactForm')} />
-                </div>
-              </div>
-            </div>
-          }
           <LoginDialog
             showLogin={this.state.showLogin}
             refetch={refetch}
             toggleLogin={this.toggleLogin} />
-          <ContactDialog
-            contactForm={contactForm}
-            reason={contactReason}
-            closeDialog={this.closeContactDialog} />
         </div>
       </div>
     </div>
@@ -220,12 +124,15 @@ const styles = {
   background: {
     background: '#fbfbfb',
     minHeight: '100vh',
-    paddingBottom: 50
+    paddingBottom: 50,
+    display: 'flex',
+    justifyContent: 'center'
   },
   container: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
+    maxWidth: 800
   },
   joinedRoomsHeader: {
     marginLeft: 10,
