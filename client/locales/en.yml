@@ -23,6 +23,30 @@ en:
   invalid-email: Please enter a valid e-mail address
   homepage:
     header: Mobilize supporters through meaningful conversation.
+    reach: Reach Those Ready To Support Your Work
+    description:
+      - Your work inspires people who want to connect with you and support what you do.
+      - Nametag lets these people connect with your organization and with one another in small group conversations that can be joined at any time.
+    works: How It Works
+    works_callouts:
+      0:
+        image: https://s3.amazonaws.com/nametag_images/site/invitation.svg
+        title: Invitation
+        body: Invite people in through e-mail, SMS or social media. Nametag is web-based, so there's no app for them to download.
+      1:
+        image: https://s3.amazonaws.com/nametag_images/site/conversation.svg
+        title: Conversation
+        body: Conversation happens in chat rooms that mimic a small group sitting down at a table together. Everyone introduces themselves and new members feel seen and heard as soon as they arrive.
+      2:
+        image: https://s3.amazonaws.com/nametag_images/site/callstoaction.svg
+        title: Call to Action
+        body: Calls to action are imbedded into every room, so people who feel inspired can donate, volunteer, or move to a deeper level of involvement.
+    who: Why Nametag?
+    built_by:
+      - I've been building social movements online for over 15 years. In that time, I've seen again and again that relationships grow and movements thrive in places where people can connect in intimate conversations about their lives.
+      - Unfortunately in those 15 years the internet has gotten worse, not better, at enabling these sorts of conversations. I built Nametag because I believe that these conversations hold immense power.
+      - Whether you're winning a campaign or launching a podcast, your success is rooted in your ability to get people into conversation. Nametag exists to make those conversations happen.
+      - -David Jay, Founder
   badge:
     granted_by: Granted by
     note: Note
@@ -164,22 +188,6 @@ en:
     create_account: Register to Join
     choose_one: Choose One Of the Following
     room_convos: Your Conversations
-    organizing: Chat Built For Organizing
-    works: How It Works
-    works_callouts:
-      0:
-        image: https://s3.amazonaws.com/nametag_images/site/invitation.svg
-        title: Invitation
-        body: Invite people in through e-mail, SMS or social media. Nametag is web-based, so there's no app for them to download.
-      1:
-        image: https://s3.amazonaws.com/nametag_images/site/conversation.svg
-        title: Conversation
-        body: Conversation happens in chat rooms that mimic a small group sitting down at a table together. Everyone introduces themselves and new members feel seen and heard as soon as they arrive.
-      2:
-        image: https://s3.amazonaws.com/nametag_images/site/callstoaction.svg
-        title: Call to Action
-        body: Calls to action are imbedded into every room, so people who feel inspired can donate, volunteer, or move to a deeper level of involvement.
-    built_by: Our team has over a decade of experience building social movements through authentic conversation online. We believe that real change starts with people sharing personal stories in small conversations.
     learn: Learn More
     rooms: Rooms
     settings: Settings
@@ -200,7 +208,6 @@ en:
     sign_up: SIGN ME UP!
     sign_up_donate: SIGN UP AND DONATE!
     contact: CONTACT US
-    who: Who We Are
   user:
     em_confirmed: Your e-mail has been confirmed! Redirecting to homepage...
     pw_match: Passwords do not match

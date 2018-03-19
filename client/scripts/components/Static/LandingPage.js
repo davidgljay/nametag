@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import RaisedButton from 'material-ui/RaisedButton'
+import FlatButton from 'material-ui/FlatButton'
 import t from '../../utils/i18n'
 import {contactForm} from '../../actions/RoomActions'
 import FeatureCallout from '../Room/FeatureCallout'
@@ -55,17 +56,14 @@ class LandingPage extends Component {
         <div style={styles.loginContainer}>
           <div style={styles.login} onClick={this.toggleLogin}>{t('login.login')}</div>
         </div>
-        <h2 style={styles.headerText}>Reach Those Ready To Support Your Work</h2>
+        <h2 style={styles.headerText}>{t('homepage.reach')}</h2>
         <div style={styles.bodyText}>
-          {
-            `Your work inspires people who want to connect with you and support what you do.`
-          }
-        </div>
-        <div style={styles.bodyText}>
-          {
-            `Nametag lets these people connect with your organization and with one another
-            in small group conversations that can be joined at any time.`
-          }
+          <p>
+            {t('homepage.description[0]')}
+          </p>
+          <p>
+            {t('homepage.description[1]')}
+          </p>
         </div>
         <div style={styles.featuresContainer} >
           <img src='https://s3.amazonaws.com/nametag_images/site/angle.svg' style={styles.angle} />
@@ -75,9 +73,9 @@ class LandingPage extends Component {
               [0, 1, 2].map(i =>
                 <FeatureCallout
                   key={i}
-                  image={t(`room.works_callouts.${i}.image`)}
-                  title={t(`room.works_callouts.${i}.title`)}
-                  body={t(`room.works_callouts.${i}.body`)} />
+                  image={t(`homepage.works_callouts.${i}.image`)}
+                  title={t(`homepage.works_callouts.${i}.title`)}
+                  body={t(`homepage.works_callouts.${i}.body`)} />
               )
             }
           </div>
@@ -87,14 +85,13 @@ class LandingPage extends Component {
           <RaisedButton primary label={t('room.try_it')} onClick={this.openContactDialog('demoRequest')} />
         </div>
         <div style={styles.whoWeAreContainer}>
-          <h2 style={styles.headerText}>{t('room.who')}</h2>
-          <div style={styles.builtBy}>
-            {t('room.built_by')}
-            <br />
-            <br />
+          <h2 style={styles.headerText}>{t('homepage.who')}</h2>
+          <div style={styles.bodyText}>
+            <img src='https://s3.amazonaws.com/nametag_images/site/DJ_wideshot_300.jpg' style={styles.djImage} />
+            {[0, 1, 2, 3].map(i => <p>{t(`homepage.built_by[${i}]`)}</p>)}
           </div>
           <div style={styles.buttonContainer}>
-            <RaisedButton primary label={t('room.contact')} onClick={this.openContactDialog('contactForm')} />
+            <FlatButton label={t('room.contact')} onClick={this.openContactDialog('contactForm')} />
           </div>
         </div>
       </div>
@@ -243,7 +240,8 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    margin: '20px 0px'
   },
   whoWeAreImage: {
     width: '80%',
@@ -254,5 +252,10 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column'
+  },
+  djImage: {
+    borderRadius: 3,
+    margin: 15,
+    float: 'left'
   }
 }
