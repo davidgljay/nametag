@@ -1,19 +1,16 @@
 import React, {PropTypes} from 'react'
-import {Card, CardMedia, CardTitle} from 'material-ui/Card'
+import {white} from '../../../styles/colors'
 
-const FeatureCallout = ({title, image, body}) => <div>
-  <Card style={styles.card}>
-    <CardMedia
-      overlayContentStyle={styles.overlayStyle} >
-      <img src={image} alt='' />
-    </CardMedia>
-    <CardTitle
-      title={title}
-      titleStyle={styles.titleStyle}
-      subtitle={body}
-      subtitleStyle={styles.subtitleStyle} />
-  </Card>
-</div>
+const FeatureCallout = ({title, image, body}) =>
+  <div style={styles.container}>
+    <img src={image} alt={''} style={styles.image} />
+    <h3 style={styles.titleStyle}>
+      {title}
+    </h3>
+    <div style={styles.bodyStyle}>
+      {body}
+    </div>
+  </div>
 
 const {string} = PropTypes
 
@@ -26,17 +23,22 @@ FeatureCallout.proptypes = {
 export default FeatureCallout
 
 const styles = {
-  card: {
-    width: 260,
-    marginTop: 20,
-    marginBottom: 20,
-    marginLeft: 3,
-    marginRight: 3
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    color: white,
+    width: 350,
+    padding: 10
+  },
+  image: {
+    height: 200
   },
   titleStyle: {
-    fontWeight: 300
+    fontWeight: 300,
+    fontSize: 24
   },
-  overlayStyle: {
-    background: 'linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 20%)'
+  bodyStyle: {
+    textAlign: 'center'
   }
 }
