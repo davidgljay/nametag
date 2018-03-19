@@ -128,8 +128,8 @@ const create = ({conn, user, models: {Users, BadgeRequests, Rooms, Messages, Tem
       nametag.image && user.images.indexOf(nametag.image) === -1 ? Users.appendUserArray('images', nametag.image) : null,
 
       // Send a notification to the room's moderator
-      nametag.room ?
-          db.table('rooms').getAll(nametag.room)
+      nametag.room
+        ? db.table('rooms').getAll(nametag.room)
           .eqJoin('mod', db.table('nametags'))
           .map(join => ({room: join('left'), modId: join('right')('id')}))
           .run(conn)

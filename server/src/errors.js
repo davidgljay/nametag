@@ -154,6 +154,7 @@ module.exports = {
   ErrMissingPassword,
   ErrMissingToken,
   ErrNotInRoom,
+  ErrRoomNotFound,
   ErrNotMod,
   ErrNotYourNametag,
   ErrNotYourMessage,

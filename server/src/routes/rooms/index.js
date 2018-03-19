@@ -1,3 +1,5 @@
+const db = require('../../db')
+
 module.exports = (req, res, next, conn) => {
   const roomId = /\/rooms\/([a-z0-9-]{36})/.exec(req.url)[1]
   return db.table('rooms').getAll(roomId)

@@ -204,11 +204,11 @@ r.connect({host: 'rethinkdb'})
         return context.models.Users.getByHash(req.query.loginHash)
           .then(user =>
             req.login(user, (err) => {
-                if (err) {
-                  return next(err)
-                }
-                res.redirect(req.url.replace(/loginHash=[^&]+&/, ''))
-              })
+              if (err) {
+                return next(err)
+              }
+              res.redirect(req.url.replace(/loginHash=[^&]+&/, ''))
+            })
             )
           .catch(error =>
             res.redirect(req.url.replace(/loginHash=[^&]+[&]*/, ''))
@@ -265,9 +265,9 @@ app.get('/logout',
 // Only include the graphiql tool if we aren't in production mode.
 // if (app.get('env') !== 'production') {
   // Interactive graphiql interface.
-  app.use('/api/v1/graph/iql', apollo.graphiqlExpress({
-    endpointURL: '/api/v1/graph/ql'
-  }))
+app.use('/api/v1/graph/iql', apollo.graphiqlExpress({
+  endpointURL: '/api/v1/graph/ql'
+}))
 // }
 
 // Server sw.js
