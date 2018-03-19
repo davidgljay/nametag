@@ -134,41 +134,47 @@ const create = ({conn, user, models: {Users, BadgeRequests, Rooms, Messages, Tem
           .map(join => ({room: join('left'), modId: join('right')('id')}))
           .run(conn)
           .then(cursor => cursor.toArray())
-          .then(([{room, modId}]) => Promise.all([
-            room,
-            Users.getByNametag(modId),
-            Users.getTokens(id)
-          ]))
-        .then(([room, {email, loginHash}, [token]]) => Promise.all([
-          notification({
-            reason: 'MOD_ROOM_JOIN',
-            params: {
-              roomName: room.title,
-              roomId: room.id,
-              nametagName: nametag.name,
-              image: nametag.image
+          .then(([result]) => {
+            if (!result) {
+              return null
             }
-          }, token),
-          sendEmail({
-            to: email,
-            from: {name: 'Nametag', email: 'noreply@nametag.chat'},
-            template: 'modRoomJoin',
-            params: {
-              roomId: room.id,
-              roomTitle: room.title,
-              nametagName: nametag.name,
-              nametagImage: nametag.image,
-              nametagBio: nametag.bio,
-              loginHash
-            }
-          }),
-          Messages.create({
-            text: 'Someone new has joined, say hello.',
-            nametag: id,
-            room: room.id
+            const {room, modId} = result
+            return Promise.all([
+              room,
+              Users.getByNametag(modId),
+              Users.getTokens(id)
+            ])
+            .then(([room, {email, loginHash}, [token]]) => Promise.all([
+              notification({
+                reason: 'MOD_ROOM_JOIN',
+                params: {
+                  roomName: room.title,
+                  roomId: room.id,
+                  nametagName: nametag.name,
+                  image: nametag.image
+                }
+              }, token),
+              sendEmail({
+                to: email,
+                from: {name: 'Nametag', email: 'noreply@nametag.chat'},
+                template: 'modRoomJoin',
+                params: {
+                  roomId: room.id,
+                  roomTitle: room.title,
+                  nametagName: nametag.name,
+                  nametagImage: nametag.image,
+                  nametagBio: nametag.bio,
+                  loginHash
+                }
+              }),
+              Messages.create({
+                text: 'Someone new has joined, say hello.',
+                nametag: id,
+                room: room.id
+              })
+            ]))
           })
-        ]))
-        : null
+          : null
     ])
   })
   .then(([res, id]) => {
