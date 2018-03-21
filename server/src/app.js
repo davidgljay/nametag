@@ -218,7 +218,7 @@ r.connect({host: 'rethinkdb'})
       // If loading a room, display key room info in a template
       if (/\/rooms\/[a-z0-9-]{36}/.test(req.url)) {
         roomsRoute(req, res, next, conn)
-      } else if (/\/r\/[a-z0-9]+/.test(req.url)) {
+      } else if (/\/r\/[^\/]+/.test(req.url)) {
         shortLinkRoute(req, res, next, conn)
       } else {
         homeRoute(req, res, next, conn)
