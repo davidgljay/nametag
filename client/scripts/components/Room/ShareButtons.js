@@ -7,7 +7,7 @@ const twitterLink = (shortLink, title) => `https://twitter.com/intent/tweet?text
 
 const fbLink = (shortLink, roomId, title) => `https://www.facebook.com/dialog/share?app_id=672526412895563&display=page&href=${getUrl(shortLink)}&redirect_uri=${encodeURI(`https://nametag.chat/rooms/${roomId}`)}`
 
-const emailLink = (shortLink, title) => `mailto:?subject=${encodeURI(title)}&body=${encodeURI(t('room.invite_email'))}${getUrl(shortLink)}`
+const emailLink = (shortLink, title) => `mailto:?subject=${encodeURI(title)}&body=${encodeURI(t('room.invite_email'))}%0D%0A${getUrl(shortLink)}`
 
 const ShareButtons = ({shortLink, title, roomId}) => <div style={styles.container}>
   <div style={styles.header}>{t('room.invite')}</div>

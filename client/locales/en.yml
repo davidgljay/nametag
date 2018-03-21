@@ -198,7 +198,7 @@ en:
     open: This room is active
     invite: Invite
     invite_twitter: Join the conversation:
-    invite_email: There's an interesting conversation going on, want to join?\n\n
+    invite_email: There's an interesting conversation going on, want to join?
     room_form_err: You must propose a topic of conversation.
     room_form: What would you like to talk about?
     start_conversation: Start Conversation
