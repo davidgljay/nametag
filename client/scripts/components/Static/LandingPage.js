@@ -88,7 +88,7 @@ class LandingPage extends Component {
           <h2 style={styles.headerText}>{t('homepage.who')}</h2>
           <div style={styles.bodyText}>
             <img src='https://s3.amazonaws.com/nametag_images/site/DJ_wideshot_300.jpg' style={styles.djImage} />
-            {[0, 1, 2, 3].map(i => <p>{t(`homepage.built_by[${i}]`)}</p>)}
+            {[0, 1, 2, 3].map(i => <p key={i}>{t(`homepage.built_by[${i}]`)}</p>)}
           </div>
           <div style={styles.buttonContainer}>
             <FlatButton label={t('room.contact')} onClick={this.openContactDialog('contactForm')} />
@@ -97,7 +97,10 @@ class LandingPage extends Component {
       </div>
       <LoginDialog
         showLogin={this.state.showLogin}
-        refetch={window.location.reload}
+        refetch={() => {
+          window.location.reload()
+          return Promise.resolve()
+        }}
         toggleLogin={this.toggleLogin} />
       <ContactDialog
         contactForm={contactForm}
