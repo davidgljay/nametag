@@ -5,6 +5,8 @@ const {ROOM_TIMEOUT} = require('../../constants')
 const {search} = require('../../elasticsearch')
 const pubsub = require('../subscriptions/pubsub')
 const notification = require('../../notifications')
+const uuid = require('uuid')
+const sendEmail = require('../../email')
 
 const roomsTable = db.table('rooms')
 
@@ -17,6 +19,33 @@ const roomsTable = db.table('rooms')
  */
 
 const get = ({conn}, id) => id ? roomsTable.get(id).run(conn) : Promise.resolve(null)
+
+/**
+ * Returns or clones a room based on a shortLink.
+ *
+ * @param {Object} context     graph context
+ * @param {String} shortLink   the shortLink of the room to be retrieved
+ *
+ */
+
+const getByShortLink = ({conn}, shortLink) =>
+roomsTable.getAll(shortLink, {index: 'shortLink'})
+  .map(room => ({
+    id: room('id'),
+    nametagLimit: r.branch(room.hasFields('nametagLimit'), room('nametagLimit'), 15),
+    nametagCount: db.table('nametags').getAll(room('id'), {index: 'room'}).count()
+  }))
+  .filter(room => room('nametagCount').lt(room('nametagLimit')))
+  .limit(1)('id')
+  .run(conn)
+  .then(res => res.toArray())
+  .then(array => {
+    if (array.length === 0) {
+      return clone({conn}, shortLink)
+    } else {
+      return array[0]
+    }
+  })
 
 /**
 * Returns all visible public rooms for this user.
@@ -123,11 +152,14 @@ const getQuery = ({conn, user, models: {Users}}, query) =>
 const create = ({conn, models: {Nametags, Users}}, rm) => {
   const defaultPublic = process.env.NODE_ENV === 'test' ? 'APPROVED' : 'PENDING'
   const testId = process.env.NODE_ENV === 'test' ? {id: '123456'} : {}
+  const shortLink = rm.title.split(' ').slice(0, 2).join('').toLowerCase() + uuid.v4().slice(0, 3)
   const room = Object.assign(
     {},
     rm,
     {
+      shortLink,
       createdAt: new Date(),
+      updatedAt: new Date(),
       modOnlyDMs: false,
       mod: null,
       public: rm.public ? defaultPublic : false,
@@ -271,9 +303,81 @@ const notifyOfNewMessage = ({conn, models: {Nametags, Users}}, roomId) =>
 const approveRoom = ({conn}, roomId) =>
   roomsTable.get(roomId).update({public: 'APPROVED'}).run(conn)
 
+  /**
+  * Clones a room with too many participants
+  *
+  * @param {Object} context     graph context
+  * @param {String} shortLink   the shortLink of the room to be cloned
+  *
+  */
+
+const clone = ({conn}, shortLink) =>
+  roomsTable.getAll(shortLink, {index: 'shortLink'})
+    .limit(1)
+    .eqJoin('mod', db.table('nametags'))
+    .map(j => ({
+      room: j('left').without('id', 'createdAt', 'updatedAt'),
+      mod: j('right').without('id', 'createdAt', 'updatedAt')
+    }))
+    .run(conn)
+    .then(cursor => cursor.toArray())
+    .then(array => array.length >= 1 ? array : Promise.reject(errors.ErrRoomNotFound))
+    .then(([{room, mod}]) =>
+      Promise.all([
+        roomsTable.insert(Object.assign({}, room, {createdAt: new Date(), updatedAt: new Date()})).run(conn),
+        db.table('nametags').insert(Object.assign({}, mod, {createdAt: new Date(), updatedAt: new Date()})).run(conn),
+        db.table('messages').getAll([mod.room, false], {index: 'room_recipient'}).without('id').run(conn).then(messages => messages.toArray()),
+        mod.user,
+        room.mod
+      ])
+    )
+    .then(([roomRes, modRes, messages, user, oldModId]) => {
+      const newRoomId = roomRes.generated_keys[0]
+      const newModId = modRes.generated_keys[0]
+
+      // Copy every message posted before another user joins the room
+      let messagesToCopy = []
+      for (var i = 0; i < messages.length; i++) {
+        if (messages[i].nametag && messages[i].nametag !== oldModId) {
+          break
+        } else {
+          messagesToCopy.push(
+            Object.assign({}, messages[i], {room: newRoomId, author: messages[i].author ? newModId : null})
+          )
+        }
+      }
+
+      // TODO: e-mail mod and let them know that a new room has been spawned.
+      const eMailPromise = db.table('users').getAll(user).pluck('email')
+        .merge(roomsTable.get(newRoomId).pluck('id', 'title')).run(conn)
+        .then(cursor => cursor.toArray())
+        .then(([{email, id, title}]) =>
+          sendEmail({
+            to: email,
+            from: {name: 'Nametag', email: 'noreply@nametag.chat'},
+            template: 'roomClone',
+            params: {
+              roomId: id,
+              roomTitle: title
+            }
+          })
+        )
+
+      return Promise.all([
+        newRoomId,
+        roomsTable.get(newRoomId).update({mod: newModId}).run(conn),
+        db.table('nametags').get(newModId).update({room: newRoomId}).run(conn),
+        db.table('users').get(user).update({nametags: {[newRoomId]: newModId}}).run(conn),
+        db.table('messages').insert(messagesToCopy).run(conn),
+        eMailPromise
+      ])
+    })
+    .then(([newRoomId]) => newRoomId)
+
 module.exports = (context) => ({
   Rooms: {
     get: (id) => get(context, id),
+    getByShortLink: (shortLink) => getByShortLink(context, shortLink),
     getVisible: () => getVisible(context),
     getQuery: (query) => getQuery(context, query),
     create: (room) => create(context, room),
@@ -282,6 +386,7 @@ module.exports = (context) => ({
     getGranterRooms: (granterCode) => getGranterRooms(context, granterCode),
     updateLatestMessage: (roomId) => updateLatestMessage(context, roomId),
     notifyOfNewMessage: (roomId) => notifyOfNewMessage(context, roomId),
-    approveRoom: (roomId) => approveRoom(context, roomId)
+    approveRoom: (roomId) => approveRoom(context, roomId),
+    clone: (roomId) => clone(context, roomId)
   }
 })

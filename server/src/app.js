@@ -10,6 +10,9 @@ const imageRedirect = require('./routes/images/imageRedirect')
 const stripeAuth = require('./routes/granters/stripeAuth')
 const stripeDash = require('./routes/granters/stripeDash')
 const contactForm = require('./routes/contact/contact')
+const roomsRoute = require('./routes/rooms')
+const shortLinkRoute = require('./routes/r')
+const homeRoute = require('./routes')
 const config = require('./secrets.json')
 const path = require('path')
 const bodyParser = require('body-parser')
@@ -196,24 +199,29 @@ r.connect({host: 'rethinkdb'})
 
     /* All others serve index.html */
     app.get('*', (req, res, next) => {
+      const context = new Context({}, conn)
+      if (req.query.loginHash) {
+        return context.models.Users.getByHash(req.query.loginHash)
+          .then(user =>
+            req.login(user, (err) => {
+              if (err) {
+                return next(err)
+              }
+              res.redirect(req.url.replace(/loginHash=[^&]+&/, ''))
+            })
+            )
+          .catch(error =>
+            res.redirect(req.url.replace(/loginHash=[^&]+[&]*/, ''))
+          )
+      }
+
       // If loading a room, display key room info in a template
       if (/\/rooms\/[a-z0-9-]{36}/.test(req.url)) {
-        const roomId = /\/rooms\/([a-z0-9-]{36})/.exec(req.url)[1]
-        db.table('rooms').getAll(roomId)
-        .eqJoin('mod', db.table('nametags'))
-        .zip()
-        .run(conn)
-          .then(cursor => cursor.toArray())
-          .then(([result]) => {
-            if (!result) {
-              res.render('404.pug')
-            } else {
-              res.render('index.pug', {title: result.title, image: result.image, description: result.bio})
-            }
-          })
-          .catch(next)
+        roomsRoute(req, res, next, conn)
+      } else if (/\/r\/[^\/]+/.test(req.url)) {
+        shortLinkRoute(req, res, next, conn)
       } else {
-        res.render('index.pug', {title: 'Nametag', description: 'Online chat built for authentic conversations that inspire action.'})
+        homeRoute(req, res, next, conn)
       }
     })
 
@@ -255,12 +263,12 @@ app.get('/logout',
 // ==============================================================================
 
 // Only include the graphiql tool if we aren't in production mode.
-if (app.get('env') !== 'production') {
+// if (app.get('env') !== 'production') {
   // Interactive graphiql interface.
-  app.use('/api/v1/graph/iql', apollo.graphiqlExpress({
-    endpointURL: '/api/v1/graph/ql'
-  }))
-}
+app.use('/api/v1/graph/iql', apollo.graphiqlExpress({
+  endpointURL: '/api/v1/graph/ql'
+}))
+// }
 
 // Server sw.js
 app.get('/firebase-messaging-sw.js', (req, res) => {

@@ -3,6 +3,7 @@ const r = require('rethinkdb')
 const errors = require('../../errors')
 const pubsub = require('../subscriptions/pubsub')
 const notification = require('../../notifications')
+const sendEmail = require('../../email')
 
 const nametagsTable = db.table('nametags')
 
@@ -127,28 +128,53 @@ const create = ({conn, user, models: {Users, BadgeRequests, Rooms, Messages, Tem
       nametag.image && user.images.indexOf(nametag.image) === -1 ? Users.appendUserArray('images', nametag.image) : null,
 
       // Send a notification to the room's moderator
-      nametag.room ? Rooms.get(nametag.room)
-            .then(room => Promise.all([
-              room,
-              Users.getTokens(id)
-            ]))
-        .then(([room, [token]]) => Promise.all([
-          notification({
-            reason: 'MOD_ROOM_JOIN',
-            params: {
-              roomName: room.title,
-              roomId: room.id,
-              nametagName: nametag.name,
-              image: nametag.image
+      nametag.room
+        ? db.table('rooms').getAll(nametag.room)
+          .eqJoin('mod', db.table('nametags'))
+          .map(join => ({room: join('left'), modId: join('right')('id')}))
+          .run(conn)
+          .then(cursor => cursor.toArray())
+          .then(([result]) => {
+            if (!result) {
+              return null
             }
-          }, token),
-          Messages.create({
-            text: 'Someone new has joined, say hello.',
-            nametag: id,
-            room: room.id
+            const {room, modId} = result
+            return Promise.all([
+              room,
+              Users.getByNametag(modId),
+              Users.getTokens(id)
+            ])
+            .then(([room, {email, loginHash}, [token]]) => Promise.all([
+              notification({
+                reason: 'MOD_ROOM_JOIN',
+                params: {
+                  roomName: room.title,
+                  roomId: room.id,
+                  nametagName: nametag.name,
+                  image: nametag.image
+                }
+              }, token),
+              sendEmail({
+                to: email,
+                from: {name: 'Nametag', email: 'noreply@nametag.chat'},
+                template: 'modRoomJoin',
+                params: {
+                  roomId: room.id,
+                  roomTitle: room.title,
+                  nametagName: nametag.name,
+                  nametagImage: nametag.image,
+                  nametagBio: nametag.bio,
+                  loginHash
+                }
+              }),
+              Messages.create({
+                text: 'Someone new has joined, say hello.',
+                nametag: id,
+                room: room.id
+              })
+            ]))
           })
-        ]))
-        : null
+          : null
     ])
   })
   .then(([res, id]) => {
@@ -228,7 +254,7 @@ const updateLatestVisit = ({conn}, nametagId) => nametagsTable
     setTimeout(() => {
       nametagsTable.get(nametagId).run(conn)
       .then(nametag => {
-        if (!nametag.Date.now() - new Date(nametag.latestVisit).getTime() > 20000) {
+        if (Date.now() - new Date(nametag.latestVisit).getTime() > 20000) {
           return nametagsTable.get(nametagId).update({present: false}).run(conn)
           .catch(errors.errorLog('Setting nametag presence to false'))
         }

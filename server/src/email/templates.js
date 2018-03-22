@@ -13,6 +13,8 @@ const contactForm = require('./contact-form')
 const demoRequest = require('./demo-request')
 const digest = require('./digest')
 const donation = require('./donation')
+const roomClone = require('./room-clone')
+const modRoomJoin = require('./mod-room-join')
 
 module.exports = {
   passwordReset,
@@ -29,5 +31,7 @@ module.exports = {
   donation,
   volAction,
   contactForm,
-  demoRequest
+  demoRequest,
+  roomClone,
+  modRoomJoin
 }

@@ -50,7 +50,7 @@ class RoomLeftBar extends Component {
     const leftBar = <div id='leftBar' style={leftBarStyle}>
       <div style={styles.leftBarContent}>
         <div style={styles.share}>
-          <ShareButtons roomId={room.id} title={room.title} />
+          <ShareButtons roomId={room.id} title={room.title} shortLink={room.shortLink} />
         </div>
         <div style={styles.leftNavHeader}>
           {t('room.norms')}

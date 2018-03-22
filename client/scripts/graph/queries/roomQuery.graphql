@@ -13,7 +13,9 @@ query roomQuery($id: ID!){
     modOnlyDMs
     ctaText
     ctaImage
+    ctaButton
     thankText
+    shortLink
     actionTypes {
       title
       desc

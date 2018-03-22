@@ -14,7 +14,7 @@ module.exports = ({rooms, loginHash}) => {
     let room = rooms[i]
     html += `<tr>
     <td style="padding: 10px; border: 1px #a8a8a8 solid; width:100%; min-width: 250px; max-width: 500px; border-radius: 4px; box-shadow: 2px 2px 6px #888888;">
-      <a href="https://nametag.chat/rooms/${room.id}" target='_blank' style="text-decoration: none; color: #000;">
+      <a href="https://nametag.chat/rooms/${room.id}?loginHash=${loginHash}" target='_blank' style="text-decoration: none; color: #000;">
       <table style="width: 100%; padding-bottom: 20px;">
         <tr style="vertical-align: top;">
           <td style="width: 70%;">

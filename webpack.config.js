@@ -14,6 +14,10 @@ module.exports = {
     'app': [
       'babel-polyfill',
       path.join(__dirname, 'client/scripts/app')
+    ],
+    'landing': [
+      'babel-polyfill',
+      path.join(__dirname, 'client/scripts/landing')
     ]
   }),
   output: {

@@ -98,7 +98,8 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'stretch',
     minHeight: 80,
-    padding: 10
+    padding: 10,
+    minWidth: 350
   },
   input: {
     flex: 1,

@@ -3,7 +3,7 @@ import radium from 'radium'
 
 const Media = (props) => {
   let media
-  let yt = /youtube\.com\/watch\?v=([a-zA-Z0-9_]+)/.exec(props.url)
+  let yt = /youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/.exec(props.url)
   if (yt) {
     let ytCode = yt[1]
     media = <div style={styles.video}>

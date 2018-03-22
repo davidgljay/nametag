@@ -108,6 +108,9 @@ type Room {
   # The date when the room was created
   createdAt: Date!
 
+  # A shortlink for sharing the room
+  shortLink: String
+
   # The messages sent in the room
   messages: [Message]
 
@@ -147,8 +150,11 @@ type Room {
   # Text for a call to action for this room
   ctaText: String
 
-  # Image for a call to action for this room
+  # Image for a call to action for this room. This is visible in the call to action dialog.
   ctaImage: String
+
+  # Button prompting the user to make a call to action. This launches the call to action dialog.
+  ctaButton: String
 
   # Text for thanking participants when they have taken action
   thankText: String

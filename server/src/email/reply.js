@@ -7,7 +7,7 @@ module.exports = ({roomId, roomName, message, messageId, author, loginHash}) => 
   \n
   Click here to respond:\n
   \n
-      https://nametag.chat/rooms/${roomId}?showReplies=${messageId}\n
+      https://nametag.chat/rooms/${roomId}?showReplies=${messageId}&loginHash=${loginHash}\n
   \n\n
   You can also unsubscribe:\n
   https://nametag.chat/unsubscribe/${loginHash}?roomid=${roomId}&roomname=${encodeURIComponent(roomName)}\n\n`,
@@ -26,7 +26,7 @@ module.exports = ({roomId, roomName, message, messageId, author, loginHash}) => 
     </tr>
     <tr>
     <td style="text-align: center">
-        <a href="https://nametag.chat/rooms/${roomId}?showReplies=${messageId}" target='_blank' style="text-decoration: none;">
+        <a href="https://nametag.chat/rooms/${roomId}?showReplies=${messageId}&loginHash=${loginHash}" target='_blank' style="text-decoration: none;">
             <div style="margin-top: 10px; margin-left: auto; margin-right: auto; padding: 10px; font-size: 20px; background: #12726a; color: #FFF; border-radius: 3px; text-decoration: none !important; max-width: 150px; text-align: center;">
                 Respond
             </div>
