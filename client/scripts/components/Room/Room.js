@@ -198,7 +198,7 @@ class Room extends Component {
       ? <img
         id='volActionButton'
         style={styles.backIcon}
-        src='https://s3.amazonaws.com/nametag_images/site/jointhefight.png' />
+        src={`https://s3.amazonaws.com/nametag_images/site/${room.ctaButton || 'jointhefight.png'}`} />
       : null
 
     return <div style={styles.roomContainer}>
