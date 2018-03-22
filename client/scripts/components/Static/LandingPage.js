@@ -82,7 +82,7 @@ class LandingPage extends Component {
           <img src='https://s3.amazonaws.com/nametag_images/site/angle2.svg' style={styles.angle} />
         </div>
         <div style={styles.buttonContainer}>
-          <RaisedButton primary label={t('room.try_it')} onClick={this.openContactDialog('demoRequest')} />
+          <RaisedButton primary label={t('room.try_it')} onClick={() => {window.location = '/r/nametagdemoc35'} />
         </div>
         <div style={styles.whoWeAreContainer}>
           <h2 style={styles.headerText}>{t('homepage.who')}</h2>
