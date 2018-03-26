@@ -207,7 +207,7 @@ r.connect({host: 'rethinkdb'})
               if (err) {
                 return next(err)
               }
-              res.redirect(req.url.replace(/loginHash=[^&]+&/, ''))
+              res.redirect(req.url.replace(/loginHash=[^&]+[&]*/, ''))
             })
             )
           .catch(error =>

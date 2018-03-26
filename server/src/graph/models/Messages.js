@@ -430,7 +430,8 @@ const dmMentionEmail = ({models: {Rooms, Users, Nametags}}, id, message, templat
       roomId: room.id,
       roomName: room.title,
       message: message.text,
-      author: author.name
+      author: author.name,
+      loginHash: user.loginHash
     }
   })
      : null
