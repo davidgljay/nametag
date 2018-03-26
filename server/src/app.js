@@ -174,7 +174,7 @@ r.connect({host: 'rethinkdb'})
       } else {
         const context = new Context({}, conn)
         context.models.Users.emailDigest()
-          .then(res.end())
+          .then(() => res.end())
           .catch(err => next(new errors.APIError(err)))
       }
     })
