@@ -50,9 +50,9 @@ class Message extends Component {
       return /[^ (]+(\.gif|\.jpg|\.png)/.exec(message)
     }
 
-    this.toggleMenu = e => {
+    this.toggleMenu = open => e => {
       const {myNametag, message: {author, nametag}} = this.props
-      if (!this.state.showMenu) {
+      if (open) {
         track('MESSAGE_MENU_OPEN')
       }
       if (e && e.preventDefault) {
@@ -62,7 +62,7 @@ class Message extends Component {
       (nametag && nametag.id === myNametag.id)
       ? 'commands' : 'mentions'
       this.setState({
-        showMenu: this.state.showMenu ? '' : target
+        showMenu: open ? target : ''
       })
     }
   }
@@ -168,7 +168,7 @@ class Message extends Component {
         onClick={() => isReplyNotif
           ? setVisibleReplies(id.split('_')[1])
           : this.setState({showActions: !showActions})}>
-        <div style={imageStyle} onClick={this.toggleMenu}>
+        <div style={imageStyle} onClick={this.toggleMenu(true)}>
           {
             author && !hideAuthor && <NametagIcon
               image={author.image}
@@ -178,14 +178,14 @@ class Message extends Component {
         </div>
         <div style={messageStyle}>
           {
-            author && !hideAuthor && <div style={styles.name} onClick={this.toggleMenu}>
+            author && !hideAuthor && <div style={styles.name} onClick={this.toggleMenu(true)}>
               {author.name}
             </div>
           }
           {
             callout
           }
-          <div style={styles.text} className='messageText'>
+          <div style={styles.text} className='messageText' onClick={this.toggleMenu(true)}>
             <ReactMarkdown
               containerTagName={'span'}
               className={'messageText'}
@@ -214,7 +214,7 @@ class Message extends Component {
           }
           {
             nametag &&
-            <div style={styles.nametagContainer}>
+            <div style={styles.nametagContainer} onClick={this.toggleMenu(true)}>
               <Card key={nametag.id} id={nametag.id} style={styles.nametag}>
                 <Nametag
                   nametag={nametag}
@@ -269,7 +269,7 @@ class Message extends Component {
                 hideDMs={hideDMs && !isMod}
                 open={showMenu === 'mentions'}
                 anchor={document.getElementById(id)}
-                toggleMenu={this.toggleMenu}
+                toggleMenu={this.toggleMenu(false)}
                 setBadgeGrantee={setBadgeGrantee}
                 canGrantBadges={canGrantBadges}
                 setDefaultMessage={setDefaultMessage}
@@ -278,7 +278,7 @@ class Message extends Component {
                 isMod={isMod}
                 setDefaultMessage={setDefaultMessage}
                 anchor={document.getElementById(id)}
-                onRequestClose={this.toggleMenu}
+                onRequestClose={this.toggleMenu(false)}
                 messageId={id}
                 messageText={text}
                 roomId={roomId}
@@ -423,7 +423,8 @@ const styles = {
     borderRadius: 5,
     overflowWrap: 'break-word',
     wordWrap: 'break-word',
-    wordBreak: 'break-word'
+    wordBreak: 'break-word',
+    cursor: 'pointer'
   },
   helpMessage: {
     color: grey,
