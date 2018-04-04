@@ -148,7 +148,7 @@ class Message extends Component {
       .replace(/:\(/, ':white_frowning_face:')
       .replace(/(?=\S+)_(?=\S+:)/g, '~@~A~')
       .replace(
-        /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/,
+        /(?![\w.,@?^/=%&:~+#-]*])(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?(?!])(.|$)/,
         (url) => `[${url}](${url})`)
 
     const isMod = !!author && mod.id === author.id
