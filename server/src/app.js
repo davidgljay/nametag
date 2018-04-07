@@ -26,7 +26,7 @@ const Context = require('./graph/context')
 const {db} = require('./db')
 const dbInit = require('./graph/models').init
 const passport = require('passport')
-const RDBStore = require('express-session-rethinkdb')(session)
+const RDBStore = require('./rdbSessions')(session)
 const Raven = require('raven')
 const startSubscriptionServer = require('./graph/subscriptions/SubscriptionServer')
 const PORT = 8181
@@ -57,46 +57,6 @@ app.use(Raven.requestHandler())
 
 /* Use body parser middleware */
 app.use(bodyParser.json())
-const rdbStore = new RDBStore({
-  connectOptions: {
-    servers: [
-        { host: 'rethinkdb', port: 28015 }
-    ],
-    db: 'sessions',
-    discovery: false,
-    pool: true,
-    buffer: 50,
-    max: 1000,
-    timeout: 20,
-    timeoutError: 1000
-  },
-  table: 'sessions',
-  sessionTimeout: 2629746000,
-  flushInterval: 60000,
-  debug: false
-})
-
-/* Set up sessions. */
-const sessionOptions = {
-  secret: config.session.secret,
-  rolling: true,
-  httpOnly: false,
-  saveUninitialized: true,
-  resave: true,
-  unset: 'destroy',
-  sameSite: true,
-  logErrors: true,
-  cookie: {
-    secure: false,
-    maxAge: 2629746000 // 1 month in milliseconds
-  },
-  store: rdbStore
-}
-
-if (app.get('env') === 'production') {
-  // Enable the secure cookie when we are in production mode.
-  sessionOptions.cookie.secure = true
-}
 
 /* Serve static files */
 app.use('/public', express.static(path.join('/usr', 'client', 'public')))
@@ -146,20 +106,52 @@ app.post('/api/contact_form',
       .catch(err => next(`Error posting to contact form ${err}`))
   })
 
-// Add sessions to middleware after static files, sessions are only created on API calls.
-app.use(session(sessionOptions))
-app.use(function (req, res, next) {
-  if (!req.session) {
-    return next(new Error('No session initialized'))
-  }
-  next()
-})
-app.use(passport.initialize())
-app.use(passport.session())
-
 /* Get rethinkdb connection */
 r.connect({host: 'rethinkdb'})
   .then(conn => {
+    /* Session Management */
+    const rdbStore = new RDBStore({
+      conn: conn,
+      table: 'sessions',
+      db: 'sessions',
+      sessionTimeout: 2629746000,
+      flushInterval: 60000,
+      debug: false
+    })
+
+    /* Set up sessions. */
+    const sessionOptions = {
+      secret: config.session.secret,
+      rolling: true,
+      httpOnly: false,
+      saveUninitialized: true,
+      resave: true,
+      unset: 'destroy',
+      sameSite: true,
+      logErrors: true,
+      cookie: {
+        secure: false,
+        maxAge: 2629746000 // 1 month in milliseconds
+      },
+      store: rdbStore
+    }
+
+    if (app.get('env') === 'production') {
+      // Enable the secure cookie when we are in production mode.
+      sessionOptions.cookie.secure = true
+    }
+
+    app.use(session(sessionOptions))
+    app.use(function (req, res, next) {
+      if (!req.session) {
+        console.log('No session!')
+        return next(new Error('No session initialized'))
+      }
+      next()
+    })
+    app.use(passport.initialize())
+    app.use(passport.session())
+
     /* Auth Providers */
     // passport.use('local', local(conn))
     passport.use('hash', hash(conn))
@@ -258,6 +250,13 @@ r.connect({host: 'rethinkdb'})
         .catch(next)
     })
 
+    app.get('/logout',
+      (req, res) => {
+        req.session.destroy()
+        req.logout()
+        res.redirect('/')
+      })
+
     /* All others serve index.html */
     app.get('*', (req, res, next) => {
       const context = new Context({}, conn)
@@ -309,13 +308,6 @@ r.connect({host: 'rethinkdb'})
     })
   })
   .catch(err => console.log(`Error connecting to rethinkdb: ${err}`))
-
-app.get('/logout',
-  (req, res) => {
-    req.session.destroy()
-    req.logout()
-    res.redirect('/')
-  })
 
   // ==============================================================================
   // GraphQL Router

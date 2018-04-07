@@ -1459,6 +1459,10 @@ memory-cache@^0.1.4:
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/memory-cache/-/memory-cache-0.1.6.tgz#2ed9933ed7a8c718249be7366f7ca8749acf8a24"
 
+memory-cache@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/memory-cache/-/memory-cache-0.2.0.tgz#7890b01d52c00c8ebc9d533e1f8eb17e3034871a"
+
 merge-descriptors@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/merge-descriptors/-/merge-descriptors-1.0.1.tgz#b00aaa556dd8b44568150ec9d1b953f3f90cbb61"
@@ -2142,7 +2146,7 @@ rethinkdb@^2.1.1:
   dependencies:
     bluebird ">= 2.3.2 < 3"
 
-rethinkdbdash@^2.2.18, rethinkdbdash@^2.3.31:
+rethinkdbdash@^2.2.18:
   version "2.3.31"
   resolved "https://registry.yarnpkg.com/rethinkdbdash/-/rethinkdbdash-2.3.31.tgz#fe2f73d1fa6e6f5d96d8e881292013cf6dca914d"
   dependencies:
