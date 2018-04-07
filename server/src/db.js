@@ -4,18 +4,18 @@ let db
 let init
 
 const sessionsDBInit = (conn) => r.dbCreate('sessions').run(conn).catch(err => {
-    if (err.msg !== 'Database `sessions` already exists.') {
-      console.log('err', err)
-    }
-    return
-  })
+  if (err.msg !== 'Database `sessions` already exists.') {
+    console.log('err', err)
+  }
+  return
+})
   .then(() => r.db('sessions').tableCreate('sessions').run(conn)
     .catch(err => {
-        if (err.msg !== 'Table `sessions.sessions` already exists.') {
-          console.log('err', err)
-        }
-        return
-      })
+      if (err.msg !== 'Table `sessions.sessions` already exists.') {
+        console.log('err', err)
+      }
+      return
+    })
 )
 
 switch (process.env.NODE_ENV) {

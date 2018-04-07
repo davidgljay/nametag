@@ -27,7 +27,6 @@ const {db} = require('./db')
 const dbInit = require('./graph/models').init
 const passport = require('passport')
 const RDBStore = require('express-session-rethinkdb')(session)
-const elasticsearch = require('./elasticsearch')
 const Raven = require('raven')
 const startSubscriptionServer = require('./graph/subscriptions/SubscriptionServer')
 const PORT = 8181
@@ -60,17 +59,17 @@ app.use(Raven.requestHandler())
 app.use(bodyParser.json())
 const rdbStore = new RDBStore({
   connectOptions: {
-      servers: [
+    servers: [
         { host: 'rethinkdb', port: 28015 }
-      ],
-      db: 'sessions',
-      discovery: false,
-      pool: true,
-      buffer: 50,
-      max: 1000,
-      timeout: 20,
-      timeoutError: 1000
-    },
+    ],
+    db: 'sessions',
+    discovery: false,
+    pool: true,
+    buffer: 50,
+    max: 1000,
+    timeout: 20,
+    timeoutError: 1000
+  },
   table: 'sessions',
   sessionTimeout: 2629746000,
   flushInterval: 60000,
@@ -146,7 +145,6 @@ app.post('/api/contact_form',
       .then(() => res.status(200).end())
       .catch(err => next(`Error posting to contact form ${err}`))
   })
-
 
 // Add sessions to middleware after static files, sessions are only created on API calls.
 app.use(session(sessionOptions))
@@ -273,7 +271,7 @@ r.connect({host: 'rethinkdb'})
               res.redirect(req.url.replace(/loginHash=[^&]+[&]*/, ''))
             })
             )
-          .catch(error =>
+          .catch(() =>
             res.redirect(req.url.replace(/loginHash=[^&]+[&]*/, ''))
           )
       }
@@ -281,7 +279,7 @@ r.connect({host: 'rethinkdb'})
       // If loading a room, display key room info in a template
       if (/\/rooms\/[a-z0-9-]{36}/.test(req.url)) {
         roomsRoute(req, res, next, conn)
-      } else if (/\/r\/[^\/]+/.test(req.url)) {
+      } else if (/\/r\/[^/]+/.test(req.url)) {
         shortLinkRoute(req, res, next, conn)
       } else {
         homeRoute(req, res, next, conn)
@@ -326,7 +324,7 @@ app.get('/logout',
   // Only include the graphiql tool if we aren't in production mode.
   // if (app.get('env') !== 'production') {
   // Interactive graphiql interface.
-  app.use('/api/v1/graph/iql', apollo.graphiqlExpress({
-    endpointURL: '/api/v1/graph/ql'
-  }))
+app.use('/api/v1/graph/iql', apollo.graphiqlExpress({
+  endpointURL: '/api/v1/graph/ql'
+}))
   // }
