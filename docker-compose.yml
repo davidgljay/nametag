@@ -11,7 +11,6 @@ nametag:
     - ./server/backup:/usr/nametag/server/backup
   links:
     - rethinkdb
-    - redis
     # - elasticsearch
   ports:
     - "8181:8181"
@@ -26,13 +25,6 @@ rethinkdb:
     - "28015"
   ports:
     - "127.0.0.1:8080:8080"
-redis:
-  image: redis:alpine
-  ports:
-    - "6379:6379"
-  command: redis-server --appendonly yes
-  volumes:
-    - ./redis_data:/data
 # elasticsearch:
 #     image: docker.elastic.co/elasticsearch/elasticsearch:5.4.0
 #     environment:

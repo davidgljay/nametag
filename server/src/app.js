@@ -26,8 +26,7 @@ const Context = require('./graph/context')
 const {db} = require('./db')
 const dbInit = require('./graph/models').init
 const passport = require('passport')
-const RedisStore = require('connect-redis')(session)
-const redis = require('./redis')
+const RDBStore = require('express-session-rethinkdb')(session)
 const elasticsearch = require('./elasticsearch')
 const Raven = require('raven')
 const startSubscriptionServer = require('./graph/subscriptions/SubscriptionServer')
@@ -59,6 +58,24 @@ app.use(Raven.requestHandler())
 
 /* Use body parser middleware */
 app.use(bodyParser.json())
+const rdbStore = new RDBStore({
+  connectOptions: {
+      servers: [
+        { host: 'rethinkdb', port: 28015 }
+      ],
+      db: 'sessions',
+      discovery: false,
+      pool: true,
+      buffer: 50,
+      max: 1000,
+      timeout: 20,
+      timeoutError: 1000
+    },
+  table: 'sessions',
+  sessionTimeout: 2629746000,
+  flushInterval: 60000,
+  debug: false
+})
 
 /* Set up sessions. */
 const sessionOptions = {
@@ -74,9 +91,7 @@ const sessionOptions = {
     secure: false,
     maxAge: 2629746000 // 1 month in milliseconds
   },
-  store: new RedisStore({
-    client: redis.createClient()
-  })
+  store: rdbStore
 }
 
 if (app.get('env') === 'production') {
@@ -136,7 +151,6 @@ app.post('/api/contact_form',
 // Add sessions to middleware after static files, sessions are only created on API calls.
 app.use(session(sessionOptions))
 app.use(function (req, res, next) {
-  console.log(req.session)
   if (!req.session) {
     return next(new Error('No session initialized'))
   }
