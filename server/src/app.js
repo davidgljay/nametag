@@ -84,14 +84,63 @@ if (app.get('env') === 'production') {
   sessionOptions.cookie.secure = true
 }
 
-elasticsearch.init().catch(err => console.log(err))
+/* Serve static files */
+app.use('/public', express.static(path.join('/usr', 'client', 'public')))
 
+// Server sw.js
+app.get('/firebase-messaging-sw.js', (req, res) => {
+  res.setHeader('Content-Type', 'application/javascript')
+  res.sendFile(path.join('/usr', 'client', 'public', 'firebase-messaging-sw.js'))
+})
+
+app.get('/favicon.ico', (req, res) => {
+  res.sendFile(path.join('/usr', 'client', 'public', 'favicon.ico'))
+})
+
+/* Serve well-known files */
+app.use('/.well-known', express.static(path.join('/usr', 'client', 'public', 'well-known')))
+
+/* Upload an image and return the url of that image on S3 */
+app.post('/api/images',
+    imageUpload.multer.any(),
+    (req, res) => {
+      res.json({url: req.files[0].location})
+    }
+)
+
+/* Redirect to an image (used to securely deliver images hosted via http) */
+app.get('/api/image_redirect',
+  (req, res) => {
+    imageRedirect.redirect(decodeURIComponent(req.query.url), res)
+      .catch(err => console.error('Redirecting image', err))
+  }
+)
+
+/* Upload an image from a url and return the location of that image on S3 */
+app.post('/api/image_url',
+  (req, res, next) => {
+    imageUpload.fromUrl(req.body.width, req.body.height, req.body.url)
+      .then(data => res.json(data))
+      .catch(err => next(`Uploading image from URL ${err}`))
+  })
+
+/* Accepts input from the contact form */
+app.post('/api/contact_form',
+  (req, res, next) => {
+    contactForm(req.body)
+      .then(() => res.status(200).end())
+      .catch(err => next(`Error posting to contact form ${err}`))
+  })
+
+
+// Add sessions to middleware after static files, sessions are only created on API calls.
 app.use(session(sessionOptions))
 app.use(function (req, res, next) {
+  console.log(req.session)
   if (!req.session) {
-    return next(new Error('No session initialized')) // handle error
+    return next(new Error('No session initialized'))
   }
-  next() // otherwise continue
+  next()
 })
 app.use(passport.initialize())
 app.use(passport.session())
@@ -249,68 +298,21 @@ r.connect({host: 'rethinkdb'})
   })
   .catch(err => console.log(`Error connecting to rethinkdb: ${err}`))
 
-/* Serve static files */
-app.use('/public', express.static(path.join('/usr', 'client', 'public')))
-
 app.get('/logout',
   (req, res) => {
     req.session.destroy()
     req.logout()
     res.redirect('/')
   })
-// ==============================================================================
-// GraphQL Router
-// ==============================================================================
 
-// Only include the graphiql tool if we aren't in production mode.
-// if (app.get('env') !== 'production') {
+  // ==============================================================================
+  // GraphQL Router
+  // ==============================================================================
+
+  // Only include the graphiql tool if we aren't in production mode.
+  // if (app.get('env') !== 'production') {
   // Interactive graphiql interface.
-app.use('/api/v1/graph/iql', apollo.graphiqlExpress({
-  endpointURL: '/api/v1/graph/ql'
-}))
-// }
-
-// Server sw.js
-app.get('/firebase-messaging-sw.js', (req, res) => {
-  res.setHeader('Content-Type', 'application/javascript')
-  res.sendFile(path.join('/usr', 'client', 'public', 'firebase-messaging-sw.js'))
-})
-
-app.get('/favicon.ico', (req, res) => {
-  res.sendFile(path.join('/usr', 'client', 'public', 'favicon.ico'))
-})
-
-/* Serve well-known files */
-app.use('/.well-known', express.static(path.join('/usr', 'client', 'public', 'well-known')))
-
-/* Upload an image and return the url of that image on S3 */
-app.post('/api/images',
-    imageUpload.multer.any(),
-    (req, res) => {
-      res.json({url: req.files[0].location})
-    }
-)
-
-/* Redirect to an image (used to securely deliver images hosted via http) */
-app.get('/api/image_redirect',
-  (req, res) => {
-    imageRedirect.redirect(decodeURIComponent(req.query.url), res)
-      .catch(err => console.error('Redirecting image', err))
-  }
-)
-
-/* Upload an image from a url and return the location of that image on S3 */
-app.post('/api/image_url',
-  (req, res, next) => {
-    imageUpload.fromUrl(req.body.width, req.body.height, req.body.url)
-      .then(data => res.json(data))
-      .catch(err => next(`Uploading image from URL ${err}`))
-  })
-
-/* Accepts input from the contact form */
-app.post('/api/contact_form',
-  (req, res, next) => {
-    contactForm(req.body)
-      .then(() => res.status(200).end())
-      .catch(err => next(`Error posting to contact form ${err}`))
-  })
+  app.use('/api/v1/graph/iql', apollo.graphiqlExpress({
+    endpointURL: '/api/v1/graph/ql'
+  }))
+  // }
