@@ -4,50 +4,48 @@ const cache = require('memory-cache')
 module.exports = function (session) {
   const Store = session.Store
 
-  function RethinkStore(options) {
+  function RethinkStore (options) {
     options = options || {}
-    conn = options.conn
+    this.conn = options.conn
 
-    if (!conn) {
+    if (!this.conn) {
       console.err('Rdb connection is not defined')
       return
     }
 
     Store.call(this, options)
 
-
     this.emit('connect')
     this.sessionTimeout = options.sessionTimeout || 86400000 // 1 day
     this.table = options.table || 'session'
     this.db = options.db || 'sessions'
     this.debug = options.debug || false
-    setInterval( function() {
+    setInterval(function () {
       try {
         r.db(this.db).table(this.table)
-          .filter( r.row('expires').lt(r.now().toEpochTime().mul(1000)) ).delete()
-          .run(conn)
-      }
-      catch (error) {
-        console.error( error )
+          .filter(r.row('expires').lt(r.now().toEpochTime().mul(1000))).delete()
+          .run(this.conn)
+      } catch (error) {
+        console.error(error)
         return null
       }
-    }.bind( this ), options.flushInterval || 60000 )
+    }.bind(this), options.flushInterval || 60000)
   }
 
   RethinkStore.prototype = new Store()
 
   // Get Session
   RethinkStore.prototype.get = function (sid, fn) {
-    var sdata = cache.get('sess-'+sid)
+    var sdata = cache.get('sess-' + sid)
     if (sdata) {
-      if( this.debug ){ console.log( 'SESSION: (get)', JSON.parse(sdata.session) ) }
+      if (this.debug) { console.log('SESSION: (get)', JSON.parse(sdata.session)) }
       return fn(null, JSON.parse(sdata.session))
     } else {
-        r.db(this.db).table(this.table).get(sid).run(conn).then(function (data) {
-          return fn(null, data ? JSON.parse(data.session) : null)
-        }).error(function (err) {
-          return fn(err)
-        })
+      r.db(this.db).table(this.table).get(sid).run(this.conn).then(function (data) {
+        return fn(null, data ? JSON.parse(data.session) : null)
+      }).error(function (err) {
+        return fn(err)
+      })
     }
   }
 
@@ -62,20 +60,21 @@ module.exports = function (session) {
       session: JSON.stringify(sess)
     }
 
-    r.db(this.db).table(this.table).insert(sessionToStore, { conflict: 'replace', returnChanges: true }).run(conn).then(function (data) {
+    r.db(this.db).table(this.table).insert(sessionToStore, { conflict: 'replace', returnChanges: true }).run(this.conn).then(function (data) {
       var sdata = null
-      if(data.changes[0] != null)
+      if (data.changes[0] != null) {
         sdata = data.changes[0].new_val || null
+      }
 
-      if (sdata){
-          if (this.debug){ console.log( 'SESSION: (set)', sdata.id ) }
-          cache.put( 'sess-'+ sdata.id, sdata, 30000 )
+      if (sdata) {
+        if (this.debug) { console.log('SESSION: (set)', sdata.id) }
+        cache.put('sess-' + sdata.id, sdata, 30000)
       }
       if (typeof fn === 'function') {
         return fn()
-      }
-      else
+      } else {
         return null
+      }
     }).error(function (err) {
       return fn(err)
     })
@@ -83,13 +82,12 @@ module.exports = function (session) {
 
   // Destroy Session
   RethinkStore.prototype.destroy = function (sid, fn) {
-    if (this.debug){ console.log( 'SESSION: (destroy)', sid ) }
-    cache.del('sess-'+sid)
-    r.db(this.db).table(this.table).get(sid).delete().run(conn).then(function (data) {
-      if (typeof fn === 'function'){
+    if (this.debug) { console.log('SESSION: (destroy)', sid) }
+    cache.del('sess-' + sid)
+    r.db(this.db).table(this.table).get(sid).delete().run(this.conn).then(function (data) {
+      if (typeof fn === 'function') {
         return fn()
-      }
-      else return null
+      } else return null
     }).error(function (err) {
       return fn(err)
     })
