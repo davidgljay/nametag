@@ -142,9 +142,8 @@ r.connect({host: 'rethinkdb'})
     }
 
     app.use(session(sessionOptions))
-    app.use(function (req, res, next) {
+    app.use((req, res, next) => {
       if (!req.session) {
-        console.log('No session!')
         return next(new Error('No session initialized'))
       }
       next()
@@ -152,23 +151,23 @@ r.connect({host: 'rethinkdb'})
     app.use(passport.initialize())
     app.use(passport.session())
 
+    /* User session serialization */
+    passport.serializeUser((user, done) => {
+      done(null, user.id)
+    })
+
+    passport.deserializeUser((id, done) =>
+      db.table('users').get(id).run(conn)
+        .then(user => done(null, user))
+        .catch(done)
+    )
+
     /* Auth Providers */
     // passport.use('local', local(conn))
     passport.use('hash', hash(conn))
     passport.use('facebook', facebook(conn))
     passport.use('twitter', twitter(conn))
     passport.use('google', google(conn))
-
-    /* User session serialization */
-    passport.serializeUser((user, done) => {
-      done(null, user.id)
-    })
-
-    passport.deserializeUser((id, done) => {
-      db.table('users').get(id).run(conn)
-        .then(user => done(null, user))
-        .catch(done)
-    })
 
     // GraphQL endpoint.
     app.use('/api/v1/graph/ql', apollo.graphqlExpress(graph.createGraphOptions(conn)))
@@ -195,9 +194,10 @@ r.connect({host: 'rethinkdb'})
     /* Twitter auth */
     app.get('/auth/twitter', passport.authenticate('twitter'))
     app.get('/auth/twitter/callback', (req, res, next) =>
-      passport.authenticate('twitter',
+        passport.authenticate('twitter',
         authCallback(req, res, next, conn)
       )(req, res, next))
+
 
     /* Google auth */
     app.get('/auth/google', passport.authenticate('google', {
