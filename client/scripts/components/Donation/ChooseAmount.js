@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react'
 import {grey} from '../../../styles/colors'
 
-const donationAmounts = [2500, 5000, 10000]
+const donationAmounts = [1000, 2500, 5000]
 
 const onUpdateCustom = (selectAmount) => (e) => {
   selectAmount(e.target.value)()
