@@ -94,7 +94,7 @@ class VolActionDialog extends Component {
         )
       }
 
-      if (granter.stripe && amount) {
+      if (granter.stripe && amount && amount > 0) {
         promises.push(
           stripe.createToken({
             type: 'card',
