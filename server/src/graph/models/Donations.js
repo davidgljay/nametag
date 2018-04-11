@@ -29,7 +29,7 @@ const get = ({conn}, id) => id ? donationsTable.get(id).run(conn) : Promise.reso
 
 const create = ({conn, user, models: {Messages}}, donation, nametagId) =>
   db.table('nametags').getAll(nametagId)
-    .map(n => n.merge({donorRoomName: n('name'), donorImage: n('image')}))
+    .map(n => n.merge({donorName: n('name'), donorImage: n('image')}))
     .eqJoin(n => n('room'), db.table('rooms'))
     .zip()
     .eqJoin(r => r('granter'), db.table('granters'))
