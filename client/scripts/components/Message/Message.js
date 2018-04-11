@@ -116,9 +116,20 @@ class Message extends Component {
       media = <Media url={this.checkImage(text)[0]} />
     }
 
+    const isReplyNotif = id.split('_')[0] === 'replyNotif'
+
     // Compress messages if they are sequentally from the same author
     let messageStyle = hideAuthor ? {...styles.messageText, ...styles.compressed} : styles.messageText
-    const messageContainerStyle = hideAuthor ? {...styles.message, ...styles.compressed} : styles.message
+    let messageContainerStyle = styles.messageContainer
+    if (hideAuthor) {
+      messageContainerStyle = {...messageContainerStyle, ...styles.compressed}
+    }
+    if (!author && !nametag) {
+      messageContainerStyle = {...messageContainerStyle, ...styles.helpMessageContainer}
+    }
+    if (isReplyNotif) {
+      messageContainerStyle = {...messageContainerStyle, cursor: 'pointer'}
+    }
     const imageStyle = hideAuthor ? {...styles.image, ...styles.compressed} : styles.image
 
     let callout
@@ -152,18 +163,12 @@ class Message extends Component {
         (url) => `[${url}](${url})`)
 
     const isMod = !!author && mod.id === author.id
-    const isReplyNotif = id.split('_')[0] === 'replyNotif'
     const about = author || nametag
 
     return <div>
       <div
         className='message'
-        style={isReplyNotif
-          ? {
-            ...messageContainerStyle,
-            cursor: 'pointer'
-          }
-          : messageContainerStyle}
+        style={messageContainerStyle}
         id={id}
         onClick={() => isReplyNotif
           ? setVisibleReplies(id.split('_')[1])
@@ -185,11 +190,11 @@ class Message extends Component {
           {
             callout
           }
-          <div style={styles.text} className='messageText' onClick={this.toggleMenu(true)}>
+          <div className='messageText' onClick={this.toggleMenu(true)}>
             <ReactMarkdown
               containerTagName={'span'}
               className={'messageText'}
-              style={styles.text}
+              style={author ? styles.text : {...styles.text, ...styles.helpText}}
               renderers={{
                 text: ({literal}) => {
                   const text = literal.replace(/~@~A~/g, '_')
@@ -391,12 +396,16 @@ Message.propTypes = {
 export default Message
 
 const styles = {
-  message: {
+  messageContainer: {
     paddingTop: 10,
     paddingBottom: 5,
     marginTop: 10,
     marginBottom: 5,
     display: 'flex'
+  },
+  helpMessageContainer: {
+    margin: 3,
+    padding: 0
   },
   directMessageIncoming: {
     paddingTop: 10,
@@ -429,8 +438,9 @@ const styles = {
   },
   helpMessage: {
     color: grey,
+    fontStyle: 'italic',
     textAlign: 'center',
-    fontStyle: 'italic'
+    paddingTop: 3
   },
   image: {
     paddingRight: 10,
@@ -473,6 +483,9 @@ const styles = {
   text: {
     fontSize: 16,
     fontWeight: 300
+  },
+  helpText: {
+    fontSize: 12
   },
   defaultImage: {
     backgroundColor: primary,
