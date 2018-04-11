@@ -161,6 +161,8 @@ class Message extends Component {
       .replace(
         /(?![\w.,@?^/=%&:~+#-]*])(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?(?!])(.|$)/,
         (url) => `[${url}](${url})`)
+    const hasLink = /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))/.exec(emojiText)
+
 
     const isMod = !!author && mod.id === author.id
     const about = author || nametag
@@ -190,7 +192,7 @@ class Message extends Component {
           {
             callout
           }
-          <div className='messageText' onClick={this.toggleMenu(true)}>
+          <div className='messageText' onClick={hasLink ? () => {} : this.toggleMenu(true)}>
             <ReactMarkdown
               containerTagName={'span'}
               className={'messageText'}
