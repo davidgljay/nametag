@@ -94,7 +94,7 @@ class Messages extends Component {
     this.addReaction = (emoji) => {
       const {addReaction, myNametag} = this.props
       const {showEmoji} = this.state
-      addReaction(showEmoji, emoji.colons, myNametag.id)
+      addReaction(showEmoji, emoji.colons, myNametag.id, myNametag.name)
       this.setState({showEmoji: ''})
     }
   }

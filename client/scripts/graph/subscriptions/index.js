@@ -56,7 +56,7 @@ export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeT
               if (msg.id === message.id) {
                 return message
               }
-              if (msg.id === message.parent.id) {
+              if (message.parent && msg.id === message.parent.id) {
                 return {
                   ...msg,
                   replies: msg.replies.map(reply =>

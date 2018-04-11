@@ -230,7 +230,7 @@ class Message extends Component {
               <EmojiReactions
                 reactions={reactions}
                 addReaction={addReaction}
-                myNametagId={myNametag.id}
+                myNametag={myNametag}
                 messageId={id} />
               <MessageMenu
                 showModAction={this.showModAction}

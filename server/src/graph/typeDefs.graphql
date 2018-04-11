@@ -227,6 +227,9 @@ type EmojiReaction {
   # The nametag of the person who provided this reaction
   nametagId: ID!
 
+  # The name of the person who provided this reaction
+  name: String!
+
 }
 
 # A representation of a user's identity in a particular room

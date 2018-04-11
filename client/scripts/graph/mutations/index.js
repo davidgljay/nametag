@@ -439,7 +439,7 @@ export const createMessage = graphql(CREATE_MESSAGE, {
 
 export const addReaction = graphql(ADD_REACTION, {
   props: ({ownProps, mutate}) => ({
-    addReaction: (messageId, emoji, nametagId) => mutate({
+    addReaction: (messageId, emoji, nametagId, name) => mutate({
       variables: {
         messageId,
         emoji,
@@ -472,6 +472,7 @@ export const addReaction = graphql(ADD_REACTION, {
                     message.reactions.push({
                       emoji,
                       nametagId,
+                      name,
                       __typename: 'EmojiReaction'
                     })
                   }

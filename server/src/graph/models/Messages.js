@@ -449,7 +449,11 @@ const dmMentionEmail = ({models: {Rooms, Users, Nametags}}, id, message, templat
 
 const addReaction = ({conn}, messageId, emoji, nametagId) =>
   messagesTable.get(messageId)
-    .update(message => ({reactions: message('reactions').setInsert({emoji, nametagId})}))
+    .update(message => ({reactions: message('reactions').setInsert({
+      emoji,
+      nametagId,
+      name: db.table('nametags').get(nametagId)('name')
+    })}), {nonAtomic: true})
     .run(conn)
 
 /**
