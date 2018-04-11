@@ -40,7 +40,7 @@ class ComposeWithMenu extends Component {
     }
 
     this.nametagList = (text) => {
-      const query = /@\S*/.exec(text)
+      const query = /@\S*$/.exec(text)
       const {nametags} = this.props
       return query ? nametags.filter(n => n.name.toLowerCase().match(query[0].slice(1).toLowerCase()))
         .map(n => n.name)
