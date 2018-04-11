@@ -1,15 +1,10 @@
 import React, {Component, PropTypes} from 'react'
-import {CardElement, PaymentRequestButtonElement} from 'react-stripe-elements'
+import {CardElement} from 'react-stripe-elements'
 
 class StripeCheckout extends Component {
 
   constructor (props) {
     super(props)
-
-    this.state = {
-      canMakePayment: false,
-      paymentRequest: null
-    }
 
     this.setPaymentRequest = () => {
       const {
@@ -79,22 +74,9 @@ class StripeCheckout extends Component {
 
   render () {
     const {amount} = this.props
-    const {
-      paymentRequest,
-      canMakePayment
-    } = this.state
     return <div style={styles.container}>
       {
         amount && <div style={styles.checkout}>
-          {
-            paymentRequest && canMakePayment &&
-            <div style={styles.paymentRequest}>
-              <PaymentRequestButtonElement
-                paymentRequest={paymentRequest}
-                className='PaymentRequestButton' />
-              <h3>OR</h3>
-            </div>
-          }
           <CardElement style={{base: {fontSize: '18px'}}} />
           <img style={styles.poweredBy} src='https://s3.amazonaws.com/nametag_images/site/powered_by_stripe.png' />
         </div>
