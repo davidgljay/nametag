@@ -333,6 +333,7 @@ class Message extends Component {
           addReaction={addReaction}
           setRecipient={setRecipient}
           editMessage={editMessage}
+          toggleNametagImageMenu={toggleNametagImageMenu}
           norms={norms}
           hideDMs={hideDMs}
           open={visibleReplies === id}

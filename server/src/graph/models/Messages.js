@@ -59,20 +59,14 @@ const newMessageCount = ({conn, user}, roomId) =>
  * @param {String} nametag the id of the nametag of the currently logged in user for this room
  */
 
-const getRoomMessages = ({user, conn}, room, nametag) => Promise.all([
+const getRoomMessages = ({user, conn}, room, nametag) =>
   messagesTable.getAll([room, false], {index: 'room_recipient'})
-    .filter(message => r.not(message.hasFields('parent')))
-    .run(conn),
-  messagesTable.getAll([room, nametag], {index: 'room_recipient'}).run(conn),
-  messagesTable.getAll([room, user.nametags[room], true], {index: 'room_author_isDM'}).run(conn)
-])
- .then(([messageCursor, dmToCursor, dmFromCursor]) => Promise.all([
-   messageCursor.toArray(),
-   dmToCursor.toArray(),
-   dmFromCursor.toArray()
- ]))
- .then(([messages, dmsTo, dmsFrom]) => messages
-    .concat(dmsTo).concat(dmsFrom)
+  .union(messagesTable.getAll([room, nametag], {index: 'room_recipient'}))
+  .union(messagesTable.getAll([room, user.nametags[room], true], {index: 'room_author_isDM'}))
+  .filter(message => r.not(message.hasFields('parent')))
+  .run(conn)
+ .then(cursor => cursor.toArray())
+ .then(messages => messages
     .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
   )
 
@@ -115,37 +109,42 @@ const create = (context, m) => {
     }
   )
 
-  const createMessagePromise = () => messagesTable.insert(messageObj).run(conn)
+  const createMessagePromise = (message) => messagesTable.insert(message).run(conn)
     .then((res) => {
       if (res.errors > 0) {
         return new errors.APIError('Error creating message')
       }
-      return Object.assign({}, messageObj, {id: res.generated_keys[0]})
+      return Object.assign({}, message, {id: res.generated_keys[0]})
     })
-    .then(message => Promise.all([
-      checkMentions(context, message),
-      message,
-      Rooms.updateLatestMessage(message.room),
-      message.author ? Nametags.update(message.author, {latestVisit: new Date(Date.now() + 1000)}) : null
+    .then(postedMessage => Promise.all([
+      checkMentions(context, postedMessage),
+      postedMessage,
+      Rooms.updateLatestMessage(postedMessage.room),
+      postedMessage.author ? Nametags.update(postedMessage.author, {latestVisit: new Date(Date.now() + 1000)}) : null
     ]))
-    .then(([updates = {}, message]) => {
-      messageObj = Object.assign({}, message, updates)
-      return messageObj
-    })
+    .then(([updates = {}, postedMessage]) => Object.assign({}, postedMessage, updates))
 
   if (m.recipient && m.author) {
-    return createMessagePromise()
-      .then(() => Promise.all([
-        dmMentionNotif(context, messageObj.recipient, messageObj, 'DM'),
-        dmMentionEmail(context, messageObj.recipient, messageObj, 'dm')
-      ]))
-      .then(() => messageObj)
+    return createMessagePromise(messageObj)
+      .then(postedMessage => Promise.all([
+        dmMentionNotif(context, postedMessage.recipient, postedMessage, 'DM'),
+        dmMentionEmail(context, postedMessage.recipient, postedMessage, 'dm')
+      ])
+      .then(() => postedMessage)
+    )
   }
 
   if (m.parent) {
-    return createMessagePromise()
-      .then(() => emailIfReply(context, messageObj))
-      .then(() => messageObj)
+    return messagesTable.get(m.parent).run(conn)
+      .then(parent => parent.recipient
+        ? Object.assign({}, messageObj, {recipient: parent.recipient})
+        : messageObj
+      )
+      .then(updatedMessage => createMessagePromise(updatedMessage))
+      .then(postedMessage =>
+        emailIfReply(context, postedMessage)
+        .then(() => postedMessage)
+      )
   }
 
   if (m.template) {
@@ -160,15 +159,12 @@ const create = (context, m) => {
         if (!user.badges[adminTemplate]) {
           return errors.ErrBadgeGrant
         }
-        return createMessagePromise()
+        return createMessagePromise(messageObj)
       })
   }
 
   return checkForCommands(context, messageObj)
-  .then(msg => {
-    messageObj = msg
-    return createMessagePromise()
-  })
+  .then(msg => createMessagePromise(msg))
 }
 
 /**
