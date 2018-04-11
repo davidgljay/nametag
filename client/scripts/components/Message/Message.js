@@ -398,10 +398,8 @@ export default Message
 
 const styles = {
   messageContainer: {
-    paddingTop: 10,
-    paddingBottom: 5,
-    marginTop: 10,
-    marginBottom: 5,
+    marginTop: 2,
+    marginBottom: 2,
     display: 'flex'
   },
   helpMessageContainer: {
