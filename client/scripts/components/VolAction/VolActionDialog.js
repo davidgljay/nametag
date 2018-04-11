@@ -79,7 +79,7 @@ class VolActionDialog extends Component {
       if (granter.type === 'CAMPAIGN' && (
         !name || !occupation || !employer || !address1 || !address2 ||
         !city || !state || !zip
-      )) {
+      ) && amount) {
         this.setState({donationInfoMissing: true})
         return
       }
