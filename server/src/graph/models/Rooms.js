@@ -313,6 +313,7 @@ const approveRoom = ({conn}, roomId) =>
 
 const clone = ({conn}, shortLink) =>
   roomsTable.getAll(shortLink, {index: 'shortLink'})
+    .orderBy('createdAt')
     .limit(1)
     .eqJoin('mod', db.table('nametags'))
     .map(j => ({

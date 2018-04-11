@@ -94,7 +94,7 @@ class Messages extends Component {
     this.addReaction = (emoji) => {
       const {addReaction, myNametag} = this.props
       const {showEmoji} = this.state
-      addReaction(showEmoji, emoji.colons, myNametag.id)
+      addReaction(showEmoji, emoji.colons, myNametag.id, myNametag.name)
       this.setState({showEmoji: ''})
     }
   }
@@ -220,7 +220,7 @@ export default radium(Messages)
 
 const styles = {
   messages: {
-    minHeight: '100vh',
+    minHeight: 'calc(100vh - 100px)',
     width: 'calc(100% - 275px)',
     display: 'flex',
     flexDirection: 'column',

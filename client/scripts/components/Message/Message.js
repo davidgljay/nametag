@@ -50,9 +50,9 @@ class Message extends Component {
       return /[^ (]+(\.gif|\.jpg|\.png)/.exec(message)
     }
 
-    this.toggleMenu = e => {
+    this.toggleMenu = open => e => {
       const {myNametag, message: {author, nametag}} = this.props
-      if (!this.state.showMenu) {
+      if (open) {
         track('MESSAGE_MENU_OPEN')
       }
       if (e && e.preventDefault) {
@@ -62,7 +62,7 @@ class Message extends Component {
       (nametag && nametag.id === myNametag.id)
       ? 'commands' : 'mentions'
       this.setState({
-        showMenu: this.state.showMenu ? '' : target
+        showMenu: open ? target : ''
       })
     }
   }
@@ -116,9 +116,20 @@ class Message extends Component {
       media = <Media url={this.checkImage(text)[0]} />
     }
 
+    const isReplyNotif = id.split('_')[0] === 'replyNotif'
+
     // Compress messages if they are sequentally from the same author
     let messageStyle = hideAuthor ? {...styles.messageText, ...styles.compressed} : styles.messageText
-    const messageContainerStyle = hideAuthor ? {...styles.message, ...styles.compressed} : styles.message
+    let messageContainerStyle = styles.messageContainer
+    if (hideAuthor) {
+      messageContainerStyle = {...messageContainerStyle, ...styles.compressed}
+    }
+    if (!author && !nametag) {
+      messageContainerStyle = {...messageContainerStyle, ...styles.helpMessageContainer}
+    }
+    if (isReplyNotif) {
+      messageContainerStyle = {...messageContainerStyle, cursor: 'pointer'}
+    }
     const imageStyle = hideAuthor ? {...styles.image, ...styles.compressed} : styles.image
 
     let callout
@@ -148,27 +159,22 @@ class Message extends Component {
       .replace(/:\(/, ':white_frowning_face:')
       .replace(/(?=\S+)_(?=\S+:)/g, '~@~A~')
       .replace(
-        /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/,
+        /(?![\w.,@?^/=%&:~+#-]*])(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?(?!])(.|$)/,
         (url) => `[${url}](${url})`)
+    const hasLink = /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))/.exec(emojiText)
 
     const isMod = !!author && mod.id === author.id
-    const isReplyNotif = id.split('_')[0] === 'replyNotif'
     const about = author || nametag
 
     return <div>
       <div
         className='message'
-        style={isReplyNotif
-          ? {
-            ...messageContainerStyle,
-            cursor: 'pointer'
-          }
-          : messageContainerStyle}
+        style={messageContainerStyle}
         id={id}
         onClick={() => isReplyNotif
           ? setVisibleReplies(id.split('_')[1])
           : this.setState({showActions: !showActions})}>
-        <div style={imageStyle} onClick={this.toggleMenu}>
+        <div style={imageStyle} onClick={this.toggleMenu(true)}>
           {
             author && !hideAuthor && <NametagIcon
               image={author.image}
@@ -178,18 +184,18 @@ class Message extends Component {
         </div>
         <div style={messageStyle}>
           {
-            author && !hideAuthor && <div style={styles.name} onClick={this.toggleMenu}>
+            author && !hideAuthor && <div style={styles.name} onClick={this.toggleMenu(true)}>
               {author.name}
             </div>
           }
           {
             callout
           }
-          <div style={styles.text} className='messageText'>
+          <div className='messageText' onClick={hasLink ? () => {} : this.toggleMenu(true)}>
             <ReactMarkdown
               containerTagName={'span'}
               className={'messageText'}
-              style={styles.text}
+              style={author ? styles.text : {...styles.text, ...styles.helpText}}
               renderers={{
                 text: ({literal}) => {
                   const text = literal.replace(/~@~A~/g, '_')
@@ -214,7 +220,7 @@ class Message extends Component {
           }
           {
             nametag &&
-            <div style={styles.nametagContainer}>
+            <div style={styles.nametagContainer} onClick={this.toggleMenu(true)}>
               <Card key={nametag.id} id={nametag.id} style={styles.nametag}>
                 <Nametag
                   nametag={nametag}
@@ -230,7 +236,7 @@ class Message extends Component {
               <EmojiReactions
                 reactions={reactions}
                 addReaction={addReaction}
-                myNametagId={myNametag.id}
+                myNametag={myNametag}
                 messageId={id} />
               <MessageMenu
                 showModAction={this.showModAction}
@@ -269,7 +275,7 @@ class Message extends Component {
                 hideDMs={hideDMs && !isMod}
                 open={showMenu === 'mentions'}
                 anchor={document.getElementById(id)}
-                toggleMenu={this.toggleMenu}
+                toggleMenu={this.toggleMenu(false)}
                 setBadgeGrantee={setBadgeGrantee}
                 canGrantBadges={canGrantBadges}
                 setDefaultMessage={setDefaultMessage}
@@ -278,7 +284,7 @@ class Message extends Component {
                 isMod={isMod}
                 setDefaultMessage={setDefaultMessage}
                 anchor={document.getElementById(id)}
-                onRequestClose={this.toggleMenu}
+                onRequestClose={this.toggleMenu(false)}
                 messageId={id}
                 messageText={text}
                 roomId={roomId}
@@ -333,6 +339,7 @@ class Message extends Component {
           addReaction={addReaction}
           setRecipient={setRecipient}
           editMessage={editMessage}
+          toggleNametagImageMenu={toggleNametagImageMenu}
           norms={norms}
           hideDMs={hideDMs}
           open={visibleReplies === id}
@@ -391,12 +398,16 @@ Message.propTypes = {
 export default Message
 
 const styles = {
-  message: {
+  messageContainer: {
     paddingTop: 10,
     paddingBottom: 5,
     marginTop: 10,
     marginBottom: 5,
     display: 'flex'
+  },
+  helpMessageContainer: {
+    margin: 3,
+    padding: 0
   },
   directMessageIncoming: {
     paddingTop: 10,
@@ -424,12 +435,14 @@ const styles = {
     borderRadius: 5,
     overflowWrap: 'break-word',
     wordWrap: 'break-word',
-    wordBreak: 'break-word'
+    wordBreak: 'break-word',
+    cursor: 'pointer'
   },
   helpMessage: {
     color: grey,
+    fontStyle: 'italic',
     textAlign: 'center',
-    fontStyle: 'italic'
+    paddingTop: 3
   },
   image: {
     paddingRight: 10,
@@ -472,6 +485,9 @@ const styles = {
   text: {
     fontSize: 16,
     fontWeight: 300
+  },
+  helpText: {
+    fontSize: 12
   },
   defaultImage: {
     backgroundColor: primary,

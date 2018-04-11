@@ -17,6 +17,7 @@ fragment messageView on Message {
   reactions {
     emoji
     nametagId
+    name
   }
   template {
     id

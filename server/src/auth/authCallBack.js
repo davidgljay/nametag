@@ -11,6 +11,10 @@ module.exports = (req, res, next, conn) => (err, data) => {
   }
   const {user, authProfile} = data
   const reqWithUser = Object.assign({}, {user}, req)
+  if (!authProfile || !user) {
+    return Promise.reject()
+  }
+
   return Promise.all([
     Users(reqWithUser, conn).addDefaultsFromAuth(authProfile),
     Users(reqWithUser, conn).addBadgesFromAuth(authProfile)

@@ -669,12 +669,20 @@ const emailDigest = ({conn}) =>
   .eqJoin('room', db.table('rooms'))
   .filter(join => r.not(join('right')('closed')))
   .map(join => ({
-    room: join('right').pluck('title', 'mod', 'id'),
+    room: join('right').pluck('title', 'mod', 'id', 'latestMessage'),
     nametag: join('left').pluck('latestVisit', 'user')
   }))
   .eqJoin(join => join('nametag')('user'), db.table('users'))
   .filter(join => join('right')('email')
-    .and(r.not(join('right')('unsubscribe').keys().contains('digest'))))
+    .and(r.not(join('right')('unsubscribe').keys().contains('digest')))
+    .and(
+      r.branch(
+        join('right').hasFields('latestEmail'),
+        join('right')('latestEmail').lt(join('left')('room')('latestMessage')),
+        true
+      )
+     )
+  )
   .map(join =>
       join('left').merge({
         email: join('right')('email'),
@@ -712,12 +720,13 @@ const emailDigest = ({conn}) =>
   .run(conn)
   .then(results => {
     let sent = {}
+    let promises = []
     for (var i = 0; i < results.length; i++) {
       const {group, reduction} = results[i]
       const loginHash = reduction[0].loginHash
       if (!sent[group]) {
         sent[group] = true
-        sendEmail({
+        promises.push(sendEmail({
           from: {
             email: 'noreply@nametag.chat',
             name: 'Nametag Update'
@@ -725,9 +734,17 @@ const emailDigest = ({conn}) =>
           to: group,
           template: 'digest',
           params: {loginHash, rooms: reduction}
-        })
+        }))
+        promises.push(
+          usersTable.getAll(group, {index: 'email'})
+            .update({
+              latestEmail: new Date()
+            })
+            .run(conn)
+        )
       }
     }
+    return Promise.all(promises)
   })
 
 module.exports = (context) => ({

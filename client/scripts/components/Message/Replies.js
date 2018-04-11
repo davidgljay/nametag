@@ -42,6 +42,7 @@ class Replies extends Component {
         setRecipient,
         parent,
         open,
+        toggleNametagImageMenu,
         norms,
         hideDMs,
         closeReply,
@@ -124,6 +125,7 @@ class Replies extends Component {
                     setDefaultMessage={this.setDefaultMessage}
                     setRecipient={setRecipient}
                     setEditing={this.setEditing}
+                    toggleNametagImageMenu={toggleNametagImageMenu}
                     norms={norms}
                     mod={mod}
                     createMessage={createMessage}
@@ -169,7 +171,8 @@ Replies.propTypes = {
   closeReply: func.isRequired,
   setBadgeGrantee: func.isRequired,
   acceptBadge: func.isRequired,
-  canGrantBadges: bool.isRequired
+  canGrantBadges: bool.isRequired,
+  toggleNametagImageMenu: func.isRequired
 }
 
 export default Replies
