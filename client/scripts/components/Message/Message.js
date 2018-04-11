@@ -163,7 +163,6 @@ class Message extends Component {
         (url) => `[${url}](${url})`)
     const hasLink = /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))/.exec(emojiText)
 
-
     const isMod = !!author && mod.id === author.id
     const about = author || nametag
 

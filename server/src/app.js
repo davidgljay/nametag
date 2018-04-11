@@ -198,7 +198,6 @@ r.connect({host: 'rethinkdb'})
         authCallback(req, res, next, conn)
       )(req, res, next))
 
-
     /* Google auth */
     app.get('/auth/google', passport.authenticate('google', {
       scope: ['openid', 'profile', 'email']

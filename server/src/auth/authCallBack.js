@@ -24,7 +24,6 @@ module.exports = (req, res, next, conn) => (err, data) => {
         return next(err)
       }
       res.redirect('/')
-
     })
   }).catch(next)
 }
