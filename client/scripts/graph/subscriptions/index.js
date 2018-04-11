@@ -87,25 +87,22 @@ export const messageAdded = subscribeToMore => (roomId, nametagId) => subscribeT
         msg => msg.id === message.parent.id
         ? addReply(msg, message)
         : msg
-      )
-      if (oldData.room.messages.slice().reverse()[0].id !== message.parent.id) {
-        newMessages.push({
-          __typename: 'Message',
-          id: `replyNotif_${message.parent.id}_${message.id}`,
-          createdAt: new Date().toISOString(),
-          text: `${message.author.name} has replied to ${replyTo}.`,
-          editedAt: null,
-          replies: [],
-          replyCount: 0,
-          saved: false,
-          parent: null,
-          nametag: null,
-          template: null,
-          recipient: null,
-          author: null,
-          reactions: []
-        })
-      }
+      ).concat({
+        __typename: 'Message',
+        id: `replyNotif_${message.parent.id}_${message.id}`,
+        createdAt: new Date().toISOString(),
+        text: `${message.author.name} has replied to ${replyTo}.`,
+        editedAt: null,
+        replies: [],
+        replyCount: 0,
+        saved: false,
+        parent: null,
+        nametag: null,
+        template: null,
+        recipient: null,
+        author: null,
+        reactions: []
+      })
       return {
         ...oldData,
         room: {
