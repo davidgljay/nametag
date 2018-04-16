@@ -121,8 +121,8 @@ class VolActionDialog extends Component {
       Promise.all(promises)
         .then(() => this.setState({signedUp: true, loadingSignup: false}))
         .catch((e) => {
-          console.log('Caught error on donation', e)
           this.setState({loadingSignup: false, signedUp: false})
+          return e
         })
     }
 
