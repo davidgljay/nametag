@@ -310,13 +310,23 @@ const findOrCreateFromAuth = ({conn}, authProfile, provider) => {
           if (rdbRes.errors > 0) {
             return Promise.reject(new Error('Error while inserting user'))
           }
-          return {
+          console.log('Sending new user e-mail')
+          return sendEmail({
+            from: {
+              email: 'info@nametag.chat',
+              name: 'Nametag'
+            },
+            to: 'david@nametag.chat',
+            template: 'newUser',
+            params: {userEmail: userObject.email}
+          })
+          .then(() => {
             user: Object.assign({}, userObject,
               {
                 id: rdbRes.generated_keys[0]
               }),
             authProfile
-          }
+          })
         })
     })
 }
@@ -480,7 +490,16 @@ const createLocal = (context, email, path) =>
           const id = res.generated_keys[0]
           return Promise.all([
             id,
-            emailConfirmationRequest(context, email)
+            emailConfirmationRequest(context, email),
+            sendEmail({
+              from: {
+                email: 'info@nametag.chat',
+                name: 'Nametag'
+              },
+              to: 'david@nametag.chat',
+              template: 'newUser',
+              params: {userEmail: email}
+            })
           ])
            .then(([id]) => ({id, newUser}))
         })
