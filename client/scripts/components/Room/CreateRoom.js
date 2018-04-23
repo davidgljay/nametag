@@ -25,7 +25,8 @@ class CreateRoom extends Component {
         thankText: t('create_room.cta.thanks'),
         mod: {
           badges: []
-        }
+        },
+        nametagLimit: 15
       },
       image: '',
       norms: {},

@@ -168,6 +168,8 @@ en:
     welcome_start: Start by choosing a welcome prompt.
     welcome_helptext: Users will be asked this question when they enter the room.
     welcome_prompt: Welcome Prompt
+    room_size: How big would you like your rooms?
+    room_size_helptext: Rather than one big room Nametag directs participants to a series of small group conversations. We've found that 15 is an optimal size for these groups.
     errors:
       welcome: Please add a welcome prompt
       norm: Please select at least one norm

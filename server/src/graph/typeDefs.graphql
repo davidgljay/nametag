@@ -611,6 +611,9 @@ input CreateRoomInput {
   # Granter sponsoring this room
   granter: ID
 
+  # The maximum number of nametags allowed before the room clones
+  nametagLimit: Int
+
 }
 
 input ActionTypeInput {

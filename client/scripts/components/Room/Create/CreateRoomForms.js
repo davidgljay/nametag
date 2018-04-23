@@ -46,7 +46,8 @@ const getForm = ({
         <WelcomeForm
           error={error}
           updateRoom={updateRoom}
-          welcome={room.welcome} />
+          welcome={room.welcome}
+          nametagLimit={room.nametagLimit} />
       </div>
     case 1:
       track('WELCOME_FORMS')
