@@ -6,7 +6,7 @@ const AboutNametag = ({next}) => <div style={styles.container}>
   <div>
     {t('room.about_nametag')}
   </div>
-  <img src='https://s3.amazonaws.com/nametag_images/site/welcoming.jpg' alt='Dinner Party' />
+  <img src='https://s3.amazonaws.com/nametag_images/site/welcomeimagesm.jpg' alt='Dinner Party' />
   <RaisedButton
     primary
     onClick={next}
