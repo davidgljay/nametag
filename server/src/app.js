@@ -11,6 +11,7 @@ const stripeAuth = require('./routes/granters/stripeAuth')
 const stripeDash = require('./routes/granters/stripeDash')
 const contactForm = require('./routes/contact/contact')
 const roomsRoute = require('./routes/rooms')
+const embedRoute = require('./routes/granters/embed')
 const shortLinkRoute = require('./routes/r')
 const homeRoute = require('./routes')
 const config = require('./secrets.json')
@@ -247,6 +248,11 @@ r.connect({host: 'rethinkdb'})
       stripeDash(context, req.params.granter, req.user)
         .then(({url}) => res.redirect(url))
         .catch(next)
+    })
+
+    app.get('/granters/:granter/embed', (req, res, next) => {
+      const context = new Context({}, conn)
+      embedRoute(req, res, next)
     })
 
     app.get('/logout',
