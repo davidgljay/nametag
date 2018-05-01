@@ -18,6 +18,10 @@ module.exports = {
     'landing': [
       'babel-polyfill',
       path.join(__dirname, 'client/scripts/landing')
+    ],
+    'embed': [
+      'babel-polyfill',
+      path.join(__dirname, 'client/scripts/embed')
     ]
   }),
   output: {

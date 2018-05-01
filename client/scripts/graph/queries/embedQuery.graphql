@@ -1,0 +1,28 @@
+#import "../fragments/nametagView.graphql"
+
+query roomsQuery($query: String, $granter: String) {
+  rooms(query: $query, granter: $granter) {
+    id
+    title
+    norms
+    createdAt
+    nametagCount
+    latestMessage
+    closed
+    templates {
+      id
+      name
+      image
+      description
+      granter {
+        id
+        name
+        image
+        description
+      }
+    }
+    mod {
+      ...nametagView
+    }
+  }
+  }

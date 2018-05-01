@@ -15,6 +15,7 @@ import USER_QUERY from './userQuery.graphql'
 import GRANTER_QUERY from './granterQuery.graphql'
 import CREATE_BADGE_TEMPLATE_QUERY from './createTemplateQuery.graphql'
 import BADGE_TEMPLATE_QUERY from './templateQuery.graphql'
+import EMBED_QUERY from './embedQuery.graphql'
 
 function getQueryVariable (variable) {
   let query = window.location.search.substring(1)
@@ -119,5 +120,13 @@ export const granterQuery = graphql(GRANTER_QUERY, {
   props: ({data}) => ({
     data,
     badgeRequestAddedSubscription: badgeRequestAdded(data.subscribeToMore)
+  })
+})
+
+export const embedQuery = graphql(EMBED_QUERY, {
+  options: (props) => ({
+    variables: {
+      granter: props.params.urlCode
+    }
   })
 })
