@@ -87,36 +87,16 @@ const getVisible = ({conn, user, models: {Users}}) =>
  * Returns all private rooms for a particular granter.
  *
  * @param {Object} context     graph context
- * @param {Array<String>} granterCode  urlCode of the granter to be returned
+ * @param {String} granterCode  urlCode of the granter to be returned
  */
 
-const getGranterRooms = ({conn, user, models: {Users}}, granterCode) => {
-  return user
-  ? db.table('granters').getAll(granterCode, {index: 'urlCode'})
-    .eqJoin('id', r.db('nametag').table('templates'), {index: 'granter'})
-    .map(join => join('right'))
-    .pluck('id')
-    .run(conn)
-    .then(cursor => cursor.toArray())
-    .then(templateIds => {
-      const userTemplateIds = templateIds.map(t => t.id).filter(id => !!user.badges[id])
-      if (userTemplateIds.length === 0) {
-        return Promise.resolve([])
-      }
-      return roomsTable.between(new Date(Date.now() - ROOM_TIMEOUT), new Date(), {index: 'latestMessage'})
-        .orderBy({index: r.desc('latestMessage')})
-        .filter(room =>
-          room('public').eq('APPROVED').and(
-            room('templates')
-              .setIntersection(userTemplateIds)
-              .count().gt(0)
-          )
-         )
-        .run(conn)
-        .then(cursor => cursor.toArray())
-    })
-  : Promise.resolve([])
-}
+const getGranterRooms = ({conn, models: {Granters}}, granterCode) =>
+  Granters.getByUrlCode(granterCode)
+  .then(granter => granter
+    ? roomsTable.getAll(granter.id, {index: 'granter'}).run(conn)
+      .then(cursor => cursor.toArray())
+    : Promise.reject(new APIError('Organization not found'))
+  )
 
 /**
 * Returns active rooms based on a query.

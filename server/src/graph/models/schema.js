@@ -17,6 +17,7 @@ module.exports = {
     indexes: [
       'latestMessage',
       'shortLink',
+      'granter',
       {name: 'templates', multi: true},
       {name: 'isPublic', fields: {countEq: ['templates', 0]}}
     ]

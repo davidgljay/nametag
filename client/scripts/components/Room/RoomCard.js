@@ -15,12 +15,9 @@ class RoomCard extends Component {
     super(props)
 
     this.onJoinClick = () => {
-      const {room, router} = this.props
+      const {room} = this.props
       track('CREATE_NAMETAG')
-      router.push({
-        pathname: `/rooms/${room.id}`,
-        state: {isJoining: true}
-      })
+      window.location = `https://nametag.chat/r/${room.shortLink}`
     }
   }
 

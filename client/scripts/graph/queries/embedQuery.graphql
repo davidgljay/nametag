@@ -9,6 +9,7 @@ query roomsQuery($query: String, $granter: String) {
     nametagCount
     latestMessage
     closed
+    shortLink
     templates {
       id
       name
