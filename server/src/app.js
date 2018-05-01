@@ -251,8 +251,12 @@ r.connect({host: 'rethinkdb'})
     })
 
     app.get('/granters/:granter/embed', (req, res, next) => {
-      const context = new Context({}, conn)
       embedRoute(req, res, next)
+    })
+
+    app.get('/granters/:granter/oembed', (req, res, next) => {
+      const context = new Context({}, conn)
+      embedRoute.oEmbed(req, res, next, context)
     })
 
     app.get('/logout',
